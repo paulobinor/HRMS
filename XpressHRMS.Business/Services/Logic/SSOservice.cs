@@ -55,5 +55,35 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
+        public async Task<BaseResponse> LogOut(UserLoginDTO user)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                string URL = URLConstant.SSOBaseURL + URLConstant.LogOut;
+                var client = new RestClient(URL);
+                var validation = await _genericRepository.PostAsync<UserLoginDTO, BaseResponse>(URL, user);
+                if (validation.Data != null)
+                {
+                    // var S_Response = JsonConvert.DeserializeObject<SSOResponse>(validation.Data.ToString());
+
+                    response.ResponseCode = "";
+                    response.ResponseMessage = "";
+                    response.Data = validation.Data;
+                    return response;
+
+                }
+                response.ResponseMessage = validation.ResponseMessage;
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                return response;
+
+            }
+
+        }
+
     }
 }

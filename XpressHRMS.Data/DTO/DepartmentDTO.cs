@@ -46,4 +46,12 @@ namespace XpressHRMS.Data.DTO
 
 
     }
+
+    public class GetDepartment
+    {
+        public int DepartmentID { get; set; }
+        public int CompanyID { get; set; }
+
+
+    }
 }

@@ -156,9 +156,10 @@ namespace XpressHRMS.Business.Services.Logic
 
         public async Task<BaseResponse> DeleteDepartment(DeleteDepartmentDTO payload)
         {
+            BaseResponse response = new BaseResponse();
+
             try
             {
-                BaseResponse response = new BaseResponse();
                 bool isModelStateValidate = true;
                 string validationMessage = "";
                 if (payload.DepartmentID < 0)
@@ -202,8 +203,8 @@ namespace XpressHRMS.Business.Services.Logic
             }
             catch (Exception ex)
             {
-
-                throw;
+                _logger.LogError($"MethodName: DeleteDepartment() ===>{ex.Message}");
+                return response;
             }
 
         }
@@ -211,9 +212,10 @@ namespace XpressHRMS.Business.Services.Logic
 
         public async Task<BaseResponse> DisableDepartment(DeleteDepartmentDTO payload)
         {
+            BaseResponse response = new BaseResponse();
+
             try
             {
-                BaseResponse response = new BaseResponse();
                 bool isModelStateValidate = true;
                 string validationMessage = "";
                 if (payload.DepartmentID < 0)
@@ -252,33 +254,55 @@ namespace XpressHRMS.Business.Services.Logic
             }
             catch (Exception ex)
             {
-
-                throw;
+                _logger.LogError($"MethodName: DisableDepartment() ===>{ex.Message}");
+                return response;
             }
 
         }
 
         public async Task<BaseResponse> ActivateDepartment(DeleteDepartmentDTO payload)
         {
+            BaseResponse response = new BaseResponse();
+
             try
             {
-                BaseResponse response = new BaseResponse();
-
-
-                int result = await _departmentRepository.ActivateDepartment(payload.DepartmentID, payload.CompanyID);
-                if (result > 0)
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+                if (payload.DepartmentID < 0)
                 {
-                    response.ResponseMessage = "Department Activated Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.Data = payload;
+                    isModelStateValidate = false;
+                    validationMessage += "  || Department is NULL";
+                }
+                if (payload.CompanyID < 0)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Company is NULL";
+                }
+                if (!isModelStateValidate)
+                {
+                    response.ResponseMessage = validationMessage;
+                    response.ResponseCode = ResponseCode.ValidationError.ToString();
+                    response.Data = null;
                     return response;
+
                 }
                 else
                 {
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    response.Data = null;
-                    return response;
+                    int result = await _departmentRepository.ActivateDepartment(payload.DepartmentID, payload.CompanyID);
+                    if (result > 0)
+                    {
+                        response.ResponseMessage = "Department Activated Successfully";
+                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.Data = payload;
+                        return response;
+                    }
+                    else
+                    {
+                        response.ResponseMessage = "Internal Server Error";
+                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        response.Data = null;
+                        return response;
+                    }
                 }
 
                 return response;
@@ -286,10 +310,95 @@ namespace XpressHRMS.Business.Services.Logic
             }
             catch (Exception ex)
             {
+                _logger.LogError($"MethodName: ActivateDepartment() ===>{ex.Message}");
 
-                return null;
+                return response;
             }
 
+        }
+
+        public async Task<BaseResponse> GetAllDepartment(int CompanyID)
+        {
+            BaseResponse response = new BaseResponse();
+
+            try
+            {
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+               
+                if (CompanyID < 0)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Company is NULL";
+                }
+                if (!isModelStateValidate)
+                {
+                    response.ResponseMessage = validationMessage;
+                    response.ResponseCode = ResponseCode.ValidationError.ToString();
+                    response.Data = null;
+                    return response;
+
+                }
+                else
+                {
+                    var result =await _departmentRepository.GetAllDepartment(CompanyID);
+                    if (result!=null)
+                    {
+                        response.ResponseMessage = "Department Retrieved Successfully";
+                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.Data = result;
+                        return response;
+                    }
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: GetAllDepartment() ===>{ex.Message}");
+                return response;
+            }
+        }
+
+        public async Task<BaseResponse> GetDepartmentByID(int CompanyID, int DepartmentID)
+        {
+            BaseResponse response = new BaseResponse();
+
+            try
+            {
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (CompanyID < 0)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Company is NULL";
+                }
+                if (!isModelStateValidate)
+                {
+                    response.ResponseMessage = validationMessage;
+                    response.ResponseCode = ResponseCode.ValidationError.ToString();
+                    response.Data = null;
+                    return response;
+
+                }
+                else
+                {
+                    var result = await _departmentRepository.GetAllDepartmentByID(DepartmentID,CompanyID);
+                    if (result != null)
+                    {
+                        response.ResponseMessage = "Department Retrieved Successfully";
+                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.Data = result;
+                        return response;
+                    }
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: GetAllDepartment() ===>{ex.Message}");
+                return response;
+            }
         }
 
 

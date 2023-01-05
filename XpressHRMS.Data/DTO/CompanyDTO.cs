@@ -9,6 +9,7 @@ namespace XpressHRMS.Data.DTO
     public class CompanyDTO
     {
         public string CompanyName { get; set; }
+        public string CompanyID { get; set; }
         public string Companyphonenumber { get; set; }
         public string MissionStmt { get; set; }
         public string VisionStmt { get; set; }
@@ -29,5 +30,27 @@ namespace XpressHRMS.Data.DTO
         public string CompanyLogo { get; set; }
         public string Email { get; set; }
         public string Website { get; set; }
+    }
+
+
+    public class CreateCompanyDTO
+    {
+        public string CompanyName { get; set; }
+        public string CompanyID { get; set; }
+        public string Companyphonenumber { get; set; }
+        public string MissionStmt { get; set; }
+        public string VisionStmt { get; set; }
+        public List<string> CompanyTheme { get; set; }
+        public DateTime EstablishmentDate { get; set; }
+        public string CompanyLogo { get; set; }
+        public string Email { get; set; }
+        public string Website { get; set; }
+    }
+
+    public class DeletedCompanyDTO
+    {
+        public string CompanyID { get; set; }
+
+
     }
 }

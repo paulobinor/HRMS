@@ -69,7 +69,7 @@ namespace XpressHRMS.Controllers
 
                 user.Email = base64Email.ToString();
                 user.Password = base64Password.ToString();
-                var resp = await _iSSOservice.Login(user);
+                var resp = await _iSSOservice.LogOut(user);
                 if (resp != null)
                 {
                     response.Data = resp.Data;

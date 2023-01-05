@@ -7,5 +7,6 @@ namespace XpressHRMS.Business.Services.ILogic
     public interface ISSOservice
     {
         Task<BaseResponse> Login(UserLoginDTO user);
+        Task<BaseResponse> LogOut(UserLoginDTO user);
     }
 }
