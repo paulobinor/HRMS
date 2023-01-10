@@ -11,16 +11,19 @@ using XpressHRMS.Data.IRepository;
 
 namespace XpressHRMS.Controllers
 {
-    public class DepartmentController : Controller
+    [Route("api/[controller]")]
+
+    public class DepartmentController : ControllerBase
     {
         private readonly IDepartmentService _departmentService;
-        private DepartmentController(IDepartmentService departmentService)
+        public DepartmentController(IDepartmentService departmentService)
         {
             _departmentService = departmentService;
         }
 
         [HttpPost("CreateDepartment")]
-        public async Task<IActionResult> CreateDepartment(DepartmentDTO payload)
+
+        public async Task<IActionResult> CreateDepartment([FromBody] DepartmentDTO payload)
         {
             BaseResponse response = new BaseResponse();
             try
@@ -42,21 +45,28 @@ namespace XpressHRMS.Controllers
             }
         }
 
-
         [HttpPut("UpdateDepartment")]
-        public async Task<IActionResult> UpdateDepartment(UpdateDepartmentDTO payload)
+
+        public async Task<IActionResult> UpdateDepartment([FromBody] UpdateDepartmentDTO payload)
         {
             BaseResponse response = new BaseResponse();
             try
             {
                 var resp = await _departmentService.UpdateDepartment(payload);
-                if (resp != null)
+                if (resp.Data != null)
                 {
                     response.Data = resp;
                     response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = "";
+                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
+                }
+                else
+                {
+                    response.Data = resp;
+                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.ResponseMessage = resp.ResponseMessage;
+                    return Ok(response);
                 }
                 return Ok(response);
             }
@@ -66,21 +76,27 @@ namespace XpressHRMS.Controllers
             }
         }
 
-
         [HttpDelete("DeleteDepartment")]
-        public async Task<IActionResult> DeleteDepartment(DeleteDepartmentDTO payload)
+        public async Task<IActionResult> DeleteDepartment([FromBody] DeleteDepartmentDTO payload)
         {
             BaseResponse response = new BaseResponse();
             try
             {
                 var resp = await _departmentService.DeleteDepartment(payload);
-                if (resp != null)
+                if (resp.Data != null)
                 {
                     response.Data = resp;
                     response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = "";
+                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
+                }
+                else
+                {
+                    response.Data = resp;
+                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.ResponseMessage = resp.ResponseMessage;
+                    return Ok(response);
                 }
                 return Ok(response);
             }
@@ -90,20 +106,27 @@ namespace XpressHRMS.Controllers
             }
         }
 
-        [HttpPut("ActivateDepartment")]
-        public async Task<IActionResult> ActivateDepartment(DeleteDepartmentDTO payload)
+        [HttpGet("GetAllDepartment")]
+        public async Task<IActionResult> GetAllDepartment(int CompanyID)
         {
             BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _departmentService.ActivateDepartment(payload);
-                if (resp != null)
+                var resp = await _departmentService.GetAllDepartments(CompanyID);
+                if (resp.Data != null)
                 {
                     response.Data = resp;
                     response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = "";
+                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
+                }
+                else
+                {
+                    response.Data = resp;
+                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.ResponseMessage = resp.ResponseMessage;
+                    return Ok(response);
                 }
                 return Ok(response);
             }
@@ -113,20 +136,87 @@ namespace XpressHRMS.Controllers
             }
         }
 
-        [HttpPut("DisableDepartment")]
-        public async Task<IActionResult> DisableDepartment(DeleteDepartmentDTO payload)
+        [HttpGet("GetAllDepartmentByID")]
+        public async Task<IActionResult> GetAllDepartmentByID(int CompanyID, int DepartmentID)
         {
             BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _departmentService.DisableDepartment(payload);
-                if (resp != null)
+                var resp = await _departmentService.GetAllDepartmentByID(CompanyID, DepartmentID);
+                if (resp.Data != null)
                 {
                     response.Data = resp;
                     response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = "";
+                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
+                }
+                else
+                {
+                    response.Data = resp;
+                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.ResponseMessage = resp.ResponseMessage;
+                    return Ok(response);
+                }
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return Ok(response);
+            }
+        }
+
+        [HttpPost("ActivateDepartment")]
+        public async Task<IActionResult> ActivateDepartment(int CompanyID)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                var resp = await _departmentService.ActivateDepartment(null);
+                if (resp.Data != null)
+                {
+                    response.Data = resp;
+                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.ResponseMessage = resp.ResponseMessage;
+                    return Ok(response);
+
+                }
+                else
+                {
+                    response.Data = resp;
+                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.ResponseMessage = resp.ResponseMessage;
+                    return Ok(response);
+                }
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return Ok(response);
+            }
+        }
+
+        [HttpPost("DisableDepartment")]
+        public async Task<IActionResult> DisableDepartment(int CompanyID)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                var resp = await _departmentService.DisableDepartment(null);
+                if (resp.Data != null)
+                {
+                    response.Data = resp;
+                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.ResponseMessage = resp.ResponseMessage;
+                    return Ok(response);
+
+                }
+                else
+                {
+                    response.Data = resp;
+                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.ResponseMessage = resp.ResponseMessage;
+                    return Ok(response);
                 }
                 return Ok(response);
             }

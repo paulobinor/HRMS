@@ -11,7 +11,7 @@ namespace XpressHRMS.Data.DTO
         public string DepartmentName { get; set; }
         public int HODEmployeeID { get; set; }
         public DateTime DateCreated { get; set; }
-        public int CreatedByUserID { get; set; }
+        public string CreatedBy { get; set; }
         public int CompanyID { get; set; }
 
         public bool isActive { get; set; }
@@ -40,14 +40,6 @@ namespace XpressHRMS.Data.DTO
     }
 
     public class DeleteDepartmentDTO
-    {
-        public int DepartmentID { get; set; }
-        public int CompanyID { get; set; }
-
-
-    }
-
-    public class GetDepartment
     {
         public int DepartmentID { get; set; }
         public int CompanyID { get; set; }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\saheed.alabi\\Source\\Repos\\hrms-be-backend\\XpressHRMS.Business\\XpressHRMS.Business.csproj": {}
+    "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Business\\XpressHRMS.Business.csproj": {}
   },
   "projects": {
-    "C:\\Users\\saheed.alabi\\Source\\Repos\\hrms-be-backend\\XpressHRMS.Business\\XpressHRMS.Business.csproj": {
+    "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Business\\XpressHRMS.Business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\saheed.alabi\\Source\\Repos\\hrms-be-backend\\XpressHRMS.Business\\XpressHRMS.Business.csproj",
+        "projectUniqueName": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Business\\XpressHRMS.Business.csproj",
         "projectName": "XpressHRMS.Business",
-        "projectPath": "C:\\Users\\saheed.alabi\\Source\\Repos\\hrms-be-backend\\XpressHRMS.Business\\XpressHRMS.Business.csproj",
+        "projectPath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Business\\XpressHRMS.Business.csproj",
         "packagesPath": "C:\\Users\\saheed.alabi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\saheed.alabi\\Source\\Repos\\hrms-be-backend\\XpressHRMS.Business\\obj\\",
+        "outputPath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Business\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -35,8 +35,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\Users\\saheed.alabi\\Source\\Repos\\hrms-be-backend\\XpressHRMS.Data\\XpressHRMS.Data.csproj": {
-                "projectPath": "C:\\Users\\saheed.alabi\\Source\\Repos\\hrms-be-backend\\XpressHRMS.Data\\XpressHRMS.Data.csproj"
+              "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Data\\XpressHRMS.Data.csproj": {
+                "projectPath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Data\\XpressHRMS.Data.csproj"
               }
             }
           }
@@ -51,6 +51,14 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.0, )"
+            },
+            "Microsoft.AspNet.WebApi.Core": {
+              "target": "Package",
+              "version": "[5.2.9, )"
+            },
             "Microsoft.Extensions.Logging.Abstractions": {
               "target": "Package",
               "version": "[7.0.0, )"
@@ -87,14 +95,14 @@
         }
       }
     },
-    "C:\\Users\\saheed.alabi\\Source\\Repos\\hrms-be-backend\\XpressHRMS.Data\\XpressHRMS.Data.csproj": {
+    "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Data\\XpressHRMS.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\saheed.alabi\\Source\\Repos\\hrms-be-backend\\XpressHRMS.Data\\XpressHRMS.Data.csproj",
+        "projectUniqueName": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Data\\XpressHRMS.Data.csproj",
         "projectName": "XpressHRMS.Data",
-        "projectPath": "C:\\Users\\saheed.alabi\\Source\\Repos\\hrms-be-backend\\XpressHRMS.Data\\XpressHRMS.Data.csproj",
+        "projectPath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Data\\XpressHRMS.Data.csproj",
         "packagesPath": "C:\\Users\\saheed.alabi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\saheed.alabi\\Source\\Repos\\hrms-be-backend\\XpressHRMS.Data\\obj\\",
+        "outputPath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -139,6 +147,10 @@
               "version": "[5.0.1, )"
             },
             "Microsoft.Extensions.Configuration.Abstractions": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
               "target": "Package",
               "version": "[7.0.0, )"
             },

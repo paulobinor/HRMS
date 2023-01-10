@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NTL3ncBErxe2y9qrlv9SWq8i075XFGdUEZ8fai+eZMFkLPGiFGyYNNKqh+67RPclf5Tp6fLLC7ULQs7sb/DmIg==",
+  "dgSpecHash": "ZNd3XutkZ+/VgyVAGA5ws4qfnmD5kEwGG1Ib76PHaIEUx7IIAqz/iw70bak5U5wAXJ3ZeAquH8uyHVCO9t9XOw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\saheed.alabi\\Source\\Repos\\hrms-be-backend\\XpressHRMS.Data\\XpressHRMS.Data.csproj",
+  "projectFilePath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Data\\XpressHRMS.Data.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
@@ -12,6 +12,7 @@
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.data.sqlclient\\5.0.1\\microsoft.data.sqlclient.5.0.1.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\5.0.1\\microsoft.data.sqlclient.sni.runtime.5.0.1.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\7.0.0\\microsoft.extensions.configuration.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\7.0.0\\microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\7.0.0\\microsoft.extensions.logging.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.identity.client\\4.45.0\\microsoft.identity.client.4.45.0.nupkg.sha512",

@@ -1,8 +1,10 @@
 ﻿using Dapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,10 +19,14 @@ namespace XpressHRMS.Data.Repository
     {
         private readonly ILogger<DepartmentRepository> _logger;
         private readonly IDapperGeneric _dapper;
+        private readonly string _connectionString;
 
-        public DepartmentRepository(ILogger<DepartmentRepository> logger)
+
+        public DepartmentRepository(ILogger<DepartmentRepository> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _connectionString = configuration.GetConnectionString("HRMSConnectionString");
+
 
         }
 
@@ -28,14 +34,21 @@ namespace XpressHRMS.Data.Repository
         {
             try
             {
-                var param = new DynamicParameters();
-                param.Add("@Status", ACTION.INSERT);
-                param.Add("@DepartmentName", payload.DepartmentName);
-                param.Add("@HODEmployeeID", payload.HODEmployeeID);
-                param.Add("@CreatedByUserID", payload.CreatedByUserID);
-                param.Add("@isActive", true);
-                param.Add("@CompanyID", payload.CompanyID);
-                return await _dapper.Get<int>("", param, commandType: CommandType.StoredProcedure);
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                { 
+                       var param = new DynamicParameters();
+                        param.Add("@Status", ACTION.INSERT);
+                        param.Add("@DepartmentName", payload.DepartmentName);
+                        param.Add("@HODEmployeeID", payload.HODEmployeeID);
+                        param.Add("@CreatedByUserID", payload.CreatedBy);
+                        param.Add("@isActive", true);
+                        param.Add("@CompanyID", payload.CompanyID);
+                    dynamic response = await _dapper.ExecuteAsync("Sp_Department", param: param, commandType: CommandType.StoredProcedure);
+                    return response;
+
+                }
+
+
 
 
             }
@@ -50,11 +63,16 @@ namespace XpressHRMS.Data.Repository
         {
             try
             {
-                var param = new DynamicParameters();
-                param.Add("@Status", ACTION.DELETE);
-                param.Add("@DepartmentID", DepartmentID);
-                param.Add("@CompanyID", CompanyID);
-                return await _dapper.Get<int>("", param, commandType: CommandType.StoredProcedure);
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", ACTION.DELETE);
+                    param.Add("@DepartmentID", DepartmentID);
+                    param.Add("@CompanyID", CompanyID);
+                    dynamic response = await _dapper.ExecuteAsync("Sp_Department", param: param, commandType: CommandType.StoredProcedure);
+                    return response;
+                }
+                
 
 
             }
@@ -70,11 +88,16 @@ namespace XpressHRMS.Data.Repository
         {
             try
             {
-                var param = new DynamicParameters();
-                param.Add("@Status", ACTION.DELETE);
-                param.Add("@DepartmentID", DepartmentID);
-                param.Add("@CompanyID", CompanyID);
-                return await _dapper.Get<int>("", param, commandType: CommandType.StoredProcedure);
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", ACTION.DELETE);
+                    param.Add("@DepartmentID", DepartmentID);
+                    param.Add("@CompanyID", CompanyID);
+                    dynamic response = await _dapper.ExecuteAsync("Sp_Department", param: param, commandType: CommandType.StoredProcedure);
+                    return response;
+                }
+              
 
             }
             catch (Exception ex)
@@ -89,11 +112,16 @@ namespace XpressHRMS.Data.Repository
         {
             try
             {
-                var param = new DynamicParameters();
-                param.Add("@Status", ACTION.DELETE);
-                param.Add("@DepartmentID", DepartmentID);
-                param.Add("@CompanyID", CompanyID);
-                return await _dapper.Get<int>("", param, commandType: CommandType.StoredProcedure);
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", ACTION.DELETE);
+                    param.Add("@DepartmentID", DepartmentID);
+                    param.Add("@CompanyID", CompanyID);
+                    dynamic response = await _dapper.ExecuteAsync("Sp_Department", param: param, commandType: CommandType.StoredProcedure);
+                    return response;
+                }
+              
 
             }
             catch (Exception ex)
@@ -108,13 +136,19 @@ namespace XpressHRMS.Data.Repository
         {
             try
             {
-                var param = new DynamicParameters();
-                param.Add("@Status", ACTION.UPDATE);
-                param.Add("@DepartmentName", payload.DepartmentName);
-                param.Add("@HODEmployeeID", payload.HODEmployeeID);
-                param.Add("@DepartmentID", payload.DepartmentID);
-                param.Add("@CompanyID", payload.CompanyID);
-                return await _dapper.Get<int>("", param, commandType: CommandType.StoredProcedure);
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", ACTION.UPDATE);
+                    param.Add("@DepartmentName", payload.DepartmentName);
+                    param.Add("@HODEmployeeID", payload.HODEmployeeID);
+                    param.Add("@DepartmentID", payload.DepartmentID);
+                    param.Add("@CompanyID", payload.CompanyID);
+
+                    dynamic response = await _dapper.ExecuteAsync("Sp_Department", param: param, commandType: CommandType.StoredProcedure);
+                    return response;
+                }
+              
 
 
             }
@@ -125,14 +159,19 @@ namespace XpressHRMS.Data.Repository
             }
 
         }
-        public async Task<List<GetDepartmentDTO>> GetAllDepartment(int CompanyID)
+        public async Task<IEnumerable<GetDepartmentDTO>> GetAllDepartment(int CompanyID)
         {
             try
             {
-                var param = new DynamicParameters();
-                param.Add("@Status", ACTION.SELECTALL);
-                param.Add("@CompanyID", CompanyID);
-                return await _dapper.GetAll<GetDepartmentDTO>("", param, commandType: CommandType.StoredProcedure);
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", ACTION.SELECTALL);
+                    param.Add("@CompanyID", CompanyID);
+                    var response = await _dapper.QueryAsync<GetDepartmentDTO>("Sp_Department", param: param, commandType: CommandType.StoredProcedure);
+                    return response;
+                }
+               
 
             }
             catch (Exception ex)
@@ -143,15 +182,20 @@ namespace XpressHRMS.Data.Repository
 
         }
 
-        public async Task<List<GetDepartmentDTO>> GetAllDepartmentByID(int DepartmentID, int CompanyID)
+        public async Task<IEnumerable<GetDepartmentDTO>> GetAllDepartmentByID(int DepartmentID, int CompanyID)
         {
             try
             {
-                var param = new DynamicParameters();
-                param.Add("@Status", ACTION.SELECTBYID);
-                param.Add("@DepartmentID", DepartmentID);
-                param.Add("@CompanyID", CompanyID);
-                return await _dapper.GetAll<GetDepartmentDTO>("", param, commandType: CommandType.StoredProcedure);
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", ACTION.SELECTBYID);
+                    param.Add("@DepartmentID", DepartmentID);
+                    param.Add("@CompanyID", CompanyID);
+                    var response = await _dapper.QueryAsync<GetDepartmentDTO>("Sp_Department", param: param, commandType: CommandType.StoredProcedure);
+                    return response;
+
+                }
 
             }
             catch (Exception ex)

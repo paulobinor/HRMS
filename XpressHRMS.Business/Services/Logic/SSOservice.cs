@@ -11,9 +11,12 @@ using XpressHRMS.Data.AppContants;
 using XpressHRMS.Data.DTO;
 using XpressHRMS.Business.Services.ILogic;
 using XpressHRMS.Data.Response;
+using System.Web.Http;
 
 namespace XpressHRMS.Business.Services.Logic
 {
+    [Route("api/[controller]")]
+
     public class SSOservice : ISSOservice
     {
         private readonly ILogger<SSOservice> _logger;
@@ -36,36 +39,6 @@ namespace XpressHRMS.Business.Services.Logic
                 if (validation.Data != null)
                 {
                    // var S_Response = JsonConvert.DeserializeObject<SSOResponse>(validation.Data.ToString());
-
-                    response.ResponseCode = "";
-                    response.ResponseMessage = "";
-                    response.Data = validation.Data;
-                    return response;
-
-                }
-                response.ResponseMessage = validation.ResponseMessage;
-                return response;
-
-            }
-            catch (Exception ex)
-            {
-                return response;
-
-            }
-
-        }
-
-        public async Task<BaseResponse> LogOut(UserLoginDTO user)
-        {
-            BaseResponse response = new BaseResponse();
-            try
-            {
-                string URL = URLConstant.SSOBaseURL + URLConstant.LogOut;
-                var client = new RestClient(URL);
-                var validation = await _genericRepository.PostAsync<UserLoginDTO, BaseResponse>(URL, user);
-                if (validation.Data != null)
-                {
-                    // var S_Response = JsonConvert.DeserializeObject<SSOResponse>(validation.Data.ToString());
 
                     response.ResponseCode = "";
                     response.ResponseMessage = "";
