@@ -1,8 +1,10 @@
 ﻿using Dapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,10 +19,13 @@ namespace XpressHRMS.Data.Repository
     {
         private readonly ILogger<UnitRepository> _logger;
         private readonly IDapperGeneric _dapper;
+        private readonly string _connectionString;
 
-        public UnitRepository(ILogger<UnitRepository> logger)
+        public UnitRepository(ILogger<UnitRepository> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _connectionString = configuration.GetConnectionString("HRMSConnectionString");
+
 
         }
 
@@ -28,13 +33,18 @@ namespace XpressHRMS.Data.Repository
         {
             try
             {
-                var param = new DynamicParameters();
-                param.Add("@Status", ACTION.INSERT);
-                param.Add("@UnitName", payload.UnitName);
-                param.Add("@HODEmployeeID", payload.HODEmployeeID);
-                param.Add("@CreatedByUserID", payload.CreatedByUserID);
-                param.Add("@isActive", true);
-                return await _dapper.Get<int>("", param, commandType: CommandType.StoredProcedure);
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", ACTION.INSERT);
+                    param.Add("@UnitName", payload.UnitName);
+                    param.Add("@HODEmployeeID", payload.HODEmployeeID);
+                    param.Add("@CreatedByUserID", payload.CreatedByUserID);
+                    param.Add("@isActive", true);
+                    dynamic response = await _dapper.ExecuteAsync("Sp_Unit", param: param, commandType: CommandType.StoredProcedure);
+                    return response;
+                }
+                   
 
 
             }
@@ -49,10 +59,15 @@ namespace XpressHRMS.Data.Repository
         {
             try
             {
-                var param = new DynamicParameters();
-                param.Add("@Status", ACTION.DELETE);
-                param.Add("@UnitID", UnitID);
-                return await _dapper.Get<int>("", param, commandType: CommandType.StoredProcedure);
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", ACTION.DELETE);
+                    param.Add("@UnitID", UnitID);
+                    dynamic response = await _dapper.ExecuteAsync("Sp_Unit", param: param, commandType: CommandType.StoredProcedure);
+                    return response;
+
+                }
 
 
             }
@@ -68,10 +83,15 @@ namespace XpressHRMS.Data.Repository
         {
             try
             {
-                var param = new DynamicParameters();
-                param.Add("@Status", ACTION.DISABLE);
-                param.Add("@UnitID", UnitID);
-                return await _dapper.Get<int>("", param, commandType: CommandType.StoredProcedure);
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", ACTION.DISABLE);
+                    param.Add("@UnitID", UnitID);
+                    dynamic response = await _dapper.ExecuteAsync("Sp_Unit", param: param, commandType: CommandType.StoredProcedure);
+                    return response;
+
+                }
 
             }
             catch (Exception ex)
@@ -85,10 +105,15 @@ namespace XpressHRMS.Data.Repository
         {
             try
             {
-                var param = new DynamicParameters();
-                param.Add("@Status", ACTION.ACTIVATE);
-                param.Add("@UnitID", UnitID);
-                return await _dapper.Get<int>("", param, commandType: CommandType.StoredProcedure);
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+
+                    var param = new DynamicParameters();
+                    param.Add("@Status", ACTION.ACTIVATE);
+                    param.Add("@UnitID", UnitID);
+                    dynamic response = await _dapper.ExecuteAsync("Sp_Unit", param: param, commandType: CommandType.StoredProcedure);
+                    return response;
+                }
 
             }
             catch (Exception ex)
@@ -103,13 +128,19 @@ namespace XpressHRMS.Data.Repository
         {
             try
             {
-                var param = new DynamicParameters();
-                param.Add("@Status", ACTION.UPDATE);
-                param.Add("@UnitName", payload.UnitName);
-                param.Add("@HODEmployeeID", payload.HODEmployeeID);
-                param.Add("@UnitID", payload.UnitID);
-                param.Add("@DepartmentID", payload.DepartmentID);
-                return await _dapper.Get<int>("", param, commandType: CommandType.StoredProcedure);
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", ACTION.UPDATE);
+                    param.Add("@UnitName", payload.UnitName);
+                    param.Add("@HODEmployeeID", payload.HODEmployeeID);
+                    param.Add("@UnitID", payload.UnitID);
+                    param.Add("@DepartmentID", payload.DepartmentID);
+                    dynamic response = await _dapper.ExecuteAsync("Sp_Unit", param: param, commandType: CommandType.StoredProcedure);
+                    return response;
+                }
+
+                  
 
 
             }
@@ -120,13 +151,18 @@ namespace XpressHRMS.Data.Repository
             }
 
         }
-        public async Task<List<UnitDTO>> GetAllUnits(UnitDTO payload)
+        public async Task<IEnumerable<UnitDTO>> GetAllUnits(UnitDTO payload)
         {
             try
             {
-                var param = new DynamicParameters();
-                param.Add("@Status", ACTION.SELECTALL);
-                return await _dapper.GetAll<UnitDTO>("", param, commandType: CommandType.StoredProcedure);
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", ACTION.SELECTALL);
+                    var response = await _dapper.QueryAsync<UnitDTO>("Sp_Unit", param: param, commandType: CommandType.StoredProcedure);
+                    return response;
+                }
+                   
 
             }
             catch (Exception ex)
@@ -137,14 +173,19 @@ namespace XpressHRMS.Data.Repository
 
         }
 
-        public async Task<List<UnitDTO>> GetUnitByID(int UnitID)
+        public async Task<IEnumerable<UnitDTO>> GetUnitByID(int UnitID)
         {
             try
             {
-                var param = new DynamicParameters();
-                param.Add("@Status", ACTION.SELECTBYID);
-                param.Add("@UnitID", UnitID);
-                return await _dapper.GetAll<UnitDTO>("", param, commandType: CommandType.StoredProcedure);
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", ACTION.SELECTBYID);
+                    param.Add("@UnitID", UnitID);
+                    var response = await _dapper.QueryAsync<UnitDTO>("Sp_Unit", param: param, commandType: CommandType.StoredProcedure);
+                    return response;
+                }
+               
 
             }
             catch (Exception ex)

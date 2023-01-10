@@ -11,5 +11,7 @@ namespace XpressHRMS.Business.Services.ILogic
         Task<BaseResponse> DeleteDepartment(DeleteDepartmentDTO payload);
         Task<BaseResponse> DisableDepartment(DeleteDepartmentDTO payload);
         Task<BaseResponse> UpdateDepartment(UpdateDepartmentDTO payload);
+        Task<BaseResponse> GetAllDepartmentByID(int CompanyID, int DepartmentID);
+        Task<BaseResponse> GetAllDepartments(int CompanyID);
     }
 }

@@ -20,7 +20,6 @@ namespace XpressHRMS.Data.DTO
         public string UnitName { get; set; }
         public int HODEmployeeID { get; set; }
         public int DepartmentID { get; set; }
-
         public DateTime DateUpdated { get; set; }
     }
 

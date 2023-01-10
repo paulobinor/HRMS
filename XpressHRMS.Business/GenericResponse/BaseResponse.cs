@@ -12,4 +12,11 @@ namespace XpressHRMS.Business.GenericResponse
         public string ResponseMessage { get; set; }
         public object Data { get; set; }
     }
+    public class BaseResponseLogin
+    {
+        public string ResponseCode { get; set; }
+        public string ResponseMessage { get; set; }
+        public object Data { get; set; }
+        public object jwttoken { get; set; }
+    }
 }

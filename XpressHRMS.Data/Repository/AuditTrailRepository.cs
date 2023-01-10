@@ -17,14 +17,14 @@ namespace XpressHRMS.Data.Repository
     {
         private readonly ILogger<AuditTrailRepository> _logger;
         private readonly string _connectionString;
-        private readonly IDapperGeneric _dapperGeneric;
+        private readonly IDapperGeneric _dapper;
         public AuditTrailRepository(IConfiguration configuration, ILogger<AuditTrailRepository> logger, IDapperGeneric dapper)
         {
-            _connectionString = configuration.GetConnectionString("HRMSConnectionString");
+            _connectionString = configuration.GetConnectionString("");
             _logger = logger;
-            _dapperGeneric = dapper;
+            _dapper = dapper;
         }
-        public async Task<List<AuditDTO>> GetAllAuditTrail(string DateFrom, string DateTo)
+        public async Task<List<AuditTrail>> GetAllAuditTrail(string DateFrom, string DateTo)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace XpressHRMS.Data.Repository
                 param.Add("@DateFrom", DateFrom);
                 param.Add("@DateTo", DateTo);
 
-                return await _dapperGeneric.GetAll<AuditDTO>("sp_get_audit_trail", param, commandType: CommandType.StoredProcedure);
+                return await _dapper.GetAll<AuditTrail>("sp_get_audit_trail", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
@@ -56,7 +56,7 @@ namespace XpressHRMS.Data.Repository
                 param.Add("@Response", payload.Response);
 
 
-                return await _dapperGeneric.Get<long>("sp_process_audit_trail", param, commandType: CommandType.StoredProcedure);
+                return await _dapper.Get<long>("sp_process_audit_trail", param, commandType: CommandType.StoredProcedure);
 
             }
             catch (Exception ex)
