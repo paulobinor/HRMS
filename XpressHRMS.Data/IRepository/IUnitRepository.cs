@@ -6,12 +6,12 @@ namespace XpressHRMS.Data.IRepository
 {
     public interface IUnitRepository
     {
-        Task<int> ActivateUnit(int UnitID);
-        Task<int> CreateUnit(UnitDTO payload);
-        Task<int> DeleteUnit(int UnitID);
-        Task<int> DisableUnit(int UnitID);
-        Task<IEnumerable<UnitDTO>> GetAllUnits(UnitDTO payload);
-        Task<IEnumerable<UnitDTO>> GetUnitByID(int UnitID);
+        Task<int> ActivateUnit(int UnitID, int CompanyID);
+        Task<int> CreateUnit(CreateUnitDTO payload);
+        Task<int> DeleteUnit(int UnitID, int CompanyID);
+        Task<int> DisableUnit(int UnitID, int CompanyID);
+        Task<IEnumerable<UnitDTO>> GetAllUnits(int CompanyID);
+        Task<IEnumerable<UnitDTO>> GetUnitByID(int UnitID, int CompanyID);
         Task<int> UpdateUnit(UpdateUnitDTO payload);
     }
 }

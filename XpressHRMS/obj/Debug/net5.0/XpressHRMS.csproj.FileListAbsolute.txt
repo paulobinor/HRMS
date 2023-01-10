@@ -84,7 +84,6 @@ C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\bin\Debug\net5.0\X
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\bin\Debug\net5.0\XpressHRMS.runtimeconfig.json
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\bin\Debug\net5.0\XpressHRMS.runtimeconfig.dev.json
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\bin\Debug\net5.0\XpressHRMS.dll
-C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\bin\Debug\net5.0\ref\XpressHRMS.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\bin\Debug\net5.0\XpressHRMS.pdb
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\bin\Debug\net5.0\AutoMapper.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\bin\Debug\net5.0\Azure.Core.dll
@@ -156,3 +155,4 @@ C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Debug\net5.0\X
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Debug\net5.0\ref\XpressHRMS.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Debug\net5.0\XpressHRMS.pdb
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Debug\net5.0\XpressHRMS.genruntimeconfig.cache
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\bin\Debug\net5.0\ref\XpressHRMS.dll
