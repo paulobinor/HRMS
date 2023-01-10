@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "X5B7GIFVvCK4EuM16bJ7739TpZgSIF7sc3WsJf1VecD8eYYBXt59t6w9TXdCiPrYyWV16+XkkBpLD/OdJU0+Rg==",
+  "dgSpecHash": "4C7xqU121Kmsn/rVkk6JhrjJKVQZljSl1yHJAsC0glbAfzfn9YkFDrHotkBBlfWUfrdXgmx3Ek43AqLbWc/v6A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\saheed.alabi\\Source\\Repos\\hrms-be-backend\\XpressHRMS.Model\\XpressHRMS.Model.csproj",
+  "projectFilePath": "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Model\\XpressHRMS.Model.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
