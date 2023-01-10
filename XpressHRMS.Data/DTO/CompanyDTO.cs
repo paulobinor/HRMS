@@ -8,7 +8,10 @@ namespace XpressHRMS.Data.DTO
 {
     public class CompanyDTO
     {
+        public int CompanyID { get; set; }
+
         public string CompanyName { get; set; }
+
         public string Companyphonenumber { get; set; }
         public string MissionStmt { get; set; }
         public string VisionStmt { get; set; }

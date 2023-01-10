@@ -15,6 +15,7 @@ namespace XpressHRMS.Business
 
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<ISSOservice, SSOservice>();
+            services.AddScoped<IBranchService, BranchService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IUnitService, UnitService>();
