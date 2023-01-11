@@ -5,6 +5,6 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\bin\Release\net5.0\publish\</_PublishTargetUrl>
-    <History>True|2023-01-10T16:52:44.6018841Z;True|2023-01-10T17:06:57.0714880+01:00;True|2023-01-10T11:13:18.6474327+01:00;True|2023-01-10T09:05:19.5932955+01:00;</History>
+    <History>True|2023-01-10T21:49:27.0033426Z;True|2023-01-10T17:52:44.6018841+01:00;True|2023-01-10T17:06:57.0714880+01:00;True|2023-01-10T11:13:18.6474327+01:00;True|2023-01-10T09:05:19.5932955+01:00;</History>
   </PropertyGroup>
 </Project>

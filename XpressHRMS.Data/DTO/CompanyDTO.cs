@@ -15,7 +15,7 @@ namespace XpressHRMS.Data.DTO
         public string Companyphonenumber { get; set; }
         public string MissionStmt { get; set; }
         public string VisionStmt { get; set; }
-        public List<string>CompanyTheme { get; set; }
+        public string CompanyTheme { get; set; }
         public DateTime EstablishmentDate { get; set; }
         public string CompanyLogo { get; set; }
         public string Email { get; set; }

@@ -19,6 +19,7 @@ namespace XpressHRMS.Data
             services.AddScoped<IUnitRepository, UnitRepository>();
             services.AddSingleton<IDapperGeneric, DapperGenericRepository>();
             services.AddScoped<IBranchRepository, BranchRepository>();
+            services.AddScoped<IBankRepository, BankRepository>();
 
 
 

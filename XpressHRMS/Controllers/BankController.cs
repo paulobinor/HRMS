@@ -11,17 +11,16 @@ using XpressHRMS.Data.Enums;
 namespace XpressHRMS.Controllers
 {
     [Route("api/[controller]")]
-
-    public class BranchController : ControllerBase
+    public class BankController : ControllerBase
     {
-        private readonly IBranchService _branchService;
-        public BranchController(IBranchService branchService)
+        private readonly IBankService _bankService;
+        public BankController(IBankService bankService)
         {
-            _branchService = branchService;
+            _bankService = bankService;
         }
 
-        [HttpPost("CreateBranch")]
-        public async Task<IActionResult> CreateBranch([FromBody] CreateBranchDTO payload)
+        [HttpPost("CreateBank")]
+        public async Task<IActionResult> CreateBank([FromBody] CreateBankDTO payload)
         {
 
             BaseResponse response = new BaseResponse();
@@ -33,7 +32,7 @@ namespace XpressHRMS.Controllers
 
             try
             {
-                var resp = await _branchService.CreateBranch(payload);
+                var resp = await _bankService.CreateBank(payload);
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
@@ -57,8 +56,8 @@ namespace XpressHRMS.Controllers
             }
         }
 
-        [HttpPut("UpdateBranch")]
-        public async Task<IActionResult> UpdateBranch([FromBody] UpdateBranchDTO payload)
+        [HttpPut("UpdateBank")]
+        public async Task<IActionResult> UpdateBank([FromBody] UpdateBankDTO payload)
         {
             BaseResponse response = new BaseResponse();
 
@@ -66,7 +65,7 @@ namespace XpressHRMS.Controllers
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _branchService.UpdateBranch(payload);
+                var resp = await _bankService.UpdateBank(payload);
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
@@ -89,45 +88,14 @@ namespace XpressHRMS.Controllers
                 return Ok(response);
             }
         }
-        [HttpDelete("DeleteBranch")]
-        public async Task<IActionResult> DeleteBranch(DeleteBranchDTO payload)
-        {
-            BaseResponse response = new BaseResponse();
-
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-            try
-            {
-                var resp = await _branchService.DeleteBranch(payload);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
-            }
-            catch (Exception e)
-            {
-                return Ok(response);
-            }
-        }
-        [HttpGet("GetAllBranches")]
-        public async Task<IActionResult> GetAllBranches(int CompanyID)
+       
+        [HttpGet("GetAllBanks")]
+        public async Task<IActionResult> GetAllBanks()
         {
             BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _branchService.GetAllBranches(CompanyID);
+                var resp = await _bankService.GetAllBanks();
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
@@ -150,8 +118,8 @@ namespace XpressHRMS.Controllers
                 return Ok(response);
             }
         }
-        [HttpGet("GetBranchByID")]
-        public async Task<IActionResult> GetBranchByID(DeleteBranchDTO payload)
+        [HttpGet("GetBankByID")]
+        public async Task<IActionResult> GetBankByID(int bankid )
         {
             BaseResponse response = new BaseResponse();
 
@@ -159,7 +127,7 @@ namespace XpressHRMS.Controllers
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _branchService.GetBranchByID(payload);
+                var resp = await _bankService.GetBankByID(bankid);
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
