@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "4C7xqU121Kmsn/rVkk6JhrjJKVQZljSl1yHJAsC0glbAfzfn9YkFDrHotkBBlfWUfrdXgmx3Ek43AqLbWc/v6A==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Model\\XpressHRMS.Model.csproj",
+  "expectedPackageFiles": [],
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Model\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
+}
