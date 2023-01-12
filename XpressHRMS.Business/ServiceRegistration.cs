@@ -15,11 +15,17 @@ namespace XpressHRMS.Business
 
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<ISSOservice, SSOservice>();
+            services.AddScoped<IBranchService, BranchService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<ICompanyService, CompanyService>();
+<<<<<<< HEAD
             services.AddScoped<IPositionService, PositionService>();
             services.AddScoped<IGradeService, GradeService>();
             services.AddScoped<IEmployeeTypeService, EmployeeTypeService>();
+=======
+            services.AddScoped<IUnitService, UnitService>();
+            services.AddScoped<IBankService, BankService>();
+>>>>>>> SaheedDev
         }
     }
 }

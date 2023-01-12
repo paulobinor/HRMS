@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -39,7 +40,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.INSERT);
                     param.Add("@CompanyName", payload.CompanyName);
                     param.Add("@Companyphonenumber", payload.Companyphonenumber);
-                    //param.Add("@CompanyTheme", payload.CompanyTheme);
+                    param.Add("@CompanyTheme", JsonConvert.SerializeObject(payload.CompanyTheme));
                     param.Add("@Email", payload.Email);
                     param.Add("@EstablishmentDate", payload.EstablishmentDate);
                     param.Add("@MissionStmt", payload.MissionStmt);
