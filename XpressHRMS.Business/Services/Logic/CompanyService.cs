@@ -128,15 +128,11 @@ namespace XpressHRMS.Business.Services.Logic
                         return response;
                     }
                 }
-
-
-
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: CreateComapany() ===>{ex.Message}");
                 return response;
-
             }
 
         }
@@ -454,8 +450,6 @@ namespace XpressHRMS.Business.Services.Logic
                     response.ResponseCode = ResponseCode.InternalServer.ToString();
                     response.Data = null;
                     return response;
-
-                    
                 }
                 else
                 {

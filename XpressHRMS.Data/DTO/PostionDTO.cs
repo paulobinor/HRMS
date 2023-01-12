@@ -6,26 +6,48 @@ using System.Threading.Tasks;
 
 namespace XpressHRMS.Data.DTO
 {
-    public class AuditDTO
+    public class CreatePositionDTO
     {
-        public long AuditTrailId { get; set; }
-        public long UserId { get; set; }
-        public DateTime AccessDate { get; set; }
-        public string Operation { get; set; }
-        public string AccessedFromIpAddress { get; set; }
-        public string AccessedFromPort { get; set; }
-        public string Payload { get; set; }
-        public string Response { get; set; }
-        public string OperationBy { get; set; }
+        public int CompanyID { get; set; }
+        //public int PositionID { get; set; }
+        public string PositionName { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime DateCreated { get; set; }
+        public int IsActive { get; set; }
+
     }
-    public class AuditTrailReq
+
+    public class   UPdatePositionDTO
     {
-        public long UserId { get; set; }
-        public DateTime AccessDate { get; set; }
-        public string Operation { get; set; }
-        public string AccessedFromIpAddress { get; set; }
-        public string AccessedFromPort { get; set; }
-        public string Payload { get; set; }
-        public string Response { get; set; }
+        public int CompanyID { get; set; }
+        public int PositionID { get; set; }
+        public string PositionName { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime DateCreated { get; set; }
+        public int IsActive { get; set; }
+
+    }
+
+    public class DeletePositionDTO
+    {
+        public int CompanyID { get; set; }
+        public int PositionID { get; set; }
+        //public string PositionName { get; set; }
+        //public string CreatedBy { get; set; }
+        public DateTime DateCreated { get; set; }
+        public int IsActive { get; set; }
+
+    }
+
+
+    public class PositionDTO
+    {
+        public int CompanyID { get; set; }
+        public int PositionID { get; set; }
+        public string PositionName { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime DateCreated { get; set; }
+        public int IsActive { get; set; }
+
     }
 }

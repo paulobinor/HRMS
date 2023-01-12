@@ -17,7 +17,9 @@ namespace XpressHRMS.Data
             services.AddScoped<IAuditTrailRepository, AuditTrailRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddSingleton<IDapperGeneric, DapperGenericRepository>();
-
+            services.AddSingleton<IPositionRepository, PositionRepository>();
+            services.AddSingleton<IGradeRepository, GradeRepository>();
+            services.AddSingleton<IEmployeeTypeRepository, EmployeeTypeRepository>();
 
 
         }

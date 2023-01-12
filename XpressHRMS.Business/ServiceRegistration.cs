@@ -17,6 +17,9 @@ namespace XpressHRMS.Business
             services.AddScoped<ISSOservice, SSOservice>();
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IPositionService, PositionService>();
+            services.AddScoped<IGradeService, GradeService>();
+            services.AddScoped<IEmployeeTypeService, EmployeeTypeService>();
         }
     }
 }
