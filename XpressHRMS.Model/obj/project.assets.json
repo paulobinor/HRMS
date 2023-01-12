@@ -8,20 +8,30 @@
     "net5.0": []
   },
   "packageFolders": {
-    "C:\\Users\\olajumoke.owolabi\\.nuget\\packages\\": {}
+    "C:\\Users\\saheed.alabi\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Model\\XpressHRMS.Model.csproj",
+      "projectUniqueName": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Model\\XpressHRMS.Model.csproj",
       "projectName": "XpressHRMS.Model",
-      "projectPath": "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Model\\XpressHRMS.Model.csproj",
-      "packagesPath": "C:\\Users\\olajumoke.owolabi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Model\\obj\\",
+      "projectPath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Model\\XpressHRMS.Model.csproj",
+      "packagesPath": "C:\\Users\\saheed.alabi\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Model\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\olajumoke.owolabi\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\saheed.alabi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
@@ -60,16 +70,8 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Model\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  }
 }
