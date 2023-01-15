@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ using XpressHRMS.Data.IRepository;
 namespace XpressHRMS.Controllers
 {
     [Route("api/[controller]")]
-
+    [Authorize]
     public class DepartmentController : ControllerBase
     {
         private readonly IDepartmentService _departmentService;

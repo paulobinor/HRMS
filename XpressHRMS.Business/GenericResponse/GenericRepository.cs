@@ -94,7 +94,7 @@ namespace XpressHRMS.Business.GenericResponse
             }
         }
 
-        public async Task<TR> PostAsync<T, TR>(string uri, T data, string authToken = "")
+        public async Task<string> PostAsync<T, TR>(string uri, T data, string authToken = "")
         {
             try
             {
@@ -120,8 +120,8 @@ namespace XpressHRMS.Business.GenericResponse
                 jsonResult = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
                 if (responseMessage.IsSuccessStatusCode)
                 {
-                    var json = JsonConvert.DeserializeObject<TR>(jsonResult);
-                    return json;
+                    //var json = JsonConvert.SerializeObject<TR>(jsonResult);
+                    return jsonResult;
                 }
 
                 if (responseMessage.StatusCode == HttpStatusCode.Forbidden ||
@@ -140,7 +140,7 @@ namespace XpressHRMS.Business.GenericResponse
                 throw;
             }
         }
-        
+
         public async Task<T> PutAsync<T>(string uri, T data, string authToken = "")
         {
             try

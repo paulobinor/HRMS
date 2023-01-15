@@ -103,8 +103,7 @@ namespace XpressHRMS.Business.Services.Logic
                     };
 
 
-                    //var audit=_auditTrailRepository.CreateAuditTrail(auditry);
-
+                    var audit=_auditTrailRepository.CreateAuditTrail(auditry);
                     dynamic result = await _companyRepository.CreateCompany(payload);
                     if (result > 0)
                     {
@@ -280,6 +279,7 @@ namespace XpressHRMS.Business.Services.Logic
                         Response = ((int)ResponseCode.Ok).ToString().ToString()
                     };
 
+                    var audit = _auditTrailRepository.CreateAuditTrail(auditry);
 
                     int result = await _companyRepository.DeleteCompany(CompanyID);
                     if (result > 0)
@@ -343,6 +343,7 @@ namespace XpressHRMS.Business.Services.Logic
                         Response = ((int)ResponseCode.Ok).ToString().ToString()
                     };
 
+                    var audit = _auditTrailRepository.CreateAuditTrail(auditry);
 
                     int result = await _companyRepository.DisableCompany(CompanyID);
                     if (result > 0)
@@ -406,7 +407,7 @@ namespace XpressHRMS.Business.Services.Logic
                         Response = ((int)ResponseCode.Ok).ToString().ToString()
                     };
 
-
+                    var audit = _auditTrailRepository.CreateAuditTrail(auditry);
                     int result = await _companyRepository.ActivateCompany(CompanyID);
                     if (result > 0)
                     {

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +11,13 @@ using XpressHRMS.Data.DTO;
 using XpressHRMS.Business.Services.ILogic;
 using XpressHRMS.Data.Response;
 using System.Web.Http;
+using RestSharp;
+using Polly;
+using System.Net;
+using System.Diagnostics;
+using System.Net.Http;
+using RestSharp.Authenticators;
+using System.Threading;
 
 namespace XpressHRMS.Business.Services.Logic
 {
@@ -36,17 +42,16 @@ namespace XpressHRMS.Business.Services.Logic
                 string URL = URLConstant.SSOBaseURL + URLConstant.Login;
                 var client = new RestClient(URL);
                 var validation = await _genericRepository.PostAsync<UserLoginDTO, BaseResponse>(URL, user);
-                if (validation.Data != null)
+                if (validation != null)
                 {
-                   // var S_Response = JsonConvert.DeserializeObject<SSOResponse>(validation.Data.ToString());
-
+                    var S_Response = JsonConvert.DeserializeObject<SSOResponse>(validation);
+                   
                     response.ResponseCode = "";
                     response.ResponseMessage = "";
-                    response.Data = validation.Data;
+                    response.Data = S_Response;
                     return response;
 
                 }
-                response.ResponseMessage = validation.ResponseMessage;
                 return response;
 
             }

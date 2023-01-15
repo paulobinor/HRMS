@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using XpressHRMS.Business.GenericResponse;
@@ -9,6 +10,7 @@ using XpressHRMS.Data.Enums;
 namespace XpressHRMS.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
 
     public class UnitController : ControllerBase
     {

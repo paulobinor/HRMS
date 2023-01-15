@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ using XpressHRMS.Data.Enums;
 namespace XpressHRMS.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
+
     public class BankController : ControllerBase
     {
         private readonly IBankService _bankService;

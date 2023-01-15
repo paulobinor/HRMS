@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ using XpressHRMS.Data.Enums;
 namespace XpressHRMS.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
 
     public class CompanyController : ControllerBase
     {
@@ -36,7 +38,7 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.ResponseCode = resp.ResponseCode;
                     response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
@@ -44,7 +46,7 @@ namespace XpressHRMS.Controllers
                 else
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.ResponseCode = resp.ResponseCode;
                     response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }

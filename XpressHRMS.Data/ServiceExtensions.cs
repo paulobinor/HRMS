@@ -18,15 +18,13 @@ namespace XpressHRMS.Data
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IUnitRepository, UnitRepository>();
             services.AddSingleton<IDapperGeneric, DapperGenericRepository>();
-<<<<<<< HEAD
             services.AddSingleton<IPositionRepository, PositionRepository>();
             services.AddSingleton<IGradeRepository, GradeRepository>();
             services.AddSingleton<IEmployeeTypeRepository, EmployeeTypeRepository>();
-=======
             services.AddScoped<IBranchRepository, BranchRepository>();
             services.AddScoped<IBankRepository, BankRepository>();
 
->>>>>>> SaheedDev
+
 
 
         }

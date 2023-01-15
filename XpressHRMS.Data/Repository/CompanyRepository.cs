@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -16,6 +17,8 @@ using XpressHRMS.IRepository;
 
 namespace XpressHRMS.Data.Repository
 {
+    
+    [Authorize]
     public class CompanyRepository : ICompanyRepository
     {
         private readonly ILogger<CompanyRepository> _logger;

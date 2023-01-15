@@ -238,3 +238,7 @@ C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS\obj\Debug\ne
 =======
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\bin\Debug\net5.0\ref\XpressHRMS.dll
 >>>>>>> SaheedDev
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\bin\Debug\net5.0\Microsoft.AspNetCore.Authorization.dll
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\bin\Debug\net5.0\Microsoft.AspNetCore.Metadata.dll
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\bin\Debug\net5.0\Microsoft.Extensions.Options.dll

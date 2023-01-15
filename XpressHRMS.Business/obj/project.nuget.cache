@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "5M8EhNeQbhxA8dDS2p8/CelI7Z+C+zMdCnoBoKiND2mFAy4y8ClFeIe5+7fhF8Dfog5Kpl70r9RAFRPektc27Q==",
+  "dgSpecHash": "uB+9Kvn0vR2NyhttzfTR2Ixm4sLQKU/F9G79+UiGWEGRyxw5JOZxzNuAAZhyhTABCQJZjaqByxaocbrvrQduEg==",
   "success": true,
   "projectFilePath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Business\\XpressHRMS.Business.csproj",
   "expectedPackageFiles": [
@@ -10,6 +10,8 @@
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\dapper\\2.0.123\\dapper.2.0.123.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.aspnet.webapi.client\\5.2.9\\microsoft.aspnet.webapi.client.5.2.9.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.aspnet.webapi.core\\5.2.9\\microsoft.aspnet.webapi.core.5.2.9.nupkg.sha512",
+    "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.aspnetcore.authorization\\7.0.2\\microsoft.aspnetcore.authorization.7.0.2.nupkg.sha512",
+    "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.aspnetcore.metadata\\7.0.2\\microsoft.aspnetcore.metadata.7.0.2.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.data.sqlclient\\5.0.1\\microsoft.data.sqlclient.5.0.1.nupkg.sha512",
@@ -17,6 +19,7 @@
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\7.0.0\\microsoft.extensions.configuration.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\7.0.0\\microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\7.0.0\\microsoft.extensions.logging.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.extensions.options\\7.0.0\\microsoft.extensions.options.7.0.0.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.identity.client\\4.45.0\\microsoft.identity.client.4.45.0.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.identity.client.extensions.msal\\2.19.3\\microsoft.identity.client.extensions.msal.2.19.3.nupkg.sha512",
