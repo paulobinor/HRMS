@@ -300,19 +300,23 @@ namespace XpressHRMS.Business.Services.Logic
             try
             {
 
-                dynamic result = await _departmentRepository.GetAllDepartment(CompanyID);
-                if (result.Count>0)
+                var result = await _departmentRepository.GetAllDepartment(CompanyID);
+                if (result==null)
+                {
+
+                    response.ResponseMessage = "No Record Found";
+                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.Data = result;
+                    return response;
+
+                    
+                }
+               
+                else
                 {
                     response.ResponseMessage = "Department Retrieved Successfully";
                     response.ResponseCode = ResponseCode.Ok.ToString();
                     response.Data = result;
-                    return response;
-                }
-                else
-                {
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    response.Data = null;
                     return response;
                 }
 

@@ -11,11 +11,15 @@ C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Release\net5.0
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Release\net5.0\PubTmp\Out\Dapper.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Release\net5.0\PubTmp\Out\System.Net.Http.Formatting.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Release\net5.0\PubTmp\Out\System.Web.Http.dll
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Release\net5.0\PubTmp\Out\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Release\net5.0\PubTmp\Out\Microsoft.AspNetCore.Authorization.dll
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Release\net5.0\PubTmp\Out\Microsoft.AspNetCore.Metadata.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Release\net5.0\PubTmp\Out\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Release\net5.0\PubTmp\Out\Microsoft.Data.SqlClient.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Release\net5.0\PubTmp\Out\Microsoft.Extensions.Configuration.Abstractions.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Release\net5.0\PubTmp\Out\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Release\net5.0\PubTmp\Out\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Release\net5.0\PubTmp\Out\Microsoft.Extensions.Options.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Release\net5.0\PubTmp\Out\Microsoft.Extensions.Primitives.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Release\net5.0\PubTmp\Out\Microsoft.Identity.Client.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Release\net5.0\PubTmp\Out\Microsoft.Identity.Client.Extensions.Msal.dll

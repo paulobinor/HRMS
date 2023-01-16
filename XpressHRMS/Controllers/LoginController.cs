@@ -50,7 +50,7 @@ namespace XpressHRMS.Controllers
 
                 var resp = await _iSSOservice.Login(user);
                 //var resp = "d";
-                if (resp.Data!=null)
+                if (resp.ResponseCode=="00")
                 {
                        var authClaims = new List<Claim>
                         {
@@ -64,7 +64,7 @@ namespace XpressHRMS.Controllers
                     var token = new JwtSecurityToken(
                         issuer: _config["JWT:ValidIssuer"],
                         audience: _config["JWT:ValidAudience"],
-                        expires: DateTime.Now.AddHours(3),
+                        expires: DateTime.Now.AddMinutes(15),
                         claims: authClaims,
                         signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                         );
@@ -76,6 +76,7 @@ namespace XpressHRMS.Controllers
                 }
                 else
                 {
+                    response.Data = resp;
                     return Ok(response);
 
                 }
@@ -88,7 +89,22 @@ namespace XpressHRMS.Controllers
 
 
 
-       
+        //public RefreshToken GenerateRefreshToken(string ipAddress)
+        //{
+        //    // generate token that is valid for 7 days
+        //    using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+        //    var randomBytes = new byte[64];
+        //    rngCryptoServiceProvider.GetBytes(randomBytes);
+        //    var refreshToken = new RefreshToken
+        //    {
+        //        Token = Convert.ToBase64String(randomBytes),
+        //        Expires = DateTime.UtcNow.AddDays(7),
+        //        Created = DateTime.UtcNow,
+        //        CreatedByIp = ipAddress
+        //    };
+
+        //    return refreshToken;
+        //}
 
         [HttpPost("LogOut")]
 

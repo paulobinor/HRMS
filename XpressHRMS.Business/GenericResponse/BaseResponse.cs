@@ -19,4 +19,10 @@ namespace XpressHRMS.Business.GenericResponse
         public string RoleName { get; set; }
         public int CompanyID { get; set; }
     }
+    public class SSOLogout
+    {
+        public string responseCode { get; set; }
+        public string responseMessage { get; set; }
+        public object data { get; set; }
+    }
 }
