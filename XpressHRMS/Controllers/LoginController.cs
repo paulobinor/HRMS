@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using RestSharp;
@@ -21,13 +23,15 @@ namespace XpressHRMS.Controllers
     public class LoginController : ControllerBase
     {
         private readonly ISSOservice _iSSOservice;
+        private IConfiguration _config;
         private readonly ILogger<LoginController> _logger;
-        public LoginController(ILogger<LoginController> logger, ISSOservice iSSOservice)
+        public LoginController(ILogger<LoginController> logger, ISSOservice iSSOservice, IConfiguration config)
         {
             _logger = logger;
             _iSSOservice = iSSOservice;
+            _config = config;
         }
-
+        [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<IActionResult> Login(string Email, string Password)
         {
@@ -42,38 +46,65 @@ namespace XpressHRMS.Controllers
                 var base64Password = System.Convert.ToBase64String(plainTextPassword);
 
                 user.Email = base64Email.ToString();
-                user.Password = base64Password.ToString();
-                var resp = await _iSSOservice.Login(user);
-                if (resp!=null)
-                {
-                    var secretKey = new SymmetricSecurityKey
-                   (Encoding.UTF8.GetBytes("thisisasecretkey@123"));
-                    var signinCredentials = new SigningCredentials
-                   (secretKey, SecurityAlgorithms.HmacSha256);
-                    var jwtSecurityToken = new JwtSecurityToken(
-                        issuer: "ABCXYZ",
-                        audience: "http://localhost:51398",
-                        claims: new List<Claim>(),
-                        expires: DateTime.Now.AddMinutes(10),
-                        signingCredentials: signinCredentials
-                    );
-                    Ok(new JwtSecurityTokenHandler().
-                    WriteToken(jwtSecurityToken));
+                user.Password = base64Password.ToString();               
 
+                var resp = await _iSSOservice.Login(user);
+                //var resp = "d";
+                if (resp.ResponseCode=="00")
+                {
+                       var authClaims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name, user.Email),
+                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        };
+
+
+                    var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Secret"]));
+
+                    var token = new JwtSecurityToken(
+                        issuer: _config["JWT:ValidIssuer"],
+                        audience: _config["JWT:ValidAudience"],
+                        expires: DateTime.Now.AddMinutes(15),
+                        claims: authClaims,
+                        signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                        );
+                    response.jwttoken = new JwtSecurityTokenHandler().WriteToken(token);
                     response.Data = resp.Data;
-                    response.ResponseCode = "";
-                    response.ResponseMessage = "";
-                    response.jwttoken = jwtSecurityToken;
+                    return Ok(response);
+
+
+                }
+                else
+                {
+                    response.Data = resp;
                     return Ok(response);
 
                 }
-                return Ok(response);
             }
-            catch (Exception e)
+            catch (Exception Ex)
             {
                 return Ok(response);
             }
         }
+
+
+
+        //public RefreshToken GenerateRefreshToken(string ipAddress)
+        //{
+        //    // generate token that is valid for 7 days
+        //    using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+        //    var randomBytes = new byte[64];
+        //    rngCryptoServiceProvider.GetBytes(randomBytes);
+        //    var refreshToken = new RefreshToken
+        //    {
+        //        Token = Convert.ToBase64String(randomBytes),
+        //        Expires = DateTime.UtcNow.AddDays(7),
+        //        Created = DateTime.UtcNow,
+        //        CreatedByIp = ipAddress
+        //    };
+
+        //    return refreshToken;
+        //}
 
         [HttpPost("LogOut")]
 

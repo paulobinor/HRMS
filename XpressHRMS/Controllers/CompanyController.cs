@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ using XpressHRMS.Data.Enums;
 namespace XpressHRMS.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
 
     public class CompanyController : ControllerBase
     {
@@ -35,16 +37,16 @@ namespace XpressHRMS.Controllers
                 var resp = await _companyService.CreateCompany(payload, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.Data = resp.Data;
+                    response.ResponseCode = resp.ResponseCode;
                     response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.Data = resp.Data;
+                    response.ResponseCode = resp.ResponseCode;
                     response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
@@ -68,7 +70,7 @@ namespace XpressHRMS.Controllers
                 var resp = await _companyService.UpdateCompany(payload, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
+                    response.Data = resp.Data;
                     response.ResponseCode = ResponseCode.Ok.ToString();
                     response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
@@ -76,7 +78,7 @@ namespace XpressHRMS.Controllers
                 }
                 else
                 {
-                    response.Data = resp;
+                    response.Data = resp.Data;
                     response.ResponseCode = ResponseCode.Ok.ToString();
                     response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
@@ -100,7 +102,7 @@ namespace XpressHRMS.Controllers
                 var resp = await _companyService.DeleteCompany(CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
+                    response.Data = resp.Data;
                     response.ResponseCode = ResponseCode.Ok.ToString();
                     response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
@@ -108,7 +110,7 @@ namespace XpressHRMS.Controllers
                 }
                 else
                 {
-                    response.Data = resp;
+                    response.Data = resp.Data;
                     response.ResponseCode = ResponseCode.Ok.ToString();
                     response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
@@ -129,7 +131,7 @@ namespace XpressHRMS.Controllers
                 var resp = await _companyService.GetAllCompanies();
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
+                    response.Data = resp.Data;
                     response.ResponseCode = ResponseCode.Ok.ToString();
                     response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
@@ -137,8 +139,8 @@ namespace XpressHRMS.Controllers
                 }
                 else
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.Data = resp.Data;
+                    response.ResponseCode = ResponseCode.NotFound.ToString();
                     response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
@@ -161,7 +163,7 @@ namespace XpressHRMS.Controllers
                 var resp = await _companyService.GetCompanyByID(CompanyID);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
+                    response.Data = resp.Data;
                     response.ResponseCode = ResponseCode.Ok.ToString();
                     response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
@@ -169,8 +171,8 @@ namespace XpressHRMS.Controllers
                 }
                 else
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.Data = resp.Data;
+                    response.ResponseCode = ResponseCode.NotFound.ToString();
                     response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
@@ -193,7 +195,7 @@ namespace XpressHRMS.Controllers
                 var resp = await _companyService.ActivateCompany(CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
+                    response.Data = resp.Data;
                     response.ResponseCode = ResponseCode.Ok.ToString();
                     response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
@@ -201,7 +203,7 @@ namespace XpressHRMS.Controllers
                 }
                 else
                 {
-                    response.Data = resp;
+                    response.Data = resp.Data;
                     response.ResponseCode = ResponseCode.Ok.ToString();
                     response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
@@ -226,7 +228,7 @@ namespace XpressHRMS.Controllers
                 var resp = await _companyService.DisableCompany(CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
+                    response.Data = resp.Data;
                     response.ResponseCode = ResponseCode.Ok.ToString();
                     response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
@@ -234,7 +236,7 @@ namespace XpressHRMS.Controllers
                 }
                 else
                 {
-                    response.Data = resp;
+                    response.Data = resp.Data;
                     response.ResponseCode = ResponseCode.Ok.ToString();
                     response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);

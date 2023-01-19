@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +11,13 @@ using XpressHRMS.Data.DTO;
 using XpressHRMS.Business.Services.ILogic;
 using XpressHRMS.Data.Response;
 using System.Web.Http;
+using RestSharp;
+using Polly;
+using System.Net;
+using System.Diagnostics;
+using System.Net.Http;
+using RestSharp.Authenticators;
+using System.Threading;
 
 namespace XpressHRMS.Business.Services.Logic
 {
@@ -34,19 +40,34 @@ namespace XpressHRMS.Business.Services.Logic
             try
             {
                 string URL = URLConstant.SSOBaseURL + URLConstant.Login;
+
                 var client = new RestClient(URL);
                 var validation = await _genericRepository.PostAsync<UserLoginDTO, BaseResponse>(URL, user);
-                if (validation.Data != null)
-                {
-                   // var S_Response = JsonConvert.DeserializeObject<SSOResponse>(validation.Data.ToString());
+                var S_Response = JsonConvert.DeserializeObject<SSOResponse>(validation);
 
-                    response.ResponseCode = "";
-                    response.ResponseMessage = "";
-                    response.Data = validation.Data;
+                if (S_Response.responseCode =="00")
+                {
+                    response.Data = S_Response.data;
+                    response.ResponseMessage = S_Response.responseMessage;
+                    response.ResponseCode = S_Response.responseCode;
                     return response;
 
                 }
-                response.ResponseMessage = validation.ResponseMessage;
+                else if (S_Response.responseCode=="09")
+                {
+                     Logout(user);
+
+                }
+                else
+                {
+                    response.Data = S_Response.data;
+                    response.ResponseMessage = S_Response.responseMessage;
+                    response.ResponseCode = S_Response.responseCode;
+                    return response;
+                }
+                response.Data = S_Response.data;
+                response.ResponseMessage = S_Response.responseMessage;
+                response.ResponseCode = S_Response.responseCode;
                 return response;
 
             }
@@ -58,5 +79,29 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
+        public void Logout(UserLoginDTO payload)
+        {
+            try
+            {
+                UserLogoutDTO user = new UserLogoutDTO();
+                byte[] data = Convert.FromBase64String(payload.Email);
+                string decodedString = Encoding.UTF8.GetString(data);
+                user.Email = decodedString;
+                string URLLogout = URLConstant.SSOBaseURL + URLConstant.LogOut;
+             
+                var client = new RestClient(URLLogout);
+                var validation =   _genericRepository.PostAsync<UserLogoutDTO, BaseResponse>(URLLogout, user);
+                var S_Response = JsonConvert.DeserializeObject<SSOLogout>(validation.ToString());
+                if (S_Response.responseCode=="00")
+                {
+                    var gobacktologin =  Login(payload);
+                }
+               
+
+            }
+            catch (Exception ex)
+            {
+            }
+        }
     }
 }

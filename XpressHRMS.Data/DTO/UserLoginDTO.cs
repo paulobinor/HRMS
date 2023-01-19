@@ -11,4 +11,9 @@ namespace XpressHRMS.Data.DTO
         public string Email { get; set; }
         public string Password { get; set; }
     }
+
+    public class UserLogoutDTO
+    {
+        public string Email { get; set; }
+    }
 }
