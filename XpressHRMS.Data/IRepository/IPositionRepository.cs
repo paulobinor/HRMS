@@ -12,8 +12,8 @@ namespace XpressHRMS.Data.IRepository
         Task<int> CreatePosition(CreatePositionDTO createposition);
         Task<int> UpdatePosition(UPdatePositionDTO Updateposition);
         Task<int> DeletePosition(DeletePositionDTO deletePosition);
-        Task<int> DisablePosition(int PositionID);
-        Task<int> ActivatePosition(int PositionID);
+        Task<int> DisablePosition(int PositionID, int CompanyIDDis);
+        Task<int> ActivatePosition(int PositionID, int CompanyIDEna);
         Task<IEnumerable<PositionDTO>> GetAllPositions();
         Task<IEnumerable<PositionDTO>> GetPositionByID(int CompanyID, int PositionID);
     }

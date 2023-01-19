@@ -185,7 +185,7 @@ namespace XpressHRMS.Controllers
         }
 
         [HttpPost("ActivateEmployeeType")]
-        public async Task<IActionResult> ActivateEmployeeType(int EmployeeTypeID)
+        public async Task<IActionResult> ActivateEmployeeType(int EmployeeTypeID, int CompanyID)
         {
             BaseResponse response = new BaseResponse();
 
@@ -193,7 +193,7 @@ namespace XpressHRMS.Controllers
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _EmployeeTypeService.ActivateEmployeeType(EmployeeTypeID, RemoteIpAddress, RemotePort);
+                var resp = await _EmployeeTypeService.ActivateEmployeeType(EmployeeTypeID, CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
                     response.Data = resp;
@@ -218,7 +218,7 @@ namespace XpressHRMS.Controllers
         }
 
         [HttpPost("DisableEmployeeType")]
-        public async Task<IActionResult> DisableEmployeeType(int EmployeeTypeID)
+        public async Task<IActionResult> DisableEmployeeType(int EmployeeTypeID, int CompanyID)
         {
             BaseResponse response = new BaseResponse();
 
@@ -226,7 +226,7 @@ namespace XpressHRMS.Controllers
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _EmployeeTypeService.DisableEmployeeType(EmployeeTypeID, RemoteIpAddress, RemotePort);
+                var resp = await _EmployeeTypeService.DisableEmployeeType(EmployeeTypeID, CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
                     response.Data = resp;

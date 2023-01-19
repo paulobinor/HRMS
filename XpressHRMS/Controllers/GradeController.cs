@@ -189,7 +189,7 @@ namespace XpressHRMS.Controllers
         }
 
         [HttpPost("ActivateGrade")]
-        public async Task<IActionResult> ActivateGrade(int GradeID)
+        public async Task<IActionResult> ActivateGrade(int GradeID, int CompanyID)
         {
             BaseResponse response = new BaseResponse();
 
@@ -197,7 +197,7 @@ namespace XpressHRMS.Controllers
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _GradeService.ActivateGrade(GradeID, RemoteIpAddress, RemotePort);
+                var resp = await _GradeService.ActivateGrade(GradeID, CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
                     response.Data = resp;
@@ -222,7 +222,7 @@ namespace XpressHRMS.Controllers
         }
 
         [HttpPost("DisableGrade")]
-        public async Task<IActionResult> DisableGrade(int GradeID)
+        public async Task<IActionResult> DisableGrade(int GradeID, int CompanyID)
         {
             BaseResponse response = new BaseResponse();
 
@@ -230,7 +230,7 @@ namespace XpressHRMS.Controllers
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _GradeService.DisableGrade(GradeID, RemoteIpAddress, RemotePort);
+                var resp = await _GradeService.DisableGrade(GradeID, CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
                     response.Data = resp;

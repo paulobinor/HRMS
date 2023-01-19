@@ -13,8 +13,8 @@ namespace XpressHRMS.Business.Services.ILogic
         Task<BaseResponse> CreateEmployeeType(CreateEmployeeTypeDTO createEmployeeType, string RemoteIpAddress, string RemotePort);
         Task<BaseResponse> UpdateEmployeeType(UpdateEmployeeTypeDTO UpdateEmployeeType, string RemoteIpAddress, string RemotePort);
         Task<BaseResponse> DeleteEmployeeType(DelEmployeeTypeDTO DelEmployeeType, string RemoteIpAddress, string RemotePort);
-        Task<BaseResponse> DisableEmployeeType(int EmployeeTypeID, string RemoteIpAddress, string RemotePort);
-        Task<BaseResponse> ActivateEmployeeType(int EmployeeTypeID, string RemoteIpAddress, string RemotePort);
+        Task<BaseResponse> DisableEmployeeType(int EmployeeTypeID, int CompanyID, string RemoteIpAddress, string RemotePort);
+        Task<BaseResponse> ActivateEmployeeType(int EmployeeTypeID, int CompanyID, string RemoteIpAddress, string RemotePort);
         Task<BaseResponse> GetAllEmployeeType();
 
         Task<BaseResponse> GetEmployeeTypeByID(int CompanyID, int PositionID);

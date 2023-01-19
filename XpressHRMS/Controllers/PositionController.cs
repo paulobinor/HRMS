@@ -190,7 +190,7 @@ namespace XpressHRMS.Controllers
         }
 
         [HttpPost("ActivatePosition")]
-        public async Task<IActionResult> ActivatePosition(int PositionID)
+        public async Task<IActionResult> ActivatePosition(int PositionID, int CompanyID)
         {
             BaseResponse response = new BaseResponse();
 
@@ -198,7 +198,7 @@ namespace XpressHRMS.Controllers
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _PositionService.ActivatePosition(PositionID, RemoteIpAddress, RemotePort);
+                var resp = await _PositionService.ActivatePosition(PositionID, CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
                     response.Data = resp;
@@ -223,7 +223,7 @@ namespace XpressHRMS.Controllers
         }
 
         [HttpPost("DisablePosition")]
-        public async Task<IActionResult> DisablePosition(int PositionID)
+        public async Task<IActionResult> DisablePosition(int PositionID, int CompanyID)
         {
             BaseResponse response = new BaseResponse();
 
@@ -231,7 +231,7 @@ namespace XpressHRMS.Controllers
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _PositionService.DisablePosition(PositionID, RemoteIpAddress, RemotePort);
+                var resp = await _PositionService.DisablePosition(PositionID, CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
                     response.Data = resp;
