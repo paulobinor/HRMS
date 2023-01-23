@@ -58,21 +58,21 @@ namespace XpressHRMS.Business.Services.Logic
                     if (result > 0)
                     {
                         response.ResponseMessage = "Department Created Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = payload;
                         return response;
                     }
                     else if (result == -1)
                     {
                         response.ResponseMessage = "Department Already Exist";
-                        response.ResponseCode = ResponseCode.Already_Exist.ToString();
+                        response.ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
                     else
                     {
                         response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -130,14 +130,14 @@ namespace XpressHRMS.Business.Services.Logic
                     if (result > 0)
                     {
                         response.ResponseMessage = "Department Updated Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = payload;
                         return response;
                     }
                     else
                     {
                         response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -187,14 +187,14 @@ namespace XpressHRMS.Business.Services.Logic
                     if (result > 0)
                     {
                         response.ResponseMessage = "Department Deleted Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = payload;
                         return response;
                     }
                     else
                     {
                         response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -237,14 +237,14 @@ namespace XpressHRMS.Business.Services.Logic
                     if (result > 0)
                     {
                         response.ResponseMessage = "Department Disabled Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = payload;
                         return response;
                     }
                     else
                     {
                         response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -271,14 +271,14 @@ namespace XpressHRMS.Business.Services.Logic
                 if (result > 0)
                 {
                     response.ResponseMessage = "Department Activated Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.Data = payload;
                     return response;
                 }
                 else
                 {
                     response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     response.Data = null;
                     return response;
                 }
@@ -304,8 +304,13 @@ namespace XpressHRMS.Business.Services.Logic
                 if (result==null)
                 {
 
+                    response.ResponseMessage = "Department Retrieved Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+
+
                     response.ResponseMessage = "No Record Found";
                     response.ResponseCode = ResponseCode.Ok.ToString();
+
                     response.Data = result;
                     return response;
 
@@ -314,6 +319,11 @@ namespace XpressHRMS.Business.Services.Logic
                
                 else
                 {
+
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                    response.Data = null;
+
                     response.ResponseMessage = "Department Retrieved Successfully";
                     response.ResponseCode = ResponseCode.Ok.ToString();
                     response.Data = result;
@@ -340,14 +350,14 @@ namespace XpressHRMS.Business.Services.Logic
                 if (result.Count > 0)
                 {
                     response.ResponseMessage = "Department Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.Data = result;
                     return response;
                 }
                 else
                 {
                     response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     response.Data = null;
                     return response;
                 }

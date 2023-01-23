@@ -7128,30 +7128,20 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\saheed.alabi\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
-    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\olajumoke.owolabi\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS\\XpressHRMS.csproj",
+      "projectUniqueName": "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS\\XpressHRMS.csproj",
       "projectName": "XpressHRMS",
-      "projectPath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS\\XpressHRMS.csproj",
-      "packagesPath": "C:\\Users\\saheed.alabi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS\\obj\\",
+      "projectPath": "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS\\XpressHRMS.csproj",
+      "packagesPath": "C:\\Users\\olajumoke.owolabi\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\saheed.alabi\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Users\\olajumoke.owolabi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
@@ -7164,11 +7154,11 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Business\\XpressHRMS.Business.csproj": {
-              "projectPath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Business\\XpressHRMS.Business.csproj"
+            "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Business\\XpressHRMS.Business.csproj": {
+              "projectPath": "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Business\\XpressHRMS.Business.csproj"
             },
-            "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Data\\XpressHRMS.Data.csproj": {
-              "projectPath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Data\\XpressHRMS.Data.csproj"
+            "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Data\\XpressHRMS.Data.csproj": {
+              "projectPath": "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Data\\XpressHRMS.Data.csproj"
             }
           }
         }
@@ -7214,6 +7204,12 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[5.0.16, 5.0.16]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -7222,7 +7218,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   },
