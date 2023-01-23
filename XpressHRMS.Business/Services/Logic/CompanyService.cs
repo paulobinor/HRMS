@@ -104,7 +104,14 @@ namespace XpressHRMS.Business.Services.Logic
 
 
                     var audit=_auditTrailRepository.CreateAuditTrail(auditry);
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> master
+>>>>>>> e2edf564460ff757ff7e79041bfc7a224d357bef
                     dynamic result = await _companyRepository.CreateCompany(payload);
                     if (result > 0)
                     {
@@ -487,6 +494,7 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 else
                 {
+<<<<<<< HEAD
 
                     response.ResponseMessage = "Internal Server Error";
                     response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
@@ -494,6 +502,15 @@ namespace XpressHRMS.Business.Services.Logic
                     response.ResponseMessage = "No Record Found";
                     response.ResponseCode = ResponseCode.InternalServer.ToString();
 
+=======
+<<<<<<< HEAD
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+=======
+                    response.ResponseMessage = "No Record Found";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString();
+>>>>>>> master
+>>>>>>> e2edf564460ff757ff7e79041bfc7a224d357bef
                     response.Data = null;
                     return response;
                 }

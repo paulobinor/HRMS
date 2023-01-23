@@ -303,6 +303,10 @@ namespace XpressHRMS.Business.Services.Logic
                 var result = await _departmentRepository.GetAllDepartment(CompanyID);
                 if (result==null)
                 {
+<<<<<<< HEAD
+                    response.ResponseMessage = "Department Retrieved Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+=======
 
                     response.ResponseMessage = "Department Retrieved Successfully";
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
@@ -310,7 +314,11 @@ namespace XpressHRMS.Business.Services.Logic
 
                     response.ResponseMessage = "No Record Found";
                     response.ResponseCode = ResponseCode.Ok.ToString();
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
+>>>>>>> e2edf564460ff757ff7e79041bfc7a224d357bef
                     response.Data = result;
                     return response;
 
@@ -319,14 +327,23 @@ namespace XpressHRMS.Business.Services.Logic
                
                 else
                 {
+<<<<<<< HEAD
 
                     response.ResponseMessage = "Internal Server Error";
                     response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     response.Data = null;
 
+=======
+<<<<<<< HEAD
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                    response.Data = null;
+=======
+>>>>>>> e2edf564460ff757ff7e79041bfc7a224d357bef
                     response.ResponseMessage = "Department Retrieved Successfully";
                     response.ResponseCode = ResponseCode.Ok.ToString();
                     response.Data = result;
+>>>>>>> master
                     return response;
                 }
 
