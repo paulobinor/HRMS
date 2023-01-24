@@ -36,8 +36,8 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.ResponseCode = ResponseCode.Ok.ToString();
+                    //response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
@@ -70,8 +70,8 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.ResponseCode = ResponseCode.Ok.ToString();
+                    //response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
@@ -103,8 +103,8 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.ResponseCode = ResponseCode.Ok.ToString();
+                    //response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
@@ -124,17 +124,17 @@ namespace XpressHRMS.Controllers
         }
 
         [HttpGet("GetAllEmployeeType")]
-        public async Task<IActionResult> GetAllEmployeeType()
+        public async Task<IActionResult> GetAllEmployeeType(int CompanyID)
         {
             BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _EmployeeTypeService.GetAllEmployeeType();
+                var resp = await _EmployeeTypeService.GetAllEmployeeType(CompanyID);
                 if (resp.Data != null)
                 {
                     response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.ResponseCode = ResponseCode.Ok.ToString();
+                    //response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
@@ -167,8 +167,8 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.ResponseCode = ResponseCode.Ok.ToString();
+                    //response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
@@ -188,7 +188,7 @@ namespace XpressHRMS.Controllers
         }
 
         [HttpPost("ActivateEmployeeType")]
-        public async Task<IActionResult> ActivateEmployeeType(int EmployeeTypeID)
+        public async Task<IActionResult> ActivateEmployeeType(int EmployeeTypeID, int CompanyID)
         {
             BaseResponse response = new BaseResponse();
 
@@ -196,12 +196,12 @@ namespace XpressHRMS.Controllers
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _EmployeeTypeService.ActivateEmployeeType(EmployeeTypeID, RemoteIpAddress, RemotePort);
+                var resp = await _EmployeeTypeService.ActivateEmployeeType(EmployeeTypeID, CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
                     response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.ResponseCode = ResponseCode.Ok.ToString();
+                    //response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
@@ -221,7 +221,7 @@ namespace XpressHRMS.Controllers
         }
 
         [HttpPost("DisableEmployeeType")]
-        public async Task<IActionResult> DisableEmployeeType(int EmployeeTypeID)
+        public async Task<IActionResult> DisableEmployeeType(int EmployeeTypeID, int CompanyID)
         {
             BaseResponse response = new BaseResponse();
 
@@ -229,12 +229,12 @@ namespace XpressHRMS.Controllers
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _EmployeeTypeService.DisableEmployeeType(EmployeeTypeID, RemoteIpAddress, RemotePort);
+                var resp = await _EmployeeTypeService.DisableEmployeeType(EmployeeTypeID, CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
                     response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.ResponseCode = ResponseCode.Ok.ToString();
+                    //response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }

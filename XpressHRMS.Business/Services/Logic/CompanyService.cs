@@ -104,25 +104,33 @@ namespace XpressHRMS.Business.Services.Logic
 
 
                     var audit=_auditTrailRepository.CreateAuditTrail(auditry);
+<<<<<<< HEAD
+
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> master
+>>>>>>> e2edf564460ff757ff7e79041bfc7a224d357bef
                     dynamic result = await _companyRepository.CreateCompany(payload);
                     if (result > 0)
                     {
                         response.ResponseMessage = "Department Created Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = payload;
                         return response;
                     }
                     else if (result == -1)
                     {
                         response.ResponseMessage = "Department Already Exist";
-                        response.ResponseCode = ResponseCode.Already_Exist.ToString();
+                        response.ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
                     else
                     {
                         response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -218,14 +226,14 @@ namespace XpressHRMS.Business.Services.Logic
                     if (result > 0)
                     {
                         response.ResponseMessage = "Company Updated Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = payload;
                         return response;
                     }
                     else
                     {
                         response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -285,14 +293,14 @@ namespace XpressHRMS.Business.Services.Logic
                     if (result > 0)
                     {
                         response.ResponseMessage = "Company Deleted Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = CompanyID;
                         return response;
                     }
                     else
                     {
                         response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -349,14 +357,14 @@ namespace XpressHRMS.Business.Services.Logic
                     if (result > 0)
                     {
                         response.ResponseMessage = "Company Disabled Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
                     else
                     {
                         response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -412,14 +420,14 @@ namespace XpressHRMS.Business.Services.Logic
                     if (result > 0)
                     {
                         response.ResponseMessage = "Company Activated Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = CompanyID;
                         return response;
                     }
                     else
                     {
                         response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -448,14 +456,14 @@ namespace XpressHRMS.Business.Services.Logic
                 if (result==null)
                 {
                     response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     response.Data = null;
                     return response;
                 }
                 else
                 {
                     response.ResponseMessage = "Company Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.Data = result;
                     return response;
                 }
@@ -480,14 +488,29 @@ namespace XpressHRMS.Business.Services.Logic
                 if (result.Count > 0)
                 {
                     response.ResponseMessage = "Company Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.Data = result;
                     return response;
                 }
                 else
                 {
+<<<<<<< HEAD
+
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+
                     response.ResponseMessage = "No Record Found";
                     response.ResponseCode = ResponseCode.InternalServer.ToString();
+
+=======
+<<<<<<< HEAD
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+=======
+                    response.ResponseMessage = "No Record Found";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString();
+>>>>>>> master
+>>>>>>> e2edf564460ff757ff7e79041bfc7a224d357bef
                     response.Data = null;
                     return response;
                 }

@@ -40,7 +40,6 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.INSERT);
                     param.Add("@CompanyID", createGrade.CompanyID);
                     param.Add("@GradeName", createGrade.GradeName);
-                    param.Add("@CreatedBy", createGrade.CreatedBy);
                     dynamic response = await _dapper.ExecuteAsync("sp_Grade", param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
@@ -64,7 +63,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@CompanyIDUpd", UpdateGrade.CompanyID);
                     param.Add("@GradeIDUpd", UpdateGrade.GradeID);
                     param.Add("@GradeNameUpd", UpdateGrade.GradeName);
-                    param.Add("@CreatedByUpd", UpdateGrade.CreatedBy);
+                
 
                     dynamic response = await _dapper.ExecuteAsync("sp_Grade", param: param, commandType: CommandType.StoredProcedure);
 
@@ -87,7 +86,7 @@ namespace XpressHRMS.Data.Repository
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.DELETE);
-                    //param.Add("@CompanyID", deleteGrade.CompanyID);
+                    param.Add("@CompanyIDDel", deleteGrade.CompanyID);
                     param.Add("@GradeIDDel", deleteGrade.GradeID);
                     dynamic response = await _dapper.ExecuteAsync("sp_Grade", param: param, commandType: CommandType.StoredProcedure);
                     return response;
@@ -100,7 +99,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<int> DisableGrade(int GradeID)
+        public async Task<int> DisableGrade(int GradeID, int CompanyIDDis)
         {
             try
             {
@@ -109,6 +108,7 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.DISABLE);
                     param.Add("@GradeID", GradeID);
+                    param.Add("@CompanyIDDis", CompanyIDDis);
                     dynamic response = await _dapper.ExecuteAsync("sp_Grade", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
@@ -120,7 +120,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<int> ActivateGrade(int GradeID)
+        public async Task<int> ActivateGrade(int GradeID, int CompanyIDEna)
         {
             try
             {
@@ -129,6 +129,7 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.ACTIVATE);
                     param.Add("@GradeID", GradeID);
+                    param.Add("@CompanyIDEna", CompanyIDEna);
                     dynamic response = await _dapper.ExecuteAsync("sp_Grade", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
@@ -140,7 +141,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<IEnumerable<GradeDTO>> GetAllGrades()
+        public async Task<IEnumerable<GradeDTO>> GetAllGrades(int CompanyID)
         {
             try
             {
@@ -149,6 +150,7 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     int d = (int)GetAllDefault.GetAll;
                     param.Add("@Status", ACTION.SELECTALL);
+                    param.Add("@CompanyIDGet", CompanyID);
                     var response = await _dapper.QueryAsync<GradeDTO>("sp_Grade", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
@@ -169,7 +171,7 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     int d = (int)GetAllDefault.GetAll;
                     param.Add("@Status", ACTION.SELECTBYID);
-                    param.Add("@GradeIDGet", CompanyID);
+                    param.Add("@CompanyIDGet", CompanyID);
                     param.Add("@GradeIDGet", GradeID);
                     var response = await _dapper.QueryAsync<GradeDTO>("sp_Grade", param: param, commandType: CommandType.StoredProcedure);
                     return response;

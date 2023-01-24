@@ -47,11 +47,11 @@ namespace XpressHRMS.Business.Services.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || EmployeeTypeName is NULL";
                 }
-                if (string.IsNullOrEmpty(createEmployeeType.CreatedBy))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || CreatedBy is NULL";
-                }
+                //if (string.IsNullOrEmpty(createEmployeeType.CreatedBy))
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || CreatedBy is NULL";
+                //}
 
                 if (!isModelStateValidate)
                 {
@@ -75,27 +75,27 @@ namespace XpressHRMS.Business.Services.Logic
                     };
 
 
-                    //var audit=_auditTrailRepository.CreateAuditTrail(auditry);
+                    var audit=_auditTrailRepository.CreateAuditTrail(auditry);
 
                     dynamic result = await _EmployeeTypeRepository.CreateEmployeeType(createEmployeeType);
                     if (result > 0)
                     {
                         response.ResponseMessage = "EmployeeTypeName Created Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = createEmployeeType;
                         return response;
                     }
                     else if (result == -1)
                     {
                         response.ResponseMessage = "EmployeeTypeName Already Exist";
-                        response.ResponseCode = ResponseCode.Already_Exist.ToString();
+                        response.ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
                     else
                     {
                         response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -133,11 +133,11 @@ namespace XpressHRMS.Business.Services.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || EmployeeType is NULL";
                 }
-                if (string.IsNullOrEmpty(UpdateEmployeeType.CreatedBy))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || CreatedBy is NULL";
-                }
+                //if (string.IsNullOrEmpty(UpdateEmployeeType.CreatedBy))
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || CreatedBy is NULL";
+                //}
 
 
                 if (!isModelStateValidate)
@@ -167,14 +167,14 @@ namespace XpressHRMS.Business.Services.Logic
                     if (result > 0)
                     {
                         response.ResponseMessage = "EmployeeType Updated Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = UpdateEmployeeType;
                         return response;
                     }
                     else
                     {
                         response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -224,19 +224,20 @@ namespace XpressHRMS.Business.Services.Logic
                         Response = ((int)ResponseCode.Ok).ToString().ToString()
                     };
 
+                    var audit = _auditTrailRepository.CreateAuditTrail(auditry);
 
                     int result = await _EmployeeTypeRepository.DeleteEmployeeType(DelEmployeeType);
                     if (result > 0)
                     {
                         response.ResponseMessage = "Position Deleted Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = DelEmployeeType;
                         return response;
                     }
                     else
                     {
                         response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -250,7 +251,7 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse> DisableEmployeeType(int EmployeeTypeID, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse> DisableEmployeeType(int EmployeeTypeID, int  CompanyID, string RemoteIpAddress, string RemotePort)
         {
             BaseResponse response = new BaseResponse();
             try
@@ -286,12 +287,14 @@ namespace XpressHRMS.Business.Services.Logic
                         Response = ((int)ResponseCode.Ok).ToString().ToString()
                     };
 
+                    var audit = _auditTrailRepository.CreateAuditTrail(auditry);
 
-                    int result = await _EmployeeTypeRepository.DisableEmployeeType(EmployeeTypeID);
+
+                    int result = await _EmployeeTypeRepository.DisableEmployeeType(EmployeeTypeID, CompanyID);
                     if (result > 0)
                     {
                         response.ResponseMessage = "EmployeeType Disabled Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -312,7 +315,7 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse> ActivateEmployeeType(int EmployeeTypeID, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse> ActivateEmployeeType(int EmployeeTypeID, int CompanyID, string RemoteIpAddress, string RemotePort)
         {
             BaseResponse response = new BaseResponse();
 
@@ -347,19 +350,21 @@ namespace XpressHRMS.Business.Services.Logic
                         Response = ((int)ResponseCode.Ok).ToString().ToString()
                     };
 
+                    var audit = _auditTrailRepository.CreateAuditTrail(auditry);
 
-                    int result = await _EmployeeTypeRepository.ActivateEmployeeType(EmployeeTypeID);
+
+                    int result = await _EmployeeTypeRepository.ActivateEmployeeType(EmployeeTypeID , CompanyID);
                     if (result > 0)
                     {
                         response.ResponseMessage = "EmployeeType Activated Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = EmployeeTypeID;
                         return response;
                     }
                     else
                     {
                         response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -373,24 +378,24 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse> GetAllEmployeeType()
+        public async Task<BaseResponse> GetAllEmployeeType(int CompanyID)
         {
             BaseResponse response = new BaseResponse();
 
             try
             {
-                var result = await _EmployeeTypeRepository.GetAllEmployeeType();
+                var result = await _EmployeeTypeRepository.GetAllEmployeeType(CompanyID);
                 if (result == null)
                 {
                     response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     response.Data = null;
                     return response;
                 }
                 else
                 {
                     response.ResponseMessage = "EmployeeType Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.Data = result;
                     return response;
                 }
@@ -414,7 +419,7 @@ namespace XpressHRMS.Business.Services.Logic
                 if (result.Count > 0)
                 {
                     response.ResponseMessage = "EmployeeType Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.Data = result;
                     return response;
                 }

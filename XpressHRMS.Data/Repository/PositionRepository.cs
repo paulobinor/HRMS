@@ -40,7 +40,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.INSERT);
                     param.Add("@CompanyID", createposition.CompanyID);
                     param.Add("@PositionName", createposition.PositionName);
-                    param.Add("@CreatedBy", createposition.CreatedBy);
+                    //param.Add("@CreatedBy", createposition.CreatedBy);
 
 
                     dynamic response = await _dapper.ExecuteAsync("sp_Position", param: param, commandType: CommandType.StoredProcedure);
@@ -69,7 +69,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@PositionIDUpd", Updateposition.PositionID);
                     param.Add("@CompanyIDUpd", Updateposition.CompanyID);
                     param.Add("@PositionNameUpd", Updateposition.PositionName);
-                    param.Add("@CreatedByUpd", Updateposition.CreatedBy);
+                    //param.Add("@CreatedByUpd", Updateposition.CreatedBy);
 
                     dynamic response = await _dapper.ExecuteAsync("sp_Position", param: param, commandType: CommandType.StoredProcedure);
 
@@ -95,6 +95,7 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.DELETE);
                     param.Add("@PositionIDDel", deletePosition.PositionID);
+                    param.Add("@CompanyIDDel", deletePosition.CompanyID);
                     //param.Add("@CompanyIDUpd", deletePosition.CompanyID);
                     dynamic response = await _dapper.ExecuteAsync("sp_Position", param: param, commandType: CommandType.StoredProcedure);
                     return response;
@@ -107,7 +108,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<int> DisablePosition(int PositionID)
+        public async Task<int> DisablePosition(int PositionID, int CompanyIDDis)
         {
             try
             {
@@ -116,6 +117,7 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.DISABLE);
                     param.Add("@PositionID", PositionID);
+                    param.Add("@CompanyIDDis", CompanyIDDis);
                     dynamic response = await _dapper.ExecuteAsync("sp_Position", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
@@ -127,7 +129,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<int> ActivatePosition(int PositionID)
+        public async Task<int> ActivatePosition(int PositionID, int CompanyIDEna)
         {
             try
             {
@@ -136,6 +138,7 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.ACTIVATE);
                     param.Add("@PositionID", PositionID);
+                    param.Add("@CompanyIDEna", CompanyIDEna);
                     dynamic response = await _dapper.ExecuteAsync("sp_Position", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
@@ -147,7 +150,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<IEnumerable<PositionDTO>> GetAllPositions()
+        public async Task<IEnumerable<PositionDTO>> GetAllPositions(int CompanyID)
         {
             try
             {
@@ -156,6 +159,7 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     int d = (int)GetAllDefault.GetAll;
                     param.Add("@Status", ACTION.SELECTALL);
+                    param.Add("@CompanyIDGet", CompanyID);
                     var response = await _dapper.QueryAsync<PositionDTO>("sp_Position", param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
@@ -177,7 +181,7 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     int d = (int)GetAllDefault.GetAll;
                     param.Add("@Status", ACTION.SELECTBYID);
-                    param.Add("@PositionIDGet", CompanyID);
+                    param.Add("@CompanyIDGet", CompanyID);
                     param.Add("@PositionIDGet", PositionID);
                     var response = await _dapper.QueryAsync<PositionDTO>("sp_Position", param: param, commandType: CommandType.StoredProcedure);
                     return response;

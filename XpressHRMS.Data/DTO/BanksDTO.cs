@@ -31,4 +31,4 @@ namespace XpressHRMS.Data.DTO
             public string BankName { get; set; }
         }
 
-    }
+}
