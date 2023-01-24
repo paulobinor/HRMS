@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "PgRVw189LmX/GwFCWI0HTjxcj/BPFPq7fYu3xFDvENdIJ9Mq2d5frxhW6iTE06F9rVFWobsiWjyyr1DxNgdXNw==",
+  "dgSpecHash": "j8k804zvMRVvucXA7M8MZJJ6XuTz8nZa52/HrX8/gUWRzkTpSKbmFf/Wz0zhXVMHdQRoHeyywsPz2sIj4wggJw==",
   "success": true,
   "projectFilePath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS\\XpressHRMS.csproj",
   "expectedPackageFiles": [
@@ -12,6 +12,8 @@
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.aspnet.webapi.core\\5.2.9\\microsoft.aspnet.webapi.core.5.2.9.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\5.0.16\\microsoft.aspnetcore.authentication.jwtbearer.5.0.16.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.aspnetcore.authorization\\7.0.2\\microsoft.aspnetcore.authorization.7.0.2.nupkg.sha512",
+    "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.2.0\\microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
+    "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.2.0\\microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.aspnetcore.metadata\\7.0.2\\microsoft.aspnetcore.metadata.7.0.2.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\saheed.alabi\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

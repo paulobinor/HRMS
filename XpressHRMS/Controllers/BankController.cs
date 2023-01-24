@@ -31,8 +31,6 @@ namespace XpressHRMS.Controllers
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
 
-
-
             try
             {
                 var resp = await _bankService.CreateBank(payload);
