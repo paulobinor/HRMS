@@ -6842,20 +6842,30 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\olajumoke.owolabi\\.nuget\\packages\\": {}
+    "C:\\Users\\saheed.alabi\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Business\\XpressHRMS.Business.csproj",
+      "projectUniqueName": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Business\\XpressHRMS.Business.csproj",
       "projectName": "XpressHRMS.Business",
-      "projectPath": "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Business\\XpressHRMS.Business.csproj",
-      "packagesPath": "C:\\Users\\olajumoke.owolabi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Business\\obj\\",
+      "projectPath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Business\\XpressHRMS.Business.csproj",
+      "packagesPath": "C:\\Users\\saheed.alabi\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Business\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\olajumoke.owolabi\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\saheed.alabi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
@@ -6868,8 +6878,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Data\\XpressHRMS.Data.csproj": {
-              "projectPath": "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Data\\XpressHRMS.Data.csproj"
+            "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Data\\XpressHRMS.Data.csproj": {
+              "projectPath": "C:\\Users\\saheed.alabi\\source\\repos\\hrms-be-backend\\XpressHRMS.Data\\XpressHRMS.Data.csproj"
             }
           }
         }
@@ -6928,7 +6938,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   },

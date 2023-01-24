@@ -49,8 +49,6 @@ namespace XpressHRMS.Controllers
                 else
                 {
                     response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
                 return Ok(response);
@@ -82,8 +80,6 @@ namespace XpressHRMS.Controllers
                 else
                 {
                     response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
                 //return Ok(response);
@@ -115,8 +111,6 @@ namespace XpressHRMS.Controllers
                 else
                 {
                     response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
                 //return Ok(response);
@@ -145,8 +139,6 @@ namespace XpressHRMS.Controllers
                 else
                 {
                     response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
                 //return Ok(response);
@@ -179,8 +171,6 @@ namespace XpressHRMS.Controllers
                 else
                 {
                     response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
                 return Ok(response);
@@ -212,8 +202,6 @@ namespace XpressHRMS.Controllers
                 else
                 {
                     response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
                 return Ok(response);
@@ -245,8 +233,6 @@ namespace XpressHRMS.Controllers
                 else
                 {
                     response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
                 return Ok(response);
