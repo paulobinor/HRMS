@@ -47,11 +47,7 @@ namespace XpressHRMS.Business.Services.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || Position Name is NULL";
                 }
-                //if (string.IsNullOrEmpty(createGrade.CreatedBy))
-                //{
-                //    isModelStateValidate = false;
-                //    validationMessage += "  || CreatedBy is NULL";
-                //}
+              
 
                 if (!isModelStateValidate)
                 {
