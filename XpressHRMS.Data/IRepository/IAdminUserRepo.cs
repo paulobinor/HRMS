@@ -7,7 +7,7 @@ namespace XpressHRMS.Data.IRepository
     public interface IAdminUserRepo
     {
         Task<dynamic> CreateAdminUser(CreateAdminUserLoginDTO payload);
-        Task<IEnumerable<AdminDTO>> LoginAdmin(UserLoginDTO payload
+        Task<AdminDTO> LoginAdmin(UserLoginDTO payload
            );
         Task<IEnumerable<AdminDTO>> GetAdminUser(UserLoginDTO payload);
     }

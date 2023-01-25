@@ -80,3 +80,4 @@ C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Debug\net5.0\X
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Debug\net5.0\ref\XpressHRMS.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Debug\net5.0\XpressHRMS.pdb
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Debug\net5.0\XpressHRMS.genruntimeconfig.cache
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\obj\Debug\net5.0\XpressHRMS.csproj.AssemblyReference.cache

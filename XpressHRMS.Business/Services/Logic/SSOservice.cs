@@ -191,18 +191,16 @@ namespace XpressHRMS.Business.Services.Logic
                     Password = EncryptDecrypt.EncryptResult(payload.Password)
                 };
 
-                dynamic result = await _adminUserRepo.LoginAdmin(adminDetails);
-                if (result.Count > 0)
+                var result = await _adminUserRepo.LoginAdmin(adminDetails);
+                if (result!=null)
                 {
-                    response.ResponseMessage = "Login Successfully";
-                    response.ResponseCode = "00";
+                    
                     response.Data = result;
                     return response;
                 }
                 else
                 {
-                    response.ResponseMessage = "No Record Found";
-                    response.ResponseCode = "01";
+                  
                     response.Data = null;
                     return response;
                 }

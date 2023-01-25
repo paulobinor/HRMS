@@ -38,18 +38,12 @@ namespace XpressHRMS.Controllers
             BaseResponseLogin response = new BaseResponseLogin();
             try
             {
-                UserLoginDTO user = new UserLoginDTO();
-                //var plainTextEmail = System.Text.Encoding.UTF8.GetBytes(Email);
-                //var plainTextPassword = System.Text.Encoding.UTF8.GetBytes(Password);
-
-                //var base64Email = System.Convert.ToBase64String(plainTextEmail);
-                //var base64Password = System.Convert.ToBase64String(plainTextPassword);
-
+                UserLoginDTO user = new UserLoginDTO();               
                 user.Email = Email;
                 user.Password = Password;
 
                 var resp = await _iSSOservice.AdminLogin(user);
-                if (resp.ResponseCode=="00")
+                if (resp.Data!=null)
                 {
                        var authClaims = new List<Claim>
                         {
@@ -67,15 +61,19 @@ namespace XpressHRMS.Controllers
                         claims: authClaims,
                         signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                         );
+                    response.ResponseCode = "00";
+                    response.ResponseMessage = "Login Successfully";
                     response.jwttoken = new JwtSecurityTokenHandler().WriteToken(token);
-                    response.Data = resp;                  
+                    response.Data = resp.Data;                  
                     return Ok(response);
 
 
                 }
                 else
                 {
-                    response.Data = resp;
+                    response.ResponseCode = "01";
+                    response.ResponseMessage = "Invalid Login";
+                    response.Data = resp.Data;
                     return Ok(response);
 
                 }

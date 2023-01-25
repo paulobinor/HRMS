@@ -52,7 +52,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<IEnumerable<AdminDTO>> LoginAdmin(UserLoginDTO payload
+        public async Task<AdminDTO> LoginAdmin(UserLoginDTO payload
            )
         {
             try
@@ -63,7 +63,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.SELECTALL);
                     param.Add("@Email", payload.Email);
                     param.Add("@Password", payload.Password);
-                    var login = await _dapper.QueryAsync<AdminDTO>("Sp_AdminUser", param: param, commandType: CommandType.StoredProcedure);
+                    var login = await _dapper.QueryFirstAsync<AdminDTO>("Sp_AdminUser", param: param, commandType: CommandType.StoredProcedure);
                     return login;
                     //return await _dapper.GetAll<CompanyDTO>("Sp_Company", param, commandType: CommandType.StoredProcedure);
                 }
