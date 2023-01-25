@@ -23,6 +23,7 @@ namespace XpressHRMS.Data
             services.AddSingleton<IEmployeeTypeRepository, EmployeeTypeRepository>();
             services.AddScoped<IBranchRepository, BranchRepository>();
             services.AddScoped<IBankRepository, BankRepository>();
+            services.AddScoped<IAdminUserRepo, AdminUserRepo>();
 
 
 

@@ -1,0 +1,12 @@
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Data\bin\Release\net5.0\XpressHRMS.Data.deps.json
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Data\bin\Release\net5.0\XpressHRMS.Data.dll
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Data\bin\Release\net5.0\ref\XpressHRMS.Data.dll
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Data\bin\Release\net5.0\XpressHRMS.Data.pdb
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Data\obj\Release\net5.0\XpressHRMS.Data.csproj.AssemblyReference.cache
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Data\obj\Release\net5.0\XpressHRMS.Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Data\obj\Release\net5.0\XpressHRMS.Data.AssemblyInfoInputs.cache
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Data\obj\Release\net5.0\XpressHRMS.Data.AssemblyInfo.cs
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Data\obj\Release\net5.0\XpressHRMS.Data.csproj.CoreCompileInputs.cache
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Data\obj\Release\net5.0\XpressHRMS.Data.dll
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Data\obj\Release\net5.0\ref\XpressHRMS.Data.dll
+C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Data\obj\Release\net5.0\XpressHRMS.Data.pdb

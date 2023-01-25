@@ -31,24 +31,18 @@ namespace XpressHRMS.Controllers
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
 
-
-
             try
             {
                 var resp = await _bankService.CreateBank(payload);
                 if (resp.Data != null)
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ((int)ResponseCode.Ok).ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp;
                     return Ok(response);
 
                 }
                 else
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
                 return Ok(response);
@@ -72,16 +66,12 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ((int)ResponseCode.Ok).ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
                 else
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
                 return Ok(response);
@@ -102,16 +92,12 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ((int)ResponseCode.Ok).ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
                 else
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.NotFound.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
                 return Ok(response);
@@ -133,17 +119,13 @@ namespace XpressHRMS.Controllers
                 var resp = await _bankService.GetBankByID(bankid);
                 if (resp.Data != null)
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ((int)ResponseCode.Ok).ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;                   
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.NotFound.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;                  
                     return Ok(response);
                 }
                 return Ok(response);

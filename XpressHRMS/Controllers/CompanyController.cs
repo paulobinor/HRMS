@@ -103,16 +103,12 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
                 else
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
                 return Ok(response);
@@ -132,16 +128,12 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
                 else
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.NotFound.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
                 return Ok(response);
@@ -164,16 +156,12 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
                 else
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.NotFound.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
                 return Ok(response);
@@ -196,16 +184,12 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
                 else
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
                 return Ok(response);
@@ -229,16 +213,12 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
                 else
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
                 }
                 return Ok(response);

@@ -16,8 +16,10 @@ namespace XpressHRMS.Business.GenericResponse
     {
         public object Data { get; set; }
         public object jwttoken { get; set; }
-        public string RoleName { get; set; }
-        public int CompanyID { get; set; }
+        //public string RoleName { get; set; }
+        //public int CompanyID { get; set; }
+        public string ResponseCode { get; set; }
+        public string ResponseMessage { get; set; }
     }
     public class SSOLogout
     {

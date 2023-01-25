@@ -56,21 +56,21 @@ namespace XpressHRMS.Business.Services.Logic
                     if (result > 0)
                     {
                         response.ResponseMessage = "Bank Created Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        response.ResponseCode ="00";
                         response.Data = payload;
                         return response;
                     }
                     else if (result == -1)
                     {
                         response.ResponseMessage = "Bank Already Exist";
-                        response.ResponseCode = ResponseCode.Already_Exist.ToString();
+                        response.ResponseCode = "-1";
                         response.Data = null;
                         return response;
                     }
                     else
                     {
                         response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        response.ResponseCode = "01";
                         response.Data = null;
                         return response;
                     }

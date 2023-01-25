@@ -487,17 +487,9 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 else
                 {
-
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-
+                   
                     response.ResponseMessage = "No Record Found";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "No Record Found";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
                     response.Data = null;
                     return response;
                 }
