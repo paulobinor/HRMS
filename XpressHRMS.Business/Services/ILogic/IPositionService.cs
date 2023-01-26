@@ -16,7 +16,9 @@ namespace XpressHRMS.Business.Services.ILogic
 
         Task<BaseResponse> DisablePosition(int PositionID, int CompanyID, string RemoteIpAddress, string RemotePort);
         Task<BaseResponse> ActivatePosition(int PositionID, int CompanyID, string RemoteIpAddress, string RemotePort);
+
         Task<BaseResponse> GetAllPositions(int CompanyID);
+
         Task<BaseResponse> GetPositionByID(int CompanyID, int PositionID);
 
     }

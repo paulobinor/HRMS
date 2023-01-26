@@ -55,22 +55,22 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _bankRepository.CreateBank(payload);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Bank Created Successfully";
-                        response.ResponseCode ="00";
+                        //response.ResponseMessage = "Bank Created Successfully";
+                        //response.ResponseCode ="00";
                         response.Data = payload;
                         return response;
                     }
                     else if (result == -1)
                     {
-                        response.ResponseMessage = "Bank Already Exist";
-                        response.ResponseCode = "-1";
+                        //response.ResponseMessage = "Bank Already Exist";
+                        //response.ResponseCode = "-1";
                         response.Data = null;
                         return response;
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = "01";
+                        //response.ResponseMessage = "Internal Server Error";
+                        //response.ResponseCode = "01";
                         response.Data = null;
                         return response;
                     }
@@ -125,15 +125,15 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _bankRepository.UpdateBank(payload);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Bank Updated Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        //response.ResponseMessage = "Bank Updated Successfully";
+                        //response.ResponseCode = ResponseCode.Ok.ToString();
                         response.Data = payload;
                         return response;
                     }
                     else
                     {
-                        response.ResponseMessage = "Failed to Updated record";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        //response.ResponseMessage = "Failed to Updated record";
+                        //response.ResponseCode = ResponseCode.InternalServer.ToString();
                         response.Data = null;
                         return response;
                     }
@@ -162,15 +162,15 @@ namespace XpressHRMS.Business.Services.Logic
                 dynamic result = await _bankRepository.GetAllBank();
                 if (result.Count > 0)
                 {
-                    response.ResponseMessage = "Banks Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    //response.ResponseMessage = "Banks Retrieved Successfully";
+                    //response.ResponseCode = ResponseCode.Ok.ToString();
                     response.Data = result;
                     return response;
                 }
                 else
                 {
-                    response.ResponseMessage = "No Record Found";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
+                    //response.ResponseMessage = "No Record Found";
+                    //response.ResponseCode = ResponseCode.InternalServer.ToString();
                     response.Data = null;
                     return response;
                 }
@@ -194,15 +194,15 @@ namespace XpressHRMS.Business.Services.Logic
                 dynamic result = await _bankRepository.GetBankById(bankID);
                 if (result.Count > 0)
                 {
-                    response.ResponseMessage = "Bank Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    //response.ResponseMessage = "Bank Retrieved Successfully";
+                    //response.ResponseCode = ResponseCode.Ok.ToString();
                     response.Data = result;
                     return response;
                 }
                 else
                 {
-                    response.ResponseMessage = "No record found";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
+                    //response.ResponseMessage = "No record found";
+                    //response.ResponseCode = ResponseCode.InternalServer.ToString();
                     response.Data = null;
                     return response;
                 }

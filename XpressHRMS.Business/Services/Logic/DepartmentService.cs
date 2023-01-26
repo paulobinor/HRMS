@@ -236,15 +236,15 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _departmentRepository.DisableDepartment(payload.DepartmentID, payload.CompanyID);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Department Disabled Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Department Disabled Successfully";
+                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = payload;
                         return response;
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Internal Server Error";
+                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -270,15 +270,15 @@ namespace XpressHRMS.Business.Services.Logic
                 int result = await _departmentRepository.ActivateDepartment(payload.DepartmentID, payload.CompanyID);
                 if (result > 0)
                 {
-                    response.ResponseMessage = "Department Activated Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    //response.ResponseMessage = "Department Activated Successfully";
+                    //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.Data = payload;
                     return response;
                 }
                 else
                 {
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                    //response.ResponseMessage = "Internal Server Error";
+                    //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     response.Data = null;
                     return response;
                 }
@@ -304,8 +304,8 @@ namespace XpressHRMS.Business.Services.Logic
                 if (result==null)
                 {
                    
-                    response.ResponseMessage = "No Record Found";
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    //response.ResponseMessage = "No Record Found";
+                    //response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
                     response.Data = result;
                     return response;
 
@@ -314,8 +314,8 @@ namespace XpressHRMS.Business.Services.Logic
                
                 else
                 {
-                    response.ResponseMessage = "Department Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    //response.ResponseMessage = "Department Retrieved Successfully";
+                    //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.Data = result;
                     return response;
                 }
@@ -339,15 +339,15 @@ namespace XpressHRMS.Business.Services.Logic
                 dynamic result = await _departmentRepository.GetAllDepartmentByID(DepartmentID, CompanyID);
                 if (result.Count > 0)
                 {
-                    response.ResponseMessage = "Department Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    //response.ResponseMessage = "Department Retrieved Successfully";
+                    //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.Data = result;
                     return response;
                 }
                 else
                 {
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                    //response.ResponseMessage = "Internal Server Error";
+                    //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     response.Data = null;
                     return response;
                 }

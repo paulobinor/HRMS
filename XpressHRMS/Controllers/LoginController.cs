@@ -38,14 +38,14 @@ namespace XpressHRMS.Controllers
             BaseResponseLogin response = new BaseResponseLogin();
             try
             {
-                UserLoginDTO user = new UserLoginDTO();               
+                UserLoginDTO user = new UserLoginDTO();
                 user.Email = Email;
                 user.Password = Password;
 
                 var resp = await _iSSOservice.AdminLogin(user);
-                if (resp.Data!=null)
+                if (resp.Data != null)
                 {
-                       var authClaims = new List<Claim>
+                    var authClaims = new List<Claim>
                         {
                             new Claim(ClaimTypes.Name, user.Email),
                             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
@@ -64,7 +64,7 @@ namespace XpressHRMS.Controllers
                     response.ResponseCode = "00";
                     response.ResponseMessage = "Login Successfully";
                     response.jwttoken = new JwtSecurityTokenHandler().WriteToken(token);
-                    response.Data = resp.Data;                  
+                    response.Data = resp.Data;
                     return Ok(response);
 
 

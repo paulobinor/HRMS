@@ -14,6 +14,7 @@ namespace XpressHRMS.Data.IRepository
         Task<int> DeleteEmployeeType(DelEmployeeTypeDTO deleteEmployeeType);
         Task<int> DisableEmployeeType(int EmployeeTypeID, int CompanyIDDis);
         Task<int> ActivateEmployeeType(int EmployeeTypeID, int CompanyIDEna);
+
         Task<IEnumerable<EmployeeTypeDTO>> GetAllEmployeeType(int CompanyID);
         Task<IEnumerable<EmployeeTypeDTO>> GetEmployeeTypeByID(int CompanyID, int EmployeeTypeID);
     }

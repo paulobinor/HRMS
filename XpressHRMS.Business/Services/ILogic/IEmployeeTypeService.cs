@@ -15,7 +15,9 @@ namespace XpressHRMS.Business.Services.ILogic
         Task<BaseResponse> DeleteEmployeeType(DelEmployeeTypeDTO DelEmployeeType, string RemoteIpAddress, string RemotePort);
         Task<BaseResponse> DisableEmployeeType(int EmployeeTypeID, int CompanyID, string RemoteIpAddress, string RemotePort);
         Task<BaseResponse> ActivateEmployeeType(int EmployeeTypeID, int CompanyID, string RemoteIpAddress, string RemotePort);
+
         Task<BaseResponse> GetAllEmployeeType(int CompanyID);
+
         Task<BaseResponse> GetEmployeeTypeByID(int CompanyID, int PositionID);
 
 

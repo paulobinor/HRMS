@@ -15,7 +15,9 @@ namespace XpressHRMS.Business.Services.ILogic
         Task<BaseResponse> DeleteGrade(DelGradeDTO DelGrade, string RemoteIpAddress, string RemotePort);
         Task<BaseResponse> DisableGrade(int GradeID, int CompanyID, string RemoteIpAddress, string RemotePort);
         Task<BaseResponse> ActivateGrade(int GradeID, int CompanyID, string RemoteIpAddress, string RemotePort);
+
         Task<BaseResponse> GetAllGrade(int CompanyID);
+
         Task<BaseResponse> GetGradeByID(int CompanyID, int GradeID);
     }
 }
