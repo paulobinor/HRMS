@@ -38,16 +38,16 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = resp.ResponseCode;
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Department Created Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = resp.ResponseCode;
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 return Ok(response);
@@ -71,16 +71,16 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Company Updated Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 return Ok(response);
@@ -103,16 +103,15 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Company Deleted Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 return Ok(response);
@@ -132,16 +131,16 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.NotFound.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Company Retrieved Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 return Ok(response);
@@ -164,16 +163,16 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Company Retrieved Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.NotFound.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    
+                    response.ResponseMessage = "No Record Found";
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 return Ok(response);
@@ -196,16 +195,15 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Company Activated Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 return Ok(response);
@@ -229,16 +227,15 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Company Disabled Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 return Ok(response);

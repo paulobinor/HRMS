@@ -78,22 +78,22 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _branchRepository.CreateBranch(payload);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Branch Created Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        //response.ResponseMessage = "Branch Created Successfully";
+                        //response.ResponseCode = ResponseCode.Ok.ToString();
                         response.Data = payload;
                         return response;
                     }
                     else if (result == -1)
                     {
-                        response.ResponseMessage = "Branch Already Exist";
-                        response.ResponseCode = ResponseCode.Already_Exist.ToString();
+                        //response.ResponseMessage = "Branch Already Exist";
+                        //response.ResponseCode = ResponseCode.Already_Exist.ToString();
                         response.Data = null;
                         return response;
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        //response.ResponseMessage = "Internal Server Error";
+                        //response.ResponseCode = ResponseCode.InternalServer.ToString();
                         response.Data = null;
                         return response;
                     }
@@ -167,15 +167,15 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _branchRepository.UpdateBranch(payload);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "branch Updated Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        //response.ResponseMessage = "branch Updated Successfully";
+                        //response.ResponseCode = ResponseCode.Ok.ToString();
                         response.Data = payload;
                         return response;
                     }
                     else
                     {
-                        response.ResponseMessage = "Failed to Updated record";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        //response.ResponseMessage = "Failed to Updated record";
+                        //response.ResponseCode = ResponseCode.InternalServer.ToString();
                         response.Data = null;
                         return response;
                     }
@@ -224,15 +224,15 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _branchRepository.DeleteBranch(payload);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Branch Deleted Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
+                        //response.ResponseMessage = "Branch Deleted Successfully";
+                        //response.ResponseCode = ResponseCode.Ok.ToString();
                         response.Data = payload;
                         return response;
                     }
                     else
                     {
-                        response.ResponseMessage = "Failed to delete record";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
+                        //response.ResponseMessage = "Failed to delete record";
+                        //response.ResponseCode = ResponseCode.InternalServer.ToString();
                         response.Data = null;
                         return response;
                     }
@@ -258,15 +258,15 @@ namespace XpressHRMS.Business.Services.Logic
                 dynamic result = await _branchRepository.GetAllBranches(CompanyID);
                 if (result.Count > 0)
                 {
-                    response.ResponseMessage = "Branch Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    //response.ResponseMessage = "Branch Retrieved Successfully";
+                    //response.ResponseCode = ResponseCode.Ok.ToString();
                     response.Data = result;
                     return response;
                 }
                 else
                 {
-                    response.ResponseMessage = "No Record Found";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
+                    //response.ResponseMessage = "No Record Found";
+                    //response.ResponseCode = ResponseCode.InternalServer.ToString();
                     response.Data = null;
                     return response;
                 }
@@ -290,15 +290,15 @@ namespace XpressHRMS.Business.Services.Logic
                 dynamic result = await _branchRepository.GetBranchByID(payload);
                 if (result.Count > 0)
                 {
-                    response.ResponseMessage = "Branch Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
+                    //response.ResponseMessage = "Branch Retrieved Successfully";
+                    //response.ResponseCode = ResponseCode.Ok.ToString();
                     response.Data = result;
                     return response;
                 }
                 else
                 {
-                    response.ResponseMessage = "No record found";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
+                    //response.ResponseMessage = "No record found";
+                    //response.ResponseCode = ResponseCode.InternalServer.ToString();
                     response.Data = null;
                     return response;
                 }

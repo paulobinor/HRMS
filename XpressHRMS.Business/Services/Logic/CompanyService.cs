@@ -104,19 +104,12 @@ namespace XpressHRMS.Business.Services.Logic
 
 
                     var audit=_auditTrailRepository.CreateAuditTrail(auditry);
-<<<<<<< HEAD
 
-=======
-<<<<<<< HEAD
-
-=======
->>>>>>> master
->>>>>>> e2edf564460ff757ff7e79041bfc7a224d357bef
                     dynamic result = await _companyRepository.CreateCompany(payload);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Department Created Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Department Created Successfully";
+                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = payload;
                         return response;
                     }
@@ -292,15 +285,15 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _companyRepository.DeleteCompany(CompanyID);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Company Deleted Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Company Deleted Successfully";
+                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = CompanyID;
                         return response;
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Internal Server Error";
+                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -356,15 +349,15 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _companyRepository.DisableCompany(CompanyID);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Company Disabled Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Company Disabled Successfully";
+                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Internal Server Error";
+                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -455,15 +448,15 @@ namespace XpressHRMS.Business.Services.Logic
                 var result = await _companyRepository.GetAllCompanies();
                 if (result==null)
                 {
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                    //response.ResponseMessage = "Internal Server Error";
+                    //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     response.Data = null;
                     return response;
                 }
                 else
                 {
-                    response.ResponseMessage = "Company Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    //response.ResponseMessage = "Company Retrieved Successfully";
+                    //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.Data = result;
                     return response;
                 }
@@ -487,30 +480,16 @@ namespace XpressHRMS.Business.Services.Logic
                 dynamic result = await _companyRepository.GetCompanyByID(CompanyID);
                 if (result.Count > 0)
                 {
-                    response.ResponseMessage = "Company Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    //response.ResponseMessage = "Company Retrieved Successfully";
+                    //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.Data = result;
                     return response;
                 }
                 else
                 {
-<<<<<<< HEAD
-
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-
-                    response.ResponseMessage = "No Record Found";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-
-=======
-<<<<<<< HEAD
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-=======
-                    response.ResponseMessage = "No Record Found";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
->>>>>>> master
->>>>>>> e2edf564460ff757ff7e79041bfc7a224d357bef
+                   
+                    //response.ResponseMessage = "No Record Found";
+                    //response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
                     response.Data = null;
                     return response;
                 }

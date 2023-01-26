@@ -56,7 +56,8 @@ namespace XpressHRMS
             services.AddBussinessLayer(Configuration);
             services.AddHttpClient();
             services.AddScoped<IGenericRepository, GenericRepository>();
-           
+
+            services.AddHttpContextAccessor();
 
             services.AddControllers();
             services.AddMemoryCache();

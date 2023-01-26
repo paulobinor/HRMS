@@ -39,20 +39,13 @@ namespace XpressHRMS.Controllers
             try
             {
                 UserLoginDTO user = new UserLoginDTO();
-                var plainTextEmail = System.Text.Encoding.UTF8.GetBytes(Email);
-                var plainTextPassword = System.Text.Encoding.UTF8.GetBytes(Password);
+                user.Email = Email;
+                user.Password = Password;
 
-                var base64Email = System.Convert.ToBase64String(plainTextEmail);
-                var base64Password = System.Convert.ToBase64String(plainTextPassword);
-
-                user.Email = base64Email.ToString();
-                user.Password = base64Password.ToString();               
-
-                var resp = await _iSSOservice.Login(user);
-                //var resp = "d";
-                if (resp.ResponseCode=="00")
+                var resp = await _iSSOservice.AdminLogin(user);
+                if (resp.Data != null)
                 {
-                       var authClaims = new List<Claim>
+                    var authClaims = new List<Claim>
                         {
                             new Claim(ClaimTypes.Name, user.Email),
                             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
@@ -64,10 +57,12 @@ namespace XpressHRMS.Controllers
                     var token = new JwtSecurityToken(
                         issuer: _config["JWT:ValidIssuer"],
                         audience: _config["JWT:ValidAudience"],
-                        expires: DateTime.Now.AddMinutes(15),
+                        expires: DateTime.Now.AddHours(2),
                         claims: authClaims,
                         signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                         );
+                    response.ResponseCode = "00";
+                    response.ResponseMessage = "Login Successfully";
                     response.jwttoken = new JwtSecurityTokenHandler().WriteToken(token);
                     response.Data = resp.Data;
                     return Ok(response);
@@ -76,7 +71,9 @@ namespace XpressHRMS.Controllers
                 }
                 else
                 {
-                    response.Data = resp;
+                    response.ResponseCode = "01";
+                    response.ResponseMessage = "Invalid Login";
+                    response.Data = resp.Data;
                     return Ok(response);
 
                 }
@@ -89,45 +86,32 @@ namespace XpressHRMS.Controllers
 
 
 
-        //public RefreshToken GenerateRefreshToken(string ipAddress)
-        //{
-        //    // generate token that is valid for 7 days
-        //    using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
-        //    var randomBytes = new byte[64];
-        //    rngCryptoServiceProvider.GetBytes(randomBytes);
-        //    var refreshToken = new RefreshToken
-        //    {
-        //        Token = Convert.ToBase64String(randomBytes),
-        //        Expires = DateTime.UtcNow.AddDays(7),
-        //        Created = DateTime.UtcNow,
-        //        CreatedByIp = ipAddress
-        //    };
 
-        //    return refreshToken;
-        //}
 
-        [HttpPost("LogOut")]
+        [HttpPost("CreateAdmin")]
 
-        public async Task<IActionResult> LogOut(string Email, string Password)
+        public async Task<IActionResult> CreateAdmin([FromBody] CreateAdminUserLoginDTO payload)
         {
             BaseResponse response = new BaseResponse();
             try
             {
-                UserLoginDTO user = new UserLoginDTO();
-                var plainTextEmail = System.Text.Encoding.UTF8.GetBytes(Email);
-                var plainTextPassword = System.Text.Encoding.UTF8.GetBytes(Password);
 
-                var base64Email = System.Convert.ToBase64String(plainTextEmail);
-                var base64Password = System.Convert.ToBase64String(plainTextPassword);
+                //Xpress@Admin
+                //Admin@2023
+                var claimsIdentity = this.User.Identity as ClaimsIdentity;
+                string email = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+                if (string.IsNullOrEmpty(email))
+                {
+                    response.Data = null;
+                    response.ResponseCode = "00";
+                    response.ResponseMessage = "Kindly Login";
+                    return Ok(response);
+                }
 
-                user.Email = base64Email.ToString();
-                user.Password = base64Password.ToString();
-                var resp = await _iSSOservice.Login(user);
+                var resp = await _iSSOservice.CreateAdmin(payload, email);
                 if (resp != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = "";
-                    response.ResponseMessage = "";
                     return Ok(response);
 
                 }

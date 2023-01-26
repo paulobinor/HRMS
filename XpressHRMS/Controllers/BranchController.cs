@@ -39,16 +39,16 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
+                    response.ResponseMessage = "Branch Created Successfully";
                     response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString();
                     return Ok(response);
                 }
                 return Ok(response);
@@ -72,16 +72,16 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
+                    response.ResponseMessage = "branch Updated Successfully";
                     response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Failed to Updated record";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString();
                     return Ok(response);
                 }
                 return Ok(response);
@@ -104,16 +104,16 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
+                    response.ResponseMessage = "Branch Deleted Successfully";
                     response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    
+                    response.ResponseMessage = "Failed to delete record";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString();
                     return Ok(response);
                 }
                 return Ok(response);
@@ -133,16 +133,16 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
+                    response.ResponseMessage = "Branch Retrieved Successfully";
                     response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.NotFound.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "No Record Found";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString();
                     return Ok(response);
                 }
                 return Ok(response);
@@ -165,16 +165,16 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
+                    response.ResponseMessage = "Branch Retrieved Successfully";
                     response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.NotFound.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "No record found";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString();
                     return Ok(response);
                 }
                 return Ok(response);

@@ -31,24 +31,22 @@ namespace XpressHRMS.Controllers
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
 
-
-
             try
             {
                 var resp = await _bankService.CreateBank(payload);
                 if (resp.Data != null)
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ((int)ResponseCode.Ok).ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp;
+                    response.ResponseMessage = "Bank Created Successfully";
+                    response.ResponseCode = "00";
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = "01";
                     return Ok(response);
                 }
                 return Ok(response);
@@ -72,16 +70,16 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ((int)ResponseCode.Ok).ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Bank Updated Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString();
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Failed to Updated record";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString();
                     return Ok(response);
                 }
                 return Ok(response);
@@ -102,16 +100,16 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ((int)ResponseCode.Ok).ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Banks Retrieved Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString();
                     return Ok(response);
 
                 }
                 else
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.NotFound.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Banks Retrieved Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString();
                     return Ok(response);
                 }
                 return Ok(response);
@@ -134,16 +132,16 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
-                    response.ResponseCode = ((int)ResponseCode.Ok).ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Bank Retrieved Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString();
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.NotFound.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "No record found";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString();
                     return Ok(response);
                 }
                 return Ok(response);

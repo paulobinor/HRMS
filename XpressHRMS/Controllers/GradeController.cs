@@ -40,17 +40,18 @@ namespace XpressHRMS.Controllers
                 var resp = await _GradeService.CreateGrade(CraeteGrade, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "Grade Created Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                    response.Data = null;
                     return Ok(response);
                 }
                 return Ok(response);
@@ -73,17 +74,17 @@ namespace XpressHRMS.Controllers
                 var resp = await _GradeService.UpdateGrade(UpdateGrade, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "Grade Updated Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 //return Ok(response);
@@ -106,17 +107,17 @@ namespace XpressHRMS.Controllers
                 var resp = await _GradeService.DeleteGrade(DelGrade, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "Grade Deleted Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 //return Ok(response);
@@ -136,17 +137,19 @@ namespace XpressHRMS.Controllers
                 var resp = await _GradeService.GetAllGrade(CompanyID);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "Grade Retrieved Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                  
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+
                     return Ok(response);
                 }
                 //return Ok(response);
@@ -170,17 +173,17 @@ namespace XpressHRMS.Controllers
                 var resp = await _GradeService.GetGradeByID(CompanyID, GradeID);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "Grade Retrieved Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 return Ok(response);
@@ -203,17 +206,17 @@ namespace XpressHRMS.Controllers
                 var resp = await _GradeService.ActivateGrade(GradeID, CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "Position Activated Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 return Ok(response);
@@ -236,17 +239,17 @@ namespace XpressHRMS.Controllers
                 var resp = await _GradeService.DisableGrade(GradeID, CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "Position Disabled Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 return Ok(response);

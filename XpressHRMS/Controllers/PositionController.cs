@@ -13,7 +13,7 @@ namespace XpressHRMS.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class PositionController : ControllerBase
     {
         private readonly IPositionService _PositionService;
@@ -38,17 +38,19 @@ namespace XpressHRMS.Controllers
                 var resp = await _PositionService.CreatePosition(CraetePosition, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
+                    response.Data = resp.Data;
                     //response.ResponseCode = ResponseCode.Ok.ToString();
                     //response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Position Created Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
-                else
+                else 
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0');
+                    //response.Data = resp.Data;
                     return Ok(response);
                 }
                 return Ok(response);
@@ -72,17 +74,19 @@ namespace XpressHRMS.Controllers
                 var resp = await _PositionService.UpdatePosition(UpdatePosition, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                   
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "Position Updated Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                  
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                    //response.Data = resp.Data;
                     return Ok(response);
                 }
                 //return Ok(response);
@@ -105,17 +109,17 @@ namespace XpressHRMS.Controllers
                 var resp = await _PositionService.DeletePosition(DelPosition, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "Position Deleted Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 //return Ok(response);
@@ -135,17 +139,19 @@ namespace XpressHRMS.Controllers
                 var resp = await _PositionService.GetAllPositions(CompanyID);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "Positions Retrieved Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+
                     return Ok(response);
                 }
                 return Ok(response);
@@ -169,17 +175,17 @@ namespace XpressHRMS.Controllers
                 var resp = await _PositionService.GetPositionByID(CompanyID, PositionID);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "Position Retrieved Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 return Ok(response);
@@ -202,17 +208,17 @@ namespace XpressHRMS.Controllers
                 var resp = await _PositionService.ActivatePosition(PositionID, CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "Position Activated Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 return Ok(response);
@@ -235,17 +241,17 @@ namespace XpressHRMS.Controllers
                 var resp = await _PositionService.DisablePosition(PositionID, CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "Position Disabled Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 return Ok(response);

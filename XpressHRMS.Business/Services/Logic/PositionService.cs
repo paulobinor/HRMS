@@ -80,22 +80,22 @@ namespace XpressHRMS.Business.Services.Logic
                     dynamic result = await _PositionRepository.CreatePosition(createpostion);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Position Created Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Position Created Successfully";
+                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = createpostion;
                         return response;
                     }
                     else if (result == -1)
                     {
-                        response.ResponseMessage = "position Already Exist";
-                        response.ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "position Already Exist";
+                        //response.ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Internal Server Error";
+                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -167,15 +167,15 @@ namespace XpressHRMS.Business.Services.Logic
                     dynamic result = await _PositionRepository.UpdatePosition(UpdatePosition);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Position Updated Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Position Updated Successfully";
+                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = UpdatePosition;
                         return response;
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Internal Server Error";
+                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -230,15 +230,15 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _PositionRepository.DeletePosition(DelPostion);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Position Deleted Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Position Deleted Successfully";
+                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = DelPostion;
                         return response;
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Internal Server Error";
+                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -294,15 +294,15 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _PositionRepository.DisablePosition(PositionID, CompanyID);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Position Disabled Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Position Disabled Successfully";
+                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Internal Server Error";
+                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -357,15 +357,15 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _PositionRepository.ActivatePosition(PositionID, CompanyID);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Position Activated Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Position Activated Successfully";
+                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = PositionID;
                         return response;
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Internal Server Error";
+                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -388,15 +388,15 @@ namespace XpressHRMS.Business.Services.Logic
                 var result = await _PositionRepository.GetAllPositions(CompanyID);
                 if (result == null)
                 {
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                    //response.ResponseMessage = "Internal Server Error";
+                    //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     response.Data = null;
                     return response;
                 }
                 else
                 {
-                    response.ResponseMessage = "Positions Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    //response.ResponseMessage = "Positions Retrieved Successfully";
+                    //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.Data = result;
                     return response;
                 }
@@ -419,15 +419,15 @@ namespace XpressHRMS.Business.Services.Logic
                 dynamic result = await _PositionRepository.GetPositionByID(CompanyID, PositionID);
                 if (result.Count > 0)
                 {
-                    response.ResponseMessage = "Position Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    //response.ResponseMessage = "Position Retrieved Successfully";
+                    //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.Data = result;
                     return response;
                 }
                 else
                 {
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                    //response.ResponseMessage = "Internal Server Error";
+                    //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     response.Data = null;
                     return response;
                 }
