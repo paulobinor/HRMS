@@ -57,22 +57,19 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _departmentRepository.CreateDepartment(payload);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Department Created Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                      
                         response.Data = payload;
                         return response;
                     }
                     else if (result == -1)
                     {
-                        response.ResponseMessage = "Department Already Exist";
-                        response.ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0');
+                        
                         response.Data = null;
                         return response;
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                        
                         response.Data = null;
                         return response;
                     }
@@ -306,7 +303,7 @@ namespace XpressHRMS.Business.Services.Logic
                    
                     //response.ResponseMessage = "No Record Found";
                     //response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.Data = result;
+                    response.Data = null;
                     return response;
 
                     

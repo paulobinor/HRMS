@@ -13,7 +13,7 @@ using XpressHRMS.Data.IRepository;
 namespace XpressHRMS.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+   //[Authorize]
     public class DepartmentController : ControllerBase
     {
         private readonly IDepartmentService _departmentService;
@@ -30,7 +30,7 @@ namespace XpressHRMS.Controllers
             try
             {             
                 var resp = await _departmentService.CreateDepartment(payload);
-                if (resp != null)
+                if (resp.Data != null)
                 {
                     response.Data = resp.Data;
                     response.ResponseMessage = "Department Created Successfully";
@@ -40,10 +40,9 @@ namespace XpressHRMS.Controllers
                 }
                 else
                 {
-                    //response.Data = resp.Data;
                     response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    response.Data = null;
+                    response.ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0');
+                    //response.Data = resp.Data;
                     return Ok(response);
                 }
                 return Ok(response);

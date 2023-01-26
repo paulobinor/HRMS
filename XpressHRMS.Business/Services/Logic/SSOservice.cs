@@ -52,7 +52,7 @@ namespace XpressHRMS.Business.Services.Logic
                 var validation = await _genericRepository.PostAsync<UserLoginDTO, BaseResponse>(URL, user);
                 var S_Response = JsonConvert.DeserializeObject<SSOResponse>(validation);
 
-                if (S_Response.responseCode =="00")
+                if (S_Response.responseCode == "00")
                 {
                     response.Data = S_Response.data;
                     response.ResponseMessage = S_Response.responseMessage;
@@ -60,9 +60,9 @@ namespace XpressHRMS.Business.Services.Logic
                     return response;
 
                 }
-                else if (S_Response.responseCode=="09")
+                else if (S_Response.responseCode == "09")
                 {
-                     Logout(user);
+                    Logout(user);
 
                 }
                 else
@@ -95,15 +95,15 @@ namespace XpressHRMS.Business.Services.Logic
                 string decodedString = Encoding.UTF8.GetString(data);
                 user.Email = decodedString;
                 string URLLogout = URLConstant.SSOBaseURL + URLConstant.LogOut;
-             
+
                 var client = new RestClient(URLLogout);
-                var validation =   _genericRepository.PostAsync<UserLogoutDTO, BaseResponse>(URLLogout, user);
+                var validation = _genericRepository.PostAsync<UserLogoutDTO, BaseResponse>(URLLogout, user);
                 var S_Response = JsonConvert.DeserializeObject<SSOLogout>(validation.ToString());
-                if (S_Response.responseCode=="00")
+                if (S_Response.responseCode == "00")
                 {
-                    var gobacktologin =  Login(payload);
+                    var gobacktologin = Login(payload);
                 }
-               
+
 
             }
             catch (Exception ex)
@@ -115,7 +115,7 @@ namespace XpressHRMS.Business.Services.Logic
 
         public async Task<BaseResponse> CreateAdmin(CreateAdminUserLoginDTO payload, string Email)
         {
-            BaseResponse response = new BaseResponse(); 
+            BaseResponse response = new BaseResponse();
 
             try
             {
@@ -132,7 +132,7 @@ namespace XpressHRMS.Business.Services.Logic
                     Email = Email
                 };
                 dynamic checkifAdminUserExist = await _adminUserRepo.GetAdminUser(getemail);
-                if (checkifAdminUserExist.Count>0)
+                if (checkifAdminUserExist.Count > 0)
                 {
                     dynamic login = await _adminUserRepo.CreateAdminUser(userdetails);
 
@@ -166,7 +166,7 @@ namespace XpressHRMS.Business.Services.Logic
                     return response;
                 }
 
-              
+
 
                 return response;
 
@@ -192,15 +192,15 @@ namespace XpressHRMS.Business.Services.Logic
                 };
 
                 var result = await _adminUserRepo.LoginAdmin(adminDetails);
-                if (result!=null)
+                if (result != null)
                 {
-                    
+
                     response.Data = result;
                     return response;
                 }
                 else
                 {
-                  
+
                     response.Data = null;
                     return response;
                 }
