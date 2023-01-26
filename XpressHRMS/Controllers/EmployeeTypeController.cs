@@ -13,7 +13,7 @@ namespace XpressHRMS.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
 
     public class EmployeeTypeController : ControllerBase
     {
@@ -35,15 +35,17 @@ namespace XpressHRMS.Controllers
                 var resp = await _EmployeeTypeService.CreateEmployeeType(CraeteEmployeeType, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "EmployeeTypeName Created Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 return Ok(response);
@@ -67,15 +69,17 @@ namespace XpressHRMS.Controllers
                 var resp = await _EmployeeTypeService.UpdateEmployeeType(UpdateEmployeeType, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "EmployeeType Updated Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 //return Ok(response);
@@ -98,15 +102,17 @@ namespace XpressHRMS.Controllers
                 var resp = await _EmployeeTypeService.DeleteEmployeeType(DelEmployeeType, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "EmployeeType Deleted Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 //return Ok(response);
@@ -126,15 +132,18 @@ namespace XpressHRMS.Controllers
                 var resp = await _EmployeeTypeService.GetAllEmployeeType(CompanyID);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "EmployeeType Retrieved Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                   
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
+                    //response.Data = resp;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 return Ok(response);
@@ -158,15 +167,17 @@ namespace XpressHRMS.Controllers
                 var resp = await _EmployeeTypeService.GetEmployeeTypeByID(CompanyID,EmployeeTypeID);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "EmployeeType Retrieved Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString();
                     return Ok(response);
                 }
                 return Ok(response);
@@ -189,15 +200,17 @@ namespace XpressHRMS.Controllers
                 var resp = await _EmployeeTypeService.ActivateEmployeeType(EmployeeTypeID, CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "EmployeeType Activated Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                     return Ok(response);
                 }
                 return Ok(response);
@@ -220,15 +233,17 @@ namespace XpressHRMS.Controllers
                 var resp = await _EmployeeTypeService.DisableEmployeeType(EmployeeTypeID, CompanyID, RemoteIpAddress, RemotePort);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    //response.ResponseMessage = resp.ResponseMessage;
+                    response.Data = resp.Data;
+                    response.ResponseMessage = "EmployeeType Disabled Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    response.Data = resp;
+                    //response.Data = resp.Data;
+                    response.ResponseMessage = "Internal Server Error";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString();
                     return Ok(response);
                 }
                 return Ok(response);

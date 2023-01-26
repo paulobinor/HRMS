@@ -80,22 +80,22 @@ namespace XpressHRMS.Business.Services.Logic
                     dynamic result = await _EmployeeTypeRepository.CreateEmployeeType(createEmployeeType);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "EmployeeTypeName Created Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "EmployeeTypeName Created Successfully";
+                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = createEmployeeType;
                         return response;
                     }
                     else if (result == -1)
                     {
-                        response.ResponseMessage = "EmployeeTypeName Already Exist";
-                        response.ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "EmployeeTypeName Already Exist";
+                        //response.ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Internal Server Error";
+                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }
@@ -166,8 +166,8 @@ namespace XpressHRMS.Business.Services.Logic
                     dynamic result = await _EmployeeTypeRepository.UpdateEmployeeType(UpdateEmployeeType);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "EmployeeType Updated Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "EmployeeType Updated Successfully";
+                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = UpdateEmployeeType;
                         return response;
                     }
@@ -229,15 +229,15 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _EmployeeTypeRepository.DeleteEmployeeType(DelEmployeeType);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Position Deleted Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "EmployeeType Deleted Successfully";
+                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.Data = DelEmployeeType;
                         return response;
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = "Internal Server Error";
+                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
                         response.Data = null;
                         return response;
                     }

@@ -31,6 +31,8 @@ namespace XpressHRMS.Controllers
                 if (resp != null)
                 {
                     response.Data = resp.Data;
+                    response.ResponseMessage = "Unit Created Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString();
                     return Ok(response);
 
                 }
@@ -53,12 +55,16 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
+                    response.ResponseMessage = "Unit Updated Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString();
                     return Ok(response);
 
                 }
                 else
                 {
                     response.Data = resp.Data;
+                    response.ResponseMessage = "Failed to Updated record";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString();
                     return Ok(response);
                 }
                 return Ok(response);
@@ -79,12 +85,16 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
+                    response.ResponseMessage = "Department Deleted Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString();
                     return Ok(response);
 
                 }
                 else
                 {
                     response.Data = resp.Data;
+                    response.ResponseMessage = "Failed to delete record";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString();
                     return Ok(response);
                 }
                 return Ok(response);
@@ -105,12 +115,16 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
+                    response.ResponseMessage = "Units Retrieved Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString();
                     return Ok(response);
 
                 }
                 else
                 {
                     response.Data = resp.Data;
+                    response.ResponseMessage = "No Record Found";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString();
                     return Ok(response);
                 }
                 return Ok(response);
@@ -131,12 +145,16 @@ namespace XpressHRMS.Controllers
                 if (resp.Data != null)
                 {
                     response.Data = resp.Data;
+                    response.ResponseMessage = "Unit Retrieved Successfully";
+                    response.ResponseCode = ResponseCode.Ok.ToString();
                     return Ok(response);
 
                 }
                 else
                 {
                     response.Data = resp.Data;
+                    response.ResponseMessage = "No record found";
+                    response.ResponseCode = ResponseCode.InternalServer.ToString();
                     return Ok(response);
                 }
                 return Ok(response);
