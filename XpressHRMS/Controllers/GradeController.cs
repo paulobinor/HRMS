@@ -16,7 +16,7 @@ namespace XpressHRMS.Controllers
     [ApiController]
     [Authorize]
 
-    public class GradeController : ControllerBase
+    public class GradeController : BaseController
     {
         private readonly IGradeService _GradeService;
         public GradeController(IGradeService GradeService)
@@ -28,135 +28,69 @@ namespace XpressHRMS.Controllers
         public async Task<IActionResult> CreateGrade([FromBody] CreateGradeDTO CraeteGrade)
         {
 
-            BaseResponse response = new BaseResponse();
 
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
 
-
-
             try
             {
-                var resp = await _GradeService.CreateGrade(CraeteGrade, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Grade Created Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
+                return this.CustomResponse(await _GradeService.CreateGrade(CraeteGrade,RemoteIpAddress,RemotePort));
 
-                }
-                else
-                {
-                    //response.Data = resp.Data;
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    response.Data = null;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpPut("UpdateGrade")]
         public async Task<IActionResult> UpdateGrade([FromBody] UpdateGradeDTO UpdateGrade)
         {
-            BaseResponse response = new BaseResponse();
+
 
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+
             try
             {
-                var resp = await _GradeService.UpdateGrade(UpdateGrade, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Grade Updated Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
+                return this.CustomResponse(await _GradeService.UpdateGrade(UpdateGrade, RemoteIpAddress, RemotePort));
 
-                }
-                else
-                {
-                    //response.Data = resp.Data;
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
-                }
-                //return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpDelete("DeleteGrade")]
         public async Task<IActionResult> DeleteGrade(DelGradeDTO DelGrade)
         {
-            BaseResponse response = new BaseResponse();
 
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+
             try
             {
-                var resp = await _GradeService.DeleteGrade(DelGrade, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Grade Deleted Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
+                return this.CustomResponse(await _GradeService.DeleteGrade(DelGrade, RemoteIpAddress, RemotePort));
 
-                }
-                else
-                {
-                    //response.Data = resp.Data;
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
-                }
-                //return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpGet("GetAllGrade")]
-        public async Task<IActionResult> GetAllPosition(int CompanyID)
+        public async Task<IActionResult> GetAllGrade(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _GradeService.GetAllGrade(CompanyID);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Grade Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                  
-                    return Ok(response);
+                return this.CustomResponse(await _GradeService.GetAllGrade(CompanyID));
 
-                }
-                else
-                {
-                    //response.Data = resp.Data;
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-
-                    return Ok(response);
-                }
-                //return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
@@ -164,101 +98,82 @@ namespace XpressHRMS.Controllers
         [HttpGet("GetAllGradeByID")]
         public async Task<IActionResult> GetAllGradeByID(int CompanyID, int GradeID)
         {
-            BaseResponse response = new BaseResponse();
-
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _GradeService.GetGradeByID(CompanyID, GradeID);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Grade Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
+                return this.CustomResponse(await _GradeService.GetGradeByID(CompanyID, GradeID));
 
-                }
-                else
-                {
-                    //response.Data = resp.Data;
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
-                }
-                return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
-        [HttpPost("ActivateGrade")]
-        public async Task<IActionResult> ActivateGrade(int GradeID, int CompanyID)
-        {
-            BaseResponse response = new BaseResponse();
+        //[HttpPost("ActivateGrade")]
+        //public async Task<IActionResult> ActivateGrade(int GradeID, int CompanyID)
+        //{
+        //    BaseResponse response = new BaseResponse();
 
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-            try
-            {
-                var resp = await _GradeService.ActivateGrade(GradeID, CompanyID, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Position Activated Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
+        //    string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //    string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+        //    try
+        //    {
+        //        var resp = await _GradeService.ActivateGrade(GradeID, CompanyID, RemoteIpAddress, RemotePort);
+        //        if (resp.Data != null)
+        //        {
+        //            response.Data = resp.Data;
+        //            response.ResponseMessage = "Position Activated Successfully";
+        //            response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+        //            return Ok(response);
 
-                }
-                else
-                {
-                    //response.Data = resp.Data;
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
-                }
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return Ok(response);
-            }
-        }
+        //        }
+        //        else
+        //        {
+        //            //response.Data = resp.Data;
+        //            response.ResponseMessage = "Internal Server Error";
+        //            response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+        //            return Ok(response);
+        //        }
+        //        return Ok(response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Ok(response);
+        //    }
+        //}
 
-        [HttpPost("DisableGrade")]
-        public async Task<IActionResult> DisableGrade(int GradeID, int CompanyID)
-        {
-            BaseResponse response = new BaseResponse();
+        //[HttpPost("DisableGrade")]
+        //public async Task<IActionResult> DisableGrade(int GradeID, int CompanyID)
+        //{
+        //    BaseResponse response = new BaseResponse();
 
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-            try
-            {
-                var resp = await _GradeService.DisableGrade(GradeID, CompanyID, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Position Disabled Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
+        //    string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //    string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+        //    try
+        //    {
+        //        var resp = await _GradeService.DisableGrade(GradeID, CompanyID, RemoteIpAddress, RemotePort);
+        //        if (resp.Data != null)
+        //        {
+        //            response.Data = resp.Data;
+        //            response.ResponseMessage = "Position Disabled Successfully";
+        //            response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+        //            return Ok(response);
 
-                }
-                else
-                {
-                    //response.Data = resp.Data;
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
-                }
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return Ok(response);
-            }
-        }
+        //        }
+        //        else
+        //        {
+        //            //response.Data = resp.Data;
+        //            response.ResponseMessage = "Internal Server Error";
+        //            response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+        //            return Ok(response);
+        //        }
+        //        return Ok(response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Ok(response);
+        //    }
+        //}
 
     }
 }

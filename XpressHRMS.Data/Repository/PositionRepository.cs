@@ -18,13 +18,14 @@ namespace XpressHRMS.Data.Repository
     public class PositionRepository : IPositionRepository
     {
         private readonly ILogger<PositionRepository> _logger;
-        private readonly IDapperGeneric _dapper;
+        private readonly IDapperGeneric _dapperr;
         private readonly string _connectionString;
 
-        public PositionRepository(ILogger<PositionRepository> logger, IConfiguration configuration)
+        public PositionRepository(ILogger<PositionRepository> logger, IConfiguration configuration, IDapperGeneric dapper)
         {
             _logger = logger;
             _connectionString = configuration.GetConnectionString("HRMSConnectionString");
+            _dapperr = dapper;
 
 
         }
@@ -150,7 +151,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<IEnumerable<PositionDTO>> GetAllPositions(int CompanyID)
+        public async Task<List<PositionDTO>> GetAllPositions(int CompanyID)
         {
             try
             {
@@ -160,8 +161,7 @@ namespace XpressHRMS.Data.Repository
                     int d = (int)GetAllDefault.GetAll;
                     param.Add("@Status", ACTION.SELECTALL);
                     param.Add("@CompanyIDGet", CompanyID);
-                    var response = await _dapper.QueryAsync<PositionDTO>("sp_Position", param: param, commandType: CommandType.StoredProcedure);
-
+                   var response= await _dapperr.GetAll<PositionDTO>("sp_Position", param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
             }
@@ -172,7 +172,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<IEnumerable<PositionDTO>> GetPositionByID(int CompanyID, int PositionID)
+        public async Task<PositionDTO> GetPositionByID(int CompanyID, int PositionID)
         {
             try
             {
@@ -183,7 +183,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.SELECTBYID);
                     param.Add("@CompanyIDGet", CompanyID);
                     param.Add("@PositionIDGet", PositionID);
-                    var response = await _dapper.QueryAsync<PositionDTO>("sp_Position", param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapperr.Get<PositionDTO>("sp_Position", param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
             }

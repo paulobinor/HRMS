@@ -19,13 +19,14 @@ namespace XpressHRMS.Data.Repository
     {
 
         private readonly ILogger<GradeRepository> _logger;
-        private readonly IDapperGeneric _dapper;
+        private readonly IDapperGeneric _dapperr;
         private readonly string _connectionString;
 
-        public GradeRepository(ILogger<GradeRepository> logger, IConfiguration configuration)
+        public GradeRepository(ILogger<GradeRepository> logger, IConfiguration configuration, IDapperGeneric dapperr)
         {
             _logger = logger;
             _connectionString = configuration.GetConnectionString("HRMSConnectionString");
+            _dapperr = dapperr;
 
 
         }
@@ -141,7 +142,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<IEnumerable<GradeDTO>> GetAllGrades(int CompanyID)
+        public async Task<List<GradeDTO>> GetAllGrades(int CompanyID)
         {
             try
             {
@@ -151,7 +152,7 @@ namespace XpressHRMS.Data.Repository
                     int d = (int)GetAllDefault.GetAll;
                     param.Add("@Status", ACTION.SELECTALL);
                     param.Add("@CompanyIDGet", CompanyID);
-                    var response = await _dapper.QueryAsync<GradeDTO>("sp_Grade", param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapperr.GetAll<GradeDTO>("sp_Grade", param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
             }
@@ -162,7 +163,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<IEnumerable<GradeDTO>> GetGradeByID(int CompanyID, int GradeID)
+        public async Task<GradeDTO> GetGradeByID(int CompanyID, int GradeID)
         {
             try
             {
@@ -173,7 +174,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.SELECTBYID);
                     param.Add("@CompanyIDGet", CompanyID);
                     param.Add("@GradeIDGet", GradeID);
-                    var response = await _dapper.QueryAsync<GradeDTO>("sp_Grade", param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapperr.Get<GradeDTO>("sp_Grade", param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
             }

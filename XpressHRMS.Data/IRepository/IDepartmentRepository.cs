@@ -10,7 +10,7 @@ namespace XpressHRMS.Data.IRepository
         Task<int> DeleteDepartment(int DepartmentID, int CompanyID);
         Task<int> DisableDepartment(int DepartmentID, int CompanyID);
         Task<int> ActivateDepartment(int DepartmentID, int CompanyID);
-        Task<IEnumerable<GetDepartmentDTO>> GetAllDepartment(int CompanyID);
+        Task<List<GetDepartmentDTO>> GetAllDepartment(int CompanyID);
         Task<IEnumerable<GetDepartmentDTO>> GetAllDepartmentByID(int DepartmentID, int CompanyID);
         Task<int> UpdateDepartment(UpdateDepartmentDTO payload);
     }

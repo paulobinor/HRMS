@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XpressHRMS.Business.GenericResponse
 {
-   public class BaseResponse
+   public class BaseResponse<T>
     {
         public string ResponseCode { get; set; }
         public string ResponseMessage { get; set; }

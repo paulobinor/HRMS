@@ -23,9 +23,8 @@ namespace XpressHRMS.Business.Services.Logic
             _bankRepository = bankRepository;
 
         }
-        public async Task<BaseResponse> CreateBank(CreateBankDTO payload)
+        public async Task<BaseResponse<CreateBankDTO>> CreateBank(CreateBankDTO payload)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -44,10 +43,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<CreateBankDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -55,24 +56,33 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _bankRepository.CreateBank(payload);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "Bank Created Successfully";
-                        //response.ResponseCode ="00";
-                        response.Data = payload;
-                        return response;
+                        return new BaseResponse<CreateBankDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Saved Successfully",
+                            Data = payload
+
+                        };
                     }
                     else if (result == -1)
                     {
-                        //response.ResponseMessage = "Bank Already Exist";
-                        //response.ResponseCode = "-1";
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreateBankDTO>()
+                        {
+                            ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Already Exist",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        //response.ResponseMessage = "Internal Server Error";
-                        //response.ResponseCode = "01";
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreateBankDTO>()
+                        {
+                            ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Internal Server Error",
+                            Data = null
+
+                        };
                     }
                 }
 
@@ -82,16 +92,19 @@ namespace XpressHRMS.Business.Services.Logic
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: CreateBank() ===>{ex.Message}");
-                return response;
-
+                return new BaseResponse<CreateBankDTO>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
             }
 
         }
 
 
-        public async Task<BaseResponse> UpdateBank(UpdateBankDTO payload)
+        public async Task<BaseResponse<UpdateBankDTO>> UpdateBank(UpdateBankDTO payload)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -114,10 +127,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<UpdateBankDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -125,17 +140,23 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _bankRepository.UpdateBank(payload);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "Bank Updated Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString();
-                        response.Data = payload;
-                        return response;
+                        return new BaseResponse<UpdateBankDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Updated  Successfully",
+                            Data = payload
+
+                        };
                     }
                     else
                     {
-                        //response.ResponseMessage = "Failed to Updated record";
-                        //response.ResponseCode = ResponseCode.InternalServer.ToString();
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<UpdateBankDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to Update Record",
+                            Data = payload
+
+                        };
                     }
                 }
 
@@ -146,72 +167,99 @@ namespace XpressHRMS.Business.Services.Logic
             {
                 _logger.LogError($"MethodName: UpdateBank() ===>{ex.Message}");
 
-                return response;
-
+                return new BaseResponse<UpdateBankDTO>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
             }
 
         }
 
-        public async Task<BaseResponse> GetAllBanks()
+        public async Task<BaseResponse<List<BanksDTO>>> GetAllBanks()
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
 
-                dynamic result = await _bankRepository.GetAllBank();
+                var result = await _bankRepository.GetAllBank();
                 if (result.Count > 0)
                 {
-                    //response.ResponseMessage = "Banks Retrieved Successfully";
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.Data = result;
-                    return response;
+                    return new BaseResponse<List<BanksDTO>>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Retreived Successfully",
+                        Data = result
+
+                    };
                 }
                 else
                 {
-                    //response.ResponseMessage = "No Record Found";
-                    //response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<List<BanksDTO>>()
+                    {
+                        ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "No record found",
+                        Data = result
+
+                    };
                 }
 
 
             }
             catch (Exception)
             {
-                return response;
+                return new BaseResponse<List<BanksDTO>>()
+                {
+                    ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'),
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    Data = null
+
+                };
             }
         }
 
 
-        public async Task<BaseResponse> GetBankByID(int bankID)
+        public async Task<BaseResponse<BanksDTO>> GetBankByID(int bankID)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
 
-                dynamic result = await _bankRepository.GetBankById(bankID);
-                if (result.Count > 0)
+                var result = await _bankRepository.GetBankById(bankID);
+                if (result!=null)
                 {
-                    //response.ResponseMessage = "Bank Retrieved Successfully";
-                    //response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.Data = result;
-                    return response;
+
+                    return new BaseResponse<BanksDTO>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Retreived Successfully",
+                        Data = result
+
+                    };
                 }
                 else
                 {
-                    //response.ResponseMessage = "No record found";
-                    //response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<BanksDTO>()
+                    {
+                        ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "No record found",
+                        Data = result
+
+                    };
                 }
 
 
             }
             catch (Exception)
             {
-                return response;
+                return new BaseResponse<BanksDTO>()
+                {
+                    ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'),
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    Data = null
+
+                };
             }
         }
 

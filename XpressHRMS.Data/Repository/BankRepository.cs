@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using XpressHRMS.Data.DTO;
 using XpressHRMS.Data.Enums;
 using XpressHRMS.Data.IRepository;
+using XpressHRMS.IRepository;
 using static XpressHRMS.Data.DTO.BanksDTO;
 
 namespace XpressHRMS.Data.Repository
@@ -21,11 +22,14 @@ namespace XpressHRMS.Data.Repository
         private readonly string _connectionString;
         private readonly ILogger<BankRepository> _logger;
         private readonly IConfiguration _configuration;
-        public BankRepository(IConfiguration configuration, ILogger<BankRepository> logger)
+        private readonly IDapperGeneric _dapperr;
+
+        public BankRepository(IConfiguration configuration, ILogger<BankRepository> logger, IDapperGeneric dapperr)
         {
             _connectionString = configuration.GetConnectionString("HRMSConnectionString");
             _logger = logger;
             _configuration = configuration;
+            _dapperr = dapperr;
         }
 
         public async Task<dynamic> CreateBank(CreateBankDTO bankDTO)
@@ -100,7 +104,7 @@ namespace XpressHRMS.Data.Repository
         }
 
 
-        public async Task<IEnumerable<BanksDTO>> GetAllBank()
+        public async Task<List<BanksDTO>> GetAllBank()
         {
             try
             {
@@ -108,9 +112,7 @@ namespace XpressHRMS.Data.Repository
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.SELECTALL);
-                    var bankbranch = await _dapper.QueryAsync<BanksDTO>("Sp_Bank", param: param, commandType: CommandType.StoredProcedure);
-
-                    return bankbranch;
+                    return await _dapperr.GetAll<BanksDTO>("Sp_Bank", param, commandType: CommandType.StoredProcedure);
                 }
             }
             catch (Exception ex)

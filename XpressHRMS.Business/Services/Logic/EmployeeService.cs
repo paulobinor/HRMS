@@ -23,9 +23,8 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse> CreateEmployee(CreateEmployeeDTO payload)
+        public async Task<BaseResponse<CreateEmployeeDTO>> CreateEmployee(CreateEmployeeDTO payload)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -54,35 +53,45 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
-
+                    return new BaseResponse<CreateEmployeeDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
                 }
                 else
                 {
                     int result = await _EmployeeRepo.CreateEmployee(payload);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Employee Created Successfully";
-                        response.ResponseCode = "00";
-                        response.Data = payload;
-                        return response;
+                        return new BaseResponse<CreateEmployeeDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Saved Successfully",
+                            Data = payload
+
+                        };
                     }
                     else if (result == -1)
                     {
-                        response.ResponseMessage = "Employee Already Exist";
-                        response.ResponseCode = "-1";
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreateEmployeeDTO>()
+                        {
+                            ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Already Exist",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreateEmployeeDTO>()
+                        {
+                            ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Internal Server Error",
+                            Data = null
+
+                        };
                     }
                 }
 
@@ -92,8 +101,12 @@ namespace XpressHRMS.Business.Services.Logic
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: CreateEmployee() ===>{ex.Message}");
-                return response;
-
+                return new BaseResponse<CreateEmployeeDTO>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
             }
 
         }

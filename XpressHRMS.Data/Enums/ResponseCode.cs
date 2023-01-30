@@ -37,6 +37,7 @@ namespace XpressHRMS.Data.Enums
         Ok = 00,
         NotFound = 02,
         ProcessingError = 03,
+        AuthorizationError = 04,
         Already_Exist = 11,
         OtpValidation = 09,
         Pending = 06,

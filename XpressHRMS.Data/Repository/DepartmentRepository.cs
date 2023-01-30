@@ -18,15 +18,15 @@ namespace XpressHRMS.Data.Repository
     public class DepartmentRepository : IDepartmentRepository
     {
         private readonly ILogger<DepartmentRepository> _logger;
-        private readonly IDapperGeneric _dapper;
+        private readonly IDapperGeneric _dapperr;
         private readonly string _connectionString;
 
 
-        public DepartmentRepository(ILogger<DepartmentRepository> logger, IConfiguration configuration)
+        public DepartmentRepository(ILogger<DepartmentRepository> logger, IConfiguration configuration, IDapperGeneric dapper)
         {
             _logger = logger;
             _connectionString = configuration.GetConnectionString("HRMSConnectionString");
-
+            _dapperr = dapper;
 
         }
 
@@ -145,7 +145,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@DepartmentID", payload.DepartmentID);
                     param.Add("@CompanyID", payload.CompanyID);
 
-                    dynamic response = await _dapper.ExecuteAsync("Sp_Department", param: param, commandType: CommandType.StoredProcedure);
+                    int response = await _dapper.ExecuteAsync("Sp_Department", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
               
@@ -159,18 +159,19 @@ namespace XpressHRMS.Data.Repository
             }
 
         }
-        public async Task<IEnumerable<GetDepartmentDTO>> GetAllDepartment(int CompanyID)
+        public async Task<List<GetDepartmentDTO>> GetAllDepartment(int CompanyID)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
+                
                     var param = new DynamicParameters();
-                    param.Add("@Status", ACTION.SELECTALL);
+                int d = (int)GetAllDefault.GetAll;
+                param.Add("@Status", ACTION.SELECTALL);
                     param.Add("@CompanyID", CompanyID);
-                    var response = await _dapper.QueryAsync<GetDepartmentDTO>("Sp_Department", param: param, commandType: CommandType.StoredProcedure);
-                    return response;
-                }
+                   // var response = await _dapper.QueryAsync<GetDepartmentDTO>("Sp_Department", param: param, commandType: CommandType.StoredProcedure);
+                    return await _dapperr.GetAll<GetDepartmentDTO>("Sp_Department", param, commandType: CommandType.StoredProcedure);
+                    //return responeD;
+                
                
 
             }
@@ -193,7 +194,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@DepartmentID", DepartmentID);
                     param.Add("@CompanyID", CompanyID);
                     var response = await _dapper.QueryAsync<GetDepartmentDTO>("Sp_Department", param: param, commandType: CommandType.StoredProcedure);
-                    return response;
+                    return response.ToList();
 
                 }
 

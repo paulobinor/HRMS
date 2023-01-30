@@ -27,9 +27,8 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse> CreatePosition(CreatePositionDTO createpostion, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<CreatePositionDTO>> CreatePosition(CreatePositionDTO createpostion, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -55,10 +54,13 @@ namespace XpressHRMS.Business.Services.Logic
 
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<CreatePositionDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
+
 
                 }
                 else
@@ -77,41 +79,56 @@ namespace XpressHRMS.Business.Services.Logic
 
                     var audit=_auditTrailRepository.CreateAuditTrail(auditry);
 
-                    dynamic result = await _PositionRepository.CreatePosition(createpostion);
+                    int result = await _PositionRepository.CreatePosition(createpostion);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "Position Created Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = createpostion;
-                        return response;
+                        return new BaseResponse<CreatePositionDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Saved Successfully",
+                            Data = createpostion
+
+                        };
+
                     }
                     else if (result == -1)
                     {
-                        //response.ResponseMessage = "position Already Exist";
-                        //response.ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreatePositionDTO>()
+                        {
+                            ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Already Exist",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        //response.ResponseMessage = "Internal Server Error";
-                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreatePositionDTO>()
+                        {
+                            ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Internal Server Error",
+                            Data = null
+
+                        };
                     }
                 }
+                
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: CreatePosition() ===>{ex.Message}");
-                return response;
+                return new BaseResponse<CreatePositionDTO>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
             }
 
         }
 
-        public async Task<BaseResponse> UpdatePosition(UPdatePositionDTO UpdatePosition, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<UPdatePositionDTO>> UpdatePosition(UPdatePositionDTO UpdatePosition, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -142,11 +159,12 @@ namespace XpressHRMS.Business.Services.Logic
 
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    //response.ResponseCode = ResponseCode.ValidationError.ok
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<UPdatePositionDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -167,31 +185,41 @@ namespace XpressHRMS.Business.Services.Logic
                     dynamic result = await _PositionRepository.UpdatePosition(UpdatePosition);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "Position Updated Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = UpdatePosition;
-                        return response;
+                        return new BaseResponse<UPdatePositionDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Updated Successfully",
+                            Data = UpdatePosition
+
+                        };
                     }
                     else
                     {
-                        //response.ResponseMessage = "Internal Server Error";
-                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<UPdatePositionDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to Update Record",
+                            Data = UpdatePosition
+
+                        };
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: UpdatePosition() ===>{ex.Message}");
-                return response;
+                return new BaseResponse<UPdatePositionDTO>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
             }
 
         }
 
-        public async Task<BaseResponse> DeletePosition(DeletePositionDTO DelPostion, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<DeletePositionDTO>> DeletePosition(DeletePositionDTO DelPostion, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
                
@@ -205,10 +233,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<DeletePositionDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -230,31 +260,36 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _PositionRepository.DeletePosition(DelPostion);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "Position Deleted Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = DelPostion;
-                        return response;
+                        return new BaseResponse<DeletePositionDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Deleted  Successfully",
+                            Data = DelPostion
+
+                        };
                     }
                     else
                     {
-                        //response.ResponseMessage = "Internal Server Error";
-                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<DeletePositionDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to  Delete Record",
+                            Data = DelPostion
+
+                        };
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: DeletePosition() ===>{ex.Message}");
-                return response;
+                return null;
             }
 
         }
 
-        public async Task<BaseResponse> DisablePosition(int PositionID, int CompanyID, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<int>> DisablePosition(int PositionID, int CompanyID, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
                
@@ -268,10 +303,13 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = PositionID;
-                    return response;
+                    return new BaseResponse<int>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
+
 
                 }
                 else
@@ -294,31 +332,36 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _PositionRepository.DisablePosition(PositionID, CompanyID);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "Position Disabled Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<int>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Disabled Successfully",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        //response.ResponseMessage = "Internal Server Error";
-                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<int>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record failed to Disable",
+                            Data = null
+
+                        };
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: DisablePosition() ===>{ex.Message}");
-                return response;
+                return null;
             }
 
         }
 
-        public async Task<BaseResponse> ActivatePosition(int PositionID, int CompanyID, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<int>> ActivatePosition(int PositionID, int CompanyID, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
@@ -332,10 +375,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = PositionID;
-                    return response;
+                    return new BaseResponse<int>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -357,30 +402,35 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _PositionRepository.ActivatePosition(PositionID, CompanyID);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "Position Activated Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = PositionID;
-                        return response;
+                        return new BaseResponse<int>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Activated Successfully",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        //response.ResponseMessage = "Internal Server Error";
-                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<int>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to Activate Record",
+                            Data = null
+
+                        };
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: ActivatedPosition() ===>{ex.Message}");
-                return response;
+                return null;
             }
 
         }
-        public async Task<BaseResponse> GetAllPositions(int CompanyID)
+        public async Task<BaseResponse<List<PositionDTO>>> GetAllPositions(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
@@ -388,55 +438,67 @@ namespace XpressHRMS.Business.Services.Logic
                 var result = await _PositionRepository.GetAllPositions(CompanyID);
                 if (result == null)
                 {
-                    //response.ResponseMessage = "Internal Server Error";
-                    //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<List<PositionDTO>>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Retreived Successfully",
+                        Data = result
+
+                    };
+
                 }
                 else
                 {
-                    //response.ResponseMessage = "Positions Retrieved Successfully";
-                    //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.Data = result;
-                    return response;
+                    return new BaseResponse<List<PositionDTO>>()
+                    {
+                        ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "No record found",
+                        Data = result
+
+                    };
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: GetAllPosition() ===>{ex.Message}");
-                return response;
+                return null;
             }
 
         }
 
-        public async Task<BaseResponse> GetPositionByID(int CompanyID, int PositionID)
+        public async Task<BaseResponse<PositionDTO>> GetPositionByID(int CompanyID, int PositionID)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
 
-                dynamic result = await _PositionRepository.GetPositionByID(CompanyID, PositionID);
-                if (result.Count > 0)
+                var result = await _PositionRepository.GetPositionByID(CompanyID, PositionID);
+                if (result!=null)
                 {
-                    //response.ResponseMessage = "Position Retrieved Successfully";
-                    //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.Data = result;
-                    return response;
+                    return new BaseResponse<PositionDTO>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Retreived Successfully",
+                        Data = result
+
+                    };
                 }
                 else
                 {
-                    //response.ResponseMessage = "Internal Server Error";
-                    //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<PositionDTO>()
+                    {
+                        ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "No record found",
+                        Data = result
+
+                    };
                 }
 
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: GetAllPositionByID() ===>{ex.Message}");
-                return response;
+                return null;
 
             }
         }

@@ -21,6 +21,7 @@ using System.Threading;
 using XpressHRMS.Data.IRepository;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using XpressHRMS.Data.Enums;
 
 namespace XpressHRMS.Business.Services.Logic
 {
@@ -41,81 +42,11 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse> Login(UserLoginDTO user)
+
+
+
+        public async Task<BaseResponse<CreateAdminUserLoginDTO>> CreateAdmin(CreateAdminUserLoginDTO payload, string Email)
         {
-            BaseResponse response = new BaseResponse();
-            try
-            {
-                string URL = URLConstant.SSOBaseURL + URLConstant.Login;
-
-                var client = new RestClient(URL);
-                var validation = await _genericRepository.PostAsync<UserLoginDTO, BaseResponse>(URL, user);
-                var S_Response = JsonConvert.DeserializeObject<SSOResponse>(validation);
-
-                if (S_Response.responseCode == "00")
-                {
-                    response.Data = S_Response.data;
-                    response.ResponseMessage = S_Response.responseMessage;
-                    response.ResponseCode = S_Response.responseCode;
-                    return response;
-
-                }
-                else if (S_Response.responseCode == "09")
-                {
-                    Logout(user);
-
-                }
-                else
-                {
-                    response.Data = S_Response.data;
-                    response.ResponseMessage = S_Response.responseMessage;
-                    response.ResponseCode = S_Response.responseCode;
-                    return response;
-                }
-                response.Data = S_Response.data;
-                response.ResponseMessage = S_Response.responseMessage;
-                response.ResponseCode = S_Response.responseCode;
-                return response;
-
-            }
-            catch (Exception ex)
-            {
-                return response;
-
-            }
-
-        }
-
-        public void Logout(UserLoginDTO payload)
-        {
-            try
-            {
-                UserLogoutDTO user = new UserLogoutDTO();
-                byte[] data = Convert.FromBase64String(payload.Email);
-                string decodedString = Encoding.UTF8.GetString(data);
-                user.Email = decodedString;
-                string URLLogout = URLConstant.SSOBaseURL + URLConstant.LogOut;
-
-                var client = new RestClient(URLLogout);
-                var validation = _genericRepository.PostAsync<UserLogoutDTO, BaseResponse>(URLLogout, user);
-                var S_Response = JsonConvert.DeserializeObject<SSOLogout>(validation.ToString());
-                if (S_Response.responseCode == "00")
-                {
-                    var gobacktologin = Login(payload);
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-
-        public async Task<BaseResponse> CreateAdmin(CreateAdminUserLoginDTO payload, string Email)
-        {
-            BaseResponse response = new BaseResponse();
 
             try
             {
@@ -138,50 +69,64 @@ namespace XpressHRMS.Business.Services.Logic
 
                     if (login > 0)
                     {
-                        response.Data = null;
-                        response.ResponseCode = "00";
-                        response.ResponseMessage = "Saved Successfully";
-                        return response;
+                        return new BaseResponse<CreateAdminUserLoginDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Saved Successfully",
+                            Data = payload
+
+                        };
                     }
                     else if (login == -1)
                     {
-                        response.Data = null;
-                        response.ResponseCode = "00";
-                        response.ResponseMessage = "User Already Exist";
-                        return response;
+                        return new BaseResponse<CreateAdminUserLoginDTO>()
+                        {
+                            ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "User Already Exist",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        response.Data = null;
-                        response.ResponseCode = "02";
-                        response.ResponseMessage = "Internal Server Erro";
-                        return response;
+                        return new BaseResponse<CreateAdminUserLoginDTO>()
+                        {
+                            ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Internal Server Error",
+                            Data = null
+
+                        };
                     }
                 }
                 else
                 {
-                    response.Data = null;
-                    response.ResponseCode = "02";
-                    response.ResponseMessage = "You do not have access to Create User Admin";
-                    return response;
+
+                    return new BaseResponse<CreateAdminUserLoginDTO>()
+                    {
+                        ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "You do not have access to Create User Admin",
+                        Data = null
+
+                    };
+
+                   
                 }
 
 
 
-                return response;
+                return null;
 
             }
             catch (Exception ex)
             {
 
-                return response;
+                return null;
             }
         }
 
 
-        public async Task<BaseResponse> AdminLogin(UserLoginDTO payload)
+        public async Task<BaseResponse<UserLoginDTO>> AdminLogin(UserLoginDTO payload)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
@@ -194,22 +139,33 @@ namespace XpressHRMS.Business.Services.Logic
                 var result = await _adminUserRepo.LoginAdmin(adminDetails);
                 if (result != null)
                 {
+                    return new BaseResponse<UserLoginDTO>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Saved Successfully",
+                        Data = payload
 
-                    response.Data = result;
-                    return response;
+                    };
+
+                    
                 }
                 else
                 {
+                    return new BaseResponse<UserLoginDTO>()
+                    {
+                        ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Failed to Login",
+                        Data = null
 
-                    response.Data = null;
-                    return response;
+                    };
+                  
                 }
 
 
             }
             catch (Exception)
             {
-                return response;
+                return null;
             }
         }
 

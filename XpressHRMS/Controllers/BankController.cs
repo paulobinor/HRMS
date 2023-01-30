@@ -14,7 +14,7 @@ namespace XpressHRMS.Controllers
     [Route("api/[controller]")]
     //[Authorize]
 
-    public class BankController : ControllerBase
+    public class BankController : BaseController
     {
         private readonly IBankService _bankService;
         public BankController(IBankService bankService)
@@ -26,129 +26,55 @@ namespace XpressHRMS.Controllers
         public async Task<IActionResult> CreateBank([FromBody] CreateBankDTO payload)
         {
 
-            BaseResponse response = new BaseResponse();
-
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-
             try
             {
-                var resp = await _bankService.CreateBank(payload);
-                if (resp.Data != null)
-                {
-                    response.Data = resp;
-                    response.ResponseMessage = "Bank Created Successfully";
-                    response.ResponseCode = "00";
-                    return Ok(response);
+                return this.CustomResponse(await  _bankService.CreateBank(payload));
 
-                }
-                else
-                {
-                    //response.Data = resp.Data;
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = "01";
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpPut("UpdateBank")]
         public async Task<IActionResult> UpdateBank([FromBody] UpdateBankDTO payload)
         {
-            BaseResponse response = new BaseResponse();
-
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _bankService.UpdateBank(payload);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Bank Updated Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    return Ok(response);
+                return this.CustomResponse(await _bankService.UpdateBank(payload));
 
-                }
-                else
-                {
-                    //response.Data = resp.Data;
-                    response.ResponseMessage = "Failed to Updated record";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
        
         [HttpGet("GetAllBanks")]
         public async Task<IActionResult> GetAllBanks()
         {
-            BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _bankService.GetAllBanks();
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Banks Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    return Ok(response);
+                return this.CustomResponse(await _bankService.GetAllBanks());
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Banks Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
         [HttpGet("GetBankByID")]
         public async Task<IActionResult> GetBankByID(int bankid )
         {
-            BaseResponse response = new BaseResponse();
-
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _bankService.GetBankByID(bankid);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Bank Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    return Ok(response);
+                return this.CustomResponse(await _bankService.GetBankByID(bankid));
 
-                }
-                else
-                {
-                    //response.Data = resp.Data;
-                    response.ResponseMessage = "No record found";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
     }

@@ -10,16 +10,16 @@ namespace XpressHRMS.Business.Services.ILogic
 {
     public interface IPositionService
     {
-        Task<BaseResponse> CreatePosition(CreatePositionDTO createpostion, string RemoteIpAddress, string RemotePort);
-        Task<BaseResponse> UpdatePosition(UPdatePositionDTO UpdatePosition, string RemoteIpAddress, string RemotePort);
-        Task<BaseResponse> DeletePosition(DeletePositionDTO DelPostion, string RemoteIpAddress, string RemotePort);
+        Task<BaseResponse<CreatePositionDTO>> CreatePosition(CreatePositionDTO createpostion, string RemoteIpAddress, string RemotePort);
+        Task<BaseResponse<UPdatePositionDTO>> UpdatePosition(UPdatePositionDTO UpdatePosition, string RemoteIpAddress, string RemotePort);
+        Task<BaseResponse<DeletePositionDTO>> DeletePosition(DeletePositionDTO DelPostion, string RemoteIpAddress, string RemotePort);
 
-        Task<BaseResponse> DisablePosition(int PositionID, int CompanyID, string RemoteIpAddress, string RemotePort);
-        Task<BaseResponse> ActivatePosition(int PositionID, int CompanyID, string RemoteIpAddress, string RemotePort);
+        Task<BaseResponse<int>> DisablePosition(int PositionID, int CompanyID, string RemoteIpAddress, string RemotePort);
+        Task<BaseResponse<int>> ActivatePosition(int PositionID, int CompanyID, string RemoteIpAddress, string RemotePort);
 
-        Task<BaseResponse> GetAllPositions(int CompanyID);
+        Task<BaseResponse<List<PositionDTO>>> GetAllPositions(int CompanyID);
 
-        Task<BaseResponse> GetPositionByID(int CompanyID, int PositionID);
+        Task<BaseResponse<PositionDTO>> GetPositionByID(int CompanyID, int PositionID);
 
     }
 }

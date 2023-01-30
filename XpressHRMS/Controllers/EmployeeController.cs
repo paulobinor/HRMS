@@ -7,7 +7,7 @@ using XpressHRMS.Business.Services.ILogic;
 
 namespace XpressHRMS.Controllers
 {
-    public class EmployeeController : Controller
+    public class EmployeeController : BaseController
     {
         private readonly IEmployeeService _EmployeeService;
         public EmployeeController(IEmployeeService EmployeeService)

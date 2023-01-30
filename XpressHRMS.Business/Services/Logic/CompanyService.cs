@@ -30,9 +30,8 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse> CreateCompany(CreateCompanyDTO payload, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<CreateCompanyDTO>> CreateCompany(CreateCompanyDTO payload, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -83,10 +82,12 @@ namespace XpressHRMS.Business.Services.Logic
 
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<CreateCompanyDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -96,51 +97,65 @@ namespace XpressHRMS.Business.Services.Logic
                         AccessDate = DateTime.Now,
                         AccessedFromIpAddress = RemoteIpAddress,
                         AccessedFromPort = RemotePort,
-                        UserId =3,
+                        UserId = 3,
                         Operation = "Creating Company ",
                         Payload = JsonConvert.SerializeObject(payload),
                         Response = ((int)ResponseCode.Ok).ToString().ToString()
                     };
 
 
-                    var audit=_auditTrailRepository.CreateAuditTrail(auditry);
+                    var audit = _auditTrailRepository.CreateAuditTrail(auditry);
 
-                    dynamic result = await _companyRepository.CreateCompany(payload);
+                    int result = await _companyRepository.CreateCompany(payload);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "Department Created Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = payload;
-                        return response;
+                        return new BaseResponse<CreateCompanyDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Saved Successfully",
+                            Data = payload
+
+                        };
                     }
                     else if (result == -1)
                     {
-                        response.ResponseMessage = "Department Already Exist";
-                        response.ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreateCompanyDTO>()
+                        {
+                            ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Already Exist",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreateCompanyDTO>()
+                        {
+                            ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Internal Server Error",
+                            Data = null
+
+                        };
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: CreateComapany() ===>{ex.Message}");
-                return response;
+                return new BaseResponse<CreateCompanyDTO>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
             }
-
         }
 
+     
 
-        public async Task<BaseResponse> UpdateCompany(UpdateCompanyDTO payload, string RemoteIpAddress, string RemotePort)
+
+        public async Task<BaseResponse<UpdateCompanyDTO>> UpdateCompany(UpdateCompanyDTO payload, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -194,10 +209,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<UpdateCompanyDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -215,20 +232,26 @@ namespace XpressHRMS.Business.Services.Logic
 
 
                     var audit = _auditTrailRepository.CreateAuditTrail(auditry);
-                    dynamic result = await _companyRepository.UpdateCompany(payload);
+                    int result = await _companyRepository.UpdateCompany(payload);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Company Updated Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = payload;
-                        return response;
+                        return new BaseResponse<UpdateCompanyDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Updated  Successfully",
+                            Data = payload
+
+                        };
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<UpdateCompanyDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to Update Record",
+                            Data = payload
+
+                        };
                     }
                 }
 
@@ -239,17 +262,20 @@ namespace XpressHRMS.Business.Services.Logic
             {
                 _logger.LogError($"MethodName: UpdateCompany() ===>{ex.Message}");
 
-                return response;
-
+                return new BaseResponse<UpdateCompanyDTO>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
             }
 
         }
 
-        public async Task<BaseResponse> DeleteCompany(int CompanyID, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<int>> DeleteCompany(int CompanyID, string RemoteIpAddress, string RemotePort)
         {
             try
             {
-                BaseResponse response = new BaseResponse();
                 bool isModelStateValidate = true;
                 string validationMessage = "";
 
@@ -260,10 +286,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<int>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -285,17 +313,23 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _companyRepository.DeleteCompany(CompanyID);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "Company Deleted Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = CompanyID;
-                        return response;
+                        return new BaseResponse<int>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Deleted  Successfully",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        //response.ResponseMessage = "Internal Server Error";
-                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<int>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to  Delete Record",
+                            Data = null
+
+                        };
                     }
                 }
 
@@ -310,11 +344,10 @@ namespace XpressHRMS.Business.Services.Logic
         }
 
 
-        public async Task<BaseResponse> DisableCompany(int CompanyID, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<int>> DisableCompany(int CompanyID, string RemoteIpAddress, string RemotePort)
         {
             try
             {
-                BaseResponse response = new BaseResponse();
                 bool isModelStateValidate = true;
                 string validationMessage = "";
                 if (CompanyID < 0)
@@ -324,10 +357,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = CompanyID;
-                    return response;
+                    return new BaseResponse<int>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -349,17 +384,23 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _companyRepository.DisableCompany(CompanyID);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "Company Disabled Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<int>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Deleted  Successfully",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        //response.ResponseMessage = "Internal Server Error";
-                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<int>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to  Delete Record",
+                            Data = null
+
+                        };
                     }
                 }
 
@@ -373,10 +414,8 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse> ActivateCompany(int CompanyID, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<int>> ActivateCompany(int CompanyID, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
-
             try
             {
 
@@ -389,10 +428,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = CompanyID;
-                    return response;
+                    return new BaseResponse<int>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -412,35 +453,41 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _companyRepository.ActivateCompany(CompanyID);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Company Activated Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = CompanyID;
-                        return response;
+                        return new BaseResponse<int>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Activated  Successfully",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<int>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to  Activate Record",
+                            Data = null
+
+
+                        };
                     }
 
                 }
 
-                return response;
 
             }
             catch (Exception ex)
             {
 
-                return response;
-            }
+                return null;
 
+
+            }
         }
 
-        public async Task<BaseResponse> GetAllCompanies()
+        public async Task<BaseResponse<List<CompanyDTO>>> GetAllCompanies()
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
@@ -448,58 +495,76 @@ namespace XpressHRMS.Business.Services.Logic
                 var result = await _companyRepository.GetAllCompanies();
                 if (result==null)
                 {
-                    //response.ResponseMessage = "Internal Server Error";
-                    //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<List<CompanyDTO>>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Retreived Successfully",
+                        Data = result
+
+                    };
                 }
                 else
                 {
-                    //response.ResponseMessage = "Company Retrieved Successfully";
-                    //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.Data = result;
-                    return response;
+                    return new BaseResponse<List<CompanyDTO>>()
+                    {
+                        ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "No record found",
+                        Data = result
+
+                    };
                 }
 
-                return response;
             }
             catch (Exception ex)
             {
-                return response;
+                return new BaseResponse<List<CompanyDTO>>()
+                {
+                    ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'),
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    Data = null
 
+                };
             }
         }
 
-        public async Task<BaseResponse> GetCompanyByID(int CompanyID)
+        public async Task<BaseResponse<CompanyDTO>> GetCompanyByID(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
 
-                dynamic result = await _companyRepository.GetCompanyByID(CompanyID);
-                if (result.Count > 0)
+                var result = await _companyRepository.GetCompanyByID(CompanyID);
+                if (result!=null)
                 {
-                    //response.ResponseMessage = "Company Retrieved Successfully";
-                    //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.Data = result;
-                    return response;
+                    return new BaseResponse<CompanyDTO>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Retreived Successfully",
+                        Data = result
+
+                    };
                 }
                 else
                 {
-                   
-                    //response.ResponseMessage = "No Record Found";
-                    //response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<CompanyDTO>()
+                    {
+                        ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "No record found",
+                        Data = result
+
+                    };
                 }
 
-                return response;
             }
             catch (Exception ex)
             {
-                return response;
+                return new BaseResponse<CompanyDTO>()
+                {
+                    ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'),
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    Data = null
 
+                };
             }
         }
     }

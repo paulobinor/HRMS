@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using XpressHRMS.Data.DTO;
 using XpressHRMS.Data.Enums;
 using XpressHRMS.Data.IRepository;
+using XpressHRMS.IRepository;
 
 namespace XpressHRMS.Data.Repository
 {
@@ -19,11 +20,14 @@ namespace XpressHRMS.Data.Repository
         private readonly string _connectionString;
         private readonly ILogger<EmployeeRepository> _logger;
         private readonly IConfiguration _configuration;
-        public EmployeeRepository(IConfiguration configuration, ILogger<EmployeeRepository> logger)
+        private readonly IDapperGeneric _dapperr;
+
+        public EmployeeRepository(IConfiguration configuration, ILogger<EmployeeRepository> logger, IDapperGeneric dapperr)
         {
             _connectionString = configuration.GetConnectionString("HRMSConnectionString");
             _logger = logger;
             _configuration = configuration;
+            _dapperr = dapperr;
         }
         public async Task<dynamic> CreateEmployee(CreateEmployeeDTO payload)
         {

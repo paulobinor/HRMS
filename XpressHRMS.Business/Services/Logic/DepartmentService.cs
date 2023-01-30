@@ -25,12 +25,10 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse> CreateDepartment(DepartmentDTO payload)
+        public async Task<BaseResponse<DepartmentDTO>>CreateDepartment(DepartmentDTO payload)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
-
                 bool isModelStateValidate = true;
                 string validationMessage = "";
 
@@ -46,10 +44,14 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    
+                    return new BaseResponse<DepartmentDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
+
 
                 }
                 else
@@ -57,21 +59,37 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _departmentRepository.CreateDepartment(payload);
                     if (result > 0)
                     {
-                      
-                        response.Data = payload;
-                        return response;
+
+                        return new BaseResponse<DepartmentDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Saved Successfully",
+                            Data = payload
+
+                        };
+
                     }
                     else if (result == -1)
                     {
-                        
-                        response.Data = null;
-                        return response;
+
+                        return new BaseResponse<DepartmentDTO>()
+                        {
+                            ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Already Exist",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        
-                        response.Data = null;
-                        return response;
+
+                        return new BaseResponse<DepartmentDTO>()
+                        {
+                            ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Internal Server Error",
+                            Data = null
+
+                        };
                     }
                 }
 
@@ -81,16 +99,19 @@ namespace XpressHRMS.Business.Services.Logic
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: CreateDepartment() ===>{ex.Message}");
-                return response;
-
+                return new BaseResponse<DepartmentDTO>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
             }
 
         }
 
 
-        public async Task<BaseResponse> UpdateDepartment(UpdateDepartmentDTO payload)
+        public async Task<BaseResponse<UpdateDepartmentDTO>>UpdateDepartment(UpdateDepartmentDTO payload)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -115,10 +136,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<UpdateDepartmentDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -126,17 +149,23 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _departmentRepository.UpdateDepartment(payload);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Department Updated Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = payload;
-                        return response;
+                        return new BaseResponse<UpdateDepartmentDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Updated  Successfully",
+                            Data = payload
+
+                        };
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<UpdateDepartmentDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to Update Record",
+                            Data = payload
+
+                        };
                     }
                 }
 
@@ -147,17 +176,20 @@ namespace XpressHRMS.Business.Services.Logic
             {
                 _logger.LogError($"MethodName: UpdateDepartment() ===>{ex.Message}");
 
-                return response;
-
+                return new BaseResponse<UpdateDepartmentDTO>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
             }
 
         }
 
-        public async Task<BaseResponse> DeleteDepartment(DeleteDepartmentDTO payload)
+        public async Task<BaseResponse<DeleteDepartmentDTO>> DeleteDepartment(DeleteDepartmentDTO payload)
         {
             try
             {
-                BaseResponse response = new BaseResponse();
                 bool isModelStateValidate = true;
                 string validationMessage = "";
                 if (payload.DepartmentID < 0)
@@ -172,10 +204,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<DeleteDepartmentDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -183,17 +217,23 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _departmentRepository.DeleteDepartment(payload.DepartmentID, payload.CompanyID);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Department Deleted Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = payload;
-                        return response;
+                        return new BaseResponse<DeleteDepartmentDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Deleted  Successfully",
+                            Data = payload
+
+                        };
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<DeleteDepartmentDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to  Delete Record",
+                            Data = payload
+
+                        };
                     }
                 }
 
@@ -208,127 +248,139 @@ namespace XpressHRMS.Business.Services.Logic
         }
 
 
-        public async Task<BaseResponse> DisableDepartment(DeleteDepartmentDTO payload)
+        //public async Task<BaseResponse> DisableDepartment(DeleteDepartmentDTO payload)
+        //{
+        //    try
+        //    {
+        //        BaseResponse response = new BaseResponse();
+        //        bool isModelStateValidate = true;
+        //        string validationMessage = "";
+        //        if (payload.DepartmentID < 0)
+        //        {
+        //            isModelStateValidate = false;
+        //            validationMessage += "  || Department is NULL";
+        //        }
+        //        if (!isModelStateValidate)
+        //        {
+        //            response.ResponseMessage = validationMessage;
+        //            response.ResponseCode = ResponseCode.ValidationError.ToString();
+        //            response.Data = null;
+        //            return response;
+
+        //        }
+        //        else
+        //        {
+        //            int result = await _departmentRepository.DisableDepartment(payload.DepartmentID, payload.CompanyID);
+        //            if (result > 0)
+        //            {
+        //                //response.ResponseMessage = "Department Disabled Successfully";
+        //                //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+        //                response.Data = payload;
+        //                return response;
+        //            }
+        //            else
+        //            {
+        //                //response.ResponseMessage = "Internal Server Error";
+        //                //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+        //                response.Data = null;
+        //                return response;
+        //            }
+        //        }
+
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        throw;
+        //    }
+
+        //}
+
+        //public async Task<BaseResponse> ActivateDepartment(DeleteDepartmentDTO payload)
+        //{
+        //    try
+        //    {
+        //        BaseResponse response = new BaseResponse();
+
+
+        //        int result = await _departmentRepository.ActivateDepartment(payload.DepartmentID, payload.CompanyID);
+        //        if (result > 0)
+        //        {
+        //            //response.ResponseMessage = "Department Activated Successfully";
+        //            //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+        //            response.Data = payload;
+        //            return response;
+        //        }
+        //        else
+        //        {
+        //            //response.ResponseMessage = "Internal Server Error";
+        //            //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+        //            response.Data = null;
+        //            return response;
+        //        }
+
+        //        return response;
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        return null;
+        //    }
+
+        //}
+        public async Task<BaseResponse<List<GetDepartmentDTO>>> GetAllDepartments(int CompanyID)
         {
+
             try
             {
-                BaseResponse response = new BaseResponse();
-                bool isModelStateValidate = true;
-                string validationMessage = "";
-                if (payload.DepartmentID < 0)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Department is NULL";
-                }
-                if (!isModelStateValidate)
-                {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
 
-                }
-                else
+               var result = await _departmentRepository.GetAllDepartment(CompanyID);
+                if (result.Count>0)
                 {
-                    int result = await _departmentRepository.DisableDepartment(payload.DepartmentID, payload.CompanyID);
-                    if (result > 0)
+
+                    return new BaseResponse<List<GetDepartmentDTO>>()
                     {
-                        //response.ResponseMessage = "Department Disabled Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = payload;
-                        return response;
-                    }
-                    else
-                    {
-                        //response.ResponseMessage = "Internal Server Error";
-                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
-                    }
-                }
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Retreived Successfully",
+                        Data = result
+
+                    };
 
 
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-
-        }
-
-        public async Task<BaseResponse> ActivateDepartment(DeleteDepartmentDTO payload)
-        {
-            try
-            {
-                BaseResponse response = new BaseResponse();
-
-
-                int result = await _departmentRepository.ActivateDepartment(payload.DepartmentID, payload.CompanyID);
-                if (result > 0)
-                {
-                    //response.ResponseMessage = "Department Activated Successfully";
-                    //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.Data = payload;
-                    return response;
-                }
-                else
-                {
-                    //response.ResponseMessage = "Internal Server Error";
-                    //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    response.Data = null;
-                    return response;
-                }
-
-                return response;
-
-            }
-            catch (Exception ex)
-            {
-
-                return null;
-            }
-
-        }
-        public async Task<BaseResponse> GetAllDepartments(int CompanyID)
-        {
-            BaseResponse response = new BaseResponse();
-
-            try
-            {
-
-                var result = await _departmentRepository.GetAllDepartment(CompanyID);
-                if (result==null)
-                {
-                   
-                    //response.ResponseMessage = "No Record Found";
-                    //response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.Data = null;
-                    return response;
-
-                    
                 }
                
                 else
                 {
-                    //response.ResponseMessage = "Department Retrieved Successfully";
-                    //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.Data = result;
-                    return response;
+                    return new BaseResponse<List<GetDepartmentDTO>>()
+                    {
+                        ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "No record found",
+                        Data = result
+
+                    };
                 }
 
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return response;
+                _logger.LogError($"MethodName: GetDepartment() ===>{ex.Message}");
+
+                return new BaseResponse<List<GetDepartmentDTO>>()
+                {
+                    ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'),
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    Data = null
+
+                };
             }
         }
 
 
-        public async Task<BaseResponse> GetAllDepartmentByID(int CompanyID, int DepartmentID)
+        public async Task<BaseResponse<GetDepartmentDTO>> GetAllDepartmentByID(int CompanyID, int DepartmentID)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
@@ -336,24 +388,36 @@ namespace XpressHRMS.Business.Services.Logic
                 dynamic result = await _departmentRepository.GetAllDepartmentByID(DepartmentID, CompanyID);
                 if (result.Count > 0)
                 {
-                    //response.ResponseMessage = "Department Retrieved Successfully";
-                    //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.Data = result;
-                    return response;
+                    return new BaseResponse<GetDepartmentDTO>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Retreived Successfully",
+                        Data = result
+
+                    };
                 }
                 else
                 {
-                    //response.ResponseMessage = "Internal Server Error";
-                    //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<GetDepartmentDTO>()
+                    {
+                        ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "No record found",
+                        Data = result
+
+                    };
                 }
 
 
             }
             catch (Exception)
             {
-                return response;
+                return new BaseResponse<GetDepartmentDTO>()
+                {
+                    ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'),
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    Data = null
+
+                };
             }
         }
 
