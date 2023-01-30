@@ -73,30 +73,20 @@ namespace XpressHRMS.Data.DTO
         public int ReligionID { get; set; }
         public DateTime DateJoined { get; set; }
         public DateTime DateConfirmed { get; set; }
-        public int StartBranchID { get; set; }
-        public int CurrentBranchID { get; set; }
-        public int StartDepartmentID { get; set; }
-        public int CurrentDepartmentID { get; set; }
-        public int StartPositionID { get; set; }
-        public int CurrentPositionID { get; set; }
-        public string Picture { get; set; }
+        public int BranchID { get; set; }
+     
+        public int DepartmentID { get; set; }
+        public int PositionID { get; set; }
         public string Hobby { get; set; }
         public int BankID { get; set; }
         public string BankAcctNo { get; set; }
-        public string PFAAcctNo { get; set; }
-        public string PFAID { get; set; }
         public int EmployeeTypeID { get; set; }
-        public string EmployeeStatus { get; set; }
-        public bool IsFirstLogin { get; set; }
-        public int JobTitleID { get; set; }
-        public DateTime DateCreated { get; set; }
     }
 
 
     public class CreateEmployeeDTOBulk
     {
         public string HRTag { get; set; }
- 
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleName { get; set; }
@@ -116,23 +106,15 @@ namespace XpressHRMS.Data.DTO
         public int ReligionID { get; set; }
         public DateTime DateJoined { get; set; }
         public DateTime DateConfirmed { get; set; }
-        public int StartBranchID { get; set; }
-        public int CurrentBranchID { get; set; }
-        public int StartDepartmentID { get; set; }
-        public int CurrentDepartmentID { get; set; }
-        public int StartPositionID { get; set; }
-        public int CurrentPositionID { get; set; }
-        public string Picture { get; set; }
+        public int BranchID { get; set; }
+
+        public int DepartmentID { get; set; }
+        public int PositionID { get; set; }
         public string Hobby { get; set; }
         public int BankID { get; set; }
         public string BankAcctNo { get; set; }
-        public string PFAAcctNo { get; set; }
-        public string PFAID { get; set; }
         public int EmployeeTypeID { get; set; }
-        public string EmployeeStatus { get; set; }
-        public bool IsFirstLogin { get; set; }
-        public int JobTitleID { get; set; }
-        public DateTime DateCreated { get; set; }
+
     }
 
 

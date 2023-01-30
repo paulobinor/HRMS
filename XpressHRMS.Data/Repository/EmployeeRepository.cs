@@ -39,20 +39,14 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@BankAcctNo", payload.BankAcctNo);
                     param.Add("@BankID", payload.BankID);
                     param.Add("@BloodGroupID", payload.BloodGroupID);
-                    param.Add("@CurrentBranchID", payload.CurrentBranchID);
                     param.Add("@CompanyID", CompanyID);
-                    param.Add("@CurrentDepartmentID", payload.CurrentDepartmentID);
-                    param.Add("@CurrentPositionID", payload.CurrentPositionID);
-                    param.Add("@DateCreated", payload.DateCreated);
                     param.Add("@DateJoined", payload.DateJoined);
                     param.Add("@DOB", payload.DOB);
                     param.Add("@EmailAddress", payload.EmailAddress);
-                    param.Add("@EmployeeStatus", payload.EmployeeStatus);
                     param.Add("@EmployeeTypeID", payload.EmployeeTypeID);
                     param.Add("@FirstName", payload.FirstName);
                     param.Add("@height", payload.height);
                     param.Add("@Hobby", payload.Hobby);
-                    param.Add("@JobTitleID", payload.JobTitleID);
                     param.Add("@LastName", payload.LastName);
                     param.Add("@LGAID", payload.LGAID);
                     param.Add("@MaritalID", payload.MaritalID);
@@ -60,16 +54,10 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@NationalityID", payload.NationalityID);
                     param.Add("@NumberOfChildren", payload.NumberOfChildren);
                     param.Add("@NumberOfDepRelative", payload.NumberOfDepRelative);
-                    param.Add("@PFAAcctNo", payload.PFAAcctNo);
-                    param.Add("@PFAID", payload.PFAID);
                     param.Add("@PhoneNumber", payload.PhoneNumber);
-                    param.Add("@Picture", payload.Picture);
                     param.Add("@PostalAddress", payload.PostalAddress);
                     param.Add("@ReligionID", payload.ReligionID);
                     param.Add("@ResidentialAddress", payload.ResidentialAddress);
-                    param.Add("@StartBranchID", payload.StartBranchID);
-                    param.Add("@StartDepartmentID", payload.StartDepartmentID);
-                    param.Add("@StartPositionID", payload.StartPositionID);
                     param.Add("@StateID", payload.StateID);
 
                     dynamic response = await _dapper.ExecuteAsync("[dbo].[Sp_CreateEmployee]", param: param, commandType: CommandType.StoredProcedure);
@@ -96,21 +84,14 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@BankID", payload.BankID);
                     param.Add("@BloodGroupID", payload.BloodGroupID);
                     param.Add("@CompanyID", CompanyID);
-                    param.Add("@CurrentBranchID", payload.CurrentBranchID);
-                    param.Add("@CurrentDepartmentID", payload.CurrentDepartmentID);
-                    param.Add("@CurrentPositionID", payload.CurrentPositionID);
                     param.Add("@DateConfirmed", payload.DateConfirmed);
-                    param.Add("@DateCreated", payload.DateCreated);
                     param.Add("@DateJoined", payload.DateJoined);
                     param.Add("@DOB", payload.DOB);
                     param.Add("@EmailAddress", payload.EmailAddress);
-                    param.Add("@EmployeeStatus", payload.EmployeeStatus);
                     param.Add("@EmployeeTypeID", payload.EmployeeTypeID);
                     param.Add("@FirstName", payload.FirstName);
                     param.Add("@height", payload.height);
                     param.Add("@Hobby", payload.Hobby);
-                    param.Add("@IsFirstLogin", payload.IsFirstLogin);
-                    param.Add("@JobTitleID", payload.JobTitleID);
                     param.Add("@LastName", payload.LastName);
                     param.Add("@LGAID", payload.LGAID);
                     param.Add("@MaritalID", payload.MaritalID);
@@ -118,18 +99,12 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@NationalityID", payload.NationalityID);
                     param.Add("@NumberOfChildren", payload.NumberOfChildren);
                     param.Add("@NumberOfDepRelative", payload.NumberOfDepRelative);
-                    param.Add("@PFAAcctNo", payload.PFAAcctNo);
-                    param.Add("@PFAID", payload.PFAID);
                     param.Add("@PhoneNumber", payload.PhoneNumber);
-                    param.Add("@Picture", payload.Picture);
                     param.Add("@PostalAddress", payload.PostalAddress);
                     param.Add("@ReligionID", payload.ReligionID);
                     param.Add("@ResidentialAddress", payload.ResidentialAddress);
-                    param.Add("@StartBranchID", payload.StartBranchID);
-                    param.Add("@StartDepartmentID", payload.StartDepartmentID);
-                    param.Add("@StartPositionID", payload.StartPositionID);
                     param.Add("@StateID", payload.StateID);
-                    dynamic response = _dapper.ExecuteAsync("AddEmployee", param: param, commandType: CommandType.StoredProcedure);
+                    dynamic response = _dapper.ExecuteAsync("[dbo].[Sp_CreateEmployee]", param: param, commandType: CommandType.StoredProcedure);
                     
                 }
             }
