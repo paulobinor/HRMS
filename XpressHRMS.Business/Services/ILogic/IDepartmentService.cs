@@ -8,7 +8,7 @@ namespace XpressHRMS.Business.Services.ILogic
     public interface IDepartmentService
     {
         //Task<BaseResponse<DeleteDepartmentDTO>> ActivateDepartment(DeleteDepartmentDTO payload);
-        Task<BaseResponse<DepartmentDTO>> CreateDepartment(DepartmentDTO payload);
+        Task<BaseResponse<DepartmentDTO>> CreateDepartment(CreateDepartmentDTO payload);
         Task<BaseResponse<DeleteDepartmentDTO>> DeleteDepartment(DeleteDepartmentDTO payload);
         //Task<BaseResponse<DeleteDepartmentDTO>> DisableDepartment(DeleteDepartmentDTO payload);
         Task<BaseResponse<UpdateDepartmentDTO>> UpdateDepartment(UpdateDepartmentDTO payload);

@@ -24,6 +24,7 @@ namespace XpressHRMS.Data
             services.AddScoped<IBranchRepository, BranchRepository>();
             services.AddScoped<IBankRepository, BankRepository>();
             services.AddScoped<IAdminUserRepo, AdminUserRepo>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 
 

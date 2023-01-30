@@ -6,7 +6,7 @@ namespace XpressHRMS.Data.IRepository
 {
     public interface IDepartmentRepository
     {
-        Task<int> CreateDepartment(DepartmentDTO payload);
+        Task<int> CreateDepartment(CreateDepartmentDTO payload);
         Task<int> DeleteDepartment(int DepartmentID, int CompanyID);
         Task<int> DisableDepartment(int DepartmentID, int CompanyID);
         Task<int> ActivateDepartment(int DepartmentID, int CompanyID);

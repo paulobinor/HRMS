@@ -30,7 +30,7 @@ namespace XpressHRMS.Data.Repository
 
         }
 
-        public async Task<int> CreateDepartment(DepartmentDTO payload)
+        public async Task<int> CreateDepartment(CreateDepartmentDTO payload)
         {
             try
             {
@@ -40,7 +40,6 @@ namespace XpressHRMS.Data.Repository
                         param.Add("@Status", ACTION.INSERT);
                         param.Add("@DepartmentName", payload.DepartmentName);
                         param.Add("@HODEmployeeID", payload.HODEmployeeID);
-                        param.Add("@CreatedBy", payload.CreatedBy);
                         param.Add("@isActive", true);
                         param.Add("@CompanyID", payload.CompanyID);
                     dynamic response = await _dapper.ExecuteAsync("Sp_Department", param: param, commandType: CommandType.StoredProcedure);

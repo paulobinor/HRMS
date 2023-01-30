@@ -25,7 +25,7 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse<DepartmentDTO>>CreateDepartment(DepartmentDTO payload)
+        public async Task<BaseResponse<DepartmentDTO>>CreateDepartment(CreateDepartmentDTO payload)
         {
             try
             {

@@ -24,7 +24,7 @@ namespace XpressHRMS.Controllers
 
         [HttpPost("CreateDepartment")]
 
-        public async Task<IActionResult> CreateDepartment([FromBody] DepartmentDTO payload)
+        public async Task<IActionResult> CreateDepartment([FromBody] CreateDepartmentDTO payload)
         {
             try
             {
