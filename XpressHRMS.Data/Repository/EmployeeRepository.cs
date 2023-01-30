@@ -40,9 +40,9 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@CurrentBranchID", payload.CurrentBranchID);
                     param.Add("@CurrentDepartmentID", payload.CurrentDepartmentID);
                     param.Add("@CurrentPositionID", payload.CurrentPositionID);
-                    param.Add("@DateConfirmed", payload.DateConfirmed);
-                    param.Add("@DateCreated", payload.DateCreated);
-                    param.Add("@DateJoined", payload.DateJoined);
+                    //param.Add("@DateConfirmed", payload.DateConfirmed);
+                    //param.Add("@DateCreated", payload.DateCreated);
+                    //param.Add("@DateJoined", payload.DateJoined);
                     param.Add("@DOB", payload.DOB);
                     param.Add("@EmailAddress", payload.EmailAddress);
                     param.Add("@EmployeeStatus", payload.EmployeeStatus);

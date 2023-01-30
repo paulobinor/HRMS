@@ -10,7 +10,7 @@ namespace XpressHRMS.Data.DTO
     {
         public long AuditTrailId { get; set; }
         public long UserId { get; set; }
-        public DateTime AccessDate { get; set; }
+        //public DateTime AccessDate { get; set; }
         public string Operation { get; set; }
         public string AccessedFromIpAddress { get; set; }
         public string AccessedFromPort { get; set; }

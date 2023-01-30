@@ -107,11 +107,11 @@ namespace XpressHRMS.Business.Services.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || Department Name is NULL";
                 }
-                if (string.IsNullOrEmpty(payload.CreatedBy))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Created By is NULL";
-                }
+                //if (string.IsNullOrEmpty(payload.CreatedBy))
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || Created By is NULL";
+                //}
 
                 if (payload.CompanyID<0)
                 {

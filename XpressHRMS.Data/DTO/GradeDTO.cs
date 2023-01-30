@@ -12,8 +12,8 @@ namespace XpressHRMS.Data.DTO
         //public int GradeID { get; set; }
         public string GradeName { get; set; }
         //public string CreatedBy { get; set; }
-        public DateTime DateCreated { get; set; }
-        public int IsActive { get; set; }
+        //public DateTime DateCreated { get; set; }
+        //public int IsActive { get; set; }
     }
 
     public class UpdateGradeDTO
@@ -22,18 +22,18 @@ namespace XpressHRMS.Data.DTO
         public int GradeID { get; set; }
         public string GradeName { get; set; }
         //public string CreatedBy { get; set; }
-        public DateTime DateCreated { get; set; }
-        public int IsActive { get; set; }
+        //public DateTime DateCreated { get; set; }
+        //public int IsActive { get; set; }
     }
 
     public class DelGradeDTO
     {
         public int CompanyID { get; set; }
         public int GradeID { get; set; }
-        //public string GradeName { get; set; }
+        public string GradeName { get; set; }
         //public string CreatedBy { get; set; }
-        public DateTime DateCreated { get; set; }
-        public int IsActive { get; set; }
+        //public DateTime DateCreated { get; set; }
+        //public int IsActive { get; set; }
     }
 
     public class GradeDTO
@@ -41,8 +41,8 @@ namespace XpressHRMS.Data.DTO
         public int CompanyID { get; set; }
         public int GradeID { get; set; }
         public string GradeName { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime DateCreated { get; set; }
-        public int IsActive { get; set; }
+        //public string CreatedBy { get; set; }
+        //public DateTime DateCreated { get; set; }
+        //public int IsActive { get; set; }
     }
 }

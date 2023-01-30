@@ -41,7 +41,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@BranchName", payload.BranchName);
                     param.Add("@CompanyID", payload.CompanyID);
                     param.Add("@IsHeadQuater", payload.IsHeadQuater);
-                    param.Add("@CreatedBy", payload.CreatedBy);
+                    //param.Add("@CreatedBy", payload.CreatedBy);
                     param.Add("@Address", payload.Address);
                     param.Add("@CountryID", payload.CountryID);
                     param.Add("@StateID", payload.StateID);

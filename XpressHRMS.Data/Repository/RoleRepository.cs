@@ -36,7 +36,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.INSERT);
                     param.Add("@RoleName", payload.RoleName);
                     param.Add("@CompanyID", payload.CompanyID);
-                    param.Add("@CreatedBy", payload.CreatedBy);
+                    //param.Add("@CreatedBy", payload.CreatedBy);
 
                     dynamic response = await _dapper.ExecuteAsync("Sp_Role", param: param, commandType: CommandType.StoredProcedure);
 

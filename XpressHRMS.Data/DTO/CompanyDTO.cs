@@ -16,7 +16,7 @@ namespace XpressHRMS.Data.DTO
         public string MissionStmt { get; set; }
         public string VisionStmt { get; set; }
         public string CompanyTheme { get; set; }
-        public DateTime EstablishmentDate { get; set; }
+        //public DateTime EstablishmentDate { get; set; }
         public string CompanyLogo { get; set; }
         public string Email { get; set; }
         public string Website { get; set; }
@@ -29,7 +29,7 @@ namespace XpressHRMS.Data.DTO
         public string MissionStmt { get; set; }
         public string VisionStmt { get; set; }
         public string CompanyTheme { get; set; }
-        public DateTime EstablishmentDate { get; set; }
+        //public DateTime EstablishmentDate { get; set; }
         public string CompanyLogo { get; set; }
         public string Email { get; set; }
         public string Website { get; set; }
@@ -41,7 +41,7 @@ namespace XpressHRMS.Data.DTO
         public string Companyphonenumber { get; set; }
         public string MissionStmt { get; set; }
         public string VisionStmt { get; set; }
-        public DateTime EstablishmentDate { get; set; }
+        //public DateTime EstablishmentDate { get; set; }
         public string CompanyLogo { get; set; }
         public string Email { get; set; }
         public string Website { get; set; }

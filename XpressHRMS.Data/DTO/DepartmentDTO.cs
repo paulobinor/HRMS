@@ -10,10 +10,10 @@ namespace XpressHRMS.Data.DTO
     {
         public string DepartmentName { get; set; }
         public int HODEmployeeID { get; set; }
-        public DateTime DateCreated { get; set; }
-        public string CreatedBy { get; set; }
+        //public DateTime DateCreated { get; set; }
+        //public string CreatedBy { get; set; }
         public int CompanyID { get; set; }
-        public bool isActive { get; set; }
+        //public bool isActive { get; set; }
 
     }
     public class GetDepartmentDTO
@@ -22,10 +22,10 @@ namespace XpressHRMS.Data.DTO
         public int DepartmentID { get; set; }
         public int HODEmployeeID { get; set; }
         public int CompanyID { get; set; }
-        public DateTime DateCreated { get; set; }
+        //public DateTime DateCreated { get; set; }
         public int CreatedByUserID { get; set; }
         public bool isDeleted { get; set; }
-        public bool isActive { get; set; }
+        //public bool isActive { get; set; }
 
     }
     public class UpdateDepartmentDTO
@@ -33,7 +33,7 @@ namespace XpressHRMS.Data.DTO
         public int DepartmentID { get; set; }
         public string DepartmentName { get; set; }
         public int HODEmployeeID { get; set; }
-        public DateTime DateUpdated { get; set; }
+        //public DateTime DateUpdated { get; set; }
         public int CompanyID { get; set; }
 
     }

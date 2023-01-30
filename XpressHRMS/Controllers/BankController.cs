@@ -36,22 +36,23 @@ namespace XpressHRMS.Controllers
                 var resp = await _bankService.CreateBank(payload);
                 if (resp.Data != null)
                 {
-                    response.Data = resp;
+                    response.Data = resp.Data;
+                   
                     response.ResponseMessage = "Bank Created Successfully";
-                    response.ResponseCode = "00";
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     return Ok(response);
 
                 }
                 else
                 {
-                    //response.Data = resp.Data;
                     response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = "01";
+                    response.ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0');
+                    //response.Data = resp.Data;
                     return Ok(response);
                 }
                 return Ok(response);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 return Ok(response);
             }

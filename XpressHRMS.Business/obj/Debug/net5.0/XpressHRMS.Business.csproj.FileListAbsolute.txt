@@ -27,3 +27,4 @@ C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj
 C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.dll
 C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\ref\XpressHRMS.Business.dll
 C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.pdb
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.csproj.CopyComplete

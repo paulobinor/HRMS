@@ -11,8 +11,8 @@ namespace XpressHRMS.Data.DTO
         public int UnitID { get; set; }
         public string UnitName { get; set; }
         public int HODEmployeeID { get; set; }
-        public DateTime DateCreated { get; set; }
-        public int CreatedByUserID { get; set; }
+        //public DateTime DateCreated { get; set; }
+        //public int CreatedByUserID { get; set; }
         public int CompanyID { get; set; }
         public int IsDeleted { get; set; }
     }
@@ -20,8 +20,8 @@ namespace XpressHRMS.Data.DTO
     {
         public string UnitName { get; set; }
         public int HODEmployeeID { get; set; }
-        public DateTime DateCreated { get; set; }
-        public int CreatedByUserID { get; set; }
+        //public DateTime DateCreated { get; set; }
+        //public int CreatedByUserID { get; set; }
         public int CompanyID { get; set; }
 
     }

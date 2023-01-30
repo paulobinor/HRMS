@@ -13,7 +13,7 @@ using XpressHRMS.Data.IRepository;
 namespace XpressHRMS.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class DepartmentController : ControllerBase
     {
         private readonly IDepartmentService _departmentService;

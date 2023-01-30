@@ -28,8 +28,8 @@ namespace XpressHRMS.Data.DTO
         public decimal height { get; set; }
         public int BloodGroupID { get; set; }
         public int ReligionID { get; set; }
-        public DateTime DateJoined { get; set; }
-        public DateTime DateConfirmed { get; set; }
+        //public DateTime DateJoined { get; set; }
+        //public DateTime DateConfirmed { get; set; }
         public int StartBranchID { get; set; }
         public int CurrentBranchID { get; set; }
         public int StartDepartmentID { get; set; }
@@ -46,7 +46,7 @@ namespace XpressHRMS.Data.DTO
         public string EmployeeStatus { get; set; }
         public bool IsFirstLogin { get; set; }
         public int JobTitleID { get; set; }
-        public DateTime DateCreated { get; set; }
+        //public DateTime DateCreated { get; set; }
     }
 
 
@@ -72,8 +72,8 @@ namespace XpressHRMS.Data.DTO
         public decimal height { get; set; }
         public int BloodGroupID { get; set; }
         public int ReligionID { get; set; }
-        public DateTime DateJoined { get; set; }
-        public DateTime DateConfirmed { get; set; }
+        //public DateTime DateJoined { get; set; }
+        //public DateTime DateConfirmed { get; set; }
         public int StartBranchID { get; set; }
         public int CurrentBranchID { get; set; }
         public int StartDepartmentID { get; set; }
@@ -90,6 +90,6 @@ namespace XpressHRMS.Data.DTO
         public string EmployeeStatus { get; set; }
         public bool IsFirstLogin { get; set; }
         public int JobTitleID { get; set; }
-        public DateTime DateCreated { get; set; }
+        //public DateTime DateCreated { get; set; }
     }
 }
