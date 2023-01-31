@@ -6,6 +6,7 @@ namespace XpressHRMS.Business.Services.ILogic
 {
     public interface IEmployeeService
     {
-        Task<BaseResponse> CreateEmployee(CreateEmployeeDTO payload);
+        Task<BaseResponse<CreateEmployeeDTO>> CreateEmployee(CreateEmployeeDTO payload, int CompanyID);
+        Task<BaseResponse<EmployeeUpload>> CreateEmployeeBulk(EmployeeUpload payload, int CompanyID);
     }
 }

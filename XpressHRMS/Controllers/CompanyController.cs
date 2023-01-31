@@ -14,7 +14,7 @@ namespace XpressHRMS.Controllers
     [Route("api/[controller]")]
     [Authorize]
 
-    public class CompanyController : ControllerBase
+    public class CompanyController : BaseController
     {
         private readonly ICompanyService _companyService;
         public CompanyController(ICompanyService companyService)
@@ -25,224 +25,106 @@ namespace XpressHRMS.Controllers
         public async Task<IActionResult> CreateCompany([FromBody] CreateCompanyDTO payload)
         {
 
-            BaseResponse response = new BaseResponse();
-
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-
-            
-
             try
             {
-                var resp = await _companyService.CreateCompany(payload, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Department Created Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
+                return this.CustomResponse(await _companyService.CreateCompany(payload, RemoteIpAddress, RemotePort));
 
-                }
-                else
-                {
-                    //response.Data = resp.Data;
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpPut("UpdateCompany")]
         public async Task<IActionResult> UpdateCompany([FromBody] UpdateCompanyDTO payload)
         {
-            BaseResponse response = new BaseResponse();
-
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _companyService.UpdateCompany(payload, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Company Updated Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
+                return this.CustomResponse(await _companyService.UpdateCompany(payload, RemoteIpAddress, RemotePort));
 
-                }
-                else
-                {
-                    //response.Data = resp.Data;
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
         [HttpDelete("DeleteCompany")]
         public async Task<IActionResult> DeleteCompany(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
-
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _companyService.DeleteCompany(CompanyID, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Company Deleted Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
+                return this.CustomResponse(await _companyService.DeleteCompany(CompanyID, RemoteIpAddress, RemotePort));
 
-                }
-                else
-                {
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
         [HttpGet("GetAllCompanies")]
         public async Task<IActionResult> GetAllCompanies()
         {
-            BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _companyService.GetAllCompanies();
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+                return this.CustomResponse(await _companyService.GetAllCompanies());
 
-                    return Ok(response);
-
-                }
-                else
-                {
-                    response.ResponseMessage = "Company Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
         [HttpGet("GetAllCompaniesByID")]
         public async Task<IActionResult> GetAllCompaniesByID(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
-            
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _companyService.GetCompanyByID(CompanyID);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Company Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
+                return this.CustomResponse(await _companyService.GetCompanyByID(CompanyID));
 
-                }
-                else
-                {
-                    
-                    response.ResponseMessage = "No Record Found";
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
         [HttpPost("ActivateCompany")]
         public async Task<IActionResult> ActivateCompany(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
 
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _companyService.ActivateCompany(CompanyID, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Company Activated Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
+                return this.CustomResponse(await _companyService.ActivateCompany(CompanyID, RemoteIpAddress,RemotePort));
 
-                }
-                else
-                {
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpPost("DisableCompany")]
         public async Task<IActionResult> DisableCompany(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
 
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _companyService.DisableCompany(CompanyID, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Company Disabled Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
+                return this.CustomResponse(await _companyService.DisableCompany(CompanyID,RemoteIpAddress,RemotePort));
 
-                }
-                else
-                {
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 

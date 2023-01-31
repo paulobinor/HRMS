@@ -8,8 +8,8 @@ namespace XpressHRMS.Data.IRepository
     {
         Task<int> CreateRole(CreateRoleDTO payload);
         Task<int> DeleteRole(DeleteRoleDTO payload);
-        Task<IEnumerable<RoleDTO>> GetAllRoles(int CompanyID);
-        Task<IEnumerable<RoleDTO>> GetRolesByID(DeleteRoleDTO payload);
+        Task<List<RoleDTO>> GetAllRoles(int CompanyID);
+        Task<RoleDTO> GetRolesByID(DeleteRoleDTO payload);
         Task<int> UpdateRole(UpdateRoleDTO payload);
     }
 }

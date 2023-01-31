@@ -1,3 +1,17 @@
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\bin\Debug\net5.0\XpressHRMS.Business.deps.json
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\bin\Debug\net5.0\XpressHRMS.Business.dll
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\bin\Debug\net5.0\ref\XpressHRMS.Business.dll
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\bin\Debug\net5.0\XpressHRMS.Business.pdb
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\bin\Debug\net5.0\XpressHRMS.Data.dll
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\bin\Debug\net5.0\XpressHRMS.Data.pdb
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.csproj.AssemblyReference.cache
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.AssemblyInfoInputs.cache
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.AssemblyInfo.cs
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.csproj.CoreCompileInputs.cache
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.dll
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\ref\XpressHRMS.Business.dll
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.pdb
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Business\bin\Debug\net5.0\XpressHRMS.Business.deps.json
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Business\bin\Debug\net5.0\XpressHRMS.Business.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Business\bin\Debug\net5.0\ref\XpressHRMS.Business.dll
@@ -13,18 +27,7 @@ C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Business\obj\Debug
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Business\obj\Debug\net5.0\ref\XpressHRMS.Business.dll
 C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.pdb
-C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\bin\Debug\net5.0\XpressHRMS.Business.deps.json
-C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\bin\Debug\net5.0\XpressHRMS.Business.dll
-C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\bin\Debug\net5.0\ref\XpressHRMS.Business.dll
-C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\bin\Debug\net5.0\XpressHRMS.Business.pdb
-C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\bin\Debug\net5.0\XpressHRMS.Data.dll
-C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\bin\Debug\net5.0\XpressHRMS.Data.pdb
-C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.csproj.AssemblyReference.cache
-C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.AssemblyInfoInputs.cache
-C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.AssemblyInfo.cs
-C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.csproj.CoreCompileInputs.cache
-C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.dll
-C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\ref\XpressHRMS.Business.dll
-C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.pdb
+<<<<<<< HEAD
 C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Business\obj\Debug\net5.0\XpressHRMS.Business.csproj.CopyComplete
+=======
+>>>>>>> master

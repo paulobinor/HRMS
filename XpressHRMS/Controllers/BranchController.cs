@@ -14,7 +14,7 @@ namespace XpressHRMS.Controllers
     [Route("api/[controller]")]
     [Authorize]
 
-    public class BranchController : ControllerBase
+    public class BranchController : BaseController
     {
         private readonly IBranchService _branchService;
         public BranchController(IBranchService branchService)
@@ -26,162 +26,62 @@ namespace XpressHRMS.Controllers
         public async Task<IActionResult> CreateBranch([FromBody] CreateBranchDTO payload)
         {
 
-            BaseResponse response = new BaseResponse();
-
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-
-
-
             try
             {
-                var resp = await _branchService.CreateBranch(payload);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Branch Created Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    return Ok(response);
-
-                }
-                else
-                {
-                    //response.Data = resp.Data;
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    return Ok(response);
-                }
-                return Ok(response);
+                return this.CustomResponse(await _branchService.CreateBranch(payload));
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpPut("UpdateBranch")]
         public async Task<IActionResult> UpdateBranch([FromBody] UpdateBranchDTO payload)
         {
-            BaseResponse response = new BaseResponse();
-
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _branchService.UpdateBranch(payload);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "branch Updated Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    return Ok(response);
-
-                }
-                else
-                {
-                    //response.Data = resp.Data;
-                    response.ResponseMessage = "Failed to Updated record";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    return Ok(response);
-                }
-                return Ok(response);
+                return this.CustomResponse(await _branchService.UpdateBranch(payload));
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
         [HttpDelete("DeleteBranch")]
         public async Task<IActionResult> DeleteBranch(DeleteBranchDTO payload)
         {
-            BaseResponse response = new BaseResponse();
-
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _branchService.DeleteBranch(payload);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Branch Deleted Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    return Ok(response);
-
-                }
-                else
-                {
-                    
-                    response.ResponseMessage = "Failed to delete record";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    return Ok(response);
-                }
-                return Ok(response);
+                return this.CustomResponse(await _branchService.DeleteBranch(payload));
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
         [HttpGet("GetAllBranches")]
         public async Task<IActionResult> GetAllBranches(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _branchService.GetAllBranches(CompanyID);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Branch Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    return Ok(response);
-
-                }
-                else
-                {
-                    //response.Data = resp.Data;
-                    response.ResponseMessage = "No Record Found";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    return Ok(response);
-                }
-                return Ok(response);
+                return this.CustomResponse(await _branchService.GetAllBranches(CompanyID));
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
         [HttpGet("GetBranchByID")]
         public async Task<IActionResult> GetBranchByID(DeleteBranchDTO payload)
         {
-            BaseResponse response = new BaseResponse();
-
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _branchService.GetBranchByID(payload);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseMessage = "Branch Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    return Ok(response);
-
-                }
-                else
-                {
-                    //response.Data = resp.Data;
-                    response.ResponseMessage = "No record found";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    return Ok(response);
-                }
-                return Ok(response);
+                return this.CustomResponse(await _branchService.GetBranchByID(payload));
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
     }

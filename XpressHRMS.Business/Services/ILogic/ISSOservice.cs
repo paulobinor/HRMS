@@ -6,8 +6,8 @@ namespace XpressHRMS.Business.Services.ILogic
 {
     public interface ISSOservice
     {
-        Task<BaseResponse> Login(UserLoginDTO user);
-        Task<BaseResponse> AdminLogin(UserLoginDTO payload);
-        Task<BaseResponse> CreateAdmin(CreateAdminUserLoginDTO payload, string Email);
+        //Task<BaseResponse<UserLoginDTO>> Login(UserLoginDTO user);
+        Task<BaseResponse<UserLoginDTO>> AdminLogin(UserLoginDTO payload);
+        Task<BaseResponse<CreateAdminUserLoginDTO>> CreateAdmin(CreateAdminUserLoginDTO payload, string Email);
     }
 }

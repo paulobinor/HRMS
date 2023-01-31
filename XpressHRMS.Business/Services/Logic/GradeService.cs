@@ -27,9 +27,8 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse> CreateGrade(CreateGradeDTO createGrade, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<CreateGradeDTO>> CreateGrade(CreateGradeDTO createGrade, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -51,10 +50,12 @@ namespace XpressHRMS.Business.Services.Logic
 
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<CreateGradeDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -73,41 +74,54 @@ namespace XpressHRMS.Business.Services.Logic
 
                     var audit=_auditTrailRepository.CreateAuditTrail(auditry);
 
-                    dynamic result = await _GradeRepository.CreateGrade(createGrade);
+                    int result = await _GradeRepository.CreateGrade(createGrade);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "Grade Created Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = createGrade;
-                        return response;
+                        return new BaseResponse<CreateGradeDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Saved Successfully",
+                            Data = createGrade
+
+                        };
                     }
                     else if (result == -1)
                     {
-                        //response.ResponseMessage = "Grade Already Exist";
-                        //response.ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreateGradeDTO>()
+                        {
+                            ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Already Exist",
+                            Data = createGrade
+
+                        };
                     }
                     else
                     {
-                        //response.ResponseMessage = "Internal Server Error";
-                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreateGradeDTO>()
+                        {
+                            ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Internal Server Error",
+                            Data = null
+
+                        };
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: CreateGrade() ===>{ex.Message}");
-                return response;
+                return new BaseResponse<CreateGradeDTO>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
             }
 
         }
 
-        public async Task<BaseResponse> UpdateGrade(UpdateGradeDTO UpdateGrade, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<UpdateGradeDTO>> UpdateGrade(UpdateGradeDTO UpdateGrade, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -134,10 +148,12 @@ namespace XpressHRMS.Business.Services.Logic
 
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<UpdateGradeDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -158,31 +174,41 @@ namespace XpressHRMS.Business.Services.Logic
                     dynamic result = await _GradeRepository.UpdateGrade(UpdateGrade);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "Grade Updated Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = UpdateGrade;
-                        return response;
+                        return new BaseResponse<UpdateGradeDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Updated  Successfully",
+                            Data = UpdateGrade
+
+                        };
                     }
                     else
                     {
-                        //response.ResponseMessage = "Internal Server Error";
-                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<UpdateGradeDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to Update Record",
+                            Data = UpdateGrade
+
+                        };
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: UpdateGrade() ===>{ex.Message}");
-                return response;
+                return new BaseResponse<UpdateGradeDTO>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
             }
 
         }
 
-        public async Task<BaseResponse> DeleteGrade(DelGradeDTO DelGrade, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<DelGradeDTO>> DeleteGrade(DelGradeDTO DelGrade, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
@@ -196,10 +222,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<DelGradeDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -222,31 +250,42 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _GradeRepository.DeleteGrade(DelGrade);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "Grade Deleted Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = DelGrade;
-                        return response;
+                        return new BaseResponse<DelGradeDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Deleted  Successfully",
+                            Data = DelGrade
+
+                        };
                     }
                     else
                     {
-                        //response.ResponseMessage = "Internal Server Error";
-                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<DelGradeDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to  Delete Record",
+                            Data = DelGrade
+
+                        };
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: DeleteGrade() ===>{ex.Message}");
-                return response;
+                return new BaseResponse<DelGradeDTO>()
+                {
+                    ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'),
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    Data = null
+
+                };
             }
 
         }
 
-        public async Task<BaseResponse> DisableGrade(int GradeID, int CompanyID, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<int>> DisableGrade(int GradeID, int CompanyID, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
@@ -260,10 +299,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = GradeID;
-                    return response;
+                    return new BaseResponse<int>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -286,32 +327,42 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _GradeRepository.DisableGrade(GradeID, CompanyID);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "Position Disabled Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<int>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Disable Successfully",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        //response.ResponseMessage = "Internal Server Error";
-                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<int>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to  Disable Record",
+                            Data = null
+
+                        };
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: Disable Grade() ===>{ex.Message}");
-                return response;
+                return new BaseResponse<int>()
+                {
+                    ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'),
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    Data = null
+
+                };
             }
 
         }
 
-        public async Task<BaseResponse> ActivateGrade(int GradeID, int CompanyID, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<int>> ActivateGrade(int GradeID, int CompanyID, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
-
             try
             {
 
@@ -324,10 +375,13 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = GradeID;
-                    return response;
+                    return new BaseResponse<int>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
+
 
                 }
                 else
@@ -349,31 +403,43 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _GradeRepository.ActivateGrade(GradeID, CompanyID);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "Position Activated Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = GradeID;
-                        return response;
+                        return new BaseResponse<int>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Activated Successfully",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        //response.ResponseMessage = "Internal Server Error";
-                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<int>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to Activate Record",
+                            Data = null
+
+                        };
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: ActivatedPosition() ===>{ex.Message}");
-                return response;
+
+                return new BaseResponse<int>()
+                {
+                    ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'),
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    Data = null
+
+                };
             }
 
         }
 
-        public async Task<BaseResponse> GetAllGrade(int CompanyID)
+        public async Task<BaseResponse<List<GradeDTO>>> GetAllGrade(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
@@ -381,30 +447,41 @@ namespace XpressHRMS.Business.Services.Logic
                 var result = await _GradeRepository.GetAllGrades(CompanyID);
                 if (result == null)
                 {
-                    //response.ResponseMessage = "Internal Server Error";
-                    //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<List<GradeDTO>>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Retreived Successfully",
+                        Data = result
+
+                    };
                 }
                 else
                 {
-                    //response.ResponseMessage = "Grade Retrieved Successfully";
-                    //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.Data = result;
-                    return response;
+                    return new BaseResponse<List<GradeDTO>>()
+                    {
+                        ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "No record found",
+                        Data = result
+
+                    };
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: GetAllGrades() ===>{ex.Message}");
-                return response;
+                return new BaseResponse<List<GradeDTO>>()
+                {
+                    ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'),
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    Data = null
+
+                };
             }
 
         }
 
-        public async Task<BaseResponse> GetGradeByID(int CompanyID, int GradeID)
+        public async Task<BaseResponse<GradeDTO>> GetGradeByID(int CompanyID, int GradeID)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
@@ -412,25 +489,36 @@ namespace XpressHRMS.Business.Services.Logic
                 dynamic result = await _GradeRepository.GetGradeByID(CompanyID, GradeID);
                 if (result.Count > 0)
                 {
-                    //response.ResponseMessage = "Grade Retrieved Successfully";
-                    //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.Data = result;
-                    return response;
+                    return new BaseResponse<GradeDTO>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Retreived Successfully",
+                        Data = result
+
+                    };
                 }
                 else
                 {
-                    //response.ResponseMessage = "Internal Server Error";
-                    //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<GradeDTO>()
+                    {
+                        ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "No record found",
+                        Data = result
+
+                    };
                 }
 
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: GetAllGradeByID() ===>{ex.Message}");
-                return response;
+                return new BaseResponse<GradeDTO>()
+                {
+                    ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'),
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    Data = null
 
+                };
             }
         }
 

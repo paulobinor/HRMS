@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using XpressHRMS.Data.DTO;
 using XpressHRMS.Data.Enums;
 using XpressHRMS.Data.IRepository;
+using XpressHRMS.IRepository;
 
 namespace XpressHRMS.Data.Repository
 {
@@ -19,11 +20,14 @@ namespace XpressHRMS.Data.Repository
         private readonly string _connectionString;
         private readonly ILogger<RoleRepository> _logger;
         private readonly IConfiguration _configuration;
-        public RoleRepository(IConfiguration configuration, ILogger<RoleRepository> logger)
+        private readonly IDapperGeneric _dapperr;
+
+        public RoleRepository(IConfiguration configuration, ILogger<RoleRepository> logger, IDapperGeneric dapperr)
         {
             _connectionString = configuration.GetConnectionString("HRMSConnectionString");
             _logger = logger;
             _configuration = configuration;
+            _dapperr = dapperr;
         }
 
         public async Task<int> CreateRole(CreateRoleDTO payload)
@@ -105,7 +109,7 @@ namespace XpressHRMS.Data.Repository
             }
 
         }
-        public async Task<IEnumerable<RoleDTO>> GetAllRoles(int CompanyID)
+        public async Task<List<RoleDTO>> GetAllRoles(int CompanyID)
         {
             try
             {
@@ -114,7 +118,7 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.SELECTALL);
                     param.Add("@CompanyID", CompanyID);
-                    var roles = await _dapper.QueryAsync<RoleDTO>("Sp_Role", param: param, commandType: CommandType.StoredProcedure);
+                    var roles = await _dapperr.GetAll<RoleDTO>("Sp_Role", param, commandType: CommandType.StoredProcedure);
                     return roles;
                     //return await _dapper.GetAll<CompanyDTO>("Sp_Company", param, commandType: CommandType.StoredProcedure);
                 }
@@ -129,7 +133,7 @@ namespace XpressHRMS.Data.Repository
 
         }
 
-        public async Task<IEnumerable<RoleDTO>> GetRolesByID(DeleteRoleDTO payload)
+        public async Task<RoleDTO> GetRolesByID(DeleteRoleDTO payload)
         {
             try
             {
@@ -140,7 +144,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.SELECTBYID);
                     param.Add("@CompanyID", payload.CompanyID);
                     param.Add("@RoleID", payload.RoleID);
-                    var response = await _dapper.QueryAsync<RoleDTO>("Sp_Role", param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapperr.Get<RoleDTO>("Sp_Role", param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
 

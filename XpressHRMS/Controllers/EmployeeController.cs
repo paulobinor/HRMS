@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using XpressHRMS.Business.Services.ILogic;
+using XpressHRMS.Data.DTO;
 
 namespace XpressHRMS.Controllers
 {
-    public class EmployeeController : Controller
+    [Route("api/[controller]")]
+
+    public class EmployeeController : BaseController
     {
         private readonly IEmployeeService _EmployeeService;
         public EmployeeController(IEmployeeService EmployeeService)
@@ -15,39 +18,40 @@ namespace XpressHRMS.Controllers
             _EmployeeService = EmployeeService;
         }
 
-        //[HttpPost("CreateBank")]
-        //public async Task<IActionResult> CreateBank([FromBody] CreateBankDTO payload)
-        //{
+        [HttpPost("CreateEmployee")]
+        public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeDTO payload, int CompanyID)
+        {
 
-        //    BaseResponse response = new BaseResponse();
 
-        //    string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-        //    string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            try
+            {
+                return this.CustomResponse(await _EmployeeService.CreateEmployee(payload, CompanyID));
 
-        //    try
-        //    {
-        //        var resp = await _bankService.CreateBank(payload);
-        //        if (resp.Data != null)
-        //        {
-        //            response.Data = resp.Data;
-        //            response.ResponseCode = ((int)ResponseCode.Ok).ToString();
-        //            response.ResponseMessage = resp.ResponseMessage;
-        //            return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
 
-        //        }
-        //        else
-        //        {
-        //            response.Data = resp.Data;
-        //            response.ResponseCode = ResponseCode.Ok.ToString();
-        //            response.ResponseMessage = resp.ResponseMessage;
-        //            return Ok(response);
-        //        }
-        //        return Ok(response);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return Ok(response);
-        //    }
-        //}
+        [HttpPost("UploadBulkEmployee")]
+        public async Task<IActionResult> UploadBulkEmployee([FromForm] EmployeeUpload payload, int CompanyID)
+        {
+
+
+            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            try
+            {
+                return this.CustomResponse(await _EmployeeService.CreateEmployeeBulk(payload, CompanyID));
+
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
     }
 }

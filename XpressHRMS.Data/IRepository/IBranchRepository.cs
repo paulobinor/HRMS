@@ -8,8 +8,8 @@ namespace XpressHRMS.Data.IRepository
     {
         Task<int> CreateBranch(CreateBranchDTO payload);
         Task<int> DeleteBranch(DeleteBranchDTO payload);
-        Task<IEnumerable<BranchDTO>> GetAllBranches(int CompanyID);
-        Task<IEnumerable<BranchDTO>> GetBranchByID(DeleteBranchDTO payload);
+        Task<List<BranchDTO>> GetAllBranches(int CompanyID);
+        Task<BranchDTO> GetBranchByID(DeleteBranchDTO payload);
         Task<int> UpdateBranch(UpdateBranchDTO payload);
     }
 }

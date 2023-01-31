@@ -23,6 +23,7 @@ namespace XpressHRMS.Business
             services.AddScoped<IEmployeeTypeService, EmployeeTypeService>();
             services.AddScoped<IUnitService, UnitService>();
             services.AddScoped<IBankService, BankService>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
         }
     }
 }

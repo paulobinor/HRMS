@@ -18,13 +18,16 @@ namespace XpressHRMS.Data.Repository
     public class EmployeeTypeRepository : IEmployeeTypeRepository
     {
         private readonly ILogger<EmployeeTypeRepository> _logger;
-        private readonly IDapperGeneric _dapper;
+        //private readonly IDapperGeneric _dapper;
+        private readonly IDapperGeneric _dapperr;
+
         private readonly string _connectionString;
 
-        public EmployeeTypeRepository(ILogger<EmployeeTypeRepository> logger, IConfiguration configuration)
+        public EmployeeTypeRepository(ILogger<EmployeeTypeRepository> logger, IConfiguration configuration, IDapperGeneric dapperr)
         {
             _logger = logger;
             _connectionString = configuration.GetConnectionString("HRMSConnectionString");
+            _dapperr = dapperr;
 
 
         }
@@ -140,7 +143,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<IEnumerable<EmployeeTypeDTO>> GetAllEmployeeType(int CompanyID)
+        public async Task<List<EmployeeTypeDTO>> GetAllEmployeeType(int CompanyID)
         {
             try
             {
@@ -150,8 +153,9 @@ namespace XpressHRMS.Data.Repository
                     int d = (int)GetAllDefault.GetAll;
                     param.Add("@Status", ACTION.SELECTALL);
                     param.Add("@CompanyIDGet", CompanyID);
-                    var response = await _dapper.QueryAsync<EmployeeTypeDTO>("sp_EmployeeType", param: param, commandType: CommandType.StoredProcedure);
-                    return response;
+                    //var response = await _dapper.QueryAsync<EmployeeTypeDTO>("sp_EmployeeType", param: param, commandType: CommandType.StoredProcedure);
+                    var respone = await _dapperr.GetAll<EmployeeTypeDTO>("sp_EmployeeType", param, commandType: CommandType.StoredProcedure);
+                    return respone;
                 }
             }
             catch (Exception ex)
@@ -161,7 +165,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<IEnumerable<EmployeeTypeDTO>> GetEmployeeTypeByID(int CompanyID, int EmployeeTypeID)
+        public async Task<EmployeeTypeDTO> GetEmployeeTypeByID(int CompanyID, int EmployeeTypeID)
         {
             try
             {
@@ -172,7 +176,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.SELECTBYID);
                     param.Add("@CompanyIDGet", CompanyID);
                     param.Add("@EmployeeTypeIDGet", EmployeeTypeID);
-                    var response = await _dapper.QueryAsync<EmployeeTypeDTO>("sp_EmployeeType", param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapperr.Get<EmployeeTypeDTO>("sp_EmployeeType", param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
             }

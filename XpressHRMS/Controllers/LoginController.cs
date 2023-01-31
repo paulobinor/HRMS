@@ -92,7 +92,7 @@ namespace XpressHRMS.Controllers
 
         public async Task<IActionResult> CreateAdmin([FromBody] CreateAdminUserLoginDTO payload)
         {
-            BaseResponse response = new BaseResponse();
+            BaseResponse<CreateAdminUserLoginDTO> response = new BaseResponse<CreateAdminUserLoginDTO>();
             try
             {
 

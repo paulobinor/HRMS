@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +25,8 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse> CreateEmployee(CreateEmployeeDTO payload)
+        public async Task<BaseResponse<CreateEmployeeDTO>> CreateEmployee(CreateEmployeeDTO payload, int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -54,35 +55,45 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
-
+                    return new BaseResponse<CreateEmployeeDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
                 }
                 else
                 {
-                    int result = await _EmployeeRepo.CreateEmployee(payload);
+                    int result = await _EmployeeRepo.CreateEmployee(payload, CompanyID);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Employee Created Successfully";
-                        response.ResponseCode = "00";
-                        response.Data = payload;
-                        return response;
+                        return new BaseResponse<CreateEmployeeDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Saved Successfully",
+                            Data = payload
+
+                        };
                     }
                     else if (result == -1)
                     {
-                        response.ResponseMessage = "Employee Already Exist";
-                        response.ResponseCode = "-1";
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreateEmployeeDTO>()
+                        {
+                            ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Already Exist",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreateEmployeeDTO>()
+                        {
+                            ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Internal Server Error",
+                            Data = null
+
+                        };
                     }
                 }
 
@@ -92,11 +103,116 @@ namespace XpressHRMS.Business.Services.Logic
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: CreateEmployee() ===>{ex.Message}");
-                return response;
-
+                return new BaseResponse<CreateEmployeeDTO>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
             }
 
         }
+
+
+        public async Task<BaseResponse<EmployeeUpload>> CreateEmployeeBulk(EmployeeUpload payload, int CompanyID)
+        {
+            try
+            {
+                int rowCount = 0;
+
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (payload.EmployeeFiles==null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Kindly select a file";
+                }
+                
+                if (!isModelStateValidate)
+                {
+                    return new BaseResponse<EmployeeUpload>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
+                }
+                else
+                {
+
+
+                    using (var stream = new MemoryStream())
+                    {
+                        await payload.EmployeeFiles.CopyToAsync(stream);
+
+                        using (var package = new ExcelPackage(stream))
+                        {
+                            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                            ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                            rowCount = worksheet.Dimension.Rows;
+                            var columnmCount = worksheet.Dimension.Columns;
+
+                            if (columnmCount != 5)
+                            {
+                                return new BaseResponse<EmployeeUpload>()
+                                {
+                                    ResponseMessage = "Kindly Upload the appropriate file",
+                                    ResponseCode = ((int)ResponseCode.ProcessingError).ToString(),
+                                    Data = null
+                                };
+                            }
+
+                            for (int row = 2; row <= rowCount; row++)
+                            {
+                                string FirstName = worksheet.Cells[row, 1].Value.ToString().Trim();
+                                string LastName = worksheet.Cells[row, 2].Value.ToString().Trim();
+                                string EmailAddress = worksheet.Cells[row, 3].Value.ToString().Trim();
+                                string PhoneNumber = worksheet.Cells[row, 4].Value.ToString().Trim();
+                                string staffID= worksheet.Cells[row, 5].Value.ToString().Trim();
+                                var EmpPayload = new CreateEmployeeDTOBulk
+                                {
+                                     FirstName=FirstName,
+                                     LastName=LastName,
+                                     EmailAddress=EmailAddress,
+                                     PhoneNumber=PhoneNumber,
+                                     HRTag= staffID
+                                };
+
+                                _EmployeeRepo.CreateEmployeeBulk(EmpPayload, CompanyID);
+                               
+                            }
+                        }
+                    }
+
+                 
+                        return new BaseResponse<EmployeeUpload>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Saved Successfully",
+                            Data = payload
+
+                        };
+                    
+                   
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateEmployee() ===>{ex.Message}");
+                return new BaseResponse<EmployeeUpload>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
+            }
+
+        }
+
 
     }
 }

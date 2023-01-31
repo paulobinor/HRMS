@@ -27,9 +27,8 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse> CreateEmployeeType(CreateEmployeeTypeDTO createEmployeeType, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<CreateEmployeeTypeDTO>> CreateEmployeeType(CreateEmployeeTypeDTO createEmployeeType, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -55,10 +54,12 @@ namespace XpressHRMS.Business.Services.Logic
 
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<CreateEmployeeTypeDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -80,38 +81,51 @@ namespace XpressHRMS.Business.Services.Logic
                     dynamic result = await _EmployeeTypeRepository.CreateEmployeeType(createEmployeeType);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "EmployeeTypeName Created Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = createEmployeeType;
-                        return response;
+                        return new BaseResponse<CreateEmployeeTypeDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Saved Successfully",
+                            Data = createEmployeeType
+
+                        };
                     }
                     else if (result == -1)
                     {
-                        //response.ResponseMessage = "EmployeeTypeName Already Exist";
-                        //response.ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreateEmployeeTypeDTO>()
+                        {
+                            ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Already Exist",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        //response.ResponseMessage = "Internal Server Error";
-                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreateEmployeeTypeDTO>()
+                        {
+                            ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Internal Server Error",
+                            Data = null
+
+                        };
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: CreateEmployeeTypeName() ===>{ex.Message}");
-                return response;
+                return new BaseResponse<CreateEmployeeTypeDTO>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
             }
 
         }
 
-        public async Task<BaseResponse> UpdateEmployeeType(UpdateEmployeeTypeDTO UpdateEmployeeType, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<UpdateEmployeeTypeDTO>> UpdateEmployeeType(UpdateEmployeeTypeDTO UpdateEmployeeType, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -133,19 +147,16 @@ namespace XpressHRMS.Business.Services.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || EmployeeType is NULL";
                 }
-                //if (string.IsNullOrEmpty(UpdateEmployeeType.CreatedBy))
-                //{
-                //    isModelStateValidate = false;
-                //    validationMessage += "  || CreatedBy is NULL";
-                //}
-
+             
 
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<UpdateEmployeeTypeDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -166,31 +177,41 @@ namespace XpressHRMS.Business.Services.Logic
                     dynamic result = await _EmployeeTypeRepository.UpdateEmployeeType(UpdateEmployeeType);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "EmployeeType Updated Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = UpdateEmployeeType;
-                        return response;
+                        return new BaseResponse<UpdateEmployeeTypeDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Updated  Successfully",
+                            Data = UpdateEmployeeType
+
+                        };
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<UpdateEmployeeTypeDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to Update Record",
+                            Data = UpdateEmployeeType
+
+                        };
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: UpdateEmployeeType() ===>{ex.Message}");
-                return response;
+                return new BaseResponse<UpdateEmployeeTypeDTO>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
             }
 
         }
 
-        public async Task<BaseResponse> DeleteEmployeeType(DelEmployeeTypeDTO DelEmployeeType, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<DelEmployeeTypeDTO>> DeleteEmployeeType(DelEmployeeTypeDTO DelEmployeeType, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
               
@@ -204,10 +225,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<DelEmployeeTypeDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -229,214 +252,244 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _EmployeeTypeRepository.DeleteEmployeeType(DelEmployeeType);
                     if (result > 0)
                     {
-                        //response.ResponseMessage = "EmployeeType Deleted Successfully";
-                        //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = DelEmployeeType;
-                        return response;
+                        return new BaseResponse<DelEmployeeTypeDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Deleted Successfully",
+                            Data = DelEmployeeType
+
+                        };
                     }
                     else
                     {
-                        //response.ResponseMessage = "Internal Server Error";
-                        //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<DelEmployeeTypeDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to  Delete Record",
+                            Data = DelEmployeeType
+
+                        };
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: DeleteEmployeeType() ===>{ex.Message}");
-                return response;
+                return new BaseResponse<DelEmployeeTypeDTO>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
             }
 
         }
 
-        public async Task<BaseResponse> DisableEmployeeType(int EmployeeTypeID, int  CompanyID, string RemoteIpAddress, string RemotePort)
-        {
-            BaseResponse response = new BaseResponse();
-            try
-            {
+        //public async Task<BaseResponse<DelEmployeeTypeDTO>> DisableEmployeeType(int EmployeeTypeID, int  CompanyID, string RemoteIpAddress, string RemotePort)
+        //{
+        //    try
+        //    {
                
 
-                bool isModelStateValidate = true;
-                string validationMessage = "";
-                if (EmployeeTypeID < 0)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || EmployeeType ID is NULL";
-                }
-                if (!isModelStateValidate)
-                {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = EmployeeTypeID;
-                    return response;
+        //        bool isModelStateValidate = true;
+        //        string validationMessage = "";
+        //        if (EmployeeTypeID < 0)
+        //        {
+        //            isModelStateValidate = false;
+        //            validationMessage += "  || EmployeeType ID is NULL";
+        //        }
+        //        if (!isModelStateValidate)
+        //        {
+        //            response.ResponseMessage = validationMessage;
+        //            response.ResponseCode = ResponseCode.ValidationError.ToString();
+        //            response.Data = EmployeeTypeID;
+        //            return response;
 
-                }
-                else
-                {
+        //        }
+        //        else
+        //        {
 
-                    var auditry = new AuditTrailReq
-                    {
-                        AccessDate = DateTime.Now,
-                        AccessedFromIpAddress = RemoteIpAddress,
-                        AccessedFromPort = RemotePort,
-                        UserId = 3,
-                        Operation = "Disable Position",
-                        Payload = JsonConvert.SerializeObject(EmployeeTypeID),
-                        Response = ((int)ResponseCode.Ok).ToString().ToString()
-                    };
+        //            var auditry = new AuditTrailReq
+        //            {
+        //                AccessDate = DateTime.Now,
+        //                AccessedFromIpAddress = RemoteIpAddress,
+        //                AccessedFromPort = RemotePort,
+        //                UserId = 3,
+        //                Operation = "Disable Position",
+        //                Payload = JsonConvert.SerializeObject(EmployeeTypeID),
+        //                Response = ((int)ResponseCode.Ok).ToString().ToString()
+        //            };
 
-                    var audit = _auditTrailRepository.CreateAuditTrail(auditry);
+        //            var audit = _auditTrailRepository.CreateAuditTrail(auditry);
 
 
-                    int result = await _EmployeeTypeRepository.DisableEmployeeType(EmployeeTypeID, CompanyID);
-                    if (result > 0)
-                    {
-                        response.ResponseMessage = "EmployeeType Disabled Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
-                    }
-                    else
-                    {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
-                        response.Data = null;
-                        return response;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"MethodName: DisableEmployeeType() ===>{ex.Message}");
-                return response;
-            }
+        //            int result = await _EmployeeTypeRepository.DisableEmployeeType(EmployeeTypeID, CompanyID);
+        //            if (result > 0)
+        //            {
+        //                response.ResponseMessage = "EmployeeType Disabled Successfully";
+        //                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+        //                response.Data = null;
+        //                return response;
+        //            }
+        //            else
+        //            {
+        //                response.ResponseMessage = "Internal Server Error";
+        //                response.ResponseCode = ResponseCode.InternalServer.ToString();
+        //                response.Data = null;
+        //                return response;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"MethodName: DisableEmployeeType() ===>{ex.Message}");
+        //        return response;
+        //    }
 
-        }
+        //}
 
-        public async Task<BaseResponse> ActivateEmployeeType(int EmployeeTypeID, int CompanyID, string RemoteIpAddress, string RemotePort)
+        //public async Task<BaseResponse<DelEmployeeTypeDTO>> ActivateEmployeeType(int EmployeeTypeID, int CompanyID, string RemoteIpAddress, string RemotePort)
+        //{
+
+        //    try
+        //    {
+
+        //        bool isModelStateValidate = true;
+        //        string validationMessage = "";
+        //        if (EmployeeTypeID < 0)
+        //        {
+        //            isModelStateValidate = false;
+        //            validationMessage += "  || EmployeeType is NULL";
+        //        }
+        //        if (!isModelStateValidate)
+        //        {
+        //            response.ResponseMessage = validationMessage;
+        //            response.ResponseCode = ResponseCode.ValidationError.ToString();
+        //            response.Data = EmployeeTypeID;
+        //            return response;
+
+        //        }
+        //        else
+        //        {
+        //            var auditry = new AuditTrailReq
+        //            {
+        //                AccessDate = DateTime.Now,
+        //                AccessedFromIpAddress = RemoteIpAddress,
+        //                AccessedFromPort = RemotePort,
+        //                UserId = 3,
+        //                Operation = "Updated EmployeeType",
+        //                Payload = JsonConvert.SerializeObject(EmployeeTypeID),
+        //                Response = ((int)ResponseCode.Ok).ToString().ToString()
+        //            };
+
+        //            var audit = _auditTrailRepository.CreateAuditTrail(auditry);
+
+
+        //            int result = await _EmployeeTypeRepository.ActivateEmployeeType(EmployeeTypeID , CompanyID);
+        //            if (result > 0)
+        //            {
+        //                response.ResponseMessage = "EmployeeType Activated Successfully";
+        //                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+        //                response.Data = EmployeeTypeID;
+        //                return response;
+        //            }
+        //            else
+        //            {
+        //                response.ResponseMessage = "Internal Server Error";
+        //                response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+        //                response.Data = null;
+        //                return response;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"MethodName: ActivatedEmployeeType() ===>{ex.Message}");
+        //        return response;
+        //    }
+
+        //}
+
+        public async Task<BaseResponse<List<EmployeeTypeDTO>>> GetAllEmployeeType(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
-
-            try
-            {
-
-                bool isModelStateValidate = true;
-                string validationMessage = "";
-                if (EmployeeTypeID < 0)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || EmployeeType is NULL";
-                }
-                if (!isModelStateValidate)
-                {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = EmployeeTypeID;
-                    return response;
-
-                }
-                else
-                {
-                    var auditry = new AuditTrailReq
-                    {
-                        AccessDate = DateTime.Now,
-                        AccessedFromIpAddress = RemoteIpAddress,
-                        AccessedFromPort = RemotePort,
-                        UserId = 3,
-                        Operation = "Updated EmployeeType",
-                        Payload = JsonConvert.SerializeObject(EmployeeTypeID),
-                        Response = ((int)ResponseCode.Ok).ToString().ToString()
-                    };
-
-                    var audit = _auditTrailRepository.CreateAuditTrail(auditry);
-
-
-                    int result = await _EmployeeTypeRepository.ActivateEmployeeType(EmployeeTypeID , CompanyID);
-                    if (result > 0)
-                    {
-                        response.ResponseMessage = "EmployeeType Activated Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.Data = EmployeeTypeID;
-                        return response;
-                    }
-                    else
-                    {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                        response.Data = null;
-                        return response;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"MethodName: ActivatedEmployeeType() ===>{ex.Message}");
-                return response;
-            }
-
-        }
-
-        public async Task<BaseResponse> GetAllEmployeeType(int CompanyID)
-        {
-            BaseResponse response = new BaseResponse();
 
             try
             {
                 var result = await _EmployeeTypeRepository.GetAllEmployeeType(CompanyID);
-                if (result == null)
+                if (result.Count >0)
                 {
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<List<EmployeeTypeDTO>>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Retreived Successfully",
+                        Data = result
+
+                    };
                 }
                 else
                 {
-                    response.ResponseMessage = "EmployeeType Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.Data = result;
-                    return response;
+                    return new BaseResponse<List<EmployeeTypeDTO>>()
+                    {
+                        ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "No record found",
+                        Data = result
+
+                    };
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: GetAllEmployeeType() ===>{ex.Message}");
-                return response;
+                return new BaseResponse<List<EmployeeTypeDTO>>()
+                {
+                    ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'),
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    Data = null
+
+                };
             }
 
         }
 
-        public async Task<BaseResponse> GetEmployeeTypeByID(int CompanyID, int PositionID)
+        public async Task<BaseResponse<EmployeeTypeDTO>> GetEmployeeTypeByID(int CompanyID, int PositionID)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
 
-                dynamic result = await _EmployeeTypeRepository.GetEmployeeTypeByID(CompanyID,PositionID);
-                if (result.Count > 0)
+                var result = await _EmployeeTypeRepository.GetEmployeeTypeByID(CompanyID,PositionID);
+                if (result!=null)
                 {
-                    response.ResponseMessage = "EmployeeType Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.Data = result;
-                    return response;
+                    return new BaseResponse<EmployeeTypeDTO>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Retreived Successfully",
+                        Data = result
+
+                    };
                 }
                 else
                 {
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<EmployeeTypeDTO>()
+                    {
+                        ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "No record found",
+                        Data = result
+
+                    };
                 }
 
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: GetAllEmployeeTypeByID() ===>{ex.Message}");
-                return response;
+                return new BaseResponse<EmployeeTypeDTO>()
+                {
+                    ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'),
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    Data = null
 
+                };
             }
         }
 
