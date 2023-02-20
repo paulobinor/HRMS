@@ -24,90 +24,90 @@ namespace XpressHRMS.Controllers
             _GradeService = GradeService;
         }
 
-        [HttpPost("CreateGrade")]
-        public async Task<IActionResult> CreateGrade([FromBody] CreateGradeDTO CraeteGrade)
-        {
+        //[HttpPost("CreateGrade")]
+        //public async Task<IActionResult> CreateGrade([FromBody] CreateGradeDTO CraeteGrade)
+        //{
 
 
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+        //    string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //    string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
 
-            try
-            {
-                return this.CustomResponse(await _GradeService.CreateGrade(CraeteGrade,RemoteIpAddress,RemotePort));
+        //    try
+        //    {
+        //        return this.CustomResponse(await _GradeService.CreateGrade(CraeteGrade,RemoteIpAddress,RemotePort));
 
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return null;
+        //    }
+        //}
 
-        [HttpPut("UpdateGrade")]
-        public async Task<IActionResult> UpdateGrade([FromBody] UpdateGradeDTO UpdateGrade)
-        {
-
-
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-
-            try
-            {
-                return this.CustomResponse(await _GradeService.UpdateGrade(UpdateGrade, RemoteIpAddress, RemotePort));
-
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
-
-        [HttpDelete("DeleteGrade")]
-        public async Task<IActionResult> DeleteGrade(DelGradeDTO DelGrade)
-        {
-
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-
-            try
-            {
-                return this.CustomResponse(await _GradeService.DeleteGrade(DelGrade, RemoteIpAddress, RemotePort));
-
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
-
-        [HttpGet("GetAllGrade")]
-        public async Task<IActionResult> GetAllGrade(int CompanyID)
-        {
-            try
-            {
-                return this.CustomResponse(await _GradeService.GetAllGrade(CompanyID));
-
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
+        //[HttpPut("UpdateGrade")]
+        //public async Task<IActionResult> UpdateGrade([FromBody] UpdateGradeDTO UpdateGrade)
+        //{
 
 
-        [HttpGet("GetAllGradeByID")]
-        public async Task<IActionResult> GetAllGradeByID(int CompanyID, int GradeID)
-        {
-            try
-            {
-                return this.CustomResponse(await _GradeService.GetGradeByID(CompanyID, GradeID));
+        //    string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //    string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
 
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
+        //    try
+        //    {
+        //        return this.CustomResponse(await _GradeService.UpdateGrade(UpdateGrade, RemoteIpAddress, RemotePort));
+
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return null;
+        //    }
+        //}
+
+        //[HttpDelete("DeleteGrade")]
+        //public async Task<IActionResult> DeleteGrade(DelGradeDTO DelGrade)
+        //{
+
+        //    string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //    string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+
+        //    try
+        //    {
+        //        return this.CustomResponse(await _GradeService.DeleteGrade(DelGrade, RemoteIpAddress, RemotePort));
+
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return null;
+        //    }
+        //}
+
+        //[HttpGet("GetAllGrade")]
+        //public async Task<IActionResult> GetAllGrade(int CompanyID)
+        //{
+        //    try
+        //    {
+        //        return this.CustomResponse(await _GradeService.GetAllGrade(CompanyID));
+
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return null;
+        //    }
+        //}
+
+
+        //[HttpGet("GetAllGradeByID")]
+        //public async Task<IActionResult> GetAllGradeByID(int CompanyID, int GradeID)
+        //{
+        //    try
+        //    {
+        //        return this.CustomResponse(await _GradeService.GetGradeByID(CompanyID, GradeID));
+
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return null;
+        //    }
+        //}
 
         //[HttpPost("ActivateGrade")]
         //public async Task<IActionResult> ActivateGrade(int GradeID, int CompanyID)

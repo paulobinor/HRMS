@@ -15,5 +15,6 @@ namespace XpressHRMS.Data.Enums
         DELETE = 5,
         DISABLE = 6,
         ACTIVATE=7
+
     }
 }

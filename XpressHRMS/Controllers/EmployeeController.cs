@@ -18,40 +18,43 @@ namespace XpressHRMS.Controllers
             _EmployeeService = EmployeeService;
         }
 
-        [HttpPost("CreateEmployee")]
-        public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeDTO payload, int CompanyID)
-        {
+        //[HttpPost("CreateEmployee")]
+        //public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeDTO createEmp, int CompanyID)
+        //{
 
 
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-            try
-            {
-                return this.CustomResponse(await _EmployeeService.CreateEmployee(payload, CompanyID));
+        //    string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //    string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+        //    try
+        //    {
+        //        return this.CustomResponse(await _EmployeeService.CreateEmployee(createEmp, CompanyID));
 
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
-
-        [HttpPost("UploadBulkEmployee")]
-        public async Task<IActionResult> UploadBulkEmployee([FromForm] EmployeeUpload payload, int CompanyID)
-        {
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return null;
+        //    }
+        //}
 
 
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-            try
-            {
-                return this.CustomResponse(await _EmployeeService.CreateEmployeeBulk(payload, CompanyID));
+        //stopppppppppp
 
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
+        //[HttpPost("UploadBulkEmployee")]
+        //public async Task<IActionResult> UploadBulkEmployee([FromForm] EmployeeUpload payload, int CompanyID)
+        //{
+
+
+        //    string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //    string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+        //    try
+        //    {
+        //        return this.CustomResponse(await _EmployeeService.CreateEmployeeBulk(payload, CompanyID));
+
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return null;
+        //    }
+        //}
     }
 }

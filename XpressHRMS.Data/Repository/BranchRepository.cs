@@ -42,11 +42,12 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@BranchName", payload.BranchName);
                     param.Add("@CompanyID", payload.CompanyID);
                     param.Add("@IsHeadQuater", payload.IsHeadQuater);
-                    //param.Add("@CreatedBy", payload.CreatedBy);
+                    param.Add("@CreatedBy", payload.CreatedBy);
                     param.Add("@Address", payload.Address);
                     param.Add("@CountryID", payload.CountryID);
                     param.Add("@StateID", payload.StateID);
                     param.Add("@LgaID", payload.LgaID);
+                    //param.Add("@isActive", true);
                     dynamic response = await _dapper.ExecuteAsync("Sp_Branch", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
@@ -78,13 +79,10 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@CountryID", payload.CountryID);
                     param.Add("@StateID", payload.StateID);
                     param.Add("@LgaID", payload.LgaID);
+                    param.Add("@UpdatedBy", payload.UpdatedBy);
                     dynamic response = await _dapper.ExecuteAsync("Sp_Branch", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
-
-
-
-
             }
             catch (Exception ex)
             {
@@ -103,6 +101,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.DELETE);
                     param.Add("@CompanyID", payload.CompanyID);
                     param.Add("@BranchID", payload.BranchID);
+                    param.Add("@DeletedBy", payload.DeletedBy);
                     dynamic response = await _dapper.ExecuteAsync("Sp_Branch", param: param, commandType: CommandType.StoredProcedure);
                     return response;
 
@@ -140,7 +139,7 @@ namespace XpressHRMS.Data.Repository
 
         }
 
-        public async Task<BranchDTO> GetBranchByID(DeleteBranchDTO payload)
+        public async Task<BranchDTO> GetBranchByID(int BranchID, string CompanyID)
         {
             try
             {
@@ -148,8 +147,8 @@ namespace XpressHRMS.Data.Repository
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.SELECTBYID);
-                    param.Add("@BranchID", payload.BranchID);
-                    param.Add("@CompanyID", payload.CompanyID);
+                    param.Add("@BranchID", BranchID);
+                    param.Add("@CompanyID", CompanyID);
                     var response = await _dapperr.Get<BranchDTO>("Sp_Branch", param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
@@ -160,6 +159,57 @@ namespace XpressHRMS.Data.Repository
             {
                 _logger.LogError(ex.ToString());
                 return null;
+            }
+
+        }
+
+        public async Task<int> DisableBranch(DisBranchDTO disable)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", ACTION.DISABLE);
+                    param.Add("@BranchID", disable.BranchID);
+                    param.Add("@CompanyID", disable.CompanyID);
+                    param.Add("@DisableBy", disable.DisableBy);
+                    dynamic response = await _dapper.ExecuteAsync("Sp_Branch", param: param, commandType: CommandType.StoredProcedure);
+                    return response;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return 0;
+            }
+
+        }
+
+        public async Task<int> ActivateBranch( EnBranchDTO enableBy )
+
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", ACTION.DELETE);
+                    param.Add("@BranchID", enableBy.BranchID);
+                    param.Add("@CompanyID", enableBy.CompanyID);
+                    param.Add("@EnableBy", enableBy.EnableBy);
+                    dynamic response = await _dapper.ExecuteAsync("Sp_Branch", param: param, commandType: CommandType.StoredProcedure);
+                    return response;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return 0;
             }
 
         }

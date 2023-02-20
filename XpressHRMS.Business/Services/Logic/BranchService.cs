@@ -9,6 +9,9 @@ using XpressHRMS.Data.DTO;
 using XpressHRMS.Business.Services.ILogic;
 using XpressHRMS.Data.Enums;
 using XpressHRMS.Data.IRepository;
+using Newtonsoft.Json;
+
+
 
 namespace XpressHRMS.Business.Services.Logic
 {
@@ -17,11 +20,13 @@ namespace XpressHRMS.Business.Services.Logic
 
         private readonly ILogger<BranchService> _logger;
         private readonly IBranchRepository _branchRepository;
+        private readonly IAuditTrailRepository _auditTrailRepository;
 
-        public BranchService(ILogger<BranchService> logger, IBranchRepository branchRepository)
+        public BranchService(ILogger<BranchService> logger, IAuditTrailRepository auditTrailRepository, IBranchRepository branchRepository)
         {
             _logger = logger;
             _branchRepository = branchRepository;
+            _auditTrailRepository = auditTrailRepository;
 
         }
         public async Task<BaseResponse<CreateBranchDTO>> CreateBranch(CreateBranchDTO payload)
@@ -44,11 +49,11 @@ namespace XpressHRMS.Business.Services.Logic
                     validationMessage += "  || Address is NULL";
                 }
 
-                if (payload.CompanyID < 0)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Country Is Null";
-                }
+                //if (payload.CompanyID < 0)
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || Country Is Null";
+                //}
                 if (payload.StateID < 0)
                 {
                     isModelStateValidate = false;
@@ -59,11 +64,11 @@ namespace XpressHRMS.Business.Services.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || Lga Is Null";
                 }
-                if (payload.CompanyID < 0)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Company Is Null";
-                }
+                //if (payload.CompanyID < 0)
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || Company Is Null";
+                //}
                 if (!isModelStateValidate)
                 {
                     return new BaseResponse<CreateBranchDTO>()
@@ -128,7 +133,7 @@ namespace XpressHRMS.Business.Services.Logic
         }
 
 
-        public async Task<BaseResponse<UpdateBranchDTO>> UpdateBranch(UpdateBranchDTO payload)
+        public async Task<BaseResponse<UpdateBranchDTO>> UpdateBranch(UpdateBranchDTO UpdateBranch, string RemoteIpAddress, string RemotePort)
         {
             try
             {
@@ -136,38 +141,19 @@ namespace XpressHRMS.Business.Services.Logic
                 bool isModelStateValidate = true;
                 string validationMessage = "";
 
-                if (string.IsNullOrEmpty(payload.BranchName))
+                if (string.IsNullOrEmpty(UpdateBranch.CompanyID))
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || Branch Name is NULL";
                 }
 
-                if (string.IsNullOrEmpty(payload.Address))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Address is NULL";
-                }
-
-                if (payload.CompanyID < 0)
+                if (UpdateBranch.BranchID < 0)
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || Country Is Null";
                 }
-                if (payload.StateID < 0)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || state Is Null";
-                }
-                if (payload.LgaID < 0)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Lga Is Null";
-                }
-                if (payload.CompanyID < 0)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Company Is Null";
-                }
+
+
 
                 if (!isModelStateValidate)
                 {
@@ -178,18 +164,30 @@ namespace XpressHRMS.Business.Services.Logic
                         Data = null
                     };
 
-
                 }
                 else
                 {
-                    int result = await _branchRepository.UpdateBranch(payload);
+                    var auditry = new AuditTrailReq
+                    {
+                        AccessDate = DateTime.Now,
+                        AccessedFromIpAddress = RemoteIpAddress,
+                        AccessedFromPort = RemotePort,
+                        UserId = 3,
+                        Operation = "Updated Branch",
+                        Payload = JsonConvert.SerializeObject(UpdateBranch),
+                        Response = ((int)ResponseCode.Ok).ToString().ToString()
+                    };
+
+
+                    var audit = _auditTrailRepository.CreateAuditTrail(auditry);
+                    dynamic result = await _branchRepository.UpdateBranch(UpdateBranch);
                     if (result > 0)
                     {
                         return new BaseResponse<UpdateBranchDTO>()
                         {
                             ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
-                            ResponseMessage = "Record Saved Successfully",
-                            Data = payload
+                            ResponseMessage = "Record Updated Successfully",
+                            Data = UpdateBranch
 
                         };
                     }
@@ -197,28 +195,23 @@ namespace XpressHRMS.Business.Services.Logic
                     {
                         return new BaseResponse<UpdateBranchDTO>()
                         {
-                            ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0'),
-                            ResponseMessage = "Record Already Exist",
-                            Data = null
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to Update Record",
+                            Data = UpdateBranch
 
                         };
                     }
                 }
-
-
-
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: UpdateBranch() ===>{ex.Message}");
                 return new BaseResponse<UpdateBranchDTO>()
                 {
-                    ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0'),
-                    ResponseMessage = "Internal Server Error",
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
                     Data = null
-
                 };
-
             }
 
         }
@@ -234,11 +227,11 @@ namespace XpressHRMS.Business.Services.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || Unit is NULL";
                 }
-                if (payload.CompanyID < 0)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Company is NULL";
-                }
+                //if (payload.CompanyID < 0)
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || Company is NULL";
+                //}
                 if (!isModelStateValidate)
                 {
                     return new BaseResponse<DeleteBranchDTO>()
@@ -327,13 +320,13 @@ namespace XpressHRMS.Business.Services.Logic
         }
 
 
-        public async Task<BaseResponse<BranchDTO>> GetBranchByID(DeleteBranchDTO payload)
+        public async Task<BaseResponse<BranchDTO>> GetBranchByID(int BranchID, string CompanyID)
         {
 
             try
             {
 
-                var result = await _branchRepository.GetBranchByID(payload);
+                var result = await _branchRepository.GetBranchByID(BranchID, CompanyID);
                 if (result!=null)
                 {
                     return new BaseResponse<BranchDTO>()
@@ -367,6 +360,128 @@ namespace XpressHRMS.Business.Services.Logic
 
                 };
             }
+        }
+
+        public async Task<BaseResponse<DisBranchDTO>> DisableBranch(DisBranchDTO payload)
+        {
+            try
+            {
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+                if (payload.BranchID < 0)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Unit is NULL";
+                }
+                //if (payload.CompanyID < 0)
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || Company is NULL";
+                //}
+                if (!isModelStateValidate)
+                {
+                    return new BaseResponse<DisBranchDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
+
+                }
+                else
+                {
+                    int result = await _branchRepository.DisableBranch(payload);
+                    if (result > 0)
+                    {
+                        return new BaseResponse<DisBranchDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Deleted  Successfully",
+                            Data = payload
+
+                        };
+                    }
+                    else
+                    {
+                        return new BaseResponse<DisBranchDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to  Delete Record",
+                            Data = payload
+
+                        };
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+
+        public async Task<BaseResponse<EnBranchDTO>> EnableBranch(EnBranchDTO payload)
+        {
+            try
+            {
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+                if (payload.BranchID < 0)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Unit is NULL";
+                }
+                //if (payload.CompanyID < 0)
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || Company is NULL";
+                //}
+                if (!isModelStateValidate)
+                {
+                    return new BaseResponse<EnBranchDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
+
+                }
+                else
+                {
+                    int result = await _branchRepository.ActivateBranch(payload);
+                    if (result > 0)
+                    {
+                        return new BaseResponse<EnBranchDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Deleted  Successfully",
+                            Data = payload
+
+                        };
+                    }
+                    else
+                    {
+                        return new BaseResponse<EnBranchDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to  Delete Record",
+                            Data = payload
+
+                        };
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
         }
     }
 }

@@ -9,7 +9,9 @@ namespace XpressHRMS.Data.IRepository
         Task<int> CreateBranch(CreateBranchDTO payload);
         Task<int> DeleteBranch(DeleteBranchDTO payload);
         Task<List<BranchDTO>> GetAllBranches(int CompanyID);
-        Task<BranchDTO> GetBranchByID(DeleteBranchDTO payload);
+        Task<BranchDTO> GetBranchByID(int BranchID, string CompanyID);
         Task<int> UpdateBranch(UpdateBranchDTO payload);
+        Task<int> ActivateBranch(EnBranchDTO enableBy);
+        Task<int> DisableBranch(DisBranchDTO disable);
     }
 }

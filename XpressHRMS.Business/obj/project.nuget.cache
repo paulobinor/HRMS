@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "5Cg4csLObeZMIa7CuklCTo5dfTVVUGpb6rISM6GWgHIXC0Wj3gr3koIeV5HRDVfROu3mIQ6N62aL8BvZJThbjg==",
+  "dgSpecHash": "gNL6fJO0V45dpzulkV0tbWeVNURjiyY/IPU3KakiZPqADx7AD3hPhhg6QwHDmfMDIsR2G8AQI3+9+64X52KzUA==",
   "success": true,
   "projectFilePath": "C:\\Users\\olajumoke.owolabi\\source\\repos\\HRMS-BE(BackEnd)\\XpressHRMS.Business\\XpressHRMS.Business.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\olajumoke.owolabi\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
     "C:\\Users\\olajumoke.owolabi\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\olajumoke.owolabi\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
+    "C:\\Users\\olajumoke.owolabi\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\olajumoke.owolabi\\.nuget\\packages\\dapper\\2.0.123\\dapper.2.0.123.nupkg.sha512",
     "C:\\Users\\olajumoke.owolabi\\.nuget\\packages\\epplus\\6.1.2\\epplus.6.1.2.nupkg.sha512",
     "C:\\Users\\olajumoke.owolabi\\.nuget\\packages\\epplus.interfaces\\6.1.1\\epplus.interfaces.6.1.1.nupkg.sha512",

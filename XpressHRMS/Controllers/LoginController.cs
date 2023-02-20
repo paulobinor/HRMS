@@ -20,7 +20,9 @@ namespace XpressHRMS.Controllers
 {
     [Route("api/[controller]")]
 
-    public class LoginController : ControllerBase
+    //[ApiController]
+    //[Authorize]
+    public class LoginController : /*ControllerBase*/ BaseController
     {
         private readonly ISSOservice _iSSOservice;
         private IConfiguration _config;
@@ -45,9 +47,18 @@ namespace XpressHRMS.Controllers
                 var resp = await _iSSOservice.AdminLogin(user);
                 if (resp.Data != null)
                 {
+                    System.Reflection.PropertyInfo value = resp.Data.GetType().GetProperty("CompanyID");
+                    string companyid = (string) value.GetValue(resp.Data, null);
+                    if (string.IsNullOrEmpty(companyid))
+                    {
+                        companyid = "0";
+                    }
+
+                   
                     var authClaims = new List<Claim>
                         {
                             new Claim(ClaimTypes.Name, user.Email),
+                            new Claim(ClaimTypes.SerialNumber, companyid),
                             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         };
 
@@ -85,11 +96,7 @@ namespace XpressHRMS.Controllers
         }
 
 
-
-
-
         [HttpPost("CreateAdmin")]
-
         public async Task<IActionResult> CreateAdmin([FromBody] CreateAdminUserLoginDTO payload)
         {
             BaseResponse<CreateAdminUserLoginDTO> response = new BaseResponse<CreateAdminUserLoginDTO>();
@@ -99,7 +106,12 @@ namespace XpressHRMS.Controllers
                 //Xpress@Admin
                 //Admin@2023
                 var claimsIdentity = this.User.Identity as ClaimsIdentity;
+
                 string email = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+                string CreatedBy = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+                payload.CreatedBy = CreatedBy;
+               
+
                 if (string.IsNullOrEmpty(email))
                 {
                     response.Data = null;
@@ -112,14 +124,97 @@ namespace XpressHRMS.Controllers
                 if (resp != null)
                 {
                     response.Data = resp.Data;
+                    response.ResponseCode = resp.ResponseCode;
+                    response.ResponseMessage = resp.ResponseMessage;
                     return Ok(response);
 
                 }
                 return Ok(response);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 return Ok(response);
+            }
+        }
+
+        //[HttpPut("UpdateAdmin")]
+        //public async Task<IActionResult> UpdateAdmin([FromBody] UpdateAdminUserLoginDTO payload)
+        //{
+        //    string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //    string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+        //    try
+        //    {
+        //        return this.CustomResponse(await _iSSOservice.UpdateAdmin(payload, RemoteIpAddress, RemotePort));
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
+
+        [HttpDelete("DeleteAdmin")]
+        public async Task<IActionResult> DeleteAdmin(int CompanyID, int AdminUserID)
+        {
+            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            try
+            {
+                return this.CustomResponse(await _iSSOservice.DeleteAdmin(CompanyID, AdminUserID, RemoteIpAddress, RemotePort));
+
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+       
+        [HttpPost("DisableAdmin")]
+        public async Task<IActionResult> DisableAdmin(int CompanyID, int AdminUserID)
+        {
+
+            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            try
+            {
+                return this.CustomResponse(await _iSSOservice.DisableAdmin(CompanyID, AdminUserID, RemoteIpAddress, RemotePort));
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        [HttpPost("ActivateAdmin")]
+        public async Task<IActionResult> ActivateAdmin(int CompanyID, int AdminUserID)
+        {
+
+            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            try
+            {
+                return this.CustomResponse(await _iSSOservice.ActivateAdminUser(CompanyID, AdminUserID, RemoteIpAddress, RemotePort));
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        [HttpGet("GetAllAdmin")]
+        public async Task<IActionResult> GetAllAdminUser()
+        {
+            try
+            {
+                return this.CustomResponse(await _iSSOservice.GetAllAdminUser());
+
+            }
+            catch (Exception e)
+            {
+                return null;
             }
         }
     }

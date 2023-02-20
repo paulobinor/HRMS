@@ -39,16 +39,13 @@ namespace XpressHRMS.Data.Repository
                        var param = new DynamicParameters();
                         param.Add("@Status", ACTION.INSERT);
                         param.Add("@DepartmentName", payload.DepartmentName);
-                        param.Add("@HODEmployeeID", payload.HODEmployeeID);
-                        param.Add("@isActive", true);
-                        param.Add("@CompanyID", payload.CompanyID);
+                        param.Add("@HodID", payload.HodID);
+                    param.Add("@CreatedBy", payload.CreatedBy);
+                    param.Add("@CompanyID", payload.CompanyID);
                     dynamic response = await _dapper.ExecuteAsync("Sp_Department", param: param, commandType: CommandType.StoredProcedure);
                     return response;
 
                 }
-
-
-
 
             }
             catch (Exception ex)
@@ -58,7 +55,7 @@ namespace XpressHRMS.Data.Repository
             }
 
         }
-        public async Task<int> DeleteDepartment(int DepartmentID, int CompanyID)
+        public async Task<int> DeleteDepartment(int DepartmentID, string CompanyID)
         {
             try
             {
@@ -83,7 +80,7 @@ namespace XpressHRMS.Data.Repository
 
         }
 
-        public async Task<int> DisableDepartment(int DepartmentID, int CompanyID)
+        public async Task<int> DisableDepartment(DisDepartmentDTO diable)
         {
             try
             {
@@ -91,8 +88,8 @@ namespace XpressHRMS.Data.Repository
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.DELETE);
-                    param.Add("@DepartmentID", DepartmentID);
-                    param.Add("@CompanyID", CompanyID);
+                    param.Add("@DepartmentID", diable.DepartmentID);
+                    param.Add("@CompanyID", diable.CompanyID);
                     dynamic response = await _dapper.ExecuteAsync("Sp_Department", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
@@ -107,7 +104,7 @@ namespace XpressHRMS.Data.Repository
 
         }
 
-        public async Task<int> ActivateDepartment(int DepartmentID, int CompanyID)
+        public async Task<int> ActivateDepartment(EnDepartmentDTO enable)
         {
             try
             {
@@ -115,8 +112,8 @@ namespace XpressHRMS.Data.Repository
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.DELETE);
-                    param.Add("@DepartmentID", DepartmentID);
-                    param.Add("@CompanyID", CompanyID);
+                    param.Add("@DepartmentID", enable.DepartmentID);
+                    param.Add("@CompanyID", enable.CompanyID);
                     dynamic response = await _dapper.ExecuteAsync("Sp_Department", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
@@ -139,17 +136,15 @@ namespace XpressHRMS.Data.Repository
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.UPDATE);
-                    param.Add("@DepartmentName", payload.DepartmentName);
-                    param.Add("@HODEmployeeID", payload.HODEmployeeID);
                     param.Add("@DepartmentID", payload.DepartmentID);
+                    param.Add("@DepartmentName", payload.DepartmentName);
+                    param.Add("@HodID", payload.HodID);
                     param.Add("@CompanyID", payload.CompanyID);
 
                     int response = await _dapper.ExecuteAsync("Sp_Department", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
-              
-
-
+ 
             }
             catch (Exception ex)
             {
@@ -158,7 +153,7 @@ namespace XpressHRMS.Data.Repository
             }
 
         }
-        public async Task<List<GetDepartmentDTO>> GetAllDepartment(int CompanyID)
+        public async Task<List<GetDepartmentDTO>> GetAllDepartment(string CompanyID)
         {
             try
             {
@@ -182,7 +177,7 @@ namespace XpressHRMS.Data.Repository
 
         }
 
-        public async Task<IEnumerable<GetDepartmentDTO>> GetAllDepartmentByID(int DepartmentID, int CompanyID)
+        public async Task<IEnumerable<GetDepartmentDTO>> GetAllDepartmentByID(int DepartmentID, string CompanyID)
         {
             try
             {

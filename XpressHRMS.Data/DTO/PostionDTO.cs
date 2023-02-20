@@ -2,39 +2,45 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace XpressHRMS.Data.DTO
 {
     public class CreatePositionDTO
     {
-        public int CompanyID { get; set; }
+        [JsonIgnore]
+        public string CompanyID { get; set; }
         //public int PositionID { get; set; }
         public string PositionName { get; set; }
-        //public string CreatedBy { get; set; }
-        public DateTime DateCreated { get; set; }
-        public int IsActive { get; set; }
+        [JsonIgnore]
+        public string CreatedBy { get; set; }
+        //public DateTime DateCreated { get; set; }
+        //public int IsActive { get; set; }
 
     }
 
     public class   UPdatePositionDTO
     {
-        public int CompanyID { get; set; }
+        public string CompanyID { get; set; }
         public int PositionID { get; set; }
         public string PositionName { get; set; }
-        //public string CreatedBy { get; set; }
-        //public DateTime DateCreated { get; set; }
+        [JsonIgnore]
+        //public string UpdatedByUpd { get; set; }
+        //[JsonIgnore]
+        public DateTime DateUpdate { get; set; }
         //public int IsActive { get; set; }
 
     }
 
     public class DeletePositionDTO
     {
-        public int CompanyID { get; set; }
+        public string CompanyID { get; set; }
         public int PositionID { get; set; }
-        //public string PositionName { get; set; }
-        //public string CreatedBy { get; set; }
-        //public DateTime DateCreated { get; set; }
+        [JsonIgnore]
+        public string DeletedBy { get; set; }
+        [JsonIgnore]
+        public DateTime DateDeleted { get; set; }
         //public int IsActive { get; set; }
 
     }

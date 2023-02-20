@@ -7,12 +7,13 @@ namespace XpressHRMS.Business.Services.ILogic
 {
     public interface IDepartmentService
     {
-        //Task<BaseResponse<DeleteDepartmentDTO>> ActivateDepartment(DeleteDepartmentDTO payload);
+       
         Task<BaseResponse<DepartmentDTO>> CreateDepartment(CreateDepartmentDTO payload);
         Task<BaseResponse<DeleteDepartmentDTO>> DeleteDepartment(DeleteDepartmentDTO payload);
-        //Task<BaseResponse<DeleteDepartmentDTO>> DisableDepartment(DeleteDepartmentDTO payload);
         Task<BaseResponse<UpdateDepartmentDTO>> UpdateDepartment(UpdateDepartmentDTO payload);
-        Task<BaseResponse<GetDepartmentDTO>> GetAllDepartmentByID(int CompanyID, int DepartmentID);
-        Task<BaseResponse<List<GetDepartmentDTO>>> GetAllDepartments(int CompanyID);
+        Task<BaseResponse<GetDepartmentDTO>> GetAllDepartmentByID(string CompanyID, int DepartmentID);
+        Task<BaseResponse<List<GetDepartmentDTO>>> GetAllDepartments(string CompanyID);
+        Task<BaseResponse<DisDepartmentDTO>> DisableDepartment(DisDepartmentDTO Disdepartment, string RemoteIpAddress, string RemotePort);
+        Task<BaseResponse<DisDepartmentDTO>> ActivateDepartment(EnDepartmentDTO enable, string RemoteIpAddress, string RemotePort);
     }
 }

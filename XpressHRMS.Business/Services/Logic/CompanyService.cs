@@ -42,44 +42,31 @@ namespace XpressHRMS.Business.Services.Logic
                 if (string.IsNullOrEmpty(payload.CompanyLogo))
                 {
                     isModelStateValidate = false;
-                    validationMessage += "  || Department Name is NULL";
+                    validationMessage += "  || CompanyLogo Name is NULL";
                 }
                 if (string.IsNullOrEmpty(payload.CompanyName))
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || Company Name is NULL";
                 }
-                if (string.IsNullOrEmpty(payload.CompanyLogo))
+                if (string.IsNullOrEmpty(payload.PhoneNumber))
                 {
                     isModelStateValidate = false;
-                    validationMessage += "  || Department Name is NULL";
+                    validationMessage += "  || PhoneNumber Name is NULL";
                 }
-                if (string.IsNullOrEmpty(payload.Companyphonenumber))
+                if (string.IsNullOrEmpty(payload.CompanyAddress))
                 {
                     isModelStateValidate = false;
-                    validationMessage += "  || Companyphonenumber is NULL";
+                    validationMessage += "  || CompanyAddress is NULL";
                 }
-                if (string.IsNullOrEmpty(payload.Email))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Email is NULL";
-                }
-                if (string.IsNullOrEmpty(payload.MissionStmt))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || MissionStmt is NULL";
-                }
-                if (string.IsNullOrEmpty(payload.VisionStmt))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || VisionStmt is NULL";
-                }
+                
                 if (string.IsNullOrEmpty(payload.Website))
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || Website is NULL";
                 }
 
+               
                 if (!isModelStateValidate)
                 {
                     return new BaseResponse<CreateCompanyDTO>()
@@ -151,9 +138,6 @@ namespace XpressHRMS.Business.Services.Logic
             }
         }
 
-     
-
-
         public async Task<BaseResponse<UpdateCompanyDTO>> UpdateCompany(UpdateCompanyDTO payload, string RemoteIpAddress, string RemotePort)
         {
             try
@@ -162,46 +146,33 @@ namespace XpressHRMS.Business.Services.Logic
                 bool isModelStateValidate = true;
                 string validationMessage = "";
 
-                if (string.IsNullOrEmpty(payload.CompanyLogo))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Department Name is NULL";
-                }
-                if (string.IsNullOrEmpty(payload.CompanyName))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Company Name is NULL";
-                }
-                if (string.IsNullOrEmpty(payload.CompanyLogo))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Department Name is NULL";
-                }
-                if (string.IsNullOrEmpty(payload.Companyphonenumber))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Companyphonenumber is NULL";
-                }
-                if (string.IsNullOrEmpty(payload.Email))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Email is NULL";
-                }
-                if (string.IsNullOrEmpty(payload.MissionStmt))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || MissionStmt is NULL";
-                }
-                if (string.IsNullOrEmpty(payload.VisionStmt))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || VisionStmt is NULL";
-                }
-                if (string.IsNullOrEmpty(payload.Website))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Website is NULL";
-                }
+                //if (string.IsNullOrEmpty(payload.CompanyLogo))
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || CompanyLogo Name is NULL";
+                //}
+                //if (string.IsNullOrEmpty(payload.CompanyName))
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || Company Name is NULL";
+                //}
+                //if (string.IsNullOrEmpty(payload.PhoneNumber))
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || Companyphonenumber Name is NULL";
+                //}
+                //if (string.IsNullOrEmpty(payload.CompanyAddress))
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || CompanyAddress is NULL";
+                //}
+
+                //if (string.IsNullOrEmpty(payload.Website))
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || Website is NULL";
+                //}
+
                 if (payload.CompanyID < 0)
                 {
                     isModelStateValidate = false;
@@ -272,7 +243,7 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse<int>> DeleteCompany(int CompanyID, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<int>> DeleteCompany(int CompanyID, string DeletedBy, string RemoteIpAddress, string RemotePort)
         {
             try
             {
@@ -310,7 +281,7 @@ namespace XpressHRMS.Business.Services.Logic
 
                     var audit = _auditTrailRepository.CreateAuditTrail(auditry);
 
-                    int result = await _companyRepository.DeleteCompany(CompanyID);
+                    int result = await _companyRepository.DeleteCompany(CompanyID, DeletedBy);
                     if (result > 0)
                     {
                         return new BaseResponse<int>()
@@ -342,9 +313,7 @@ namespace XpressHRMS.Business.Services.Logic
             }
 
         }
-
-
-        public async Task<BaseResponse<int>> DisableCompany(int CompanyID, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<int>> DisableCompany(int CompanyID, string DisableBy, string RemoteIpAddress, string RemotePort)
         {
             try
             {
@@ -353,7 +322,7 @@ namespace XpressHRMS.Business.Services.Logic
                 if (CompanyID < 0)
                 {
                     isModelStateValidate = false;
-                    validationMessage += "  || Company is NULL";
+                    validationMessage += "  || Company is required";
                 }
                 if (!isModelStateValidate)
                 {
@@ -367,28 +336,30 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 else
                 {
+                   
 
-                    var auditry = new AuditTrailReq
-                    {
-                        AccessDate = DateTime.Now,
-                        AccessedFromIpAddress = RemoteIpAddress,
-                        AccessedFromPort = RemotePort,
-                        UserId = 3,
-                        Operation = "Disable Company",
-                        Payload = JsonConvert.SerializeObject(CompanyID),
-                        Response = ((int)ResponseCode.Ok).ToString().ToString()
-                    };
-
-                    var audit = _auditTrailRepository.CreateAuditTrail(auditry);
-
-                    int result = await _companyRepository.DisableCompany(CompanyID);
+                    int result = await _companyRepository.DisableCompany(CompanyID, DisableBy);
                     if (result > 0)
                     {
+                        var auditry = new AuditTrailReq
+                        {
+                            AccessDate = DateTime.Now,
+                            AccessedFromIpAddress = RemoteIpAddress,
+                            AccessedFromPort = RemotePort,
+                            UserId = 3,
+                            Operation = "Disable Company",
+                            Payload = JsonConvert.SerializeObject(CompanyID),
+                            Response = ((int)ResponseCode.Ok).ToString().ToString()
+                        };
+
+                        var audit = _auditTrailRepository.CreateAuditTrail(auditry);
                         return new BaseResponse<int>()
                         {
                             ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
-                            ResponseMessage = "Record Deleted  Successfully",
+                            ResponseMessage = "Record Disable  Successfully",
                             Data = null
+
+
 
                         };
                     }
@@ -397,7 +368,7 @@ namespace XpressHRMS.Business.Services.Logic
                         return new BaseResponse<int>()
                         {
                             ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
-                            ResponseMessage = "Failed to  Delete Record",
+                            ResponseMessage = "Failed to  Disable Record",
                             Data = null
 
                         };
@@ -414,7 +385,7 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse<int>> ActivateCompany(int CompanyID, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse<int>> ActivateCompany(int CompanyID, string EnableBy, string RemoteIpAddress, string RemotePort)
         {
             try
             {
@@ -438,21 +409,22 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 else
                 {
-                    var auditry = new AuditTrailReq
-                    {
-                        AccessDate = DateTime.Now,
-                        AccessedFromIpAddress = RemoteIpAddress,
-                        AccessedFromPort = RemotePort,
-                        UserId = 3,
-                        Operation = "Updated Company",
-                        Payload = JsonConvert.SerializeObject(CompanyID),
-                        Response = ((int)ResponseCode.Ok).ToString().ToString()
-                    };
-
-                    var audit = _auditTrailRepository.CreateAuditTrail(auditry);
-                    int result = await _companyRepository.ActivateCompany(CompanyID);
+                    
+                    int result = await _companyRepository.ActivateCompany(CompanyID, EnableBy);
                     if (result > 0)
                     {
+                        var auditry = new AuditTrailReq
+                        {
+                            AccessDate = DateTime.Now,
+                            AccessedFromIpAddress = RemoteIpAddress,
+                            AccessedFromPort = RemotePort,
+                            UserId = 3,
+                            Operation = "Updated Company",
+                            Payload = JsonConvert.SerializeObject(CompanyID),
+                            Response = ((int)ResponseCode.Ok).ToString().ToString()
+                        };
+
+                        var audit = _auditTrailRepository.CreateAuditTrail(auditry);
                         return new BaseResponse<int>()
                         {
                             ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
@@ -493,7 +465,7 @@ namespace XpressHRMS.Business.Services.Logic
             {
 
                 var result = await _companyRepository.GetAllCompanies();
-                if (result==null)
+                if (result!=null)
                 {
                     return new BaseResponse<List<CompanyDTO>>()
                     {

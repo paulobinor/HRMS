@@ -23,87 +23,89 @@ namespace XpressHRMS.Controllers
             _EmployeeTypeService = EmployeeTypeService;
         }
 
-        [HttpPost("CreateEmployeeType")]
-        public async Task<IActionResult> CreateEmployeeType([FromBody] CreateEmployeeTypeDTO CraeteEmployeeType)
-        {
+        //[HttpPost("CreateEmployeeType")]
+        //public async Task<IActionResult> CreateEmployeeType([FromBody] CreateEmployeeTypeDTO CraeteEmployeeType)
+        //{
 
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-            try
-            {
-                //var resp = await _EmployeeTypeService.CreateEmployeeType(CraeteEmployeeType, RemoteIpAddress, RemotePort);
-                return this.CustomResponse(await _EmployeeTypeService.CreateEmployeeType(CraeteEmployeeType, RemoteIpAddress, RemotePort));
+        //    string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //    string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+        //    try
+        //    {
+        //        //var resp = await _EmployeeTypeService.CreateEmployeeType(CraeteEmployeeType, RemoteIpAddress, RemotePort);
+        //        return this.CustomResponse(await _EmployeeTypeService.CreateEmployeeType(CraeteEmployeeType, RemoteIpAddress, RemotePort));
 
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
 
 
-        [HttpPut("UpdateEmployeeType")]
-        public async Task<IActionResult> UpdateEmployeeType([FromBody] UpdateEmployeeTypeDTO UpdateEmployeeType)
-        {
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-            try
-            {
-                //var resp = await _EmployeeTypeService.CreateEmployeeType(CraeteEmployeeType, RemoteIpAddress, RemotePort);
-                return this.CustomResponse(await _EmployeeTypeService.UpdateEmployeeType(UpdateEmployeeType, RemoteIpAddress, RemotePort));
+        //[HttpPut("UpdateEmployeeType")]
+        //public async Task<IActionResult> UpdateEmployeeType([FromBody] UpdateEmployeeTypeDTO UpdateEmployeeType)
+        //{
+        //    string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //    string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+        //    try
+        //    {
+        //        //var resp = await _EmployeeTypeService.CreateEmployeeType(CraeteEmployeeType, RemoteIpAddress, RemotePort);
+        //        return this.CustomResponse(await _EmployeeTypeService.UpdateEmployeeType(UpdateEmployeeType, RemoteIpAddress, RemotePort));
 
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
 
-        [HttpDelete("DeleteEmployeeType")]
-        public async Task<IActionResult> DeleteEmployeeType(DelEmployeeTypeDTO DelEmployeeType)
-        {
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-            try
-            {
-                return this.CustomResponse(await _EmployeeTypeService.DeleteEmployeeType(DelEmployeeType, RemoteIpAddress, RemotePort));
+        //[HttpDelete("DeleteEmployeeType")]
+        //public async Task<IActionResult> DeleteEmployeeType(DelEmployeeTypeDTO DelEmployeeType)
+        //{
+        //    string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //    string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+        //    try
+        //    {
+        //        return this.CustomResponse(await _EmployeeTypeService.DeleteEmployeeType(DelEmployeeType, RemoteIpAddress, RemotePort));
 
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
 
-        [HttpGet("GetAllEmployeeType")]
-        public async Task<IActionResult> GetAllEmployeeType(int CompanyID)
-        {
+        //[HttpGet("GetAllEmployeeType")]
+        //public async Task<IActionResult> GetAllEmployeeType(int CompanyID)
+        //{
            
-            try
-            {
-                return this.CustomResponse(await _EmployeeTypeService.GetAllEmployeeType(CompanyID));
+        //    try
+        //    {
+        //        return this.CustomResponse(await _EmployeeTypeService.GetAllEmployeeType(CompanyID));
 
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
 
 
-        [HttpGet("GetAllEmployeeTypeByID")]
-        public async Task<IActionResult> GetAllEmployeeTypeByID(int CompanyID, int EmployeeTypeID)
-        {
-            try
-            {
-                return this.CustomResponse(await _EmployeeTypeService.GetEmployeeTypeByID(CompanyID, EmployeeTypeID));
+        //[HttpGet("GetAllEmployeeTypeByID")]
+        //public async Task<IActionResult> GetAllEmployeeTypeByID(int CompanyID, int EmployeeTypeID)
+        //{
+        //    try
+        //    {
+        //        return this.CustomResponse(await _EmployeeTypeService.GetEmployeeTypeByID(CompanyID, EmployeeTypeID));
 
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
+
+        //stopppppppppppppp
 
         //[HttpPost("ActivateEmployeeType")]
         //public async Task<IActionResult> ActivateEmployeeType(int EmployeeTypeID, int CompanyID)

@@ -1,6 +1,5 @@
 C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Data\bin\Debug\net5.0\XpressHRMS.Data.deps.json
 C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Data\bin\Debug\net5.0\XpressHRMS.Data.dll
-C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Data\bin\Debug\net5.0\ref\XpressHRMS.Data.dll
 C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Data\bin\Debug\net5.0\XpressHRMS.Data.pdb
 C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Data\obj\Debug\net5.0\XpressHRMS.Data.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Data\obj\Debug\net5.0\XpressHRMS.Data.AssemblyInfoInputs.cache
@@ -9,3 +8,5 @@ C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Data\obj\Deb
 C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Data\obj\Debug\net5.0\XpressHRMS.Data.dll
 C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Data\obj\Debug\net5.0\ref\XpressHRMS.Data.dll
 C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Data\obj\Debug\net5.0\XpressHRMS.Data.pdb
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Data\bin\Debug\net5.0\ref\XpressHRMS.Data.dll
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS.Data\obj\Debug\net5.0\XpressHRMS.Data.csproj.AssemblyReference.cache

@@ -43,14 +43,12 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.INSERT);
                     param.Add("@CompanyName", payload.CompanyName);
-                    param.Add("@Companyphonenumber", payload.Companyphonenumber);
-                    param.Add("@CompanyTheme", payload.CompanyTheme);
-                    param.Add("@Email", payload.Email);
-                    //param.Add("@EstablishmentDate", payload.EstablishmentDate);
-                    param.Add("@MissionStmt", payload.MissionStmt);
-                    param.Add("@VisionStmt", payload.VisionStmt);
+                    param.Add("@PhoneNumber", payload.PhoneNumber);
+                    param.Add("@CompanyAddress", payload.CompanyAddress);
                     param.Add("@Website", payload.Website);
                     param.Add("@CompanyLogo", payload.CompanyLogo);
+                    param.Add("@CreatedBy", payload.CreatedBy);
+                    //param.Add("@CreatedBy", payload.CreatedBy);
 
                     dynamic response = await _dapper.ExecuteAsync("Sp_Company", param: param, commandType: CommandType.StoredProcedure);
 
@@ -66,7 +64,7 @@ namespace XpressHRMS.Data.Repository
             }
 
         }
-        public async Task<int> DeleteCompany(int CompanyID)
+        public async Task<int> DeleteCompany(int CompanyID,  string DeletedBy)
         {
             try
             {
@@ -75,6 +73,8 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.DELETE);
                     param.Add("@CompanyID", CompanyID);
+                    param.Add("@DeletedBy", DeletedBy);
+
                     dynamic response = await _dapper.ExecuteAsync("Sp_Company", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
@@ -90,20 +90,20 @@ namespace XpressHRMS.Data.Repository
 
         }
 
-        public async Task<int> DisableCompany(int CompanyID)
+        public async Task<int> DisableCompany(int CompanyID, string DisableBy)
         {
             try
             {
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", ACTION.DELETE);
+                    //param.Add("@Status", ACTION.DISABLE);
+                    param.Add("@Status", 6);
                     param.Add("@CompanyID", CompanyID);
+                    param.Add("@DisableBy", DisableBy);
                     dynamic response = await _dapper.ExecuteAsync("Sp_Company", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
-                
-
             }
             catch (Exception ex)
             {
@@ -113,15 +113,16 @@ namespace XpressHRMS.Data.Repository
 
         }
 
-        public async Task<int> ActivateCompany(int CompanyID)
+        public async Task<int> ActivateCompany(int CompanyID,  string EnableBy)
         {
             try
             {
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", ACTION.DELETE);
+                    param.Add("@Status", ACTION.ACTIVATE);
                     param.Add("@CompanyID", CompanyID);
+                    param.Add("@EnableBy", EnableBy);
                     dynamic response = await _dapper.ExecuteAsync("Sp_Company", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
@@ -146,13 +147,11 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.UPDATE);
                     param.Add("@CompanyLogo", payload.CompanyLogo);
                     param.Add("@CompanyName", payload.CompanyName);
-                    param.Add("@Companyphonenumber", payload.Companyphonenumber);
+                    param.Add("@PhoneNumber", payload.PhoneNumber);
                     param.Add("@CompanyID", payload.CompanyID);
-                    param.Add("@Email", payload.Email);
-                    //param.Add("@EstablishmentDate", payload.EstablishmentDate);
-                    param.Add("@MissionStmt", payload.MissionStmt);
-                    param.Add("@VisionStmt", payload.VisionStmt);
+                    param.Add("@CompanyAddress", payload.CompanyAddress);
                     param.Add("@Website", payload.Website);
+                    param.Add("@UpdatedBy", payload.UpdatedBy);
 
                     dynamic response = await _dapper.ExecuteAsync("Sp_Company", param: param, commandType: CommandType.StoredProcedure);
 
@@ -181,8 +180,6 @@ namespace XpressHRMS.Data.Repository
                     return companies;
                     //return await _dapper.GetAll<CompanyDTO>("Sp_Company", param, commandType: CommandType.StoredProcedure);
                 }
-                    
-
             }
             catch (Exception ex)
             {
@@ -205,7 +202,9 @@ namespace XpressHRMS.Data.Repository
                     var response = await _dapperr.Get<CompanyDTO>("Sp_Company", param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
+
                
+
 
             }
             catch (Exception ex)

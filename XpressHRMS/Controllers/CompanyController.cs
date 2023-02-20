@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using XpressHRMS.Business.GenericResponse;
 using XpressHRMS.Business.Services.ILogic;
@@ -29,10 +30,15 @@ namespace XpressHRMS.Controllers
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
+
+                var claimsIdentity = this.User.Identity as ClaimsIdentity;
+                string CreatedBy = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+                payload.CreatedBy = CreatedBy;
+
                 return this.CustomResponse(await _companyService.CreateCompany(payload, RemoteIpAddress, RemotePort));
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -45,10 +51,13 @@ namespace XpressHRMS.Controllers
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
+                var claimsIdentity = this.User.Identity as ClaimsIdentity;
+                string updatedBy = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+                payload.UpdatedBy = updatedBy;
                 return this.CustomResponse(await _companyService.UpdateCompany(payload, RemoteIpAddress, RemotePort));
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -60,10 +69,13 @@ namespace XpressHRMS.Controllers
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                return this.CustomResponse(await _companyService.DeleteCompany(CompanyID, RemoteIpAddress, RemotePort));
+                var claimsIdentity = this.User.Identity as ClaimsIdentity;
+                string DeletedBy = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+                //payload.CreatedBy = CreatedBy;
+                return this.CustomResponse(await _companyService.DeleteCompany(CompanyID, DeletedBy, RemoteIpAddress, RemotePort));
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -102,7 +114,10 @@ namespace XpressHRMS.Controllers
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                return this.CustomResponse(await _companyService.ActivateCompany(CompanyID, RemoteIpAddress,RemotePort));
+                var claimsIdentity = this.User.Identity as ClaimsIdentity;
+                string EnableBy = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+                //payload.CreatedBy = CreatedBy;
+                return this.CustomResponse(await _companyService.ActivateCompany(CompanyID, EnableBy, RemoteIpAddress, RemotePort));
 
             }
             catch (Exception e)
@@ -119,10 +134,14 @@ namespace XpressHRMS.Controllers
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                return this.CustomResponse(await _companyService.DisableCompany(CompanyID,RemoteIpAddress,RemotePort));
+
+                var claimsIdentity = this.User.Identity as ClaimsIdentity;
+                string DisableBy = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+                //payload.CreatedBy = CreatedBy;
+                return this.CustomResponse(await _companyService.DisableCompany(CompanyID, DisableBy, RemoteIpAddress, RemotePort));
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 return null;
             }

@@ -11,7 +11,9 @@ namespace XpressHRMS.Business.Services.ILogic
         Task<BaseResponse<List<BranchDTO>>> GetAllBranches(int CompanyID);
         Task<BaseResponse<DeleteBranchDTO>> DeleteBranch(DeleteBranchDTO payload);
 
-        Task<BaseResponse<BranchDTO>> GetBranchByID(DeleteBranchDTO payload);
-        Task<BaseResponse<UpdateBranchDTO>> UpdateBranch(UpdateBranchDTO payload);
+        Task<BaseResponse<BranchDTO>> GetBranchByID(int BranchID, string CompanyID);
+        Task<BaseResponse<UpdateBranchDTO>> UpdateBranch(UpdateBranchDTO UpdateBranch, string RemoteIpAddress, string RemotePort);
+        Task<BaseResponse<DisBranchDTO>> DisableBranch(DisBranchDTO payload);
+        Task<BaseResponse<EnBranchDTO>> EnableBranch(EnBranchDTO payload);
     }
 }

@@ -41,7 +41,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.INSERT);
                     param.Add("@CompanyID", createposition.CompanyID);
                     param.Add("@PositionName", createposition.PositionName);
-                    //param.Add("@CreatedBy", createposition.CreatedBy);
+                    param.Add("@CreatedBy", createposition.CreatedBy);
 
 
                     dynamic response = await _dapper.ExecuteAsync("sp_Position", param: param, commandType: CommandType.StoredProcedure);
@@ -70,7 +70,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@PositionIDUpd", Updateposition.PositionID);
                     param.Add("@CompanyIDUpd", Updateposition.CompanyID);
                     param.Add("@PositionNameUpd", Updateposition.PositionName);
-                    //param.Add("@CreatedByUpd", Updateposition.CreatedBy);
+                    //param.Add("@UpdatedByUpd", Updateposition.UpdatedByUpd);
 
                     dynamic response = await _dapper.ExecuteAsync("sp_Position", param: param, commandType: CommandType.StoredProcedure);
 
@@ -97,7 +97,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.DELETE);
                     param.Add("@PositionIDDel", deletePosition.PositionID);
                     param.Add("@CompanyIDDel", deletePosition.CompanyID);
-                    //param.Add("@CompanyIDUpd", deletePosition.CompanyID);
+                    param.Add("@DeletedByDel", deletePosition.DeletedBy);
                     dynamic response = await _dapper.ExecuteAsync("sp_Position", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }

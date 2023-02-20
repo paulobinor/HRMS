@@ -39,9 +39,10 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.INSERT);
                     param.Add("@UnitName", payload.UnitName);
-                    param.Add("@HODEmployeeID", payload.HODEmployeeID);
+                    //param.Add("@HodID", payload.HodID);
+                    param.Add("@UnitHeadID", payload.UnitHeadID);
                     //param.Add("@CreatedBy", payload.CreatedByUserID);
-                    param.Add("@CompanyID", payload.CompanyID);
+                    //param.Add("@CompanyID", payload.CompanyID);
                     dynamic response = await _dapper.ExecuteAsync("Sp_Unit", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
@@ -137,7 +138,8 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.UPDATE);
                     param.Add("@UnitName", payload.UnitName);
-                    param.Add("@HODEmployeeID", payload.HODEmployeeID);
+                    //param.Add("@HodID", payload.HodID);
+                    param.Add("@UnitHeadID", payload.UnitHeadID);
                     param.Add("@UnitID", payload.UnitID);
                     param.Add("@DepartmentID", payload.DepartmentID);
                     param.Add("@CompanyID", payload.CompanyID);

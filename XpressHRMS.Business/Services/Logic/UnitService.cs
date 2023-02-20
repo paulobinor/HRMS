@@ -37,10 +37,15 @@ namespace XpressHRMS.Business.Services.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || Unit Name is NULL";
                 }
-                if (payload.HODEmployeeID < 0)
+                //if (payload.HodID < 0)
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || Kindly select the Head of Department for" + " " + payload.UnitName;
+                //}
+                if (payload.UnitHeadID < 0)
                 {
                     isModelStateValidate = false;
-                    validationMessage += "  || Kindly select the Head of Department for" + " " + payload.UnitName;
+                    validationMessage += "  || Kindly select the Head of Unit for" + " " + payload.UnitName;
                 }
                 if (!isModelStateValidate)
                 {
@@ -115,10 +120,15 @@ namespace XpressHRMS.Business.Services.Logic
                     validationMessage += "  || Department Name is NULL";
                 }
 
-                if (payload.HODEmployeeID < 0)
+                //if (payload.HodID < 0)
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || Kindly select the Head of Department";
+                //}
+                if (payload.UnitHeadID < 0)
                 {
                     isModelStateValidate = false;
-                    validationMessage += "  || Kindly select the Head of Department";
+                    validationMessage += "  || Kindly select the Head of Unit";
                 }
                 if (payload.CompanyID < 0)
                 {

@@ -5,7 +5,7 @@ namespace XpressHRMS.Data.IRepository
 {
     public interface IEmployeeRepository
     {
-        Task<dynamic> CreateEmployee(CreateEmployeeDTO payload, int CompanyID);
-        void CreateEmployeeBulk(CreateEmployeeDTOBulk payload, int CompanyID);
+        Task<dynamic> CreateEmployee(CreateEmployeeDTO createEmp, int CompanyID);
+        //void CreateEmployeeBulk(CreateEmployeeDTOBulk payload, int CompanyID);
     }
 }

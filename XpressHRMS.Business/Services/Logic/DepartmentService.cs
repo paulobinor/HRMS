@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,15 +14,17 @@ using XpressHRMS.Data.IRepository;
 
 namespace XpressHRMS.Business.Services.Logic
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     public class DepartmentService : IDepartmentService
     {
         private readonly ILogger<DepartmentService> _logger;
         private readonly IDepartmentRepository _departmentRepository;
-        public DepartmentService(ILogger<DepartmentService> logger, IDepartmentRepository departmentRepository)
+        private readonly IAuditTrailRepository _auditTrailRepository;
+        public DepartmentService(ILogger<DepartmentService> logger, IDepartmentRepository departmentRepository, IAuditTrailRepository auditTrailRepository)
         {
             _logger = logger;
             _departmentRepository = departmentRepository;
+            _auditTrailRepository = auditTrailRepository;
 
         }
 
@@ -37,7 +40,7 @@ namespace XpressHRMS.Business.Services.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || Department Name is NULL";
                 }
-                if (payload.HODEmployeeID < 0)
+                if (payload.HodID < 0)
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || Kindly select the Head of Department for" + " " + payload.DepartmentName;
@@ -124,15 +127,15 @@ namespace XpressHRMS.Business.Services.Logic
                     validationMessage += "  || Department Name is NULL";
                 }
 
-                if (payload.HODEmployeeID < 0)
+                if (payload.HodID < 0)
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || Kindly select the Head of Department";
                 }
-                if (payload.CompanyID < 0)
+                if (string.IsNullOrEmpty(payload.CompanyID))
                 {
                     isModelStateValidate = false;
-                    validationMessage += "  || Company is Null";
+                    validationMessage += "  || Department Name is NULL";
                 }
                 if (!isModelStateValidate)
                 {
@@ -197,10 +200,10 @@ namespace XpressHRMS.Business.Services.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || Department is NULL";
                 }
-                if (payload.CompanyID < 0)
+                if (string.IsNullOrEmpty(payload.CompanyID))
                 {
                     isModelStateValidate = false;
-                    validationMessage += "  || Company is NULL";
+                    validationMessage += "  || Department Name is NULL";
                 }
                 if (!isModelStateValidate)
                 {
@@ -247,90 +250,8 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-
-        //public async Task<BaseResponse> DisableDepartment(DeleteDepartmentDTO payload)
-        //{
-        //    try
-        //    {
-        //        BaseResponse response = new BaseResponse();
-        //        bool isModelStateValidate = true;
-        //        string validationMessage = "";
-        //        if (payload.DepartmentID < 0)
-        //        {
-        //            isModelStateValidate = false;
-        //            validationMessage += "  || Department is NULL";
-        //        }
-        //        if (!isModelStateValidate)
-        //        {
-        //            response.ResponseMessage = validationMessage;
-        //            response.ResponseCode = ResponseCode.ValidationError.ToString();
-        //            response.Data = null;
-        //            return response;
-
-        //        }
-        //        else
-        //        {
-        //            int result = await _departmentRepository.DisableDepartment(payload.DepartmentID, payload.CompanyID);
-        //            if (result > 0)
-        //            {
-        //                //response.ResponseMessage = "Department Disabled Successfully";
-        //                //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-        //                response.Data = payload;
-        //                return response;
-        //            }
-        //            else
-        //            {
-        //                //response.ResponseMessage = "Internal Server Error";
-        //                //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-        //                response.Data = null;
-        //                return response;
-        //            }
-        //        }
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw;
-        //    }
-
-        //}
-
-        //public async Task<BaseResponse> ActivateDepartment(DeleteDepartmentDTO payload)
-        //{
-        //    try
-        //    {
-        //        BaseResponse response = new BaseResponse();
-
-
-        //        int result = await _departmentRepository.ActivateDepartment(payload.DepartmentID, payload.CompanyID);
-        //        if (result > 0)
-        //        {
-        //            //response.ResponseMessage = "Department Activated Successfully";
-        //            //response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-        //            response.Data = payload;
-        //            return response;
-        //        }
-        //        else
-        //        {
-        //            //response.ResponseMessage = "Internal Server Error";
-        //            //response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
-        //            response.Data = null;
-        //            return response;
-        //        }
-
-        //        return response;
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        return null;
-        //    }
-
-        //}
-        public async Task<BaseResponse<List<GetDepartmentDTO>>> GetAllDepartments(int CompanyID)
+        
+        public async Task<BaseResponse<List<GetDepartmentDTO>>> GetAllDepartments(string CompanyID)
         {
 
             try
@@ -347,8 +268,6 @@ namespace XpressHRMS.Business.Services.Logic
                         Data = result
 
                     };
-
-
                 }
                
                 else
@@ -361,8 +280,6 @@ namespace XpressHRMS.Business.Services.Logic
 
                     };
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -379,7 +296,7 @@ namespace XpressHRMS.Business.Services.Logic
         }
 
 
-        public async Task<BaseResponse<GetDepartmentDTO>> GetAllDepartmentByID(int CompanyID, int DepartmentID)
+        public async Task<BaseResponse<GetDepartmentDTO>> GetAllDepartmentByID(string CompanyID, int DepartmentID)
         {
 
             try
@@ -418,6 +335,151 @@ namespace XpressHRMS.Business.Services.Logic
                     Data = null
 
                 };
+            }
+        }
+
+        public async Task<BaseResponse<DisDepartmentDTO>> DisableDepartment(DisDepartmentDTO Disdepartment, string RemoteIpAddress, string RemotePort)
+        {
+            try
+            {
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+                if (Disdepartment.DepartmentID < 0)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Company is required";
+                }
+                if (!isModelStateValidate)
+                {
+                    return new BaseResponse<DisDepartmentDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
+
+                }
+                else
+                {
+
+
+                    int result = await _departmentRepository.DisableDepartment(Disdepartment);
+                    if (result > 0)
+                    {
+                        var auditry = new AuditTrailReq
+                        {
+                            AccessDate = DateTime.Now,
+                            AccessedFromIpAddress = RemoteIpAddress,
+                            AccessedFromPort = RemotePort,
+                            UserId = 3,
+                            Operation = "Disable Department",
+                            Payload = JsonConvert.SerializeObject(Disdepartment),
+                            Response = ((int)ResponseCode.Ok).ToString().ToString()
+                        };
+
+                        var audit = _auditTrailRepository.CreateAuditTrail(auditry);
+                        return new BaseResponse<DisDepartmentDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Disable  Successfully",
+                            Data = null
+
+
+
+                        };
+                    }
+                    else
+                    {
+                        return new BaseResponse<DisDepartmentDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to  Disable Record",
+                            Data = null
+
+                        };
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+
+        public async Task<BaseResponse<DisDepartmentDTO>> ActivateDepartment(EnDepartmentDTO enable, string RemoteIpAddress, string RemotePort)
+        {
+            try
+            {
+
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+                if (enable.DepartmentID < 0)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Company is NULL";
+                }
+                if (!isModelStateValidate)
+                {
+                    return new BaseResponse<DisDepartmentDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
+
+                }
+                else
+                {
+
+                    int result = await _departmentRepository.ActivateDepartment(enable);
+                    if (result > 0)
+                    {
+                        var auditry = new AuditTrailReq
+                        {
+                            AccessDate = DateTime.Now,
+                            AccessedFromIpAddress = RemoteIpAddress,
+                            AccessedFromPort = RemotePort,
+                            UserId = 3,
+                            Operation = "Updated Department",
+                            Payload = JsonConvert.SerializeObject(enable),
+                            Response = ((int)ResponseCode.Ok).ToString().ToString()
+                        };
+
+                        var audit = _auditTrailRepository.CreateAuditTrail(auditry);
+                        return new BaseResponse<DisDepartmentDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Activated  Successfully",
+                            Data = null
+
+                        };
+                    }
+                    else
+                    {
+                        return new BaseResponse<DisDepartmentDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to  Activate Record",
+                            Data = null
+
+
+                        };
+                    }
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+
+
             }
         }
 

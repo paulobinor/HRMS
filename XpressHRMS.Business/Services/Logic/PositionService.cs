@@ -36,7 +36,7 @@ namespace XpressHRMS.Business.Services.Logic
                 string validationMessage = "";
 
 
-                if (createpostion.CompanyID < 0)
+                if (string.IsNullOrEmpty(createpostion.CompanyID))
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || CompanyID is NULL";
@@ -46,11 +46,11 @@ namespace XpressHRMS.Business.Services.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || PositionName is NULL";
                 }
-                //if (string.IsNullOrEmpty(createpostion.CreatedBy))
-                //{
-                //    isModelStateValidate = false;
-                //    validationMessage += "  || CreatedBy is NULL";
-                //}
+                if (string.IsNullOrEmpty(createpostion.CreatedBy))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || CreatedBy is NULL";
+                }
 
                 if (!isModelStateValidate)
                 {
@@ -135,7 +135,7 @@ namespace XpressHRMS.Business.Services.Logic
                 bool isModelStateValidate = true;
                 string validationMessage = "";
 
-                if (UpdatePosition.CompanyID < 0)
+                if (string.IsNullOrEmpty(UpdatePosition.CompanyID))
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || Company ID is NULL";
@@ -150,10 +150,10 @@ namespace XpressHRMS.Business.Services.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || PositionName is NULL";
                 }
-                //if (string.IsNullOrEmpty(UpdatePosition.CreatedBy))
+                //if (string.IsNullOrEmpty(UpdatePosition.UpdatedByUpd))
                 //{
                 //    isModelStateValidate = false;
-                //    validationMessage += "  || CreatedBy is NULL";
+                //    validationMessage += "  || UpdateBy is NULL";
                 //}
 
 
@@ -230,6 +230,11 @@ namespace XpressHRMS.Business.Services.Logic
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || Position is NULL";
+                }
+                if (string.IsNullOrEmpty(DelPostion.DeletedBy))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || CreatedBy is NULL";
                 }
                 if (!isModelStateValidate)
                 {
@@ -436,7 +441,7 @@ namespace XpressHRMS.Business.Services.Logic
             {
 
                 var result = await _PositionRepository.GetAllPositions(CompanyID);
-                if (result == null)
+                if (result != null)
                 {
                     return new BaseResponse<List<PositionDTO>>()
                     {

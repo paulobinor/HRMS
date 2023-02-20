@@ -92,7 +92,7 @@ namespace XpressHRMS
                 swagger.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "ASP.NET 5 Web API",
+                    Title = "HRMS Web API",
                     Description = "Authentication and Authorization in ASP.NET 5 with JWT and Swagger"
                 });
                 // To Enable authorization using Swagger (JWT)    
@@ -120,6 +120,14 @@ namespace XpressHRMS
 
                     }
                 });
+            });
+
+            services.AddCors(p =>
+            {
+                p.AddPolicy("CorsPolicy",
+                b => b.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
             });
         }
 
@@ -155,7 +163,7 @@ namespace XpressHRMS
 
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PAG Survey v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HRMS Web Api v1"));
 
 
 
@@ -165,7 +173,8 @@ namespace XpressHRMS
 
 
 
-            app.UseCors(b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            //app.UseCors(b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            app.UseCors("CorsPolicy");
             var forwardOptions = new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
