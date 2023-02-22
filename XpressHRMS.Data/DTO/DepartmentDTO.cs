@@ -13,7 +13,16 @@ namespace XpressHRMS.Data.DTO
         public DateTime DateCreated { get; set; }
         public string CreatedBy { get; set; }
         public int CompanyID { get; set; }
+        public bool isActive { get; set; }
 
+    }
+
+    public class CreateDepartmentDTO
+    {
+        public string DepartmentName { get; set; }
+        public int HODEmployeeID { get; set; }
+        public DateTime DateCreated { get; set; }
+        public int CompanyID { get; set; }
         public bool isActive { get; set; }
 
     }

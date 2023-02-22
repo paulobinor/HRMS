@@ -18,6 +18,10 @@ using System.Diagnostics;
 using System.Net.Http;
 using RestSharp.Authenticators;
 using System.Threading;
+using XpressHRMS.Data.IRepository;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+using XpressHRMS.Data.Enums;
 
 namespace XpressHRMS.Business.Services.Logic
 {
@@ -27,81 +31,144 @@ namespace XpressHRMS.Business.Services.Logic
     {
         private readonly ILogger<SSOservice> _logger;
         private readonly IGenericRepository _genericRepository;
-        public SSOservice(ILogger<SSOservice> logger, IGenericRepository genericRepository)
+        private readonly IAdminUserRepo _adminUserRepo;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public SSOservice(ILogger<SSOservice> logger, IGenericRepository genericRepository, IAdminUserRepo adminUserRepo, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _genericRepository = genericRepository;
+            _adminUserRepo = adminUserRepo;
+            _httpContextAccessor = httpContextAccessor;
 
         }
 
-        public async Task<BaseResponse> Login(UserLoginDTO user)
+
+
+
+        public async Task<BaseResponse<CreateAdminUserLoginDTO>> CreateAdmin(CreateAdminUserLoginDTO payload, string Email)
         {
-            BaseResponse response = new BaseResponse();
+
             try
             {
-                string URL = URLConstant.SSOBaseURL + URLConstant.Login;
-
-                var client = new RestClient(URL);
-                var validation = await _genericRepository.PostAsync<UserLoginDTO, BaseResponse>(URL, user);
-                var S_Response = JsonConvert.DeserializeObject<SSOResponse>(validation);
-
-                if (S_Response.responseCode =="00")
+                var userdetails = new CreateAdminUserLoginDTO()
                 {
-                    response.Data = S_Response.data;
-                    response.ResponseMessage = S_Response.responseMessage;
-                    response.ResponseCode = S_Response.responseCode;
-                    return response;
+                    Email = payload.Email,
+                    FirstName = payload.FirstName,
+                    LastName = payload.LastName,
+                    Password = EncryptDecrypt.EncryptResult(payload.Password)
+                };
 
-                }
-                else if (S_Response.responseCode=="09")
+                var getemail = new UserLoginDTO()
                 {
-                     Logout(user);
+                    Email = Email
+                };
+                dynamic checkifAdminUserExist = await _adminUserRepo.GetAdminUser(getemail);
+                if (checkifAdminUserExist.Count > 0)
+                {
+                    dynamic login = await _adminUserRepo.CreateAdminUser(userdetails);
 
+                    if (login > 0)
+                    {
+                        return new BaseResponse<CreateAdminUserLoginDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Saved Successfully",
+                            Data = payload
+
+                        };
+                    }
+                    else if (login == -1)
+                    {
+                        return new BaseResponse<CreateAdminUserLoginDTO>()
+                        {
+                            ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "User Already Exist",
+                            Data = null
+
+                        };
+                    }
+                    else
+                    {
+                        return new BaseResponse<CreateAdminUserLoginDTO>()
+                        {
+                            ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Internal Server Error",
+                            Data = null
+
+                        };
+                    }
                 }
                 else
                 {
-                    response.Data = S_Response.data;
-                    response.ResponseMessage = S_Response.responseMessage;
-                    response.ResponseCode = S_Response.responseCode;
-                    return response;
+
+                    return new BaseResponse<CreateAdminUserLoginDTO>()
+                    {
+                        ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "You do not have access to Create User Admin",
+                        Data = null
+
+                    };
+
+                   
                 }
-                response.Data = S_Response.data;
-                response.ResponseMessage = S_Response.responseMessage;
-                response.ResponseCode = S_Response.responseCode;
-                return response;
+
+
+
+                return null;
 
             }
             catch (Exception ex)
             {
-                return response;
 
+                return null;
             }
-
         }
 
-        public void Logout(UserLoginDTO payload)
+
+        public async Task<BaseResponse<UserLoginDTO>> AdminLogin(UserLoginDTO payload)
         {
+
             try
             {
-                UserLogoutDTO user = new UserLogoutDTO();
-                byte[] data = Convert.FromBase64String(payload.Email);
-                string decodedString = Encoding.UTF8.GetString(data);
-                user.Email = decodedString;
-                string URLLogout = URLConstant.SSOBaseURL + URLConstant.LogOut;
-             
-                var client = new RestClient(URLLogout);
-                var validation =   _genericRepository.PostAsync<UserLogoutDTO, BaseResponse>(URLLogout, user);
-                var S_Response = JsonConvert.DeserializeObject<SSOLogout>(validation.ToString());
-                if (S_Response.responseCode=="00")
+                var adminDetails = new UserLoginDTO()
                 {
-                    var gobacktologin =  Login(payload);
+                    Email = payload.Email,
+                    Password = EncryptDecrypt.EncryptResult(payload.Password)
+                };
+
+                var result = await _adminUserRepo.LoginAdmin(adminDetails);
+                if (result != null)
+                {
+                    return new BaseResponse<UserLoginDTO>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Saved Successfully",
+                        Data = payload
+
+                    };
+
+                    
                 }
-               
+                else
+                {
+                    return new BaseResponse<UserLoginDTO>()
+                    {
+                        ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Failed to Login",
+                        Data = null
+
+                    };
+                  
+                }
+
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+                return null;
             }
         }
+
     }
+
 }

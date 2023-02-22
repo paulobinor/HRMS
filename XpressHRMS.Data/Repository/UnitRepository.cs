@@ -18,13 +18,14 @@ namespace XpressHRMS.Data.Repository
     public class UnitRepository : IUnitRepository
     {
         private readonly ILogger<UnitRepository> _logger;
-        private readonly IDapperGeneric _dapper;
+        private readonly IDapperGeneric _dapperr;
         private readonly string _connectionString;
 
-        public UnitRepository(ILogger<UnitRepository> logger, IConfiguration configuration)
+        public UnitRepository(ILogger<UnitRepository> logger, IConfiguration configuration, IDapperGeneric dapperr)
         {
             _logger = logger;
             _connectionString = configuration.GetConnectionString("HRMSConnectionString");
+            _dapperr = dapperr;
 
 
         }
@@ -155,7 +156,7 @@ namespace XpressHRMS.Data.Repository
             }
 
         }
-        public async Task<IEnumerable<UnitDTO>> GetAllUnits(int CompanyID)
+        public async Task<List<UnitDTO>> GetAllUnits(int CompanyID)
         {
             try
             {
@@ -164,7 +165,7 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.SELECTALL);
                     param.Add("@CompanyID", CompanyID);
-                    var response = await _dapper.QueryAsync<UnitDTO>("Sp_Unit", param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapperr.GetAll<UnitDTO>("Sp_Unit",param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
                    
@@ -178,7 +179,7 @@ namespace XpressHRMS.Data.Repository
 
         }
 
-        public async Task<IEnumerable<UnitDTO>> GetUnitByID(int UnitID, int CompanyID)
+        public async Task<UnitDTO> GetUnitByID(int UnitID, int CompanyID)
         {
             try
             {
@@ -188,7 +189,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.SELECTBYID);
                     param.Add("@UnitID", UnitID);
                     param.Add("@CompanyID", CompanyID);
-                    var response = await _dapper.QueryAsync<UnitDTO>("Sp_Unit", param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapperr.Get<UnitDTO>("Sp_Unit", param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
                

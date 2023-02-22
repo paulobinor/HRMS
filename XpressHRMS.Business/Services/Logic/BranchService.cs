@@ -24,9 +24,8 @@ namespace XpressHRMS.Business.Services.Logic
             _branchRepository = branchRepository;
 
         }
-        public async Task<BaseResponse> CreateBranch(CreateBranchDTO payload)
+        public async Task<BaseResponse<CreateBranchDTO>> CreateBranch(CreateBranchDTO payload)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -67,10 +66,13 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<CreateBranchDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
+
 
                 }
                 else
@@ -78,24 +80,33 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _branchRepository.CreateBranch(payload);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Branch Created Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
-                        response.Data = payload;
-                        return response;
+                        return new BaseResponse<CreateBranchDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Saved Successfully",
+                            Data = payload
+
+                        };
                     }
                     else if (result == -1)
                     {
-                        response.ResponseMessage = "Branch Already Exist";
-                        response.ResponseCode = ResponseCode.Already_Exist.ToString();
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreateBranchDTO>()
+                        {
+                            ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Already Exist",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreateBranchDTO>()
+                        {
+                            ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Internal Server Error",
+                            Data = null
+
+                        };
                     }
                 }
 
@@ -105,16 +116,20 @@ namespace XpressHRMS.Business.Services.Logic
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: CreateBranch() ===>{ex.Message}");
-                return response;
 
+                return new BaseResponse<CreateBranchDTO>()
+                {
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    ResponseCode = ((int)ResponseCode.Exception).ToString(),
+                    Data = null
+                };
             }
 
         }
 
 
-        public async Task<BaseResponse> UpdateBranch(UpdateBranchDTO payload)
+        public async Task<BaseResponse<UpdateBranchDTO>> UpdateBranch(UpdateBranchDTO payload)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -156,10 +171,13 @@ namespace XpressHRMS.Business.Services.Logic
 
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<UpdateBranchDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
+
 
                 }
                 else
@@ -167,17 +185,23 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _branchRepository.UpdateBranch(payload);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "branch Updated Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
-                        response.Data = payload;
-                        return response;
+                        return new BaseResponse<UpdateBranchDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Saved Successfully",
+                            Data = payload
+
+                        };
                     }
                     else
                     {
-                        response.ResponseMessage = "Failed to Updated record";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<UpdateBranchDTO>()
+                        {
+                            ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Already Exist",
+                            Data = null
+
+                        };
                     }
                 }
 
@@ -187,18 +211,22 @@ namespace XpressHRMS.Business.Services.Logic
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: UpdateBranch() ===>{ex.Message}");
+                return new BaseResponse<UpdateBranchDTO>()
+                {
+                    ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0'),
+                    ResponseMessage = "Internal Server Error",
+                    Data = null
 
-                return response;
+                };
 
             }
 
         }
 
-        public async Task<BaseResponse> DeleteBranch(DeleteBranchDTO payload)
+        public async Task<BaseResponse<DeleteBranchDTO>> DeleteBranch(DeleteBranchDTO payload)
         {
             try
             {
-                BaseResponse response = new BaseResponse();
                 bool isModelStateValidate = true;
                 string validationMessage = "";
                 if (payload.BranchID < 0)
@@ -213,10 +241,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<DeleteBranchDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -224,17 +254,23 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _branchRepository.DeleteBranch(payload);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Branch Deleted Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
-                        response.Data = payload;
-                        return response;
+                        return new BaseResponse<DeleteBranchDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Deleted  Successfully",
+                            Data = payload
+
+                        };
                     }
                     else
                     {
-                        response.ResponseMessage = "Failed to delete record";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<DeleteBranchDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to  Delete Record",
+                            Data = payload
+
+                        };
                     }
                 }
 
@@ -248,9 +284,8 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse> GetAllBranches(int CompanyID)
+        public async Task<BaseResponse<List<BranchDTO>>> GetAllBranches(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
@@ -258,56 +293,79 @@ namespace XpressHRMS.Business.Services.Logic
                 dynamic result = await _branchRepository.GetAllBranches(CompanyID);
                 if (result.Count > 0)
                 {
-                    response.ResponseMessage = "Branch Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.Data = result;
-                    return response;
+                    return new BaseResponse<List<BranchDTO>>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Retreived Successfully",
+                        Data = result
+
+                    };
                 }
                 else
                 {
-                    response.ResponseMessage = "No Record Found";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<List<BranchDTO>>()
+                    {
+                        ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "No record found",
+                        Data = result
+
+                    };
                 }
 
 
             }
             catch (Exception)
             {
-                return response;
+                return new BaseResponse<List<BranchDTO>>()
+                {
+                    ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'),
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    Data = null
+
+                };
             }
         }
 
 
-        public async Task<BaseResponse> GetBranchByID(DeleteBranchDTO payload)
+        public async Task<BaseResponse<BranchDTO>> GetBranchByID(DeleteBranchDTO payload)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
 
-                dynamic result = await _branchRepository.GetBranchByID(payload);
-                if (result.Count > 0)
+                var result = await _branchRepository.GetBranchByID(payload);
+                if (result!=null)
                 {
-                    response.ResponseMessage = "Branch Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.Data = result;
-                    return response;
+                    return new BaseResponse<BranchDTO>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Retreived Successfully",
+                        Data = result
+
+                    };
                 }
                 else
                 {
-                    response.ResponseMessage = "No record found";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<BranchDTO>()
+                    {
+                        ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "No record found",
+                        Data = result
+
+                    };
                 }
 
 
             }
             catch (Exception)
             {
-                return response;
+                return new BaseResponse<BranchDTO>()
+                {
+                    ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'),
+                    ResponseMessage = "Unable to process the operation, kindly contact the support",
+                    Data = null
+
+                };
             }
         }
     }

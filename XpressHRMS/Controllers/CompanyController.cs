@@ -14,7 +14,7 @@ namespace XpressHRMS.Controllers
     [Route("api/[controller]")]
     [Authorize]
 
-    public class CompanyController : ControllerBase
+    public class CompanyController : BaseController
     {
         private readonly ICompanyService _companyService;
         public CompanyController(ICompanyService companyService)
@@ -25,227 +25,106 @@ namespace XpressHRMS.Controllers
         public async Task<IActionResult> CreateCompany([FromBody] CreateCompanyDTO payload)
         {
 
-            BaseResponse response = new BaseResponse();
-
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-
-            
-
             try
             {
-                var resp = await _companyService.CreateCompany(payload, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = resp.ResponseCode;
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _companyService.CreateCompany(payload, RemoteIpAddress, RemotePort));
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = resp.ResponseCode;
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpPut("UpdateCompany")]
         public async Task<IActionResult> UpdateCompany([FromBody] UpdateCompanyDTO payload)
         {
-            BaseResponse response = new BaseResponse();
-
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _companyService.UpdateCompany(payload, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _companyService.UpdateCompany(payload, RemoteIpAddress, RemotePort));
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
         [HttpDelete("DeleteCompany")]
         public async Task<IActionResult> DeleteCompany(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
-
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _companyService.DeleteCompany(CompanyID, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _companyService.DeleteCompany(CompanyID, RemoteIpAddress, RemotePort));
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
         [HttpGet("GetAllCompanies")]
         public async Task<IActionResult> GetAllCompanies()
         {
-            BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _companyService.GetAllCompanies();
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _companyService.GetAllCompanies());
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.NotFound.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
         [HttpGet("GetAllCompaniesByID")]
         public async Task<IActionResult> GetAllCompaniesByID(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
-            
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _companyService.GetCompanyByID(CompanyID);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _companyService.GetCompanyByID(CompanyID));
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.NotFound.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
         [HttpPost("ActivateCompany")]
         public async Task<IActionResult> ActivateCompany(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
 
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _companyService.ActivateCompany(CompanyID, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _companyService.ActivateCompany(CompanyID, RemoteIpAddress,RemotePort));
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpPost("DisableCompany")]
         public async Task<IActionResult> DisableCompany(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
 
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _companyService.DisableCompany(CompanyID, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _companyService.DisableCompany(CompanyID,RemoteIpAddress,RemotePort));
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 

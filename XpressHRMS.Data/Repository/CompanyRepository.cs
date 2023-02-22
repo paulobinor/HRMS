@@ -22,13 +22,14 @@ namespace XpressHRMS.Data.Repository
     public class CompanyRepository : ICompanyRepository
     {
         private readonly ILogger<CompanyRepository> _logger;
-        private readonly IDapperGeneric _dapper;
+        private readonly IDapperGeneric _dapperr;
         private readonly string _connectionString;
 
-        public CompanyRepository(ILogger<CompanyRepository> logger, IConfiguration configuration)
+        public CompanyRepository(ILogger<CompanyRepository> logger, IConfiguration configuration, IDapperGeneric dapperr)
         {
             _logger = logger;
             _connectionString = configuration.GetConnectionString("HRMSConnectionString");
+            _dapperr = dapperr;
 
 
         }
@@ -43,7 +44,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.INSERT);
                     param.Add("@CompanyName", payload.CompanyName);
                     param.Add("@Companyphonenumber", payload.Companyphonenumber);
-                    param.Add("@CompanyTheme", JsonConvert.SerializeObject(payload.CompanyTheme));
+                    param.Add("@CompanyTheme", payload.CompanyTheme);
                     param.Add("@Email", payload.Email);
                     param.Add("@EstablishmentDate", payload.EstablishmentDate);
                     param.Add("@MissionStmt", payload.MissionStmt);
@@ -168,7 +169,7 @@ namespace XpressHRMS.Data.Repository
             }
 
         }
-        public async Task<IEnumerable<CompanyDTO>> GetAllCompanies()
+        public async Task<List<CompanyDTO>> GetAllCompanies()
         {
             try
             {
@@ -176,7 +177,7 @@ namespace XpressHRMS.Data.Repository
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.SELECTALL);
-                    var companies = await _dapper.QueryAsync<CompanyDTO>("Sp_Company", param: param, commandType: CommandType.StoredProcedure);
+                    var companies = await _dapperr.GetAll<CompanyDTO>("Sp_Company", param, commandType: CommandType.StoredProcedure);
                     return companies;
                     //return await _dapper.GetAll<CompanyDTO>("Sp_Company", param, commandType: CommandType.StoredProcedure);
                 }
@@ -191,7 +192,7 @@ namespace XpressHRMS.Data.Repository
 
         }
 
-        public async Task<IEnumerable<CompanyDTO>> GetCompanyByID(int CompanyID)
+        public async Task<CompanyDTO> GetCompanyByID(int CompanyID)
         {
             try
             {
@@ -201,7 +202,7 @@ namespace XpressHRMS.Data.Repository
                     int d = (int)GetAllDefault.GetAll;
                     param.Add("@Status", ACTION.SELECTBYID);
                     param.Add("@CompanyID", CompanyID);
-                    var response = await _dapper.QueryAsync<CompanyDTO>("Sp_Company", param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapperr.Get<CompanyDTO>("Sp_Company", param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
                

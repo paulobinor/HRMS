@@ -10,8 +10,8 @@ namespace XpressHRMS.Data.IRepository
         Task<int> CreateCompany(CreateCompanyDTO payload);
         Task<int> DeleteCompany(int CompanyID);
         Task<int> DisableCompany(int CompanyID);
-        Task<IEnumerable<CompanyDTO>> GetAllCompanies();
-        Task<IEnumerable<CompanyDTO>> GetCompanyByID(int CompanyID);
+        Task<List<CompanyDTO>> GetAllCompanies();
+        Task<CompanyDTO> GetCompanyByID(int CompanyID);
         Task<int> UpdateCompany(UpdateCompanyDTO payload);
     }
 }

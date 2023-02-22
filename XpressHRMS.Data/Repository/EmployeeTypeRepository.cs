@@ -18,13 +18,16 @@ namespace XpressHRMS.Data.Repository
     public class EmployeeTypeRepository : IEmployeeTypeRepository
     {
         private readonly ILogger<EmployeeTypeRepository> _logger;
-        private readonly IDapperGeneric _dapper;
+        //private readonly IDapperGeneric _dapper;
+        private readonly IDapperGeneric _dapperr;
+
         private readonly string _connectionString;
 
-        public EmployeeTypeRepository(ILogger<EmployeeTypeRepository> logger, IConfiguration configuration)
+        public EmployeeTypeRepository(ILogger<EmployeeTypeRepository> logger, IConfiguration configuration, IDapperGeneric dapperr)
         {
             _logger = logger;
             _connectionString = configuration.GetConnectionString("HRMSConnectionString");
+            _dapperr = dapperr;
 
 
         }
@@ -39,7 +42,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.INSERT);
                     param.Add("@CompanyID", createEmployeeType.CompanyID);
                     param.Add("@EmployeeTypeName", createEmployeeType.EmployeeTypeName);
-                    param.Add("@CreatedBy", createEmployeeType.CreatedBy);
+                    
                     dynamic response = await _dapper.ExecuteAsync("sp_EmployeeType", param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
@@ -63,7 +66,6 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@CompanyIDUpd", UpdateEmployeeType.CompanyID);
                     param.Add("@EmployeeTypeIDUpd", UpdateEmployeeType.EmployeeTypeID);
                     param.Add("@EmployeeTypeNameUpd", UpdateEmployeeType.EmployeeTypeName);
-                    param.Add("@CreatedByUpd", UpdateEmployeeType.CreatedBy);
 
                     dynamic response = await _dapper.ExecuteAsync("sp_EmployeeType", param: param, commandType: CommandType.StoredProcedure);
 
@@ -86,7 +88,7 @@ namespace XpressHRMS.Data.Repository
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.DELETE);
-                    //param.Add("@CompanyID", deleteGrade.CompanyID);
+                    param.Add("@CompanyID", deleteEmployeeType.CompanyID);
                     param.Add("@EmployeeTypeIDDel", deleteEmployeeType.EmployeeTypeID);
                     dynamic response = await _dapper.ExecuteAsync("sp_EmployeeType", param: param, commandType: CommandType.StoredProcedure);
                     return response;
@@ -99,7 +101,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<int> DisableEmployeeType(int EmployeeTypeID)
+        public async Task<int> DisableEmployeeType(int EmployeeTypeID , int CompanyIDDis)
         {
             try
             {
@@ -108,6 +110,7 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.DISABLE);
                     param.Add("@EmployeeTypeID", EmployeeTypeID);
+                    param.Add("@CompanyIDDis", CompanyIDDis);
                     dynamic response = await _dapper.ExecuteAsync("sp_EmployeeType", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
@@ -119,7 +122,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<int> ActivateEmployeeType(int EmployeeTypeID)
+        public async Task<int> ActivateEmployeeType(int EmployeeTypeID, int CompanyIDEna)
         {
             try
             {
@@ -128,6 +131,7 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.ACTIVATE);
                     param.Add("@EmployeeTypeID", EmployeeTypeID);
+                    param.Add("@CompanyIDEna", CompanyIDEna);
                     dynamic response = await _dapper.ExecuteAsync("sp_EmployeeType", param: param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
@@ -139,7 +143,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<IEnumerable<EmployeeTypeDTO>> GetAllEmployeeType()
+        public async Task<List<EmployeeTypeDTO>> GetAllEmployeeType(int CompanyID)
         {
             try
             {
@@ -148,8 +152,10 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     int d = (int)GetAllDefault.GetAll;
                     param.Add("@Status", ACTION.SELECTALL);
-                    var response = await _dapper.QueryAsync<EmployeeTypeDTO>("sp_EmployeeType", param: param, commandType: CommandType.StoredProcedure);
-                    return response;
+                    param.Add("@CompanyIDGet", CompanyID);
+                    //var response = await _dapper.QueryAsync<EmployeeTypeDTO>("sp_EmployeeType", param: param, commandType: CommandType.StoredProcedure);
+                    var respone = await _dapperr.GetAll<EmployeeTypeDTO>("sp_EmployeeType", param, commandType: CommandType.StoredProcedure);
+                    return respone;
                 }
             }
             catch (Exception ex)
@@ -159,7 +165,7 @@ namespace XpressHRMS.Data.Repository
             }
         }
 
-        public async Task<IEnumerable<EmployeeTypeDTO>> GetEmployeeTypeByID(int CompanyID, int EmployeeTypeID)
+        public async Task<EmployeeTypeDTO> GetEmployeeTypeByID(int CompanyID, int EmployeeTypeID)
         {
             try
             {
@@ -168,9 +174,9 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     int d = (int)GetAllDefault.GetAll;
                     param.Add("@Status", ACTION.SELECTBYID);
-                    param.Add("@EmployeeTypeIDGet", CompanyID);
+                    param.Add("@CompanyIDGet", CompanyID);
                     param.Add("@EmployeeTypeIDGet", EmployeeTypeID);
-                    var response = await _dapper.QueryAsync<EmployeeTypeDTO>("sp_EmployeeType", param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapperr.Get<EmployeeTypeDTO>("sp_EmployeeType", param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
             }

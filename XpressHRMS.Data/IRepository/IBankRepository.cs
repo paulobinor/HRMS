@@ -8,7 +8,7 @@ namespace XpressHRMS.Data.IRepository
     {
         Task<dynamic> CreateBank(CreateBankDTO bankDTO);
         Task<dynamic> DeleteBank(DeleteBankDTO deleteBank);
-        Task<IEnumerable<BanksDTO>> GetAllBank();
+        Task<List<BanksDTO>> GetAllBank();
         Task<BanksDTO> GetBankByCBNCode(string BankCode);
         Task<BanksDTO> GetBankById(double bankID);
         Task<dynamic> UpdateBank(UpdateBankDTO bankDTO);

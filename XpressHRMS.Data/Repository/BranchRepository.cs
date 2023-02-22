@@ -19,13 +19,14 @@ namespace XpressHRMS.Data.Repository
     public class BranchRepository : IBranchRepository
     {
         private readonly ILogger<BranchRepository> _logger;
-        private readonly IDapperGeneric _dapper;
+        private readonly IDapperGeneric _dapperr;
         private readonly string _connectionString;
 
-        public BranchRepository(ILogger<BranchRepository> logger, IConfiguration configuration)
+        public BranchRepository(ILogger<BranchRepository> logger, IConfiguration configuration, IDapperGeneric dapperr)
         {
             _logger = logger;
             _connectionString = configuration.GetConnectionString("HRMSConnectionString");
+            _dapperr = dapperr;
 
 
         }
@@ -116,7 +117,7 @@ namespace XpressHRMS.Data.Repository
             }
 
         }
-        public async Task<IEnumerable<BranchDTO>> GetAllBranches(int CompanyID)
+        public async Task<List<BranchDTO>> GetAllBranches(int CompanyID)
         {
             try
             {
@@ -125,7 +126,7 @@ namespace XpressHRMS.Data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", ACTION.SELECTALL);
                     param.Add("@CompanyID", CompanyID);
-                    var response = await _dapper.QueryAsync<BranchDTO>("Sp_Branch", param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapperr.GetAll<BranchDTO>("Sp_Branch", param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
 
@@ -139,7 +140,7 @@ namespace XpressHRMS.Data.Repository
 
         }
 
-        public async Task<IEnumerable<BranchDTO>> GetBranchByID(DeleteBranchDTO payload)
+        public async Task<BranchDTO> GetBranchByID(DeleteBranchDTO payload)
         {
             try
             {
@@ -149,7 +150,7 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.SELECTBYID);
                     param.Add("@BranchID", payload.BranchID);
                     param.Add("@CompanyID", payload.CompanyID);
-                    var response = await _dapper.QueryAsync<BranchDTO>("Sp_Branch", param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapperr.Get<BranchDTO>("Sp_Branch", param, commandType: CommandType.StoredProcedure);
                     return response;
                 }
 

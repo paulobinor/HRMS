@@ -24,9 +24,8 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse> CreateUnit(CreateUnitDTO payload)
+        public async Task<BaseResponse<CreateUnitDTO>> CreateUnit(CreateUnitDTO payload)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -45,10 +44,13 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<CreateUnitDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
+
 
                 }
                 else
@@ -56,24 +58,33 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _unitRepository.CreateUnit(payload);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Unit Created Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
-                        response.Data = payload;
-                        return response;
+                        return new BaseResponse<CreateUnitDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Saved Successfully",
+                            Data = payload
+
+                        };
                     }
                     else if (result == -1)
                     {
-                        response.ResponseMessage = "Unit Already Exist";
-                        response.ResponseCode = ResponseCode.Already_Exist.ToString();
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreateUnitDTO>()
+                        {
+                            ResponseCode = ResponseCode.Already_Exist.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Already Exist",
+                            Data = null
+
+                        };
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<CreateUnitDTO>()
+                        {
+                            ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Internal Server Error",
+                            Data = null
+
+                        };
                     }
                 }
 
@@ -83,16 +94,15 @@ namespace XpressHRMS.Business.Services.Logic
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: CreateDepartment() ===>{ex.Message}");
-                return response;
+                return null;
 
             }
 
         }
 
 
-        public async Task<BaseResponse> UpdateUnit(UpdateUnitDTO payload)
+        public async Task<BaseResponse<UpdateUnitDTO>> UpdateUnit(UpdateUnitDTO payload)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
 
@@ -117,10 +127,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<UpdateUnitDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -128,17 +140,23 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _unitRepository.UpdateUnit(payload);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Unit Updated Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
-                        response.Data = payload;
-                        return response;
+                        return new BaseResponse<UpdateUnitDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Updated  Successfully",
+                            Data = payload
+
+                        };
                     }
                     else
                     {
-                        response.ResponseMessage = "Failed to Updated record";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<UpdateUnitDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to Update Record",
+                            Data = payload
+
+                        };
                     }
                 }
 
@@ -149,17 +167,16 @@ namespace XpressHRMS.Business.Services.Logic
             {
                 _logger.LogError($"MethodName: UpdateUnit() ===>{ex.Message}");
 
-                return response;
+                return null;
 
             }
 
         }
 
-        public async Task<BaseResponse> DeleteUnit(DeleteUnitDTO payload)
+        public async Task<BaseResponse<DeleteUnitDTO>> DeleteUnit(DeleteUnitDTO payload)
         {
             try
             {
-                BaseResponse response = new BaseResponse();
                 bool isModelStateValidate = true;
                 string validationMessage = "";
                 if (payload.UnitID < 0)
@@ -174,10 +191,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<DeleteUnitDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -185,17 +204,23 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _unitRepository.DeleteUnit(payload.UnitID, payload.CompanyID);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Department Deleted Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
-                        response.Data = payload;
-                        return response;
+                        return new BaseResponse<DeleteUnitDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record Deleted  Successfully",
+                            Data = payload
+
+                        };
                     }
                     else
                     {
-                        response.ResponseMessage = "Failed to delete record";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<DeleteUnitDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to  Delete Record",
+                            Data = payload
+
+                        };
                     }
                 }
 
@@ -203,18 +228,16 @@ namespace XpressHRMS.Business.Services.Logic
             }
             catch (Exception ex)
             {
-
-                throw;
+                return null;
             }
 
         }
 
 
-        public async Task<BaseResponse> DisableUnit(DeleteUnitDTO payload)
+        public async Task<BaseResponse<DeleteUnitDTO>> DisableUnit(DeleteUnitDTO payload)
         {
             try
             {
-                BaseResponse response = new BaseResponse();
                 bool isModelStateValidate = true;
                 string validationMessage = "";
                 if (payload.UnitID < 0)
@@ -224,10 +247,12 @@ namespace XpressHRMS.Business.Services.Logic
                 }
                 if (!isModelStateValidate)
                 {
-                    response.ResponseMessage = validationMessage;
-                    response.ResponseCode = ResponseCode.ValidationError.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<DeleteUnitDTO>()
+                    {
+                        ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = validationMessage,
+                        Data = null
+                    };
 
                 }
                 else
@@ -235,17 +260,23 @@ namespace XpressHRMS.Business.Services.Logic
                     int result = await _unitRepository.DisableUnit(payload.UnitID, payload.CompanyID);
                     if (result > 0)
                     {
-                        response.ResponseMessage = "Unit Disabled Successfully";
-                        response.ResponseCode = ResponseCode.Ok.ToString();
-                        response.Data = payload;
-                        return response;
+                        return new BaseResponse<DeleteUnitDTO>()
+                        {
+                            ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Record DisAbled Successfully",
+                            Data = payload
+
+                        };
                     }
                     else
                     {
-                        response.ResponseMessage = "Internal Server Error";
-                        response.ResponseCode = ResponseCode.InternalServer.ToString();
-                        response.Data = null;
-                        return response;
+                        return new BaseResponse<DeleteUnitDTO>()
+                        {
+                            ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                            ResponseMessage = "Failed to  Delete Record",
+                            Data = payload
+
+                        };
                     }
                 }
 
@@ -259,30 +290,34 @@ namespace XpressHRMS.Business.Services.Logic
 
         }
 
-        public async Task<BaseResponse> ActivateUnit(DeleteUnitDTO payload)
+        public async Task<BaseResponse<DeleteUnitDTO>> ActivateUnit(DeleteUnitDTO payload)
         {
             try
             {
-                BaseResponse response = new BaseResponse();
 
 
                 int result = await _unitRepository.ActivateUnit(payload.UnitID, payload.CompanyID);
                 if (result > 0)
                 {
-                    response.ResponseMessage = "Unit Activated Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.Data = payload;
-                    return response;
+                    return new BaseResponse<DeleteUnitDTO>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Activated Successfully",
+                        Data = payload
+
+                    };
                 }
                 else
                 {
-                    response.ResponseMessage = "Internal Server Error";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<DeleteUnitDTO>()
+                    {
+                        ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Failed to Activate Record",
+                        Data = payload
+
+                    };
                 }
 
-                return response;
 
             }
             catch (Exception ex)
@@ -292,66 +327,76 @@ namespace XpressHRMS.Business.Services.Logic
             }
 
         }
-        public async Task<BaseResponse> GetAllUnits(int CompanyID)
+        public async Task<BaseResponse<List<UnitDTO>>> GetAllUnits(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
 
-                dynamic result = await _unitRepository.GetAllUnits(CompanyID);
+                var result = await _unitRepository.GetAllUnits(CompanyID);
                 if (result.Count > 0)
                 {
-                    response.ResponseMessage = "Units Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.Data = result;
-                    return response;
+                    return new BaseResponse<List<UnitDTO>>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Retreived Successfully",
+                        Data = result
+
+                    };
                 }
                 else
                 {
-                    response.ResponseMessage = "No Record Found";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<List<UnitDTO>>()
+                    {
+                        ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "No record found",
+                        Data = result
+
+                    };
                 }
 
 
             }
             catch (Exception)
             {
-                return response;
+                return null;
             }
         }
 
 
-        public async Task<BaseResponse> GetUnitByID(int CompanyID, int UnitID)
+        public async Task<BaseResponse<UnitDTO>> GetUnitByID(int CompanyID, int UnitID)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
 
-                dynamic result = await _unitRepository.GetUnitByID(UnitID, CompanyID);
-                if (result.Count > 0)
+                var result = await _unitRepository.GetUnitByID(UnitID, CompanyID);
+                if (result!=null)
                 {
-                    response.ResponseMessage = "Unit Retrieved Successfully";
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.Data = result;
-                    return response;
+                    return new BaseResponse<UnitDTO>()
+                    {
+                        ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "Record Retreived Successfully",
+                        Data = result
+
+                    };
                 }
                 else
                 {
-                    response.ResponseMessage = "No record found";
-                    response.ResponseCode = ResponseCode.InternalServer.ToString();
-                    response.Data = null;
-                    return response;
+                    return new BaseResponse<UnitDTO>()
+                    {
+                        ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        ResponseMessage = "No record found",
+                        Data = result
+
+                    };
                 }
 
 
             }
             catch (Exception)
             {
-                return response;
+                return null;
             }
         }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XpressHRMS.Business.GenericResponse
 {
-   public class BaseResponse
+   public class BaseResponse<T>
     {
         public string ResponseCode { get; set; }
         public string ResponseMessage { get; set; }
@@ -18,6 +18,8 @@ namespace XpressHRMS.Business.GenericResponse
         public object jwttoken { get; set; }
         public string RoleName { get; set; }
         public int CompanyID { get; set; }
+        public string ResponseCode { get; set; }
+        public string ResponseMessage { get; set; }
     }
     public class SSOLogout
     {

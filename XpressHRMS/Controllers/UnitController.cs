@@ -12,7 +12,7 @@ namespace XpressHRMS.Controllers
     [Route("api/[controller]")]
     [Authorize]
 
-    public class UnitController : ControllerBase
+    public class UnitController : BaseController
     {
         private readonly IUnitService _unitService;
         public UnitController(IUnitService unitService)
@@ -24,23 +24,14 @@ namespace XpressHRMS.Controllers
 
         public async Task<IActionResult> CreateUnit([FromBody] CreateUnitDTO payload)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _unitService.CreateUnit(payload);
-                if (resp != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = "";
-                    return Ok(response);
+                return this.CustomResponse(await _unitService.CreateUnit(payload));
 
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
@@ -48,120 +39,57 @@ namespace XpressHRMS.Controllers
 
         public async Task<IActionResult> UpdateUnit([FromBody] UpdateUnitDTO payload)
         {
-            BaseResponse response = new BaseResponse();
+
             try
             {
-                var resp = await _unitService.UpdateUnit(payload);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _unitService.UpdateUnit(payload));
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpDelete("DeleteUnit")]
         public async Task<IActionResult> DeleteUnit([FromBody] DeleteUnitDTO payload)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _unitService.DeleteUnit(payload);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _unitService.DeleteUnit(payload));
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpGet("GetAllUnits")]
         public async Task<IActionResult> GetAllUnits(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _unitService.GetAllUnits(CompanyID);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _unitService.GetAllUnits(CompanyID));
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpGet("GetUnitByID")]
         public async Task<IActionResult> GetUnitByID(int CompanyID, int UnitID)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _unitService.GetUnitByID(CompanyID, UnitID);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _unitService.GetUnitByID(CompanyID, UnitID));
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 

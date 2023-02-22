@@ -11,7 +11,7 @@ namespace XpressHRMS.Data.DTO
         public int CompanyID { get; set; }
         //public int PositionID { get; set; }
         public string PositionName { get; set; }
-        public string CreatedBy { get; set; }
+        //public string CreatedBy { get; set; }
         public DateTime DateCreated { get; set; }
         public int IsActive { get; set; }
 
@@ -22,7 +22,7 @@ namespace XpressHRMS.Data.DTO
         public int CompanyID { get; set; }
         public int PositionID { get; set; }
         public string PositionName { get; set; }
-        public string CreatedBy { get; set; }
+        //public string CreatedBy { get; set; }
         public DateTime DateCreated { get; set; }
         public int IsActive { get; set; }
 

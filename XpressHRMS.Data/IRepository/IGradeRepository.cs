@@ -12,10 +12,11 @@ namespace XpressHRMS.Data.IRepository
         Task<int> CreateGrade(CreateGradeDTO createGrade);
         Task<int> UpdateGrade(UpdateGradeDTO UpdateGrade);
         Task<int> DeleteGrade(DelGradeDTO deleteGrade);
-        Task<int> DisableGrade(int GradeID);
-        Task<int> ActivateGrade(int GradeID);
-        Task<IEnumerable<GradeDTO>> GetAllGrades();
-        Task<IEnumerable<GradeDTO>> GetGradeByID(int CompanyID, int GradeID);
+        Task<int> DisableGrade(int GradeID, int CompanyIDDis);
+        Task<int> ActivateGrade(int GradeID, int CompanyIDEna);
+
+        Task<List<GradeDTO>> GetAllGrades(int CompanyID);
+        Task<GradeDTO> GetGradeByID(int CompanyID, int GradeID);
 
 
     }

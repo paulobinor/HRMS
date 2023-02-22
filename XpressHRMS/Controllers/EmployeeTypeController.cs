@@ -13,9 +13,9 @@ namespace XpressHRMS.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
 
-    public class EmployeeTypeController : ControllerBase
+    public class EmployeeTypeController : BaseController
     {
         private readonly IEmployeeTypeService _EmployeeTypeService;
         public EmployeeTypeController(IEmployeeTypeService EmployeeTypeService)
@@ -26,33 +26,18 @@ namespace XpressHRMS.Controllers
         [HttpPost("CreateEmployeeType")]
         public async Task<IActionResult> CreateEmployeeType([FromBody] CreateEmployeeTypeDTO CraeteEmployeeType)
         {
-            BaseResponse response = new BaseResponse();
 
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _EmployeeTypeService.CreateEmployeeType(CraeteEmployeeType, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                //var resp = await _EmployeeTypeService.CreateEmployeeType(CraeteEmployeeType, RemoteIpAddress, RemotePort);
+                return this.CustomResponse(await _EmployeeTypeService.CreateEmployeeType(CraeteEmployeeType, RemoteIpAddress, RemotePort));
 
-                }
-                else
-                {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception ex)
             {
-                return Ok(response);
+                return null;
             }
         }
 
@@ -60,96 +45,48 @@ namespace XpressHRMS.Controllers
         [HttpPut("UpdateEmployeeType")]
         public async Task<IActionResult> UpdateEmployeeType([FromBody] UpdateEmployeeTypeDTO UpdateEmployeeType)
         {
-            BaseResponse response = new BaseResponse();
-
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _EmployeeTypeService.UpdateEmployeeType(UpdateEmployeeType, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                //var resp = await _EmployeeTypeService.CreateEmployeeType(CraeteEmployeeType, RemoteIpAddress, RemotePort);
+                return this.CustomResponse(await _EmployeeTypeService.UpdateEmployeeType(UpdateEmployeeType, RemoteIpAddress, RemotePort));
 
-                }
-                else
-                {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                //return Ok(response);
             }
             catch (Exception ex)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpDelete("DeleteEmployeeType")]
         public async Task<IActionResult> DeleteEmployeeType(DelEmployeeTypeDTO DelEmployeeType)
         {
-            BaseResponse response = new BaseResponse();
-
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _EmployeeTypeService.DeleteEmployeeType(DelEmployeeType, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _EmployeeTypeService.DeleteEmployeeType(DelEmployeeType, RemoteIpAddress, RemotePort));
 
-                }
-                else
-                {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                //return Ok(response);
             }
             catch (Exception ex)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpGet("GetAllEmployeeType")]
-        public async Task<IActionResult> GetAllEmployeeType()
+        public async Task<IActionResult> GetAllEmployeeType(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
+           
             try
             {
-                var resp = await _EmployeeTypeService.GetAllEmployeeType();
-                if (resp.Data != null)
-                {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _EmployeeTypeService.GetAllEmployeeType(CompanyID));
 
-                }
-                else
-                {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception ex)
             {
-                return Ok(response);
+                return null;
             }
         }
 
@@ -157,101 +94,82 @@ namespace XpressHRMS.Controllers
         [HttpGet("GetAllEmployeeTypeByID")]
         public async Task<IActionResult> GetAllEmployeeTypeByID(int CompanyID, int EmployeeTypeID)
         {
-            BaseResponse response = new BaseResponse();
-
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             try
             {
-                var resp = await _EmployeeTypeService.GetEmployeeTypeByID(CompanyID,EmployeeTypeID);
-                if (resp.Data != null)
-                {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _EmployeeTypeService.GetEmployeeTypeByID(CompanyID, EmployeeTypeID));
 
-                }
-                else
-                {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception ex)
             {
-                return Ok(response);
+                return null;
             }
         }
 
-        [HttpPost("ActivateEmployeeType")]
-        public async Task<IActionResult> ActivateEmployeeType(int EmployeeTypeID)
-        {
-            BaseResponse response = new BaseResponse();
+        //[HttpPost("ActivateEmployeeType")]
+        //public async Task<IActionResult> ActivateEmployeeType(int EmployeeTypeID, int CompanyID)
+        //{
+        //    BaseResponse response = new BaseResponse();
 
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-            try
-            {
-                var resp = await _EmployeeTypeService.ActivateEmployeeType(EmployeeTypeID, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+        //    string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //    string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+        //    try
+        //    {
+        //        var resp = await _EmployeeTypeService.ActivateEmployeeType(EmployeeTypeID, CompanyID, RemoteIpAddress, RemotePort);
+        //        if (resp.Data != null)
+        //        {
+        //            response.Data = resp.Data;
+        //            response.ResponseMessage = "EmployeeType Activated Successfully";
+        //            response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+        //            return Ok(response);
 
-                }
-                else
-                {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return Ok(response);
-            }
-        }
+        //        }
+        //        else
+        //        {
+        //            //response.Data = resp.Data;
+        //            response.ResponseMessage = "Internal Server Error";
+        //            response.ResponseCode = ResponseCode.InternalServer.ToString("D").PadLeft(2, '0');
+        //            return Ok(response);
+        //        }
+        //        return Ok(response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Ok(response);
+        //    }
+        //}
 
-        [HttpPost("DisableEmployeeType")]
-        public async Task<IActionResult> DisableEmployeeType(int EmployeeTypeID)
-        {
-            BaseResponse response = new BaseResponse();
+        //[HttpPost("DisableEmployeeType")]
+        //public async Task<IActionResult> DisableEmployeeType(int EmployeeTypeID, int CompanyID)
+        //{
+        //    BaseResponse response = new BaseResponse();
 
-            string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-            try
-            {
-                var resp = await _EmployeeTypeService.DisableEmployeeType(EmployeeTypeID, RemoteIpAddress, RemotePort);
-                if (resp.Data != null)
-                {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+        //    string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //    string RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+        //    try
+        //    {
+        //        var resp = await _EmployeeTypeService.DisableEmployeeType(EmployeeTypeID, CompanyID, RemoteIpAddress, RemotePort);
+        //        if (resp.Data != null)
+        //        {
+        //            response.Data = resp.Data;
+        //            response.ResponseMessage = "EmployeeType Disabled Successfully";
+        //            response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+        //            return Ok(response);
 
-                }
-                else
-                {
-                    response.Data = resp;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return Ok(response);
-            }
-        }
+        //        }
+        //        else
+        //        {
+        //            //response.Data = resp.Data;
+        //            response.ResponseMessage = "Internal Server Error";
+        //            response.ResponseCode = ResponseCode.InternalServer.ToString();
+        //            return Ok(response);
+        //        }
+        //        return Ok(response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Ok(response);
+        //    }
+        //}
 
 
     }

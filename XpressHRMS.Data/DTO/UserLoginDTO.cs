@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XpressHRMS.Data.DTO
 {
-   public class UserLoginDTO
+    public class UserLoginDTO
     {
         public string Email { get; set; }
         public string Password { get; set; }
@@ -15,5 +15,24 @@ namespace XpressHRMS.Data.DTO
     public class UserLogoutDTO
     {
         public string Email { get; set; }
+    }
+
+    public class CreateAdminUserLoginDTO
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string CompanyID { get; set; }
+    }
+
+    public class AdminDTO
+    {
+        public string Email { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Role { get; set; }
+        public string CompanyID { get; set; }
+
     }
 }

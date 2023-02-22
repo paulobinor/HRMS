@@ -13,8 +13,8 @@ using XpressHRMS.Data.IRepository;
 namespace XpressHRMS.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
-    public class DepartmentController : ControllerBase
+  // [Authorize]
+    public class DepartmentController : BaseController
     {
         private readonly IDepartmentService _departmentService;
         public DepartmentController(IDepartmentService departmentService)
@@ -24,25 +24,16 @@ namespace XpressHRMS.Controllers
 
         [HttpPost("CreateDepartment")]
 
-        public async Task<IActionResult> CreateDepartment([FromBody] DepartmentDTO payload)
+        public async Task<IActionResult> CreateDepartment([FromBody] CreateDepartmentDTO payload)
         {
-            BaseResponse response = new BaseResponse();
             try
-            {             
-                var resp = await _departmentService.CreateDepartment(payload);
-                if (resp != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-
-                }
-                return Ok(response);
+            {
+                return this.CustomResponse(await _departmentService.CreateDepartment(payload));
+             
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
@@ -50,181 +41,85 @@ namespace XpressHRMS.Controllers
 
         public async Task<IActionResult> UpdateDepartment([FromBody] UpdateDepartmentDTO payload)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _departmentService.UpdateDepartment(payload);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _departmentService.UpdateDepartment(payload));
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Exception.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpDelete("DeleteDepartment")]
         public async Task<IActionResult> DeleteDepartment([FromBody] DeleteDepartmentDTO payload)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _departmentService.DeleteDepartment(payload);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _departmentService.DeleteDepartment(payload));
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Exception.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpGet("GetAllDepartment")]
         public async Task<IActionResult> GetAllDepartment(int CompanyID)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _departmentService.GetAllDepartments(CompanyID);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _departmentService.GetAllDepartments(CompanyID));
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.NotFound.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
         [HttpGet("GetAllDepartmentByID")]
         public async Task<IActionResult> GetAllDepartmentByID(int CompanyID, int DepartmentID)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
-                var resp = await _departmentService.GetAllDepartmentByID(CompanyID, DepartmentID);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+                return this.CustomResponse(await _departmentService.GetAllDepartmentByID(CompanyID, DepartmentID));
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.NotFound.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
             }
             catch (Exception e)
             {
-                return Ok(response);
+                return null;
             }
         }
 
-        [HttpPost("ActivateDepartment")]
-        public async Task<IActionResult> ActivateDepartment(int CompanyID)
-        {
-            BaseResponse response = new BaseResponse();
-            try
-            {
-                var resp = await _departmentService.ActivateDepartment(null);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+        //[HttpPost("ActivateDepartment")]
+        //public async Task<IActionResult> ActivateDepartment(DeleteDepartmentDTO payload)
+        //{
+        //    try
+        //    {
+        //        return this.CustomResponse(await _departmentService.ActivateDepartment(payload));
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
-            }
-            catch (Exception e)
-            {
-                return Ok(response);
-            }
-        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return null;
+        //    }
+        //}
 
-        [HttpPost("DisableDepartment")]
-        public async Task<IActionResult> DisableDepartment(int CompanyID)
-        {
-            BaseResponse response = new BaseResponse();
-            try
-            {
-                var resp = await _departmentService.DisableDepartment(null);
-                if (resp.Data != null)
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Ok.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
+        //[HttpPost("DisableDepartment")]
+        //public async Task<IActionResult> DisableDepartment(DeleteDepartmentDTO payload)
+        //{
+        //    try
+        //    {
+        //        return this.CustomResponse(await _departmentService.ActivateDepartment(payload));
 
-                }
-                else
-                {
-                    response.Data = resp.Data;
-                    response.ResponseCode = ResponseCode.Exception.ToString();
-                    response.ResponseMessage = resp.ResponseMessage;
-                    return Ok(response);
-                }
-                return Ok(response);
-            }
-            catch (Exception e)
-            {
-                return Ok(response);
-            }
-        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return null;
+        //    }
+        //}
     }
 }
