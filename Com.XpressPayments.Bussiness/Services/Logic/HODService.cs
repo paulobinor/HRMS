@@ -1,4 +1,4 @@
-﻿//using AutoMapper.Configuration;
+﻿
 using Com.XpressPayments.Bussiness.Services.ILogic;
 using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.Enums;
