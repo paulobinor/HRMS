@@ -1,0 +1,7 @@
+C:\Users\user\source\repos\Com.XpressPayments.HRMSWebApi\Com.XpressPayments.Api\obj\Debug\net5.0\Com.XpressPayments.Api.csproj.AssemblyReference.cache
+C:\Users\user\source\repos\Com.XpressPayments.HRMSWebApi\Com.XpressPayments.Api\obj\Debug\net5.0\Com.XpressPayments.Api.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\source\repos\Com.XpressPayments.HRMSWebApi\Com.XpressPayments.Api\obj\Debug\net5.0\Com.XpressPayments.Api.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\Com.XpressPayments.HRMSWebApi\Com.XpressPayments.Api\obj\Debug\net5.0\Com.XpressPayments.Api.AssemblyInfo.cs
+C:\Users\user\source\repos\Com.XpressPayments.HRMSWebApi\Com.XpressPayments.Api\obj\Debug\net5.0\Com.XpressPayments.Api.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\Com.XpressPayments.HRMSWebApi\Com.XpressPayments.Api\obj\Debug\net5.0\Com.XpressPayments.Api.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\user\source\repos\Com.XpressPayments.HRMSWebApi\Com.XpressPayments.Api\obj\Debug\net5.0\Com.XpressPayments.Api.MvcApplicationPartsAssemblyInfo.cache
