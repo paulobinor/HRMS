@@ -162,8 +162,8 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                var Unit = await _unitHeadRepository.GetUnitHeadById(updateDto.UnitHeadID);
-                if (null == Unit)
+                var UnitHead = await _unitHeadRepository.GetUnitHeadById(updateDto.UnitHeadID);
+                if (null == UnitHead)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = "No record found for the specified Unit";
@@ -233,8 +233,8 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                var hod = await _unitHeadRepository.GetUnitHeadById(deleteDto.UnitHeadID);
-                if (null != hod)
+                var UnitHead = await _unitHeadRepository.GetUnitHeadById(deleteDto.UnitHeadID);
+                if (null != UnitHead)
                 {
                     dynamic resp = await _unitHeadRepository.DeleteUnitHead(deleteDto, requesterUserEmail);
                     if (resp > 0)
@@ -300,11 +300,11 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //update action performed into audit log here
 
-                var hod = await _unitHeadRepository.GetAllActiveUnitHead();
+                var UnitHead = await _unitHeadRepository.GetAllActiveUnitHead();
 
-                if (hod.Any())
+                if (UnitHead.Any())
                 {
-                    response.Data = hod;
+                    response.Data = UnitHead;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = "UnitHead fetched successfully.";
                     return response;
@@ -426,9 +426,9 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetUnitHeadById(long UnitHeadID,) ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: GetUnitHeadById(long UnitHeadID) ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured:  GetUnitHeadById(long UnitHeadID,)  ==> {ex.Message}";
+                response.ResponseMessage = $"Exception Occured:  GetUnitHeadById(long UnitHeadID)  ==> {ex.Message}";
                 response.Data = null;
                 return response;
             }

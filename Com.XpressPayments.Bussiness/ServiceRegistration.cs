@@ -29,6 +29,7 @@ namespace Com.XpressPayments.Bussiness
             services.AddScoped<ILgaService, LgaService>();
             services.AddScoped<IUnitService, UnitService>();
             services.AddScoped<IUnitHeadService, UnitHeadService>();
+            services.AddScoped<IJobDescriptionService, JobDescriptionService>();
         }
     }
 }

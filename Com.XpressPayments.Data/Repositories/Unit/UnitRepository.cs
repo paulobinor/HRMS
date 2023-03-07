@@ -65,12 +65,12 @@ namespace Com.XpressPayments.Data.Repositories.Unit
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", UnitEnum.UPDATE);
-                    param.Add("@UnitID", unit.HodID);
-                    param.Add("@UnitName", unit.UnitName.Trim());
-                    param.Add("@HodID", unit.HodID);
-                    param.Add("@UnitHeadID", unit.UnitHeadID);
-                    param.Add("@DepartmentID", unit.DepartmentID);
-                    param.Add("@CompanyId", unit.CompanyID);
+                    param.Add("@UnitIDUpd", unit.HodID);
+                    param.Add("@UnitNameUpd", unit.UnitName.Trim());
+                    param.Add("@HodIDUpd", unit.HodID);
+                    param.Add("@UnitHeadIDUpd", unit.UnitHeadID);
+                    param.Add("@DepartmentIDUpd", unit.DepartmentID);
+                    param.Add("@CompanyIdUpd", unit.CompanyID);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
 
@@ -163,7 +163,7 @@ namespace Com.XpressPayments.Data.Repositories.Unit
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", HODenum.GETBYID);
+                    param.Add("@Status", UnitEnum.GETBYID);
                     param.Add("@UnitGet", UnitID);
 
                     var UnitDetails = await _dapper.QueryFirstOrDefaultAsync<UnitDTO>(ApplicationConstant.Sp_Unit, param: param, commandType: CommandType.StoredProcedure);
@@ -186,7 +186,7 @@ namespace Com.XpressPayments.Data.Repositories.Unit
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", HODenum.GETBYEMAIL);
+                    param.Add("@Status", UnitEnum.GETBYEMAIL);
                     param.Add("@UnitNameGet", UnitName);
 
                     var UnitDetails = await _dapper.QueryFirstOrDefaultAsync<UnitDTO>(ApplicationConstant.Sp_Unit, param: param, commandType: CommandType.StoredProcedure);

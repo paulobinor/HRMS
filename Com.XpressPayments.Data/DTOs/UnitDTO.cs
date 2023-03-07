@@ -36,7 +36,7 @@ namespace Com.XpressPayments.Data.DTOs
         public long DepartmentID { get; set; }
         public long CompanyID { get; set; }
 
-        public string Created_By_User_Email { get; set; }
+       
     }
 
     public class UpdateUnitDTO

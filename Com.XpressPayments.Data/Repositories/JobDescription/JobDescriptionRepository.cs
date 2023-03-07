@@ -38,7 +38,7 @@ namespace Com.XpressPayments.Data.Repositories.JobDescription
                     var param = new DynamicParameters();
                     param.Add("@Status", JobDescriptionEnum.CREATE);
                     param.Add("@JobDescriptionName", create.JobDescriptionName.Trim());
-                    param.Add("@CompanyId", create.CompanyID);
+                    param.Add("@CompanyID", create.CompanyID);
 
                     param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
                     dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);
@@ -62,7 +62,8 @@ namespace Com.XpressPayments.Data.Repositories.JobDescription
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", JobDescriptionEnum.UPDATE);
-                    param.Add("@JobDescriptionID", update.JobDescriptionID);
+                    param.Add("@JobDescriptionIDUpd", update.CompanyID);
+                    param.Add("@JobDescriptionNameUpd", update.JobDescriptionName);
                     param.Add("@CompanyId", update.CompanyID);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());

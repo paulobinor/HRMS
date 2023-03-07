@@ -39,7 +39,6 @@ namespace Com.XpressPayments.Data.Repositories.UnitHead
                     param.Add("@UnitHeadName", create.UnitHeadName.Trim());
                     param.Add("@UnitID", create.UnitID);
                     param.Add("@HodID", create.HodID);
-                   
                     param.Add("@DepartmentID", create.DepartmentID);
                     param.Add("@CompanyId", create.CompanyID);
 
@@ -66,12 +65,12 @@ namespace Com.XpressPayments.Data.Repositories.UnitHead
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", UnitHeadEnum.UPDATE);
-                    param.Add("@UnitHeadID", update.UnitHeadID);
-                    param.Add("@UnitHeadName", update.UnitHeadName.Trim());
-                    param.Add("@UnitID", update.UnitID);
-                    param.Add("@HodID", update.HodID);
-                    param.Add("@DepartmentID", update.DepartmentID);
-                    param.Add("@CompanyId", update.CompanyID);
+                    param.Add("@UnitHeadIDUpd", update.UnitHeadID);
+                    param.Add("@UnitHeadNameUpd", update.UnitHeadName.Trim());
+                    param.Add("@UnitIDUpd", update.UnitID);
+                    param.Add("@HodIDUpd", update.HodID);
+                    param.Add("@DepartmentIDUpd", update.DepartmentID);
+                    param.Add("@CompanyIdUpd", update.CompanyID);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
 

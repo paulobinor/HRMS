@@ -37,94 +37,401 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             _companyrepository = companyrepository;
         }
 
-        //public async Task<BaseResponse> CreateJobDescription(CreateJobDescriptionDTO creatDto, RequesterInfo requester)
-        //{
-        //    var response = new BaseResponse();
-        //    try
-        //    {
-        //        string createdbyUserEmail = requester.Username;
-        //        string createdbyUserId = requester.UserId.ToString();
-        //        string RoleId = requester.RoleId.ToString();
+        public async Task<BaseResponse> CreateJobDescription(CreateJobDescriptionDTO creatDto, RequesterInfo requester)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                string createdbyUserEmail = requester.Username;
+                string createdbyUserId = requester.UserId.ToString();
+                string RoleId = requester.RoleId.ToString();
 
-        //        var ipAddress = requester.IpAddress.ToString();
-        //        var port = requester.Port.ToString();
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
 
-        //        var requesterInfo = await _accountRepository.FindUser(createdbyUserEmail);
-        //        if (null == requesterInfo)
-        //        {
-        //            response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-        //            response.ResponseMessage = "Requester information cannot be found.";
-        //            return response;
-        //        }
+                var requesterInfo = await _accountRepository.FindUser(createdbyUserEmail);
+                if (null == requesterInfo)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Requester information cannot be found.";
+                    return response;
+                }
 
-        //        if (Convert.ToInt32(RoleId) != 1)
-        //        {
-        //            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-        //            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-        //            return response;
-        //        }
+                if (Convert.ToInt32(RoleId) != 1)
+                {
+                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                    return response;
+                }
 
-        //        //validate UnitDto payload here 
-        //        if (String.IsNullOrEmpty(creatDto.JobDescriptionName) || creatDto.CompanyID <= 0 )
-        //            //|| creatDto.DepartmentID <= 0 ||
-        //            //creatDto.HodID <= 0 || creatDto.UnitID <= 0)
-        //        {
-        //            response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-        //            response.ResponseMessage = $"Please ensure all required fields are entered.";
-        //            return response;
-        //        }
+                //validate UnitDto payload here 
+                if (String.IsNullOrEmpty(creatDto.JobDescriptionName) || creatDto.CompanyID <= 0)
+                //|| creatDto.DepartmentID <= 0 ||
+                //creatDto.HodID <= 0 || creatDto.UnitID <= 0)
+                {
+                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Please ensure all required fields are entered.";
+                    return response;
+                }
 
-        //        var isExistsComp = await _companyrepository.GetCompanyById(creatDto.CompanyID);
-        //        if (null == isExistsComp)
-        //        {
-        //            response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-        //            response.ResponseMessage = $"Invalid Company suplied.";
-        //            return response;
-        //        }
-        //        else
-        //        {
-        //            if (isExistsComp.IsDeleted)
-        //            {
-        //                response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-        //                response.ResponseMessage = $"The Company suplied is already deleted, HOD cannot be created under it.";
-        //                return response;
-        //            }
-        //        }
+                var isExistsComp = await _companyrepository.GetCompanyById(creatDto.CompanyID);
+                if (null == isExistsComp)
+                {
+                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Invalid Company suplied.";
+                    return response;
+                }
+                else
+                {
+                    if (isExistsComp.IsDeleted)
+                    {
+                        response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"The Company suplied is already deleted, HOD cannot be created under it.";
+                        return response;
+                    }
+                }
 
-        //        creatDto.JobDescriptionName = $"{creatDto.JobDescriptionName} ({isExistsComp.CompanyName})";
+                creatDto.JobDescriptionName = $"{creatDto.JobDescriptionName} ({isExistsComp.CompanyName})";
 
-        //        var isExists = await _jobDescriptionRepository.GetAllJobDescription(creatDto.JobDescriptionName);
-        //        if (null != isExists)
-        //        {
-        //            response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-        //            response.ResponseMessage = $"JobDescription with name : {creatDto.UnitHeadName} already exists.";
-        //            return response;
-        //        }
+                var isExists = await _jobDescriptionRepository.GetJobDescriptionByName(creatDto.JobDescriptionName);
+                if (null != isExists)
+                {
+                    response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"JobDescription with name : {creatDto.JobDescriptionName} already exists.";
+                    return response;
+                }
 
-        //        dynamic resp = await _unitHeadRepository.CreateUnitHead(creatDto, createdbyUserEmail);
-        //        if (resp > 0)
-        //        {
-        //            //update action performed into audit log here
+                dynamic resp = await _jobDescriptionRepository.CreateJobDescription(creatDto, createdbyUserEmail);
+                if (resp > 0)
+                {
+                    //update action performed into audit log here
 
-        //            var UnitHead = await _unitHeadRepository.GetUnitHeadByName(creatDto.UnitHeadName);
+                    var UnitHead = await _jobDescriptionRepository.GetJobDescriptionByName(creatDto.JobDescriptionName);
 
-        //            response.Data = UnitHead;
-        //            response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-        //            response.ResponseMessage = "UnitHead created successfully.";
-        //            return response;
-        //        }
-        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-        //        response.ResponseMessage = "An error occured while Creating Unit. Please contact admin.";
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Exception Occured: CreateUnitHead ==> {ex.Message}");
-        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-        //        response.ResponseMessage = $"Exception Occured: CreateUnitHead ==> {ex.Message}";
-        //        response.Data = null;
-        //        return response;
-        //    }
-        //}
+                    response.Data = UnitHead;
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "JobDescription created successfully.";
+                    return response;
+                }
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "An error occured while Creating JobDescription. Please contact admin.";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: CreateJobDescription ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: CreateJobDescription ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+        }
+
+        public async Task<BaseResponse> UpdateJobDescription(UpdateJobDescriptionDTO updateDto, RequesterInfo requester)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                string requesterUserEmail = requester.Username;
+                string requesterUserId = requester.UserId.ToString();
+                string RoleId = requester.RoleId.ToString();
+
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
+
+                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                if (null == requesterInfo)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Requester information cannot be found.";
+                    return response;
+                }
+
+                if (Convert.ToInt32(RoleId) != 1)
+                {
+                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                    return response;
+                }
+
+                //validate DepartmentDto payload here 
+                if (String.IsNullOrEmpty(updateDto.JobDescriptionName) || updateDto.CompanyID <= 0)
+                {
+                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Please ensure all required fields are entered.";
+                    return response;
+                }
+
+                var Unit = await _jobDescriptionRepository.GetJobDescriptionById(updateDto.JobDescriptionID);
+                if (null == Unit)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "No record found for the specified Unit";
+                    response.Data = null;
+                    return response;
+                }
+
+                dynamic resp = await _jobDescriptionRepository.UpdateJobDescription(updateDto, requesterUserEmail);
+                if (resp > 0)
+                {
+                    //update action performed into audit log here
+
+                    var updatedJobDescription = await _jobDescriptionRepository.GetJobDescriptionById(updateDto.JobDescriptionID);
+
+                    _logger.LogInformation("JobDescription updated successfully.");
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "JobDescription updated successfully.";
+                    response.Data = updatedJobDescription;
+                    return response;
+                }
+                response.ResponseCode = ResponseCode.Exception.ToString();
+                response.ResponseMessage = "An error occurred while updating Hod.";
+                response.Data = null;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: UpdateJobDescriptionDTO ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: UpdateJobDescriptionDTO ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+        }
+
+        public async Task<BaseResponse> DeleteJobDescription(DeletedJobDescriptionDTO deleteDto, RequesterInfo requester)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                string requesterUserEmail = requester.Username;
+                string requesterUserId = requester.UserId.ToString();
+                string RoleId = requester.RoleId.ToString();
+
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
+
+                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                if (null == requesterInfo)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Requester information cannot be found.";
+                    return response;
+                }
+
+                if (Convert.ToInt32(RoleId) != 1)
+                {
+                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                    return response;
+                }
+
+                if (deleteDto.JobDescriptionID == 1)
+                {
+                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"System Default hod cannot be deleted.";
+                    return response;
+                }
+
+                var JobDescription = await _jobDescriptionRepository.GetJobDescriptionById(deleteDto.JobDescriptionID);
+                if (null != JobDescription)
+                {
+                    dynamic resp = await _jobDescriptionRepository.DeleteJobDescription(deleteDto, requesterUserEmail);
+                    if (resp > 0)
+                    {
+                        //update action performed into audit log here
+
+                        var DeletedUnit = await _jobDescriptionRepository.GetJobDescriptionById(deleteDto.JobDescriptionID);
+
+                        _logger.LogInformation($"JobDescription with name: {DeletedUnit.JobDescriptionName} Deleted successfully.");
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"JobDescription with name: {DeletedUnit.JobDescriptionName} Deleted successfully.";
+                        response.Data = null;
+                        return response;
+
+                    }
+                    response.ResponseCode = ResponseCode.Exception.ToString();
+                    response.ResponseMessage = "An error occurred while deleting JobDescription.";
+                    response.Data = null;
+                    return response;
+                }
+                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "No record found for the specified JobDescription";
+                response.Data = null;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: DeleteJobDescription ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: DeleteJobDescription ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+        }
+
+        public async Task<BaseResponse> GetAllActiveJobDescription(RequesterInfo requester)
+        {
+            BaseResponse response = new BaseResponse();
+
+            try
+            {
+                string requesterUserEmail = requester.Username;
+                string requesterUserId = requester.UserId.ToString();
+                string RoleId = requester.RoleId.ToString();
+
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
+
+                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                if (null == requesterInfo)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Requester information cannot be found.";
+                    return response;
+                }
+
+                if (Convert.ToInt32(RoleId) > 2)
+                {
+                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                    return response;
+                }
+
+                //update action performed into audit log here
+
+                var hod = await _jobDescriptionRepository.GetAllActiveJobDescription();
+
+                if (hod.Any())
+                {
+                    response.Data = hod;
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "JobDescription fetched successfully.";
+                    return response;
+                }
+                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "No JobDescription found.";
+                response.Data = null;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetAllActiveJobDescription() ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: GetAllActiveJobDescription() ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+        }
+
+        public async Task<BaseResponse> GetAllJobDescription(RequesterInfo requester)
+        {
+            BaseResponse response = new BaseResponse();
+
+            try
+            {
+                string requesterUserEmail = requester.Username;
+                string requesterUserId = requester.UserId.ToString();
+                string RoleId = requester.RoleId.ToString();
+
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
+
+                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                if (null == requesterInfo)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Requester information cannot be found.";
+                    return response;
+                }
+
+                if (Convert.ToInt32(RoleId) > 2)
+                {
+                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                    return response;
+                }
+
+                //update action performed into audit log here
+
+                var JobDescription = await _jobDescriptionRepository.GetAllJobDescription();
+
+                if (JobDescription.Any())
+                {
+                    response.Data = JobDescription;
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "JobDescription fetched successfully.";
+                    return response;
+                }
+                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "No JobDescription found.";
+                response.Data = null;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetAllJobDescription() ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: GetAllJobDescription() ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+        }
+
+        public async Task<BaseResponse> GetJobDescriptionById(long JobDescriptionID, RequesterInfo requester)
+        {
+            BaseResponse response = new BaseResponse();
+
+            try
+            {
+                string requesterUserEmail = requester.Username;
+                string requesterUserId = requester.UserId.ToString();
+                string RoleId = requester.RoleId.ToString();
+
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
+
+                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                if (null == requesterInfo)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Requester information cannot be found.";
+                    return response;
+                }
+
+                if (Convert.ToInt32(RoleId) > 2)
+                {
+                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                    return response;
+                }
+
+                var Unit = await _jobDescriptionRepository.GetJobDescriptionById(JobDescriptionID);
+
+                if (Unit == null)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "JobDescription not found.";
+                    response.Data = null;
+                    return response;
+                }
+
+                //update action performed into audit log here
+
+                response.Data = Unit;
+                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "JobDescription fetched successfully.";
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetJobDescriptionById(long JobDescriptionID) ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured:  GetJobDescriptionById(long JobDescriptionID)  ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+        }
     }
 }

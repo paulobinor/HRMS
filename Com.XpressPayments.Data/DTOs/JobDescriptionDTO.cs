@@ -35,6 +35,7 @@ namespace Com.XpressPayments.Data.DTOs
     public class UpdateJobDescriptionDTO
     {
         public long JobDescriptionID { get; set; }
+        public string JobDescriptionName { get; set; }
         public long CompanyID { get; set; }
 
     }

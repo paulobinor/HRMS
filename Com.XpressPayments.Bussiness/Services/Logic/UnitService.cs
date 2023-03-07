@@ -185,7 +185,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
                 response.ResponseCode = ResponseCode.Exception.ToString();
-                response.ResponseMessage = "An error occurred while updating Hod.";
+                response.ResponseMessage = "An error occurred while updating Unit.";
                 response.Data = null;
                 return response;
             }
@@ -411,7 +411,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 if (Unit == null)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Hod not found.";
+                    response.ResponseMessage = "UnitID not found.";
                     response.Data = null;
                     return response;
                 }
