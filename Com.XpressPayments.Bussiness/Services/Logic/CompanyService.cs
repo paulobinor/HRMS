@@ -352,11 +352,11 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 {
                     response.Data = Companys;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Companies fetched successfully.";
+                    response.ResponseMessage = "Company fetched successfully.";
                     return response;
                 }
                 response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No Companies found.";
+                response.ResponseMessage = "No Company found.";
                 response.Data = null;
                 return response;
             }

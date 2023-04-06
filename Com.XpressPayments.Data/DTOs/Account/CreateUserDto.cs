@@ -21,6 +21,8 @@ namespace Com.XpressPayments.Data.DTOs.Account
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
         public string Email { get; set; }
+        public string OfficalMail { get; set; }
+        
 
         public string PhoneNumber { get; set; }
 

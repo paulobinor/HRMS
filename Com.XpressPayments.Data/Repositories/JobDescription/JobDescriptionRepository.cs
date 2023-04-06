@@ -62,7 +62,7 @@ namespace Com.XpressPayments.Data.Repositories.JobDescription
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", JobDescriptionEnum.UPDATE);
-                    param.Add("@JobDescriptionIDUpd", update.CompanyID);
+                    param.Add("@JobDescriptionIDUpd", update.JobDescriptionID);
                     param.Add("@JobDescriptionNameUpd", update.JobDescriptionName);
                     param.Add("@CompanyId", update.CompanyID);
 
@@ -89,7 +89,7 @@ namespace Com.XpressPayments.Data.Repositories.JobDescription
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", JobDescriptionEnum.DELETE);
-                    param.Add("@JobDescriptionIDGet", Convert.ToInt32(delete.JobDescriptionID));
+                    param.Add("@JobDescriptionIDDelete", Convert.ToInt32(delete.JobDescriptionID));
                     param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
                     param.Add("@Reasons_For_Deleting", delete.Reasons_For_Delete == null ? "" : delete.Reasons_For_Delete.ToString().Trim());
 
@@ -158,7 +158,7 @@ namespace Com.XpressPayments.Data.Repositories.JobDescription
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", JobDescriptionEnum.GETBYID);
-                    param.Add("@JobDescriptionID", JobDescriptionID);
+                    param.Add("@JobDescriptionIDUpd", JobDescriptionID);
 
                     var JobDescriptionDetails = await _dapper.QueryFirstOrDefaultAsync<JobDescriptionDTO>(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);
 
@@ -173,7 +173,7 @@ namespace Com.XpressPayments.Data.Repositories.JobDescription
             }
         }
 
-        public async Task<UnitHeadDTO> GetJobDescriptionByName(string JobDescriptionName)
+        public async Task<JobDescriptionDTO> GetJobDescriptionByName(string JobDescriptionName)
         {
             try
             {
@@ -183,7 +183,7 @@ namespace Com.XpressPayments.Data.Repositories.JobDescription
                     param.Add("@Status", JobDescriptionEnum.GETBYEMAIL);
                     param.Add("@JobDescriptionNameGet", JobDescriptionName);
 
-                    var JobDescriptionDetails = await _dapper.QueryFirstOrDefaultAsync<UnitHeadDTO>(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);
+                    var JobDescriptionDetails = await _dapper.QueryFirstOrDefaultAsync<JobDescriptionDTO>(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);
 
                     return JobDescriptionDetails;
                 }
@@ -196,7 +196,7 @@ namespace Com.XpressPayments.Data.Repositories.JobDescription
             }
         }
 
-        public async Task<IEnumerable<UnitHeadDTO>> GetAllJobDescriptionCompanyId(long JobDescriptionID)
+        public async Task<IEnumerable<JobDescriptionDTO>> GetAllJobDescriptionCompanyId(long JobDescriptionID)
         {
             try
             {
@@ -206,9 +206,9 @@ namespace Com.XpressPayments.Data.Repositories.JobDescription
                     param.Add("@Status", 8);
                     param.Add("@CompanyIdGet", JobDescriptionID);
 
-                    var UnitHeadDetails = await _dapper.QueryAsync<UnitHeadDTO>(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);
+                    var JobDescriptionDetails = await _dapper.QueryAsync<JobDescriptionDTO>(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);
 
-                    return UnitHeadDetails;
+                    return JobDescriptionDetails;
                 }
             }
             catch (Exception ex)

@@ -1,14 +1,22 @@
-﻿using Com.XpressPayments.Bussiness.Services.ILogic;
+﻿using Com.XpressPayments.Api.Wrappers;
+using Com.XpressPayments.Bussiness.Services.ILogic;
 using Com.XpressPayments.Bussiness.ViewModels;
 using Com.XpressPayments.Data.DTOs.Account;
 using Com.XpressPayments.Data.Enums;
 using Com.XpressPayments.Data.GenericResponse;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OfficeOpenXml;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Threading.Tasks;
+using LicenseContext = OfficeOpenXml.LicenseContext;
 
 namespace Com.XpressPayments.Api.Controllers
 {
@@ -116,6 +124,69 @@ namespace Com.XpressPayments.Api.Controllers
             }
         }
 
+
+        [HttpPost("CreateUserBulkUpload")]
+        [Authorize]
+        public async Task<IActionResult> UploadTempleTransactions(IFormFile batchTransactions)
+        {
+            try
+            {
+                if (batchTransactions?.Length > 0)
+                {
+                    List<CreateUserDto> batchList = new();
+                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                    var stream = batchTransactions.OpenReadStream();
+                    using (var package = new ExcelPackage(stream))
+                    {
+                        var worksheet = package.Workbook.Worksheets.First();
+                        var rowCount = worksheet.Dimension.Rows;
+                        for (int row = 2; row <= rowCount - 1; row++)
+                        {
+                            var FirstName = worksheet.Cells[row, 1].Value?.ToString();
+                            var MiddleName = worksheet.Cells[row, 2].Value?.ToString();
+                            var LastName = worksheet.Cells[row, 3].Value?.ToString();
+                            var Email = worksheet.Cells[row, 4].Value?.ToString();
+                            var OfficalMail = worksheet.Cells[row, 5].Value?.ToString();
+                            var PhoneNumber = worksheet.Cells[row, 6].Value?.ToString();
+                            var RoleId = worksheet.Cells[row, 7].Value?.ToString();
+                            var DepartmentId = worksheet.Cells[row, 8].Value?.ToString();
+                            var CompanyId = worksheet.Cells[row, 9].Value?.ToString();
+
+
+                            CreateUserDto user = new()
+                            {
+                                FirstName = FirstName,
+                                MiddleName = MiddleName,
+                                LastName = LastName,
+                                Email = Email,
+                                OfficalMail = OfficalMail,
+                                PhoneNumber = PhoneNumber,
+                                RoleId = Convert.ToInt32(RoleId),
+                                DepartmentId = Convert.ToInt32(DepartmentId),
+                                CompanyId = Convert.ToInt32(CompanyId)
+                            };
+
+                            var requester = new RequesterInfo
+                            {
+                                Username = this.User.Claims.ToList()[2].Value,
+                                UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                                RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                                IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
+                                Port = Request.HttpContext.Connection.LocalPort.ToString()
+                            };
+                            var res = await _authService.CreateUser(user, requester);
+
+                        }
+
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+            return null;
+        }
 
         [HttpPut("UpdateUser")]
         [Authorize]

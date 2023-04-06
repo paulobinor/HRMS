@@ -35,6 +35,7 @@ namespace Com.XpressPayments.Data.Repositories.Company.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", Cmpany.CREATE);
                     param.Add("@CompanyName", Comp.CompanyName.Trim());
+                    param.Add("@CompanyCode", Comp.CompanyCode.Trim());
                     param.Add("@Address", Comp.Address.Trim());
                     param.Add("@Email", Comp.Email.Trim());
                     param.Add("@Website", Comp.Website.Trim());
@@ -65,6 +66,7 @@ namespace Com.XpressPayments.Data.Repositories.Company.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", Cmpany.UPDATE);
                     param.Add("@CompanyIdUpd", Convert.ToInt32(Comp.CompanyId));
+                    param.Add("@CompanyCodeUpd", Comp.CompanyCode.Trim());
                     param.Add("@CompanyNameUpd", Comp.CompanyName == null ? "" : Comp.CompanyName.ToString().Trim());
                     param.Add("@AddressUpd", Comp.Address.Trim());
                     param.Add("@EmailUpd", Comp.Email.Trim());

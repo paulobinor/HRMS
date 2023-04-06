@@ -740,6 +740,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
         }
 
+      
         public async Task<BaseResponse> GetAllUsersPendingApproval(RequesterInfo requester)
         {
             var response = new BaseResponse();

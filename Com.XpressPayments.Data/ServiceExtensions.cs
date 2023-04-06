@@ -4,8 +4,15 @@ using Com.XpressPayments.Data.Repositories.Company.Repository;
 using Com.XpressPayments.Data.Repositories.CountryStateLga;
 using Com.XpressPayments.Data.Repositories.Departments.IRepository;
 using Com.XpressPayments.Data.Repositories.Departments.Repository;
+using Com.XpressPayments.Data.Repositories.Employee;
+using Com.XpressPayments.Data.Repositories.EmployeeType;
+using Com.XpressPayments.Data.Repositories.Gender;
+using Com.XpressPayments.Data.Repositories.Grade;
 using Com.XpressPayments.Data.Repositories.HOD;
+using Com.XpressPayments.Data.Repositories.Institutions;
 using Com.XpressPayments.Data.Repositories.JobDescription;
+using Com.XpressPayments.Data.Repositories.MaritalStatus;
+using Com.XpressPayments.Data.Repositories.Position;
 using Com.XpressPayments.Data.Repositories.Unit;
 using Com.XpressPayments.Data.Repositories.UnitHead;
 using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
@@ -36,6 +43,13 @@ namespace Com.XpressPayments.Data
             services.AddScoped<IUnitRepository, UnitRepository>();
             services.AddScoped<IUnitHeadRepository, UnitHeadRepository>();
             services.AddScoped<IJobDescriptionRepository, JobDescriptionRepository>();
+            services.AddScoped<IEmployeeTypeRepository, EmployeeTypeRepository>();
+            services.AddScoped<IGradeRepository, GradeRepository>();
+            services.AddScoped<IPositionRepository, PositionRepository>();
+            services.AddScoped<IGenderRepository, GenderRepository>();
+            services.AddScoped<IMaritalStatusReposiorty, MaritalStatusReposiorty>();
+            services.AddScoped<IInstitutionsRepository, InstitutionsRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         }
     }
 }

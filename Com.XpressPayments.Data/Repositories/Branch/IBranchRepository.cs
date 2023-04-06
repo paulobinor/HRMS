@@ -17,6 +17,7 @@ namespace Com.XpressPayments.Data.Repositories.Branch
         Task<BranchDTO> GetBranchById(long BranchID);
         Task<BranchDTO> GetBranchByName(string BranchName);
         Task<IEnumerable<BranchDTO>> GetAllBranchbyCompanyId(long companyId);
+        //public async Task<BranchDTO> GetBranchByCompanyId(long companyId, long BranchID);
 
 
 

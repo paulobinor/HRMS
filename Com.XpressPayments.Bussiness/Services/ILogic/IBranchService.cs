@@ -16,6 +16,7 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
         Task<BaseResponse> GetAllActiveBranch(RequesterInfo requester);
         Task<BaseResponse> GetAllBranch(RequesterInfo requester);
         Task<BaseResponse> GetBranchbyId(long BranchID, RequesterInfo requester);
+        Task<BaseResponse> GetBranchbyCompanyId(long companyId, RequesterInfo requester);
 
 
 

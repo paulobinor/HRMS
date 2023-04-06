@@ -8,7 +8,9 @@ namespace Com.XpressPayments.Data.DTOs.Account
     public partial class User
     {
         public long UserId { get; set; }
-        public long DeptId { get; set; }       
+        public long DeptId { get; set; }
+        //public long DepartmentId { get; set; }
+        public long CompanyId { get; set; }
         public string CompanyName { get; set; }
         public string DepartmentName { get; set; }
 
@@ -16,6 +18,7 @@ namespace Com.XpressPayments.Data.DTOs.Account
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        //public string OfficalMail { get; set; }
 
         public string PhoneNumber { get; set; }
         public string PasswordHash { get; set; }

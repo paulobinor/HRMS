@@ -30,6 +30,13 @@ namespace Com.XpressPayments.Bussiness
             services.AddScoped<IUnitService, UnitService>();
             services.AddScoped<IUnitHeadService, UnitHeadService>();
             services.AddScoped<IJobDescriptionService, JobDescriptionService>();
+            services.AddScoped<IEmployeeTypeService, EmployeeTypeService>();
+            services.AddScoped<IGradeService, GradeService>();
+            services.AddScoped<IPositionService, PositionService>();
+            services.AddScoped<IGenderService, GenderService>();
+            services.AddScoped<IMaritalStatusService, MaritalStatusService>();
+            services.AddScoped<IInstitutionsService, InstitutionsService>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
         }
     }
 }

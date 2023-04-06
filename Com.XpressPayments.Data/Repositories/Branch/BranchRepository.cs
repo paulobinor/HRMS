@@ -165,7 +165,7 @@ namespace Com.XpressPayments.Data.Repositories.Branch
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", Department.GETBYID);
+                    param.Add("@Status", BranchEnum.GETBYID);
                     param.Add("@BranchIdGet", BranchID);
 
                     var BranchDetails = await _dapper.QueryFirstOrDefaultAsync<BranchDTO>(ApplicationConstant.Sp_Branch, param: param, commandType: CommandType.StoredProcedure);
@@ -188,7 +188,7 @@ namespace Com.XpressPayments.Data.Repositories.Branch
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", Department.GETBYEMAIL);
+                    param.Add("@Status", BranchEnum.GETBYEMAIL);
                     param.Add("@BranchNameGet", BranchName);
 
                     var BranchDetails = await _dapper.QueryFirstOrDefaultAsync<BranchDTO>(ApplicationConstant.Sp_Branch, param: param, commandType: CommandType.StoredProcedure);
@@ -211,8 +211,8 @@ namespace Com.XpressPayments.Data.Repositories.Branch
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", 8);
-                    param.Add("@CompanyIdGet", companyId);
+                    param.Add("@Status", BranchEnum.GETBYCOMPANY);
+                    param.Add("@CountryIDGet", companyId);
 
                     var BranchDetails = await _dapper.QueryAsync<BranchDTO>(ApplicationConstant.Sp_Branch, param: param, commandType: CommandType.StoredProcedure);
 
@@ -227,6 +227,29 @@ namespace Com.XpressPayments.Data.Repositories.Branch
             }
         }
 
+        //public async Task<BranchDTO> GetBranchByCompanyId(long companyId, long BranchID)
+        //{
+        //    try
+        //    {
+        //        using (SqlConnection _dapper = new SqlConnection(_connectionString))
+        //        {
+        //            var param = new DynamicParameters();
+        //            param.Add("@Status", BranchEnum.GETBYID);
+        //            param.Add("@CompanyIdGet", companyId);
+        //            param.Add("@BranchIDGet", BranchID);
+
+        //            var BranchDetails = await _dapper.QueryAsync<BranchDTO>(ApplicationConstant.Sp_Branch, param: param, commandType: CommandType.StoredProcedure);
+
+        //            return BranchDetails;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var err = ex.Message;
+        //        _logger.LogError($"MethodName: GetStateByCountryId(int CountryID) ===>{ex.Message}");
+        //        throw;
+        //    }
+        //}
 
     }
 }

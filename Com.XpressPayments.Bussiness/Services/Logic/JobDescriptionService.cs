@@ -64,7 +64,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                //validate UnitDto payload here 
+                //validate JobDescription payload here 
                 if (String.IsNullOrEmpty(creatDto.JobDescriptionName) || creatDto.CompanyID <= 0)
                 //|| creatDto.DepartmentID <= 0 ||
                 //creatDto.HodID <= 0 || creatDto.UnitID <= 0)
@@ -86,7 +86,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     if (isExistsComp.IsDeleted)
                     {
                         response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"The Company suplied is already deleted, HOD cannot be created under it.";
+                        response.ResponseMessage = $"The Company suplied is already deleted, JobDescription cannot be created under it.";
                         return response;
                     }
                 }
@@ -106,9 +106,9 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 {
                     //update action performed into audit log here
 
-                    var UnitHead = await _jobDescriptionRepository.GetJobDescriptionByName(creatDto.JobDescriptionName);
+                    var JobDescription = await _jobDescriptionRepository.GetJobDescriptionByName(creatDto.JobDescriptionName);
 
-                    response.Data = UnitHead;
+                    response.Data = JobDescription;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = "JobDescription created successfully.";
                     return response;
