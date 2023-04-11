@@ -98,9 +98,21 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     param.Add("@MiddleName", user.MiddleName == null ? "" : user.MiddleName.ToString().Trim());
                     param.Add("@LastName", user.LastName == null ? "" : user.LastName.ToString().Trim());
                     param.Add("@UserEmail", user.Email == null ? "" : user.Email.ToString().Trim());
-                    param.Add("OfficalMail", user.OfficalMail == null ? "" : user.OfficalMail.ToString().Trim());
+                    param.Add("@DOB", user.Email == null ? "" : user.DOB.ToString().Trim());
+                    param.Add("@ResumptionDate", user.ResumptionDate == null ? "" : user.DOB.ToString().Trim());
+                    param.Add("@OfficialMail", user.OfficialMail == null ? "" : user.OfficialMail.ToString().Trim());
                     param.Add("@PhoneNumber", user.PhoneNumber == null ? "" : user.PhoneNumber.ToString().Trim());
                     //param.Add("@PasswordHash", passwordHash);
+                    param.Add("@UnitID", user.UnitID);
+                    param.Add("@UnitHeadID", user.UnitHeadID);
+                    param.Add("@HodID", user.HodID);
+                    param.Add("@GradeID", user.GradeID);
+                    param.Add("@EmployeeTypeID", user.EmployeeTypeID);
+                    param.Add("@PositionID", user.PositionID);
+                    param.Add("@EmpLocationID", user.EmpLocationID);
+                    param.Add("@EmploymentStatusID", user.EmploymentStatusID);
+                    param.Add("@GroupID", user.GroupID);
+
                     param.Add("@RoleId", user.RoleId);
                     param.Add("@CreatedByUserId", createdbyUserId);
 
@@ -135,7 +147,19 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     param.Add("@FirstNameUpdate", user.FirstName == null ? "" : user.FirstName.ToString());
                     param.Add("@MiddleNameUpdate", user.MiddleName == null ? "" : user.MiddleName.ToString());
                     param.Add("@LastNameUpdate", user.LastName == null ? "" : user.LastName.ToString());
+                    param.Add("@OfficialMail", user.OfficialMail == null ? "" : user.OfficialMail.ToString().Trim());
                     param.Add("@PhoneNumberUpdate", user.PhoneNumber == null ? "" : user.PhoneNumber.ToString().Trim());
+                    param.Add("@DOBUpd", user.Email == null ? "" : user.DOB.ToString().Trim());
+                    param.Add("@ResumptionDateUpd", user.ResumptionDate == null ? "" : user.DOB.ToString().Trim());
+                    param.Add("@UnitIDUpd", user.UnitID);
+                    param.Add("@UnitHeadIDUpd", user.UnitHeadID);
+                    param.Add("@HodIDUpd", user.HodID);
+                    param.Add("@GradeIDUpd", user.GradeID);
+                    param.Add("@EmployeeTypeIDUpd", user.EmployeeTypeID);
+                    param.Add("@PositionIDUpd", user.PositionID);
+                    param.Add("@EmpLocationIDUpd", user.EmpLocationID);
+                    param.Add("@EmploymentStatusIDUpd", user.EmploymentStatusID);
+                    param.Add("@GroupIDUpd", user.GroupID);
                     param.Add("@RoleIdUpdate", user.RoleId);
                     param.Add("@UpdatedByUserId", updatedbyUserId);
 
@@ -268,6 +292,30 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                 throw;
             }
         }
+
+        public async Task<IEnumerable<User>> GetAllUsersbyRoleID(long RoleId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", Account.GETUSERBYROLEID);
+                    param.Add("@RoleId", RoleId);
+
+                    var userDetails = await _dapper.QueryAsync<User>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
+
+                    return userDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetAllUsersbyRoleID() ===>{ex.Message}");
+                throw;
+            }
+        }
+
 
         public async Task<dynamic> ApproveUser(long approvedByuserId, string defaultPass, string userEmail)
         {

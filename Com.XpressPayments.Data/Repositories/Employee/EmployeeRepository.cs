@@ -37,10 +37,7 @@ namespace Com.XpressPayments.Data.Repositories.Employee
                     var param = new DynamicParameters();
                     param.Add("@Status", EmployeeEnum.UPDATE);
                     param.Add("@EmpIDUpd", Convert.ToInt32(Emp.EmpID));
-                    param.Add("@UnitID", Convert.ToInt32(Emp.UnitID));
-                    param.Add("@UnitHeadID", Convert.ToInt32(Emp.UnitHeadID));
-                    param.Add("@HodID", Convert.ToInt32(Emp.HodID));
-                    param.Add("@DOBUpd", Emp.DOB.Trim());
+                    param.Add("@ProfileImageUpd", Emp.ProfileImage.Trim());
                     param.Add("@BirthPlaceUpd", Emp.BirthPlace.Trim());
                     param.Add("@NationalityUpd", Emp.Nationality.Trim());
                     param.Add("@StateOfOriginUpd", Emp.StateOfOrigin.Trim());
@@ -71,7 +68,7 @@ namespace Com.XpressPayments.Data.Repositories.Employee
                     param.Add("@DisciplineUpd", Emp.Discipline.Trim());
                     param.Add("@ContactPersonNameUpd", Emp.ContactPersonName.Trim());
                     param.Add("@ContactPersonAddressUpd", Emp.ContactPersonAddress.Trim());
-                    param.Add("@ContactPersonPhoneUpd", Emp.DOB.Trim());
+                    param.Add("@ContactPersonPhoneUpd", Emp.ContactPersonPhone.Trim());
                     param.Add("@ContactPersonRelationshipUpd,", Emp.ContactPersonRelationship.Trim());
                     param.Add("@FirstDegreeUpd", Emp.FirstDegree.Trim());
                     param.Add("@FirstDegreeSchoolAttendedUpd", Emp.FirstDegreeSchoolAttended.Trim());

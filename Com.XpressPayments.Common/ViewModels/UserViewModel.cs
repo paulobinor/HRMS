@@ -6,17 +6,33 @@ namespace Com.XpressPayments.Bussiness.ViewModels
     {
         public long UserId { get; set; }
         public long DeptId { get; set; }
+        public long CompanyId { get; set; }
+        public string CompanyName { get; set; }
         public string DepartmentName { get; set; }
+      
 
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        public string officialMail { get; set; }
+        public string DOB { get; set; }
+        public string ResumptionDate { get; set; }
 
         public string PhoneNumber { get; set; }
         public int RoleId { get; set; }
+        public long UnitID { get; set; }
+        public long UnitHeadID { get; set; }
+        public long HodID { get; set; }
+        public long GradeID { get; set; }
+        public long EmployeeTypeID { get; set; }
+        public long PositionID { get; set; }
+        public long EmpLocationID { get; set; }
+        public long EmploymentStatusID { get; set; }
+        public long GroupID { get; set; }
 
         public long? CreatedByUserId { get; set; }
+        public string? CreatedByUserEmail { get; set; }
         public DateTime DateCreated { get; set; }
 
         public bool IsModified { get; set; }

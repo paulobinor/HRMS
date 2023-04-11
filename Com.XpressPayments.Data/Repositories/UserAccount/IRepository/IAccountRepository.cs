@@ -17,6 +17,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.IRepository
 
         Task<IEnumerable<User>> GetAllActiveUsers();
         Task<IEnumerable<User>> GetAllUsersbyDeptId(long DeptId);
+        Task<IEnumerable<User>> GetAllUsersbyRoleID(long RoleId);
         Task<IEnumerable<User>> GetAllUsersbyCompanyId(long companyId);
         Task<IEnumerable<User>> GetUsersPendingApproval();
         Task<dynamic> ApproveUser(long approvedByuserId, string defaultPass, string userEmail);

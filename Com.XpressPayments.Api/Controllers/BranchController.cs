@@ -83,7 +83,7 @@ namespace Com.XpressPayments.Api.Controllers
             }
         }
 
-        [HttpPut("DeleteBranch")]
+        [HttpPost("DeleteBranch")]
         [Authorize]
         public async Task<IActionResult> DeleteBranch([FromBody] DeleteBranchDTO deleteDto)
         {

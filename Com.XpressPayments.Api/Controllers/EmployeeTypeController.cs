@@ -82,7 +82,7 @@ namespace Com.XpressPayments.Api.Controllers
             }
         }
 
-        [HttpPut("DeleteEmployeeType")]
+        [HttpPost("DeleteEmployeeType")]
         [Authorize]
         public async Task<IActionResult> DeleteEmployeeType([FromBody] DeleteEmployeeTypeDTO deleteDto)
         {

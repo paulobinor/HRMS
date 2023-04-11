@@ -82,7 +82,7 @@ namespace Com.XpressPayments.Api.Controllers
             }
         }
 
-        [HttpPut("DeleteHOD")]
+        [HttpPost("DeleteHOD")]
         [Authorize]
         public async Task<IActionResult> DeleteHOD([FromBody] DeleteHodDTO deleteDto)
         {

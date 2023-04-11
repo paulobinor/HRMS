@@ -9,11 +9,15 @@ namespace Com.XpressPayments.Data.DTOs
     {
         public long DeptId { get; set; }
         public string DepartmentName { get; set; }
+        public string DepartmentMail { get; set; }
         public string Location { get; set; }
         public long HodID { get; set; }
+        public long GroupID { get; set; }
+        public long GroupHeadID { get; set; }
         public string Email { get; set; }
         public string ContactPhone { get; set; }
         public string CompanyName { get; set; }
+        public long CompanyId { get; set; }
 
         public DateTime Created_Date { get; set; }
         public string Created_By_User_Email { get; set; }
@@ -31,8 +35,11 @@ namespace Com.XpressPayments.Data.DTOs
     public class CreateDepartmentDto
     {
         public string DepartmentName { get; set; }
+        public string DepartmentMail { get; set; }
         public string Location { get; set; }
         public long HodID { get; set; }
+        public long GroupID { get; set; }
+        public long GroupHeadID { get; set; }
         public long BranchID { get; set; }
         public string Email { get; set; }
         public string ContactPhone { get; set; }
@@ -43,8 +50,11 @@ namespace Com.XpressPayments.Data.DTOs
     {
         public long DeptId { get; set; }
         public string DepartmentName { get; set; }
+        public string DepartmentMail { get; set; }
         public string Location { get; set; }
         public long HodID { get; set; }
+        public long GroupID { get; set; }
+        public long GroupHeadID { get; set; }
         public long BranchID { get; set; }
         public string Email { get; set; }
         public string ContactPhone { get; set; }

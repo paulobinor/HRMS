@@ -11,17 +11,25 @@ namespace Com.XpressPayments.Data.DTOs
         public long EmpID { get; set; }
         public long UserId { get; set; }
         public string StaffID { get; set; }
+        public string ProfileImage { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
+        public string DOB { get; set; }
+        public string ResumptionDate { get; set; }
         public string Email { get; set; }
-        public string OfficalMail { get; set; }
+        public string officialMail { get; set; }
         public string PhoneNumber { get; set; }
         public string DeptId { get; set; }
         public long UnitID { get; set; }
         public long UnitHeadID { get; set; }
         public long HodID { get; set; }
-        public string DOB { get; set; }
+        public long GradeID { get; set; }
+        public long EmployeeTypeID { get; set; }
+        public long PositionID { get; set; }
+        public long EmpLocationID { get; set; }
+        public long EmploymentStatusID { get; set; }
+        public long GroupID { get; set; }
         public string BirthPlace { get; set; }
         public string Nationality { get; set; }
         public string StateOfOrigin { get; set; }
@@ -39,7 +47,7 @@ namespace Com.XpressPayments.Data.DTOs
         public string ChildrenDOB { get; set; }
         public string ResidentialAddress { get; set; }
         public string Position { get; set; }
-        public string ResumptionDate { get; set; }
+      
         public string HomeAddress { get; set; }
         public string MailingAddress { get; set; }
         public string NofName { get; set; }
@@ -154,10 +162,7 @@ namespace Com.XpressPayments.Data.DTOs
     public class UpdateEmployeeDTO
     {
         public long EmpID { get; set; }
-        public long UnitID { get; set; }
-        public long UnitHeadID { get; set; }
-        public long HodID { get; set; }
-        public string DOB { get; set; }
+        public string ProfileImage { get; set; }
         public string BirthPlace { get; set; }
         public string Nationality { get; set; }
         public string StateOfOrigin { get; set; }

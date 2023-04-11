@@ -12,6 +12,7 @@ namespace Com.XpressPayments.Data.DTOs.Account
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
         public string Email { get; set; }
+        public string OfficialMail { get; set; }
 
         [Required]
         [StringLength(50, ErrorMessage = "The {0} must be {2} characters long.")]
@@ -21,6 +22,8 @@ namespace Com.XpressPayments.Data.DTOs.Account
         [StringLength(50, ErrorMessage = "The {0} must be {2} characters long.")]
         public string LastName { get; set; }
         public string MiddleName { get; set; }
+        public string DOB { get; set; }
+        public string ResumptionDate { get; set; }
 
         [Required(ErrorMessage = "Phone number is required.")]
         [StringLength(20, ErrorMessage = "The {0} must be {2} characters long.")]
@@ -30,6 +33,15 @@ namespace Com.XpressPayments.Data.DTOs.Account
         public int RoleId { get; set; }
         public long CompanyId { get; set; }
         public long DeptId { get; set; }
+        public long UnitID { get; set; }
+        public long UnitHeadID { get; set; }
+        public long HodID { get; set; }
+        public long GradeID { get; set; }
+        public long EmployeeTypeID { get; set; }
+        public long PositionID { get; set; }
+        public long EmpLocationID { get; set; }
+        public long EmploymentStatusID { get; set; }
+        public long GroupID { get; set; }
 
     }
     public class UsertoDeptMappingDto

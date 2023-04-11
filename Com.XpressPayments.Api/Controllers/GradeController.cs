@@ -82,7 +82,7 @@ namespace Com.XpressPayments.Api.Controllers
             }
         }
 
-        [HttpPut("DeleteGrade")]
+        [HttpPost("DeleteGrade")]
         [Authorize]
         public async Task<IActionResult> DeleteGrade([FromBody] DeleteGradeDTO deleteDto)
         {

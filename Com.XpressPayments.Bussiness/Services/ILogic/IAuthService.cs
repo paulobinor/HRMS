@@ -2,6 +2,7 @@
 using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.DTOs.Account;
 using Com.XpressPayments.Data.GenericResponse;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Com.XpressPayments.Bussiness.Services.ILogic
@@ -23,6 +24,7 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
         Task<BaseResponse> ReactivateUser(ReactivateUserDto reactivateUser, RequesterInfo requester);
         Task<BaseResponse> UnblockAccount(UnblockAccountDto unblockUser, RequesterInfo requester);
         Task<BaseResponse> GetAllUsersbyDeptId(long DepartmentId, RequesterInfo requester);
+        
     }
 
    

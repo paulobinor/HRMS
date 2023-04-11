@@ -81,7 +81,7 @@ namespace Com.XpressPayments.Api.Controllers
             }
         }
 
-        [HttpPut("DeleteUnitHead")]
+        [HttpPost("DeleteUnitHead")]
         [Authorize]
         public async Task<IActionResult> DeleteUnitHead([FromBody] DeleteUnitHeadDTO deleteDto)
         {

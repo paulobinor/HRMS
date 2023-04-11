@@ -146,7 +146,7 @@ namespace Com.XpressPayments.Api.Controllers
                             var MiddleName = worksheet.Cells[row, 2].Value?.ToString();
                             var LastName = worksheet.Cells[row, 3].Value?.ToString();
                             var Email = worksheet.Cells[row, 4].Value?.ToString();
-                            var OfficalMail = worksheet.Cells[row, 5].Value?.ToString();
+                            var OfficialMail = worksheet.Cells[row, 5].Value?.ToString();
                             var PhoneNumber = worksheet.Cells[row, 6].Value?.ToString();
                             var RoleId = worksheet.Cells[row, 7].Value?.ToString();
                             var DepartmentId = worksheet.Cells[row, 8].Value?.ToString();
@@ -159,7 +159,7 @@ namespace Com.XpressPayments.Api.Controllers
                                 MiddleName = MiddleName,
                                 LastName = LastName,
                                 Email = Email,
-                                OfficalMail = OfficalMail,
+                                OfficialMail = OfficialMail,
                                 PhoneNumber = PhoneNumber,
                                 RoleId = Convert.ToInt32(RoleId),
                                 DepartmentId = Convert.ToInt32(DepartmentId),
@@ -188,7 +188,7 @@ namespace Com.XpressPayments.Api.Controllers
             return null;
         }
 
-        [HttpPut("UpdateUser")]
+        [HttpPost("UpdateUser")]
         [Authorize]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto updateDto)
         {
@@ -322,7 +322,7 @@ namespace Com.XpressPayments.Api.Controllers
             }
         }
 
-        [HttpPut("ApproveUser")]
+        [HttpPost("ApproveUser")]
         [Authorize]
         public async Task<IActionResult> ApproveUser(ApproveUserDto approveUser)
         {
@@ -351,7 +351,7 @@ namespace Com.XpressPayments.Api.Controllers
 
         }
 
-        [HttpPut("DisapproveUser")]
+        [HttpPost("DisapproveUser")]
         [Authorize]
         public async Task<IActionResult> DisapproveUser(DisapproveUserDto disapproveUser)
         {
