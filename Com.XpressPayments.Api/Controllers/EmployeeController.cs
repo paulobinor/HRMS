@@ -113,7 +113,7 @@ namespace Com.XpressPayments.Api.Controllers
 
         [Authorize]
         [HttpGet("GetEmployeeById")]
-        public async Task<IActionResult> GetEmployeeTypebyId(long EmpID)
+        public async Task<IActionResult> GetEmployeebyId(long EmpID)
         {
             var response = new BaseResponse();
             try
@@ -134,6 +134,36 @@ namespace Com.XpressPayments.Api.Controllers
                 _logger.LogError($"Exception Occured: ControllerMethod : GetEmployeebyId ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Exception Occured: ControllerMethod : GetEmployeebyId ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+
+        }
+
+
+        [Authorize]
+        [HttpGet("GetEmployeebyCompanyId")]
+        public async Task<IActionResult> GetEmployeebyCompanyId(long CompanyID)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var requester = new RequesterInfo
+                {
+                    Username = this.User.Claims.ToList()[2].Value,
+                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                };
+
+                return Ok(await _EmployeeService.GetEmployeebyCompanyId(CompanyID, requester));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: ControllerMethod : GetEmployeebyCompanyId ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetEmployeebyCompanyId ==> {ex.Message}";
                 response.Data = null;
                 return Ok(response);
             }

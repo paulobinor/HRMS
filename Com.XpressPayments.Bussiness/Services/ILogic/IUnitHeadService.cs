@@ -16,5 +16,6 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
         Task<BaseResponse> GetAllActiveUnitHead(RequesterInfo requester);
         Task<BaseResponse> GetAllUnitHead(RequesterInfo requester);
         Task<BaseResponse> GetUnitHeadById(long UnitHeadID, RequesterInfo requester);
+        Task<BaseResponse> GetUnitHeadbyCompanyId(long companyId, RequesterInfo requester);
     }
 }

@@ -12,6 +12,7 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
         Task<BaseResponse> GetAllActiveDepartments(RequesterInfo requester);
         Task<BaseResponse> GetAllDepartments(RequesterInfo requester);
         Task<BaseResponse> GetDepartmentbyId(long DepartmentId, RequesterInfo requester);
+        Task<BaseResponse> GetDepartmentbyCompanyId(long companyId, RequesterInfo requester);
     }
 
    

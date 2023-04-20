@@ -16,5 +16,6 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
         Task<BaseResponse> GetAllActivePosition(RequesterInfo requester);
         Task<BaseResponse> GetAllPosition(RequesterInfo requester);
         Task<BaseResponse> GetPositionById(long PositionID, RequesterInfo requester);
+        Task<BaseResponse> GetPositionbyCompanyId(long companyId, RequesterInfo requester);
     }
 }

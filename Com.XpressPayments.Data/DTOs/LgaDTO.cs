@@ -8,8 +8,8 @@ namespace Com.XpressPayments.Data.DTOs
 {
     public class LgaDTO
     {
-        public int StateID { get; set; }
-        public int LGAID { get; set; }
+        public long StateID { get; set; }
+        public long LGAID { get; set; }
         public string LGA_Name { get; set; }
     }
 }

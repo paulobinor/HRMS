@@ -63,10 +63,10 @@ namespace Com.XpressPayments.Data.Repositories.HOD
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", HODenum.UPDATE);
-                    param.Add("@HodID", hod.HodID);
-                    param.Add("@HODName", hod.HODName.Trim());
-                    param.Add("@DepartmentID", hod.DepartmentID);
-                    param.Add("@CompanyId", hod.CompanyID);
+                    param.Add("@HodIDUpd", hod.HodID);
+                    param.Add("@HODNameUpd", hod.HODName.Trim());
+                    param.Add("@DepartmentIDUpd", hod.DepartmentID);
+                    param.Add("@CompanyIdUpd", hod.CompanyID);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
 

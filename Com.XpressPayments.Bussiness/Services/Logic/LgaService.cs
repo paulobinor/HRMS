@@ -36,7 +36,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             _companyrepository = companyrepository;
         }
 
-        public async Task<BaseResponse> GetAllLga(int StateID,RequesterInfo requester)
+        public async Task<BaseResponse> GetAllLga(long StateID,RequesterInfo requester)
         {
             BaseResponse response = new BaseResponse();
 
@@ -90,7 +90,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             }
         }
 
-        public async Task<BaseResponse> GetLgaByStateId(int StateID, int LGAID, RequesterInfo requester)
+        public async Task<BaseResponse> GetLgaByStateId(long StateID, RequesterInfo requester)
         {
             BaseResponse response = new BaseResponse();
 
@@ -118,7 +118,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                var Lga = await _lgaRepository.GetLgaByStateId(StateID, LGAID);
+                var Lga = await _lgaRepository.GetLgaByStateId(StateID);
 
                 if (Lga == null)
                 {

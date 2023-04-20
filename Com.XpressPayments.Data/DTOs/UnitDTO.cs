@@ -11,9 +11,13 @@ namespace Com.XpressPayments.Data.DTOs
         public long UnitID { get; set; }
         public string UnitName { get; set; }
         public long HodID { get; set; }
+        public string HODName { get; set; }
         public long UnitHeadID { get; set; }
+        public string UnitHeadName { get; set; }
         public long DepartmentID { get; set; }
+        public string DepartmentName { get; set; }
         public long CompanyID { get; set; }
+        public string CompanyName { get; set; }
 
         public DateTime Created_Date { get; set; }
         public string Created_By_User_Email { get; set; }

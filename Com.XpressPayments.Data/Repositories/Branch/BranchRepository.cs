@@ -227,29 +227,6 @@ namespace Com.XpressPayments.Data.Repositories.Branch
             }
         }
 
-        //public async Task<BranchDTO> GetBranchByCompanyId(long companyId, long BranchID)
-        //{
-        //    try
-        //    {
-        //        using (SqlConnection _dapper = new SqlConnection(_connectionString))
-        //        {
-        //            var param = new DynamicParameters();
-        //            param.Add("@Status", BranchEnum.GETBYID);
-        //            param.Add("@CompanyIdGet", companyId);
-        //            param.Add("@BranchIDGet", BranchID);
-
-        //            var BranchDetails = await _dapper.QueryAsync<BranchDTO>(ApplicationConstant.Sp_Branch, param: param, commandType: CommandType.StoredProcedure);
-
-        //            return BranchDetails;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        var err = ex.Message;
-        //        _logger.LogError($"MethodName: GetStateByCountryId(int CountryID) ===>{ex.Message}");
-        //        throw;
-        //    }
-        //}
 
     }
 }

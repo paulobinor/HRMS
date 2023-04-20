@@ -1,5 +1,6 @@
 ﻿using Com.XpressPayments.Data.DTOs;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace Com.XpressPayments.Data.Repositories.CountryStateLga
 {
     public interface ILgaRepository
     {
-         Task<IEnumerable<LgaDTO>> GetAllLga(int StateID);
-        Task<LgaDTO> GetLgaByStateId(int StateID, int LGAID);
+         Task<IEnumerable<LgaDTO>> GetAllLga(long StateID);
+        Task<IEnumerable> GetLgaByStateId(long StateID);
     }
 }

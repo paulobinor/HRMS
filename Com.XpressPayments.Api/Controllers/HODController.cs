@@ -195,5 +195,36 @@ namespace Com.XpressPayments.Api.Controllers
             }
 
         }
+
+
+        [Authorize]
+        [HttpGet("GetHODbyCompanyId")]
+        public async Task<IActionResult> GetHODbyCompanyId(long CompanyID)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var requester = new RequesterInfo
+                {
+                    Username = this.User.Claims.ToList()[2].Value,
+                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                };
+
+                return Ok(await _HODService.GetHODbyCompanyId(CompanyID, requester));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: ControllerMethod : GetHODbyCompanyId ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetHODbyCompanyId ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+
+        }
+
     }
 }

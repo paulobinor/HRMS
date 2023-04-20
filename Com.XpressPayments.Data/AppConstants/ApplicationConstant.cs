@@ -35,6 +35,9 @@ namespace Com.XpressPayments.Data.AppConstants
         public static string Sp_MaritalStatus = "Sp_MaritalStatus";
         public static string Sp_Institutions = "Sp_Institutions";
         public static string Sp_Employee = "Sp_Employee";
+        public static string sp_EmployeeLocation = "sp_EmployeeLocation";
+        public static string sp_EmploymentStatus = "sp_EmploymentStatus";
+        public static string Sp_Group = "Sp_Group";
 
 
         //System Default

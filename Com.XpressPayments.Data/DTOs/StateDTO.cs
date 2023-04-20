@@ -10,8 +10,8 @@ namespace Com.XpressPayments.Data.DTOs
     public  class StateDTO
     {
         [JsonIgnore]
-        public int CountryID { get; set; }
-        public int StateID { get; set; }
+        public long CountryID { get; set; }
+        public long StateID { get; set; }
         public string StateName { get; set; }
     }
 }

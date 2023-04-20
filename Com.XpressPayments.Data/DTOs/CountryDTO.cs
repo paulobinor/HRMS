@@ -8,7 +8,7 @@ namespace Com.XpressPayments.Data.DTOs
 {
     public class CountryDTO
     {
-        public int CountryID { get; set; }
+        public long CountryID { get; set; }
         public string CountryName { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
 {
     public interface IStateService
     {
-        Task<BaseResponse> GetAllState(int CountryID, RequesterInfo requester);
-        Task<BaseResponse> GetStateByCountryId(int CountryID, int StateID, RequesterInfo requester);
+        Task<BaseResponse> GetAllState(long CountryID, RequesterInfo requester);
+        Task<BaseResponse> GetStateByCountryId(long CountryID, RequesterInfo requester);
     }
 }

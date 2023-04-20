@@ -26,7 +26,7 @@ namespace Com.XpressPayments.Api.Controllers
 
         [Authorize]
         [HttpGet("GetAllLga")]
-        public async Task<IActionResult> GetAllState(int StateID)
+        public async Task<IActionResult> GetAllState(long StateID)
         {
             var response = new BaseResponse();
             try
@@ -53,8 +53,8 @@ namespace Com.XpressPayments.Api.Controllers
         }
 
         [Authorize]
-        [HttpGet("GetLgabyId")]
-        public async Task<IActionResult> GetLgabyStateId(int StateID, int LGAID)
+        [HttpGet("GetLgabyStateId")]
+        public async Task<IActionResult> GetLgabyStateId(long StateID)
         {
             var response = new BaseResponse();
             try
@@ -68,7 +68,7 @@ namespace Com.XpressPayments.Api.Controllers
                     Port = Request.HttpContext.Connection.LocalPort.ToString()
                 };
 
-                return Ok(await _IgaService.GetLgaByStateId(StateID, LGAID, requester));
+                return Ok(await _IgaService.GetLgaByStateId(StateID, requester));
             }
             catch (Exception ex)
             {

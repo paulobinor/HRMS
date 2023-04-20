@@ -9,7 +9,9 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
 {
     public interface ILgaService
     {
-        Task<BaseResponse> GetAllLga(int StateID, RequesterInfo requester);
-        Task<BaseResponse> GetLgaByStateId(int StateID, int LGAID, RequesterInfo requester);
+        Task<BaseResponse> GetAllLga(long StateID, RequesterInfo requester);
+        Task<BaseResponse> GetLgaByStateId(long StateID, RequesterInfo requester);
+
+
     }
 }

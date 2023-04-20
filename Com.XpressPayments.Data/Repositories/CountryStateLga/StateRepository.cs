@@ -11,6 +11,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace Com.XpressPayments.Data.Repositories.CountryStateLga
 {
@@ -27,7 +28,7 @@ namespace Com.XpressPayments.Data.Repositories.CountryStateLga
             _configuration = configuration;
         }
 
-        public async Task<IEnumerable<StateDTO>> GetAllState(int CountryID)
+        public async Task<IEnumerable<StateDTO>> GetAllState(long CountryID)
         {
             try
             {
@@ -50,7 +51,7 @@ namespace Com.XpressPayments.Data.Repositories.CountryStateLga
             }
         }
 
-        public async Task<StateDTO> GetStateByCountryId(int CountryID, int StateID)
+        public async Task<IEnumerable> GetStateByCountryId(long CountryID)
         {
             try
             {
@@ -59,13 +60,15 @@ namespace Com.XpressPayments.Data.Repositories.CountryStateLga
                     var param = new DynamicParameters();
                     param.Add("@Status", CountryStateLgaEnum.GETBYID);
                     param.Add("@CountryIDGet", CountryID);
-                    param.Add("@StateIDGet", StateID);
+                    //param.Add("@StateIDGet", StateID);
 
-                    var StateDetails = await _dapper.QueryFirstOrDefaultAsync<StateDTO>(ApplicationConstant.Sp_get_states, param: param, commandType: CommandType.StoredProcedure);
+                    var StateDetails = await _dapper.QueryAsync<StateDTO>(ApplicationConstant.Sp_get_states, param: param, commandType: CommandType.StoredProcedure);
 
                     return StateDetails;
                 }
             }
+
+
             catch (Exception ex)
             {
                 var err = ex.Message;

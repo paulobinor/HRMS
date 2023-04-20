@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Com.XpressPayments.Bussiness.Services.ILogic;
+using Com.XpressPayments.Bussiness.Services.Logic;
 using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.Enums;
 using Com.XpressPayments.Data.GenericResponse;
@@ -190,6 +191,35 @@ namespace Com.XpressPayments.Api.Controllers
                 _logger.LogError($"Exception Occured: ControllerMethod : GetDepartmentbyId ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Exception Occured: ControllerMethod : GetDepartmentbyId ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+
+        }
+
+        [Authorize]
+        [HttpGet("GetDepartmentbyCompanyId")]
+        public async Task<IActionResult> GetDepartmentbyCompanyId(long companyId)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var requester = new RequesterInfo
+                {
+                    Username = this.User.Claims.ToList()[2].Value,
+                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                };
+
+                return Ok(await _DepartmentService.GetDepartmentbyCompanyId(companyId, requester));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: ControllerMethod : GetDepartmentbyCompanyId ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetDepartmentbyCompanyId ==> {ex.Message}";
                 response.Data = null;
                 return Ok(response);
             }

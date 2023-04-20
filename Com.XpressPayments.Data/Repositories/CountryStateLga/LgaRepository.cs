@@ -11,6 +11,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace Com.XpressPayments.Data.Repositories.CountryStateLga
 {
@@ -27,7 +28,7 @@ namespace Com.XpressPayments.Data.Repositories.CountryStateLga
             _configuration = configuration;
         }
 
-        public async Task<IEnumerable<LgaDTO>> GetAllLga(int StateID)
+        public async Task<IEnumerable<LgaDTO>> GetAllLga(long StateID)
         {
             try
             {
@@ -50,7 +51,7 @@ namespace Com.XpressPayments.Data.Repositories.CountryStateLga
             }
         }
 
-        public async Task<LgaDTO> GetLgaByStateId(int StateID, int LGAID)
+        public async Task<IEnumerable> GetLgaByStateId(long StateID)
         {
             try
             {
@@ -59,9 +60,9 @@ namespace Com.XpressPayments.Data.Repositories.CountryStateLga
                     var param = new DynamicParameters();
                     param.Add("@Status", CountryStateLgaEnum.GETBYID);
                     param.Add("@StateIDGet", StateID);
-                    param.Add("@LGAIDGet", LGAID);
+                    
 
-                    var LgaDetails = await _dapper.QueryFirstOrDefaultAsync<LgaDTO>(ApplicationConstant.Sp_get_lga, param: param, commandType: CommandType.StoredProcedure);
+                    var LgaDetails = await _dapper.QueryAsync<LgaDTO>(ApplicationConstant.Sp_get_lga, param: param, commandType: CommandType.StoredProcedure);
 
                     return LgaDetails;
                 }

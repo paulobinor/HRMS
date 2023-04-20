@@ -36,7 +36,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             _companyrepository = companyrepository;
         }
 
-        public async Task<BaseResponse> GetAllState( int CountryID, RequesterInfo requester)
+        public async Task<BaseResponse> GetAllState (long CountryID, RequesterInfo requester)
         {
             BaseResponse response = new BaseResponse();
 
@@ -90,7 +90,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             }
         }
 
-        public async Task<BaseResponse> GetStateByCountryId(int CountryID, int StateID, RequesterInfo requester)
+        public async Task<BaseResponse> GetStateByCountryId(long CountryID,  RequesterInfo requester)
         {
             BaseResponse response = new BaseResponse();
 
@@ -118,7 +118,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                var State = await _stateRepository.GetStateByCountryId(CountryID, StateID);
+                var State = await _stateRepository.GetStateByCountryId(CountryID);
 
                 if (State == null)
                 {

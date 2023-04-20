@@ -14,5 +14,6 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
         Task<BaseResponse> GetAllActiveEmployee(RequesterInfo requester);
         Task<BaseResponse> GetAllEmployee(RequesterInfo requester);
         Task<BaseResponse> GetEmployeeById(long EmpID, RequesterInfo requester);
+        Task<BaseResponse> GetEmployeebyCompanyId(long companyId, RequesterInfo requester);
     }
 }

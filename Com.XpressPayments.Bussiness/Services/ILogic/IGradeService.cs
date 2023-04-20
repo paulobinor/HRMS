@@ -16,5 +16,6 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
         Task<BaseResponse> GetAllActiveGrade(RequesterInfo requester);
         Task<BaseResponse> GetAllGrade(RequesterInfo requester);
         Task<BaseResponse> GetGradeById(long GradeID, RequesterInfo requester);
+        Task<BaseResponse> GetGradebyCompanyId(long companyId, RequesterInfo requester);
     }
 }

@@ -59,7 +59,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) != 1)
+                if (Convert.ToInt32(RoleId) != 2)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
@@ -148,7 +148,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) != 1)
+                if (Convert.ToInt32(RoleId) != 2)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
@@ -221,7 +221,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) != 1)
+                if (Convert.ToInt32(RoleId) != 2)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
@@ -293,7 +293,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+                if (Convert.ToInt32(RoleId) != 2)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
@@ -347,7 +347,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+                if (Convert.ToInt32(RoleId) != 2)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
@@ -401,7 +401,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+                if (Convert.ToInt32(RoleId) != 2)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
@@ -431,6 +431,62 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 _logger.LogError($"Exception Occured: GetHODById(long HodID) ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Exception Occured: GetHODById(long HodID) ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+        }
+
+        public async Task<BaseResponse> GetHODbyCompanyId(long companyId, RequesterInfo requester)
+        {
+            BaseResponse response = new BaseResponse();
+
+            try
+            {
+                string requesterUserEmail = requester.Username;
+                string requesterUserId = requester.UserId.ToString();
+                string RoleId = requester.RoleId.ToString();
+
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
+
+                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                if (null == requesterInfo)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Requester information cannot be found.";
+                    return response;
+                }
+
+                if (Convert.ToInt32(RoleId) != 2)
+                {
+                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                    return response;
+                }
+
+                var HOD = await _hodRepository.GetAllHODCompanyId(companyId);
+
+                if (HOD == null)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "HOD not found.";
+                    response.Data = null;
+                    return response;
+                }
+
+                //update action performed into audit log here
+
+                response.Data = HOD;
+                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "HOD fetched successfully.";
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetAllHODCompanyId(long companyId) ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: GetAllHODCompanyId(long companyId) ==> {ex.Message}";
                 response.Data = null;
                 return response;
             }

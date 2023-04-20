@@ -109,7 +109,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     param.Add("@GradeID", user.GradeID);
                     param.Add("@EmployeeTypeID", user.EmployeeTypeID);
                     param.Add("@PositionID", user.PositionID);
-                    param.Add("@EmpLocationID", user.EmpLocationID);
+                    param.Add("@BranchID", user.BranchID);
                     param.Add("@EmploymentStatusID", user.EmploymentStatusID);
                     param.Add("@GroupID", user.GroupID);
 
@@ -150,16 +150,16 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     param.Add("@OfficialMail", user.OfficialMail == null ? "" : user.OfficialMail.ToString().Trim());
                     param.Add("@PhoneNumberUpdate", user.PhoneNumber == null ? "" : user.PhoneNumber.ToString().Trim());
                     param.Add("@DOBUpd", user.Email == null ? "" : user.DOB.ToString().Trim());
-                    param.Add("@ResumptionDateUpd", user.ResumptionDate == null ? "" : user.DOB.ToString().Trim());
-                    param.Add("@UnitIDUpd", user.UnitID);
-                    param.Add("@UnitHeadIDUpd", user.UnitHeadID);
-                    param.Add("@HodIDUpd", user.HodID);
-                    param.Add("@GradeIDUpd", user.GradeID);
-                    param.Add("@EmployeeTypeIDUpd", user.EmployeeTypeID);
-                    param.Add("@PositionIDUpd", user.PositionID);
-                    param.Add("@EmpLocationIDUpd", user.EmpLocationID);
-                    param.Add("@EmploymentStatusIDUpd", user.EmploymentStatusID);
-                    param.Add("@GroupIDUpd", user.GroupID);
+                    param.Add("@ResumptionDate", user.ResumptionDate == null ? "" : user.DOB.ToString().Trim());
+                    param.Add("@UnitID", user.UnitID);
+                    param.Add("@UnitHeadID", user.UnitHeadID);
+                    param.Add("@HodID", user.HodID);
+                    param.Add("@GradeID", user.GradeID);
+                    param.Add("@EmployeeTypeID", user.EmployeeTypeID);
+                    param.Add("@PositionID", user.PositionID);
+                    param.Add("@BranchID", user.BranchID);
+                    param.Add("@EmploymentStatusID", user.EmploymentStatusID);
+                    param.Add("@GroupID", user.GroupID);
                     param.Add("@RoleIdUpdate", user.RoleId);
                     param.Add("@UpdatedByUserId", updatedbyUserId);
 

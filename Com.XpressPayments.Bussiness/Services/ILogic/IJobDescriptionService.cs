@@ -16,5 +16,6 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
         Task<BaseResponse> GetAllActiveJobDescription(RequesterInfo requester);
         Task<BaseResponse> GetAllJobDescription(RequesterInfo requester);
         Task<BaseResponse> GetJobDescriptionById(long JobDescriptionID, RequesterInfo requester);
+        Task<BaseResponse> GetJobDescriptionbyCompanyId(long companyId, RequesterInfo requester);
     }
 }

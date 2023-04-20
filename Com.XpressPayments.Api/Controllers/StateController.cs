@@ -54,7 +54,7 @@ namespace Com.XpressPayments.Api.Controllers
 
         [Authorize]
         [HttpGet("GetStatebyCountryId")]
-        public async Task<IActionResult> GetBranchbyId(int CountryID, int StateID)
+        public async Task<IActionResult> GetBranchbyId(int CountryID)
         {
             var response = new BaseResponse();
             try
@@ -68,7 +68,7 @@ namespace Com.XpressPayments.Api.Controllers
                     Port = Request.HttpContext.Connection.LocalPort.ToString()
                 };
 
-                return Ok(await _stateService.GetStateByCountryId(CountryID, StateID, requester));
+                return Ok(await _stateService.GetStateByCountryId(CountryID , requester));
             }
             catch (Exception ex)
             {

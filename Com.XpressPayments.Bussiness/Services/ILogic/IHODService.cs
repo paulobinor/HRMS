@@ -16,6 +16,7 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
         Task<BaseResponse> GetAllActiveHOD(RequesterInfo requester);
         Task<BaseResponse> GetAllHOD(RequesterInfo requester);
         Task<BaseResponse> GetHODbyId(long HodID, RequesterInfo requester);
+        Task<BaseResponse> GetHODbyCompanyId(long companyId, RequesterInfo requester);
 
     }
 }
