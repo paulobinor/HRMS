@@ -206,7 +206,7 @@ namespace Com.XpressPayments.Data.Repositories.EmploymentStatus
                     param.Add("@Status", 8);
                     param.Add("@CompanyIdGet", companyId);
 
-                    var EmpLocationDetails = await _dapper.QueryAsync<EmploymentStatusDTO>(ApplicationConstant.sp_EmployeeLocation, param: param, commandType: CommandType.StoredProcedure);
+                    var EmpLocationDetails = await _dapper.QueryAsync<EmploymentStatusDTO>(ApplicationConstant.sp_EmploymentStatus, param: param, commandType: CommandType.StoredProcedure);
 
                     return EmpLocationDetails;
                 }

@@ -211,8 +211,8 @@ namespace Com.XpressPayments.Data.Repositories.Branch
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", BranchEnum.GETBYCOMPANY);
-                    param.Add("@CountryIDGet", companyId);
+                    param.Add("@Status", 8);
+                    param.Add("@CompanyIdGet", companyId);
 
                     var BranchDetails = await _dapper.QueryAsync<BranchDTO>(ApplicationConstant.Sp_Branch, param: param, commandType: CommandType.StoredProcedure);
 

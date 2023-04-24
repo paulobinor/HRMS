@@ -66,7 +66,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //validate UnitDto payload here 
                 if (String.IsNullOrEmpty(creatDto.UnitHeadName) || creatDto.CompanyID <= 0 || creatDto.DepartmentID <= 0 ||
-                    creatDto.HodID <= 0 || creatDto.UnitID <= 0)
+                    creatDto.HodID <= 0 )
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";
@@ -155,7 +155,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //validate DepartmentDto payload here 
                 if (String.IsNullOrEmpty(updateDto.UnitHeadName) || updateDto.CompanyID <= 0 || updateDto.DepartmentID <= 0 ||
-                   updateDto.HodID <= 0 || updateDto.UnitID <= 0)
+                   updateDto.HodID <= 0 )
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";
@@ -176,7 +176,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 {
                     //update action performed into audit log here
 
-                    var updatedUnitHead = await _unitHeadRepository.GetUnitHeadById(updateDto.UnitID);
+                    var updatedUnitHead = await _unitHeadRepository.GetUnitHeadById(updateDto.UnitHeadID);
 
                     _logger.LogInformation("UnitHead updated successfully.");
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');

@@ -37,6 +37,7 @@ namespace Com.XpressPayments.Data.DTOs
         public long EmployeeTypeID { get; set; }
         public string EmployeeTypeName { get; set; }
         public long CompanyID { get; set; }
+        public string CompanyName { get; set; }
     }
 
     public class DeleteEmployeeTypeDTO

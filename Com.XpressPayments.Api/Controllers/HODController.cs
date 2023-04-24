@@ -159,9 +159,9 @@ namespace Com.XpressPayments.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetAllActiveHOD ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: ControllerMethod : GetAllHOD ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllActiveHOD ==> {ex.Message}";
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllHOD ==> {ex.Message}";
                 response.Data = null;
                 return Ok(response);
             }

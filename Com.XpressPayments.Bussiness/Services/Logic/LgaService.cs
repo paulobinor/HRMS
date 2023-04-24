@@ -57,11 +57,14 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+                if (Convert.ToInt32(RoleId) != 2)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 3)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+                    }
                 }
 
                 //update action performed into audit log here
@@ -111,11 +114,14 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+                if (Convert.ToInt32(RoleId) != 2)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 3)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+                    }
                 }
 
                 var Lga = await _lgaRepository.GetLgaByStateId(StateID);
@@ -123,7 +129,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 if (Lga == null)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "StateID not found.";
+                    response.ResponseMessage = "Lga not found.";
                     response.Data = null;
                     return response;
                 }
@@ -132,7 +138,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 response.Data = Lga;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "StateID fetched successfully.";
+                response.ResponseMessage = "Lga fetched successfully.";
                 return response;
 
             }

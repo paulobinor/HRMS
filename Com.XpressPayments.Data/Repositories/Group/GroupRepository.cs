@@ -65,7 +65,7 @@ namespace Com.XpressPayments.Data.Repositories.Group
                     param.Add("@Status", GroupEnum.UPDATE);
                     param.Add("@GroupIDUpd", group.GroupID);
                     param.Add("@GroupNameUpd", group.GroupName.Trim());
-                    param.Add("@HodID", group.HodID);
+                    param.Add("@HodIDUpd", group.HodID);
                     param.Add("@CompanyId", group.CompanyID);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());

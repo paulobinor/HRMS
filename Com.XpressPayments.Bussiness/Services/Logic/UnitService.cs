@@ -65,7 +65,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
                 //validate UnitDto payload here 
-                if (String.IsNullOrEmpty(unitDto.UnitName) || unitDto.CompanyID <= 0 || unitDto.DepartmentID <= 0 ||
+                if (String.IsNullOrEmpty(unitDto.UnitName) || unitDto.CompanyId <= 0  ||
                     unitDto.HodID <= 0  /*|| unitDto.DepartmentID <= 0*/ )
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
@@ -73,7 +73,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                var isExistsComp = await _companyrepository.GetCompanyById(unitDto.CompanyID);
+                var isExistsComp = await _companyrepository.GetCompanyById(unitDto.CompanyId);
                 if (null == isExistsComp)
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
@@ -154,8 +154,8 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
                 //validate DepartmentDto payload here 
-                if (String.IsNullOrEmpty(updateDto.UnitName) || updateDto.CompanyID <= 0 || updateDto.DepartmentID <= 0 ||
-                    updateDto.HodID <= 0 || updateDto.DepartmentID <= 0)
+                if (String.IsNullOrEmpty(updateDto.UnitName) || updateDto.CompanyId <= 0 || 
+                    updateDto.HodID <= 0 )
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";

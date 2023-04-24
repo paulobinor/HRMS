@@ -59,13 +59,17 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 if (Convert.ToInt32(RoleId) != 1)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 2)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+                    }
                 }
+                
 
                 //validate DepartmentDto payload here 
-                if (String.IsNullOrEmpty(DepartmentDto.DepartmentName) || String.IsNullOrEmpty(DepartmentDto.Location) ||
+                if (String.IsNullOrEmpty(DepartmentDto.DepartmentName)  ||
                     String.IsNullOrEmpty(DepartmentDto.Email) || String.IsNullOrEmpty(DepartmentDto.ContactPhone))
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
@@ -148,13 +152,16 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 if (Convert.ToInt32(RoleId) != 1)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 2)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+                    }
                 }
 
                 //validate DepartmentDto payload here 
-                if (String.IsNullOrEmpty(updateDto.DepartmentName) || String.IsNullOrEmpty(updateDto.Location) || updateDto.CompanyId <= 0 
+                if (String.IsNullOrEmpty(updateDto.DepartmentName)  || updateDto.CompanyId <= 0 
                     || updateDto.DeptId <= 0 || String.IsNullOrEmpty(updateDto.Email) || String.IsNullOrEmpty(updateDto.ContactPhone))
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
@@ -221,9 +228,12 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 if (Convert.ToInt32(RoleId) != 1)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 2)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+                    }
                 }
 
                 if (deleteDto.DeptId == 1)
@@ -291,11 +301,14 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+                if (Convert.ToInt32(RoleId) != 1)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 2)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+                    }
                 }
 
                 //update action performed into audit log here
@@ -345,11 +358,14 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+                if (Convert.ToInt32(RoleId) != 1)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 2)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+                    }
                 }
 
                 //update action performed into audit log here
@@ -399,11 +415,14 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+                if (Convert.ToInt32(RoleId) != 1)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 2)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+                    }
                 }
 
                 var Department = await _departmentrepository.GetDepartmentById(DepartmentId);
@@ -455,11 +474,14 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+                if (Convert.ToInt32(RoleId) != 1)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 2)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+                    }
                 }
 
                 var Dept = await _departmentrepository.GetAllDepartmentsbyCompanyId(companyId);

@@ -11,10 +11,14 @@ namespace Com.XpressPayments.Data.DTOs
         public long BranchID { get; set; }
         public string BranchName { get; set; }
         public long CompanyID { get; set; }
+      
         public string Address { get; set; }
         public long CountryID { get; set; }
+        public string CountryName { get; set; }
         public long StateID { get; set; }
+        public string StateName { get; set; }
         public long LgaID { get; set; }
+        public string LGA_Name { get; set; }
 
         public DateTime Created_Date { get; set; }
         public string Created_By_User_Email { get; set; }

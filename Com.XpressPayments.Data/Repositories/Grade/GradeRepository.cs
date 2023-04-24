@@ -63,7 +63,7 @@ namespace Com.XpressPayments.Data.Repositories.Grade
                     param.Add("@Status", GradeEnum.UPDATE);
                     param.Add("@GradeIDUpd", update.GradeID);
                     param.Add("@GradeNameUpd", update.GradeName);
-                    param.Add("@CompanyId", update.CompanyID);
+                    param.Add("@CompanyIdUpd", update.CompanyID);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
 

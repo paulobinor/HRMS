@@ -10,7 +10,7 @@ namespace Com.XpressPayments.Data.DTOs
     {
         public long UnitHeadID { get; set; }
         public string UnitHeadName { get; set; }
-        public long UnitID { get; set; }
+       
         public long HodID { get; set; }
         public long DepartmentID { get; set; }
         public long CompanyID { get; set; }
@@ -32,7 +32,7 @@ namespace Com.XpressPayments.Data.DTOs
     {
        
         public string UnitHeadName { get; set; }
-        public long UnitID { get; set; }
+       
         public long HodID { get; set; }
         public long DepartmentID { get; set; }
         public long CompanyID { get; set; }
@@ -44,7 +44,7 @@ namespace Com.XpressPayments.Data.DTOs
 
         public long UnitHeadID { get; set; }
         public string UnitHeadName { get; set; }
-        public long UnitID { get; set; }
+        
         public long HodID { get; set; }
         public long DepartmentID { get; set; }
         public long CompanyID { get; set; }

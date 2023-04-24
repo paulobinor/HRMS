@@ -185,7 +185,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
                 response.ResponseCode = ResponseCode.Exception.ToString();
-                response.ResponseMessage = "An error occurred while updating Hod.";
+                response.ResponseMessage = "An error occurred while updating EmployeeType.";
                 response.Data = null;
                 return response;
             }

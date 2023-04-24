@@ -64,7 +64,7 @@ namespace Com.XpressPayments.Data.Repositories.JobDescription
                     param.Add("@Status", JobDescriptionEnum.UPDATE);
                     param.Add("@JobDescriptionIDUpd", update.JobDescriptionID);
                     param.Add("@JobDescriptionNameUpd", update.JobDescriptionName);
-                    param.Add("@CompanyId", update.CompanyID);
+                    param.Add("@CompanyIdUpd", update.CompanyID);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
 

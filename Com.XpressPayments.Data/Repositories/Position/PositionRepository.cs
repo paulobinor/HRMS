@@ -63,7 +63,7 @@ namespace Com.XpressPayments.Data.Repositories.Position
                     param.Add("@Status", PositionEnum.UPDATE);
                     param.Add("@PositionIDUpd", update.PositionID);
                     param.Add("@PositionNameUpd", update.PositionName);
-                    param.Add("@CompanyId", update.CompanyID);
+                    param.Add("@CompanyIdUpd", update.CompanyID);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
 

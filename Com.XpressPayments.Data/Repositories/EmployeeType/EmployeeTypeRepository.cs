@@ -63,7 +63,7 @@ namespace Com.XpressPayments.Data.Repositories.EmployeeType
                     param.Add("@Status", EmployeeTypeEnum.UPDATE);
                     param.Add("@EmployeeTypeIDUpd", update.EmployeeTypeID);
                     param.Add("@EmployeeTypeNameUpd", update.EmployeeTypeName);
-                    param.Add("@CompanyId", update.CompanyID);
+                    param.Add("@CompanyIdUpd", update.CompanyID);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
 
@@ -88,7 +88,7 @@ namespace Com.XpressPayments.Data.Repositories.EmployeeType
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", EmployeeTypeEnum.DELETE);
-                    param.Add("@JobDescriptionIDDelete", Convert.ToInt32(delete.EmployeeTypeID));
+                    param.Add("@EmployeeTypeIDDelete", Convert.ToInt32(delete.EmployeeTypeID));
                     param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
                     param.Add("@Reasons_For_Deleting", delete.Reasons_For_Delete == null ? "" : delete.Reasons_For_Delete.ToString().Trim());
 

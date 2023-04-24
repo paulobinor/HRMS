@@ -40,6 +40,7 @@ namespace Com.XpressPayments.Bussiness
             services.AddScoped<IEmpLocationService, EmpLocationService>();
             services.AddScoped<IEmploymentStatusService, EmploymentStatusService>();
             services.AddScoped<IGroupService, GroupService>();
+            services.AddScoped<IHMOService, HMOService>();
         }
     }
 }

@@ -14,9 +14,9 @@ namespace Com.XpressPayments.Data.DTOs
         public string HODName { get; set; }
         public long UnitHeadID { get; set; }
         public string UnitHeadName { get; set; }
-        public long DepartmentID { get; set; }
+        public long DeptId { get; set; }
         public string DepartmentName { get; set; }
-        public long CompanyID { get; set; }
+        public long CompanyId { get; set; }
         public string CompanyName { get; set; }
 
         public DateTime Created_Date { get; set; }
@@ -37,8 +37,8 @@ namespace Com.XpressPayments.Data.DTOs
         public string UnitName { get; set; }
         public long HodID { get; set; }
         public long UnitHeadID { get; set; }
-        public long DepartmentID { get; set; }
-        public long CompanyID { get; set; }
+        public long DeptId { get; set; }
+        public long CompanyId { get; set; }
 
        
     }
@@ -49,8 +49,8 @@ namespace Com.XpressPayments.Data.DTOs
         public long HodID { get; set; }
         public string UnitName { get; set; }
         public long UnitHeadID { get; set; }
-        public long DepartmentID { get; set; }
-        public long CompanyID { get; set; }
+        public long DeptId { get; set; }
+        public long CompanyId { get; set; }
     }
 
     public class DeleteUnitDTO

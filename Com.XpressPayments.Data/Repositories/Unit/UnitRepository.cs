@@ -39,8 +39,8 @@ namespace Com.XpressPayments.Data.Repositories.Unit
                     param.Add("@UnitName", unit.UnitName.Trim());
                     param.Add("@HodID", unit.HodID);
                     param.Add("@UnitHeadID", unit.UnitHeadID);
-                    param.Add("@DepartmentID", unit.DepartmentID);
-                    param.Add("@CompanyId", unit.CompanyID);
+                    param.Add("@DeptId", unit.DeptId);
+                    param.Add("@CompanyId", unit.CompanyId);
 
                     param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
 
@@ -69,8 +69,8 @@ namespace Com.XpressPayments.Data.Repositories.Unit
                     param.Add("@UnitNameUpd", unit.UnitName.Trim());
                     param.Add("@HodIDUpd", unit.HodID);
                     param.Add("@UnitHeadIDUpd", unit.UnitHeadID);
-                    param.Add("@DepartmentIDUpd", unit.DepartmentID);
-                    param.Add("@CompanyIdUpd", unit.CompanyID);
+                    param.Add("@DeptIdUpd", unit.DeptId);
+                    param.Add("@CompanyIdUpd", unit.CompanyId);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
 
@@ -202,7 +202,7 @@ namespace Com.XpressPayments.Data.Repositories.Unit
             }
         }
 
-        public async Task<IEnumerable<UnitDTO>> GetAllUnitCompanyId(long UnitID)
+        public async Task<IEnumerable<UnitDTO>> GetAllUnitCompanyId(long CompanyId)
         {
             try
             {
@@ -210,7 +210,7 @@ namespace Com.XpressPayments.Data.Repositories.Unit
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", 8);
-                    param.Add("@CompanyIdGet", UnitID);
+                    param.Add("@CompanyIdGet", CompanyId);
 
                     var UnitDetails = await _dapper.QueryAsync<UnitDTO>(ApplicationConstant.Sp_Unit, param: param, commandType: CommandType.StoredProcedure);
 

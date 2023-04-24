@@ -67,7 +67,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
                 //validate DepartmentDto payload here 
-                if (String.IsNullOrEmpty(HodDto.HODName) || HodDto.CompanyID <= 0 || HodDto.DepartmentID <= 0)
+                if (String.IsNullOrEmpty(HodDto.HODName) || HodDto.CompanyID <= 0 )
                     //String.IsNullOrEmpty(DepartmentDto.Email) || String.IsNullOrEmpty(DepartmentDto.ContactPhone))
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');

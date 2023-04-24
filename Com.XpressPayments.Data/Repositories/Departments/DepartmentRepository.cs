@@ -35,11 +35,8 @@ namespace Com.XpressPayments.Data.Repositories.Departments.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", Department.CREATE);
                     param.Add("@DepartmentName", Dept.DepartmentName.Trim());
-                    param.Add("@DepartmentMail", Dept.DepartmentName.Trim());
-                    param.Add("@Location", Dept.Location.Trim());
                     param.Add("@HodID", Dept.HodID);
                     param.Add("@GroupID", Dept.GroupID);
-                    param.Add("@GroupHeadID", Dept.GroupHeadID);
                     param.Add("@BranchID", Dept.BranchID);
                     param.Add("@Email", Dept.Email.Trim());
                     param.Add("@ContactPhone", Dept.ContactPhone.Trim());
@@ -70,11 +67,8 @@ namespace Com.XpressPayments.Data.Repositories.Departments.Repository
                     param.Add("@Status", Department.UPDATE);
                     param.Add("@DepartmentIdUpd", Convert.ToInt32(Dept.DeptId));
                     param.Add("@DepartmentNameUpd", Dept.DepartmentName == null ? "" : Dept.DepartmentName.ToString().Trim());
-                    param.Add("@DepartmentMailUpd", Dept.DepartmentName == null ? "" : Dept.DepartmentName.ToString().Trim());
-                    param.Add("@LocationUpd", Dept.Location.Trim());
                     param.Add("@HodIDUpd", Dept.HodID);
                     param.Add("@GroupIDUpd", Dept.GroupID);
-                    param.Add("@GroupHeadIDUpd", Dept.GroupHeadID);
                     param.Add("@BranchIDUpd", Dept.BranchID);
                     param.Add("@EmailUpd", Dept.Email.Trim());
                     param.Add("@ContactPhoneUpd", Dept.ContactPhone.Trim());

@@ -11,6 +11,7 @@ using Com.XpressPayments.Data.Repositories.EmploymentStatus;
 using Com.XpressPayments.Data.Repositories.Gender;
 using Com.XpressPayments.Data.Repositories.Grade;
 using Com.XpressPayments.Data.Repositories.Group;
+using Com.XpressPayments.Data.Repositories.HMO;
 using Com.XpressPayments.Data.Repositories.HOD;
 using Com.XpressPayments.Data.Repositories.Institutions;
 using Com.XpressPayments.Data.Repositories.JobDescription;
@@ -56,6 +57,7 @@ namespace Com.XpressPayments.Data
             services.AddScoped<IEmpLocationRepository, EmpLocationRepository>();
             services.AddScoped<IEmploymentStatusRepository, EmploymentStatusRepository>();
             services.AddScoped<IGroupRepository, GroupRepository>();
+            services.AddScoped<IHMORepository, HMORepository>();
         }
     }
 }

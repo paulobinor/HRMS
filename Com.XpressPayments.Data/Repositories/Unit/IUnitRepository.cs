@@ -16,6 +16,6 @@ namespace Com.XpressPayments.Data.Repositories.Unit
         Task<IEnumerable<UnitDTO>> GetAllUnit();
         Task<UnitDTO> GetUnitById(long UnitID);
         Task<UnitDTO> GetUnitByName(string UnitName);
-        Task<IEnumerable<UnitDTO>> GetAllUnitCompanyId(long UnitID);
+        Task<IEnumerable<UnitDTO>> GetAllUnitCompanyId(long CompanyId);
     }
 }
