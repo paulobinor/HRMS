@@ -799,6 +799,47 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             }
         }
 
+        public Tuple<bool, bool> checkPermission(int roleId, int roleId2)
+        {
+            bool checkCanCreateAndRead = false;
+            bool canApprove = false;
+
+
+            //logically check the role of those that are creating and the created
+            if (roleId2 == ApplicationConstant.SuperAdmin)
+            {
+                if (roleId == ApplicationConstant.HrHead
+                || roleId == ApplicationConstant.HrAdmin )
+                {
+                    checkCanCreateAndRead = true;
+                    canApprove = true;
+                }
+            }
+
+
+            if (roleId2 == ApplicationConstant.HrHead)
+            {
+                if (roleId == ApplicationConstant.GeneralUser )
+                {
+                    checkCanCreateAndRead = true;
+                    canApprove = true;
+                }
+            }
+
+
+            if (roleId2 == ApplicationConstant.HrAdmin)
+            {
+                if (roleId == ApplicationConstant.GeneralUser )
+                {
+                    checkCanCreateAndRead = true;
+                    canApprove = false;
+                }
+            }
+
+            return new Tuple<bool, bool>(checkCanCreateAndRead, canApprove);
+
+        }
+
         public async Task<BaseResponse> ApproveUser(ApproveUserDto approveUser, RequesterInfo requester)
         {
             var response = new BaseResponse();
@@ -812,6 +853,9 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 var port = requester.Port.ToString();
 
                 var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+
+                var UserInfo = await _accountRepository.FindUser(approveUser.Email);
+
                 if (null == requesterInfo)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
@@ -819,12 +863,32 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+                if (null == UserInfo)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "User information cannot be found.";
+                    return response;
+                }
+
+
+
+                Tuple<bool, bool> checkRole = checkPermission(UserInfo.RoleId, requesterInfo.RoleId);
+
+
+                if (!checkRole.Item2)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                     return response;
                 }
+
+
+                //if (Convert.ToInt32(RoleId) != 1 || Convert.ToInt32(RoleId) != 4)
+                //{
+                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //    return response;
+                //}
 
                 var user = await _accountRepository.FindUser(approveUser.Email);
                 if (user != null)
@@ -889,7 +953,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+                if (Convert.ToInt32(RoleId) != 1 || Convert.ToInt32(RoleId) != 4)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
@@ -905,6 +969,10 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                         response.ResponseMessage = "You cannot disapprove this User because User was created by you.";
                         return response;
                     }
+
+
+
+
                     dynamic resp = await _accountRepository.DeclineUser(Convert.ToInt32(requesterUserId), user.Email, disapproveUser.DisapprovedComment);
                     if (resp > 0)
                     {

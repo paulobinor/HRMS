@@ -98,8 +98,8 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     param.Add("@MiddleName", user.MiddleName == null ? "" : user.MiddleName.ToString().Trim());
                     param.Add("@LastName", user.LastName == null ? "" : user.LastName.ToString().Trim());
                     param.Add("@UserEmail", user.Email == null ? "" : user.Email.ToString().Trim());
-                    param.Add("@DOB", user.Email == null ? "" : user.DOB.ToString().Trim());
-                    param.Add("@ResumptionDate", user.ResumptionDate == null ? "" : user.DOB.ToString().Trim());
+                    param.Add("@DOB", user.DOB == null ? "" : user.DOB.ToString().Trim());
+                    param.Add("@ResumptionDate", user.ResumptionDate == null ? "" : user.ResumptionDate.ToString().Trim());
                     param.Add("@OfficialMail", user.OfficialMail == null ? "" : user.OfficialMail.ToString().Trim());
                     param.Add("@PhoneNumber", user.PhoneNumber == null ? "" : user.PhoneNumber.ToString().Trim());
                     //param.Add("@PasswordHash", passwordHash);

@@ -39,28 +39,25 @@ namespace Com.XpressPayments.Data.Repositories.Employee
                     param.Add("@EmpIDUpd", Convert.ToInt32(Emp.EmpID));
                     param.Add("@ProfileImageUpd", Emp.ProfileImage.Trim());
                     param.Add("@BirthPlaceUpd", Emp.BirthPlace.Trim());
-                    param.Add("@NationalityUpd", Emp.Nationality.Trim());
-                    param.Add("@StateOfOriginUpd", Emp.StateOfOrigin.Trim());
-                    param.Add("@LGAUpd", Emp.LGA.Trim());
+                    param.Add("@NationalityUpd", Emp.Nationality);
+                    param.Add("@StateOfOriginUpd", Emp.StateOfOrigin);
+                    param.Add("@LGAUpd", Emp.LGA);
                     param.Add("@TownUpd", Emp.Town.Trim());
                     param.Add("@MaidenNameUpd", Emp.MaidenName.Trim());
                     param.Add("@MobileNumber2Upd", Emp.MobileNumber2.Trim());
                     param.Add("@CurrentDesignationUpd,", Emp.CurrentDesignation.Trim());
-                    param.Add("@SexUpd", Emp.Sex.Trim());
-                    param.Add("@MaritalStatusUpd", Emp.MaritalStatus.Trim());
+                    param.Add("@SexUpd", Emp.Sex);
+                    param.Add("@MaritalStatusUpd", Emp.MaritalStatus);
                     param.Add("@SpouseContactAddressUpd", Emp.SpouseContactAddress.Trim());
                     param.Add("@SpouseMobileUpd", Emp.SpouseMobile.Trim());
-                    param.Add("@NamesOfChildrenUpd", Emp.NamesOfChildren.Trim());
-                    param.Add("@ChildrenSexUpd", Emp.ChildrenSex.Trim());
-                    param.Add("@ChildrenDOBUpd", Emp.ChildrenDOB.Trim());
+                   
                     param.Add("@ResidentialAddressUpd", Emp.ResidentialAddress.Trim());
-                    param.Add("@PositionUpd", Emp.Position.Trim());
-                    param.Add("@ResumptionDateUpd", Emp.ResumptionDate.Trim());
+                    
                     param.Add("@HomeAddressUpd", Emp.HomeAddress.Trim());
                     param.Add("@MailingAddressUpd", Emp.MailingAddress.Trim());
                     param.Add("@NofNameUpd", Emp.NofName.Trim());
                     param.Add("@NofContactAddressUpd", Emp.NofContactAddress.Trim());
-                    param.Add("@NofMobileUpd", Emp.NofMobile.Trim());
+                    param.Add("@NofMobileUpd", Emp.NofMobile);
                     param.Add("@NofRelationshipUpd", Emp.NofRelationship.Trim());
                     param.Add("@HighestQualificationUpd", Emp.HighestQualification.Trim());
                     param.Add("@HighestQualificationYearUpd", Emp.HighestQualificationYear.Trim());
@@ -94,14 +91,14 @@ namespace Com.XpressPayments.Data.Repositories.Employee
                     param.Add("@FirstReferenceAddressUpd", Emp.FirstReferenceName.Trim());
                     param.Add("@FirstReferenceOccupationUpd", Emp.FirstReferenceOccupation.Trim());
                     param.Add("@FirstReferencePeriodKnownUpd", Emp.FirstReferencePeriodKnown.Trim());
-                    param.Add("@FirstReferenceMobileUpd", Emp.FirstReferenceMobile.Trim());
+                    param.Add("@FirstReferenceMobileUpd", Emp.FirstReferenceMobile);
                     param.Add("@FirstReferenceEmailUpd", Emp.FirstReferenceEmail.Trim());
                     param.Add("@SecondReferenceNameUpd", Emp.SecondReferenceName.Trim());
                     param.Add("@SecondReferenceAddressUpd", Emp.SecondReferenceName.Trim());
                     param.Add("@SecondReferenceOccupationUpd", Emp.SecondReferenceOccupation.Trim());
                     param.Add("@SecondReferencePeriodKnownUpd", Emp.SecondReferencePeriodKnown.Trim());
-                    param.Add("@SecondReferenceMobileUpd", Emp.SecondReferenceMobile.Trim());
-                    param.Add("@@SecondReferenceEmailUpd", Emp.SecondReferenceEmail.Trim());
+                    param.Add("@SecondReferenceMobileUpd", Emp.SecondReferenceMobile);
+                    param.Add("@SecondReferenceEmailUpd", Emp.SecondReferenceEmail.Trim());
                     param.Add("@FirstDegreeNameAndLocationUpd", Emp.FirstDegreeNameAndLocation.Trim());
                     param.Add("@FirstDegreeEntranceYearUpd", Convert.ToInt32(Emp.FirstDegreeEntranceYear));
                     param.Add("@FirstDegreeExitYearUpd", Convert.ToInt32(Emp.FirstDegreeExitYear));
@@ -149,6 +146,10 @@ namespace Com.XpressPayments.Data.Repositories.Employee
                     param.Add("@PreviousEmployerNameOfAgencyUpd", Emp.PreviousEmployerNameOfAgency.Trim());
                     param.Add("@PreviousEmployerAddressOfAgencyUpd", Emp.PreviousEmployerAddressOfAgency.Trim());
                     param.Add("@DoYouHaveAnyPendingIssuesWithAformerEmployerUpd", Emp.DoYouHaveAnyPendingIssuesWithAformerEmployer.Trim());
+                    param.Add("@IdentificationCountryOfIssueUpd", Emp.IdentificationCountryOfIssue);
+                    param.Add("@IdentificationTypeUpd", Emp.IdentificationType.Trim());
+                    param.Add("@IdentificationNumberUpd", Emp.IdentificationNumber.Trim());
+                    param.Add("@IdentificationDocumentUpd", Emp.IdentificationDocument.Trim());
                     param.Add("@SignatureUpd", Emp.Signature.Trim());
                     param.Add("@CompanyIdUpd", Emp.CompanyID);
 
@@ -278,6 +279,33 @@ namespace Com.XpressPayments.Data.Repositories.Employee
                 throw;
             }
         }
+
+        //public async Task<dynamic> ApproveUser(long ApprovedByUserId, string userEmail)
+        //{
+        //    try
+        //    {
+        //        //var hashdefaultPassword = BCrypt.Net.BCrypt.HashPassword(defaultPass, BCrypt.Net.BCrypt.GenerateSalt());
+
+        //        using (SqlConnection _dapper = new SqlConnection(_connectionString))
+        //        {
+        //            var param = new DynamicParameters();
+        //            param.Add("@Status", Account.APPROVEUSER);
+        //            //param.Add("@PasswordHashApprove", hashdefaultPassword);
+        //            param.Add("@ApprovedByUserId", ApprovedByUserId);
+        //            param.Add("@UserEmailApprove", userEmail);
+
+        //            dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Employee, param: param, commandType: CommandType.StoredProcedure);
+
+        //            return resp;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var err = ex.Message;
+        //        _logger.LogError($"MethodName: ApproveUser(long ApprovedByUserId, string defaultPass, string userEmail) ===>{ex.Message}");
+        //        throw;
+        //    }
+        //}
 
     }
 }

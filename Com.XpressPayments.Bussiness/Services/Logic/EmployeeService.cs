@@ -1,11 +1,14 @@
 ﻿using Com.XpressPayments.Bussiness.Services.ILogic;
+using Com.XpressPayments.Data.AppConstants;
 using Com.XpressPayments.Data.DTOs;
+using Com.XpressPayments.Data.DTOs.Account;
 using Com.XpressPayments.Data.Enums;
 using Com.XpressPayments.Data.GenericResponse;
 using Com.XpressPayments.Data.Repositories.Company.IRepository;
 using Com.XpressPayments.Data.Repositories.Employee;
 using Com.XpressPayments.Data.Repositories.EmployeeType;
 using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -57,21 +60,26 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) != 1)
-                {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
-                }
-
-                //validate DepartmentDto payload here 
-                //if (String.IsNullOrEmpty(updateDto.DepartmentName) || String.IsNullOrEmpty(updateDto.Location) || updateDto.CompanyId <= 0
-                //    || updateDto.DeptId <= 0 || String.IsNullOrEmpty(updateDto.Email) || String.IsNullOrEmpty(updateDto.ContactPhone))
+                //if (Convert.ToInt32(RoleId) != 1)
                 //{
-                //    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                //    response.ResponseMessage = $"Please ensure all required fields are entered.";
+                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                 //    return response;
                 //}
+
+                if (Convert.ToInt32(RoleId) != 2)
+                {
+                    if (Convert.ToInt32(RoleId) != 3)
+                    {
+                        if (Convert.ToInt32(RoleId) != 4)
+                        {
+                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                            return response;
+                        }
+                    }
+                   
+                }
 
                 var Emp = await _EmployeeRepository.GetEmployeeById(updateDto.EmpID);
                 if (null == Emp)
@@ -329,6 +337,76 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 return response;
             }
         }
+
+        //public async Task<BaseResponse> ApproveUser(ApproveEmp approveEmp, RequesterInfo requester)
+        //{
+        //    var response = new BaseResponse();
+        //    try
+        //    {
+        //        string requesterUserEmail = requester.Username;
+        //        string requesterUserId = requester.UserId.ToString();
+        //        string RoleId = requester.RoleId.ToString();
+
+        //        var ipAddress = requester.IpAddress.ToString();
+        //        var port = requester.Port.ToString();
+
+        //        var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+        //        if (null == requesterInfo)
+        //        {
+        //            response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+        //            response.ResponseMessage = "Requester information cannot be found.";
+        //            return response;
+        //        }
+
+        //        if (Convert.ToInt32(RoleId) > 2)
+        //        {
+        //            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+        //            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+        //            return response;
+        //        }
+
+        //        var user = await _accountRepository.FindUser(approveEmp.Email);
+        //        if (user != null)
+        //        {
+        //            if (user.CreatedByUserId == Convert.ToInt32(requesterUserId))
+        //            {
+        //                response.ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0');
+        //                response.ResponseMessage = "You cannot approve this User because User was created by you.";
+        //                return response;
+        //            }
+        //            //string defaultPass = Utils.RandomPassword();
+        //            string defaultPass = ApplicationConstant.DefaultPassword;
+        //            dynamic resp = await _accountRepository.ApproveUser(Convert.ToInt32(requesterUserId), defaultPass, user.Email);
+
+        //            if (resp > 0)
+        //            {
+        //                //update action performed into audit log here
+
+        //                _logger.LogInformation($"User with email: {user.Email} approved successfully.");
+        //                _accountRepository.SendEmail(user.Email, user.FirstName, defaultPass, "Activation Email", _hostEnvironment.ContentRootPath, "", port);
+        //                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+        //                response.ResponseMessage = $"User with email: {user.Email} approved successfully.";
+        //                return response;
+        //            }
+        //            response.ResponseCode = ResponseCode.Exception.ToString();
+        //            response.ResponseMessage = "An error occurred while approving the user.";
+        //            return response;
+        //        }
+        //        response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+        //        response.ResponseMessage = "Invalid user. Not found.";
+        //        response.Data = null;
+        //        return response;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Exception Occured: ControllerMethod : ApproveUser ==> {ex.Message}");
+        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+        //        response.ResponseMessage = $"Exception Occured: ControllerMethod : ApproveUser ==> {ex.Message}";
+        //        response.Data = null;
+        //        return response;
+        //    }
+
+        //}
 
     }
 }

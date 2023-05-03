@@ -6,10 +6,13 @@ namespace Com.XpressPayments.Bussiness.ViewModels
     {
         public long UserId { get; set; }
         public long DeptId { get; set; }
+        public long EmpID { get; set; }
+        public string StaffID { get; set; }
         public long CompanyId { get; set; }
         public string CompanyName { get; set; }
         public string DepartmentName { get; set; }
-      
+        public string ProfileImage { get; set; }
+        public bool IsUpdated { get; set; }
 
         public string FirstName { get; set; }
         public string MiddleName { get; set; }

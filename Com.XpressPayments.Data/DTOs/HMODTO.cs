@@ -27,20 +27,26 @@ namespace Com.XpressPayments.Data.DTOs
         public string SpouseBloodGrp { get; set; }
         public string SpouseGenotype { get; set; }
         public long SpouseChioceOfHospital { get; set; }
-        public string NameOfChildren { get; set; }
-        public string ChildrenSex { get; set; }
-        public string ChildrenDOB { get; set; }
-        public string ChildrenBloodGrp { get; set; }
-        public string ChildrenGenotype { get; set; }
-        public long ChildrenChioceOfHospital { get; set; }
+        public string Child1Name { get; set; }
+        public string Child1Sex { get; set; }
+        public string Child1DOB { get; set; }
+        public string Child1Genotype { get; set; }
+        public string Child1BloodGrp { get; set; }
+        public string Child1ChioceOfHospital { get; set; }
+        public string Child2Name { get; set; }
+        public string Child2Sex { get; set; }
+        public string Child2DOB { get; set; }
+        public string Child2Genotype { get; set; }
+        public string Child2BloodGrp { get; set; }
+        public string Child2ChioceOfHospital { get; set; }
+
         public string Signature { get; set; }
         public string Date { get; set; }
         public string StaffPassport { get; set; }
         public string SpousePassport { get; set; }
         public string Child1Passport { get; set; }
         public string Child2Passport { get; set; }
-        public string Child3Passport { get; set; }
-        public string Child4Passport { get; set; }
+
         public long CompanyID { get; set; }
 
         public DateTime Created_Date { get; set; }
@@ -76,20 +82,26 @@ namespace Com.XpressPayments.Data.DTOs
         public string SpouseBloodGrp { get; set; }
         public string SpouseGenotype { get; set; }
         public long SpouseChioceOfHospital { get; set; }
-        public string NameOfChildren { get; set; }
-        public string ChildrenSex { get; set; }
-        public string ChildrenDOB { get; set; }
-        public string ChildrenBloodGrp { get; set; }
-        public string ChildrenGenotype { get; set; }
-        public long ChildrenChioceOfHospital { get; set; }
+        public string Child1Name { get; set; }
+        public string Child1Sex { get; set; }
+        public string Child1DOB { get; set; }
+        public string Child1Genotype { get; set; }
+        public string Child1BloodGrp { get; set; }
+        public string Child1ChioceOfHospital { get; set; }
+        public string Child2Name { get; set; }
+        public string Child2Sex { get; set; }
+        public string Child2DOB { get; set; }
+        public string Child2Genotype { get; set; }
+        public string Child2BloodGrp { get; set; }
+        public string Child2ChioceOfHospital { get; set; }
+
         public string Signature { get; set; }
         public string Date { get; set; }
         public string StaffPassport { get; set; }
         public string SpousePassport { get; set; }
         public string Child1Passport { get; set; }
         public string Child2Passport { get; set; }
-        public string Child3Passport { get; set; }
-        public string Child4Passport { get; set; }
+
         public long CompanyID { get; set; }
 
         public string Created_By_User_Email { get; set; }
@@ -116,20 +128,26 @@ namespace Com.XpressPayments.Data.DTOs
         public string SpouseBloodGrp { get; set; }
         public string SpouseGenotype { get; set; }
         public long SpouseChioceOfHospital { get; set; }
-        public string NameOfChildren { get; set; }
-        public string ChildrenSex { get; set; }
-        public string ChildrenDOB { get; set; }
-        public string ChildrenBloodGrp { get; set; }
-        public string ChildrenGenotype { get; set; }
-        public long ChildrenChioceOfHospital { get; set; }
+        public string Child1Name { get; set; }
+        public string Child1Sex { get; set; }
+        public string Child1DOB { get; set; }
+        public string Child1Genotype { get; set; }
+        public string Child1BloodGrp { get; set; }
+        public string Child1ChioceOfHospital { get; set; }
+        public string Child2Name { get; set; }
+        public string Child2Sex { get; set; }
+        public string Child2DOB { get; set; }
+        public string Child2Genotype { get; set; }
+        public string Child2BloodGrp { get; set; }
+        public string Child2ChioceOfHospital { get; set; }
+
         public string Signature { get; set; }
         public string Date { get; set; }
         public string StaffPassport { get; set; }
         public string SpousePassport { get; set; }
         public string Child1Passport { get; set; }
         public string Child2Passport { get; set; }
-        public string Child3Passport { get; set; }
-        public string Child4Passport { get; set; }
+
         public long CompanyID { get; set; }
     }
 

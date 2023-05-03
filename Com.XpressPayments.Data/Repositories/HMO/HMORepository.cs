@@ -52,21 +52,27 @@ namespace Com.XpressPayments.Data.Repositories.HMO
                     param.Add("@SpouseBloodGrp", create.SpouseBloodGrp.Trim());
                     param.Add("@SpouseGenotype", create.SpouseGenotype.Trim());
                     param.Add("@SpouseChioceOfHospital", create.SpouseChioceOfHospital);
-                    param.Add("@NameOfChildren", create.NameOfChildren.Trim());
-                    param.Add("@ChildrenSex", create.ChildrenSex.Trim());
-                    param.Add("@ChildrenDOB", create.ChildrenDOB.Trim());
-                    param.Add("@ChildrenBloodGrp", create.ChildrenBloodGrp.Trim());
-                    param.Add("@ChildrenGenotype", create.ChildrenGenotype.Trim());
-                    param.Add("@ChildrenChioceOfHospital", create.ChildrenChioceOfHospital);
+                    param.Add("@Child1Name", create.Child1Name.Trim());
+                    param.Add("@Child1Sex", create.Child1Sex.Trim());
+                    param.Add("@Child1DOB", create.Child1DOB.Trim());
+                    param.Add("@Child1Genotype", create.Child1Genotype.Trim());
+                    param.Add("@Child1BloodGrp", create.Child1BloodGrp.Trim());
+                    param.Add("@Child1ChioceOfHospital", create.Child1ChioceOfHospital.Trim());
+                    param.Add("@Child2Name", create.Child2Name.Trim());
+                    param.Add("@Child2Sex", create.Child2Sex.Trim());
+                    param.Add("@Child2DOB", create.Child2DOB.Trim());
+                    param.Add("@Child2Genotype", create.Child2Genotype.Trim());
+                    param.Add("@Child2BloodGrp", create.Child2BloodGrp.Trim());
+                    param.Add("@Child2ChioceOfHospital", create.Child2ChioceOfHospital.Trim());
+
                     param.Add("@Signature", create.Signature.Trim());
                     param.Add("@Date", create.Date.Trim());
                     param.Add("@StaffPassport", create.StaffPassport.Trim());
                     param.Add("@SpousePassport", create.SpousePassport.Trim());
                     param.Add("@Child1Passport", create.Child1Passport.Trim());
                     param.Add("@Child2Passport", create.Child2Passport.Trim());
-                    param.Add("@Child3Passport", create.Child3Passport.Trim());
-                    param.Add("@Child4Passport", create.Child4Passport.Trim());
-                    
+
+
 
                     param.Add("@CompanyID", create.CompanyID);
 
@@ -109,20 +115,27 @@ namespace Com.XpressPayments.Data.Repositories.HMO
                     param.Add("@SpouseBloodGrpUpd", HMO.SpouseBloodGrp.Trim());
                     param.Add("@SpouseGenotypeUpd", HMO.SpouseGenotype.Trim());
                     param.Add("@SpouseChioceOfHospitalUpd", HMO.SpouseChioceOfHospital);
-                    param.Add("@NameOfChildrenUpd", HMO.NameOfChildren.Trim());
-                    param.Add("@ChildrenSexUpd", HMO.ChildrenSex.Trim());
-                    param.Add("@ChildrenDOBUpd", HMO.ChildrenDOB.Trim());
-                    param.Add("@ChildrenBloodGrpUpd", HMO.ChildrenBloodGrp.Trim());
-                    param.Add("@ChildrenGenotypeUpd", HMO.ChildrenGenotype.Trim());
-                    param.Add("@ChildrenChioceOfHospitalUpd", HMO.ChildrenChioceOfHospital);
+                    param.Add("@Child1NameUpd", HMO.Child1Name.Trim());
+                    param.Add("@Child1SexUpd", HMO.Child1Sex.Trim());
+                    param.Add("@Child1DOBUpd", HMO.Child1DOB.Trim());
+                    param.Add("@Child1GenotypeUpd", HMO.Child1Genotype.Trim());
+                    param.Add("@Child1BloodGrpUpd", HMO.Child1BloodGrp.Trim());
+                    param.Add("@Child1ChioceOfHospitalUpd", HMO.Child1ChioceOfHospital.Trim());
+                    param.Add("@Child2NameUpd", HMO.Child2Name.Trim());
+                    param.Add("@Child2SexUpd", HMO.Child2Sex.Trim());
+                    param.Add("@Child2DOBUpd", HMO.Child2DOB.Trim());
+                    param.Add("@Child2GenotypeUpd", HMO.Child2Genotype.Trim());
+                    param.Add("@Child2BloodGrpUpd", HMO.Child2BloodGrp.Trim());
+                    param.Add("@Child2ChioceOfHospitalUpd", HMO.Child2ChioceOfHospital.Trim());
+
                     param.Add("@SignatureUpd", HMO.Signature.Trim());
                     param.Add("@DateUpd", HMO.Date.Trim());
                     param.Add("@StaffPassportUpd", HMO.StaffPassport.Trim());
                     param.Add("@SpousePassportUpd", HMO.SpousePassport.Trim());
                     param.Add("@Child1PassportUpd", HMO.Child1Passport.Trim());
                     param.Add("@Child2PassportUpd", HMO.Child2Passport.Trim());
-                    param.Add("@Child3PassportUpd", HMO.Child3Passport.Trim());
-                    param.Add("@Child4PassportUpd", HMO.Child4Passport.Trim());
+
+
 
                     param.Add("@CompanyIdUpd", HMO.CompanyID);
 

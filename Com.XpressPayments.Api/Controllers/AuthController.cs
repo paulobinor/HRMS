@@ -145,12 +145,25 @@ namespace Com.XpressPayments.Api.Controllers
                             var FirstName = worksheet.Cells[row, 1].Value?.ToString();
                             var MiddleName = worksheet.Cells[row, 2].Value?.ToString();
                             var LastName = worksheet.Cells[row, 3].Value?.ToString();
-                            var Email = worksheet.Cells[row, 4].Value?.ToString();
                             var OfficialMail = worksheet.Cells[row, 5].Value?.ToString();
+                            var Email = worksheet.Cells[row, 4].Value?.ToString(); 
                             var PhoneNumber = worksheet.Cells[row, 6].Value?.ToString();
                             var RoleId = worksheet.Cells[row, 7].Value?.ToString();
+                            var CompanyId = worksheet.Cells[row, 20].Value?.ToString();
                             var DepartmentId = worksheet.Cells[row, 8].Value?.ToString();
-                            var CompanyId = worksheet.Cells[row, 9].Value?.ToString();
+                            var UnitID = worksheet.Cells[row, 9].Value?.ToString();
+                            var UnitHeadID = worksheet.Cells[row, 10].Value?.ToString();
+                            var HodID = worksheet.Cells[row, 11].Value?.ToString();
+                            var GradeID = worksheet.Cells[row, 12].Value?.ToString();
+                            var EmployeeTypeID = worksheet.Cells[row, 13].Value?.ToString();
+                            var PositionID = worksheet.Cells[row, 14].Value?.ToString();
+                            var DOB = worksheet.Cells[row, 15].Value?.ToString();
+                            var BranchID = worksheet.Cells[row, 16].Value?.ToString();
+                            var EmploymentStatusID = worksheet.Cells[row, 17].Value?.ToString();
+                            var GroupID = worksheet.Cells[row, 18].Value?.ToString();
+                            var ResumptionDate = worksheet.Cells[row, 19].Value?.ToString();
+                            
+
 
 
                             CreateUserDto user = new()
@@ -158,11 +171,22 @@ namespace Com.XpressPayments.Api.Controllers
                                 FirstName = FirstName,
                                 MiddleName = MiddleName,
                                 LastName = LastName,
-                                Email = Email,
                                 OfficialMail = OfficialMail,
+                                Email = Email,
                                 PhoneNumber = PhoneNumber,
                                 RoleId = Convert.ToInt32(RoleId),
                                 DepartmentId = Convert.ToInt32(DepartmentId),
+                                UnitID = Convert.ToInt32(UnitID),
+                                UnitHeadID = Convert.ToInt32(UnitHeadID),
+                                HodID = Convert.ToInt32(HodID),
+                                GradeID = Convert.ToInt32(GradeID),
+                                EmployeeTypeID = Convert.ToInt32(EmployeeTypeID),
+                                PositionID = Convert.ToInt32(PositionID),
+                                DOB = DOB,
+                                BranchID = Convert.ToInt32(BranchID),
+                                EmploymentStatusID = Convert.ToInt32(EmploymentStatusID),
+                                GroupID = Convert.ToInt32(GroupID),
+                                ResumptionDate = ResumptionDate,
                                 CompanyId = Convert.ToInt32(CompanyId)
                             };
 

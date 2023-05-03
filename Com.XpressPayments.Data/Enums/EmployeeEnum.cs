@@ -14,5 +14,7 @@ namespace Com.XpressPayments.Data.Enums
         GETBYID = 6,
         GETBYEMAIL = 7,
         GETCOMPANY =8,
+        APPROVEUSER = 9,
+
     }
 }

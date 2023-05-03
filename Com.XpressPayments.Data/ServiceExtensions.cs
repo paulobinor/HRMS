@@ -1,4 +1,5 @@
 ﻿using Com.XpressPayments.Data.Repositories.Branch;
+using Com.XpressPayments.Data.Repositories.Children;
 using Com.XpressPayments.Data.Repositories.Company.IRepository;
 using Com.XpressPayments.Data.Repositories.Company.Repository;
 using Com.XpressPayments.Data.Repositories.CountryStateLga;
@@ -13,6 +14,8 @@ using Com.XpressPayments.Data.Repositories.Grade;
 using Com.XpressPayments.Data.Repositories.Group;
 using Com.XpressPayments.Data.Repositories.HMO;
 using Com.XpressPayments.Data.Repositories.HOD;
+using Com.XpressPayments.Data.Repositories.HospitalPlan;
+using Com.XpressPayments.Data.Repositories.HospitalProviders;
 using Com.XpressPayments.Data.Repositories.Institutions;
 using Com.XpressPayments.Data.Repositories.JobDescription;
 using Com.XpressPayments.Data.Repositories.MaritalStatus;
@@ -58,6 +61,9 @@ namespace Com.XpressPayments.Data
             services.AddScoped<IEmploymentStatusRepository, EmploymentStatusRepository>();
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IHMORepository, HMORepository>();
+            services.AddScoped<IHospitalProvidersRepository, HospitalProvidersRepository>();
+            services.AddScoped<IHospitalPlanRepository, HospitalPlanRepository>();
+            services.AddScoped<IChildrenRepository, ChildrenRepository>();
         }
     }
 }
