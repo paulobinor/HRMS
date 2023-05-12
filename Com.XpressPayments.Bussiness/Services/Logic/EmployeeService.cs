@@ -1,13 +1,16 @@
 ﻿using Com.XpressPayments.Bussiness.Services.ILogic;
+using Com.XpressPayments.Bussiness.ViewModels;
 using Com.XpressPayments.Data.AppConstants;
 using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.DTOs.Account;
 using Com.XpressPayments.Data.Enums;
+
 using Com.XpressPayments.Data.GenericResponse;
 using Com.XpressPayments.Data.Repositories.Company.IRepository;
 using Com.XpressPayments.Data.Repositories.Employee;
 using Com.XpressPayments.Data.Repositories.EmployeeType;
 using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -27,9 +30,10 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
         private readonly IEmployeeRepository _EmployeeRepository;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
         public EmployeeService(/*IConfiguration configuration*/ IAccountRepository accountRepository, ILogger<EmployeeService> logger,
-            IEmployeeRepository EmployeeRepository, IAuditLog audit, ICompanyRepository companyrepository)
+            IEmployeeRepository EmployeeRepository, IAuditLog audit, ICompanyRepository companyrepository, IWebHostEnvironment hostEnvironment)
         {
             _audit = audit;
 
@@ -38,6 +42,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             _accountRepository = accountRepository;
             _EmployeeRepository = EmployeeRepository;
             _companyrepository = companyrepository;
+            _hostEnvironment = hostEnvironment;
         }
 
         public async Task<BaseResponse> UpdateEmployee(UpdateEmployeeDTO updateDto, RequesterInfo requester)
@@ -193,11 +198,25 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+                //if (Convert.ToInt32(RoleId) > 2)
+                //{
+                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //    return response;
+                //}
+
+                if (Convert.ToInt32(RoleId) != 2)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 3)
+                    {
+                        if (Convert.ToInt32(RoleId) != 4)
+                        {
+                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                            return response;
+                        }
+                    }
+
                 }
 
                 //update action performed into audit log here
@@ -247,11 +266,25 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+                //if (Convert.ToInt32(RoleId) > 2)
+                //{
+                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //    return response;
+                //}
+
+                if (Convert.ToInt32(RoleId) != 2)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 3)
+                    {
+                        if (Convert.ToInt32(RoleId) != 4)
+                        {
+                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                            return response;
+                        }
+                    }
+
                 }
 
                 var EmployeeType = await _EmployeeRepository.GetEmployeeById(EmpID);
@@ -338,75 +371,263 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             }
         }
 
-        //public async Task<BaseResponse> ApproveUser(ApproveEmp approveEmp, RequesterInfo requester)
-        //{
-        //    var response = new BaseResponse();
-        //    try
-        //    {
-        //        string requesterUserEmail = requester.Username;
-        //        string requesterUserId = requester.UserId.ToString();
-        //        string RoleId = requester.RoleId.ToString();
+        public Tuple<bool, bool> checkPermission(int roleId, int roleId2)
+        {
+            bool checkCanCreateAndRead = false;
+            bool canApprove = false;
 
-        //        var ipAddress = requester.IpAddress.ToString();
-        //        var port = requester.Port.ToString();
 
-        //        var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
-        //        if (null == requesterInfo)
-        //        {
-        //            response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-        //            response.ResponseMessage = "Requester information cannot be found.";
-        //            return response;
-        //        }
+            //logically check the role of those that are creating and the created
+            if (roleId2 == ApplicationConstant.SuperAdmin)
+            {
+                if (roleId == ApplicationConstant.HrHead
+                || roleId == ApplicationConstant.HrAdmin)
+                {
+                    checkCanCreateAndRead = true;
+                    canApprove = true;
+                }
+            }
 
-        //        if (Convert.ToInt32(RoleId) > 2)
-        //        {
-        //            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-        //            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-        //            return response;
-        //        }
 
-        //        var user = await _accountRepository.FindUser(approveEmp.Email);
-        //        if (user != null)
-        //        {
-        //            if (user.CreatedByUserId == Convert.ToInt32(requesterUserId))
-        //            {
-        //                response.ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0');
-        //                response.ResponseMessage = "You cannot approve this User because User was created by you.";
-        //                return response;
-        //            }
-        //            //string defaultPass = Utils.RandomPassword();
-        //            string defaultPass = ApplicationConstant.DefaultPassword;
-        //            dynamic resp = await _accountRepository.ApproveUser(Convert.ToInt32(requesterUserId), defaultPass, user.Email);
+            if (roleId2 == ApplicationConstant.HrHead)
+            {
+                if (roleId == ApplicationConstant.GeneralUser)
+                {
+                    checkCanCreateAndRead = true;
+                    canApprove = true;
+                }
+            }
 
-        //            if (resp > 0)
-        //            {
-        //                //update action performed into audit log here
 
-        //                _logger.LogInformation($"User with email: {user.Email} approved successfully.");
-        //                _accountRepository.SendEmail(user.Email, user.FirstName, defaultPass, "Activation Email", _hostEnvironment.ContentRootPath, "", port);
-        //                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-        //                response.ResponseMessage = $"User with email: {user.Email} approved successfully.";
-        //                return response;
-        //            }
-        //            response.ResponseCode = ResponseCode.Exception.ToString();
-        //            response.ResponseMessage = "An error occurred while approving the user.";
-        //            return response;
-        //        }
-        //        response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-        //        response.ResponseMessage = "Invalid user. Not found.";
-        //        response.Data = null;
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Exception Occured: ControllerMethod : ApproveUser ==> {ex.Message}");
-        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-        //        response.ResponseMessage = $"Exception Occured: ControllerMethod : ApproveUser ==> {ex.Message}";
-        //        response.Data = null;
-        //        return response;
-        //    }
+            if (roleId2 == ApplicationConstant.HrAdmin)
+            {
+                if (roleId == ApplicationConstant.GeneralUser)
+                {
+                    checkCanCreateAndRead = true;
+                    canApprove = false;
+                }
+            }
 
-        //}
+            return new Tuple<bool, bool>(checkCanCreateAndRead, canApprove);
+
+        }
+
+        public async Task<BaseResponse> GetEmpPendingApproval(RequesterInfo requester)
+        {
+            BaseResponse response = new BaseResponse();
+
+            try
+            {
+                string requesterUserEmail = requester.Username;
+                string requesterUserId = requester.UserId.ToString();
+                string RoleId = requester.RoleId.ToString();
+
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
+
+                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                if (null == requesterInfo)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Requester information cannot be found.";
+                    return response;
+                }
+
+                if (Convert.ToInt32(RoleId) > 2)
+                {
+                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                    return response;
+                }
+
+                //update action performed into audit log here
+
+                var Employee = await _EmployeeRepository.GetEmpPendingApproval();
+
+                if (Employee.Any())
+                {
+                    response.Data = Employee;
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Employee Details fetched successfully.";
+                    return response;
+                }
+                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "No Employee Details found.";
+                response.Data = null;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetEmpPendingApproval() ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: GetEmpPendingApproval() ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+        }
+
+        public async Task<BaseResponse> ApproveEmp(ApproveEmp approveEmp, RequesterInfo requester)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                string requesterUserEmail = requester.Username;
+                string requesterUserId = requester.UserId.ToString();
+                string RoleId = requester.RoleId.ToString();
+
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
+
+                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+
+                var UserInfo = await _accountRepository.FindUser(approveEmp.Email);
+
+                if (null == requesterInfo)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Requester information cannot be found.";
+                    return response;
+                }
+
+                if (null == UserInfo)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "User information cannot be found.";
+                    return response;
+                }
+
+
+
+                Tuple<bool, bool> checkRole = checkPermission(UserInfo.RoleId, requesterInfo.RoleId);
+
+
+                if (!checkRole.Item2)
+                {
+                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                    return response;
+                }
+
+
+                //if (Convert.ToInt32(RoleId) != 1 || Convert.ToInt32(RoleId) != 4)
+                //{
+                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //    return response;
+                //}
+
+                var user = await _accountRepository.FindUser(approveEmp.Email);
+                if (user != null)
+                {
+                    if (user.CreatedByUserId == Convert.ToInt32(requesterUserId))
+                    {
+                        response.ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = "You cannot approve this User because User was created by you.";
+                        return response;
+                    }
+                    //string defaultPass = Utils.RandomPassword();
+                    string defaultPass = ApplicationConstant.DefaultPassword;
+                    dynamic resp = await _accountRepository.ApproveUser(Convert.ToInt32(requesterUserId), defaultPass, user.Email);
+
+                    if (resp > 0)
+                    {
+                        //update action performed into audit log here
+
+                        _logger.LogInformation($"User with email: {user.Email} approved successfully.");
+                        _accountRepository.SendEmail(user.Email, user.FirstName, defaultPass, "Activation Email", _hostEnvironment.ContentRootPath, "", port);
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"User with email: {user.Email} approved successfully.";
+                        return response;
+                    }
+                    response.ResponseCode = ResponseCode.Exception.ToString();
+                    response.ResponseMessage = "An error occurred while approving the user.";
+                    return response;
+                }
+                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Invalid user. Not found.";
+                response.Data = null;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: ControllerMethod : ApproveEmp ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : ApproveEmp ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+
+        }
+
+        public async Task<BaseResponse> DisapproveEmp(DisapproveEmpDto disapproveEmp, RequesterInfo requester)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                string requesterUserEmail = requester.Username;
+                string requesterUserId = requester.UserId.ToString();
+                string RoleId = requester.RoleId.ToString();
+
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
+
+                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                if (null == requesterInfo)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Requester information cannot be found.";
+                    return response;
+                }
+
+                if (Convert.ToInt32(RoleId) != 1 || Convert.ToInt32(RoleId) != 4)
+                {
+                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                    return response;
+                }
+
+                var user = await _accountRepository.FindUser(disapproveEmp.Email);
+                if (user != null)
+                {
+                    if (user.CreatedByUserId == Convert.ToInt32(requesterUserId))
+                    {
+                        response.ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = "You cannot disapprove this User because User was created by you.";
+                        return response;
+                    }
+
+
+
+
+                    dynamic resp = await _accountRepository.DeclineUser(Convert.ToInt32(requesterUserId), user.Email, disapproveEmp.DisapprovedComment);
+                    if (resp > 0)
+                    {
+                        //update action performed into audit log here
+
+                        _logger.LogInformation($"User with email: {user.Email} disapproved successfully.");
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"User with email: {user.Email} disapproved successfully.";
+                        return response;
+                    }
+                    response.ResponseCode = ResponseCode.Exception.ToString();
+                    response.ResponseMessage = "An error occurred while disapproving the user.";
+                    return response;
+                }
+                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Invalid user. Not found.";
+                response.Data = null;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: ControllerMethod : DisapproveUser ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : DisapproveUser ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+
+        }
 
     }
 }

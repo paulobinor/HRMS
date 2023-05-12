@@ -42,6 +42,7 @@ namespace Com.XpressPayments.Data.DTOs.Account
         public long BranchID { get; set; }
         public long EmploymentStatusID { get; set; }
         public long GroupID { get; set; }
+        public long JobDescriptionID { get; set; }
 
     }
     public class UsertoDeptMappingDto

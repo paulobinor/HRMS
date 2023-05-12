@@ -24,12 +24,11 @@ namespace Com.XpressPayments.Data.DTOs.Account
         [EmailAddress]
         public string Email { get; set; }
         public string OfficialMail { get; set; }
-        
 
         public string PhoneNumber { get; set; }
 
         [Required]
-        public int RoleId { get; set; }
+        public long RoleId { get; set; }
         public long CompanyId { get; set; }
         public long DepartmentId { get; set; }
         public long UnitID { get; set; }
@@ -41,8 +40,7 @@ namespace Com.XpressPayments.Data.DTOs.Account
         public long BranchID { get; set; }
         public long EmploymentStatusID { get; set; }
         public long GroupID { get; set; }
-
-        
+        public long JobDescriptionID { get; set; }
 
     }
 

@@ -38,7 +38,7 @@ namespace Com.XpressPayments.Data.Repositories.Unit
                     param.Add("@Status", UnitEnum.CREATE);
                     param.Add("@UnitName", unit.UnitName.Trim());
                     param.Add("@HodID", unit.HodID);
-                    param.Add("@UnitHeadID", unit.UnitHeadID);
+                   
                     param.Add("@DeptId", unit.DeptId);
                     param.Add("@CompanyId", unit.CompanyId);
 
@@ -68,7 +68,7 @@ namespace Com.XpressPayments.Data.Repositories.Unit
                     param.Add("@UnitIDUpd", unit.HodID);
                     param.Add("@UnitNameUpd", unit.UnitName.Trim());
                     param.Add("@HodIDUpd", unit.HodID);
-                    param.Add("@UnitHeadIDUpd", unit.UnitHeadID);
+                 
                     param.Add("@DeptIdUpd", unit.DeptId);
                     param.Add("@CompanyIdUpd", unit.CompanyId);
 

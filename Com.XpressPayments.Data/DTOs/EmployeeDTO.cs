@@ -31,6 +31,7 @@ namespace Com.XpressPayments.Data.DTOs
         public long EmpLocationID { get; set; }
         public long EmploymentStatusID { get; set; }
         public long GroupID { get; set; }
+        public long JobDescriptionID { get; set; }
         public string BirthPlace { get; set; }
         public long Nationality { get; set; }
         public long StateOfOrigin { get; set; }
@@ -38,7 +39,7 @@ namespace Com.XpressPayments.Data.DTOs
         public string Town { get; set; }
         public string MaidenName { get; set; }
         public string MobileNumber2 { get; set; }
-        public string CurrentDesignation { get; set; }
+        //public string CurrentDesignation { get; set; }
         public long Sex { get; set; }
         public long MaritalStatus { get; set; }
         public string SpouseContactAddress { get; set; }
@@ -52,7 +53,7 @@ namespace Com.XpressPayments.Data.DTOs
         public string MailingAddress { get; set; }
         public string NofName { get; set; }
         public string NofContactAddress { get; set; }
-        public long NofMobile { get; set; }
+        public string NofMobile { get; set; }
         public string NofRelationship { get; set; }
         public string HighestQualification { get; set; }
         public string HighestQualificationYear { get; set; }
@@ -86,13 +87,13 @@ namespace Com.XpressPayments.Data.DTOs
         public string FirstReferenceAddress { get; set; }
         public string FirstReferenceOccupation { get; set; }
         public string FirstReferencePeriodKnown { get; set; }
-        public long FirstReferenceMobile { get; set; }
+        public string FirstReferenceMobile { get; set; }
         public string FirstReferenceEmail { get; set; }
         public string SecondReferenceName { get; set; }
         public string SecondReferenceAddress { get; set; }
         public string SecondReferenceOccupation { get; set; }
         public string SecondReferencePeriodKnown { get; set; }
-        public long SecondReferenceMobile { get; set; }
+        public string SecondReferenceMobile { get; set; }
         public string SecondReferenceEmail { get; set; }
         public string FirstDegreeNameAndLocation { get; set; }
         public long FirstDegreeEntranceYear { get; set; }
@@ -145,8 +146,21 @@ namespace Com.XpressPayments.Data.DTOs
         public string IdentificationType { get; set; }
         public string IdentificationNumber { get; set; }
         public string IdentificationDocument { get; set; }
+
+        public string StampedResignationLetterfromPreviousEmployer { get; set; }
+        public string DegreeCertificate { get; set; }
+        public string NYSCCertificate { get; set; }
+        public string SSCEorWAECCertificate { get; set; }
+        public string BirthCertificate { get; set; }
+        public string AdditionalQualification { get; set; }
         public string Signature { get; set; }
         public long CompanyID { get; set; }
+        public bool IsUpdateSession1 { get; set; }
+        public bool IsUpdateSession2 { get; set; }
+        public bool IsUpdateSession3 { get; set; }
+        public bool IsUpdateSession4 { get; set; }
+        public bool IsUpdateSession5 { get; set; }
+        public bool IsActive { get; set; }
 
 
         public DateTime Created_Date { get; set; }
@@ -173,7 +187,7 @@ namespace Com.XpressPayments.Data.DTOs
         public string Town { get; set; }
         public string MaidenName { get; set; }
         public string MobileNumber2 { get; set; }
-        public string CurrentDesignation { get; set; }
+        //public string CurrentDesignation { get; set; }
         public long Sex { get; set; }
         public long MaritalStatus { get; set; }
         public string SpouseContactAddress { get; set; }
@@ -187,7 +201,7 @@ namespace Com.XpressPayments.Data.DTOs
         public string MailingAddress { get; set; }
         public string NofName { get; set; }
         public string NofContactAddress { get; set; }
-        public long NofMobile { get; set; }
+        public string NofMobile { get; set; }
         public string NofRelationship { get; set; }
         public string HighestQualification { get; set; }
         public string HighestQualificationYear { get; set; }
@@ -221,13 +235,13 @@ namespace Com.XpressPayments.Data.DTOs
         public string FirstReferenceAddress { get; set; }
         public string FirstReferenceOccupation { get; set; }
         public string FirstReferencePeriodKnown { get; set; }
-        public long FirstReferenceMobile { get; set; }
+        public string FirstReferenceMobile { get; set; }
         public string FirstReferenceEmail { get; set; }
         public string SecondReferenceName { get; set; }
         public string SecondReferenceAddress { get; set; }
         public string SecondReferenceOccupation { get; set; }
         public string SecondReferencePeriodKnown { get; set; }
-        public long SecondReferenceMobile { get; set; }
+        public string SecondReferenceMobile { get; set; }
         public string SecondReferenceEmail { get; set; }
         public string FirstDegreeNameAndLocation { get; set; }
         public long FirstDegreeEntranceYear { get; set; }
@@ -281,12 +295,33 @@ namespace Com.XpressPayments.Data.DTOs
         public string IdentificationNumber { get; set; }
         public string IdentificationDocument { get; set; }
         public string Signature { get; set; }
+        public bool IsUpdateSession1 { get; set; }
+        public bool IsUpdateSession2 { get; set; }
+        public bool IsUpdateSession3 { get; set; }
+        public bool IsUpdateSession4 { get; set; }
+        public bool IsUpdateSession5 { get; set; }
         public long CompanyID { get; set; }
+        public string StampedResignationLetterfromPreviousEmployer { get; set; }
+        public string DegreeCertificate { get; set; }
+        public string NYSCCertificate { get; set; }
+        public string SSCEorWAECCertificate { get; set; }
+        public string BirthCertificate { get; set; }
+        public string AdditionalQualification { get; set; }
+
     }
 
     public class ApproveEmp
     {
         [Required]
         public string Email { get; set; }
+    }
+
+    public class DisapproveEmpDto
+    {
+        [Required]
+        public string Email { get; set; }
+
+        [Required]
+        public string DisapprovedComment { get; set; }
     }
 }

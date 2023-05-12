@@ -340,7 +340,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 //validate CreateUserDto payload here 
                 if (String.IsNullOrEmpty(userDto.FirstName) || String.IsNullOrEmpty(userDto.LastName) ||
                     String.IsNullOrEmpty(userDto.Email) || String.IsNullOrEmpty(userDto.PhoneNumber) ||
-                    userDto.RoleId <= 0 || userDto.RoleId > 3 || userDto.CompanyId <= 0  || userDto.DepartmentId <= 0)
+                    userDto.RoleId <= 0 || userDto.RoleId > 4 || userDto.CompanyId <= 0 || userDto.DepartmentId <= 0)
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";
@@ -946,6 +946,9 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 var port = requester.Port.ToString();
 
                 var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+
+                var UserInfo = await _accountRepository.FindUser(disapproveUser.Email);
+
                 if (null == requesterInfo)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
@@ -953,12 +956,23 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) != 1 || Convert.ToInt32(RoleId) != 4)
+
+                Tuple<bool, bool> checkRole = checkPermission(UserInfo.RoleId, requesterInfo.RoleId);
+
+
+                if (!checkRole.Item2)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                     return response;
                 }
+
+                //if (Convert.ToInt32(RoleId) != 1 || Convert.ToInt32(RoleId) != 4)
+                //{
+                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //    return response;
+                //}
 
                 var user = await _accountRepository.FindUser(disapproveUser.Email);
                 if (user != null)
@@ -978,25 +992,25 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     {
                         //update action performed into audit log here
 
-                        _logger.LogInformation($"User with email: {user.Email} disapproved successfully.");
+                        _logger.LogInformation($"Employee with email: {user.Email} disapproved successfully.");
                         response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"User with email: {user.Email} disapproved successfully.";
+                        response.ResponseMessage = $"Employee with email: {user.Email} disapproved successfully.";
                         return response;
                     }
                     response.ResponseCode = ResponseCode.Exception.ToString();
-                    response.ResponseMessage = "An error occurred while disapproving the user.";
+                    response.ResponseMessage = "An error occurred while disapproving the Employee.";
                     return response;
                 }
                 response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Invalid user. Not found.";
+                response.ResponseMessage = "Invalid Employee. Not found.";
                 response.Data = null;
                 return response;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ControllerMethod : DisapproveUser ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: ControllerMethod : DisapproveEmp ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : DisapproveUser ==> {ex.Message}";
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : DisapproveEmp ==> {ex.Message}";
                 response.Data = null;
                 return response;
             }
