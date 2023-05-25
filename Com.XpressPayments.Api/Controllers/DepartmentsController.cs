@@ -2,13 +2,17 @@
 using Com.XpressPayments.Bussiness.Services.ILogic;
 using Com.XpressPayments.Bussiness.Services.Logic;
 using Com.XpressPayments.Data.DTOs;
+using Com.XpressPayments.Data.DTOs.Account;
 using Com.XpressPayments.Data.Enums;
 using Com.XpressPayments.Data.GenericResponse;
 using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OfficeOpenXml;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -54,6 +58,37 @@ namespace Com.XpressPayments.Api.Controllers
                 return Ok(response);
             }
         }
+
+        [HttpPost("CreateDepartmentBulkUpload")]
+        [Authorize]
+        public async Task<IActionResult> CreateDepartmentBulkUpload(IFormFile payload)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var requester = new RequesterInfo
+                {
+                    Username = this.User.Claims.ToList()[2].Value,
+                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                };
+
+                return Ok(await _DepartmentService.CreateDepartmentBulkUpload(payload, requester));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: ControllerMethod : CreateDepartmentBulkUpload ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : CreateDepartmentBulkUpload ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+        }
+
+
+        
 
         [HttpPost("UpdateDepartment")]
         [Authorize]

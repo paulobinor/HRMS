@@ -1,5 +1,6 @@
 ﻿using Com.XpressPayments.Api.Wrappers;
 using Com.XpressPayments.Bussiness.Services.ILogic;
+using Com.XpressPayments.Bussiness.Services.Logic;
 using Com.XpressPayments.Bussiness.ViewModels;
 using Com.XpressPayments.Data.DTOs.Account;
 using Com.XpressPayments.Data.Enums;
@@ -124,93 +125,36 @@ namespace Com.XpressPayments.Api.Controllers
             }
         }
 
-
         [HttpPost("CreateUserBulkUpload")]
         [Authorize]
-        public async Task<IActionResult> UploadTempleTransactions(IFormFile batchTransactions)
+        public async Task<IActionResult> CreateUserBulkUpload(IFormFile payload)
         {
+            var response = new BaseResponse();
             try
             {
-                if (batchTransactions?.Length > 0)
+                var requester = new RequesterInfo
                 {
-                    List<CreateUserDto> batchList = new();
-                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                    var stream = batchTransactions.OpenReadStream();
-                    using (var package = new ExcelPackage(stream))
-                    {
-                        var worksheet = package.Workbook.Worksheets.First();
-                        var rowCount = worksheet.Dimension.Rows;
-                        for (int row = 2; row <= rowCount - 1; row++)
-                        {
-                            var FirstName = worksheet.Cells[row, 1].Value?.ToString();
-                            var MiddleName = worksheet.Cells[row, 2].Value?.ToString();
-                            var LastName = worksheet.Cells[row, 3].Value?.ToString();
-                            var OfficialMail = worksheet.Cells[row, 5].Value?.ToString();
-                            var Email = worksheet.Cells[row, 4].Value?.ToString(); 
-                            var PhoneNumber = worksheet.Cells[row, 6].Value?.ToString();
-                            var RoleId = worksheet.Cells[row, 7].Value?.ToString();
-                            var CompanyId = worksheet.Cells[row, 20].Value?.ToString();
-                            var DepartmentId = worksheet.Cells[row, 8].Value?.ToString();
-                            var UnitID = worksheet.Cells[row, 9].Value?.ToString();
-                            var UnitHeadID = worksheet.Cells[row, 10].Value?.ToString();
-                            var HodID = worksheet.Cells[row, 11].Value?.ToString();
-                            var GradeID = worksheet.Cells[row, 12].Value?.ToString();
-                            var EmployeeTypeID = worksheet.Cells[row, 13].Value?.ToString();
-                            var PositionID = worksheet.Cells[row, 14].Value?.ToString();
-                            var DOB = worksheet.Cells[row, 15].Value?.ToString();
-                            var BranchID = worksheet.Cells[row, 16].Value?.ToString();
-                            var EmploymentStatusID = worksheet.Cells[row, 17].Value?.ToString();
-                            var GroupID = worksheet.Cells[row, 18].Value?.ToString();
-                            var ResumptionDate = worksheet.Cells[row, 19].Value?.ToString();
-                            
+                    Username = this.User.Claims.ToList()[2].Value,
+                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                };
 
-
-
-                            CreateUserDto user = new()
-                            {
-                                FirstName = FirstName,
-                                MiddleName = MiddleName,
-                                LastName = LastName,
-                                OfficialMail = OfficialMail,
-                                Email = Email,
-                                PhoneNumber = PhoneNumber,
-                                RoleId = Convert.ToInt32(RoleId),
-                                DepartmentId = Convert.ToInt32(DepartmentId),
-                                UnitID = Convert.ToInt32(UnitID),
-                                UnitHeadID = Convert.ToInt32(UnitHeadID),
-                                HodID = Convert.ToInt32(HodID),
-                                GradeID = Convert.ToInt32(GradeID),
-                                EmployeeTypeID = Convert.ToInt32(EmployeeTypeID),
-                                PositionID = Convert.ToInt32(PositionID),
-                                DOB = DOB,
-                                BranchID = Convert.ToInt32(BranchID),
-                                EmploymentStatusID = Convert.ToInt32(EmploymentStatusID),
-                                GroupID = Convert.ToInt32(GroupID),
-                                ResumptionDate = ResumptionDate,
-                                CompanyId = Convert.ToInt32(CompanyId)
-                            };
-
-                            var requester = new RequesterInfo
-                            {
-                                Username = this.User.Claims.ToList()[2].Value,
-                                UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                                RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                                IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                                Port = Request.HttpContext.Connection.LocalPort.ToString()
-                            };
-                            var res = await _authService.CreateUser(user, requester);
-
-                        }
-
-                    }
-                }
+                return Ok(await _authService.CreateUserBulkUpload(payload, requester));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw;
+                _logger.LogError($"Exception Occured: ControllerMethod : CreateUserBulkUpload ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : CreateUserBulkUpload ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
             }
-            return null;
         }
+
+
+
 
         [HttpPost("UpdateUser")]
         [Authorize]

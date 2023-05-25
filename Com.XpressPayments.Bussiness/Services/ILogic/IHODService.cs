@@ -1,5 +1,6 @@
 ﻿using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.GenericResponse;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
     public  interface IHODService
     {
         Task<BaseResponse> CreateHOD(CreateHodDTO HodDto, RequesterInfo requester);
+        Task<BaseResponse> CreateHODBulkUpload(IFormFile payload, RequesterInfo requester);
         Task<BaseResponse> UpdateHOD(UpdateHodDTO updateDto, RequesterInfo requester);
         Task<BaseResponse> DeleteHOD(DeleteHodDTO deleteDto, RequesterInfo requester);
         Task<BaseResponse> GetAllActiveHOD(RequesterInfo requester);

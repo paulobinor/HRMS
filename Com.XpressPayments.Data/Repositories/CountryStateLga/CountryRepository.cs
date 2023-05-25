@@ -49,5 +49,28 @@ namespace Com.XpressPayments.Data.Repositories.CountryStateLga
                 throw;
             }
         }
+
+        public async Task<CountryDTO> GetCountryByName(string CountryName)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", CountryStateLgaEnum.GETBYNAME);
+                    param.Add("@CountryNameGet", CountryName);
+
+                    var CountryDetails = await _dapper.QueryFirstOrDefaultAsync<CountryDTO>(ApplicationConstant.Sp_get_countries, param: param, commandType: CommandType.StoredProcedure);
+
+                    return CountryDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName:  GetCountryByName(string CountryName) ===>{ex.Message}");
+                throw;
+            }
+        }
     }
 }

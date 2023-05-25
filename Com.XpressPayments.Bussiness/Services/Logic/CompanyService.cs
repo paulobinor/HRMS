@@ -79,6 +79,14 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
+                var isExistsEmail = await _companyrepository.GetCompanyByEmail(CompanyDto.Email);
+                if (null != isExistsEmail)
+                {
+                    response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Company with Email : {CompanyDto.Email} already exists.";
+                    return response;
+                }
+
                 dynamic resp = await _companyrepository.CreateCompany(CompanyDto, createdbyUserEmail);
                 if (resp > 0)
                 {

@@ -3,12 +3,18 @@ using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.Enums;
 using Com.XpressPayments.Data.GenericResponse;
 using Com.XpressPayments.Data.Repositories.Company.IRepository;
+using Com.XpressPayments.Data.Repositories.Departments.IRepository;
+using Com.XpressPayments.Data.Repositories.HOD;
 using Com.XpressPayments.Data.Repositories.Unit;
 using Com.XpressPayments.Data.Repositories.UnitHead;
 using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
+using ExcelDataReader;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,9 +30,12 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
         private readonly IUnitHeadRepository _unitHeadRepository;
-
+        private readonly IUnitRepository _unitRepository;
+        private readonly IHODRepository _hODRepository;
+        private readonly IDepartmentRepository _departmentRepository;
         public UnitHeadService (/*IConfiguration configuration*/ IAccountRepository accountRepository, ILogger<UnitHeadService> logger,
-            IUnitHeadRepository unitHeadRepository, IAuditLog audit, ICompanyRepository companyrepository)
+            IUnitHeadRepository unitHeadRepository, IAuditLog audit, ICompanyRepository companyrepository, IUnitRepository unitRepository,
+            IHODRepository hODRepository, IDepartmentRepository departmentRepository)
         {
             _audit = audit;
 
@@ -35,6 +44,9 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             _accountRepository = accountRepository;
             _unitHeadRepository = unitHeadRepository;
             _companyrepository = companyrepository;
+            _unitRepository = unitRepository;
+            _hODRepository = hODRepository;
+            _departmentRepository = departmentRepository;
         }
 
         public async Task<BaseResponse> CreateUnitHead(CreateUnitHeadDTO creatDto, RequesterInfo requester)
@@ -90,7 +102,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     }
                 }
 
-                creatDto.UnitHeadName = $"{creatDto.UnitHeadName} ({isExistsComp.CompanyName})";
+                //creatDto.UnitHeadName = $"{creatDto.UnitHeadName} ({isExistsComp.CompanyName})";
 
                 var isExists = await _unitHeadRepository.GetUnitHeadByName(creatDto.UnitHeadName);
                 if (null != isExists)
@@ -122,6 +134,149 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Exception Occured: CreateUnitHead ==> {ex.Message}";
                 response.Data = null;
+                return response;
+            }
+        }
+
+        public async Task<BaseResponse> CreateUnitHeadBulkUpload(IFormFile payload, RequesterInfo requester)
+        {
+            //check if us
+            StringBuilder errorOutput = new StringBuilder();
+            var response = new BaseResponse();
+            try
+            {
+                if (payload == null || payload.Length <= 0)
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "No file for Upload";
+                    return response;
+                }
+                else if (!Path.GetExtension(payload.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "File not an Excel Format";
+                    return response;
+                }
+                else
+                {
+                    var stream = new MemoryStream();
+                    await payload.CopyToAsync(stream);
+
+                    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                    var reader = ExcelReaderFactory.CreateReader(stream);
+                    DataSet ds = new DataSet();
+                    ds = reader.AsDataSet();
+                    reader.Close();
+
+                    int rowCount = ds.Tables[0].Rows.Count;
+                    DataTable serviceDetails = ds.Tables[0];
+
+                    int k = 0;
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+
+                        string UnitHeadName = serviceDetails.Rows[0][0].ToString();
+                        string UnitName = serviceDetails.Rows[0][1].ToString();
+                        string HODName = serviceDetails.Rows[0][2].ToString();
+                        string DepartmentName = serviceDetails.Rows[0][3].ToString();
+                        string CompanyName = serviceDetails.Rows[0][4].ToString();
+
+
+                        if (UnitHeadName != "UnitHeadName" || UnitName != "UnitName" || HODName != "HODName" || DepartmentName != "DepartmentName"
+                        || CompanyName != "CompanyName")
+
+                        {
+                            response.ResponseCode = "08";
+                            response.ResponseMessage = "File header not in the Right format";
+                            return response;
+                        }
+                        else
+                        {
+                            for (int row = 1; row < serviceDetails.Rows.Count; row++)
+                            {
+
+                                string unitHeadName = serviceDetails.Rows[row][0].ToString();
+                                var unitName = await _unitRepository.GetUnitByName(serviceDetails.Rows[row][1].ToString());
+                                var hodName = await _hODRepository.GetHODByName(serviceDetails.Rows[row][2].ToString());
+                                var departmentName = await _departmentRepository.GetDepartmentByName(serviceDetails.Rows[row][3].ToString());
+                                var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][4].ToString());
+
+                                long unitID = unitName.HodID;
+                                long hodID = hodName.HodID;
+                                long departmentID = departmentName.HodID;
+                                long companyID = company.CompanyId;
+
+
+                                var unitHeadrequest = new CreateUnitHeadDTO
+                                {
+                                    UnitID = unitID,
+                                    HodID = hodID,
+                                    DepartmentID = departmentID,
+                                    CompanyID = companyID
+
+
+                                };
+
+                                var unitHeadrequester = new RequesterInfo
+                                {
+                                    Username = requester.Username,
+                                    UserId = requester.UserId,
+                                    RoleId = requester.RoleId,
+                                    IpAddress = requester.IpAddress,
+                                    Port = requester.Port,
+
+
+                                };
+
+                                var resp = await CreateUnitHead(unitHeadrequest, unitHeadrequester);
+
+
+                                if (resp.ResponseCode == "00")
+                                {
+                                    k++;
+                                }
+                                else
+                                {
+                                    errorOutput.Append($"Row {row} failed due to {resp.ResponseMessage}" + "\n");
+                                }
+                            }
+                        }
+
+                    }
+
+
+
+                    if (k == rowCount - 1)
+                    {
+                        response.ResponseCode = "00";
+                        response.ResponseMessage = "All record inserted successfully";
+
+
+
+                        return response;
+                    }
+                    else
+                    {
+                        response.ResponseCode = "02";
+                        response.ResponseMessage = errorOutput.ToString();
+
+
+
+                        return response;
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Exception occured";
+                response.Data = null;
+
+
+
                 return response;
             }
         }

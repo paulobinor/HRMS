@@ -6,15 +6,33 @@ using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.DTOs.Account;
 using Com.XpressPayments.Data.Enums;
 using Com.XpressPayments.Data.GenericResponse;
+using Com.XpressPayments.Data.Repositories;
+using Com.XpressPayments.Data.Repositories.Branch;
+using Com.XpressPayments.Data.Repositories.Company.IRepository;
+using Com.XpressPayments.Data.Repositories.Departments.IRepository;
+using Com.XpressPayments.Data.Repositories.EmployeeType;
+using Com.XpressPayments.Data.Repositories.EmploymentStatus;
+using Com.XpressPayments.Data.Repositories.Grade;
+using Com.XpressPayments.Data.Repositories.Group;
+using Com.XpressPayments.Data.Repositories.HMO;
+using Com.XpressPayments.Data.Repositories.HOD;
+using Com.XpressPayments.Data.Repositories.JobDescription;
+using Com.XpressPayments.Data.Repositories.Position;
+using Com.XpressPayments.Data.Repositories.Unit;
+using Com.XpressPayments.Data.Repositories.UnitHead;
 using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
+using ExcelDataReader;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -33,6 +51,19 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
         private readonly ITokenRefresher _tokenRefresher;
         private readonly IAuditLog _audit;
         private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly IUnitRepository _unitRepository;
+        private readonly IUnitHeadRepository _unitHeadRepository;
+        private readonly IHODRepository _HODRepository;
+        private readonly IGradeRepository _GradeRepository;
+        private readonly IEmployeeTypeRepository _EmployeeTypeRepository;
+        private readonly IPositionRepository _PositionRepository;
+        private readonly IBranchRepository _branchRepository;
+        private readonly IEmploymentStatusRepository _EmploymentStatusRepository;
+        private readonly IGroupRepository _GroupRepository;
+        private readonly IJobDescriptionRepository _jobDescriptionRepository;
+        private readonly IRolesRepo _rolesRepo;
+        private readonly IDepartmentRepository _departmentrepository;
+        private readonly ICompanyRepository _companyrepository;
         private int MaxNumberOfFailedAttemptsToLogin;
         private int MinutesBeforeResetAfterFailedAttemptsToLogin;
         private int CharacterLengthMax;
@@ -40,10 +71,14 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
         private int MustContainUppercase;
         private int MustContainLowercase;
         private int MustContainNumber;
+      
 
         public AuthService(ITokenRefresher tokenRefresher, IUnitOfWork unitOfWork, IConfiguration configuration,
              IAuditLog audit, IMapper mapper, IJwtManager jwtManager, IWebHostEnvironment hostEnvironment,
-             IAccountRepository accountRepository, ILogger<AuthService> logger)
+             IAccountRepository accountRepository, ILogger<AuthService> logger, IUnitRepository unitRepository, IUnitHeadRepository unitHeadRepository,
+             IHODRepository HODRepository, IGradeRepository GradeRepository, IEmployeeTypeRepository EmployeeTypeRepository, IPositionRepository PositionRepository,
+                IBranchRepository branchRepository, IEmploymentStatusRepository EmploymentStatusRepository, IGroupRepository groupRepository,
+                IJobDescriptionRepository jobDescriptionRepository, IDepartmentRepository departmentrepository, ICompanyRepository companyRepository, IRolesRepo rolesRepo)
         {
             _tokenRefresher = tokenRefresher;
             _unitOfWork = unitOfWork;
@@ -53,6 +88,19 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             _logger = logger;
             _accountRepository = accountRepository;
             _hostEnvironment = hostEnvironment;
+            _unitRepository = unitRepository;
+            _unitHeadRepository = unitHeadRepository;
+            _HODRepository = HODRepository;
+            _GradeRepository    = GradeRepository;
+            _EmployeeTypeRepository = EmployeeTypeRepository;
+            _PositionRepository = PositionRepository;
+            _branchRepository = branchRepository;
+            _EmploymentStatusRepository = EmploymentStatusRepository;
+            _GroupRepository = groupRepository;
+            _rolesRepo = rolesRepo; 
+            _jobDescriptionRepository = jobDescriptionRepository;
+            _departmentrepository = departmentrepository;
+            _companyrepository = companyRepository;
         }
 
         public async Task<LoginResponse> Login(LoginModel login, string ipAddress, string port)
@@ -337,6 +385,8 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
+
+
                 //validate CreateUserDto payload here 
                 if (String.IsNullOrEmpty(userDto.FirstName) || String.IsNullOrEmpty(userDto.LastName) ||
                     String.IsNullOrEmpty(userDto.Email) || String.IsNullOrEmpty(userDto.PhoneNumber) ||
@@ -344,6 +394,13 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";
+                    return response;
+                }
+
+                if (requester.RoleId == 1 & userDto.DepartmentId != 1)
+                {
+                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Your user role is not authorized to create a new user with the selected Department.";
                     return response;
                 }
 
@@ -389,6 +446,212 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 return response;
             }
         }
+
+
+        public async Task<BaseResponse> CreateUserBulkUpload(IFormFile payload, RequesterInfo requester)
+        {
+            //check if us
+            StringBuilder errorOutput = new StringBuilder();
+            var response = new BaseResponse();
+            try
+            {
+                if (payload == null || payload.Length <= 0)
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "No file for Upload";
+                    return response;
+                }
+                else if (!Path.GetExtension(payload.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "File not an Excel Format";
+                    return response;
+                }
+                else
+                {
+                    var stream = new MemoryStream();
+                    await payload.CopyToAsync(stream);
+
+                    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                    var reader = ExcelReaderFactory.CreateReader(stream);
+                    DataSet ds = new DataSet();
+                    ds = reader.AsDataSet();
+                    reader.Close();
+
+                    int rowCount = ds.Tables[0].Rows.Count;
+                    DataTable serviceDetails = ds.Tables[0];
+
+                    int k = 0;
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+
+                        string FirstName = serviceDetails.Rows[0][0].ToString();
+                        string MiddleName = serviceDetails.Rows[0][1].ToString();
+                        string LastName = serviceDetails.Rows[0][2].ToString();
+                        string Email = serviceDetails.Rows[0][3].ToString();
+                        string DOB = serviceDetails.Rows[0][4].ToString();
+                        string ResumptionDate = serviceDetails.Rows[0][5].ToString();
+                        string OfficialMail = serviceDetails.Rows[0][6].ToString();
+                        string PhoneNumber = serviceDetails.Rows[0][7].ToString();
+                        string UnitName = serviceDetails.Rows[0][8].ToString();
+                        string UnitHeadName = serviceDetails.Rows[0][9].ToString();
+                        string HODName = serviceDetails.Rows[0][10].ToString();
+                        string GradeName = serviceDetails.Rows[0][11].ToString();
+                        string EmployeeTypeName = serviceDetails.Rows[0][12].ToString();
+                        string PositionName = serviceDetails.Rows[0][13].ToString();
+                        string BranchName = serviceDetails.Rows[0][14].ToString();
+                        string EmploymentStatusName = serviceDetails.Rows[0][15].ToString();
+                        string GroupName = serviceDetails.Rows[0][16].ToString();
+                        string JobDescriptionName = serviceDetails.Rows[0][17].ToString();
+                        string RoleName = serviceDetails.Rows[0][18].ToString();
+                        string DepartmentName = serviceDetails.Rows[0][19].ToString();
+                        string CompanyName = serviceDetails.Rows[0][20].ToString();
+
+
+                        if (FirstName != "FirstName" || MiddleName != "MiddleName"
+                        || LastName != "LastName" || Email != "Email" || DOB != "DOB" || ResumptionDate != "ResumptionDate"
+                        || OfficialMail != "OfficialMail" || PhoneNumber != "PhoneNumber" || UnitName != "UnitName" || UnitHeadName != "UnitHeadName"
+                        || HODName != "HODName" || GradeName != "GradeName" || EmployeeTypeName != "EmployeeTypeName" || PositionName != "PositionName"
+                        || BranchName != "BranchName" || EmploymentStatusName != "EmploymentStatusName" || GroupName != "GroupName" || JobDescriptionName != "JobDescriptionName"
+                        || RoleName != "RoleName" || DepartmentName != "DepartmentName" || CompanyName != "CompanyName")
+                        {
+                            response.ResponseCode = "08";
+                            response.ResponseMessage = "File header not in the Right format";
+                            return response;
+                        }
+                        else
+                        {
+                            for (int row = 1; row < serviceDetails.Rows.Count; row++)
+                            {
+
+                                string firstName = serviceDetails.Rows[row][0].ToString();
+                                string middleName = serviceDetails.Rows[row][1].ToString();
+                                string lastName = serviceDetails.Rows[row][2].ToString();
+                                string email = serviceDetails.Rows[row][3].ToString();
+                                string dOB = serviceDetails.Rows[row][4].ToString();
+                                string resumptionDate = serviceDetails.Rows[row][5].ToString();
+                                string officialMail = serviceDetails.Rows[row][6].ToString();
+                                string phoneNumber = serviceDetails.Rows[row][7].ToString();
+                                var unitName = await _unitRepository.GetUnitByName(serviceDetails.Rows[row][8].ToString());
+                                var unitHeadName = await _unitHeadRepository.GetUnitHeadByName(serviceDetails.Rows[row][9].ToString());
+                                var hODName = await _HODRepository.GetHODByName(serviceDetails.Rows[row][10].ToString());
+                                var gradeName = await _GradeRepository.GetGradeByName(serviceDetails.Rows[row][11].ToString());
+                                var employeeTypeName = await _EmployeeTypeRepository.GetEmployeeTypeByName(serviceDetails.Rows[row][12].ToString());
+                                var positionName = await _PositionRepository.GetPositionByName(serviceDetails.Rows[row][13].ToString());
+                                var branchName = await _branchRepository.GetBranchByName(serviceDetails.Rows[row][14].ToString());
+                                var employmentStatusName = await _EmploymentStatusRepository.GetEmpLoymentStatusByName(serviceDetails.Rows[row][15].ToString());
+                                var groupName = await _GroupRepository.GetGroupByName(serviceDetails.Rows[row][16].ToString());
+                                var jobDescriptionName = await _jobDescriptionRepository.GetJobDescriptionByName(serviceDetails.Rows[row][17].ToString());
+                                var roleName = await _rolesRepo.GetRolesByName(serviceDetails.Rows[row][18].ToString());
+                                var departmentName = await _departmentrepository.GetDepartmentByName(serviceDetails.Rows[row][19].ToString());
+                                var companyName = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][20].ToString());
+
+                                long unitID = unitName.UnitID;
+                                long unitHeadID = unitHeadName.UnitHeadID;
+                                long hODID = hODName.HodID;
+                                long gradeID = gradeName.GradeID;
+                                long employeeTypeID = employeeTypeName.EmployeeTypeID;
+                                long positionID = positionName.PositionID;
+                                long branchID = branchName.BranchID;
+                                long employmentStatusID = employmentStatusName.EmploymentStatusID;
+                                long groupID = groupName.GroupID;
+                                long jobDescriptionID = jobDescriptionName.JobDescriptionID;
+                                long roleID = roleName.RoleId;
+                                long departmentID = departmentName.DeptId;
+                                long companyID = companyName.CompanyId;
+
+
+                                var userrequest = new CreateUserDto
+                                {
+                                    FirstName = firstName,
+                                    MiddleName = middleName,
+                                    LastName = lastName,
+                                    Email = email,
+                                    DOB = dOB,
+                                    ResumptionDate = resumptionDate,
+                                    OfficialMail = OfficialMail,
+                                    PhoneNumber = phoneNumber,
+                                    UnitID = unitID,
+                                    UnitHeadID = unitHeadID,
+                                    HodID = hODID,
+                                    GradeID = gradeID,
+                                    EmployeeTypeID = employeeTypeID,
+                                    PositionID = positionID,
+                                    BranchID = branchID,
+                                    EmploymentStatusID = employmentStatusID,
+                                    GroupID = groupID,
+                                    JobDescriptionID = jobDescriptionID,
+                                    RoleId = roleID,
+                                    DepartmentId = departmentID,
+                                    CompanyId = companyID,
+
+
+                                };
+
+                                var userrequester = new RequesterInfo
+                                {
+                                    Username = requester.Username,
+                                    UserId = requester.UserId,
+                                    RoleId = requester.RoleId,
+                                    IpAddress = requester.IpAddress,
+                                    Port = requester.Port,
+
+
+                                };
+
+                                var resp = await CreateUser(userrequest, userrequester);
+
+
+                                if (resp.ResponseCode == "00")
+                                {
+                                    k++;
+                                }
+                                else
+                                {
+                                    errorOutput.Append($"Row {row} failed due to {resp.ResponseMessage}" + "\n");
+                                }
+                            }
+                        }
+
+                    }
+
+
+
+                    if (k == rowCount - 1)
+                    {
+                        response.ResponseCode = "00";
+                        response.ResponseMessage = "All record inserted successfully";
+
+
+
+                        return response;
+                    }
+                    else
+                    {
+                        response.ResponseCode = "02";
+                        response.ResponseMessage = errorOutput.ToString();
+
+
+
+                        return response;
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Exception occured";
+                response.Data = null;
+
+
+
+                return response;
+            }
+        }
+
 
         public async Task<BaseResponse> UpdateUser(UpdateUserDto updateDto, RequesterInfo requester)
         {

@@ -12,5 +12,6 @@ namespace Com.XpressPayments.Data.Repositories.CountryStateLga
     {
          Task<IEnumerable<LgaDTO>> GetAllLga(long StateID);
         Task<IEnumerable> GetLgaByStateId(long StateID);
+        Task<LgaDTO> GetLgaByName(string LGA_Name);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Com.XpressPayments.Data.Repositories.Branch;
+﻿using Com.XpressPayments.Data.Repositories;
+using Com.XpressPayments.Data.Repositories.Branch;
 using Com.XpressPayments.Data.Repositories.Children;
 using Com.XpressPayments.Data.Repositories.Company.IRepository;
 using Com.XpressPayments.Data.Repositories.Company.Repository;
@@ -64,6 +65,7 @@ namespace Com.XpressPayments.Data
             services.AddScoped<IHospitalProvidersRepository, HospitalProvidersRepository>();
             services.AddScoped<IHospitalPlanRepository, HospitalPlanRepository>();
             services.AddScoped<IChildrenRepository, ChildrenRepository>();
+            services.AddScoped<IRolesRepo, RolesRepo>();
         }
     }
 }

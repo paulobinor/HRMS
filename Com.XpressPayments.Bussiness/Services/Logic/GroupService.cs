@@ -6,10 +6,15 @@ using Com.XpressPayments.Data.Repositories.Company.IRepository;
 using Com.XpressPayments.Data.Repositories.Group;
 using Com.XpressPayments.Data.Repositories.HOD;
 using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
+using ExcelDataReader;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,9 +29,10 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
         private readonly IGroupRepository _GroupRepository;
+        private readonly IHODRepository _hODRepository;
 
         public GroupService(/*IConfiguration configuration*/ IAccountRepository accountRepository, ILogger<GroupService> logger,
-            IGroupRepository GroupRepository, IAuditLog audit, ICompanyRepository companyrepository)
+            IGroupRepository GroupRepository, IAuditLog audit, ICompanyRepository companyrepository, IHODRepository hODRepository)
         {
             _audit = audit;
 
@@ -35,6 +41,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             _accountRepository = accountRepository;
             _GroupRepository = GroupRepository;
             _companyrepository = companyrepository;
+            _hODRepository = hODRepository;
         }
 
         public async Task<BaseResponse> CreateGroup(CreateGroupDTO GroupDto, RequesterInfo requester)
@@ -90,7 +97,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     }
                 }
 
-                GroupDto.GroupName = $"{GroupDto.GroupName} ({isExistsComp.CompanyName})";
+                //GroupDto.GroupName = $"{GroupDto.GroupName} ({isExistsComp.CompanyName})";
 
                 var isExists = await _GroupRepository.GetGroupByName(GroupDto.GroupName);
                 if (null != isExists)
@@ -122,6 +129,142 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Exception Occured: CreateGroup ==> {ex.Message}";
                 response.Data = null;
+                return response;
+            }
+        }
+
+        public async Task<BaseResponse> CreateGroupBulkUpload(IFormFile payload, RequesterInfo requester)
+        {
+            //check if us
+            StringBuilder errorOutput = new StringBuilder();
+            var response = new BaseResponse();
+            try
+            {
+                if (payload == null || payload.Length <= 0)
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "No file for Upload";
+                    return response;
+                }
+                else if (!Path.GetExtension(payload.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "File not an Excel Format";
+                    return response;
+                }
+                else
+                {
+                    var stream = new MemoryStream();
+                    await payload.CopyToAsync(stream);
+
+                    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                    var reader = ExcelReaderFactory.CreateReader(stream);
+                    DataSet ds = new DataSet();
+                    ds = reader.AsDataSet();
+                    reader.Close();
+
+                    int rowCount = ds.Tables[0].Rows.Count;
+                    DataTable serviceDetails = ds.Tables[0];
+
+                    int k = 0;
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+
+                        string GroupName = serviceDetails.Rows[0][0].ToString();
+                        string HodName = serviceDetails.Rows[0][1].ToString();
+                        string CompanyName = serviceDetails.Rows[0][2].ToString();
+
+
+                        if (GroupName != "GroupName" || HodName != "HodName"
+                        || CompanyName != "CompanyName")
+
+                        {
+                            response.ResponseCode = "08";
+                            response.ResponseMessage = "File header not in the Right format";
+                            return response;
+                        }
+                        else
+                        {
+                            for (int row = 1; row < serviceDetails.Rows.Count; row++)
+                            {
+
+                                string groupName = serviceDetails.Rows[row][0].ToString();
+                                var hodName = await _hODRepository.GetHODByName(serviceDetails.Rows[row][1].ToString());
+                                var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][2].ToString());
+
+                                long hodID = hodName.HodID;
+                                long companyID = company.CompanyId;
+
+
+                                var grouprequest = new CreateGroupDTO
+                                {
+                                    GroupName = groupName,
+                                    HodID = hodID,
+                                    CompanyID = companyID
+
+
+                                };
+
+                                var grouprequester = new RequesterInfo
+                                {
+                                    Username = requester.Username,
+                                    UserId = requester.UserId,
+                                    RoleId = requester.RoleId,
+                                    IpAddress = requester.IpAddress,
+                                    Port = requester.Port,
+
+
+                                };
+
+                                var resp = await CreateGroup(grouprequest, grouprequester);
+
+
+                                if (resp.ResponseCode == "00")
+                                {
+                                    k++;
+                                }
+                                else
+                                {
+                                    errorOutput.Append($"Row {row} failed due to {resp.ResponseMessage}" + "\n");
+                                }
+                            }
+                        }
+
+                    }
+
+
+
+                    if (k == rowCount - 1)
+                    {
+                        response.ResponseCode = "00";
+                        response.ResponseMessage = "All record inserted successfully";
+
+
+
+                        return response;
+                    }
+                    else
+                    {
+                        response.ResponseCode = "02";
+                        response.ResponseMessage = errorOutput.ToString();
+
+
+
+                        return response;
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Exception occured";
+                response.Data = null;
+
+
+
                 return response;
             }
         }

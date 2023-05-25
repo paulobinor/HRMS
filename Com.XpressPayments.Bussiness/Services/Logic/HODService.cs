@@ -7,9 +7,13 @@ using Com.XpressPayments.Data.Repositories.Branch;
 using Com.XpressPayments.Data.Repositories.Company.IRepository;
 using Com.XpressPayments.Data.Repositories.HOD;
 using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
+using ExcelDataReader;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -92,7 +96,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     }
                 }
 
-                HodDto.HODName = $"{HodDto.HODName} ({isExistsComp.CompanyName})";
+                //HodDto.HODName = $"{HodDto.HODName} ({isExistsComp.CompanyName})";
 
                 var isExists = await _hodRepository.GetHODByName(HodDto.HODName);
                 if (null != isExists)
@@ -127,6 +131,140 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 return response;
             }
         }
+
+        public async Task<BaseResponse> CreateHODBulkUpload(IFormFile payload, RequesterInfo requester)
+        {
+            //check if us
+            StringBuilder errorOutput = new StringBuilder();
+            var response = new BaseResponse();
+            try
+            {
+                if (payload == null || payload.Length <= 0)
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "No file for Upload";
+                    return response;
+                }
+                else if (!Path.GetExtension(payload.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "File not an Excel Format";
+                    return response;
+                }
+                else
+                {
+                    var stream = new MemoryStream();
+                    await payload.CopyToAsync(stream);
+
+                    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                    var reader = ExcelReaderFactory.CreateReader(stream);
+                    DataSet ds = new DataSet();
+                    ds = reader.AsDataSet();
+                    reader.Close();
+
+                    int rowCount = ds.Tables[0].Rows.Count;
+                    DataTable serviceDetails = ds.Tables[0];
+
+                    int k = 0;
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+
+                        string HODName = serviceDetails.Rows[0][0].ToString();
+                        string CompanyName = serviceDetails.Rows[0][1].ToString();
+
+
+                        if (HODName != "HODName" 
+                        || CompanyName != "CompanyName")
+
+                        {
+                            response.ResponseCode = "08";
+                            response.ResponseMessage = "File header not in the Right format";
+                            return response;
+                        }
+                        else
+                        {
+                            for (int row = 1; row < serviceDetails.Rows.Count; row++)
+                            {
+
+                                string hODName = serviceDetails.Rows[row][0].ToString();
+                                var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][1].ToString());
+
+                                
+                                long companyID = company.CompanyId;
+
+
+                                var hodrequest = new CreateHodDTO
+                                {
+                                    HODName = HODName,
+                                    CompanyID = companyID
+
+
+                                };
+
+                                var hodrequester = new RequesterInfo
+                                {
+                                    Username = requester.Username,
+                                    UserId = requester.UserId,
+                                    RoleId = requester.RoleId,
+                                    IpAddress = requester.IpAddress,
+                                    Port = requester.Port,
+
+
+                                };
+
+                                var resp = await CreateHOD(hodrequest, hodrequester);
+
+
+                                if (resp.ResponseCode == "00")
+                                {
+                                    k++;
+                                }
+                                else
+                                {
+                                    errorOutput.Append($"Row {row} failed due to {resp.ResponseMessage}" + "\n");
+                                }
+                            }
+                        }
+
+                    }
+
+
+
+                    if (k == rowCount - 1)
+                    {
+                        response.ResponseCode = "00";
+                        response.ResponseMessage = "All record inserted successfully";
+
+
+
+                        return response;
+                    }
+                    else
+                    {
+                        response.ResponseCode = "02";
+                        response.ResponseMessage = errorOutput.ToString();
+
+
+
+                        return response;
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Exception occured";
+                response.Data = null;
+
+
+
+                return response;
+            }
+        }
+
 
         public async Task<BaseResponse> UpdateHOD(UpdateHodDTO updateDto, RequesterInfo requester)
         {

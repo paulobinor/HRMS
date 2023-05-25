@@ -10,6 +10,8 @@ namespace Com.XpressPayments.Data.DTOs
     {
         public long GradeID { get; set; }
         public string GradeName { get; set; }
+        public string NumberOfVacationDays { get; set; }
+        public string NumberOfVacationSplit { get; set; }
         public long CompanyID { get; set; }
 
         public DateTime Created_Date { get; set; }
@@ -28,6 +30,8 @@ namespace Com.XpressPayments.Data.DTOs
     public class CreateGradeDTO
     {
         public string GradeName { get; set; }
+        public string NumberOfVacationDays { get; set; }
+        public string NumberOfVacationSplit { get; set; }
         public long CompanyID { get; set; }
     }
 
@@ -35,6 +39,8 @@ namespace Com.XpressPayments.Data.DTOs
     {
         public long GradeID { get; set; }
         public string GradeName { get; set; }
+        public string NumberOfVacationDays { get; set; }
+        public string NumberOfVacationSplit { get; set; }
         public long CompanyID { get; set; }
     }
 

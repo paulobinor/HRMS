@@ -114,13 +114,15 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     param.Add("@GroupID", user.GroupID);
                     param.Add("@JobDescriptionID", user.JobDescriptionID);
                     param.Add("@RoleId", user.RoleId);
-                    param.Add("@CreatedByUserId", createdbyUserId);
 
-                    //add this parameter to sp for create user
-                    param.Add("@CreatedByUserEmail", createdbyuseremail);
-                    
                     param.Add("@DeptId", user.DepartmentId);
                     param.Add("@CompanyId", user.CompanyId);
+
+                    //add this parameter to sp for create user
+                    param.Add("@CreatedByUserId", createdbyUserId);
+                    param.Add("@CreatedByUserEmail", createdbyuseremail);
+                    
+       
 
                     response = await _dapper.QueryFirstOrDefaultAsync<CreateUserResponse>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
 

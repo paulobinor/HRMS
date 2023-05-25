@@ -57,66 +57,7 @@ namespace Com.XpressPayments.Api.Controllers
             }
         }
 
-        [HttpPost("CreateHospitalProvidersBulkUpload")]
-        [Authorize]
-        public async Task<IActionResult> UploadTempleTransactions(IFormFile batchTransactions)
-        {
-            try
-            {
-                if (batchTransactions?.Length > 0)
-                {
-                    List<CreateHospitalProvidersDTO> batchList = new();
-                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                    var stream = batchTransactions.OpenReadStream();
-                    using (var package = new ExcelPackage(stream))
-                    {
-                        var worksheet = package.Workbook.Worksheets.First();
-                        var rowCount = worksheet.Dimension.Rows;
-                        for (int row = 2; row <= rowCount - 1; row++)
-                        {
-                            var ProvidersNames = worksheet.Cells[row, 1].Value?.ToString();
-                            var State = worksheet.Cells[row, 2].Value?.ToString();
-                            var Town1 = worksheet.Cells[row, 3].Value?.ToString();
-                            var Town2 = worksheet.Cells[row, 4].Value?.ToString();
-                            var Address1 = worksheet.Cells[row, 5].Value?.ToString();
-                            var Address2 = worksheet.Cells[row, 6].Value?.ToString();
-                            var HospitalPlan = worksheet.Cells[row, 7].Value?.ToString();
-                            var CompanyID = worksheet.Cells[row, 8].Value?.ToString();
-
-
-                            CreateHospitalProvidersDTO Providers = new()
-                            {
-                                ProvidersNames = ProvidersNames,
-                                State = State,
-                                Town1 = Town1,
-                                Town2 = Town2,
-                                Address1 = Address1,
-                                Address2 = Address2,
-                                HospitalPlan = HospitalPlan,
-                                CompanyID = Convert.ToInt32(CompanyID)
-                            };
-
-                            var requester = new RequesterInfo
-                            {
-                                Username = this.User.Claims.ToList()[2].Value,
-                                UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                                RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                                IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                                Port = Request.HttpContext.Connection.LocalPort.ToString()
-                            };
-                            var res = await _HospitalProvidersService.CreateHospitalProviders(Providers, requester);
-
-                        }
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-            return null;
-        }
+        
 
         [HttpPost("UpdateHospitalProviders")]
         [Authorize]

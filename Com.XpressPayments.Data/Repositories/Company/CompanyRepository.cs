@@ -189,7 +189,7 @@ namespace Com.XpressPayments.Data.Repositories.Company.Repository
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", Cmpany.GETBYEMAIL);
+                    param.Add("@Status", Cmpany.GETBYname);
                     param.Add("@CompanyNameGet", CompanyName);
 
                     var CompanyDetails = await _dapper.QueryFirstOrDefaultAsync<CompanyDTO>(ApplicationConstant.Sp_Company, param: param, commandType: CommandType.StoredProcedure);
@@ -204,5 +204,30 @@ namespace Com.XpressPayments.Data.Repositories.Company.Repository
                 throw;
             }
         }
+
+        public async Task<CompanyDTO> GetCompanyByEmail(string Email)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", Cmpany.GETBYEmail);
+                    param.Add("@EmailGet", Email.Trim());
+
+                    var CompanyDetails = await _dapper.QueryFirstOrDefaultAsync<CompanyDTO>(ApplicationConstant.Sp_Company, param: param, commandType: CommandType.StoredProcedure);
+
+                    return CompanyDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetCompanyById(int CompanyId) ===>{ex.Message}");
+                throw;
+            }
+        }
+
+
     }
 }

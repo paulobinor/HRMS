@@ -6,9 +6,13 @@ using Com.XpressPayments.Data.Repositories.Company.IRepository;
 using Com.XpressPayments.Data.Repositories.EmployeeType;
 using Com.XpressPayments.Data.Repositories.JobDescription;
 using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
+using ExcelDataReader;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -91,7 +95,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     }
                 }
 
-                creatDto.EmployeeTypeName = $"{creatDto.EmployeeTypeName} ({isExistsComp.CompanyName})";
+                //creatDto.EmployeeTypeName = $"{creatDto.EmployeeTypeName} ({isExistsComp.CompanyName})";
 
                 var isExists = await _EmployeeTypeRepository.GetEmployeeTypeByName(creatDto.EmployeeTypeName);
                 if (null != isExists)
@@ -123,6 +127,137 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Exception Occured: CreateEmployeeType ==> {ex.Message}";
                 response.Data = null;
+                return response;
+            }
+        }
+
+        public async Task<BaseResponse> CreateEmployeeTypeBulkUpload(IFormFile payload, RequesterInfo requester)
+        {
+            //check if us
+            StringBuilder errorOutput = new StringBuilder();
+            var response = new BaseResponse();
+            try
+            {
+                if (payload == null || payload.Length <= 0)
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "No file for Upload";
+                    return response;
+                }
+                else if (!Path.GetExtension(payload.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "File not an Excel Format";
+                    return response;
+                }
+                else
+                {
+                    var stream = new MemoryStream();
+                    await payload.CopyToAsync(stream);
+
+                    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                    var reader = ExcelReaderFactory.CreateReader(stream);
+                    DataSet ds = new DataSet();
+                    ds = reader.AsDataSet();
+                    reader.Close();
+
+                    int rowCount = ds.Tables[0].Rows.Count;
+                    DataTable serviceDetails = ds.Tables[0];
+
+                    int k = 0;
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+
+                        string EmployeeTypeName = serviceDetails.Rows[0][0].ToString();
+                        string CompanyName = serviceDetails.Rows[0][1].ToString();
+
+
+                        if (EmployeeTypeName != "EmployeeTypeName" || CompanyName != "CompanyName")
+                        {
+                            response.ResponseCode = "08";
+                            response.ResponseMessage = "File header not in the Right format";
+                            return response;
+                        }
+                        else
+                        {
+                            for (int row = 1; row < serviceDetails.Rows.Count; row++)
+                            {
+
+                                string employeeTypeName = serviceDetails.Rows[row][0].ToString();
+                                var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][1].ToString());
+
+
+                                long companyID = company.CompanyId;
+
+
+                                var employeeTypeprequest = new CraeteEmployeeTypeDTO
+                                {
+                                    EmployeeTypeName = EmployeeTypeName,
+                                    CompanyID = companyID
+
+
+                                };
+
+                                var employeeTypeprequester = new RequesterInfo
+                                {
+                                    Username = requester.Username,
+                                    UserId = requester.UserId,
+                                    RoleId = requester.RoleId,
+                                    IpAddress = requester.IpAddress,
+                                    Port = requester.Port,
+
+
+                                };
+
+                                var resp = await CreateEmployeeType(employeeTypeprequest, employeeTypeprequester);
+
+
+                                if (resp.ResponseCode == "00")
+                                {
+                                    k++;
+                                }
+                                else
+                                {
+                                    errorOutput.Append($"Row {row} failed due to {resp.ResponseMessage}" + "\n");
+                                }
+                            }
+                        }
+
+                    }
+
+
+
+                    if (k == rowCount - 1)
+                    {
+                        response.ResponseCode = "00";
+                        response.ResponseMessage = "All record inserted successfully";
+
+
+
+                        return response;
+                    }
+                    else
+                    {
+                        response.ResponseCode = "02";
+                        response.ResponseMessage = errorOutput.ToString();
+
+
+
+                        return response;
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Exception occured";
+                response.Data = null;
+
+
+
                 return response;
             }
         }

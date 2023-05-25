@@ -16,5 +16,6 @@ namespace Com.XpressPayments.Data.Repositories.Company.IRepository
         Task<IEnumerable<CompanyDTO>> GetAllCompanys();
         Task<CompanyDTO> GetCompanyById(long CompanyId);
         Task<CompanyDTO> GetCompanyByName(string CompanyEmail);
+        Task<CompanyDTO> GetCompanyByEmail(string Email);
     }
 }

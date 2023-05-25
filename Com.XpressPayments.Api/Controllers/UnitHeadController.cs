@@ -9,6 +9,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using Com.XpressPayments.Bussiness.Services.Logic;
+using Microsoft.AspNetCore.Http;
+using OfficeOpenXml;
+using System.Collections.Generic;
 
 namespace Com.XpressPayments.Api.Controllers
 {
@@ -48,6 +51,34 @@ namespace Com.XpressPayments.Api.Controllers
                 _logger.LogError($"Exception Occured: ControllerMethod : CreateUnitHead ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Exception Occured: ControllerMethod : CreateUnitHead ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+        }
+
+        [HttpPost("CreateUnitHeadBulkUpload")]
+        [Authorize]
+        public async Task<IActionResult> CreateUnitHeadBulkUpload(IFormFile payload)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var requester = new RequesterInfo
+                {
+                    Username = this.User.Claims.ToList()[2].Value,
+                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                };
+
+                return Ok(await _unitHeadService.CreateUnitHeadBulkUpload(payload, requester));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: ControllerMethod : UnitHead ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : UnitHead ==> {ex.Message}";
                 response.Data = null;
                 return Ok(response);
             }

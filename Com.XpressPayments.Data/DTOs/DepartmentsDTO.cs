@@ -19,7 +19,6 @@ namespace Com.XpressPayments.Data.DTOs
         public string BranchName { get; set; }
 
         public string Email { get; set; }
-        public string ContactPhone { get; set; }
         public string CompanyName { get; set; }
         public long CompanyId { get; set; }
 
@@ -46,7 +45,6 @@ namespace Com.XpressPayments.Data.DTOs
         
         public long BranchID { get; set; }
         public string Email { get; set; }
-        public string ContactPhone { get; set; }
         public long CompanyId { get; set; }
     }
 
@@ -61,7 +59,6 @@ namespace Com.XpressPayments.Data.DTOs
         
         public long BranchID { get; set; }
         public string Email { get; set; }
-        public string ContactPhone { get; set; }
         public long CompanyId { get; set; }
     }
 

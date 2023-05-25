@@ -2,6 +2,7 @@
 using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.DTOs.Account;
 using Com.XpressPayments.Data.GenericResponse;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
         Task<RefreshTokenResponse> RefreshToken(RefreshTokenModel refresh, string ipAddress, string port);
         Task<BaseResponse> Logout(LogoutDto logout, string ipAddress, string port);
         Task<BaseResponse> CreateUser(CreateUserDto userDto, RequesterInfo requester);
+        Task<BaseResponse> CreateUserBulkUpload(IFormFile payload, RequesterInfo requester);
         Task<BaseResponse> UpdateUser(UpdateUserDto updateDto, RequesterInfo requester);
         Task<BaseResponse> SendEmailForPasswordChange(RequestPasswordChange request, string ipAddress, string port);
         Task<BaseResponse> ChangePassword(ChangePasswordViewModel changePassword, string ipAddress, string port);

@@ -39,7 +39,6 @@ namespace Com.XpressPayments.Data.Repositories.Departments.Repository
                     param.Add("@GroupID", Dept.GroupID);
                     param.Add("@BranchID", Dept.BranchID);
                     param.Add("@Email", Dept.Email.Trim());
-                    param.Add("@ContactPhone", Dept.ContactPhone.Trim());
                     param.Add("@CompanyId", Dept.CompanyId);
 
                     param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
@@ -71,7 +70,6 @@ namespace Com.XpressPayments.Data.Repositories.Departments.Repository
                     param.Add("@GroupIDUpd", Dept.GroupID);
                     param.Add("@BranchIDUpd", Dept.BranchID);
                     param.Add("@EmailUpd", Dept.Email.Trim());
-                    param.Add("@ContactPhoneUpd", Dept.ContactPhone.Trim());
                     param.Add("@CompanyIdUpd", Dept.CompanyId);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());

@@ -9,6 +9,10 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Http;
+using OfficeOpenXml;
+using System.Collections.Generic;
+using System.Net.NetworkInformation;
 
 namespace Com.XpressPayments.Api.Controllers
 {
@@ -48,6 +52,34 @@ namespace Com.XpressPayments.Api.Controllers
                 _logger.LogError($"Exception Occured: ControllerMethod : CreateGroup ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Exception Occured: ControllerMethod : CreateGroup ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+        }
+
+        [HttpPost("CreateGroupBulkUpload")]
+        [Authorize]
+        public async Task<IActionResult> CreateGroupBulkUpload(IFormFile payload)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var requester = new RequesterInfo
+                {
+                    Username = this.User.Claims.ToList()[2].Value,
+                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                };
+
+                return Ok(await _GroupService.CreateGroupBulkUpload(payload, requester));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: ControllerMethod : CreateGroupBulkUpload ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : CreateGroupBulkUpload ==> {ex.Message}";
                 response.Data = null;
                 return Ok(response);
             }

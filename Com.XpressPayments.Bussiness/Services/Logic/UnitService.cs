@@ -3,12 +3,17 @@ using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.Enums;
 using Com.XpressPayments.Data.GenericResponse;
 using Com.XpressPayments.Data.Repositories.Company.IRepository;
+using Com.XpressPayments.Data.Repositories.Departments.IRepository;
 using Com.XpressPayments.Data.Repositories.HOD;
 using Com.XpressPayments.Data.Repositories.Unit;
 using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
+using ExcelDataReader;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,9 +29,12 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
         private readonly IUnitRepository _unitRepository;
+        private readonly IHODRepository _hodRepository;
+        private readonly IDepartmentRepository _departmentRepository;
 
         public UnitService(/*IConfiguration configuration*/ IAccountRepository accountRepository, ILogger<UnitService> logger,
-            IUnitRepository unitRepository, IAuditLog audit, ICompanyRepository companyrepository)
+            IUnitRepository unitRepository, IAuditLog audit, ICompanyRepository companyrepository, IHODRepository hodRepository,
+            IDepartmentRepository departmentRepository)
         {
             _audit = audit;
 
@@ -35,6 +43,9 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             _accountRepository = accountRepository;
             _unitRepository = unitRepository;
             _companyrepository = companyrepository;
+            _hodRepository = hodRepository; 
+            _hodRepository = hodRepository;
+            _departmentRepository = departmentRepository;
         }
 
         public async Task<BaseResponse> CreateUnit(CreateUnitDTO unitDto, RequesterInfo requester)
@@ -90,7 +101,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     }
                 }
 
-                unitDto.UnitName = $"{unitDto.UnitName} ({isExistsComp.CompanyName})";
+                //unitDto.UnitName = $"{unitDto.UnitName} ({isExistsComp.CompanyName})";
 
                 var isExists = await _unitRepository.GetUnitByName(unitDto.UnitName);
                 if (null != isExists)
@@ -125,6 +136,147 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 return response;
             }
         }
+
+        public async Task<BaseResponse> CreateUnitBulkUpload(IFormFile payload, RequesterInfo requester)
+        {
+            //check if us
+            StringBuilder errorOutput = new StringBuilder();
+            var response = new BaseResponse();
+            try
+            {
+                if (payload == null || payload.Length <= 0)
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "No file for Upload";
+                    return response;
+                }
+                else if (!Path.GetExtension(payload.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "File not an Excel Format";
+                    return response;
+                }
+                else
+                {
+                    var stream = new MemoryStream();
+                    await payload.CopyToAsync(stream);
+
+                    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                    var reader = ExcelReaderFactory.CreateReader(stream);
+                    DataSet ds = new DataSet();
+                    ds = reader.AsDataSet();
+                    reader.Close();
+
+                    int rowCount = ds.Tables[0].Rows.Count;
+                    DataTable serviceDetails = ds.Tables[0];
+
+                    int k = 0;
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+
+                        string UnitName = serviceDetails.Rows[0][0].ToString();
+                        string HodName = serviceDetails.Rows[0][1].ToString();
+                        string DepartmentName = serviceDetails.Rows[0][2].ToString();
+                        string CompanyName = serviceDetails.Rows[0][3].ToString();
+
+
+                        if (UnitName != "UnitName" || HodName != "HodName"
+                        || DepartmentName != "DepartmentName" || CompanyName != "CompanyName" )
+                        {
+                            response.ResponseCode = "08";
+                            response.ResponseMessage = "File header not in the Right format";
+                            return response;
+                        }
+                        else
+                        {
+                            for (int row = 1; row < serviceDetails.Rows.Count; row++)
+                            {
+
+                                string unitName = serviceDetails.Rows[row][0].ToString();
+                                var hod = await _hodRepository.GetHODByName(serviceDetails.Rows[row][1].ToString());
+                                var dept = await _departmentRepository.GetDepartmentByName(serviceDetails.Rows[row][2].ToString());
+                                var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][3].ToString());
+                             
+
+                                long HodID = hod.HodID;
+                                long DeptID = dept.DeptId;
+                                long companyID = company.CompanyId;
+
+
+                                var unitrequest = new CreateUnitDTO
+                                {
+                                    UnitName = unitName,
+                                    HodID = HodID,
+                                    DeptId = DeptID,
+                                    CompanyId = companyID
+                                    
+
+                                };
+
+                                var unitrequester = new RequesterInfo
+                                {
+                                    Username = requester.Username,
+                                    UserId = requester.UserId,
+                                    RoleId = requester.RoleId,
+                                    IpAddress = requester.IpAddress,
+                                    Port = requester.Port,
+
+
+                                };
+
+                                var resp = await CreateUnit(unitrequest, unitrequester);
+
+
+                                if (resp.ResponseCode == "00")
+                                {
+                                    k++;
+                                }
+                                else
+                                {
+                                    errorOutput.Append($"Row {row} failed due to {resp.ResponseMessage}" + "\n");
+                                }
+                            }
+                        }
+
+                    }
+
+
+
+                    if (k == rowCount - 1)
+                    {
+                        response.ResponseCode = "00";
+                        response.ResponseMessage = "All record inserted successfully";
+
+
+
+                        return response;
+                    }
+                    else
+                    {
+                        response.ResponseCode = "02";
+                        response.ResponseMessage = errorOutput.ToString();
+
+
+
+                        return response;
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Exception occured";
+                response.Data = null;
+
+
+
+                return response;
+            }
+        }
+
 
         public async Task<BaseResponse> UpdateUnit(UpdateUnitDTO updateDto, RequesterInfo requester)
         {

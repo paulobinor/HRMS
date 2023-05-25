@@ -91,7 +91,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     }
                 }
 
-                creatDto.LocationAddress = $"{creatDto.LocationAddress} ({isExistsComp.CompanyName})";
+                //creatDto.LocationAddress = $"{creatDto.LocationAddress} ({isExistsComp.CompanyName})";
 
                 var isExists = await _EmpLocationRepository.GetEmpLocationByName(creatDto.LocationAddress);
                 if (null != isExists)

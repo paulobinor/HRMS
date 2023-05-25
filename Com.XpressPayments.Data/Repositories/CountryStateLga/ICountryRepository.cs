@@ -10,5 +10,6 @@ namespace Com.XpressPayments.Data.Repositories.CountryStateLga
     public interface ICountryRepository
     {
         Task<IEnumerable<CountryDTO>> GetAllCountries();
+        Task<CountryDTO> GetCountryByName(string CountryName);
     }
 }

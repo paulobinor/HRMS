@@ -94,7 +94,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     }
                 }
 
-                HomDto.HMONumber = $"{HomDto.HMONumber} ({isExistsComp.CompanyName})";
+                //HomDto.HMONumber = $"{HomDto.HMONumber} ({isExistsComp.CompanyName})";
 
                 var isExists = await _HMORepository.GetHMOByName(HomDto.HMONumber);
                 if (null != isExists)

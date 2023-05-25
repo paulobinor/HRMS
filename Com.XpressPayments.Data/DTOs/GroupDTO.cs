@@ -28,8 +28,9 @@ namespace Com.XpressPayments.Data.DTOs
 
     public class CreateGroupDTO
     {
-        public long HodID { get; set; }
         public string GroupName { get; set; }
+        public long HodID { get; set; }
+        
         public long CompanyID { get; set; }
 
         public string Created_By_User_Email { get; set; }

@@ -22,16 +22,27 @@ namespace Com.XpressPayments.Data.DTOs
         public string officialMail { get; set; }
         public string PhoneNumber { get; set; }
         public string DeptId { get; set; }
+        public string DepartmentName { get; set; }
         public long UnitID { get; set; }
+        public string UnitName { get; set; }
         public long UnitHeadID { get; set; }
+        public string UnitHeadName { get; set; }
         public long HodID { get; set; }
+        public string HODName { get; set; }
         public long GradeID { get; set; }
+        public string GradeName { get; set; }
         public long EmployeeTypeID { get; set; }
+        public string EmployeeTypeName { get; set; }
         public long PositionID { get; set; }
-        public long EmpLocationID { get; set; }
+        public string PositionName { get; set; }
+        public long BranchID { get; set; }
+        public string BranchName { get; set; }
         public long EmploymentStatusID { get; set; }
+        public string EmploymentStatusName { get; set; }
         public long GroupID { get; set; }
+        public string GroupName { get; set; }
         public long JobDescriptionID { get; set; }
+        public string JobDescriptionName { get; set; }
         public string BirthPlace { get; set; }
         public long Nationality { get; set; }
         public long StateOfOrigin { get; set; }

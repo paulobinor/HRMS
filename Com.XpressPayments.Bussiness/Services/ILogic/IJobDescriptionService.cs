@@ -1,5 +1,6 @@
 ﻿using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.GenericResponse;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
     public interface IJobDescriptionService
     {
         Task<BaseResponse> CreateJobDescription(CreateJobDescriptionDTO creatDto, RequesterInfo requester);
+        Task<BaseResponse> CreateJobDescriptionBulkUpload(IFormFile payload, RequesterInfo requester);
         Task<BaseResponse> UpdateJobDescription(UpdateJobDescriptionDTO updateDto, RequesterInfo requester);
         Task<BaseResponse> DeleteJobDescription(DeletedJobDescriptionDTO deleteDto, RequesterInfo requester);
         Task<BaseResponse> GetAllActiveJobDescription(RequesterInfo requester);

@@ -90,7 +90,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     }
                 }
 
-                create.ProvidersNames = $"{create.ProvidersNames} ({isExistsComp.CompanyName})";
+                //create.ProvidersNames = $"{create.ProvidersNames} ({isExistsComp.CompanyName})";
 
                 var isExists = await _HospitalProvidersRepository.GetHospitalProvidersByName(create.ProvidersNames);
                 if (null != isExists)

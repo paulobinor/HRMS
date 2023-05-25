@@ -71,6 +71,7 @@ C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\o
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\System.Security.Cryptography.Pkcs.dll
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\System.Security.Cryptography.ProtectedData.dll
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\System.Security.Permissions.dll
+C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\System.Text.Encoding.CodePages.dll
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\System.Windows.Extensions.dll
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
@@ -89,6 +90,7 @@ C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\o
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\net6.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\net6.0\System.Text.Encoding.CodePages.dll
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\Com.XpressPayments.Bussiness.dll
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\Com.XpressPayments.Common.dll

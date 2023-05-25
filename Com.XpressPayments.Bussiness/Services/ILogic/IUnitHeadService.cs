@@ -1,5 +1,6 @@
 ﻿using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.GenericResponse;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
     public  interface IUnitHeadService
     {
         Task<BaseResponse> CreateUnitHead(CreateUnitHeadDTO creatDto, RequesterInfo requester);
+        Task<BaseResponse> CreateUnitHeadBulkUpload(IFormFile payload, RequesterInfo requester);
         Task<BaseResponse> UpdateUnitHead(UpdateUnitHeadDTO updateDto, RequesterInfo requester);
         Task<BaseResponse> DeleteUnitHead(DeleteUnitHeadDTO deleteDto, RequesterInfo requester);
         Task<BaseResponse> GetAllActiveUnitHead(RequesterInfo requester);

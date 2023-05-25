@@ -74,5 +74,29 @@ namespace Com.XpressPayments.Data.Repositories.CountryStateLga
                 throw;
             }
         }
+
+
+        public async Task<LgaDTO> GetLgaByName(string LGA_Name)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", CountryStateLgaEnum.GETBYNAME);
+                    param.Add("@LGA_Name", LGA_Name);
+
+                    var LgaDetails = await _dapper.QueryFirstOrDefaultAsync<LgaDTO>(ApplicationConstant.Sp_get_lga, param: param, commandType: CommandType.StoredProcedure);
+
+                    return LgaDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName:  GetLgaByName(string LGA_Name) ===>{ex.Message}");
+                throw;
+            }
+        }
     }
 }

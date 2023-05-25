@@ -1,5 +1,6 @@
 ﻿using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.GenericResponse;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
     public  interface IEmploymentStatusService
     {
         Task<BaseResponse> CreateEmploymentStatus(CreateEmploymentStatusDTO creatDto, RequesterInfo requester);
+        Task<BaseResponse> CreateEmploymentStatusBulkUpload(IFormFile payload, RequesterInfo requester);
         Task<BaseResponse> UpdateEmploymentStatus(UpdateEmploymentStatusDTO updateDto, RequesterInfo requester);
         Task<BaseResponse> DeleteEmploymentStatus(DeleteEmploymentStatusDTO deleteDto, RequesterInfo requester);
         Task<BaseResponse> GetAllActiveEmploymentStatus(RequesterInfo requester);

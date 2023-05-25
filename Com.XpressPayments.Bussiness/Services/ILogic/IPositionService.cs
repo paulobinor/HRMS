@@ -1,5 +1,6 @@
 ﻿using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.GenericResponse;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
     public interface IPositionService
     {
         Task<BaseResponse> CreatePosition(CreatePositionDTO creatDto, RequesterInfo requester);
+        Task<BaseResponse> CreatePositionBulkUpload(IFormFile payload, RequesterInfo requester);
         Task<BaseResponse> UpdatePosition(UpadtePositionDTO updateDto, RequesterInfo requester);
         Task<BaseResponse> DeletePosition(DeletePositionDTO deleteDto, RequesterInfo requester);
         Task<BaseResponse> GetAllActivePosition(RequesterInfo requester);

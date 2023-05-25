@@ -35,6 +35,7 @@ namespace Com.XpressPayments.Data.DTOs.Account
         public string PhoneNumber { get; set; }
         public string PasswordHash { get; set; }
         public int RoleId { get; set; }
+        public string RoleName { get; set; }
         public string DOB { get; set; }
         public string ResumptionDate { get; set; }
         public long UnitID { get; set; }
@@ -55,13 +56,11 @@ namespace Com.XpressPayments.Data.DTOs.Account
         public string EmploymentStatusName { get; set; }
         public long GroupID { get; set; }
         public string GroupName { get; set; }
-
         public long JobDescriptionID { get; set; }
         public string JobDescriptionName { get; set; }
 
         public long? CreatedByUserId { get; set; }
         public DateTime DateCreated { get; set; }
-
         public bool IsModified { get; set; }
         public long? LastModifiedByUserId { get; set; }
         public DateTime? DateModified { get; set; }
@@ -95,7 +94,7 @@ namespace Com.XpressPayments.Data.DTOs.Account
 
         public string RefreshToken { get; set; }        
         public string Token { get; set; }
-        public string RoleName { get; set; }
+       
 
         public string CreatedByUserEmail { get; set; }
         public string LastUpdatedByUserEmail { get; set; }

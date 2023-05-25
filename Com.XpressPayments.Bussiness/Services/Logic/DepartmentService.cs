@@ -3,14 +3,23 @@ using Com.XpressPayments.Bussiness.Services.ILogic;
 using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.Enums;
 using Com.XpressPayments.Data.GenericResponse;
+using Com.XpressPayments.Data.Repositories.Branch;
 using Com.XpressPayments.Data.Repositories.Company.IRepository;
 using Com.XpressPayments.Data.Repositories.Departments.IRepository;
 using Com.XpressPayments.Data.Repositories.Departments.Repository;
+using Com.XpressPayments.Data.Repositories.Group;
+using Com.XpressPayments.Data.Repositories.HOD;
 using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
+using ExcelDataReader;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Data;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Com.XpressPayments.Bussiness.Services.Logic
@@ -24,9 +33,14 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
         private readonly IDepartmentRepository _departmentrepository;
+        private readonly IHODRepository _hODRepository;
+        private readonly IGroupRepository _GroupRepository;
+        private readonly IBranchRepository _branchRepository;
+        
 
         public DepartmentService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<DepartmentService> logger,
-            IDepartmentRepository departmentRepository, IAuditLog audit, IMapper mapper, ICompanyRepository companyrepository)
+            IDepartmentRepository departmentRepository, IAuditLog audit, IMapper mapper, ICompanyRepository companyrepository,
+            IHODRepository hODRepository, IGroupRepository groupRepository, IBranchRepository branchRepository)
         {
             _audit = audit;
             _mapper = mapper;
@@ -35,6 +49,9 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             _accountRepository = accountRepository;
             _departmentrepository = departmentRepository;
             _companyrepository = companyrepository;
+            _hODRepository = hODRepository;
+            _GroupRepository    = groupRepository;
+            _branchRepository = branchRepository;
         }
 
         public async Task<BaseResponse> CreateDepartment(CreateDepartmentDto DepartmentDto, RequesterInfo requester)
@@ -70,7 +87,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //validate DepartmentDto payload here 
                 if (String.IsNullOrEmpty(DepartmentDto.DepartmentName)  ||
-                    String.IsNullOrEmpty(DepartmentDto.Email) || String.IsNullOrEmpty(DepartmentDto.ContactPhone))
+                    String.IsNullOrEmpty(DepartmentDto.Email) )
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";
@@ -94,7 +111,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     }
                 }
 
-                DepartmentDto.DepartmentName = $"{DepartmentDto.DepartmentName} ({isExistsComp.CompanyName})";
+                //DepartmentDto.DepartmentName = $"{DepartmentDto.DepartmentName} ({isExistsComp.CompanyName})";
 
                 var isExists = await _departmentrepository.GetDepartmentByName(DepartmentDto.DepartmentName);
                 if (null != isExists)
@@ -130,6 +147,153 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             }
         }
 
+        public async Task<BaseResponse> CreateDepartmentBulkUpload(IFormFile payload, RequesterInfo requester)
+        {
+            //check if us
+            StringBuilder errorOutput = new StringBuilder();
+            var response = new BaseResponse();
+            try
+            {
+                if (payload == null || payload.Length <= 0)
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "No file for Upload";
+                    return response;
+                }
+                else if (!Path.GetExtension(payload.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "File not an Excel Format";
+                    return response;
+                }
+                else
+                {
+                    var stream = new MemoryStream();
+                    await payload.CopyToAsync(stream);
+
+                    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                    var reader = ExcelReaderFactory.CreateReader(stream);
+                    DataSet ds = new DataSet();
+                    ds = reader.AsDataSet();
+                    reader.Close();
+
+                    int rowCount = ds.Tables[0].Rows.Count;
+                    DataTable serviceDetails = ds.Tables[0];
+
+                    int k = 0;
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+
+                        string DepartmentName = serviceDetails.Rows[0][0].ToString();
+                        string HodName = serviceDetails.Rows[0][1].ToString();
+                        string GroupName = serviceDetails.Rows[0][2].ToString();
+                        string BranchName = serviceDetails.Rows[0][3].ToString();
+                        string Email = serviceDetails.Rows[0][4].ToString();
+                        string CompanyName = serviceDetails.Rows[0][5].ToString();
+
+
+                        if (DepartmentName != "DepartmentName" || HodName != "HodName"
+                        || GroupName != "GroupName" || BranchName != "BranchName" || Email != "Email" || CompanyName != "CompanyName")
+                        {
+                            response.ResponseCode = "08";
+                            response.ResponseMessage = "File header not in the Right format";
+                            return response;
+                        }
+                        else
+                        {
+                            for (int row = 1; row < serviceDetails.Rows.Count; row++)
+                            {
+
+                                string departmentName = serviceDetails.Rows[row][0].ToString();
+                                var hod = await _hODRepository.GetHODByName(serviceDetails.Rows[row][1].ToString());
+                                var group = await _GroupRepository.GetGroupByName(serviceDetails.Rows[row][2].ToString());
+                                var branch = await _branchRepository.GetBranchByName(serviceDetails.Rows[row][3].ToString());
+                                var email =  serviceDetails.Rows[row][4].ToString();
+                                var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][5].ToString());
+
+                                long hodID = hod.HodID;
+                                long groupID = group.GroupID;
+                                long branchID = branch.BranchID;
+                                long companyID = company.CompanyId;
+
+
+                                var departmentrequest = new CreateDepartmentDto
+                                {
+                                    DepartmentName = departmentName,
+                                    HodID = hodID,
+                                    GroupID = groupID,
+                                    BranchID = branchID,
+                                    Email = email,
+                                    CompanyId = companyID,
+
+                                };
+
+                                var departmentrequester = new RequesterInfo
+                                {
+                                    Username = requester.Username,
+                                    UserId = requester.UserId,
+                                    RoleId = requester.RoleId,
+                                    IpAddress = requester.IpAddress,
+                                    Port = requester.Port,
+
+
+                                };
+
+                                var resp = await CreateDepartment(departmentrequest, departmentrequester);
+
+
+                                if (resp.ResponseCode == "00")
+                                {
+                                    k++;
+                                }
+                                else
+                                {
+                                    errorOutput.Append($"Row {row} failed due to {resp.ResponseMessage}" + "\n");
+                                }
+                            }
+                        }
+
+                    }
+
+
+
+                    if (k == rowCount - 1)
+                    {
+                        response.ResponseCode = "00";
+                        response.ResponseMessage = "All record inserted successfully";
+
+
+
+                        return response;
+                    }
+                    else
+                    {
+                        response.ResponseCode = "02";
+                        response.ResponseMessage = errorOutput.ToString();
+
+
+
+                        return response;
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Exception occured";
+                response.Data = null;
+
+
+
+                return response;
+            }
+        }
+
+
+
         public async Task<BaseResponse> UpdateDepartment(UpdateDepartmentDto updateDto, RequesterInfo requester)
         {
             var response = new BaseResponse();
@@ -162,7 +326,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //validate DepartmentDto payload here 
                 if (String.IsNullOrEmpty(updateDto.DepartmentName)  || updateDto.CompanyId <= 0 
-                    || updateDto.DeptId <= 0 || String.IsNullOrEmpty(updateDto.Email) || String.IsNullOrEmpty(updateDto.ContactPhone))
+                    || updateDto.DeptId <= 0 || String.IsNullOrEmpty(updateDto.Email))
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";
