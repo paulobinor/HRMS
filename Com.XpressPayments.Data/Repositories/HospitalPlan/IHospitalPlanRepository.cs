@@ -10,5 +10,6 @@ namespace Com.XpressPayments.Data.Repositories.HospitalPlan
     public interface IHospitalPlanRepository
     {
         Task<IEnumerable<HospitalPlanDTO>> GetAllHospitalPlan();
+        Task<HospitalPlanDTO> GetHospitalPlanByName(string HospitalPlan);
     }
 }

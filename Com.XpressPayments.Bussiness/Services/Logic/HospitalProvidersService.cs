@@ -3,13 +3,20 @@ using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.Enums;
 using Com.XpressPayments.Data.GenericResponse;
 using Com.XpressPayments.Data.Repositories.Company.IRepository;
+using Com.XpressPayments.Data.Repositories.CountryStateLga;
 using Com.XpressPayments.Data.Repositories.HOD;
+using Com.XpressPayments.Data.Repositories.HospitalPlan;
 using Com.XpressPayments.Data.Repositories.HospitalProviders;
 using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
+using ExcelDataReader;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,9 +31,12 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
         private readonly IHospitalProvidersRepository _HospitalProvidersRepository;
+        private readonly IHospitalPlanRepository _hospitalPlanRepository;
+        private readonly IStateRepository _StateRepository;
 
         public HospitalProvidersService(/*IConfiguration configuration*/ IAccountRepository accountRepository, ILogger<HospitalProvidersService> logger,
-            IHospitalProvidersRepository HospitalProvidersRepository, IAuditLog audit, ICompanyRepository companyrepository)
+            IHospitalProvidersRepository HospitalProvidersRepository, IAuditLog audit, ICompanyRepository companyrepository,
+            IHospitalPlanRepository hospitalPlanRepository , IStateRepository stateRepository)
         {
             _audit = audit;
 
@@ -35,6 +45,9 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             _accountRepository = accountRepository;
             _HospitalProvidersRepository = HospitalProvidersRepository;
             _companyrepository = companyrepository;
+            _hospitalPlanRepository = hospitalPlanRepository;
+            _StateRepository = stateRepository;
+
         }
 
         public async Task<BaseResponse> CreateHospitalProviders(CreateHospitalProvidersDTO create, RequesterInfo requester)
@@ -125,6 +138,156 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 return response;
             }
         }
+
+        public async Task<BaseResponse> CreateHospitalProvidersBulkUpload(IFormFile payload, RequesterInfo requester)
+        {
+            //check if us
+            StringBuilder errorOutput = new StringBuilder();
+            var response = new BaseResponse();
+            try
+            {
+                if (payload == null || payload.Length <= 0)
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "No file for Upload";
+                    return response;
+                }
+                else if (!Path.GetExtension(payload.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "File not an Excel Format";
+                    return response;
+                }
+                else
+                {
+                    var stream = new MemoryStream();
+                    await payload.CopyToAsync(stream);
+
+                    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                    var reader = ExcelReaderFactory.CreateReader(stream);
+                    DataSet ds = new DataSet();
+                    ds = reader.AsDataSet();
+                    reader.Close();
+
+                    int rowCount = ds.Tables[0].Rows.Count;
+                    DataTable serviceDetails = ds.Tables[0];
+
+                    int k = 0;
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+
+                        string ProvidersName = serviceDetails.Rows[0][0].ToString();
+                        string State = serviceDetails.Rows[0][1].ToString();
+                        string Town1 = serviceDetails.Rows[0][2].ToString();
+                        string Town2 = serviceDetails.Rows[0][3].ToString();
+                        string Address1 = serviceDetails.Rows[0][4].ToString();
+                        string Address2 = serviceDetails.Rows[0][5].ToString();
+                        string HospitalPlan = serviceDetails.Rows[0][6].ToString();
+                        string CompanyName = serviceDetails.Rows[0][7].ToString();
+                        
+
+                        if (ProvidersName != "ProvidersName" || State != "State" || Town1 != "Town1" || Town2 != "Town2"
+                         || Address1 != "Address1" || Address2 != "Address2" || HospitalPlan != "HospitalPlan"
+                         || CompanyName != "CompanyName")
+
+                        {
+                            response.ResponseCode = "08";
+                            response.ResponseMessage = "File header not in the Right format";
+                            return response;
+                        }
+                        else
+                        {
+                            for (int row = 1; row < serviceDetails.Rows.Count; row++)
+                            {
+
+                                string providersName = serviceDetails.Rows[row][0].ToString();
+                                var stateName = await _StateRepository.GetStateByName(serviceDetails.Rows[row][1].ToString());
+                                string town1 = serviceDetails.Rows[row][2].ToString();
+                                string town2 = serviceDetails.Rows[row][3].ToString();
+                                string address1 = serviceDetails.Rows[row][4].ToString();
+                                string address2 = serviceDetails.Rows[row][5].ToString();
+                                var hospitalPlanName = await _hospitalPlanRepository.GetHospitalPlanByName(serviceDetails.Rows[row][6].ToString());
+                                var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][7].ToString());
+
+                                long stateID = stateName.StateID;
+                                long hospitalPlanID = hospitalPlanName.HospitalPlanID;
+                                long companyID = company.CompanyId;
+
+
+                                var providersrequest = new CreateHospitalProvidersDTO
+                                {
+                                    ProvidersNames = providersName,
+                                    StateID = stateID,
+                                    HospitalPlanID = hospitalPlanID,
+                                    CompanyID = companyID
+
+
+                                };
+
+                                var providersrequester = new RequesterInfo
+                                {
+                                    Username = requester.Username,
+                                    UserId = requester.UserId,
+                                    RoleId = requester.RoleId,
+                                    IpAddress = requester.IpAddress,
+                                    Port = requester.Port,
+
+
+                                };
+
+                                var resp = await CreateHospitalProviders(providersrequest, providersrequester);
+
+
+                                if (resp.ResponseCode == "00")
+                                {
+                                    k++;
+                                }
+                                else
+                                {
+                                    errorOutput.Append($"Row {row} failed due to {resp.ResponseMessage}" + "\n");
+                                }
+                            }
+                        }
+
+                    }
+
+
+
+                    if (k == rowCount - 1)
+                    {
+                        response.ResponseCode = "00";
+                        response.ResponseMessage = "All record inserted successfully";
+
+
+
+                        return response;
+                    }
+                    else
+                    {
+                        response.ResponseCode = "02";
+                        response.ResponseMessage = errorOutput.ToString();
+
+
+
+                        return response;
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Exception occured";
+                response.Data = null;
+
+
+
+                return response;
+            }
+        }
+
 
         public async Task<BaseResponse> UpdateHospitalProviders(UpdateHospitalProvidersDTO updateDto, RequesterInfo requester)
         {

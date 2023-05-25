@@ -1,5 +1,6 @@
 ﻿using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.GenericResponse;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
     public interface IHospitalProvidersService
     {
         Task<BaseResponse> CreateHospitalProviders(CreateHospitalProvidersDTO create, RequesterInfo requester);
+        Task<BaseResponse> CreateHospitalProvidersBulkUpload(IFormFile payload, RequesterInfo requester);
         Task<BaseResponse> UpdateHospitalProviders(UpdateHospitalProvidersDTO updateDto, RequesterInfo requester);
         Task<BaseResponse> DeleteHospitalProviders(DeleteHospitalProvidersDTO deleteDto, RequesterInfo requester);
         Task<BaseResponse> GetAllActiveHospitalProviders(RequesterInfo requester);

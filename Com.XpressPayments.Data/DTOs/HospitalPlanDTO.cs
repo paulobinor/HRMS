@@ -8,7 +8,7 @@ namespace Com.XpressPayments.Data.DTOs
 {
     public class HospitalPlanDTO
     {
-        public long ID { get; set; }
+        public long HospitalPlanID { get; set; }
         public string HospitalPlan { get; set; }
        
     }

@@ -57,7 +57,35 @@ namespace Com.XpressPayments.Api.Controllers
             }
         }
 
-        
+        [HttpPost("CreateHospitalProvidersBulkUpload")]
+        [Authorize]
+        public async Task<IActionResult> CreateHospitalProvidersBulkUpload(IFormFile payload)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var requester = new RequesterInfo
+                {
+                    Username = this.User.Claims.ToList()[2].Value,
+                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                };
+
+                return Ok(await _HospitalProvidersService.CreateHospitalProvidersBulkUpload(payload, requester));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: ControllerMethod : CreateHospitalProvidersBulkUpload ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : CreateHospitalProvidersBulkUpload ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+        }
+
+
 
         [HttpPost("UpdateHospitalProviders")]
         [Authorize]

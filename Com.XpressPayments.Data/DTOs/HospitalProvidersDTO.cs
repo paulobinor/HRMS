@@ -11,12 +11,12 @@ namespace Com.XpressPayments.Data.DTOs
 
         public long ID { get; set; }
         public string ProvidersNames { get; set; }
-        public string State { get; set; }
+        public long StateID { get; set; }
         public string Town1 { get; set; }
         public string Town2 { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
-        public string HospitalPlan { get; set; }
+        public long HospitalPlanID { get; set; }
         public long CompanyID { get; set; }
 
         public DateTime Created_Date { get; set; }
@@ -35,12 +35,12 @@ namespace Com.XpressPayments.Data.DTOs
     public class CreateHospitalProvidersDTO
     {
         public string ProvidersNames { get; set; }
-        public string State { get; set; }
+        public long StateID { get; set; }
         public string Town1 { get; set; }
         public string Town2 { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
-        public string HospitalPlan { get; set; }
+        public long HospitalPlanID { get; set; } 
         public long CompanyID { get; set; }
 
         public string Created_By_User_Email { get; set; }
@@ -51,12 +51,12 @@ namespace Com.XpressPayments.Data.DTOs
     {
         public long ID { get; set; }
         public string ProvidersNames { get; set; }
-        public string State { get; set; }
+        public long StateID { get; set; }
         public string Town1 { get; set; }
         public string Town2 { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
-        public string HospitalPlan { get; set; }
+        public long HospitalPlanID { get; set; }
         public long CompanyID { get; set; }
     }
 

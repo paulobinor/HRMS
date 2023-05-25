@@ -51,5 +51,28 @@ namespace Com.XpressPayments.Data.Repositories.MaritalStatus
                 throw;
             }
         }
+
+        public async Task<HospitalPlanDTO> GetHospitalPlanByName(string HospitalPlan)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", HospitalPlanEnum.GETBYNAME);
+                    param.Add("@HospitalPlanGet", HospitalPlan);
+
+                    var GradeDetails = await _dapper.QueryFirstOrDefaultAsync<HospitalPlanDTO>(ApplicationConstant.Sp_HospitalPlan, param: param, commandType: CommandType.StoredProcedure);
+
+                    return GradeDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName:  GetHospitalPlanByName(string HospitalPlan) ===>{ex.Message}");
+                throw;
+            }
+        }
     }
 }

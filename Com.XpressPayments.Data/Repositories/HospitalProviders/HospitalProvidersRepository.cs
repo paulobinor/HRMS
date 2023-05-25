@@ -37,12 +37,12 @@ namespace Com.XpressPayments.Data.Repositories.HospitalProviders
                     var param = new DynamicParameters();
                     param.Add("@Status", HospitalProvidersEnum.CREATE);
                     param.Add("@ProvidersNames", create.ProvidersNames.Trim());
-                    param.Add("@State", create.State.Trim());
+                    param.Add("@State", create.StateID);
                     param.Add("@Town1", create.Town1.Trim());
                     param.Add("@Town2", create.Town2.Trim());
                     param.Add("@Address1", create.Address1.Trim());
                     param.Add("@Address2", create.Address2.Trim());
-                    param.Add("@HospitalPlan", create.HospitalPlan.Trim());
+                    param.Add("@HospitalPlan", create.HospitalPlanID);
                     param.Add("@CompanyId", create.CompanyID);
 
                     param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
@@ -70,12 +70,12 @@ namespace Com.XpressPayments.Data.Repositories.HospitalProviders
                     param.Add("@Status", HospitalProvidersEnum.UPDATE);
                     param.Add("@IDUpd", update.ID);
                     param.Add("@ProvidersNamesUpd", update.ProvidersNames.Trim());
-                    param.Add("@StateUpd", update.State.Trim());
+                    param.Add("@StateUpd", update.StateID);
                     param.Add("@Town1Upd", update.Town1.Trim());
                     param.Add("@Town2Upd", update.Town2.Trim());
                     param.Add("@Address1Upd", update.Address1.Trim());
                     param.Add("@Address2Upd", update.Address2.Trim());
-                    param.Add("@HospitalPlanUpd", update.HospitalPlan.Trim());
+                    param.Add("@HospitalPlanUpd", update.HospitalPlanID);
                     param.Add("@CompanyIdUpd", update.CompanyID);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
@@ -162,7 +162,7 @@ namespace Com.XpressPayments.Data.Repositories.HospitalProviders
             }
         }
 
-        public async Task<HospitalProvidersDTO> GetHospitalProvidersById(long ID)
+        public async Task<HospitalProvidersDTO> GetHospitalProvidersById(long HospitalPlanID)
         {
             try
             {
@@ -170,7 +170,7 @@ namespace Com.XpressPayments.Data.Repositories.HospitalProviders
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", HODenum.GETBYID);
-                    param.Add("@IDGet", ID);
+                    param.Add("@HospitalPlanIDGet", HospitalPlanID);
 
                     var Details = await _dapper.QueryFirstOrDefaultAsync<HospitalProvidersDTO>(ApplicationConstant.Sp_HospitalProviders, param: param, commandType: CommandType.StoredProcedure);
 
@@ -180,7 +180,7 @@ namespace Com.XpressPayments.Data.Repositories.HospitalProviders
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: GetHospitalProvidersById(long ID) ===>{ex.Message}");
+                _logger.LogError($"MethodName: GetHospitalProvidersById(long HospitalPlanID) ===>{ex.Message}");
                 throw;
             }
         }

@@ -9,5 +9,6 @@ namespace Com.XpressPayments.Data.Enums
     public enum HospitalPlanEnum
     {
         GETALL = 2,
+        GETBYNAME = 9,
     }
 }
