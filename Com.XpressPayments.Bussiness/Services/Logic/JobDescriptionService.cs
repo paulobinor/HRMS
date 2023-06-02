@@ -365,12 +365,12 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (deleteDto.JobDescriptionID == 1)
-                {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"System Default hod cannot be deleted.";
-                    return response;
-                }
+                //if (deleteDto.JobDescriptionID == 1)
+                //{
+                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"System Default JobDescription cannot be deleted.";
+                //    return response;
+                //}
 
                 var JobDescription = await _jobDescriptionRepository.GetJobDescriptionById(deleteDto.JobDescriptionID);
                 if (null != JobDescription)

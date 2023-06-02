@@ -1173,7 +1173,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                         _logger.LogInformation($"User with email: {user.Email} approved successfully.");
                         _accountRepository.SendEmail(user.Email, user.FirstName, defaultPass, "Activation Email", _hostEnvironment.ContentRootPath, "", port);
                         response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"User with email: {user.Email} approved successfully.";
+                        response.ResponseMessage = $"User with email: {user.Email} approved successfully. Activation has been sent to the users email.";
                         return response;
                     }
                     response.ResponseCode = ResponseCode.Exception.ToString();

@@ -93,7 +93,7 @@ namespace Com.XpressPayments.Data.Repositories.HOD
                     param.Add("@Status", HODenum.DELETE);
                     param.Add("@HodIDDelete", Convert.ToInt32(hod.HodID));
                     param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
-                    param.Add("@Reasons_For_Deleting_Department", hod.Reasons_For_Delete == null ? "" : hod.Reasons_For_Delete.ToString().Trim());
+                    param.Add("@Reasons_For_Deleting", hod.Reasons_For_Delete == null ? "" : hod.Reasons_For_Delete.ToString().Trim());
 
                     dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_HOD, param: param, commandType: CommandType.StoredProcedure);
 

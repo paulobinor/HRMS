@@ -151,7 +151,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     param.Add("@LastNameUpdate", user.LastName == null ? "" : user.LastName.ToString());
                     param.Add("@OfficialMail", user.OfficialMail == null ? "" : user.OfficialMail.ToString().Trim());
                     param.Add("@PhoneNumberUpdate", user.PhoneNumber == null ? "" : user.PhoneNumber.ToString().Trim());
-                    param.Add("@DOBUpd", user.Email == null ? "" : user.DOB.ToString().Trim());
+                    param.Add("@DOB", user.Email == null ? "" : user.DOB.ToString().Trim());
                     param.Add("@ResumptionDate", user.ResumptionDate == null ? "" : user.DOB.ToString().Trim());
                     param.Add("@UnitID", user.UnitID);
                     param.Add("@UnitHeadID", user.UnitHeadID);
@@ -718,7 +718,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                 qryStr = $"?k={email}";
 
                 message = $"Dear {firstname}," +
-                          $"<p>Your Order is now in progress. Your order confirmation OTP is : {otp}.</p>";
+                          $"<p>Your request is now in progress. Your order confirmation OTP is : {otp}.</p>";
 
                 using (StreamReader reader = new StreamReader(Path.Combine(templatePath)))
                 {
@@ -831,5 +831,37 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             }
             return body;
         }
+
+        //public string ComposeEmailForApproval(string firstname, string survProcessName, string email, string wwwRootPath, string ip, string port, string appKey = null, string channel = null)
+        //{
+
+        //    string message = string.Empty;
+        //    string body = string.Empty;
+        //    string templatePath = string.Empty;
+
+        //    if (null == channel)
+        //    {
+        //        string qryStr = string.Empty;
+        //        string clientUrl = _loginUrl;
+        //        //string clientUrl = ip;
+        //        //string clientUrl = $"http://{ip}:{port}/";
+        //        templatePath = $"{wwwRootPath}/EmailHandler/SurveyParticipation.html";
+
+        //        qryStr = $"?k={email}";
+
+        //        message = $"Dear {firstname}," +
+        //                  $"<p>You have been added as a participant in Survey Name : {survProcessName}. Kindly login to the survey system to take survey.</p>";
+
+        //        using (StreamReader reader = new StreamReader(Path.Combine(templatePath)))
+        //        {
+        //            body = reader.ReadToEnd();
+        //        }
+
+        //        body = body.Replace("{link}", $"{clientUrl}");
+        //        body = body.Replace("{MailContent}", message);
+
+        //    }
+        //    return body;
+        //}
     }
 }

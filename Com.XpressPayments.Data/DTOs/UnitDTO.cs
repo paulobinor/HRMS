@@ -36,7 +36,6 @@ namespace Com.XpressPayments.Data.DTOs
     {
         public string UnitName { get; set; }
         public long HodID { get; set; }
-       
         public long DeptId { get; set; }
         public long CompanyId { get; set; }
 

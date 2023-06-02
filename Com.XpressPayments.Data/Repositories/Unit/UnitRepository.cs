@@ -38,7 +38,6 @@ namespace Com.XpressPayments.Data.Repositories.Unit
                     param.Add("@Status", UnitEnum.CREATE);
                     param.Add("@UnitName", unit.UnitName.Trim());
                     param.Add("@HodID", unit.HodID);
-                   
                     param.Add("@DeptId", unit.DeptId);
                     param.Add("@CompanyId", unit.CompanyId);
 
