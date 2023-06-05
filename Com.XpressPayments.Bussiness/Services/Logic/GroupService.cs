@@ -64,11 +64,17 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
+
                 if (Convert.ToInt32(RoleId) != 2)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 4)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+
+                    }
+
                 }
 
                 //validate DepartmentDto payload here 
@@ -289,11 +295,17 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
+
                 if (Convert.ToInt32(RoleId) != 2)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 4)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+
+                    }
+
                 }
 
                 //validate DepartmentDto payload here 
@@ -364,9 +376,14 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 if (Convert.ToInt32(RoleId) != 2)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 4)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+
+                    }
+
                 }
 
                 if (deleteDto.GroupID == 1)
@@ -434,11 +451,17 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
+
                 if (Convert.ToInt32(RoleId) != 2)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 4)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+
+                    }
+
                 }
 
                 //update action performed into audit log here
@@ -488,11 +511,17 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
+
                 if (Convert.ToInt32(RoleId) != 2)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 4)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+
+                    }
+
                 }
 
                 //update action performed into audit log here
@@ -542,11 +571,17 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
+
                 if (Convert.ToInt32(RoleId) != 2)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 4)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+
+                    }
+
                 }
 
                 var group = await _GroupRepository.GetGroupById(GroupID);
@@ -598,11 +633,17 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
+
                 if (Convert.ToInt32(RoleId) != 2)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 4)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+
+                    }
+
                 }
 
                 var group = await _GroupRepository.GetAllGroupCompanyId(companyId);

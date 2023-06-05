@@ -61,9 +61,13 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 {
                     if (Convert.ToInt32(RoleId) != 3)
                     {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
+                        if (Convert.ToInt32(RoleId) != 4)
+                        {
+                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                            return response;
+                        }
+                         
                     }
                 }
 
@@ -118,9 +122,13 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 {
                     if (Convert.ToInt32(RoleId) != 3)
                     {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
+                        if (Convert.ToInt32(RoleId) != 4)
+                        {
+                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                            return response;
+                        }
+
                     }
                 }
 

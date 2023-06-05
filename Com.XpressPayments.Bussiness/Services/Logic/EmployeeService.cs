@@ -74,14 +74,13 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 if (Convert.ToInt32(RoleId) != 2)
                 {
-                    if (Convert.ToInt32(RoleId) != 3)
+                    if (Convert.ToInt32(RoleId) != 4)
                     {
-                        if (Convert.ToInt32(RoleId) != 4)
-                        {
+                       
                             response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                             response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                             return response;
-                        }
+                        
                     }
                    
                 }
@@ -144,11 +143,17 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+                if (Convert.ToInt32(RoleId) != 2)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 4)
+                    {
+
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+
+                    }
+
                 }
 
                 //update action performed into audit log here
@@ -205,16 +210,16 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 //    return response;
                 //}
 
+
                 if (Convert.ToInt32(RoleId) != 2)
                 {
-                    if (Convert.ToInt32(RoleId) != 3)
+                    if (Convert.ToInt32(RoleId) != 4)
                     {
-                        if (Convert.ToInt32(RoleId) != 4)
-                        {
-                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                            return response;
-                        }
+
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+
                     }
 
                 }
@@ -273,16 +278,16 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 //    return response;
                 //}
 
+
                 if (Convert.ToInt32(RoleId) != 2)
                 {
-                    if (Convert.ToInt32(RoleId) != 3)
+                    if (Convert.ToInt32(RoleId) != 4)
                     {
-                        if (Convert.ToInt32(RoleId) != 4)
-                        {
-                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                            return response;
-                        }
+
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+
                     }
 
                 }
@@ -433,11 +438,18 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+
+                if (Convert.ToInt32(RoleId) != 2)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 4)
+                    {
+
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+
+                    }
+
                 }
 
                 //update action performed into audit log here
