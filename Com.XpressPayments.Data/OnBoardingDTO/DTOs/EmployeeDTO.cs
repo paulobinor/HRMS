@@ -173,6 +173,9 @@ namespace Com.XpressPayments.Data.DTOs
         public bool IsUpdateSession5 { get; set; }
         public bool IsActive { get; set; }
 
+        public long UserStatusId { get; set; }
+        public string UserStatus { get; set; }
+
 
         public DateTime Created_Date { get; set; }
         public string Created_By_User_Email { get; set; }

@@ -182,6 +182,31 @@ namespace Com.XpressPayments.Data.Repositories.EmploymentStatus
                     var param = new DynamicParameters();
                     param.Add("@Status", EmploymentStatusEnum.GETBYEMAIL);
                     param.Add("@EmploymentStatusNameGet", EmploymentStatusName);
+                   
+
+                    var EmpLocationDetails = await _dapper.QueryFirstOrDefaultAsync<EmploymentStatusDTO>(ApplicationConstant.sp_EmploymentStatus, param: param, commandType: CommandType.StoredProcedure);
+
+                    return EmpLocationDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetEmpLoymentStatusByName(string EmploymentStatusName) ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<EmploymentStatusDTO> GetEmpLoymentStatusByName(string EmploymentStatusName, int companyId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", EmploymentStatusEnum.GETBYNAMEandCOMAPMNY);
+                    param.Add("@EmploymentStatusNameGet", EmploymentStatusName);
+                    param.Add("@CompanyIdGet", companyId);
 
                     var EmpLocationDetails = await _dapper.QueryFirstOrDefaultAsync<EmploymentStatusDTO>(ApplicationConstant.sp_EmploymentStatus, param: param, commandType: CommandType.StoredProcedure);
 

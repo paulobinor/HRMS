@@ -592,7 +592,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                     HodID = hODID,
                                     GradeID = gradeID,
                                     EmployeeTypeID = employeeTypeID,
-                                    PositionID = positionID,
+                                   
                                     BranchID = branchID,
                                     EmploymentStatusID = employmentStatusID,
                                     GroupID = groupID,

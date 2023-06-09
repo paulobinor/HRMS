@@ -1,4 +1,5 @@
-﻿using Com.XpressPayments.Bussiness.Services.ILogic;
+﻿using AutoMapper;
+using Com.XpressPayments.Bussiness.Services.ILogic;
 using Com.XpressPayments.Bussiness.ViewModels;
 using Com.XpressPayments.Data.AppConstants;
 using Com.XpressPayments.Data.DTOs;
@@ -31,9 +32,10 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
         private readonly ICompanyRepository _companyrepository;
         private readonly IEmployeeRepository _EmployeeRepository;
         private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly IMapper _mapper;
 
         public EmployeeService(/*IConfiguration configuration*/ IAccountRepository accountRepository, ILogger<EmployeeService> logger,
-            IEmployeeRepository EmployeeRepository, IAuditLog audit, ICompanyRepository companyrepository, IWebHostEnvironment hostEnvironment)
+            IEmployeeRepository EmployeeRepository, IAuditLog audit, ICompanyRepository companyrepository, IWebHostEnvironment hostEnvironment, IMapper mapper)
         {
             _audit = audit;
 
@@ -43,6 +45,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             _EmployeeRepository = EmployeeRepository;
             _companyrepository = companyrepository;
             _hostEnvironment = hostEnvironment;
+            _mapper = mapper;
         }
 
         public async Task<BaseResponse> UpdateEmployee(UpdateEmployeeDTO updateDto, RequesterInfo requester)
@@ -74,15 +77,18 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 if (Convert.ToInt32(RoleId) != 2)
                 {
-                    if (Convert.ToInt32(RoleId) != 4)
+                    if (Convert.ToInt32(RoleId) != 3)
                     {
-                       
+                        if (Convert.ToInt32(RoleId) != 4)
+                        {
                             response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                             response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                             return response;
-                        
+                        }
+
+
                     }
-                   
+
                 }
 
                 var Emp = await _EmployeeRepository.GetEmployeeById(updateDto.EmpID);
@@ -142,15 +148,17 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     response.ResponseMessage = "Requester information cannot be found.";
                     return response;
                 }
-
                 if (Convert.ToInt32(RoleId) != 2)
                 {
-                    if (Convert.ToInt32(RoleId) != 4)
+                    if (Convert.ToInt32(RoleId) != 3)
                     {
+                        if (Convert.ToInt32(RoleId) != 4)
+                        {
+                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                            return response;
+                        }
 
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
 
                     }
 
@@ -213,12 +221,15 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 if (Convert.ToInt32(RoleId) != 2)
                 {
-                    if (Convert.ToInt32(RoleId) != 4)
+                    if (Convert.ToInt32(RoleId) != 3)
                     {
+                        if (Convert.ToInt32(RoleId) != 4)
+                        {
+                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                            return response;
+                        }
 
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
 
                     }
 
@@ -281,12 +292,15 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 if (Convert.ToInt32(RoleId) != 2)
                 {
-                    if (Convert.ToInt32(RoleId) != 4)
+                    if (Convert.ToInt32(RoleId) != 3)
                     {
-
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
+                        if (Convert.ToInt32(RoleId) != 4)
+                        {
+                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                            return response;
+                        }
+                         
 
                     }
 
@@ -341,11 +355,20 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+                if (Convert.ToInt32(RoleId) != 2)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) != 3)
+                    {
+                        if (Convert.ToInt32(RoleId) != 4)
+                        {
+                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                            return response;
+                        }
+
+
+                    }
+
                 }
 
                 var Emp = await _EmployeeRepository.GetAllEmployeeCompanyId(companyId);
@@ -441,32 +464,69 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 if (Convert.ToInt32(RoleId) != 2)
                 {
-                    if (Convert.ToInt32(RoleId) != 4)
+                    if (Convert.ToInt32(RoleId) != 3)
                     {
+                        if (Convert.ToInt32(RoleId) != 4)
+                        {
+                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                            return response;
+                        }
 
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
 
                     }
 
                 }
 
-                //update action performed into audit log here
-
-                var Employee = await _EmployeeRepository.GetEmpPendingApproval();
-
-                if (Employee.Any())
+                var mappeduser = new List<EmployeeDTO>();
+                var users = await _EmployeeRepository.GetEmpPendingApproval();
+                if (users.Any())
                 {
-                    response.Data = Employee;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Employee Details fetched successfully.";
+                    //update action performed into audit log here
+
+                    foreach (var user in users)
+                    {
+                        var usermap = _mapper.Map<EmployeeDTO>(user);
+                        usermap.UserStatus = "Pending";
+                        usermap.UserStatusId = Convert.ToInt32(UserStatus.PENDING);
+                        mappeduser.Add(usermap);
+                    }
+
+
+                    
+                        response.Data = mappeduser;
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = "Employee Details fetched successfully.";
+                        return response;
+                    
+                }
+                else
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "No Users found.";
+                    response.Data = null;
                     return response;
                 }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No Employee Details found.";
-                response.Data = null;
-                return response;
+
+
+             
+
+                //update action performed into audit log here
+
+                //var Employee = await _EmployeeRepository.GetEmpPendingApproval();
+
+                //if (Employee.Any())
+                //{
+                //    response.Data = Employee;
+                //    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = "Employee Details fetched successfully.";
+                //    return response;
+                //}
+
+                //response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                //response.ResponseMessage = "No Employee Details found.";
+                //response.Data = null;
+                //return response;
             }
             catch (Exception ex)
             {

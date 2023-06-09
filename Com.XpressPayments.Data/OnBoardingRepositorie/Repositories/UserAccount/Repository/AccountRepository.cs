@@ -108,7 +108,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     param.Add("@HodID", user.HodID);
                     param.Add("@GradeID", user.GradeID);
                     param.Add("@EmployeeTypeID", user.EmployeeTypeID);
-                    param.Add("@PositionID", user.PositionID);
+                
                     param.Add("@BranchID", user.BranchID);
                     param.Add("@EmploymentStatusID", user.EmploymentStatusID);
                     param.Add("@GroupID", user.GroupID);
@@ -158,7 +158,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     param.Add("@HodID", user.HodID);
                     param.Add("@GradeID", user.GradeID);
                     param.Add("@EmployeeTypeID", user.EmployeeTypeID);
-                    param.Add("@PositionID", user.PositionID);
+                  
                     param.Add("@BranchID", user.BranchID);
                     param.Add("@EmploymentStatusID", user.EmploymentStatusID);
                     param.Add("@GroupID", user.GroupID);

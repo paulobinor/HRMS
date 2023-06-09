@@ -16,6 +16,7 @@ namespace Com.XpressPayments.Data.Repositories.EmploymentStatus
         Task<IEnumerable<EmploymentStatusDTO>> GetAllEmpLoymentStatus();
         Task<EmploymentStatusDTO> GetEmpLoymentStatusById(long EmploymentStatusID);
         Task<EmploymentStatusDTO> GetEmpLoymentStatusByName(string EmploymentStatusName);
+        Task<EmploymentStatusDTO> GetEmpLoymentStatusByName(string EmploymentStatusName, int companyId);
         Task<IEnumerable<EmploymentStatusDTO>> GetAllEmploymentStatusCompanyId(long companyId);
     }
 }

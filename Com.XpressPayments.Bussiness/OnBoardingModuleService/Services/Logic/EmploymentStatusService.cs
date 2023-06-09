@@ -104,13 +104,15 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //creatDto.EmploymentStatusName = $"{creatDto.EmploymentStatusName} ({isExistsComp.CompanyName})";
 
-                var isExists = await _EmploymentStatusRepository.GetEmpLoymentStatusByName(creatDto.EmploymentStatusName);
+                var isExists = await _EmploymentStatusRepository.GetEmpLoymentStatusByName(creatDto.EmploymentStatusName,   (int)creatDto.CompanyID);
                 if (null != isExists)
                 {
                     response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"EmploymentStatus with name : {creatDto.EmploymentStatusName} already exists.";
+                    response.ResponseMessage = $"EmploymentStatus with name : {creatDto.EmploymentStatusName} already exists for this Comapny.";
                     return response;
                 }
+
+
 
                 dynamic resp = await _EmploymentStatusRepository.CreateEmploymentStatus(creatDto, createdbyUserEmail);
                 if (resp > 0)
