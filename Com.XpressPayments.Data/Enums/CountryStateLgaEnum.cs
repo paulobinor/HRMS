@@ -9,6 +9,7 @@ namespace Com.XpressPayments.Data.Enums
     public  enum CountryStateLgaEnum
     {
         GETALL = 1,
-        GETBYID = 2
+        GETBYID = 2,
+        GETBYNAME = 3
     }
 }

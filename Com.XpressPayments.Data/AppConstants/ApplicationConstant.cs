@@ -28,9 +28,32 @@ namespace Com.XpressPayments.Data.AppConstants
         public static string Sp_Unit = "Sp_Unit";
         public static string Sp_UnitHead = "Sp_UnitHead";
         public static string Sp_JobDescription = "Sp_JobDescription";
+        public static string Sp_EmployeeType = "Sp_EmployeeType";
+        public static string Sp_Grade = "Sp_Grade";
+        public static string Sp_Position = "Sp_Position";
+        public static string Sp_Gender = "Sp_Gender";
+        public static string Sp_MaritalStatus = "Sp_MaritalStatus";
+        public static string Sp_Institutions = "Sp_Institutions";
+        public static string Sp_Employee = "Sp_Employee";
+        public static string sp_EmployeeLocation = "sp_EmployeeLocation";
+        public static string sp_EmploymentStatus = "sp_EmploymentStatus";
+        public static string Sp_Group = "Sp_Group";
+        public static string Sp_HMO = "Sp_HMO";
+        public static string Sp_HospitalProviders = "Sp_HospitalProviders";
+        public static string Sp_HospitalPlan = "Sp_HospitalPlan";
+        public static string Sp_Roles = "Sp_Roles";
+
 
         //System Default
         public static int DefaultDeptId = 1;
         public static string DefaultPassword = "Password123";
+
+
+        //Roles
+        public static int SuperAdmin = 1;
+        public static int HrAdmin = 2;
+        public static int GeneralUser = 3;
+        public static int HrHead = 4;
+      
     }
 }
