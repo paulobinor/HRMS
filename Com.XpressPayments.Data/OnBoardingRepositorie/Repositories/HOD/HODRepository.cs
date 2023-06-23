@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Com.XpressPayments.Data.Repositories.HOD
 {
-    internal class HODRepository : IHODRepository
+    public class HODRepository : IHODRepository
     {
         private string _connectionString;
         private readonly ILogger<HODRepository> _logger;

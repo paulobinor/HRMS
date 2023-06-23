@@ -11,9 +11,9 @@ namespace Com.XpressPayments.Bussiness.Util
 {
     public class MailService: IMailService
     {
-        private readonly SmtpParameters _smtpParameters;
+        private readonly Smtp _smtpParameters;
         private readonly ILogger<MailService> _logger;
-        public MailService(IOptions<SmtpParameters> smtpParameters, ILogger<MailService> logger)
+        public MailService(IOptions<Smtp> smtpParameters, ILogger<MailService> logger)
         {
             _smtpParameters = smtpParameters.Value;
             _logger = logger;

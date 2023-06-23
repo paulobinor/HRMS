@@ -1,6 +1,6 @@
 ﻿namespace Com.XpressPayments.Common.Configuration
 {
-    public class SmtpParameters
+    public class Smtp
     {
         public string EmailAddress { get; set; }
         public string Password { get; set; }
