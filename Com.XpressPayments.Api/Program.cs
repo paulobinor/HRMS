@@ -72,8 +72,8 @@ builder.Services.AddSwaggerGen(option =>
     option.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "HRMS WebApi",
-        Description = "Payout API Version 2",
-        Version = "v2"
+        Description = "HRMS WebApi Version 1",
+        Version = "v1"
     });
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
