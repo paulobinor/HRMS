@@ -113,11 +113,11 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //BranchDto.BranchName = $"{BranchDto.BranchName} ({isExistsComp.CompanyName})";
 
-                var isExists = await _branchRepository.GetBranchByName(BranchDto.BranchName);
+                var isExists = await _branchRepository.GetBranchByCompany(BranchDto.BranchName, (int)BranchDto.CompanyID);
                 if (null != isExists)
                 {
                     response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Branch with name : {BranchDto.BranchName} already exists.";
+                    response.ResponseMessage = $"Branch with name : {BranchDto.BranchName} already exists for this Company.";
                     return response;
                 }
 
@@ -291,8 +291,6 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 return response;
             }
         }
-
-
 
 
         public async Task<BaseResponse> UpdateBranch(UpdateBranchDTO updateDto, RequesterInfo requester)

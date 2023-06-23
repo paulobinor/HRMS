@@ -16,6 +16,7 @@ namespace Com.XpressPayments.Data.Repositories.JobDescription
         Task<IEnumerable<JobDescriptionDTO>> GetAllJobDescription();
         Task<JobDescriptionDTO> GetJobDescriptionById(long JobDescriptionID);
         Task<JobDescriptionDTO> GetJobDescriptionByName(string JobDescriptionName);
+        Task<JobDescriptionDTO> GetJobDescriptionByCompany(string JobDescriptionName, int companyId);
         Task<IEnumerable<JobDescriptionDTO>> GetAllJobDescriptionCompanyId(long JobDescriptionID);
     }
 }

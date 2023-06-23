@@ -16,7 +16,8 @@ namespace Com.XpressPayments.Data.Repositories.Grade
         Task<IEnumerable<GradeDTO>> GetAllGrade();
         Task<GradeDTO> GetGradeById(long GradeID);
         Task<GradeDTO> GetGradeByName(string GradeName);
-        Task<IEnumerable<GradeDTO>> GetAllGradeCompanyId(long GradeID);
+        Task<GradeDTO> GetGradeByCompany(string GradeName, int companyId);
+        Task<IEnumerable<GradeDTO>> GetAllGradeCompanyId(long CompanyId);
 
 
 

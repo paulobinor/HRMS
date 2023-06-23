@@ -16,6 +16,7 @@ namespace Com.XpressPayments.Data.Repositories.HospitalProviders
         Task<IEnumerable<HospitalProvidersDTO>> GetAllHospitalProviders();
         Task<HospitalProvidersDTO> GetHospitalProvidersById(long ID);
         Task<HospitalProvidersDTO> GetHospitalProvidersByName(string ProvidersNames);
+        Task<HospitalProvidersDTO> GetHospitalProvidersByCompany(string ProvidersNames, int companyId);
         Task<IEnumerable<HodDTO>> GetAllHospitalProvidersCompanyId(long companyId);
     }
 }

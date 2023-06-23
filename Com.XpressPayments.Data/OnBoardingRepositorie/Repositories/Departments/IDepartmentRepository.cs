@@ -13,6 +13,7 @@ namespace Com.XpressPayments.Data.Repositories.Departments.IRepository
         Task<IEnumerable<DepartmentsDTO>> GetAllDepartments();
         Task<DepartmentsDTO> GetDepartmentById(long DepartmentId);
         Task<DepartmentsDTO> GetDepartmentByName(string DepartmentEmail);
+        Task<DepartmentsDTO> GetDepartmentByCompany(string DepartmentName, int companyId);
         Task<IEnumerable<DepartmentsDTO>> GetAllDepartmentsbyCompanyId(long companyId);
     }
 }

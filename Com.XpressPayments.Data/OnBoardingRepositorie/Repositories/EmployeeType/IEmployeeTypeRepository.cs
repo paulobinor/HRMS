@@ -16,6 +16,7 @@ namespace Com.XpressPayments.Data.Repositories.EmployeeType
         Task<IEnumerable<EmployeeTypeDTO>> GetAllEmployeeType();
         Task<EmployeeTypeDTO> GetEmployeeTypeById(long EmployeeTypeID);
         Task<EmployeeTypeDTO> GetEmployeeTypeByName(string EmployeeTypeName);
+        Task<EmployeeTypeDTO> GetEmployeeTypeByCompany(string EmployeeTypeName, int companyId);
         Task<IEnumerable<EmployeeTypeDTO>> GetAllEmployeeTypeCompanyId(long EmployeeTypeID);
     }
 }

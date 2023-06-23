@@ -204,6 +204,30 @@ namespace Com.XpressPayments.Data.Repositories.Branch
             }
         }
 
+        public async Task<BranchDTO> GetBranchByCompany(string BranchName, int companyId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", BranchEnum.GETBYCOMPANY);
+                    param.Add("@BranchNameGet", BranchName);
+                    param.Add("@CompanyIdGet", companyId);
+
+                    var BranchDetails = await _dapper.QueryFirstOrDefaultAsync<BranchDTO>(ApplicationConstant.Sp_Branch, param: param, commandType: CommandType.StoredProcedure);
+
+                    return BranchDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetBranchByName(string BranchName) ===>{ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<BranchDTO>> GetAllBranchbyCompanyId(long companyId)
         {
             try
@@ -211,7 +235,7 @@ namespace Com.XpressPayments.Data.Repositories.Branch
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", 8);
+                    param.Add("@Status", BranchEnum.GETBYCOMPANYID);
                     param.Add("@CompanyIdGet", companyId);
 
                     var BranchDetails = await _dapper.QueryAsync<BranchDTO>(ApplicationConstant.Sp_Branch, param: param, commandType: CommandType.StoredProcedure);

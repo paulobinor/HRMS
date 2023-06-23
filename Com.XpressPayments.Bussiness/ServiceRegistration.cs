@@ -1,9 +1,10 @@
 ﻿
 using AutoMapper;
+using Com.XpressPayments.Bussiness.LeaveModuleService.Service.ILogic;
+using Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic;
 using Com.XpressPayments.Bussiness.Services.ILogic;
 using Com.XpressPayments.Bussiness.Services.Logic;
-using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
-using Com.XpressPayments.Data.Repositories.UserAccount.Repository;
+using Com.XpressPayments.Bussiness.Util;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -43,6 +44,13 @@ namespace Com.XpressPayments.Bussiness
             services.AddScoped<IHMOService, HMOService>();
             services.AddScoped<IHospitalProvidersService, HospitalProvidersService>();
             services.AddScoped<IChildrenService, ChildrenService>();
+
+            //vacation 
+            services.AddScoped<ILeaveTypeService, LeaveTypeService>();
+            //services.AddScoped<ILeaveRequestService, LeaveRequestService>();
+
+            //Mail Service
+            services.AddScoped<IMailService, MailService>();
         }
     }
 }

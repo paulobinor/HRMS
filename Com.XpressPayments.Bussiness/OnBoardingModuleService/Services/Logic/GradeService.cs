@@ -103,11 +103,11 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //creatDto.GradeName = $"{creatDto.GradeName} ({isExistsComp.CompanyName})";
 
-                var isExists = await _GradeRepository.GetGradeByName(creatDto.GradeName);
+                var isExists = await _GradeRepository.GetGradeByCompany(creatDto.GradeName, (int)creatDto.CompanyID);
                 if (null != isExists)
                 {
                     response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Grade with name : {creatDto.GradeName} already exists.";
+                    response.ResponseMessage = $"Grade with name : {creatDto.GradeName} already exists for this Company.";
                     return response;
                 }
 

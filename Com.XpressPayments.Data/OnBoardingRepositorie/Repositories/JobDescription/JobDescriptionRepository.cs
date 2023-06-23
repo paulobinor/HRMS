@@ -12,6 +12,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.Design;
 
 namespace Com.XpressPayments.Data.Repositories.JobDescription
 { 
@@ -196,6 +197,30 @@ namespace Com.XpressPayments.Data.Repositories.JobDescription
             }
         }
 
+        public async Task<JobDescriptionDTO> GetJobDescriptionByCompany(string JobDescriptionName, int companyId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", JobDescriptionEnum.GETCOPANY);
+                    param.Add("@JobDescriptionNameGet", JobDescriptionName);
+                    param.Add("@CompanyIdGet", companyId);
+
+                    var JobDescriptionDetails = await _dapper.QueryFirstOrDefaultAsync<JobDescriptionDTO>(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);
+
+                    return JobDescriptionDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName:  GetJobDescriptionByName(string JobDescriptionName) ===>{ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<JobDescriptionDTO>> GetAllJobDescriptionCompanyId(long JobDescriptionID)
         {
             try
@@ -203,7 +228,7 @@ namespace Com.XpressPayments.Data.Repositories.JobDescription
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", 8);
+                    param.Add("@Status", JobDescriptionEnum.GETBYCOPANYID);
                     param.Add("@CompanyIdGet", JobDescriptionID);
 
                     var JobDescriptionDetails = await _dapper.QueryAsync<JobDescriptionDTO>(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);

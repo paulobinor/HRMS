@@ -177,17 +177,26 @@ namespace Com.XpressPayments.Data.DTOs
         public string UserStatus { get; set; }
 
 
-        public DateTime Created_Date { get; set; }
+        public DateTime DateCreated { get; set; }
         public string Created_By_User_Email { get; set; }
-
         public bool IsUpdated { get; set; }
         public DateTime? Updated_Date { get; set; }
         public string Updated_By_User_Email { get; set; }
-
         public bool IsDeleted { get; set; }
         public DateTime? Deleted_Date { get; set; }
         public string Deleted_By_User_Email { get; set; }
         public string Reasons_For_Delete { get; set; }
+        public bool IsApproved { get; set; }
+        public long ApprovedByUserId { get; set; }
+        public DateTime DateApproved { get; set; }
+        public bool IsDisapproved { get; set; }
+        public string DisapprovedComment { get; set; }
+        public long DisapprovedByUserId { get; set; }   
+        public DateTime DateDisapproved { get; set; }
+
+        public bool IsModified { get; set; }
+        public bool IsDeactivated { get; set; }
+        public bool IsReactivated { get; set; }
     }
 
     public class UpdateEmployeeDTO

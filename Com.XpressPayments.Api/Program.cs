@@ -44,6 +44,7 @@ namespace Com.XpressPayments.Api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+
                 });
     }
 }

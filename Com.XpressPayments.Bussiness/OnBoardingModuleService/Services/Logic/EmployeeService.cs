@@ -570,23 +570,23 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
 
 
-                Tuple<bool, bool> checkRole = checkPermission(UserInfo.RoleId, requesterInfo.RoleId);
+                //Tuple<bool, bool> checkRole = checkPermission(UserInfo.RoleId, requesterInfo.RoleId);
 
 
-                if (!checkRole.Item2)
-                {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
-                }
-
-
-                //if (Convert.ToInt32(RoleId) != 1 || Convert.ToInt32(RoleId) != 4)
+                //if (!checkRole.Item2)
                 //{
                 //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                 //    return response;
                 //}
+
+
+                if (Convert.ToInt32(RoleId) != 4)
+                {
+                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                    return response;
+                }
 
                 var user = await _accountRepository.FindUser(approveEmp.Email);
                 if (user != null)
@@ -598,15 +598,16 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                         return response;
                     }
                     //string defaultPass = Utils.RandomPassword();
-                    string defaultPass = ApplicationConstant.DefaultPassword;
-                    dynamic resp = await _accountRepository.ApproveUser(Convert.ToInt32(requesterUserId), defaultPass, user.Email);
+                    //string defaultPass = ApplicationConstant.DefaultPassword;
+                    dynamic resp = await _EmployeeRepository.ApproveEmp(Convert.ToInt32(requesterUserId),  user.Email);
+                    //dynamic resp = await _EmployeeRepository.ApproveEmp(requesterUserId, defaultPass, user.Email);
 
                     if (resp > 0)
                     {
                         //update action performed into audit log here
 
                         _logger.LogInformation($"User with email: {user.Email} approved successfully.");
-                        _accountRepository.SendEmail(user.Email, user.FirstName, defaultPass, "Activation Email", _hostEnvironment.ContentRootPath, "", port);
+                        //_accountRepository.SendEmail(user.Email, user.FirstName, defaultPass, "Activation Email", _hostEnvironment.ContentRootPath, "", port);
                         response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.ResponseMessage = $"User with email: {user.Email} approved successfully.";
                         return response;

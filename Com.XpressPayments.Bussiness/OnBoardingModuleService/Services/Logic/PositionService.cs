@@ -102,11 +102,11 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //creatDto.PositionName = $"{creatDto.PositionName} ({isExistsComp.CompanyName})";
 
-                var isExists = await _PositionRepository.GetPositionByName(creatDto.PositionName);
+                var isExists = await _PositionRepository.GetPositionByCompany(creatDto.PositionName, (int)creatDto.CompanyID);
                 if (null != isExists)
                 {
                     response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Position with name : {creatDto.PositionName} already exists.";
+                    response.ResponseMessage = $"Position with name : {creatDto.PositionName} already exists for your Company.";
                     return response;
                 }
 

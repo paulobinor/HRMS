@@ -74,15 +74,15 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) != 1)
-                {
-                    if (Convert.ToInt32(RoleId) != 2)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-                    }
-                }
+                //if (Convert.ToInt32(RoleId) != 1)
+                //{
+                //    if (Convert.ToInt32(RoleId) != 2)
+                //    {
+                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //        return response;
+                //    }
+                //}
                 if (Convert.ToInt32(RoleId) != 1)
                 {
                     if (Convert.ToInt32(RoleId) != 2)
@@ -127,11 +127,11 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //DepartmentDto.DepartmentName = $"{DepartmentDto.DepartmentName} ({isExistsComp.CompanyName})";
 
-                var isExists = await _departmentrepository.GetDepartmentByName(DepartmentDto.DepartmentName);
+                var isExists = await _departmentrepository.GetDepartmentByCompany(DepartmentDto.DepartmentName, (int)DepartmentDto.CompanyId);
                 if (null != isExists)
                 {
                     response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Department with name : {DepartmentDto.DepartmentName} already exists.";
+                    response.ResponseMessage = $"Department with name : {DepartmentDto.DepartmentName} already exists for this Company.";
                     return response;
                 }
 
@@ -235,8 +235,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                 {
                                     DepartmentName = departmentName,
                                     HodID = hodID,
-                                    GroupID = groupID,
-                                    BranchID = branchID,
+
                                     Email = email,
                                     CompanyId = companyID,
 

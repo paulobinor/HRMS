@@ -9,7 +9,7 @@ namespace Com.XpressPayments.Data.DTOs
     public  class HodDTO
     {
         public long HodID { get; set; }
-        public string HODName { get; set; }
+        public long UserId { get; set; }
         
         public long CompanyID { get; set; }
 
@@ -28,8 +28,8 @@ namespace Com.XpressPayments.Data.DTOs
 
     public class CreateHodDTO
     {
-        public string HODName { get; set; }
-       
+        public long UserId { get; set; }
+
         public long CompanyID { get; set; }
 
         public string Created_By_User_Email { get; set; }
@@ -37,8 +37,8 @@ namespace Com.XpressPayments.Data.DTOs
     public class UpdateHodDTO
     {
         public long HodID { get; set; }
-        public string HODName { get; set; }
-        
+        public long UserId { get; set; }
+
         public long CompanyID { get; set; }
     }
 

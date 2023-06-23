@@ -401,8 +401,6 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     }
                 }
 
-
-
                 //validate CreateUserDto payload here 
                 if (String.IsNullOrEmpty(userDto.FirstName) || String.IsNullOrEmpty(userDto.LastName) ||
                     String.IsNullOrEmpty(userDto.Email) || String.IsNullOrEmpty(userDto.PhoneNumber) ||
@@ -549,7 +547,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                 string officialMail = serviceDetails.Rows[row][6].ToString();
                                 string phoneNumber = serviceDetails.Rows[row][7].ToString();
                                 var unitName = await _unitRepository.GetUnitByName(serviceDetails.Rows[row][8].ToString());
-                                var unitHeadName = await _unitHeadRepository.GetUnitHeadByName(serviceDetails.Rows[row][9].ToString());
+                                var unitHeadName = await _unitHeadRepository.GetUnitHeadByUserID(serviceDetails.Rows[row][9].ToString);
                                 var hODName = await _HODRepository.GetHODByName(serviceDetails.Rows[row][10].ToString());
                                 var gradeName = await _GradeRepository.GetGradeByName(serviceDetails.Rows[row][11].ToString());
                                 var employeeTypeName = await _EmployeeTypeRepository.GetEmployeeTypeByName(serviceDetails.Rows[row][12].ToString());
@@ -1054,6 +1052,17 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     response.ResponseMessage = "Requester information cannot be found.";
                     return response;
                 }
+
+                //if (Convert.ToInt32(RoleId) != 1)
+                //{
+                //    if (Convert.ToInt32(RoleId) != 4)
+                //    {   
+                //            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //            return response;
+
+                //    }
+                //}
 
                 var mappeduser = new List<UserViewModel>();
                 var users = await _accountRepository.GetUsersPendingApproval();

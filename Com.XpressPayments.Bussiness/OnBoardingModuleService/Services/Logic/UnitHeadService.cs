@@ -11,6 +11,7 @@ using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
 using ExcelDataReader;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -81,8 +82,8 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
                 //validate UnitDto payload here 
-                if (String.IsNullOrEmpty(creatDto.UnitHeadName) || creatDto.CompanyID <= 0 || creatDto.DepartmentID <= 0 ||
-                    creatDto.HodID <= 0 )
+                if ( creatDto.CompanyID <= 0 || creatDto.DepartmentID <= 0 ||
+                    creatDto.HodID <= 0  || creatDto.UserID <= 0)
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";
@@ -108,20 +109,20 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //creatDto.UnitHeadName = $"{creatDto.UnitHeadName} ({isExistsComp.CompanyName})";
 
-                var isExists = await _unitHeadRepository.GetUnitHeadByName(creatDto.UnitHeadName);
-                if (null != isExists)
-                {
-                    response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"UnitHead with name : {creatDto.UnitHeadName} already exists.";
-                    return response;
-                }
+                //var isExists = await _unitHeadRepository.GetUnitHeadByUserID(creatDto.UserID, (int)creatDto.CompanyID);
+                //if (null != isExists)
+                //{
+                //    response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"UnitHead with name : {creatDto.UserID} already exists for your Company.";
+                //    return response;
+                //}
 
                 dynamic resp = await _unitHeadRepository.CreateUnitHead(creatDto, createdbyUserEmail);
                 if (resp > 0)
                 {
                     //update action performed into audit log here
 
-                    var UnitHead = await _unitHeadRepository.GetUnitHeadByName(creatDto.UnitHeadName);
+                    var UnitHead = await _unitHeadRepository.GetUnitHeadByUserID(creatDto.UserID);
 
                     response.Data = UnitHead;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
@@ -317,7 +318,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
                 //validate DepartmentDto payload here 
-                if (String.IsNullOrEmpty(updateDto.UnitHeadName) || updateDto.CompanyID <= 0 || updateDto.DepartmentID <= 0 ||
+                if (updateDto.UserID <= 0 || updateDto.CompanyID <= 0 || updateDto.DepartmentID <= 0 ||
                    updateDto.HodID <= 0 )
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
@@ -410,9 +411,9 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                         var DeletedUnit = await _unitHeadRepository.GetUnitHeadById(deleteDto.UnitHeadID);
 
-                        _logger.LogInformation($"UnitHead with name: {DeletedUnit.UnitHeadName} Deleted successfully.");
+                        _logger.LogInformation($"UnitHead with name: {DeletedUnit.UserID} Deleted successfully.");
                         response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"UnitHead with name: {DeletedUnit.UnitHeadName} Deleted successfully.";
+                        response.ResponseMessage = $"UnitHead with name: {DeletedUnit.UserID} Deleted successfully.";
                         response.Data = null;
                         return response;
 

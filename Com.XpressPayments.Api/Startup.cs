@@ -1,6 +1,7 @@
 using AutoMapper;
 using Com.XpressPayments.Bussiness;
 using Com.XpressPayments.Bussiness.Profiles;
+using Com.XpressPayments.Common.Configuration;
 using Com.XpressPayments.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -91,6 +92,8 @@ namespace Com.XpressPayments.Api
                     }, new List<string>()
                 }});
             });
+
+            services.Configure<SmtpParameters>(options => Configuration.GetSection("Smtp").Bind(options));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -208,6 +208,30 @@ namespace Com.XpressPayments.Data.Repositories.HospitalProviders
             }
         }
 
+        public async Task<HospitalProvidersDTO> GetHospitalProvidersByCompany(string ProvidersNames, int companyId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", HODenum.GETCOMPANY);
+                    param.Add("@ProvidersNamesGet", ProvidersNames);
+                    param.Add("@CompanyIdGet", companyId);
+
+                    var HospitalProvidersDetails = await _dapper.QueryFirstOrDefaultAsync<HospitalProvidersDTO>(ApplicationConstant.Sp_HospitalProviders, param: param, commandType: CommandType.StoredProcedure);
+
+                    return HospitalProvidersDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetHospitalProvidersByName(string ProvidersNames) ===>{ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<HodDTO>> GetAllHospitalProvidersCompanyId(long companyId)
         {
             try
@@ -215,7 +239,7 @@ namespace Com.XpressPayments.Data.Repositories.HospitalProviders
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", 8);
+                    param.Add("@Status", HODenum.GETCOMPANYBYID);
                     param.Add("@CompanyIdGet", companyId);
 
                     var Details = await _dapper.QueryAsync<HodDTO>(ApplicationConstant.Sp_HospitalProviders, param: param, commandType: CommandType.StoredProcedure);

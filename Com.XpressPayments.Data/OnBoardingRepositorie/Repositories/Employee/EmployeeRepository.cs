@@ -323,7 +323,7 @@ namespace Com.XpressPayments.Data.Repositories.Employee
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", EmployeeEnum.APPROVEEMP);  
-                    param.Add("@UserIdApprove", approvedByuserId);
+                    param.Add("@ApprovedByUserId", approvedByuserId);
                     param.Add("@UserEmailApprove", userEmail);
 
                     dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Employee, param: param, commandType: CommandType.StoredProcedure);
