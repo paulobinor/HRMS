@@ -175,7 +175,7 @@ namespace Com.XpressPayments.Data.Repositories.HOD
             }
         }
 
-        public async Task<HodDTO> GetHODByName(long UserId)
+        public async Task<HodDTO> GetHODByUserId(long UserId)
         {
             try
             {
@@ -183,7 +183,29 @@ namespace Com.XpressPayments.Data.Repositories.HOD
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", HODenum.GETBYEMAIL);
-                    param.Add("@@UserIdGet", UserId);
+                    param.Add("@UserIdGet", UserId);
+
+                    var HODDetails = await _dapper.QueryFirstOrDefaultAsync<HodDTO>(ApplicationConstant.Sp_HOD, param: param, commandType: CommandType.StoredProcedure);
+
+                    return HODDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetHODByName(string DepartmentName) ===>{ex.Message}");
+                throw;
+            }
+        }
+        public async Task<HodDTO> GetHODByName(string HODName)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", 10);
+                    param.Add("@HODNameGet", HODName);
 
                     var HODDetails = await _dapper.QueryFirstOrDefaultAsync<HodDTO>(ApplicationConstant.Sp_HOD, param: param, commandType: CommandType.StoredProcedure);
 

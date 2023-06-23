@@ -116,7 +116,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 {
                     //update action performed into audit log here
 
-                    var hod = await _hodRepository.GetHODByName(HodDto.UserId);
+                    var hod = await _hodRepository.GetHODByUserId(HodDto.UserId);
 
                     response.Data = hod;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
@@ -191,16 +191,16 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                             for (int row = 1; row < serviceDetails.Rows.Count; row++)
                             {
 
-                                string hODName = serviceDetails.Rows[row][0].ToString();
+                                var hODName =await _hodRepository.GetHODByName(serviceDetails.Rows[row][0].ToString());
                                 var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][1].ToString());
 
-                                
+                                long userId= hODName.UserId; 
                                 long companyID = company.CompanyId;
 
 
                                 var hodrequest = new CreateHodDTO
                                 {
-                                    HODName = HODName,
+                                    UserId = userId,
                                     CompanyID = companyID
 
 

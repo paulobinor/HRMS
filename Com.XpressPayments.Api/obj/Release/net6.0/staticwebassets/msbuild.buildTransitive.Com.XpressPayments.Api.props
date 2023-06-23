@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\Com.XpressPayments.Api.props" />
-</Project>

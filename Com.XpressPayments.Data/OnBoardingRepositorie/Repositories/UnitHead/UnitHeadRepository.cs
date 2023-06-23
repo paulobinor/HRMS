@@ -201,6 +201,28 @@ namespace Com.XpressPayments.Data.Repositories.UnitHead
                 throw;
             }
         }
+        public async Task<UnitHeadDTO> GetUnitHeadByUnitHeadName(string UnitHeadName)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", 10);
+                    param.Add("@UnitHeadNameGet", UnitHeadName);
+
+                    var UnitHeadDetails = await _dapper.QueryFirstOrDefaultAsync<UnitHeadDTO>(ApplicationConstant.Sp_UnitHead, param: param, commandType: CommandType.StoredProcedure);
+
+                    return UnitHeadDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName:  GetUnitHeadByName(string UnitHeadName) ===>{ex.Message}");
+                throw;
+            }
+        }
 
         public async Task<UnitHeadDTO> GetUnitHeadByCompany(long UserID, long companyId)
         {

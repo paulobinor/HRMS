@@ -16,6 +16,7 @@ namespace Com.XpressPayments.Data.Repositories.UnitHead
         Task<IEnumerable<UnitHeadDTO>> GetAllUnitHead();
         Task<UnitHeadDTO> GetUnitHeadById(long UnitHeadID);
         Task<UnitHeadDTO> GetUnitHeadByUserID(long UserID);
+        Task<UnitHeadDTO> GetUnitHeadByUnitHeadName(string UnitHeadName);
         Task<UnitHeadDTO> GetUnitHeadByCompany(long UserID, long companyId);
         Task<IEnumerable<UnitHeadDTO>> GetAllUnitHeadCompanyId(long UnitHeadID);
     }

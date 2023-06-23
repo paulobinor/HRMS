@@ -230,7 +230,6 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                 long branchID = branch.BranchID;
                                 long companyID = company.CompanyId;
 
-
                                 var departmentrequest = new CreateDepartmentDto
                                 {
                                     DepartmentName = departmentName,
