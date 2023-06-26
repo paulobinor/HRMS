@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.XpressPayments.Data.DTOs
 {
     public  class HodDTO
     {
         public long HodID { get; set; }
+        public string HodNmae { get; set; }
         public long UserId { get; set; }
         
         public long CompanyID { get; set; }
