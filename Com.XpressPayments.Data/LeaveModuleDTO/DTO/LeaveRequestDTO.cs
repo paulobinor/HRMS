@@ -5,13 +5,13 @@ namespace Com.XpressPayments.Data.LeaveModuleDTO.DTO
     public class LeaveRequestDTO
     {
         public long LeaveRequestID { get; set; }
-        public string StaffID { get; set; }
+        public long UserId { get; set; }
         public  string RequestYear { get; set; }
         public string LeaveTypeId { get; set; }
         public long NoOfDays { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string ReliverStaffID { get; set; }
+        public long ReliverUserID { get; set; }
         public string LeaveEvidence { get; set; }
         public string Notes { get; set; }
         public  string ReasonForRescheduling { get; set; }
@@ -32,14 +32,14 @@ namespace Com.XpressPayments.Data.LeaveModuleDTO.DTO
 
     public class LeaveRequestCreate
     {
-       
-        public string StaffID { get; set; }
+
+        public long UserId { get; set; }
         public int RequestYear { get; set; }
         public string LeaveTypeId { get; set; }
         public long NoOfDays { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string ReliverStaffID { get; set; }
+        public long ReliverUserID { get; set; }
         public string LeaveEvidence { get; set; }
         public string Notes { get; set; }
         public string ReasonForRescheduling { get; set; }

@@ -411,12 +411,12 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (requester.RoleId == 1 & userDto.DepartmentId != 1)
-                {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your user role is not authorized to create a new user with the selected Department.";
-                    return response;
-                }
+                //if (requester.RoleId == 1 & userDto.DepartmentId != 1)
+                //{
+                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"Your user role is not authorized to create a new user with the selected Department.";
+                //    return response;
+                //}
 
                 if ( requester.RoleId == 2 & userDto.RoleId <= 2)
                 {

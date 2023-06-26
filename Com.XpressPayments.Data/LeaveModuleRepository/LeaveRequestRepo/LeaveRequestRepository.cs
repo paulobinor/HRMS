@@ -37,13 +37,13 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", LeaveRequestEnum.CREATE);
-                    param.Add("@StaffID", Leave.StaffID.Trim());
+                    param.Add("@UserId", Leave.UserId);
                     param.Add("@RequestYear", Leave.RequestYear);
                     param.Add("@LeaveTypeId", Leave.LeaveTypeId);
                     param.Add("@NoOfDays", Leave.NoOfDays);
                     param.Add("@StartDate", Leave.StartDate);
                     param.Add("@EndDate", Leave.EndDate);
-                    param.Add("@ReliverStaffID", Leave.ReliverStaffID.Trim());
+                    param.Add("@ReliverUserID", Leave.ReliverUserID);
                     param.Add("@LeaveEvidence", Leave.LeaveEvidence.Trim());
                     param.Add("@Notes", Leave.Notes.Trim());
                     param.Add("@ReasonForRescheduling", Leave.ReasonForRescheduling.Trim());
