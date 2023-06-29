@@ -1,15 +1,12 @@
 ﻿using Com.XpressPayments.Bussiness.LeaveModuleService.Service.ILogic;
-using Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic;
-using Com.XpressPayments.Data.Enums;
 using Com.XpressPayments.Data.GenericResponse;
 using Com.XpressPayments.Data.LeaveModuleDTO.DTO;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
 
 namespace Com.XpressPayments.Api.LeaveModuleController.Controller
 {
@@ -25,7 +22,7 @@ namespace Com.XpressPayments.Api.LeaveModuleController.Controller
             _logger = logger;
             _leaveRequestService = leaveRequestService;
         }
-        [HttpPost()]
+        [HttpPost("CreateLeaveRequest")]
         [Authorize]
         public async Task<IActionResult> CreateLeaveRequest([FromBody] LeaveRequestCreate CreateDto)
         {
@@ -41,7 +38,7 @@ namespace Com.XpressPayments.Api.LeaveModuleController.Controller
 
             return Ok(await _leaveRequestService.CreateLeaveRequest(CreateDto, requester));
         }
-        [HttpPost()]
+        [HttpPost("ApproveLeaveRequest")]
         [Authorize]
         public async Task<IActionResult> ApproveLeaveRequest([FromBody] long LeaveRequestID)
         {
@@ -57,7 +54,7 @@ namespace Com.XpressPayments.Api.LeaveModuleController.Controller
 
             return Ok(await _leaveRequestService.ApproveLeaveRequest(LeaveRequestID, requester));
         }
-        [HttpPost()]
+        [HttpPost("DisaproveLeaveRequest")]
         [Authorize]
         public async Task<IActionResult> DisaproveLeaveRequest([FromBody] LeaveRequestDisapproved payload)
         {

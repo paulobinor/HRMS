@@ -26,7 +26,7 @@ namespace Com.XpressPayments.Api.LeaveModuleController.Controller
         }
 
 
-        [HttpPost()]
+        [HttpPost("CreateLeaveType")]
         [Authorize]
         public async Task<IActionResult> CreateLeaveType([FromBody] CreateLeaveTypeDTO CreateDto)
         {
@@ -54,7 +54,7 @@ namespace Com.XpressPayments.Api.LeaveModuleController.Controller
             }
         }
 
-        [HttpPut()]
+        [HttpPut("UpdateLeaveType")]
         [Authorize]
         public async Task<IActionResult> UpdateLeaveType([FromBody] UpdateLeaveTypeDTO updateDto)
         {
@@ -82,7 +82,7 @@ namespace Com.XpressPayments.Api.LeaveModuleController.Controller
             }
         }
 
-        [HttpDelete()]
+        [HttpDelete("DeleteLeaveType")]
         [Authorize]
         public async Task<IActionResult> DeleteLeaveType([FromBody] DeleteLeaveTypeDTO deleteDto)
         {
@@ -111,7 +111,7 @@ namespace Com.XpressPayments.Api.LeaveModuleController.Controller
         }
 
         [Authorize]
-        [HttpGet()]
+        [HttpGet("GetAllActiveLeaveType")]
         public async Task<IActionResult> GetAllActiveLeaveType()
         {
             var response = new BaseResponse();
@@ -140,7 +140,7 @@ namespace Com.XpressPayments.Api.LeaveModuleController.Controller
         }
 
         [Authorize]
-        [HttpGet()]
+        [HttpGet("GetAllLeaveType")]
         public async Task<IActionResult> GetAllLeaveType()
         {
             var response = new BaseResponse();
@@ -168,7 +168,7 @@ namespace Com.XpressPayments.Api.LeaveModuleController.Controller
         }
 
         [Authorize]
-        [HttpGet()]
+        [HttpGet("GetLeaveTypebyId")]
         public async Task<IActionResult> GetLeaveTypebyId(long LeaveTypeId)
         {
             var response = new BaseResponse();
@@ -197,7 +197,7 @@ namespace Com.XpressPayments.Api.LeaveModuleController.Controller
         }
 
         [Authorize]
-        [HttpGet()]
+        [HttpGet("GetLeaveTypebyCompanyId")]
         public async Task<IActionResult> GetLeaveTypebyCompanyId(long CompanyID)
         {
             var response = new BaseResponse();
