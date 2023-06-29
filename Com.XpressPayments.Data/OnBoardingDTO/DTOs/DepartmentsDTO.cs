@@ -35,10 +35,7 @@ namespace Com.XpressPayments.Data.DTOs
     public class CreateDepartmentDto
     {
         public string DepartmentName { get; set; }
-        
-       
         public long HodID { get; set; }
-
         public string Email { get; set; }
         public long CompanyId { get; set; }
     }
