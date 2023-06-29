@@ -28,6 +28,8 @@ namespace Com.XpressPayments.Data.LeaveModuleDTO.DTO
         public DateTime? Deleted_Date { get; set; }
         public string Deleted_By_User_Email { get; set; }
         public string Reasons_For_Delete { get; set; }
+
+        public bool IsHodApproved { get; set; }
     }
 
     public class LeaveRequestCreate
@@ -53,5 +55,10 @@ namespace Com.XpressPayments.Data.LeaveModuleDTO.DTO
         public long LeaveRequestID { get; set; }
         public string Reasons_For_Delete { get; set; }
     }
-        
+    public class LeaveRequestDisapproved
+    {
+        public long LeaveRequestID { get; set; }
+        public string Reasons_For_Disapprove { get; set; }
+    }
+
 }
