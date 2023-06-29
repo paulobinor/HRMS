@@ -202,12 +202,12 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                         string HodName = serviceDetails.Rows[0][1].ToString();
                         string GroupName = serviceDetails.Rows[0][2].ToString();
                         string BranchName = serviceDetails.Rows[0][3].ToString();
-                        string Email = serviceDetails.Rows[0][4].ToString();
+                      
                         string CompanyName = serviceDetails.Rows[0][5].ToString();
 
 
                         if (DepartmentName != "DepartmentName" || HodName != "HodName"
-                        || GroupName != "GroupName" || BranchName != "BranchName" || Email != "Email" || CompanyName != "CompanyName")
+                        || GroupName != "GroupName" || BranchName != "BranchName" || CompanyName != "CompanyName")
                         {
                             response.ResponseCode = "08";
                             response.ResponseMessage = "File header not in the Right format";
@@ -222,7 +222,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                 var hod = await _hODRepository.GetHODByName(serviceDetails.Rows[row][1].ToString());
                                 var group = await _GroupRepository.GetGroupByName(serviceDetails.Rows[row][2].ToString());
                                 var branch = await _branchRepository.GetBranchByName(serviceDetails.Rows[row][3].ToString());
-                                var email =  serviceDetails.Rows[row][4].ToString();
+                             
                                 var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][5].ToString());
 
                                 long hodID = hod.HodID;
@@ -235,7 +235,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                     DepartmentName = departmentName,
                                     HodID = hodID,
 
-                                    Email = email,
+                                   
                                     CompanyId = companyID,
 
                                 };
@@ -343,7 +343,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //validate DepartmentDto payload here 
                 if (String.IsNullOrEmpty(updateDto.DepartmentName)  || updateDto.CompanyId <= 0 
-                    || updateDto.DeptId <= 0 || String.IsNullOrEmpty(updateDto.Email))
+                    || updateDto.DeptId <= 0 )
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";

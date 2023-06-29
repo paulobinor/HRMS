@@ -36,7 +36,7 @@ namespace Com.XpressPayments.Data.Repositories.Departments.Repository
                     param.Add("@Status", Department.CREATE);
                     param.Add("@DepartmentName", Dept.DepartmentName.Trim());
                     param.Add("@HodID", Dept.HodID);
-                    param.Add("@Email", Dept.Email.Trim());
+                   
                     param.Add("@CompanyId", Dept.CompanyId);
 
                     param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
@@ -65,7 +65,7 @@ namespace Com.XpressPayments.Data.Repositories.Departments.Repository
                     param.Add("@DepartmentIdUpd", Convert.ToInt32(Dept.DeptId));
                     param.Add("@DepartmentNameUpd", Dept.DepartmentName == null ? "" : Dept.DepartmentName.ToString().Trim());
                     param.Add("@HodIDUpd", Dept.HodID);
-                    param.Add("@EmailUpd", Dept.Email.Trim());
+                  
                     param.Add("@CompanyIdUpd", Dept.CompanyId);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());

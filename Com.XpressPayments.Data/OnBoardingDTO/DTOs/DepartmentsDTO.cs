@@ -15,7 +15,7 @@ namespace Com.XpressPayments.Data.DTOs
         public string HODName { get; set; }
 
 
-        public string Email { get; set; }
+        
         public string CompanyName { get; set; }
         public long CompanyId { get; set; }
 
@@ -36,7 +36,7 @@ namespace Com.XpressPayments.Data.DTOs
     {
         public string DepartmentName { get; set; }
         public long HodID { get; set; }
-        public string Email { get; set; }
+   
         public long CompanyId { get; set; }
     }
 
@@ -48,7 +48,7 @@ namespace Com.XpressPayments.Data.DTOs
        
         public long HodID { get; set; }
 
-        public string Email { get; set; }
+     
         public long CompanyId { get; set; }
     }
 
