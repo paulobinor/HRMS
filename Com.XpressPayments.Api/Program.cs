@@ -6,6 +6,7 @@ using Com.XpressPayments.Bussiness.Services.ILogic;
 using Com.XpressPayments.Bussiness.Services.Logic;
 using Com.XpressPayments.Bussiness.Util;
 using Com.XpressPayments.Common.Configuration;
+using Com.XpressPayments.Data.DapperGeneric;
 using Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo;
 using Com.XpressPayments.Data.LeaveModuleRepository.LeaveType;
 using Com.XpressPayments.Data.Repositories;
@@ -137,6 +138,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.Configure<Smtp>(options => builder.Configuration.GetSection("Smtp").Bind(options));
 
+builder.Services.AddScoped<IDapperGenericRepository, DapperGenericRepository>();
 
 //register repo here
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
@@ -172,6 +174,7 @@ builder.Services.AddScoped<IHospitalPlanRepository, HospitalPlanRepository>();
 builder.Services.AddScoped<IChildrenRepository, ChildrenRepository>();
 builder.Services.AddScoped<IRolesRepo, RolesRepo>();
 
+
 //VacationModul
 builder.Services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
 builder.Services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
@@ -204,7 +207,7 @@ builder.Services.AddScoped<IChildrenService, ChildrenService>();
 
 //vacation 
 builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
-//builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
+builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
 
 //Mail Service
 builder.Services.AddScoped<IMailService, MailService>();

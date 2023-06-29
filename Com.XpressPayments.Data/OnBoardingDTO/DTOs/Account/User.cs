@@ -9,7 +9,8 @@ namespace Com.XpressPayments.Data.DTOs.Account
     {
         public long UserId { get; set; }
 
-        //public long StaffID { get; set; }
+        public long UnitHeadUserId { get; set; }
+        public long HODUserId { get; set; }
 
         public long DeptId { get; set; }
         public long EmpID { get; set; }
