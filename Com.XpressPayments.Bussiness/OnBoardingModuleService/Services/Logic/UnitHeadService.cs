@@ -80,8 +80,8 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
                 //validate UnitDto payload here 
-                if ( creatDto.CompanyID <= 0 || creatDto.DepartmentID <= 0 ||
-                    creatDto.HodID <= 0  || creatDto.UserID <= 0)
+                if ( creatDto.CompanyID <= 0 || creatDto.DepartmentID <= 0 
+                    /*/*creatDto.HodID <= 0 */ || creatDto.UserID <= 0)
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";
@@ -316,8 +316,8 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
                 //validate DepartmentDto payload here 
-                if (updateDto.UserID <= 0 || updateDto.CompanyID <= 0 || updateDto.DepartmentID <= 0 ||
-                   updateDto.HodID <= 0 )
+                if (updateDto.UserID <= 0 || updateDto.CompanyID <= 0 || updateDto.DepartmentID <= 0 
+                   /*updateDto.HodID <= 0*/ )
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";
