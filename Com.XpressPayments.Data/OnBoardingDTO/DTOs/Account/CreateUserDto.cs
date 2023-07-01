@@ -32,8 +32,7 @@ namespace Com.XpressPayments.Data.DTOs.Account
         public long CompanyId { get; set; }
         public long DepartmentId { get; set; }
         public long UnitID { get; set; }
-        public long UnitHeadID { get; set; }
-        public long HodID { get; set; }
+    
         public long GradeID { get; set; }
         public long EmployeeTypeID { get; set; }
        

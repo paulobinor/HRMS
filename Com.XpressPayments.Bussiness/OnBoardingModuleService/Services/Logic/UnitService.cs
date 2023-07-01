@@ -210,7 +210,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                 var unitrequest = new CreateUnitDTO
                                 {
                                     UnitName = unitName,
-                                    HodID = HodID,
+                                    
                                     DeptId = DeptID,
                                     CompanyId = companyID
                                     

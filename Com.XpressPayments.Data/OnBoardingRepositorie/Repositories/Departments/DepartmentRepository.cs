@@ -35,7 +35,7 @@ namespace Com.XpressPayments.Data.Repositories.Departments.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", Department.CREATE);
                     param.Add("@DepartmentName", Dept.DepartmentName.Trim());
-                    param.Add("@HodID", Dept.HodID);
+                    param.Add("@HODUserId", Dept.HODUserId);
                    
                     param.Add("@CompanyId", Dept.CompanyId);
 
@@ -64,7 +64,7 @@ namespace Com.XpressPayments.Data.Repositories.Departments.Repository
                     param.Add("@Status", Department.UPDATE);
                     param.Add("@DepartmentIdUpd", Convert.ToInt32(Dept.DeptId));
                     param.Add("@DepartmentNameUpd", Dept.DepartmentName == null ? "" : Dept.DepartmentName.ToString().Trim());
-                    param.Add("@HodIDUpd", Dept.HodID);
+                    param.Add("@HODUserIdUpd", Dept.HODUserId);
                   
                     param.Add("@CompanyIdUpd", Dept.CompanyId);
 

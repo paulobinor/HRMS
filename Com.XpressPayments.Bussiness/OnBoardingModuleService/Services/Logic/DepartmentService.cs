@@ -206,7 +206,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                         string CompanyName = serviceDetails.Rows[0][5].ToString();
 
 
-                        if (DepartmentName != "DepartmentName" || HodName != "HodName"
+                        if (DepartmentName != "DepartmentName" 
                         || GroupName != "GroupName" || BranchName != "BranchName" || CompanyName != "CompanyName")
                         {
                             response.ResponseCode = "08";
@@ -233,7 +233,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                 var departmentrequest = new CreateDepartmentDto
                                 {
                                     DepartmentName = departmentName,
-                                    HodID = hodID,
+                                  
 
                                    
                                     CompanyId = companyID,

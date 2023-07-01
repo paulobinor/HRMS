@@ -104,7 +104,6 @@ C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\o
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Debug\net6.0\Com.XpressPayments.Api.AssemblyInfoInputs.cache
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Debug\net6.0\Com.XpressPayments.Api.AssemblyInfo.cs
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Debug\net6.0\Com.XpressPayments.Api.csproj.CoreCompileInputs.cache
-C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Debug\net6.0\Com.XpressPayments.Api.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Debug\net6.0\Com.XpressPayments.Api.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Debug\net6.0\staticwebassets\msbuild.Com.XpressPayments.Api.Microsoft.AspNetCore.StaticWebAssets.props
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Debug\net6.0\staticwebassets\msbuild.build.Com.XpressPayments.Api.props
@@ -244,3 +243,4 @@ C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\D
 C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Debug\net6.0\Com.XpressPayments.Api.csproj.CopyComplete
 C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Debug\net6.0\Com.XpressPayments.Api.genruntimeconfig.cache
 C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Debug\net6.0\ref\Com.XpressPayments.Api.dll
+C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Debug\net6.0\Com.XpressPayments.Api.MvcApplicationPartsAssemblyInfo.cs

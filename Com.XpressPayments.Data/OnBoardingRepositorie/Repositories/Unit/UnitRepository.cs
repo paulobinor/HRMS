@@ -1,16 +1,13 @@
 ﻿using Com.XpressPayments.Data.AppConstants;
 using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.Enums;
-using Com.XpressPayments.Data.Repositories.HOD;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Data;
-using System.Linq;
-using System.Text;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 
 namespace Com.XpressPayments.Data.Repositories.Unit
@@ -37,7 +34,7 @@ namespace Com.XpressPayments.Data.Repositories.Unit
                     var param = new DynamicParameters();
                     param.Add("@Status", UnitEnum.CREATE);
                     param.Add("@UnitName", unit.UnitName.Trim());
-                    param.Add("@HodID", unit.HodID);
+                    param.Add("@UnitHeadUserId", unit.UnitHeadUserId);
                     param.Add("@DeptId", unit.DeptId);
                     param.Add("@CompanyId", unit.CompanyId);
 
@@ -64,10 +61,8 @@ namespace Com.XpressPayments.Data.Repositories.Unit
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", UnitEnum.UPDATE);
-                    param.Add("@UnitIDUpd", unit.HodID);
+                    param.Add("@UnitHeadUserIdUpd", unit.UnitHeadUserId);
                     param.Add("@UnitNameUpd", unit.UnitName.Trim());
-                    param.Add("@HodIDUpd", unit.HodID);
-                 
                     param.Add("@DeptIdUpd", unit.DeptId);
                     param.Add("@CompanyIdUpd", unit.CompanyId);
 

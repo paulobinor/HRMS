@@ -25,10 +25,7 @@ namespace Com.XpressPayments.Data.DTOs
         public string DepartmentName { get; set; }
         public long UnitID { get; set; }
         public string UnitName { get; set; }
-        public long UnitHeadID { get; set; }
-        public string UnitHeadName { get; set; }
-        public long HodID { get; set; }
-        public string HODName { get; set; }
+  
         public long GradeID { get; set; }
         public string GradeName { get; set; }
         public long EmployeeTypeID { get; set; }

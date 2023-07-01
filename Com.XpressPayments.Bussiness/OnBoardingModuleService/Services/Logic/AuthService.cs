@@ -586,8 +586,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                     OfficialMail = OfficialMail,
                                     PhoneNumber = phoneNumber,
                                     UnitID = unitID,
-                                    UnitHeadID = unitHeadID,
-                                    HodID = hODID,
+                                  
                                     GradeID = gradeID,
                                     EmployeeTypeID = employeeTypeID,
                                    

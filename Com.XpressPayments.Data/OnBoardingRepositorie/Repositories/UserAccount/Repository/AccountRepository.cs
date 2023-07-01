@@ -104,8 +104,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     param.Add("@PhoneNumber", user.PhoneNumber == null ? "" : user.PhoneNumber.ToString().Trim());
                     //param.Add("@PasswordHash", passwordHash);
                     param.Add("@UnitID", user.UnitID);
-                    param.Add("@UnitHeadID", user.UnitHeadID);
-                    param.Add("@HodID", user.HodID);
+               
                     param.Add("@GradeID", user.GradeID);
                     param.Add("@EmployeeTypeID", user.EmployeeTypeID);
                 
@@ -154,8 +153,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     param.Add("@DOB", user.Email == null ? "" : user.DOB.ToString().Trim());
                     param.Add("@ResumptionDate", user.ResumptionDate == null ? "" : user.DOB.ToString().Trim());
                     param.Add("@UnitID", user.UnitID);
-                    param.Add("@UnitHeadID", user.UnitHeadID);
-                    param.Add("@HodID", user.HodID);
+                   
                     param.Add("@GradeID", user.GradeID);
                     param.Add("@EmployeeTypeID", user.EmployeeTypeID);
                   
