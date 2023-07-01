@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Com.XpressPayments.Data.DTOs.Account;
+using System.ComponentModel.Design;
 
 namespace Com.XpressPayments.Data.Repositories.Employee
 {
@@ -268,7 +269,7 @@ namespace Com.XpressPayments.Data.Repositories.Employee
             }
         }
 
-        public async Task<IEnumerable<EmployeeDTO>> GetAllEmployeeCompanyId(long EmpID)
+        public async Task<IEnumerable<EmployeeDTO>> GetAllEmployeeCompanyId(long CompanyId)
         {
             try
             {
@@ -276,7 +277,7 @@ namespace Com.XpressPayments.Data.Repositories.Employee
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", 8);
-                    param.Add("@CompanyIdGet", EmpID);
+                    param.Add("@CompanyIdGet", CompanyId);
 
                     var EmployeeDetails = await _dapper.QueryAsync<EmployeeDTO>(ApplicationConstant.Sp_Employee, param: param, commandType: CommandType.StoredProcedure);
 
@@ -291,7 +292,7 @@ namespace Com.XpressPayments.Data.Repositories.Employee
             }
         }
 
-        public async Task<IEnumerable<EmployeeDTO>> GetEmpPendingApproval()
+        public async Task<IEnumerable<EmployeeDTO>> GetEmpPendingApproval(long CompanyID)
         {
             try
             {
@@ -299,6 +300,7 @@ namespace Com.XpressPayments.Data.Repositories.Employee
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", EmployeeEnum.EMPPENDINGAPPROVAL);
+                    param.Add("@CompanyIdGet", CompanyID);
 
                     var userDetails = await _dapper.QueryAsync<EmployeeDTO>(ApplicationConstant.Sp_Employee, param: param, commandType: CommandType.StoredProcedure);
 

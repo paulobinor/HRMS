@@ -15,6 +15,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Threading.Tasks;
+using System.ComponentModel.Design;
 
 namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
 {
@@ -225,7 +226,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             }
         }
 
-        public async Task<IEnumerable<User>> GetUsersPendingApproval()
+        public async Task<IEnumerable<User>> GetUsersPendingApproval(long CompanyId)
         {
             try
             {
@@ -233,7 +234,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", Account.USERSPENDINGAPPROVAL);
-                    //param.Add("@OrgIdGetPending", orgId);
+                    param.Add("@CompanyIdGet", CompanyId);
 
                     var userDetails = await _dapper.QueryAsync<User>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
 

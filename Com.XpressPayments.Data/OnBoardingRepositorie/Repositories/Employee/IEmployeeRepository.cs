@@ -14,8 +14,8 @@ namespace Com.XpressPayments.Data.Repositories.Employee
         Task<IEnumerable<EmployeeDTO>> GetAllEmployee();
         Task<EmployeeDTO> GetEmployeeById(long EmpID);
         Task<EmployeeDTO> GetEmployeeByStaffID(long StaffID);
-        Task<IEnumerable<EmployeeDTO>> GetAllEmployeeCompanyId(long EmpID);
-        Task<IEnumerable<EmployeeDTO>> GetEmpPendingApproval();
+        Task<IEnumerable<EmployeeDTO>> GetAllEmployeeCompanyId(long CompanyId);
+        Task<IEnumerable<EmployeeDTO>> GetEmpPendingApproval(long CompanyID);
         Task<dynamic> ApproveEmp(long approvedByuserId, string userEmail);
         Task<dynamic> DeclineEmp(long disapprovedByuserId, string userEmail, string comment);
     }

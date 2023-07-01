@@ -440,7 +440,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
         }
 
-        public async Task<BaseResponse> GetEmpPendingApproval(RequesterInfo requester)
+        public async Task<BaseResponse> GetEmpPendingApproval( long CompanyID, RequesterInfo requester)
         {
             BaseResponse response = new BaseResponse();
 
@@ -479,7 +479,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
                 var mappeduser = new List<EmployeeDTO>();
-                var users = await _EmployeeRepository.GetEmpPendingApproval();
+                var users = await _EmployeeRepository.GetEmpPendingApproval(CompanyID);
                 if (users.Any())
                 {
                     //update action performed into audit log here
@@ -530,9 +530,9 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetEmpPendingApproval() ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: GetEmpPendingApproval(CompanyID) ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetEmpPendingApproval() ==> {ex.Message}";
+                response.ResponseMessage = $"Exception Occured: GetEmpPendingApproval(CompanyID) ==> {ex.Message}";
                 response.Data = null;
                 return response;
             }

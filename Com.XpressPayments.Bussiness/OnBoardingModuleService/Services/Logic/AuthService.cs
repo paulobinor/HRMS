@@ -1032,7 +1032,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
         }
 
       
-        public async Task<BaseResponse> GetAllUsersPendingApproval(RequesterInfo requester)
+        public async Task<BaseResponse> GetAllUsersPendingApproval(long CompanyId,RequesterInfo requester)
         {
             var response = new BaseResponse();
             try
@@ -1064,7 +1064,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 //}
 
                 var mappeduser = new List<UserViewModel>();
-                var users = await _accountRepository.GetUsersPendingApproval();
+                var users = await _accountRepository.GetUsersPendingApproval(CompanyId);
                 if (users.Any())
                 {
                     //update action performed into audit log here
