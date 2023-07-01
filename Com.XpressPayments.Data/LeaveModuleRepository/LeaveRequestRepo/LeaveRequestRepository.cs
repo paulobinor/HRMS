@@ -166,7 +166,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
             }
         }
 
-        public async Task<DepartmentsDTO> GetLeaveRequestByName(string RequestYear)
+        public async Task<LeaveRequestDTO> GetLeaveRequestByYear(string RequestYear)
         {
             try
             {
@@ -176,9 +176,9 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
                     param.Add("@Status", LeaveRequestEnum.GETBYEMAIL);
                     param.Add("@RequestYearGet", RequestYear);
 
-                    var DepartmentDetails = await _dapper.QueryFirstOrDefaultAsync<DepartmentsDTO>(ApplicationConstant.Sp_Departments, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
 
-                    return DepartmentDetails;
+                    return LeaveDetails;
                 }
             }
             catch (Exception ex)
@@ -189,7 +189,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
             }
         }
 
-        public async Task<LeaveRequestDTO> GetLeaveRequestByCompany(string RequestYear, int companyId)
+        public async Task<LeaveRequestDTO> GetLeaveRequestByCompany(string RequestYear, long companyId)
         {
             try
             {
@@ -212,5 +212,72 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
                 throw;
             }
         }
+
+        //public async Task<IEnumerable<LeaveRequestDTO>> GetUnitedHeadPendingApproval()
+        //{
+        //    try
+        //    {
+        //        using (SqlConnection _dapper = new SqlConnection(_connectionString))
+        //        {
+        //            var param = new DynamicParameters();
+        //            param.Add("@Status", LeaveRequestEnum.GETUNITHEADAPPROVAL);
+
+        //            var userDetails = await _dapper.QueryAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
+
+        //            return userDetails;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var err = ex.Message;
+        //        _logger.LogError($"MethodName: GetUnitedHeadPendingApproval() ===>{ex.Message}");
+        //        throw;
+        //    }
+        //}
+
+        //public async Task<IEnumerable<LeaveRequestDTO>> GetHODPendingApproval()
+        //{
+        //    try
+        //    {
+        //        using (SqlConnection _dapper = new SqlConnection(_connectionString))
+        //        {
+        //            var param = new DynamicParameters();
+        //            param.Add("@Status", LeaveRequestEnum.GETHODAPPROVAL);
+
+        //            var userDetails = await _dapper.QueryAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
+
+        //            return userDetails;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var err = ex.Message;
+        //        _logger.LogError($"MethodName: GetHODPendingApproval() ===>{ex.Message}");
+        //        throw;
+        //    }
+        //}
+
+
+        //public async Task<IEnumerable<LeaveRequestDTO>> GetHRPendingApproval()
+        //{
+        //    try
+        //    {
+        //        using (SqlConnection _dapper = new SqlConnection(_connectionString))
+        //        {
+        //            var param = new DynamicParameters();
+        //            param.Add("@Status", LeaveRequestEnum.GETHRAPPROVAL);
+
+        //            var userDetails = await _dapper.QueryAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
+
+        //            return userDetails;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var err = ex.Message;
+        //        _logger.LogError($"MethodName: GetHRPendingApproval() ===>{ex.Message}");
+        //        throw;
+        //    }
+        //}
     }
 }

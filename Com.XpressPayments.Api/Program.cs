@@ -189,7 +189,7 @@ builder.Services.AddScoped<ICountyService, CountyService>();
 builder.Services.AddScoped<IStateService, StateService>();
 builder.Services.AddScoped<ILgaService, LgaService>();
 builder.Services.AddScoped<IUnitService, UnitService>();
-builder.Services.AddScoped<IUnitHeadService, UnitHeadService>();
+//builder.Services.AddScoped<IUnitHeadService, UnitHeadService>();
 builder.Services.AddScoped<IJobDescriptionService, JobDescriptionService>();
 builder.Services.AddScoped<IEmployeeTypeService, EmployeeTypeService>();
 builder.Services.AddScoped<IGradeService, GradeService>();

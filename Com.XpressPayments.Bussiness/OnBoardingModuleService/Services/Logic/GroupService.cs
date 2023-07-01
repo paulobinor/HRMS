@@ -79,7 +79,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //validate DepartmentDto payload here 
                 if (String.IsNullOrEmpty(GroupDto.GroupName) || GroupDto.CompanyID <= 0 )
-                //String.IsNullOrEmpty(DepartmentDto.Email) || String.IsNullOrEmpty(DepartmentDto.ContactPhone))
+            
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";

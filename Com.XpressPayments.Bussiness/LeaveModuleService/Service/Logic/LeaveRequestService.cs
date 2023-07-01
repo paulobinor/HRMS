@@ -193,6 +193,187 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 return response;
             }
         }
-        
+
+        public async Task<BaseResponse> GetAllLeaveRquest(RequesterInfo requester)
+        {
+            BaseResponse response = new BaseResponse();
+
+            try
+            {
+                string requesterUserEmail = requester.Username;
+                string requesterUserId = requester.UserId.ToString();
+                string RoleId = requester.RoleId.ToString();
+
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
+
+                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                if (null == requesterInfo)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Requester information cannot be found.";
+                    return response;
+                }
+
+                //if (Convert.ToInt32(RoleId) != 2)
+                //{
+                //    if (Convert.ToInt32(RoleId) != 4)
+                //    {
+                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //        return response;
+
+                //    }
+
+                //}
+
+                //update action performed into audit log here
+
+                var leave = await _leaveRequestRepository.GetAllLeaveRequest();
+
+                if (leave.Any())
+                {
+                    response.Data = leave;
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Grade fetched successfully.";
+                    return response;
+                }
+                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "No Grade found.";
+                response.Data = null;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetAllGrade() ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: GetAllGrade() ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+        }
+        public async Task<BaseResponse> GetLeaveRequsetById(long LeaveRequestID, RequesterInfo requester)
+        {
+            BaseResponse response = new BaseResponse();
+
+            try
+            {
+                string requesterUserEmail = requester.Username;
+                string requesterUserId = requester.UserId.ToString();
+                string RoleId = requester.RoleId.ToString();
+
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
+
+                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                if (null == requesterInfo)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Requester information cannot be found.";
+                    return response;
+                }
+
+
+                //if (Convert.ToInt32(RoleId) != 2)
+                //{
+                //    if (Convert.ToInt32(RoleId) != 4)
+                //    {
+                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //        return response;
+
+                //    }
+
+                //}
+
+                var LeaveRequest = await _leaveRequestRepository.GetLeaveRequestById(LeaveRequestID);
+
+                if (LeaveRequest == null)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "LeaveRequest not found.";
+                    response.Data = null;
+                    return response;
+                }
+
+                //update action performed into audit log here
+
+                response.Data = LeaveRequest;
+                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "LeaveRequest fetched successfully.";
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetLeaveRequestById(long LeaveRequestID ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured:  GetLeaveRequestById(long LeaveRequestID  ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+        }
+
+        public async Task<BaseResponse> GetLeaveRquestbyCompanyId(string RequestYear,long companyId, RequesterInfo requester)
+        {
+            BaseResponse response = new BaseResponse();
+
+            try
+            {
+                string requesterUserEmail = requester.Username;
+                string requesterUserId = requester.UserId.ToString();
+                string RoleId = requester.RoleId.ToString();
+
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
+
+                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                if (null == requesterInfo)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Requester information cannot be found.";
+                    return response;
+                }
+
+
+                //if (Convert.ToInt32(RoleId) != 2)
+                //{
+                //    if (Convert.ToInt32(RoleId) != 4)
+                //    {
+                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //        return response;
+
+                //    }
+
+                //}
+
+                var LeaveRquest = await _leaveRequestRepository.GetLeaveRequestByCompany( RequestYear, companyId);
+
+                if (LeaveRquest == null)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "LeaveRequest not found.";
+                    response.Data = null;
+                    return response;
+                }
+
+                //update action performed into audit log here
+
+                response.Data = LeaveRquest;
+                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "LeaveRequest fetched successfully.";
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetLeaveRequestByCompanyID(string RequestYear,long companyId) ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: GetLeaveRequestByCompanyID(string RequestYear, long companyId) ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+        }
     }
 }

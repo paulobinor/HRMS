@@ -9,5 +9,8 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.ILogic
         Task<BaseResponse> CreateLeaveRequest(LeaveRequestCreate payload, RequesterInfo requester);
         Task<BaseResponse> ApproveLeaveRequest(long LeaveRequestID, RequesterInfo requester);
         Task<BaseResponse> DisaproveLeaveRequest(LeaveRequestDisapproved payload, RequesterInfo requester);
+        Task<BaseResponse> GetAllLeaveRquest(RequesterInfo requester);
+        Task<BaseResponse> GetLeaveRequsetById(long LeaveRequestID, RequesterInfo requester);
+        Task<BaseResponse> GetLeaveRquestbyCompanyId(string RequestYear, long companyId, RequesterInfo requester);
     }
 }
