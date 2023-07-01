@@ -14,6 +14,9 @@ namespace Com.XpressPayments.Data.LeaveModuleDTO.DTO
         public long ReliverUserID { get; set; }
         public string LeaveEvidence { get; set; }
         public string Notes { get; set; }
+        public long UnitHeadUserID { get; set; }
+        public long HodUserID { get; set; }
+        public long HRUserId { get; set; }
         public  string ReasonForRescheduling { get; set; }
         public long CompanyID { get; set; }
 
@@ -43,7 +46,7 @@ namespace Com.XpressPayments.Data.LeaveModuleDTO.DTO
         public DateTime EndDate { get; set; }
         public long ReliverUserID { get; set; }
         public string LeaveEvidence { get; set; }
-        public string Notes { get; set; }
+        public string Notes { get; set; }     
         public string ReasonForRescheduling { get; set; }
         public long CompanyID { get; set; }
 

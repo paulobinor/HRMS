@@ -1,5 +1,4 @@
-﻿using Com.XpressPayments.Data.DTOs;
-using Com.XpressPayments.Data.LeaveModuleDTO.DTO;
+﻿using Com.XpressPayments.Data.LeaveModuleDTO.DTO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

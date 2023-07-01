@@ -79,7 +79,14 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 _mailService.SendLeaveMailToReliever(payload.ReliverUserID, payload.UserId, payload.StartDate, payload.EndDate);
 
                 //Send mail to approval
-                _mailService.SendLeaveApproveMailToApprover(userDetails.UnitHeadUserId,payload.UserId,payload.StartDate,payload.EndDate);  
+                if(userDetails.UnitHeadUserId == null)
+                {
+                    _mailService.SendLeaveApproveMailToApprover(userDetails.HODUserId, payload.UserId, payload.StartDate, payload.EndDate);
+                }
+                else
+                {
+                    _mailService.SendLeaveApproveMailToApprover(userDetails.UnitHeadUserId, payload.UserId, payload.StartDate, payload.EndDate);
+                }              
 
 
                 response.ResponseCode = "00";
@@ -124,10 +131,23 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 _mailService.SendLeaveApproveConfirmationMail(leaveRequestDetail.UserId, requester.UserId, leaveRequestDetail.StartDate, leaveRequestDetail.EndDate);
 
                 //Send mail to approval
-                if (!leaveRequestDetail.IsHodApproved)
+                if (leaveRequestDetail.UnitHeadUserID == null)
                 {
-                    _mailService.SendLeaveApproveMailToApprover(userDetails.HODUserId, leaveRequestDetail.UserId, leaveRequestDetail.StartDate, leaveRequestDetail.EndDate);
+                    _mailService.SendLeaveApproveMailToApprover(leaveRequestDetail.HRUserId, leaveRequestDetail.UserId, leaveRequestDetail.StartDate, leaveRequestDetail.EndDate);
                 }
+                else
+                {
+                    if (!leaveRequestDetail.IsHodApproved)
+                    {
+                        _mailService.SendLeaveApproveMailToApprover(leaveRequestDetail.HodUserID, leaveRequestDetail.UserId, leaveRequestDetail.StartDate, leaveRequestDetail.EndDate);
+                    }
+                    else
+                    {
+                        _mailService.SendLeaveApproveMailToApprover(leaveRequestDetail.HRUserId, leaveRequestDetail.UserId, leaveRequestDetail.StartDate, leaveRequestDetail.EndDate);
+                    }
+                   
+                }
+               
 
                 response.ResponseCode = "00";
                 response.ResponseMessage = "Record inserted successfully";
