@@ -32,6 +32,7 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
             _mailService = mailService;
             _logger = logger;
             _accountRepository = accountRepository;
+
             _rescheduleLeaveRepository = rescheduleLeaveRepository;
             _companyrepository = companyrepository;
         }
