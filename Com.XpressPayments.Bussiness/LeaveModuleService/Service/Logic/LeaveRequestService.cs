@@ -8,6 +8,7 @@ using Com.XpressPayments.Data.Repositories.Company.IRepository;
 using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -192,5 +193,6 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 return response;
             }
         }
+        
     }
 }

@@ -136,8 +136,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
                 }
             }
             catch (Exception ex)
-            {
-                var err = ex.Message;
+            {              
                 _logger.LogError($"MethodName: GetAllLeaveRequest() ===>{ex.Message}");
                 throw;
             }
