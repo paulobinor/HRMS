@@ -136,8 +136,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
                 }
             }
             catch (Exception ex)
-            {
-                var err = ex.Message;
+            {              
                 _logger.LogError($"MethodName: GetAllLeaveRequest() ===>{ex.Message}");
                 throw;
             }
@@ -210,6 +209,26 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
             {
                 var err = ex.Message;
                 _logger.LogError($"MethodName: GetLeaveRequestByCompany(string RequestYear, int companyId) ===>{ex.Message}");
+                throw;
+            }
+        }
+        public async Task<IEnumerable<LeaveRequestDTO>> GetLeaveRequestPendingApproval(long UserIdGet)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", LeaveRequestEnum.GETPENDINGAPPROVAL);
+                    param.Add("@UserIdGet", UserIdGet);
+                    var userDetails = await _dapper.QueryAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
+
+                    return userDetails;
+                }
+            }
+            catch (Exception ex)
+            {               
+                _logger.LogError($"MethodName: GetLeaveRequestPendingApproval() ===>{ex.Message}");
                 throw;
             }
         }

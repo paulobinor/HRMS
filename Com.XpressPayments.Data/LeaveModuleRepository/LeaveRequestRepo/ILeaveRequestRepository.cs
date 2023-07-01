@@ -15,6 +15,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
         Task<LeaveRequestDTO> GetLeaveRequestById(long LeaveRequestID);
         Task<LeaveRequestDTO> GetLeaveRequestByYear(string RequestYear);
         Task<LeaveRequestDTO> GetLeaveRequestByCompany(string RequestYear, long companyId);
+        Task<IEnumerable<LeaveRequestDTO>> GetLeaveRequestPendingApproval(long UserIdGet);
         //Task<IEnumerable<LeaveRequestDTO>> GetUnitedHeadPendingApproval();
         //Task<IEnumerable<LeaveRequestDTO>> GetHODPendingApproval();
         //Task<IEnumerable<LeaveRequestDTO>> GetHRPendingApproval();
