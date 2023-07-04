@@ -70,7 +70,7 @@ namespace Com.XpressPayments.Data.Repositories.Employee
                     param.Add("@FirstDegreeUpd", Emp.FirstDegree.Trim());
                     param.Add("@FirstDegreeSchoolAttendedUpd", Emp.FirstDegreeSchoolAttended.Trim());
                     param.Add("@GradeObtainedUpd", Emp.GradeObtained.Trim());
-                    param.Add("@FirstDegreeYearUpd", Convert.ToInt32(Emp.FirstDegreeYear));
+                    param.Add("@FirstDegreeYearUpd", Emp.FirstDegreeYear.Trim());
                     param.Add("@SchoolAttendedUpd", Emp.SchoolAttended.Trim());
                     param.Add("@SecondaryEducationStartDateUpd", Emp.SecondaryEducationStartDate.Trim());
                     param.Add("@SecondaryEducationYearComletedUpd", Emp.SecondaryEducationYearComleted.Trim());
@@ -84,9 +84,9 @@ namespace Com.XpressPayments.Data.Repositories.Employee
                     param.Add("@YourPensionPinNumberUpd", Emp.YourPensionPinNumber.Trim());
                     param.Add("@TaxPayerIdentificationNumberUpd", Emp.TaxPayerIdentificationNumber.Trim());
                     param.Add("@BankAccountNameUpd", Emp.BankAccountName.Trim());
-                    param.Add("@AccountNumberUpd", Convert.ToInt32(Emp.AccountNumber));
+                    param.Add("@AccountNumberUpd", Emp.AccountNumber.Trim());
                     param.Add("@BankNameUpd", Emp.BankName.Trim());
-                    param.Add("@BVNUpd", Convert.ToInt32(Emp.BVN));
+                    param.Add("@BVNUpd", Emp.BVN.Trim());
                     param.Add("@FirstReferenceNameUpd", Emp.FirstReferenceName.Trim());
                     param.Add("@FirstReferenceAddressUpd", Emp.FirstReferenceName.Trim());
                     param.Add("@FirstReferenceOccupationUpd", Emp.FirstReferenceOccupation.Trim());
@@ -100,18 +100,18 @@ namespace Com.XpressPayments.Data.Repositories.Employee
                     param.Add("@SecondReferenceMobileUpd", Emp.SecondReferenceMobile.Trim());
                     param.Add("@SecondReferenceEmailUpd", Emp.SecondReferenceEmail.Trim());
                     param.Add("@FirstDegreeNameAndLocationUpd", Emp.FirstDegreeNameAndLocation.Trim());
-                    param.Add("@FirstDegreeEntranceYearUpd", Convert.ToInt32(Emp.FirstDegreeEntranceYear));
-                    param.Add("@FirstDegreeExitYearUpd", Convert.ToInt32(Emp.FirstDegreeExitYear));
+                    param.Add("@FirstDegreeEntranceYearUpd", Emp.FirstDegreeEntranceYear.Trim());
+                    param.Add("@FirstDegreeExitYearUpd", Emp.FirstDegreeExitYear.Trim());
                     param.Add("@FirstDegreeCertificateAndDegreeObtainedUpd", Emp.FirstDegreeCertificateAndDegreeObtained.Trim());
                     param.Add("@FirstDegreeMatricNoUpd", Emp.FirstDegreeMatricNo.Trim());
                     param.Add("@SecondDegreeNameAndLocationUpd", Emp.SecondrayEducationNameAndLocation.Trim());
-                    param.Add("@SecondDegreeEntranceYearUpd", Convert.ToInt32(Emp.SecondDegreeEntranceYear));
-                    param.Add("@SecondDegreeExitYearUpd", Convert.ToInt32(Emp.SecondDegreeExitYear));
+                    param.Add("@SecondDegreeEntranceYearUpd", Emp.SecondDegreeEntranceYear.Trim());
+                    param.Add("@SecondDegreeExitYearUpd", Emp.SecondDegreeExitYear.Trim());
                     param.Add("@SecondDegreeCertificateAndDegreeObtainedUpd", Emp.SecondDegreeCertificateAndDegreeObtained.Trim());
                     param.Add("@SecondDegreeMatricNoUpd", Emp.SecondDegreeMatricNo.Trim());
                     param.Add("@SecondrayEducationNameAndLocationUpd", Emp.SecondrayEducationNameAndLocation.Trim());
-                    param.Add("@SecondrayEducationEntranceYearUpd", Convert.ToInt32(Emp.SecondrayEducationEntranceYear));
-                    param.Add("@SecondrayEducationExitYearUpd", Convert.ToInt32(Emp.SecondrayEducationExitYear));
+                    param.Add("@SecondrayEducationEntranceYearUpd", Emp.SecondrayEducationEntranceYear.Trim());
+                    param.Add("@SecondrayEducationExitYearUpd", Emp.SecondrayEducationExitYear.Trim());
                     param.Add("@SecondrayEducationCertificateAndDegreeObtainedUpd", Emp.SecondrayEducationCertificateAndDegreeObtained.Trim());
                     param.Add("@SecondrayEducationExamNoUpd", Emp.SecondrayEducationExamNo.Trim());
                     param.Add("@NameOfProfessionalBodyUpd", Emp.NameOfProfessionalBody.Trim());
@@ -155,7 +155,7 @@ namespace Com.XpressPayments.Data.Repositories.Employee
                     param.Add("@IsUpdateSession1Upd", Emp.IsUpdateSession1);
                     param.Add("@IsUpdateSession2Upd", Emp.IsUpdateSession2);
                     param.Add("@IsUpdateSession3Upd", Emp.IsUpdateSession3);
-                    param.Add("@IsUpdateSession3Upd", Emp.IsUpdateSession3);
+                    param.Add("@IsUpdateSession4Upd", Emp.IsUpdateSession4);
                     param.Add("@IsUpdateSession5Upd", Emp.IsUpdateSession5);
 
                     param.Add("@StampedResignationLetterfromPreviousEmployerUpd", Emp.StampedResignationLetterfromPreviousEmployer);

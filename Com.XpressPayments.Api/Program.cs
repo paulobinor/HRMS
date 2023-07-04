@@ -180,6 +180,8 @@ builder.Services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
 builder.Services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
 builder.Services.AddScoped<IRescheduleLeaveRepository, RescheduleLeaveRepository>();
 
+
+//OnboardingModule
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -205,9 +207,10 @@ builder.Services.AddScoped<IHMOService, HMOService>();
 builder.Services.AddScoped<IHospitalProvidersService, HospitalProvidersService>();
 builder.Services.AddScoped<IChildrenService, ChildrenService>();
 
-//vacation 
+//VacationModul
 builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
 builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
+builder.Services.AddScoped<IRescheduleLeaveService, RescheduleLeaveService>();
 
 //Mail Service
 builder.Services.AddScoped<IMailService, MailService>();

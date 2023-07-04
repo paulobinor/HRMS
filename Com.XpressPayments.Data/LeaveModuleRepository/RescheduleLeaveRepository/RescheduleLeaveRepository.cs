@@ -15,7 +15,7 @@ using Com.XpressPayments.Data.DapperGeneric;
 
 namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
 {
-    public  class RescheduleLeaveRepository : IRescheduleLeaveRepository
+    public class RescheduleLeaveRepository : IRescheduleLeaveRepository
     {
         private string _connectionString;
         private readonly ILogger<RescheduleLeaveRepository> _logger;
@@ -30,13 +30,12 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
             _dapperGeneric = dapperGeneric;
         }
 
-        public async Task<string> CreateLeaveRequest(RescheduleLeaveRequestCreate Leave)
+        public async Task<string> CreateRescheduleLeaveRequest(RescheduleLeaveRequestCreate Leave)
         {
             try
             {
                 var param = new DynamicParameters();
-                param.Add("@Status", LeaveRequestEnum.CREATE);
-                param.Add("@UserId", Leave.UserId);
+                param.Add("@Status", RescheduleLeaveRequestEnum.CREATE);
                 param.Add("@RequestYear", Leave.RequestYear);
                 param.Add("@LeaveTypeId", Leave.LeaveTypeId);
                 param.Add("@NoOfDays", Leave.NoOfDays);
@@ -46,26 +45,24 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
                 param.Add("@LeaveEvidence", Leave.LeaveEvidence.Trim());
                 param.Add("@Notes", Leave.Notes.Trim());
                 param.Add("@ReasonForRescheduling", Leave.ReasonForRescheduling.Trim());
-                param.Add("@CompanyID", Leave.CompanyID);
 
-                param.Add("@Created_By_User_Email", Leave.Created_By_User_Email.Trim());
 
                 return await _dapperGeneric.Get<string>(ApplicationConstant.Sp_RescheduleLeave, param, commandType: CommandType.StoredProcedure);
 
             }
             catch (Exception ex)
             {
-                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex}");
+                _logger.LogError($"MethodName: CreateRescheduleLeaveRequest ===>{ex}");
                 throw;
             }
         }
-        public async Task<string> ApproveLeaveRequest(long LeaveRequestID, long ApprovedByUserId)
+        public async Task<string> ApproveRescheduleLeaveRequest(long RescheduleLeaveID, long ApprovedByUserId)
         {
             try
             {
                 var param = new DynamicParameters();
-                param.Add("@Status", 10);
-                param.Add("@LeaveRequestID", LeaveRequestID);
+                param.Add("@Status", RescheduleLeaveRequestEnum.approval);
+                param.Add("@RescheduleLeaveID", RescheduleLeaveID);
                 param.Add("@ApprovedByUserId", ApprovedByUserId);
                 param.Add("@DateApproved", DateTime.Now);
                 return await _dapperGeneric.Get<string>(ApplicationConstant.Sp_RescheduleLeave, param, commandType: CommandType.StoredProcedure);
@@ -77,13 +74,13 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
                 throw;
             }
         }
-        public async Task<string> DisaproveLeaveRequest(long LeaveRequestID, long DisapprovedByUserId, string DisapprovedComment)
+        public async Task<string> DisaproveRescheduleLeaveRequest(long RescheduleLeaveID, long DisapprovedByUserId, string DisapprovedComment)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("@Status", 11);
-                param.Add("@LeaveRequestID", LeaveRequestID);
+                param.Add("@RescheduleLeaveID", RescheduleLeaveID);
                 param.Add("@DisapprovedByUserId", DisapprovedByUserId);
                 param.Add("@DisapprovedComment", DisapprovedComment);
                 param.Add("@DateDisapproved", DateTime.Now);
@@ -92,37 +89,37 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
             }
             catch (Exception ex)
             {
-                _logger.LogError($"MethodName: DisaproveLeaveRequest ===>{ex}");
+                _logger.LogError($"MethodName: DisaproveRescheduleLeaveRequest ===>{ex}");
                 throw;
             }
         }
 
-        public async Task<dynamic> DeleteLeaveRequest(LeaveRequestDelete delete, string deletedbyUserEmail)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", LeaveRequestEnum.DELETE);
-                    param.Add("@LeaveRequestIDDelete", Convert.ToInt32(delete.LeaveRequestID));
-                    param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
-                    param.Add("@Reasons_For_Delete", delete.Reasons_For_Delete == null ? "" : delete.Reasons_For_Delete.ToString().Trim());
+        //public async Task<dynamic> DeleteRescheduleLeaveRequest(LeaveRequestDelete delete, string deletedbyUserEmail)
+        //{
+        //    try
+        //    {
+        //        using (SqlConnection _dapper = new SqlConnection(_connectionString))
+        //        {
+        //            var param = new DynamicParameters();
+        //            param.Add("@Status", LeaveRequestEnum.DELETE);
+        //            param.Add("@LeaveRequestIDDelete", Convert.ToInt32(delete.LeaveRequestID));
+        //            param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
+        //            param.Add("@Reasons_For_Delete", delete.Reasons_For_Delete == null ? "" : delete.Reasons_For_Delete.ToString().Trim());
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
+        //            dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
 
-                    return response;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: Task<dynamic> DeleteLeaveRequest(LeaveRequestDelete delete, string deletedbyUserEmail) ===>{ex.Message}");
-                throw;
-            }
-        }
+        //            return response;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var err = ex.Message;
+        //        _logger.LogError($"MethodName: Task<dynamic> DeleteLeaveRequest(LeaveRequestDelete delete, string deletedbyUserEmail) ===>{ex.Message}");
+        //        throw;
+        //    }
+        //}
 
-        public async Task<IEnumerable<LeaveRequestDTO>> GetAllLeaveRequest()
+        public async Task<IEnumerable<RescheduleLeaveRequestDTO>> GetAllRescheduleLeaveRequest()
         {
             try
             {
@@ -131,7 +128,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
                     var param = new DynamicParameters();
                     param.Add("@Status", LeaveRequestEnum.GETALL);
 
-                    var LeaveDetails = await _dapper.QueryAsync<LeaveRequestDTO>(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveDetails = await _dapper.QueryAsync<RescheduleLeaveRequestDTO>(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveDetails;
                 }
@@ -144,7 +141,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
         }
 
 
-        public async Task<LeaveRequestDTO> GetLeaveRequestById(long LeaveRequestID)
+        public async Task<RescheduleLeaveRequestDTO> GetRescheduleLeaveRequestById(long RescheduleLeaveID)
         {
             try
             {
@@ -152,9 +149,9 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", LeaveRequestEnum.GETBYID);
-                    param.Add("@LeaveRequestIDGet", LeaveRequestID);
+                    param.Add("@RescheduleLeaveIDGet", RescheduleLeaveID);
 
-                    var LeaveDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveRequestDTO>(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveDetails = await _dapper.QueryFirstOrDefaultAsync<RescheduleLeaveRequestDTO>(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveDetails;
                 }
@@ -167,7 +164,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
             }
         }
 
-        public async Task<LeaveRequestDTO> GetLeaveRequestByYear(string RequestYear)
+        public async Task<RescheduleLeaveRequestDTO> GetRescheduleLeaveRequestByYear(string RequestYear)
         {
             try
             {
@@ -177,7 +174,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
                     param.Add("@Status", LeaveRequestEnum.GETBYEMAIL);
                     param.Add("@RequestYearGet", RequestYear);
 
-                    var LeaveDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveRequestDTO>(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveDetails = await _dapper.QueryFirstOrDefaultAsync<RescheduleLeaveRequestDTO>(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveDetails;
                 }
@@ -190,18 +187,18 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
             }
         }
 
-        public async Task<LeaveRequestDTO> GetLeaveRequestByCompany(string RequestYear, long companyId)
+        public async Task<RescheduleLeaveRequestDTO> GetRescheduleLeaveRequestByCompanyId(string RequestYear, long companyId)
         {
             try
             {
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", LeaveRequestEnum.GETBYCOMPANY);
+                    param.Add("@Status", RescheduleLeaveRequestEnum.GETBYCOMPANYID);
                     param.Add("@RequestYearGet", RequestYear);
                     param.Add("@CompanyIdGet", companyId);
 
-                    var LeaveDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveRequestDTO>(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveDetails = await _dapper.QueryFirstOrDefaultAsync<RescheduleLeaveRequestDTO>(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveDetails;
                 }
@@ -213,16 +210,16 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
                 throw;
             }
         }
-        public async Task<IEnumerable<LeaveRequestDTO>> GetLeaveRequestPendingApproval(long UserIdGet)
+        public async Task<IEnumerable<RescheduleLeaveRequestDTO>> GetRescheduleLeaveRequestPendingApproval(long UserIdGet)
         {
             try
             {
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", LeaveRequestEnum.GETPENDINGAPPROVAL);
+                    param.Add("@Status", RescheduleLeaveRequestEnum.approval);
                     param.Add("@UserIdGet", UserIdGet);
-                    var userDetails = await _dapper.QueryAsync<LeaveRequestDTO>(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
+                    var userDetails = await _dapper.QueryAsync<RescheduleLeaveRequestDTO>(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
 
                     return userDetails;
                 }

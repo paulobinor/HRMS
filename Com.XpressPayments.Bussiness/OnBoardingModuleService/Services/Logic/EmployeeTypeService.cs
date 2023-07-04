@@ -114,6 +114,8 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
+
+
                 dynamic resp = await _EmployeeTypeRepository.CreateEmployeeType(creatDto, createdbyUserEmail);
                 if (resp > 0)
                 {

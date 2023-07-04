@@ -38,8 +38,9 @@ namespace Com.XpressPayments.Data.LeaveModuleDTO.DTO
 
     public class RescheduleLeaveRequestCreate
     {
-        public long RescheduleLeaveRequestID { get; set; }       
-        public int RequestYear { get; set; }
+        public long RescheduleLeaveRequestID { get; set; }
+        public long UserId { get; set; }
+        public long RequestYear { get; set; }
         public string LeaveTypeId { get; set; }
         public long NoOfDays { get; set; }
         public DateTime StartDate { get; set; }

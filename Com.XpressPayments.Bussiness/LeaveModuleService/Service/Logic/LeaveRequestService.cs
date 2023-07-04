@@ -255,11 +255,11 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 {
                     response.Data = leave;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Grade fetched successfully.";
+                    response.ResponseMessage = "LeaveRequest fetched successfully.";
                     return response;
                 }
                 response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No Grade found.";
+                response.ResponseMessage = "No LeaveRequest found.";
                 response.Data = null;
                 return response;
             }
@@ -422,7 +422,7 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 {
                     response.Data = leave;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Grade fetched successfully.";
+                    response.ResponseMessage = "LeaveRequest fetched successfully.";
                     return response;
                 }
                 response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');

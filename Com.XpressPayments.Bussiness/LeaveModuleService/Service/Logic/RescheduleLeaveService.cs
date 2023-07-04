@@ -36,7 +36,9 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
             _rescheduleLeaveRepository = rescheduleLeaveRepository;
             _companyrepository = companyrepository;
         }
-        public async Task<BaseResponse> CreateLeaveRequest(LeaveRequestCreate payload, RequesterInfo requester)
+
+
+        public async Task<BaseResponse> CreateRescheduleLeaveRequest(RescheduleLeaveRequestCreate payload, RequesterInfo requester)
         {
             //check if us
             StringBuilder errorOutput = new StringBuilder();
@@ -68,7 +70,7 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                     return response;
                 }
 
-                var repoResponse = await _leaveRequestRepository.CreateLeaveRequest(payload);
+                var repoResponse = await _rescheduleLeaveRepository.CreateRescheduleLeaveRequest(payload);
                 if (!repoResponse.Contains("Success"))
                 {
                     response.ResponseCode = "08";
@@ -108,7 +110,9 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 return response;
             }
         }
-        public async Task<BaseResponse> ApproveLeaveRequest(long LeaveRequestID, RequesterInfo requester)
+
+
+        public async Task<BaseResponse> ApproveRescheduleLeaveRequest(long RescheduleLeaveRequestID, RequesterInfo requester)
         {
             //check if us
             StringBuilder errorOutput = new StringBuilder();
@@ -117,7 +121,7 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
             {
 
 
-                var repoResponse = await _leaveRequestRepository.ApproveLeaveRequest(LeaveRequestID, requester.UserId);
+                var repoResponse = await _rescheduleLeaveRepository.ApproveRescheduleLeaveRequest(RescheduleLeaveRequestID, requester.UserId);
                 if (!repoResponse.Contains("Success"))
                 {
                     response.ResponseCode = "08";
@@ -125,7 +129,7 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                     return response;
                 }
 
-                var leaveRequestDetail = await _leaveRequestRepository.GetLeaveRequestById(LeaveRequestID);
+                var leaveRequestDetail = await _rescheduleLeaveRepository.GetRescheduleLeaveRequestById(RescheduleLeaveRequestID);
 
                 var userDetails = await _accountRepository.FindUser(leaveRequestDetail.UserId);
 
@@ -168,7 +172,8 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 return response;
             }
         }
-        public async Task<BaseResponse> DisaproveLeaveRequest(LeaveRequestDisapproved payload, RequesterInfo requester)
+
+        public async Task<BaseResponse> DisaproveRescheduleLeaveRequest(RescheduleLeaveRequestDisapproved payload, RequesterInfo requester)
         {
             //check if us
             StringBuilder errorOutput = new StringBuilder();
@@ -177,7 +182,7 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
             {
 
 
-                var repoResponse = await _leaveRequestRepository.DisaproveLeaveRequest(payload.LeaveRequestID, requester.UserId, payload.Reasons_For_Disapprove);
+                var repoResponse = await _rescheduleLeaveRepository.DisaproveRescheduleLeaveRequest(payload.RescheduleLeaveRequestID, requester.UserId, payload.Reasons_For_Disapprove);
                 if (!repoResponse.Contains("Success"))
                 {
                     response.ResponseCode = "08";
@@ -185,7 +190,7 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                     return response;
                 }
 
-                var leaveRequestDetail = await _leaveRequestRepository.GetLeaveRequestById(payload.LeaveRequestID);
+                var leaveRequestDetail = await _rescheduleLeaveRepository.GetRescheduleLeaveRequestById(payload.RescheduleLeaveRequestID);
 
                 var userDetails = await _accountRepository.FindUser(leaveRequestDetail.UserId);
 
@@ -216,7 +221,7 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
             }
         }
 
-        public async Task<BaseResponse> GetAllLeaveRquest(RequesterInfo requester)
+        public async Task<BaseResponse> GetAllRescheduleLeaveRquest(RequesterInfo requester)
         {
             BaseResponse response = new BaseResponse();
 
@@ -251,30 +256,31 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
 
                 //update action performed into audit log here
 
-                var leave = await _leaveRequestRepository.GetAllLeaveRequest();
+                var leave = await _rescheduleLeaveRepository.GetAllRescheduleLeaveRequest();
 
                 if (leave.Any())
                 {
                     response.Data = leave;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Grade fetched successfully.";
+                    response.ResponseMessage = "RescheduleLeaveRequest fetched successfully.";
                     return response;
                 }
                 response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No Grade found.";
+                response.ResponseMessage = "No RescheduleLeaveRequest found.";
                 response.Data = null;
                 return response;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetAllGrade() ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: GetAllRescheduleLeaveRequest() ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllGrade() ==> {ex.Message}";
+                response.ResponseMessage = $"Exception Occured: GetAllRescheduleLeaveRequest() ==> {ex.Message}";
                 response.Data = null;
                 return response;
             }
         }
-        public async Task<BaseResponse> GetLeaveRequsetById(long LeaveRequestID, RequesterInfo requester)
+
+        public async Task<BaseResponse> GetRescheduleLeaveRequsetById(long RescheduleLeaveRequestID, RequesterInfo requester)
         {
             BaseResponse response = new BaseResponse();
 
@@ -308,12 +314,12 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
 
                 //}
 
-                var LeaveRequest = await _leaveRequestRepository.GetLeaveRequestById(LeaveRequestID);
+                var LeaveRequest = await _rescheduleLeaveRepository.GetRescheduleLeaveRequestById(RescheduleLeaveRequestID);
 
                 if (LeaveRequest == null)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "LeaveRequest not found.";
+                    response.ResponseMessage = "RescheduleLeaveRequest not found.";
                     response.Data = null;
                     return response;
                 }
@@ -322,21 +328,21 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
 
                 response.Data = LeaveRequest;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "LeaveRequest fetched successfully.";
+                response.ResponseMessage = "RescheduleLeaveRequest fetched successfully.";
                 return response;
 
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetLeaveRequestById(long LeaveRequestID ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: GetRescheduleLeaveRequestById(long RescheduleLeaveRequestID ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured:  GetLeaveRequestById(long LeaveRequestID  ==> {ex.Message}";
+                response.ResponseMessage = $"Exception Occured:  GetRescheduleLeaveRequestById(long RescheduleLeaveRequestID  ==> {ex.Message}";
                 response.Data = null;
                 return response;
             }
         }
 
-        public async Task<BaseResponse> GetLeaveRquestbyCompanyId(string RequestYear, long companyId, RequesterInfo requester)
+        public async Task<BaseResponse> GetRescheduleLeaveRequestbyCompanyId(string RequestYear, long companyId, RequesterInfo requester)
         {
             BaseResponse response = new BaseResponse();
 
@@ -370,12 +376,12 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
 
                 //}
 
-                var LeaveRquest = await _leaveRequestRepository.GetLeaveRequestByCompany(RequestYear, companyId);
+                var LeaveRquest = await _rescheduleLeaveRepository.GetRescheduleLeaveRequestByCompanyId(RequestYear, companyId);
 
                 if (LeaveRquest == null)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "LeaveRequest not found.";
+                    response.ResponseMessage = "RescheduleLeaveRequest not found.";
                     response.Data = null;
                     return response;
                 }
@@ -384,20 +390,21 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
 
                 response.Data = LeaveRquest;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "LeaveRequest fetched successfully.";
+                response.ResponseMessage = "RescheduleLeaveRequest fetched successfully.";
                 return response;
 
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetLeaveRequestByCompanyID(string RequestYear,long companyId) ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: GetRescheduleLeaveRequestByCompanyId(string RequestYear,long companyId) ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetLeaveRequestByCompanyID(string RequestYear, long companyId) ==> {ex.Message}";
+                response.ResponseMessage = $"Exception Occured: GetRescheduleLeaveRequestByCompanyId(string RequestYear, long companyId) ==> {ex.Message}";
                 response.Data = null;
                 return response;
             }
         }
-        public async Task<BaseResponse> GetLeaveRequestPendingApproval(RequesterInfo requester)
+
+        public async Task<BaseResponse> GetRescheduleLeaveRequestPendingApproval(RequesterInfo requester)
         {
             BaseResponse response = new BaseResponse();
 
@@ -418,13 +425,13 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                     return response;
                 }
 
-                var leave = await _leaveRequestRepository.GetLeaveRequestPendingApproval(requester.UserId);
+                var leave = await _rescheduleLeaveRepository.GetRescheduleLeaveRequestPendingApproval(requester.UserId);
 
                 if (leave.Any())
                 {
                     response.Data = leave;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Grade fetched successfully.";
+                    response.ResponseMessage = "RescheduleLeaveRequest fetched successfully.";
                     return response;
                 }
                 response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
@@ -434,12 +441,13 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetLeaveRequestPendingApproval() ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: GetRescheduleLeaveRequestPendingApproval() ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetLeaveRequestPendingApproval() ==> {ex.Message}";
+                response.ResponseMessage = $"Exception Occured: GetRescheduleLeaveRequestPendingApproval() ==> {ex.Message}";
                 response.Data = null;
                 return response;
             }
         }
+
     }
 }

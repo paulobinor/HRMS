@@ -19,6 +19,7 @@ namespace Com.XpressPayments.Data.LeaveModuleDTO.DTO
         public long HRUserId { get; set; }
         public  string ReasonForRescheduling { get; set; }
         public long CompanyID { get; set; }
+        public bool IsHodApproved { get; set; }
 
         public DateTime Created_Date { get; set; }
         public string Created_By_User_Email { get; set; }
@@ -32,7 +33,7 @@ namespace Com.XpressPayments.Data.LeaveModuleDTO.DTO
         public string Deleted_By_User_Email { get; set; }
         public string Reasons_For_Delete { get; set; }
 
-        public bool IsHodApproved { get; set; }
+        
     }
 
     public class LeaveRequestCreate

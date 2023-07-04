@@ -74,7 +74,7 @@ namespace Com.XpressPayments.Data.DTOs
         public string FirstDegree { get; set; }
         public string FirstDegreeSchoolAttended { get; set; }
         public string GradeObtained { get; set; }
-        public long FirstDegreeYear { get; set; }
+        public string FirstDegreeYear { get; set; }
         public string SchoolAttended { get; set; }
         public string SecondaryEducationStartDate { get; set; }
         public string SecondaryEducationYearComleted { get; set; }
@@ -88,9 +88,9 @@ namespace Com.XpressPayments.Data.DTOs
         public string YourPensionPinNumber { get; set; }
         public string TaxPayerIdentificationNumber { get; set; }
         public string BankAccountName { get; set; }
-        public long AccountNumber { get; set; }
+        public string AccountNumber { get; set; }
         public string BankName { get; set; }
-        public long BVN { get; set; }
+        public string BVN { get; set; }
         public string FirstReferenceName { get; set; }
         public string FirstReferenceAddress { get; set; }
         public string FirstReferenceOccupation { get; set; }
@@ -104,18 +104,18 @@ namespace Com.XpressPayments.Data.DTOs
         public string SecondReferenceMobile { get; set; }
         public string SecondReferenceEmail { get; set; }
         public string FirstDegreeNameAndLocation { get; set; }
-        public long FirstDegreeEntranceYear { get; set; }
-        public long FirstDegreeExitYear { get; set; }
+        public string FirstDegreeEntranceYear { get; set; }
+        public string FirstDegreeExitYear { get; set; }
         public string FirstDegreeCertificateAndDegreeObtained { get; set; }
         public string FirstDegreeMatricNo { get; set; }
         public string SecondDegreeNameAndLocation { get; set; }
-        public long SecondDegreeEntranceYear { get; set; }
-        public long SecondDegreeExitYear { get; set; }
+        public string SecondDegreeEntranceYear { get; set; }
+        public string SecondDegreeExitYear { get; set; }
         public string SecondDegreeCertificateAndDegreeObtained { get; set; }
         public string SecondDegreeMatricNo { get; set; }
         public string SecondrayEducationNameAndLocation { get; set; }
-        public long SecondrayEducationEntranceYear { get; set; }
-        public long SecondrayEducationExitYear { get; set; }
+        public string SecondrayEducationEntranceYear { get; set; }
+        public string SecondrayEducationExitYear { get; set; }
         public string SecondrayEducationCertificateAndDegreeObtained { get; set; }
         public string SecondrayEducationExamNo { get; set; }
         public string NameOfProfessionalBody { get; set; }
@@ -207,16 +207,12 @@ namespace Com.XpressPayments.Data.DTOs
         public string Town { get; set; }
         public string MaidenName { get; set; }
         public string MobileNumber2 { get; set; }
-        //public string CurrentDesignation { get; set; }
         public long Sex { get; set; }
         public long MaritalStatus { get; set; }
         public string SpouseContactAddress { get; set; }
         public string SpouseMobile { get; set; }
-       
-       
         public string ResidentialAddress { get; set; }
-        //public string Position { get; set; }
-        //public string ResumptionDate { get; set; }
+
         public string HomeAddress { get; set; }
         public string MailingAddress { get; set; }
         public string NofName { get; set; }
@@ -234,7 +230,7 @@ namespace Com.XpressPayments.Data.DTOs
         public string FirstDegree { get; set; }
         public string FirstDegreeSchoolAttended { get; set; }
         public string GradeObtained { get; set; }
-        public long FirstDegreeYear { get; set; }
+        public string FirstDegreeYear { get; set; }
         public string SchoolAttended { get; set; }
         public string SecondaryEducationStartDate { get; set; }
         public string SecondaryEducationYearComleted { get; set; }
@@ -248,9 +244,9 @@ namespace Com.XpressPayments.Data.DTOs
         public string YourPensionPinNumber { get; set; }
         public string TaxPayerIdentificationNumber { get; set; }
         public string BankAccountName { get; set; }
-        public long AccountNumber { get; set; }
+        public string AccountNumber { get; set; }
         public string BankName { get; set; }
-        public long BVN { get; set; }
+        public string BVN { get; set; }
         public string FirstReferenceName { get; set; }
         public string FirstReferenceAddress { get; set; }
         public string FirstReferenceOccupation { get; set; }
@@ -264,18 +260,18 @@ namespace Com.XpressPayments.Data.DTOs
         public string SecondReferenceMobile { get; set; }
         public string SecondReferenceEmail { get; set; }
         public string FirstDegreeNameAndLocation { get; set; }
-        public long FirstDegreeEntranceYear { get; set; }
-        public long FirstDegreeExitYear { get; set; }
+        public string FirstDegreeEntranceYear { get; set; }
+        public string FirstDegreeExitYear { get; set; }
         public string FirstDegreeCertificateAndDegreeObtained { get; set; }
         public string FirstDegreeMatricNo { get; set; }
         public string SecondDegreeNameAndLocation { get; set; }
-        public long SecondDegreeEntranceYear { get; set; }
-        public long SecondDegreeExitYear { get; set; }
+        public string SecondDegreeEntranceYear { get; set; }
+        public string SecondDegreeExitYear { get; set; }
         public string SecondDegreeCertificateAndDegreeObtained { get; set; }
         public string SecondDegreeMatricNo { get; set; }
         public string SecondrayEducationNameAndLocation { get; set; }
-        public long SecondrayEducationEntranceYear { get; set; }
-        public long SecondrayEducationExitYear { get; set; }
+        public string SecondrayEducationEntranceYear { get; set; }
+        public string SecondrayEducationExitYear { get; set; }
         public string SecondrayEducationCertificateAndDegreeObtained { get; set; }
         public string SecondrayEducationExamNo { get; set; }
         public string NameOfProfessionalBody { get; set; }
