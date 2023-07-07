@@ -27,6 +27,8 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.IRepository
         Task<dynamic> UnblockUser(long unblocedByuserId, string defaultPassword, string userEmail);
         Task<dynamic> ChangePassword(long userId, string newPassword);
 
+        Task<User> GetUserByCompany(string OfficialMail, int companyId);
+
         void SendEmail(string recipientEmail, string firtname, string defaultPass, string subject, string wwwRootPath, string ip, string port, string appKey = null, string channel = null);
 
     }

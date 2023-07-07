@@ -425,11 +425,19 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                var isExists = await _accountRepository.FindUser(userDto.Email);
-                if (null != isExists)
+                //var isExists = await _accountRepository.FindUser(userDto.Email);
+                //if (null != isExists)
+                //{
+                //    response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = "User with email already exists.";
+                //    return response;
+                //}
+
+                var isExistsNew = await _accountRepository.GetUserByCompany(userDto.OfficialMail, (int)userDto.CompanyId);
+                if (null != isExistsNew)
                 {
                     response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "User with email already exists.";
+                    response.ResponseMessage = $"User with OfficialMail : {userDto.OfficialMail} already exists for this Company.";
                     return response;
                 }
 
@@ -515,7 +523,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                         string PositionName = serviceDetails.Rows[0][13].ToString();
                         string BranchName = serviceDetails.Rows[0][14].ToString();
                         string EmploymentStatusName = serviceDetails.Rows[0][15].ToString();
-                        string GroupName = serviceDetails.Rows[0][16].ToString();
+                      
                         string JobDescriptionName = serviceDetails.Rows[0][17].ToString();
                         string RoleName = serviceDetails.Rows[0][18].ToString();
                         string DepartmentName = serviceDetails.Rows[0][19].ToString();
@@ -526,7 +534,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                         || LastName != "LastName" || Email != "Email" || DOB != "DOB" || ResumptionDate != "ResumptionDate"
                         || OfficialMail != "OfficialMail" || PhoneNumber != "PhoneNumber" || UnitName != "UnitName" || UnitHeadName != "UnitHeadName"
                         || HODName != "HODName" || GradeName != "GradeName" || EmployeeTypeName != "EmployeeTypeName" || PositionName != "PositionName"
-                        || BranchName != "BranchName" || EmploymentStatusName != "EmploymentStatusName" || GroupName != "GroupName" || JobDescriptionName != "JobDescriptionName"
+                        || BranchName != "BranchName" || EmploymentStatusName != "EmploymentStatusName"  || JobDescriptionName != "JobDescriptionName"
                         || RoleName != "RoleName" || DepartmentName != "DepartmentName" || CompanyName != "CompanyName")
                         {
                             response.ResponseCode = "08";
@@ -554,7 +562,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                 var positionName = await _PositionRepository.GetPositionByName(serviceDetails.Rows[row][13].ToString());
                                 var branchName = await _branchRepository.GetBranchByName(serviceDetails.Rows[row][14].ToString());
                                 var employmentStatusName = await _EmploymentStatusRepository.GetEmpLoymentStatusByName(serviceDetails.Rows[row][15].ToString());
-                                var groupName = await _GroupRepository.GetGroupByName(serviceDetails.Rows[row][16].ToString());
+                               
                                 var jobDescriptionName = await _jobDescriptionRepository.GetJobDescriptionByName(serviceDetails.Rows[row][17].ToString());
                                 var roleName = await _rolesRepo.GetRolesByName(serviceDetails.Rows[row][18].ToString());
                                 var departmentName = await _departmentrepository.GetDepartmentByName(serviceDetails.Rows[row][19].ToString());
@@ -568,7 +576,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                 long positionID = positionName.PositionID;
                                 long branchID = branchName.BranchID;
                                 long employmentStatusID = employmentStatusName.EmploymentStatusID;
-                                long groupID = groupName.GroupID;
+                         
                                 long jobDescriptionID = jobDescriptionName.JobDescriptionID;
                                 long roleID = roleName.RoleId;
                                 long departmentID = departmentName.DeptId;
@@ -592,7 +600,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                    
                                     BranchID = branchID,
                                     EmploymentStatusID = employmentStatusID,
-                                    GroupID = groupID,
+                                
                                     JobDescriptionID = jobDescriptionID,
                                     RoleId = roleID,
                                     DepartmentId = departmentID,

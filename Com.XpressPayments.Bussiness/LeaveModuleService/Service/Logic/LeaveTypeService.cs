@@ -246,7 +246,7 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 if (deleteDto.LeaveTypeId == 1)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"System Default hod cannot be deleted.";
+                    response.ResponseMessage = $"System Default LeaveType cannot be deleted.";
                     return response;
                 }
 

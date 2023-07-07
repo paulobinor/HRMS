@@ -16,6 +16,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Threading.Tasks;
 using System.ComponentModel.Design;
+using Com.XpressPayments.Data.DTOs;
 
 namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
 {
@@ -111,7 +112,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                 
                     param.Add("@BranchID", user.BranchID);
                     param.Add("@EmploymentStatusID", user.EmploymentStatusID);
-                    param.Add("@GroupID", user.GroupID);
+                    //param.Add("@GroupID", user.GroupID);
                     param.Add("@JobDescriptionID", user.JobDescriptionID);
                     param.Add("@RoleId", user.RoleId);
 
@@ -473,6 +474,30 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             {
                 var err = ex.Message;
                 _logger.LogError($"MethodName: ChangePassword(long userId, string newPassword) ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<User> GetUserByCompany(string OfficialMail, int companyId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", Account.GETALLUSERNAMEBYCOMPANY);
+                    param.Add("@OfficialMailGet", OfficialMail);
+                    param.Add("@CompanyIdGet", companyId);
+
+                    var UserDetails = await _dapper.QueryFirstOrDefaultAsync<User>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
+
+                    return UserDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetDepartmentById(int DepartmentId) ===>{ex.Message}");
                 throw;
             }
         }
