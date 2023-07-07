@@ -43,7 +43,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveType
                     param.Add("@CompanyID", create.CompanyID);
 
                     param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_VacationType, param: param, commandType: CommandType.StoredProcedure);
+                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_LeaveType, param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }
@@ -72,7 +72,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveType
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_VacationType, param: param, commandType: CommandType.StoredProcedure);
+                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_LeaveType, param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }
@@ -97,7 +97,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveType
                     param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
                     param.Add("@Reasons_For_Deleting", delete.Reasons_For_Delete == null ? "" : delete.Reasons_For_Delete.ToString().Trim());
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_VacationType, param: param, commandType: CommandType.StoredProcedure);
+                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_LeaveType, param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }
@@ -119,7 +119,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveType
                     var param = new DynamicParameters();
                     param.Add("@Status", LeaveTypeEnum.GETALLACTIVE);
 
-                    var LeaveTypeDetails = await _dapper.QueryAsync<LeaveTypeDTO>(ApplicationConstant.Sp_VacationType, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveTypeDetails = await _dapper.QueryAsync<LeaveTypeDTO>(ApplicationConstant.Sp_LeaveType, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveTypeDetails;
                 }
@@ -141,7 +141,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveType
                     var param = new DynamicParameters();
                     param.Add("@Status", LeaveTypeEnum.GETALL);
 
-                    var LeaveTypeDetails = await _dapper.QueryAsync<LeaveTypeDTO>(ApplicationConstant.Sp_VacationType, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveTypeDetails = await _dapper.QueryAsync<LeaveTypeDTO>(ApplicationConstant.Sp_LeaveType, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveTypeDetails;
                 }
@@ -164,7 +164,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveType
                     param.Add("@Status", LeaveTypeEnum.GETBYID);
                     param.Add("@LeaveTypeIdGet", LeaveTypeId);
 
-                    var LeaveTypeDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveTypeDTO>(ApplicationConstant.Sp_VacationType, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveTypeDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveTypeDTO>(ApplicationConstant.Sp_LeaveType, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveTypeDetails;
                 }
@@ -187,7 +187,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveType
                     param.Add("@Status", LeaveTypeEnum.GETBYEMAIL);
                     param.Add("@LeaveTypeNameGet", LeaveTypeName);
 
-                    var LeaveTypeDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveTypeDTO>(ApplicationConstant.Sp_VacationType, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveTypeDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveTypeDTO>(ApplicationConstant.Sp_LeaveType, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveTypeDetails;
                 }
@@ -211,7 +211,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveType
                     param.Add("@LeaveTypeNameGet", LeaveTypeName);
                     param.Add("@CompanyIdGet", companyId);
 
-                    var LeaveTypeDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveTypeDTO>(ApplicationConstant.Sp_VacationType, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveTypeDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveTypeDTO>(ApplicationConstant.Sp_LeaveType, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveTypeDetails;
                 }
@@ -234,7 +234,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveType
                     param.Add("@Status", GradeEnum.GETBYCOMPANYID);
                     param.Add("@CompanyIdGet", CompanyId);
 
-                    var LeaveTypeDetails = await _dapper.QueryAsync<LeaveTypeDTO>(ApplicationConstant.Sp_VacationType, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveTypeDetails = await _dapper.QueryAsync<LeaveTypeDTO>(ApplicationConstant.Sp_LeaveType, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveTypeDetails;
                 }
