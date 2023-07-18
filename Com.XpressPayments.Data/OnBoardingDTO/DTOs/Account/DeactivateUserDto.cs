@@ -10,7 +10,7 @@ namespace Com.XpressPayments.Data.DTOs.Account
     public class DeactivateUserDto
     {
         [Required]
-        public string Email { get; set; }
+        public string OfficialMail { get; set; }
         [Required]
         public string DeactivatedComment { get; set; }
         [JsonIgnore]

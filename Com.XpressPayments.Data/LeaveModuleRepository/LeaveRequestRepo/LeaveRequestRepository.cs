@@ -152,6 +152,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
                     var param = new DynamicParameters();
                     param.Add("@Status", LeaveRequestEnum.GETBYID);
                     param.Add("@LeaveRequestIDGet", LeaveRequestID);
+                   
 
                     var LeaveDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
 
@@ -166,7 +167,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
             }
         }
 
-        public async Task<LeaveRequestDTO> GetLeaveRequestByYear(string RequestYear)
+        public async Task<LeaveRequestDTO> GetLeaveRequestByYear(string RequestYear, long CompanyId)
         {
             try
             {
@@ -175,6 +176,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
                     var param = new DynamicParameters();
                     param.Add("@Status", LeaveRequestEnum.GETBYEMAIL);
                     param.Add("@RequestYearGet", RequestYear);
+                    param.Add("@CompanyIdGet", CompanyId);
 
                     var LeaveDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
 
@@ -189,18 +191,18 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
             }
         }
 
-        public async Task<LeaveRequestDTO> GetLeaveRequestByCompany(string RequestYear, long companyId)
+        public async Task<IEnumerable<LeaveRequestDTO>> GetLeaveRequestByCompany(string RequestYear, long companyId)
         {
             try
             {
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", LeaveRequestEnum.GETBYCOMPANY);
-                    param.Add("@RequestYearGet", RequestYear);
+                    param.Add("@Status", LeaveRequestEnum.GETBYCOMPANYID);
+                    param.Add("@RequestYear", RequestYear);
                     param.Add("@CompanyIdGet", companyId);
 
-                    var LeaveDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveDetails = await _dapper.QueryAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveDetails;
                 }
@@ -221,6 +223,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
                     var param = new DynamicParameters();
                     param.Add("@Status", LeaveRequestEnum.GETPENDINGAPPROVAL);
                     param.Add("@UserIdGet", UserIdGet);
+                    
                     var userDetails = await _dapper.QueryAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
 
                     return userDetails;

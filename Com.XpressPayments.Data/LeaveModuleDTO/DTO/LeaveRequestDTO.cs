@@ -7,7 +7,7 @@ namespace Com.XpressPayments.Data.LeaveModuleDTO.DTO
         public long LeaveRequestID { get; set; }
         public long UserId { get; set; }
         public  string RequestYear { get; set; }
-        public string LeaveTypeId { get; set; }
+        public long LeaveTypeId { get; set; }
         public long NoOfDays { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
@@ -41,7 +41,7 @@ namespace Com.XpressPayments.Data.LeaveModuleDTO.DTO
 
         public long UserId { get; set; }
         public int RequestYear { get; set; }
-        public string LeaveTypeId { get; set; }
+        public long LeaveTypeId { get; set; }
         public long NoOfDays { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

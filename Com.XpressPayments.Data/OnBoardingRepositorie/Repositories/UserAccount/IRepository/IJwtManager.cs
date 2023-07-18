@@ -3,9 +3,9 @@ using Com.XpressPayments.Data.GenericResponse;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Com.XpressPayments.Data.Repositories.UserAccount.IRepository
+namespace Com.XpressPayments.Data.OnBoardingRepositorie.Repositories.UserAccount.IRepository
 {
-    public interface IJwtManager
+    public interface IJwtManager 
     {
         Task<AuthResponse> GenerateJsonWebToken(User user);
         Task<AuthResponse> RefreshJsonWebToken(long userId, Claim[] claims);

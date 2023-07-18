@@ -86,11 +86,16 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 else
                 {
                     _mailService.SendLeaveApproveMailToApprover(userDetails.UnitHeadUserId, payload.UserId, payload.StartDate, payload.EndDate);
-                }              
+                }
 
 
-                response.ResponseCode = "00";
-                response.ResponseMessage = "Record inserted successfully";
+                //response.ResponseCode = "00";
+                //response.ResponseMessage = "Record inserted successfully";
+                //return response;
+
+                response.Data = payload;
+                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "leaveRequest created successfully.";
                 return response;
 
             }
@@ -265,9 +270,9 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetAllGrade() ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: LeaveRequest() ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllGrade() ==> {ex.Message}";
+                response.ResponseMessage = $"Exception Occured: LeaveRequest() ==> {ex.Message}";
                 response.Data = null;
                 return response;
             }
@@ -395,7 +400,7 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 return response;
             }
         }
-        public async Task<BaseResponse> GetLeaveRequestPendingApproval(RequesterInfo requester)
+        public async Task<BaseResponse> GetLeaveRequestPendingApproval(RequesterInfo requester )
         {
             BaseResponse response = new BaseResponse();
 
@@ -416,7 +421,7 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                     return response;
                 }
 
-                var leave = await _leaveRequestRepository.GetLeaveRequestPendingApproval(requester.UserId);
+                var leave = await _leaveRequestRepository.GetLeaveRequestPendingApproval(requester.UserId );
 
                 if (leave.Any())
                 {

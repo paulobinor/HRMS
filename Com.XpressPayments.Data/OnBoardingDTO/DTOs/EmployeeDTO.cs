@@ -175,7 +175,7 @@ namespace Com.XpressPayments.Data.DTOs
 
 
         public DateTime DateCreated { get; set; }
-        public string Created_By_User_Email { get; set; }
+        public string CreatedByUserEmail { get; set; }
         public bool IsUpdated { get; set; }
         public DateTime? Updated_Date { get; set; }
         public string Updated_By_User_Email { get; set; }
@@ -185,13 +185,16 @@ namespace Com.XpressPayments.Data.DTOs
         public string Reasons_For_Delete { get; set; }
         public bool IsApproved { get; set; }
         public long ApprovedByUserId { get; set; }
+        public string ApprovedByUserEmail { get; set; }
         public DateTime DateApproved { get; set; }
         public bool IsDisapproved { get; set; }
+        public string DisapprovedByUserEmail { get; set; }
         public string DisapprovedComment { get; set; }
         public long DisapprovedByUserId { get; set; }   
         public DateTime DateDisapproved { get; set; }
 
         public bool IsModified { get; set; }
+        
         public bool IsDeactivated { get; set; }
         public bool IsReactivated { get; set; }
     }
@@ -323,13 +326,14 @@ namespace Com.XpressPayments.Data.DTOs
         public string SSCEorWAECCertificate { get; set; }
         public string BirthCertificate { get; set; }
         public string AdditionalQualification { get; set; }
+        //public string Updated_By_User_Email { get; set; }
 
     }
 
     public class ApproveEmp
     {
         [Required]
-        public string Email { get; set; }
+        public string officialMail { get; set; }
     }
 
     public class DisapproveEmpDto

@@ -40,6 +40,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveType
                     param.Add("@LeaveTypeName", create.LeaveTypeName.Trim());
                     param.Add("@MaximumLeaveDurationDays", create.MaximumLeaveDurationDays);
                     param.Add("@Gender", create.Gender.Trim());
+                    param.Add("@IsPaidLeave", create.IsPaidLeave);
                     param.Add("@CompanyID", create.CompanyID);
 
                     param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
@@ -68,6 +69,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveType
                     param.Add("@LeaveTypeNameUpd", update.LeaveTypeName);
                     param.Add("@MaximumLeaveDurationDaysUpd", update.MaximumLeaveDurationDays);
                     param.Add("@GenderUpd", update.Gender.Trim());
+                    param.Add("@IsPaidLeaveUpd", update.IsPaidLeave);
                     param.Add("@CompanyIdUpd", update.CompanyID);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());

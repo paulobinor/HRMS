@@ -30,7 +30,7 @@ namespace Com.XpressPayments.Data.Repositories.Employee
             _configuration = configuration;
         }
 
-        public async Task<dynamic> UpdateEmployee(UpdateEmployeeDTO Emp, string updatedbyUserEmail)
+        public async Task<dynamic> UpdateEmployee(UpdateEmployeeDTO Emp, string UpdatedByserEmail)
         {
             try
             {
@@ -165,7 +165,7 @@ namespace Com.XpressPayments.Data.Repositories.Employee
                     param.Add("@BirthCertificateUpd", Emp.BirthCertificate);
                     param.Add("@AdditionalQualificationUpd", Emp.AdditionalQualification);
 
-                    param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
+                    param.Add("@Updated_By_User_Email", UpdatedByserEmail.Trim());
 
                     dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Employee, param: param, commandType: CommandType.StoredProcedure);
 
@@ -315,7 +315,7 @@ namespace Com.XpressPayments.Data.Repositories.Employee
             }
         }
 
-        public async Task<dynamic> ApproveEmp(long approvedByuserId,  string userEmail)
+        public async Task<dynamic> ApproveEmp(long approvedByuserId,  string officialMail)
         {
             try
             {
@@ -326,7 +326,7 @@ namespace Com.XpressPayments.Data.Repositories.Employee
                     var param = new DynamicParameters();
                     param.Add("@Status", EmployeeEnum.APPROVEEMP);  
                     param.Add("@ApprovedByUserId", approvedByuserId);
-                    param.Add("@UserEmailApprove", userEmail);
+                    param.Add("@officialMailApproval", officialMail);
 
                     dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Employee, param: param, commandType: CommandType.StoredProcedure);
 

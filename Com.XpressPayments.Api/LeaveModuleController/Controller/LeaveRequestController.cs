@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -103,7 +104,7 @@ namespace Com.XpressPayments.Api.LeaveModuleController.Controller
 
         [Authorize]
         [HttpGet("GetLeaveRequestbyId")]
-        public async Task<IActionResult> GetLeaveRequestbyId(long LeaveRequestID)
+        public async Task<IActionResult> GetLeaveRequestbyId(long LeaveRequestID, long CompanyId)
         {
             var response = new BaseResponse();
             try
@@ -117,7 +118,7 @@ namespace Com.XpressPayments.Api.LeaveModuleController.Controller
                     Port = Request.HttpContext.Connection.LocalPort.ToString()
                 };
 
-                return Ok(await _leaveRequestService.GetLeaveRequsetById(LeaveRequestID, requester));
+                return Ok(await _leaveRequestService.GetLeaveRequsetById(LeaveRequestID,  requester));
             }
             catch (Exception ex)
             {

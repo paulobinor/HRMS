@@ -9,6 +9,7 @@ using Com.XpressPayments.Common.Configuration;
 using Com.XpressPayments.Data.DapperGeneric;
 using Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo;
 using Com.XpressPayments.Data.LeaveModuleRepository.LeaveType;
+using Com.XpressPayments.Data.OnBoardingRepositorie.Repositories.UserAccount.IRepository;
 using Com.XpressPayments.Data.Repositories;
 using Com.XpressPayments.Data.Repositories.Branch;
 using Com.XpressPayments.Data.Repositories.Children;
