@@ -1,20 +1,18 @@
 ﻿using Com.XpressPayments.Data.LeaveModuleDTO.DTO;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
 {
     public interface IRescheduleLeaveRepository
     {
-        Task<dynamic> CreateRescheduleLeave(RescheduleLeaveRequestCreateDTO RescheduleLeave, string createdbyUserEmail);
-        Task<string> ApproveRescheduleLeave(long RescheduleLeaveID, long ApprovedByUserId);
-        Task<string> DisaproveRescheduleLeave(long RescheduleLeaveID, long DisapprovedByUserId, string DisapprovedComment);
-        Task<IEnumerable<RescheduleLeaveRequestDTO>> GetAllRescheduleLeave();
-        Task<RescheduleLeaveRequestDTO> GetRescheduleLeaveById(long RescheduleLeaveID);
+        Task<string> CreateRescheduleLeaveRequest(RescheduleLeaveRequestCreate Leave);
+        Task<string> ApproveRescheduleLeaveRequest(long RescheduleLeaveID, long ApprovedByUserId);
+        Task<string> DisaproveRescheduleLeaveRequest(long RescheduleLeaveID, long DisapprovedByUserId, string DisapprovedComment);
+        Task<IEnumerable<RescheduleLeaveRequestDTO>> GetAllRescheduleLeaveRequest();
+        Task<RescheduleLeaveRequestDTO> GetRescheduleLeaveRequestById(long RescheduleLeaveID);
         Task<RescheduleLeaveRequestDTO> GetRescheduleLeaveRequestByYear(string RequestYear);
-        Task<RescheduleLeaveRequestDTO> GetRescheduleLeaveRequestByCompany(string RequestYear, long companyId);
+        Task<RescheduleLeaveRequestDTO> GetRescheduleLeaveRequestByCompanyId(string RequestYear, long companyId);
+        Task<IEnumerable<RescheduleLeaveRequestDTO>> GetRescheduleLeaveRequestPendingApproval(long UserIdGet);
     }
 }

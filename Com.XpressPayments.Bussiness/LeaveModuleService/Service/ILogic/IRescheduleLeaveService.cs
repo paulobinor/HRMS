@@ -10,10 +10,13 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.ILogic
 {
     public interface IRescheduleLeaveService
     {
-        //Task<BaseResponse> CreateRescheduleLeaveRequest(RescheduleLeaveRequestCreateDTO payload, RequesterInfo requester);
 
+        Task<BaseResponse> CreateRescheduleLeaveRequest(RescheduleLeaveRequestCreate payload, RequesterInfo requester);
+        Task<BaseResponse> ApproveRescheduleLeaveRequest(long RescheduleLeaveRequestID, RequesterInfo requester);
+        Task<BaseResponse> DisaproveRescheduleLeaveRequest(RescheduleLeaveRequestDisapproved payload, RequesterInfo requester);
         Task<BaseResponse> GetAllRescheduleLeaveRquest(RequesterInfo requester);
-        Task<BaseResponse> GetRescheduleLeaveRequsetById(long RescheduleLeaveID, RequesterInfo requester);
-        Task<BaseResponse> GetRescheduleLeaveRquestbyCompanyId(string RequestYear, long companyId, RequesterInfo requester);
+        Task<BaseResponse> GetRescheduleLeaveRequsetById(long RescheduleLeaveRequestID, RequesterInfo requester);
+        Task<BaseResponse> GetRescheduleLeaveRequestbyCompanyId(string RequestYear, long companyId, RequesterInfo requester);
+        Task<BaseResponse> GetRescheduleLeaveRequestPendingApproval(RequesterInfo requester);
     }
 }

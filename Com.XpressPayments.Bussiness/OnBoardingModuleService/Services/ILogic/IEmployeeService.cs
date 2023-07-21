@@ -16,7 +16,7 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
         Task<BaseResponse> GetAllEmployee(RequesterInfo requester);
         Task<BaseResponse> GetEmployeeById(long EmpID, RequesterInfo requester);
         Task<BaseResponse> GetEmployeebyCompanyId(long companyId, RequesterInfo requester);
-        Task<BaseResponse> GetEmpPendingApproval(RequesterInfo requester);
+        Task<BaseResponse> GetEmpPendingApproval(long CompanyID, RequesterInfo requester);
         Task<BaseResponse> ApproveEmp(ApproveEmp approveEmp, RequesterInfo requester);
         Task<BaseResponse> DisapproveEmp(DisapproveEmpDto disapproveEmp, RequesterInfo requester);
     }

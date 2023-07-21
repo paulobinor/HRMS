@@ -54,7 +54,7 @@ namespace Com.XpressPayments.Api.LeaveModuleController.Controller
             }
         }
 
-        [HttpPut("UpdateLeaveType")]
+        [HttpPost("UpdateLeaveType")]
         [Authorize]
         public async Task<IActionResult> UpdateLeaveType([FromBody] UpdateLeaveTypeDTO updateDto)
         {
@@ -82,7 +82,7 @@ namespace Com.XpressPayments.Api.LeaveModuleController.Controller
             }
         }
 
-        [HttpDelete("DeleteLeaveType")]
+        [HttpPost("DeleteLeaveType")]
         [Authorize]
         public async Task<IActionResult> DeleteLeaveType([FromBody] DeleteLeaveTypeDTO deleteDto)
         {

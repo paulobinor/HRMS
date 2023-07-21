@@ -73,9 +73,8 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 }
 
                 //validate JobDescription payload here 
-                if (String.IsNullOrEmpty(creatDto.LeaveTypeName) || creatDto.CompanyID <= 0)
-                //|| creatDto.DepartmentID <= 0 ||
-                //creatDto.HodID <= 0 || creatDto.UnitID <= 0)
+                if (String.IsNullOrEmpty(creatDto.LeaveTypeName) || creatDto.CompanyID <= 0 || creatDto.MaximumLeaveDurationDays <= 0 ||
+                    String.IsNullOrEmpty(creatDto.Gender))
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";
@@ -247,7 +246,7 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 if (deleteDto.LeaveTypeId == 1)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"System Default hod cannot be deleted.";
+                    response.ResponseMessage = $"System Default LeaveType cannot be deleted.";
                     return response;
                 }
 

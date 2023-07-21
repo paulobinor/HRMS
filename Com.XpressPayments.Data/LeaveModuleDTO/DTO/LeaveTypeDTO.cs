@@ -12,6 +12,7 @@ namespace Com.XpressPayments.Data.LeaveModuleDTO.DTO
         public string LeaveTypeName { get; set; }
         public long MaximumLeaveDurationDays { get; set; }
         public string Gender { get; set; }
+        public bool IsPaidLeave { get; set; } 
         public long CompanyID { get; set; }
 
         public DateTime Created_Date { get; set; }
@@ -33,6 +34,7 @@ namespace Com.XpressPayments.Data.LeaveModuleDTO.DTO
         public string LeaveTypeName { get; set; }
         public long MaximumLeaveDurationDays { get; set; }
         public string Gender { get; set; }
+        public bool IsPaidLeave { get; set; } 
         public long CompanyID { get; set; }
     }
 
@@ -43,6 +45,7 @@ namespace Com.XpressPayments.Data.LeaveModuleDTO.DTO
         public string LeaveTypeName { get; set; }
         public long MaximumLeaveDurationDays { get; set; }
         public string Gender { get; set; }
+        public bool IsPaidLeave { get; set; } = false;
         public long CompanyID { get; set; }
     }
 

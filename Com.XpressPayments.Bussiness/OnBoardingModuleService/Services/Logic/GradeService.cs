@@ -204,8 +204,8 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                 var graderequest = new CreateGradeDTO
                                 {
                                     GradeName = gradeName,
-                                    NumberOfVacationDays = numberOfVacationDays,
-                                    NumberOfVacationSplit = numberOfVacationSplit,
+                                    //NumberOfVacationDays = numberOfVacationDays,
+                                    //NumberOfVacationSplit = numberOfVacationSplit,
                                     CompanyID = companyID
 
 

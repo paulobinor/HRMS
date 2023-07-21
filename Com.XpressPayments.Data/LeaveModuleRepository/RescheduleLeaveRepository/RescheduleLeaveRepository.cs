@@ -15,7 +15,7 @@ using Com.XpressPayments.Data.DapperGeneric;
 
 namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
 {
-    public  class RescheduleLeaveRepository : IRescheduleLeaveRepository
+    public class RescheduleLeaveRepository : IRescheduleLeaveRepository
     {
         private string _connectionString;
         private readonly ILogger<RescheduleLeaveRepository> _logger;
@@ -26,47 +26,39 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
             _logger = logger;
-            _dapperGeneric = dapperGeneric;
             _configuration = configuration;
+            _dapperGeneric = dapperGeneric;
         }
 
-        public async Task<dynamic> CreateRescheduleLeave(RescheduleLeaveRequestCreateDTO RescheduleLeave, string createdbyUserEmail)
+        public async Task<string> CreateRescheduleLeaveRequest(RescheduleLeaveRequestCreate Leave)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", RescheduleLeaveRequestEnum.CREATE);
-                    param.Add("@LeaveRequestID", RescheduleLeave.LeaveRequestID);
-                    param.Add("@UserId", RescheduleLeave.UserId);
-                    param.Add("@RequestYear", RescheduleLeave.RequestYear.Trim());
-                    param.Add("@LeaveTypeId", RescheduleLeave.LeaveTypeId);
-                    param.Add("@NoOfDays", RescheduleLeave.NoOfDays);
-                    param.Add("@StartDate", RescheduleLeave.StartDate);
-                    param.Add("@EndDate", RescheduleLeave.EndDate);
-                    param.Add("@ReliverUserID", RescheduleLeave.ReliverUserID);
-                    param.Add("@LeaveEvidence", RescheduleLeave.LeaveEvidence.Trim());
-                    param.Add("@Notes", RescheduleLeave.Notes.Trim());
-                    param.Add("@ReasonForRescheduling", RescheduleLeave.ReasonForRescheduling.Trim());
-                    param.Add("@CompanyID", RescheduleLeave.CompanyID);
+                var param = new DynamicParameters();
+                param.Add("@Status", RescheduleLeaveRequestEnum.CREATE);
+                param.Add("@LeaveRequestID", Leave.LeaveRequestID);
+                param.Add("@RequestYear", Leave.RequestYear);
+                param.Add("@LeaveTypeId", Leave.LeaveTypeId);
+                param.Add("@NoOfDays", Leave.NoOfDays);
+                param.Add("@StartDate", Leave.StartDate);
+                param.Add("@EndDate", Leave.EndDate);
+                param.Add("@ReliverUserID", Leave.ReliverUserID);
+                param.Add("@LeaveEvidence", Leave.LeaveEvidence.Trim());
+                param.Add("@Notes", Leave.Notes.Trim());
+                param.Add("@ReasonForRescheduling", Leave.ReasonForRescheduling.Trim());
+                param.Add("@CompanyID", Leave.CompanyID);
 
-                    param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
+                return await _dapperGeneric.Get<string>(ApplicationConstant.Sp_RescheduleLeave, param, commandType: CommandType.StoredProcedure);
 
-                    return response;
-                }
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: CreateRescheduleLeave(RescheduleLeaveRequestCreateDTO RescheduleLeave, string createdbyUserEmail) ===>{ex.Message}");
+                _logger.LogError($"MethodName: CreateRescheduleLeaveRequest ===>{ex}");
                 throw;
             }
         }
-
-        public async Task<string> ApproveRescheduleLeave(long RescheduleLeaveID, long ApprovedByUserId)
+        public async Task<string> ApproveRescheduleLeaveRequest(long RescheduleLeaveID, long ApprovedByUserId)
         {
             try
             {
@@ -80,17 +72,16 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
             }
             catch (Exception ex)
             {
-                _logger.LogError($"MethodName: ApproveRescheduleLeave ===>{ex}");
+                _logger.LogError($"MethodName: ApproveLeaveRequest ===>{ex}");
                 throw;
             }
         }
-
-        public async Task<string> DisaproveRescheduleLeave(long RescheduleLeaveID, long DisapprovedByUserId, string DisapprovedComment)
+        public async Task<string> DisaproveRescheduleLeaveRequest(long RescheduleLeaveID, long DisapprovedByUserId, string DisapprovedComment)
         {
             try
             {
                 var param = new DynamicParameters();
-                param.Add("@Status", RescheduleLeaveRequestEnum.disapproval);
+                param.Add("@Status", 11);
                 param.Add("@RescheduleLeaveID", RescheduleLeaveID);
                 param.Add("@DisapprovedByUserId", DisapprovedByUserId);
                 param.Add("@DisapprovedComment", DisapprovedComment);
@@ -100,19 +91,44 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
             }
             catch (Exception ex)
             {
-                _logger.LogError($"MethodName: DisaproveLeaveRequest ===>{ex}");
+                _logger.LogError($"MethodName: DisaproveRescheduleLeaveRequest ===>{ex}");
                 throw;
             }
         }
 
-        public async Task<IEnumerable<RescheduleLeaveRequestDTO>> GetAllRescheduleLeave()
+        //public async Task<dynamic> DeleteRescheduleLeaveRequest(LeaveRequestDelete delete, string deletedbyUserEmail)
+        //{
+        //    try
+        //    {
+        //        using (SqlConnection _dapper = new SqlConnection(_connectionString))
+        //        {
+        //            var param = new DynamicParameters();
+        //            param.Add("@Status", LeaveRequestEnum.DELETE);
+        //            param.Add("@LeaveRequestIDDelete", Convert.ToInt32(delete.LeaveRequestID));
+        //            param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
+        //            param.Add("@Reasons_For_Delete", delete.Reasons_For_Delete == null ? "" : delete.Reasons_For_Delete.ToString().Trim());
+
+        //            dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
+
+        //            return response;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var err = ex.Message;
+        //        _logger.LogError($"MethodName: Task<dynamic> DeleteLeaveRequest(LeaveRequestDelete delete, string deletedbyUserEmail) ===>{ex.Message}");
+        //        throw;
+        //    }
+        //}
+
+        public async Task<IEnumerable<RescheduleLeaveRequestDTO>> GetAllRescheduleLeaveRequest()
         {
             try
             {
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", RescheduleLeaveRequestEnum.GETALL);
+                    param.Add("@Status", LeaveRequestEnum.GETALL);
 
                     var LeaveDetails = await _dapper.QueryAsync<RescheduleLeaveRequestDTO>(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
 
@@ -121,20 +137,20 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllRescheduleLeave() ===>{ex.Message}");
+                _logger.LogError($"MethodName: GetAllLeaveRequest() ===>{ex.Message}");
                 throw;
             }
         }
 
-        public async Task<RescheduleLeaveRequestDTO> GetRescheduleLeaveById(long RescheduleLeaveID)
+
+        public async Task<RescheduleLeaveRequestDTO> GetRescheduleLeaveRequestById(long RescheduleLeaveID)
         {
             try
             {
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", RescheduleLeaveRequestEnum.GETBYID);
+                    param.Add("@Status", LeaveRequestEnum.GETBYID);
                     param.Add("@RescheduleLeaveIDGet", RescheduleLeaveID);
 
                     var LeaveDetails = await _dapper.QueryFirstOrDefaultAsync<RescheduleLeaveRequestDTO>(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
@@ -145,7 +161,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: Task<LeaveRequestDTO> GetRescheduleLeaveById(long RescheduleLeaveID) ===>{ex.Message}");
+                _logger.LogError($"MethodName: Task<LeaveRequestDTO> GetLeaveRequestById(long LeaveRequestID) ===>{ex.Message}");
                 throw;
             }
         }
@@ -157,7 +173,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", RescheduleLeaveRequestEnum.GETBYYear);
+                    param.Add("@Status", LeaveRequestEnum.GETBYEMAIL);
                     param.Add("@RequestYearGet", RequestYear);
 
                     var LeaveDetails = await _dapper.QueryFirstOrDefaultAsync<RescheduleLeaveRequestDTO>(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
@@ -168,12 +184,12 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: Task<RescheduleLeaveRequestDTO> GetRescheduleLeaveRequestByYear(string RequestYear) ===>{ex.Message}");
+                _logger.LogError($"MethodName: Task<DepartmentsDTO> GetLeaveRequestByName(string RequestYear) ===>{ex.Message}");
                 throw;
             }
         }
 
-        public async Task<RescheduleLeaveRequestDTO> GetRescheduleLeaveRequestByCompany(string RequestYear, long companyId)
+        public async Task<RescheduleLeaveRequestDTO> GetRescheduleLeaveRequestByCompanyId(string RequestYear, long companyId)
         {
             try
             {
@@ -192,7 +208,27 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: GetRescheduleLeaveRequestByCompany(string RequestYear, long companyId) ===>{ex.Message}");
+                _logger.LogError($"MethodName: GetLeaveRequestByCompany(string RequestYear, int companyId) ===>{ex.Message}");
+                throw;
+            }
+        }
+        public async Task<IEnumerable<RescheduleLeaveRequestDTO>> GetRescheduleLeaveRequestPendingApproval(long UserIdGet)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", RescheduleLeaveRequestEnum.approval);
+                    param.Add("@UserIdGet", UserIdGet);
+                    var userDetails = await _dapper.QueryAsync<RescheduleLeaveRequestDTO>(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
+
+                    return userDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: GetLeaveRequestPendingApproval() ===>{ex.Message}");
                 throw;
             }
         }

@@ -201,7 +201,7 @@ namespace Com.XpressPayments.Data.Repositories.EmployeeType
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", EmployeeTypeEnum.GETBYEMAIL);
+                    param.Add("@Status", EmployeeTypeEnum.GETEMPBYCOMANY);
                     param.Add("@EmployeeTypeNameGet", EmployeeTypeName);
                     param.Add("@CompanyIdGet", companyId);
 
@@ -225,7 +225,7 @@ namespace Com.XpressPayments.Data.Repositories.EmployeeType
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", 8);
+                    param.Add("@Status", EmployeeTypeEnum.GETCompanyBYID);
                     param.Add("@CompanyIdGet", EmployeeTypeID);
 
                     var EmployeeTypeDetails = await _dapper.QueryAsync<EmployeeTypeDTO>(ApplicationConstant.Sp_EmployeeType, param: param, commandType: CommandType.StoredProcedure);

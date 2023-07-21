@@ -79,11 +79,23 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 _mailService.SendLeaveMailToReliever(payload.ReliverUserID, payload.UserId, payload.StartDate, payload.EndDate);
 
                 //Send mail to approval
-                _mailService.SendLeaveApproveMailToApprover(userDetails.UnitHeadUserId,payload.UserId,payload.StartDate,payload.EndDate);  
+                if(userDetails.UnitHeadUserId == null)
+                {
+                    _mailService.SendLeaveApproveMailToApprover(userDetails.HODUserId, payload.UserId, payload.StartDate, payload.EndDate);
+                }
+                else
+                {
+                    _mailService.SendLeaveApproveMailToApprover(userDetails.UnitHeadUserId, payload.UserId, payload.StartDate, payload.EndDate);
+                }
 
 
-                response.ResponseCode = "00";
-                response.ResponseMessage = "Record inserted successfully";
+                //response.ResponseCode = "00";
+                //response.ResponseMessage = "Record inserted successfully";
+                //return response;
+
+                response.Data = payload;
+                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "leaveRequest created successfully.";
                 return response;
 
             }
@@ -124,10 +136,23 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 _mailService.SendLeaveApproveConfirmationMail(leaveRequestDetail.UserId, requester.UserId, leaveRequestDetail.StartDate, leaveRequestDetail.EndDate);
 
                 //Send mail to approval
-                if (!leaveRequestDetail.IsHodApproved)
+                if (leaveRequestDetail.UnitHeadUserID == null)
                 {
-                    _mailService.SendLeaveApproveMailToApprover(userDetails.HODUserId, leaveRequestDetail.UserId, leaveRequestDetail.StartDate, leaveRequestDetail.EndDate);
+                    _mailService.SendLeaveApproveMailToApprover(leaveRequestDetail.HRUserId, leaveRequestDetail.UserId, leaveRequestDetail.StartDate, leaveRequestDetail.EndDate);
                 }
+                else
+                {
+                    if (!leaveRequestDetail.IsHodApproved)
+                    {
+                        _mailService.SendLeaveApproveMailToApprover(leaveRequestDetail.HodUserID, leaveRequestDetail.UserId, leaveRequestDetail.StartDate, leaveRequestDetail.EndDate);
+                    }
+                    else
+                    {
+                        _mailService.SendLeaveApproveMailToApprover(leaveRequestDetail.HRUserId, leaveRequestDetail.UserId, leaveRequestDetail.StartDate, leaveRequestDetail.EndDate);
+                    }
+                   
+                }
+               
 
                 response.ResponseCode = "00";
                 response.ResponseMessage = "Record inserted successfully";
@@ -235,19 +260,19 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 {
                     response.Data = leave;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Grade fetched successfully.";
+                    response.ResponseMessage = "LeaveRequest fetched successfully.";
                     return response;
                 }
                 response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No Grade found.";
+                response.ResponseMessage = "No LeaveRequest found.";
                 response.Data = null;
                 return response;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetAllGrade() ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: LeaveRequest() ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllGrade() ==> {ex.Message}";
+                response.ResponseMessage = $"Exception Occured: LeaveRequest() ==> {ex.Message}";
                 response.Data = null;
                 return response;
             }
@@ -375,7 +400,7 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 return response;
             }
         }
-        public async Task<BaseResponse> GetLeaveRequestPendingApproval(RequesterInfo requester)
+        public async Task<BaseResponse> GetLeaveRequestPendingApproval(RequesterInfo requester )
         {
             BaseResponse response = new BaseResponse();
 
@@ -396,13 +421,13 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                     return response;
                 }
 
-                var leave = await _leaveRequestRepository.GetLeaveRequestPendingApproval(requester.UserId);
+                var leave = await _leaveRequestRepository.GetLeaveRequestPendingApproval(requester.UserId );
 
                 if (leave.Any())
                 {
                     response.Data = leave;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Grade fetched successfully.";
+                    response.ResponseMessage = "LeaveRequest fetched successfully.";
                     return response;
                 }
                 response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');

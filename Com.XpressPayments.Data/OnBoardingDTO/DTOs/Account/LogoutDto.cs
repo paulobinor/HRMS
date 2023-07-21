@@ -9,6 +9,7 @@ namespace Com.XpressPayments.Data.DTOs.Account
     public class LogoutDto
     {
         [Required]
-        public string Email { get; set; }
+        //public string Email { get; set; }
+        public string OfficialMail { get; set; }
     }
 }

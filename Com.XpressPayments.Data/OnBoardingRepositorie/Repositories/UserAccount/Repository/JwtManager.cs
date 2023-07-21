@@ -1,5 +1,6 @@
 ﻿using Com.XpressPayments.Data.DTOs.Account;
 using Com.XpressPayments.Data.GenericResponse;
+using Com.XpressPayments.Data.OnBoardingRepositorie.Repositories.UserAccount.IRepository;
 using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

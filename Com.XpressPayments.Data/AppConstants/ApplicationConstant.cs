@@ -44,7 +44,7 @@ namespace Com.XpressPayments.Data.AppConstants
         public static string Sp_Roles = "Sp_Roles";
 
         //Vacation module
-        public static string Sp_VacationType = "Sp_VacationType";
+        public static string Sp_LeaveType = "Sp_LeaveType";
         public static string Sp_LeaveRequest = "Sp_LeaveRequest";
         public static string Sp_RescheduleLeave = "Sp_RescheduleLeave";
 
