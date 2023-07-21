@@ -36,6 +36,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
             {
                 var param = new DynamicParameters();
                 param.Add("@Status", RescheduleLeaveRequestEnum.CREATE);
+                param.Add("@LeaveRequestID", Leave.LeaveRequestID);
                 param.Add("@RequestYear", Leave.RequestYear);
                 param.Add("@LeaveTypeId", Leave.LeaveTypeId);
                 param.Add("@NoOfDays", Leave.NoOfDays);
@@ -45,6 +46,7 @@ namespace Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo
                 param.Add("@LeaveEvidence", Leave.LeaveEvidence.Trim());
                 param.Add("@Notes", Leave.Notes.Trim());
                 param.Add("@ReasonForRescheduling", Leave.ReasonForRescheduling.Trim());
+                param.Add("@CompanyID", Leave.CompanyID);
 
 
                 return await _dapperGeneric.Get<string>(ApplicationConstant.Sp_RescheduleLeave, param, commandType: CommandType.StoredProcedure);

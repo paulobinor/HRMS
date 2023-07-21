@@ -141,11 +141,11 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", Account.UPDUSER);
-                    param.Add("@UserToupdate", user.Email);
+                    param.Add("@Email", user.Email);
                     param.Add("@FirstNameUpdate", user.FirstName == null ? "" : user.FirstName.ToString());
                     param.Add("@MiddleNameUpdate", user.MiddleName == null ? "" : user.MiddleName.ToString());
                     param.Add("@LastNameUpdate", user.LastName == null ? "" : user.LastName.ToString());
-                    param.Add("@OfficialMail", user.OfficialMail == null ? "" : user.OfficialMail.ToString().Trim());
+                    param.Add("@UserToupdate", user.OfficialMail == null ? "" : user.OfficialMail.ToString().Trim());
                     param.Add("@PhoneNumberUpdate", user.PhoneNumber == null ? "" : user.PhoneNumber.ToString().Trim());
                     param.Add("@DOB", user.Email == null ? "" : user.DOB.ToString().Trim());
                     param.Add("@ResumptionDate", user.ResumptionDate == null ? "" : user.DOB.ToString().Trim());
@@ -154,12 +154,11 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     param.Add("@EmployeeTypeID", user.EmployeeTypeID);
                     param.Add("@BranchID", user.BranchID);
                     param.Add("@EmploymentStatusID", user.EmploymentStatusID);
-                    param.Add("@GroupID", user.GroupID);
                     param.Add("@JobDescriptionID", user.JobDescriptionID);
                     param.Add("@RoleIdUpdate", user.RoleId);
                     param.Add("@UpdatedByUserId", updatedbyUserId);
                     //add this parameter to sp for update user
-                    param.Add("@UpdatedByUserEmail", updatedbyUserId);
+                    param.Add("@LastUpdatedByUserEmail", updatedbyUserId);
 
                     dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
 

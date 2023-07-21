@@ -718,14 +718,14 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
 
-                if (String.IsNullOrEmpty(updateDto.FirstName) || String.IsNullOrEmpty(updateDto.LastName) ||
-                    String.IsNullOrEmpty(updateDto.Email) || String.IsNullOrEmpty(updateDto.PhoneNumber) ||
-                    updateDto.RoleId <= 0 || updateDto.RoleId > 3 || updateDto.CompanyId <= 0 || updateDto.DeptId <= 0)
-                {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Please ensure all required fields are entered.";
-                    return response;
-                }
+                //if (String.IsNullOrEmpty(updateDto.FirstName) || String.IsNullOrEmpty(updateDto.LastName) ||
+                //    String.IsNullOrEmpty(updateDto.OfficialMail) || String.IsNullOrEmpty(updateDto.PhoneNumber) ||
+                //    updateDto.RoleId <= 0 || updateDto.RoleId > 3 || updateDto.CompanyId <= 0 || updateDto.DeptId <= 0)
+                //{
+                //    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"Please ensure all required fields are entered.";
+                //    return response;
+                //}
 
                 if (requester.RoleId == 2 & updateDto.RoleId <= 2)
                 {
