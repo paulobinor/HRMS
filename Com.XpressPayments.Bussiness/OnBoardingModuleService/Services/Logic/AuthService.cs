@@ -404,7 +404,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //validate CreateUserDto payload here 
                 if (String.IsNullOrEmpty(userDto.FirstName) || String.IsNullOrEmpty(userDto.LastName) ||
-                    String.IsNullOrEmpty(userDto.Email) || String.IsNullOrEmpty(userDto.PhoneNumber) ||
+                    String.IsNullOrEmpty(userDto.OfficialMail) || String.IsNullOrEmpty(userDto.PhoneNumber) ||
                     userDto.RoleId <= 0 || userDto.RoleId > 4 || userDto.CompanyId <= 0 || userDto.DepartmentId <= 0)
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
@@ -735,7 +735,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
 
-                var user = await _accountRepository.FindUser(updateDto.Email);
+                var user = await _accountRepository.FindUser(updateDto.OfficialMail);
                 if (null != user)
                 {
                     dynamic resp = await _accountRepository.UpdateUser(updateDto, Convert.ToInt32(requesterUserId), requesterUserEmail);
@@ -743,7 +743,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     {
                         //update action performed into audit log here
 
-                        var updatedUser = await _accountRepository.FindUser(updateDto.Email);
+                        var updatedUser = await _accountRepository.FindUser(updateDto.OfficialMail);
                         var mapped = _mapper.Map<UserViewModel>(updatedUser);
 
                         _logger.LogInformation("User updated successfully.");
@@ -1349,12 +1349,23 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
 
-                if (Convert.ToInt32(RoleId) > 2)
+
+                Tuple<bool, bool> checkRole = checkPermission(requesterInfo.RoleId, requesterInfo.RoleId);
+
+
+                if (!checkRole.Item2)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                     return response;
                 }
+
+                //if (Convert.ToInt32(RoleId) > 2)
+                //{
+                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //    return response;
+                //}
 
                 var user = await _accountRepository.FindUser(deactivateUser.OfficialMail);
                 if (user != null)
