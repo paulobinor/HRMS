@@ -1,4 +1,5 @@
-﻿using Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo;
+﻿using Com.XpressPayments.Data.ExitModuleRepository.Repositories;
+using Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo;
 using Com.XpressPayments.Data.LeaveModuleRepository.LeaveType;
 using Com.XpressPayments.Data.OnBoardingRepositorie.Repositories.UserAccount.IRepository;
 using Com.XpressPayments.Data.Repositories;
@@ -74,6 +75,9 @@ namespace Com.XpressPayments.Data
             services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
             services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
             services.AddScoped<IRescheduleLeaveRepository, RescheduleLeaveRepository>();
+
+            //ExitModule
+            services.AddScoped<IResignationRepository, ResignationRepository>();
         }
     }
 }

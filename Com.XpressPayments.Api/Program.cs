@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Com.XpressPayments.Bussiness.ExitModuleService.Services.ILogic;
+using Com.XpressPayments.Bussiness.ExitModuleService.Services.Logic;
 using Com.XpressPayments.Bussiness.LeaveModuleService.Service.ILogic;
 using Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic;
 using Com.XpressPayments.Bussiness.Profiles;
@@ -7,6 +9,7 @@ using Com.XpressPayments.Bussiness.Services.Logic;
 using Com.XpressPayments.Bussiness.Util;
 using Com.XpressPayments.Common.Configuration;
 using Com.XpressPayments.Data.DapperGeneric;
+using Com.XpressPayments.Data.ExitModuleRepository.Repositories;
 using Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo;
 using Com.XpressPayments.Data.LeaveModuleRepository.LeaveType;
 using Com.XpressPayments.Data.OnBoardingRepositorie.Repositories.UserAccount.IRepository;
@@ -176,11 +179,15 @@ builder.Services.AddScoped<IChildrenRepository, ChildrenRepository>();
 builder.Services.AddScoped<IRolesRepo, RolesRepo>();
 
 
+
+
 //VacationModul
 builder.Services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
 builder.Services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
 builder.Services.AddScoped<IRescheduleLeaveRepository, RescheduleLeaveRepository>();
 
+//ExitModule
+builder.Services.AddScoped<IResignationRepository, ResignationRepository>();
 
 //OnboardingModule
 builder.Services.AddScoped<ICompanyService, CompanyService>();
@@ -212,6 +219,10 @@ builder.Services.AddScoped<IChildrenService, ChildrenService>();
 builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
 builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
 builder.Services.AddScoped<IRescheduleLeaveService, RescheduleLeaveService>();
+
+
+//ExitModule
+builder.Services.AddScoped<IResignationService, ResignationService>();
 
 //Mail Service
 builder.Services.AddScoped<IMailService, MailService>();
