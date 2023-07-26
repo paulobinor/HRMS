@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "ee+pU0HBL/aXYecNDs+7BKhn5H4UgsdsqjQAyQbMfiA=",
+  "Source": "Com.XpressPayments.Api",
+  "BasePath": "_content/Com.XpressPayments.Api",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
