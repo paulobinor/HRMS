@@ -21,3 +21,10 @@ C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Data\obj\
 C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Data\obj\Debug\net6.0\Com.XpressPayments.Data.dll
 C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Data\obj\Debug\net6.0\refint\Com.XpressPayments.Data.dll
 C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Data\obj\Debug\net6.0\Com.XpressPayments.Data.pdb
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Data\bin\Debug\net6.0\Com.XpressPayments.Data.deps.json
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Data\bin\Debug\net6.0\Com.XpressPayments.Data.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Data\bin\Debug\net6.0\Com.XpressPayments.Data.pdb
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Data\bin\Debug\net6.0\Com.XpressPayments.Common.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Data\bin\Debug\net6.0\Com.XpressPayments.Common.pdb
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Data\obj\Debug\net6.0\Com.XpressPayments.Data.csproj.CopyComplete
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Data\obj\Debug\net6.0\ref\Com.XpressPayments.Data.dll
