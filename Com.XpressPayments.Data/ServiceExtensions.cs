@@ -1,6 +1,5 @@
 ﻿using Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo;
 using Com.XpressPayments.Data.LeaveModuleRepository.LeaveType;
-using Com.XpressPayments.Data.OnBoardingRepositorie.Repositories.Reviwer;
 using Com.XpressPayments.Data.OnBoardingRepositorie.Repositories.UserAccount.IRepository;
 using Com.XpressPayments.Data.Repositories;
 using Com.XpressPayments.Data.Repositories.Branch;
@@ -70,7 +69,6 @@ namespace Com.XpressPayments.Data
             services.AddScoped<IHospitalPlanRepository, HospitalPlanRepository>();
             services.AddScoped<IChildrenRepository, ChildrenRepository>();
             services.AddScoped<IRolesRepo, RolesRepo>();
-            services.AddScoped<IReviwerRepository, ReviwerRepository>();
 
             //VacationModul
             services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
