@@ -1,0 +1,12 @@
+[2023-07-18 08:34:57.631 +01:00  INF]  User profile is available. Using 'C:\Users\olajumoke.owolabi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-07-18 08:34:58.148 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-07-18 08:34:58.148 +01:00  INF]  Hosting environment: Development
+[2023-07-18 08:34:58.148 +01:00  INF]  Content root path: C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-07-18 08:34:58.252 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-07-18 08:34:59.399 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-07-18 08:34:59.402 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 1152.2082ms
+[2023-07-18 08:34:59.410 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 10.2925ms
+[2023-07-18 08:34:59.420 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-07-18 08:34:59.505 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 84.3525ms
+[2023-07-18 08:34:59.670 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-07-18 08:35:00.002 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 331.9862ms
