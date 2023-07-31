@@ -91,6 +91,7 @@
           }
         }
       },
+<<<<<<< HEAD:Com.XpressPayments.Api/bin/Debug/net6.0/Com.XpressPayments.Api.deps.json
       "BCrypt.Net-Next/4.0.3": {
         "runtime": {
           "lib/net6.0/BCrypt.Net-Next.dll": {
@@ -99,6 +100,8 @@
           }
         }
       },
+=======
+>>>>>>> parent of 55b359c (commit):XpressHRMS.Business/bin/Debug/net5.0/XpressHRMS.Business.deps.json
       "Dapper/2.0.123": {
         "runtime": {
           "lib/net5.0/Dapper.dll": {
@@ -1687,6 +1690,7 @@
       },
       "Com.XpressPayments.Bussiness/1.0.0": {
         "dependencies": {
+<<<<<<< HEAD:Com.XpressPayments.Api/bin/Debug/net6.0/Com.XpressPayments.Api.deps.json
           "AutoMapper": "10.1.1",
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "8.0.1",
           "Com.XpressPayments.Common": "1.0.0",
@@ -1697,6 +1701,17 @@
           "System.Configuration.ConfigurationManager": "6.0.0",
           "System.IdentityModel.Tokens.Jwt": "6.22.0",
           "System.Text.Encoding.CodePages": "7.0.0"
+=======
+          "Dapper": "2.0.123",
+          "Microsoft.AspNetCore.Authorization": "7.0.2",
+          "Microsoft.AspNetCore.Http.Features": "5.0.17",
+          "Microsoft.Data.SqlClient": "5.0.1",
+          "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "7.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "7.0.0",
+          "Newtonsoft.Json": "13.0.2",
+          "System.Data.SqlClient": "4.8.3"
+>>>>>>> parent of 55b359c (commit):XpressHRMS.Business/bin/Debug/net5.0/XpressHRMS.Business.deps.json
         },
         "runtime": {
           "Com.XpressPayments.Bussiness.dll": {}
@@ -1761,13 +1776,6 @@
       "sha512": "sha512-l1SYfZKOFBuUFG7C2SWHmJcrQQaiXgBdVCycx4vcZQkC6efDVt7mzZ5pfJAFEJDBUq7mjRQ0RPq9ZDGdSswqMg==",
       "path": "azure.identity/1.3.0",
       "hashPath": "azure.identity.1.3.0.nupkg.sha512"
-    },
-    "BCrypt.Net-Next/4.0.3": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-W+U9WvmZQgi5cX6FS5GDtDoPzUCV4LkBLkywq/kRZhuDwcbavOzcDAr3LXJFqHUi952Yj3LEYoWW0jbEUQChsA==",
-      "path": "bcrypt.net-next/4.0.3",
-      "hashPath": "bcrypt.net-next.4.0.3.nupkg.sha512"
     },
     "Dapper/2.0.123": {
       "type": "package",

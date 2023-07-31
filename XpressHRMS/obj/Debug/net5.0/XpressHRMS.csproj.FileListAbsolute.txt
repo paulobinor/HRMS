@@ -1,0 +1,7 @@
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS\obj\Debug\net5.0\XpressHRMS.csproj.AssemblyReference.cache
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS\obj\Debug\net5.0\XpressHRMS.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS\obj\Debug\net5.0\XpressHRMS.AssemblyInfoInputs.cache
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS\obj\Debug\net5.0\XpressHRMS.AssemblyInfo.cs
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS\obj\Debug\net5.0\XpressHRMS.csproj.CoreCompileInputs.cache
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS\obj\Debug\net5.0\XpressHRMS.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\olajumoke.owolabi\source\repos\HRMS-BE(BackEnd)\XpressHRMS\obj\Debug\net5.0\XpressHRMS.MvcApplicationPartsAssemblyInfo.cache
