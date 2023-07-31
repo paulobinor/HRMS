@@ -1,0 +1,96 @@
+[2023-06-29 15:14:57.534 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-06-29 15:14:57.775 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-06-29 15:14:57.775 +01:00  INF]  Hosting environment: Development
+[2023-06-29 15:14:57.775 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-06-29 15:14:57.808 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-06-29 15:14:58.242 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 436.2169ms
+[2023-06-29 15:14:58.247 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-06-29 15:14:58.265 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 18.4364ms
+[2023-06-29 15:14:58.274 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-06-29 15:14:58.334 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 59.5990ms
+[2023-06-29 15:14:58.386 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-06-29 15:14:58.586 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "POST api/LeaveRequest" for actions - Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.CreateLeaveRequest (Com.XpressPayments.Api),Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.ApproveLeaveRequest (Com.XpressPayments.Api),Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.DisaproveLeaveRequest (Com.XpressPayments.Api). Actions require a unique method/path combination for Swagger/OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_5>d.MoveNext() in C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Api\Program.cs:line 258
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[2023-06-29 15:14:58.678 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 500 - text/plain;+charset=utf-8 292.0443ms
+[2023-06-29 15:19:32.562 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-06-29 15:19:32.744 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-06-29 15:19:32.745 +01:00  INF]  Hosting environment: Development
+[2023-06-29 15:19:32.745 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-06-29 15:19:32.779 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-06-29 15:19:33.210 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 432.2108ms
+[2023-06-29 15:19:33.235 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-06-29 15:19:33.244 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 5.0992ms
+[2023-06-29 15:19:33.248 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-06-29 15:19:33.301 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 52.8820ms
+[2023-06-29 15:19:33.359 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-06-29 15:19:33.496 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "POST api/LeaveRequest" for actions - Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.CreateLeaveRequest (Com.XpressPayments.Api),Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.ApproveLeaveRequest (Com.XpressPayments.Api),Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.DisaproveLeaveRequest (Com.XpressPayments.Api). Actions require a unique method/path combination for Swagger/OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_5>d.MoveNext() in C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Api\Program.cs:line 258
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[2023-06-29 15:19:33.563 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 500 - text/plain;+charset=utf-8 204.7926ms
+[2023-06-29 15:20:22.592 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-06-29 15:20:22.778 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-06-29 15:20:22.778 +01:00  INF]  Hosting environment: Development
+[2023-06-29 15:20:22.778 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-06-29 15:20:22.816 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-06-29 15:20:23.256 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 442.4605ms
+[2023-06-29 15:20:23.275 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-06-29 15:20:23.291 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 6.8576ms
+[2023-06-29 15:20:23.291 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-06-29 15:20:23.349 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 58.0494ms
+[2023-06-29 15:20:23.407 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-06-29 15:20:23.573 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/LeaveType" for actions - Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetAllActiveLeaveType (Com.XpressPayments.Api),Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetAllLeaveType (Com.XpressPayments.Api),Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetLeaveTypebyId (Com.XpressPayments.Api),Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetLeaveTypebyCompanyId (Com.XpressPayments.Api). Actions require a unique method/path combination for Swagger/OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_5>d.MoveNext() in C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Api\Program.cs:line 258
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[2023-06-29 15:20:23.653 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 500 - text/plain;+charset=utf-8 246.1989ms
+[2023-06-29 15:21:29.323 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-06-29 15:21:29.516 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-06-29 15:21:29.517 +01:00  INF]  Hosting environment: Development
+[2023-06-29 15:21:29.517 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-06-29 15:21:29.556 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-06-29 15:21:29.974 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 420.0365ms
+[2023-06-29 15:21:29.977 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-06-29 15:21:30.000 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 16.3841ms
+[2023-06-29 15:21:30.000 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-06-29 15:21:30.067 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 66.6014ms
+[2023-06-29 15:21:30.124 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-06-29 15:21:30.288 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/LeaveType" for actions - Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetAllActiveLeaveType (Com.XpressPayments.Api),Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetAllLeaveType (Com.XpressPayments.Api),Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetLeaveTypebyId (Com.XpressPayments.Api),Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetLeaveTypebyCompanyId (Com.XpressPayments.Api). Actions require a unique method/path combination for Swagger/OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_5>d.MoveNext() in C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Api\Program.cs:line 258
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[2023-06-29 15:21:30.368 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 500 - text/plain;+charset=utf-8 243.3750ms
+[2023-06-29 15:22:43.627 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-06-29 15:22:43.987 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-06-29 15:22:43.987 +01:00  INF]  Hosting environment: Development
+[2023-06-29 15:22:43.987 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-06-29 15:22:44.072 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-06-29 15:22:44.867 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-06-29 15:22:44.869 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 801.3474ms
+[2023-06-29 15:22:44.890 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-06-29 15:22:44.890 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 22.4200ms
+[2023-06-29 15:22:44.972 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 82.4891ms
+[2023-06-29 15:22:45.031 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-06-29 15:22:45.399 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 368.5191ms

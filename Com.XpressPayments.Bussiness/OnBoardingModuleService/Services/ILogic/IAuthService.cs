@@ -19,7 +19,7 @@ namespace Com.XpressPayments.Bussiness.Services.ILogic
         Task<BaseResponse> SendEmailForPasswordChange(RequestPasswordChange request, string ipAddress, string port);
         Task<BaseResponse> ChangePassword(ChangePasswordViewModel changePassword, string ipAddress, string port);
         Task<BaseResponse> GetAllUsers(RequesterInfo requester);
-        Task<BaseResponse> GetAllUsersPendingApproval(RequesterInfo requester);
+        Task<BaseResponse> GetAllUsersPendingApproval(long CompanyId, RequesterInfo requester);
         Task<BaseResponse> ApproveUser(ApproveUserDto approveUser, RequesterInfo requester);
         Task<BaseResponse> DisapproveUser(DisapproveUserDto disapproveUser, RequesterInfo requester);
         Task<BaseResponse> DeactivateUser(DeactivateUserDto deactivateUser, RequesterInfo requester);

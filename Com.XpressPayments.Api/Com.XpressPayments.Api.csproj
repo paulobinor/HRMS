@@ -3,7 +3,11 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 	</PropertyGroup>
-
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+		<UserSecretsId>c65a9b89-6391-474b-9352-ac2798645a04</UserSecretsId>
+	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
 		<PackageReference Include="Dapper" Version="2.0.123" />

@@ -80,8 +80,8 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
                 //validate UnitDto payload here 
-                if (String.IsNullOrEmpty(unitDto.UnitName) || unitDto.CompanyId <= 0  ||
-                    unitDto.HodID <= 0  /*|| unitDto.DepartmentID <= 0*/ )
+                if (String.IsNullOrEmpty(unitDto.UnitName) || unitDto.CompanyId <= 0  
+                    /*unitDto.HodID <= 0*/  /*|| unitDto.DepartmentID <= 0*/ )
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";
@@ -107,11 +107,11 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //unitDto.UnitName = $"{unitDto.UnitName} ({isExistsComp.CompanyName})";
 
-                var isExists = await _unitRepository.GetUnitByName(unitDto.UnitName);
+                var isExists = await _unitRepository.GetUnitByCompany(unitDto.UnitName, (int)unitDto.CompanyId);
                 if (null != isExists)
                 {
                     response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Unit with name : {unitDto.UnitName} already exists.";
+                    response.ResponseMessage = $"Unit with name : {unitDto.UnitName} already exists for your Copmany.";
                     return response;
                 }
 
@@ -200,7 +200,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                 var hod = await _hodRepository.GetHODByName(serviceDetails.Rows[row][1].ToString());
                                 var dept = await _departmentRepository.GetDepartmentByName(serviceDetails.Rows[row][2].ToString());
                                 var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][3].ToString());
-                             
+
 
                                 long HodID = hod.HodID;
                                 long DeptID = dept.DeptId;
@@ -210,7 +210,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                 var unitrequest = new CreateUnitDTO
                                 {
                                     UnitName = unitName,
-                                    HodID = HodID,
+                                    
                                     DeptId = DeptID,
                                     CompanyId = companyID
                                     
@@ -313,8 +313,8 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
                 //validate DepartmentDto payload here 
-                if (String.IsNullOrEmpty(updateDto.UnitName) || updateDto.CompanyId <= 0 || 
-                    updateDto.HodID <= 0 )
+                if (String.IsNullOrEmpty(updateDto.UnitName) || updateDto.CompanyId <= 0 
+                   /* updateDto.HodID <= 0 */)
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";

@@ -195,6 +195,30 @@ namespace Com.XpressPayments.Data.Repositories.Position
             }
         }
 
+        public async Task<PositionDTO> GetPositionByCompany(string PositionName, int companyId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", PositionEnum.GETBYEMAIL);
+                    param.Add("@PositionNameGet", PositionName);
+                    param.Add("@CompanyIdGet", companyId);
+
+                    var PositionDetails = await _dapper.QueryFirstOrDefaultAsync<PositionDTO>(ApplicationConstant.Sp_Position, param: param, commandType: CommandType.StoredProcedure);
+
+                    return PositionDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName:  GetPositionByName(string PositionName) ===>{ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<PositionDTO>> GetAllPositionCompanyId(long PositionID)
         {
             try

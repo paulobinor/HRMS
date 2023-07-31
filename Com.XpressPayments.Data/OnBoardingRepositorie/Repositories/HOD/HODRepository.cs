@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Com.XpressPayments.Data.Repositories.HOD
 {
-    internal class HODRepository : IHODRepository
+    public class HODRepository : IHODRepository
     {
         private string _connectionString;
         private readonly ILogger<HODRepository> _logger;
@@ -36,7 +36,7 @@ namespace Com.XpressPayments.Data.Repositories.HOD
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", HODenum.CREATE);
-                    param.Add("@HODName", hod.HODName.Trim());
+                    param.Add("@UserId", hod.UserId);
                     //param.Add("@DeptId", hod.DeptId);
                     param.Add("@CompanyId", hod.CompanyID);
 
@@ -64,7 +64,7 @@ namespace Com.XpressPayments.Data.Repositories.HOD
                     var param = new DynamicParameters();
                     param.Add("@Status", HODenum.UPDATE);
                     param.Add("@HodIDUpd", hod.HodID);
-                    param.Add("@HODNameUpd", hod.HODName.Trim());
+                    param.Add("@UserIdUpd", hod.UserId);
                     //param.Add("@DeptIdUpd", hod.DeptId);
                     param.Add("@CompanyIdUpd", hod.CompanyID);
 
@@ -175,7 +175,7 @@ namespace Com.XpressPayments.Data.Repositories.HOD
             }
         }
 
-        public async Task<HodDTO> GetHODByName(string HODName)
+        public async Task<HodDTO> GetHODByUserId(long UserId)
         {
             try
             {
@@ -183,7 +183,53 @@ namespace Com.XpressPayments.Data.Repositories.HOD
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", HODenum.GETBYEMAIL);
+                    param.Add("@UserIdGet", UserId);
+
+                    var HODDetails = await _dapper.QueryFirstOrDefaultAsync<HodDTO>(ApplicationConstant.Sp_HOD, param: param, commandType: CommandType.StoredProcedure);
+
+                    return HODDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetHODByName(string DepartmentName) ===>{ex.Message}");
+                throw;
+            }
+        }
+        public async Task<HodDTO> GetHODByName(string HODName)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", 10);
                     param.Add("@HODNameGet", HODName);
+
+                    var HODDetails = await _dapper.QueryFirstOrDefaultAsync<HodDTO>(ApplicationConstant.Sp_HOD, param: param, commandType: CommandType.StoredProcedure);
+
+                    return HODDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetHODByName(string DepartmentName) ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<HodDTO> GetHODByCompany(long UserId, long companyId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", HODenum.GETCOMPANY);
+                    param.Add("@@UserIdGet", UserId);
+                    param.Add("@CompanyIdGet", companyId);
 
                     var HODDetails = await _dapper.QueryFirstOrDefaultAsync<HodDTO>(ApplicationConstant.Sp_HOD, param: param, commandType: CommandType.StoredProcedure);
 
@@ -205,7 +251,7 @@ namespace Com.XpressPayments.Data.Repositories.HOD
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", 8);
+                    param.Add("@Status", HODenum.GETCOMPANYBYID);
                     param.Add("@CompanyIdGet", companyId);
 
                     var HODDetails = await _dapper.QueryAsync<HodDTO>(ApplicationConstant.Sp_HOD, param: param, commandType: CommandType.StoredProcedure);

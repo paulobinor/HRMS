@@ -9,6 +9,6 @@ namespace Com.XpressPayments.Data.DTOs.Account
     public class UnblockAccountDto
     {
         [Required]
-        public string Email { get; set; }
+        public string OfficialMail { get; set; }
     }
 }

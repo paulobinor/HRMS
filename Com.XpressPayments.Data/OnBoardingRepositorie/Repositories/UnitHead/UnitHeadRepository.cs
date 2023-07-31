@@ -36,7 +36,7 @@ namespace Com.XpressPayments.Data.Repositories.UnitHead
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", UnitHeadEnum.CREATE);
-                    param.Add("@UnitHeadName", create.UnitHeadName.Trim());
+                    param.Add("@UserID", create.UserID);
                     param.Add("@UnitID", create.UnitID);
                     param.Add("@HodID", create.HodID);
                     param.Add("@DepartmentID", create.DepartmentID);
@@ -66,7 +66,7 @@ namespace Com.XpressPayments.Data.Repositories.UnitHead
                     var param = new DynamicParameters();
                     param.Add("@Status", UnitHeadEnum.UPDATE);
                     param.Add("@UnitHeadIDUpd", update.UnitHeadID);
-                    param.Add("@UnitHeadNameUpd", update.UnitHeadName.Trim());
+                    param.Add("@UserIDUpd", update.UserID);
                     param.Add("@UnitIDUpd", update.UnitID);
                     param.Add("@HodIDUpd", update.HodID);
                     param.Add("@DepartmentIDUpd", update.DepartmentID);
@@ -179,7 +179,7 @@ namespace Com.XpressPayments.Data.Repositories.UnitHead
             }
         }
 
-        public async Task<UnitHeadDTO> GetUnitHeadByName(string UnitHeadName)
+        public async Task<UnitHeadDTO> GetUnitHeadByUserID(long UserID)
         {
             try
             {
@@ -187,7 +187,53 @@ namespace Com.XpressPayments.Data.Repositories.UnitHead
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", HODenum.GETBYEMAIL);
+                    param.Add("@UserIDGet", UserID);
+
+                    var UnitHeadDetails = await _dapper.QueryFirstOrDefaultAsync<UnitHeadDTO>(ApplicationConstant.Sp_UnitHead, param: param, commandType: CommandType.StoredProcedure);
+
+                    return UnitHeadDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName:  GetUnitHeadByName(string UnitHeadName) ===>{ex.Message}");
+                throw;
+            }
+        }
+        public async Task<UnitHeadDTO> GetUnitHeadByUnitHeadName(string UnitHeadName)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", 10);
                     param.Add("@UnitHeadNameGet", UnitHeadName);
+
+                    var UnitHeadDetails = await _dapper.QueryFirstOrDefaultAsync<UnitHeadDTO>(ApplicationConstant.Sp_UnitHead, param: param, commandType: CommandType.StoredProcedure);
+
+                    return UnitHeadDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName:  GetUnitHeadByName(string UnitHeadName) ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<UnitHeadDTO> GetUnitHeadByCompany(long UserID, long companyId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", HODenum.GETBYEMAIL);
+                    param.Add("@UserIDGet", UserID);
+                    param.Add("@CompanyIdGet", companyId);
 
                     var UnitHeadDetails = await _dapper.QueryFirstOrDefaultAsync<UnitHeadDTO>(ApplicationConstant.Sp_UnitHead, param: param, commandType: CommandType.StoredProcedure);
 

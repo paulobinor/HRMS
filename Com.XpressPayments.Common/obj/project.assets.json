@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\Com.XpressPayments.Common\\Com.XpressPayments.Common.csproj",
+      "projectUniqueName": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\Com.XpressPayments.Common\\Com.XpressPayments.Common.csproj",
       "projectName": "Com.XpressPayments.Common",
-      "projectPath": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\Com.XpressPayments.Common\\Com.XpressPayments.Common.csproj",
+      "projectPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\Com.XpressPayments.Common\\Com.XpressPayments.Common.csproj",
       "packagesPath": "C:\\Users\\peter.omolayo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\Com.XpressPayments.Common\\obj\\",
+      "outputPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\Com.XpressPayments.Common\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\peter.omolayo\\AppData\\Roaming\\NuGet\\NuGet.Config",

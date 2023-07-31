@@ -109,11 +109,11 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //create.ProvidersNames = $"{create.ProvidersNames} ({isExistsComp.CompanyName})";
 
-                var isExists = await _HospitalProvidersRepository.GetHospitalProvidersByName(create.ProvidersNames);
+                var isExists = await _HospitalProvidersRepository.GetHospitalProvidersByCompany(create.ProvidersNames, (int)create.CompanyID);
                 if (null != isExists)
                 {
                     response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"HospitalProviders with name : {create.ProvidersNames} already exists.";
+                    response.ResponseMessage = $"HospitalProviders with name : {create.ProvidersNames} already exists for your Company.";
                     return response;
                 }
 

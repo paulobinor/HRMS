@@ -106,13 +106,15 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //creatDto.EmployeeTypeName = $"{creatDto.EmployeeTypeName} ({isExistsComp.CompanyName})";
 
-                var isExists = await _EmployeeTypeRepository.GetEmployeeTypeByName(creatDto.EmployeeTypeName);
+                var isExists = await _EmployeeTypeRepository.GetEmployeeTypeByCompany(creatDto.EmployeeTypeName, (int)creatDto.CompanyID);
                 if (null != isExists)
                 {
                     response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"EmployeeType with name : {creatDto.EmployeeTypeName} already exists.";
+                    response.ResponseMessage = $"EmployeeType with name : {creatDto.EmployeeTypeName} already exists for this Company.";
                     return response;
                 }
+
+
 
                 dynamic resp = await _EmployeeTypeRepository.CreateEmployeeType(creatDto, createdbyUserEmail);
                 if (resp > 0)

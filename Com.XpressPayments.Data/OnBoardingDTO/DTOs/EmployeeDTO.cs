@@ -25,10 +25,7 @@ namespace Com.XpressPayments.Data.DTOs
         public string DepartmentName { get; set; }
         public long UnitID { get; set; }
         public string UnitName { get; set; }
-        public long UnitHeadID { get; set; }
-        public string UnitHeadName { get; set; }
-        public long HodID { get; set; }
-        public string HODName { get; set; }
+  
         public long GradeID { get; set; }
         public string GradeName { get; set; }
         public long EmployeeTypeID { get; set; }
@@ -77,7 +74,7 @@ namespace Com.XpressPayments.Data.DTOs
         public string FirstDegree { get; set; }
         public string FirstDegreeSchoolAttended { get; set; }
         public string GradeObtained { get; set; }
-        public long FirstDegreeYear { get; set; }
+        public string FirstDegreeYear { get; set; }
         public string SchoolAttended { get; set; }
         public string SecondaryEducationStartDate { get; set; }
         public string SecondaryEducationYearComleted { get; set; }
@@ -91,9 +88,9 @@ namespace Com.XpressPayments.Data.DTOs
         public string YourPensionPinNumber { get; set; }
         public string TaxPayerIdentificationNumber { get; set; }
         public string BankAccountName { get; set; }
-        public long AccountNumber { get; set; }
+        public string AccountNumber { get; set; }
         public string BankName { get; set; }
-        public long BVN { get; set; }
+        public string BVN { get; set; }
         public string FirstReferenceName { get; set; }
         public string FirstReferenceAddress { get; set; }
         public string FirstReferenceOccupation { get; set; }
@@ -107,18 +104,18 @@ namespace Com.XpressPayments.Data.DTOs
         public string SecondReferenceMobile { get; set; }
         public string SecondReferenceEmail { get; set; }
         public string FirstDegreeNameAndLocation { get; set; }
-        public long FirstDegreeEntranceYear { get; set; }
-        public long FirstDegreeExitYear { get; set; }
+        public string FirstDegreeEntranceYear { get; set; }
+        public string FirstDegreeExitYear { get; set; }
         public string FirstDegreeCertificateAndDegreeObtained { get; set; }
         public string FirstDegreeMatricNo { get; set; }
         public string SecondDegreeNameAndLocation { get; set; }
-        public long SecondDegreeEntranceYear { get; set; }
-        public long SecondDegreeExitYear { get; set; }
+        public string SecondDegreeEntranceYear { get; set; }
+        public string SecondDegreeExitYear { get; set; }
         public string SecondDegreeCertificateAndDegreeObtained { get; set; }
         public string SecondDegreeMatricNo { get; set; }
         public string SecondrayEducationNameAndLocation { get; set; }
-        public long SecondrayEducationEntranceYear { get; set; }
-        public long SecondrayEducationExitYear { get; set; }
+        public string SecondrayEducationEntranceYear { get; set; }
+        public string SecondrayEducationExitYear { get; set; }
         public string SecondrayEducationCertificateAndDegreeObtained { get; set; }
         public string SecondrayEducationExamNo { get; set; }
         public string NameOfProfessionalBody { get; set; }
@@ -177,17 +174,31 @@ namespace Com.XpressPayments.Data.DTOs
         public string UserStatus { get; set; }
 
 
-        public DateTime Created_Date { get; set; }
-        public string Created_By_User_Email { get; set; }
-
+        public DateTime DateCreated { get; set; }
+        public string CreatedByUserEmail { get; set; }
         public bool IsUpdated { get; set; }
         public DateTime? Updated_Date { get; set; }
         public string Updated_By_User_Email { get; set; }
-
         public bool IsDeleted { get; set; }
         public DateTime? Deleted_Date { get; set; }
         public string Deleted_By_User_Email { get; set; }
         public string Reasons_For_Delete { get; set; }
+        public bool IsApproved { get; set; }
+        public long ApprovedByUserId { get; set; }
+        public string ApprovedByUserEmail { get; set; }
+        public DateTime DateApproved { get; set; }
+        public bool IsDisapproved { get; set; }
+        public string DisapprovedByUserEmail { get; set; }
+        public string DisapprovedComment { get; set; }
+        public long DisapprovedByUserId { get; set; }   
+        public DateTime DateDisapproved { get; set; }
+
+        public bool IsModified { get; set; }
+        
+        public bool IsDeactivated { get; set; }
+        public bool IsReactivated { get; set; }
+        public string DeactivatedByUserEmail { get; set; }
+        public string ReactivatedByUserEmail { get; set; }
     }
 
     public class UpdateEmployeeDTO
@@ -201,16 +212,12 @@ namespace Com.XpressPayments.Data.DTOs
         public string Town { get; set; }
         public string MaidenName { get; set; }
         public string MobileNumber2 { get; set; }
-        //public string CurrentDesignation { get; set; }
         public long Sex { get; set; }
         public long MaritalStatus { get; set; }
         public string SpouseContactAddress { get; set; }
         public string SpouseMobile { get; set; }
-       
-       
         public string ResidentialAddress { get; set; }
-        //public string Position { get; set; }
-        //public string ResumptionDate { get; set; }
+
         public string HomeAddress { get; set; }
         public string MailingAddress { get; set; }
         public string NofName { get; set; }
@@ -228,7 +235,7 @@ namespace Com.XpressPayments.Data.DTOs
         public string FirstDegree { get; set; }
         public string FirstDegreeSchoolAttended { get; set; }
         public string GradeObtained { get; set; }
-        public long FirstDegreeYear { get; set; }
+        public string FirstDegreeYear { get; set; }
         public string SchoolAttended { get; set; }
         public string SecondaryEducationStartDate { get; set; }
         public string SecondaryEducationYearComleted { get; set; }
@@ -242,9 +249,9 @@ namespace Com.XpressPayments.Data.DTOs
         public string YourPensionPinNumber { get; set; }
         public string TaxPayerIdentificationNumber { get; set; }
         public string BankAccountName { get; set; }
-        public long AccountNumber { get; set; }
+        public string AccountNumber { get; set; }
         public string BankName { get; set; }
-        public long BVN { get; set; }
+        public string BVN { get; set; }
         public string FirstReferenceName { get; set; }
         public string FirstReferenceAddress { get; set; }
         public string FirstReferenceOccupation { get; set; }
@@ -258,18 +265,18 @@ namespace Com.XpressPayments.Data.DTOs
         public string SecondReferenceMobile { get; set; }
         public string SecondReferenceEmail { get; set; }
         public string FirstDegreeNameAndLocation { get; set; }
-        public long FirstDegreeEntranceYear { get; set; }
-        public long FirstDegreeExitYear { get; set; }
+        public string FirstDegreeEntranceYear { get; set; }
+        public string FirstDegreeExitYear { get; set; }
         public string FirstDegreeCertificateAndDegreeObtained { get; set; }
         public string FirstDegreeMatricNo { get; set; }
         public string SecondDegreeNameAndLocation { get; set; }
-        public long SecondDegreeEntranceYear { get; set; }
-        public long SecondDegreeExitYear { get; set; }
+        public string SecondDegreeEntranceYear { get; set; }
+        public string SecondDegreeExitYear { get; set; }
         public string SecondDegreeCertificateAndDegreeObtained { get; set; }
         public string SecondDegreeMatricNo { get; set; }
         public string SecondrayEducationNameAndLocation { get; set; }
-        public long SecondrayEducationEntranceYear { get; set; }
-        public long SecondrayEducationExitYear { get; set; }
+        public string SecondrayEducationEntranceYear { get; set; }
+        public string SecondrayEducationExitYear { get; set; }
         public string SecondrayEducationCertificateAndDegreeObtained { get; set; }
         public string SecondrayEducationExamNo { get; set; }
         public string NameOfProfessionalBody { get; set; }
@@ -321,13 +328,14 @@ namespace Com.XpressPayments.Data.DTOs
         public string SSCEorWAECCertificate { get; set; }
         public string BirthCertificate { get; set; }
         public string AdditionalQualification { get; set; }
+        //public string Updated_By_User_Email { get; set; }
 
     }
 
     public class ApproveEmp
     {
         [Required]
-        public string Email { get; set; }
+        public string officialMail { get; set; }
     }
 
     public class DisapproveEmpDto

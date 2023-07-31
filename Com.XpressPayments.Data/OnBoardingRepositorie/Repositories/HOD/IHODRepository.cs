@@ -15,12 +15,10 @@ namespace Com.XpressPayments.Data.Repositories.HOD
         Task<IEnumerable<HodDTO>> GetAllActiveHODs();
         Task<IEnumerable<HodDTO>> GetAllHOD();
         Task<HodDTO> GetHODById(long HodID);
+        Task<HodDTO> GetHODByUserId(long UserId);
         Task<HodDTO> GetHODByName(string HODName);
+        Task<HodDTO> GetHODByCompany(long UserId, long companyId);
         Task<IEnumerable<HodDTO>> GetAllHODCompanyId(long companyId);
-
-
-
-
 
     }
 }

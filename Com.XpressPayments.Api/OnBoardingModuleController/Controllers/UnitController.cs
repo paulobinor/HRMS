@@ -1,18 +1,14 @@
 ﻿using Com.XpressPayments.Bussiness.Services.ILogic;
-using Com.XpressPayments.Bussiness.Services.Logic;
 using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.Enums;
 using Com.XpressPayments.Data.GenericResponse;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
-using Microsoft.AspNetCore.Http;
-using OfficeOpenXml;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
 
 namespace Com.XpressPayments.Api.Controllers
 {

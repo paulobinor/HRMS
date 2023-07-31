@@ -8,7 +8,7 @@ namespace Com.XpressPayments.Bussiness.ViewModels
     public class ChangePasswordViewModel
     {
         [Required]        
-        public string Email { get; set; }
+        public string officialMail { get; set; }
         [Required]
         public string OldPassword { get; set; }
         [Required]

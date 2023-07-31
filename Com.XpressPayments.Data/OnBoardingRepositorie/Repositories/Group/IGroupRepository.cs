@@ -16,6 +16,7 @@ namespace Com.XpressPayments.Data.Repositories.Group
         Task<IEnumerable<GroupDTO>> GetAllGroup();
         Task<GroupDTO> GetGroupById(long GroupID);
         Task<GroupDTO> GetGroupByName(string GroupName);
+        Task<GroupDTO> GetGroupByCompany(string GroupName, int companyId);
         Task<IEnumerable<GroupDTO>> GetAllGroupCompanyId(long companyId);
     }
 }

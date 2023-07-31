@@ -79,7 +79,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //validate DepartmentDto payload here 
                 if (String.IsNullOrEmpty(GroupDto.GroupName) || GroupDto.CompanyID <= 0 )
-                //String.IsNullOrEmpty(DepartmentDto.Email) || String.IsNullOrEmpty(DepartmentDto.ContactPhone))
+            
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";
@@ -105,11 +105,11 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //GroupDto.GroupName = $"{GroupDto.GroupName} ({isExistsComp.CompanyName})";
 
-                var isExists = await _GroupRepository.GetGroupByName(GroupDto.GroupName);
+                var isExists = await _GroupRepository.GetGroupByCompany(GroupDto.GroupName, (int)GroupDto.CompanyID);
                 if (null != isExists)
                 {
                     response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Group with name : {GroupDto.GroupName} already exists.";
+                    response.ResponseMessage = $"Group with name : {GroupDto.GroupName} already exists for this Company.";
                     return response;
                 }
 

@@ -12,6 +12,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.Design;
 
 namespace Com.XpressPayments.Data.Repositories.Group
 {
@@ -198,6 +199,30 @@ namespace Com.XpressPayments.Data.Repositories.Group
             }
         }
 
+        public async Task<GroupDTO> GetGroupByCompany(string GroupName, int companyId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", GroupEnum.GETBYEMAIL);
+                    param.Add("@GroupNameGet", GroupName);
+                    param.Add("@CompanyIdGet", companyId);
+
+                    var GroupDetails = await _dapper.QueryFirstOrDefaultAsync<GroupDTO>(ApplicationConstant.Sp_Group, param: param, commandType: CommandType.StoredProcedure);
+
+                    return GroupDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetGroupByName(string GroupName) ===>{ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<GroupDTO>> GetAllGroupCompanyId(long companyId)
         {
             try
@@ -205,7 +230,7 @@ namespace Com.XpressPayments.Data.Repositories.Group
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", 8);
+                    param.Add("@Status", GroupEnum.GETBYCOMPANYID);
                     param.Add("@CompanyIdGet", companyId);
 
                     var GroupDetails = await _dapper.QueryAsync<GroupDTO>(ApplicationConstant.Sp_Group, param: param, commandType: CommandType.StoredProcedure);

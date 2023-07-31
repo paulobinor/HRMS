@@ -3,7 +3,6 @@ using Com.XpressPayments.Bussiness.Services.ILogic;
 using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.Enums;
 using Com.XpressPayments.Data.GenericResponse;
-using Com.XpressPayments.Data.Repositories.Branch;
 using Com.XpressPayments.Data.Repositories.Company.IRepository;
 using Com.XpressPayments.Data.Repositories.HOD;
 using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
@@ -11,7 +10,6 @@ using ExcelDataReader;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -76,7 +74,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
                 //validate DepartmentDto payload here 
-                if (String.IsNullOrEmpty(HodDto.HODName) || HodDto.CompanyID <= 0 )
+                if (HodDto.UserId <= 0 || HodDto.CompanyID <= 0 )
                     //String.IsNullOrEmpty(DepartmentDto.Email) || String.IsNullOrEmpty(DepartmentDto.ContactPhone))
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
@@ -103,20 +101,20 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //HodDto.HODName = $"{HodDto.HODName} ({isExistsComp.CompanyName})";
 
-                var isExists = await _hodRepository.GetHODByName(HodDto.HODName);
-                if (null != isExists)
-                {
-                    response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Department with name : {HodDto.HODName} already exists.";
-                    return response;
-                }
+                //var isExists = await _hodRepository.GetHODByCompany(HodDto.HODName, (int)HodDto.CompanyID);
+                //if (null != isExists)
+                //{
+                //    response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"Department with name : {HodDto.HODName} already exists for this Company.";
+                //    return response;
+                //}
 
                 dynamic resp = await _hodRepository.CreateHOD(HodDto, createdbyUserEmail);
                 if (resp > 0)
                 {
                     //update action performed into audit log here
 
-                    var hod = await _hodRepository.GetHODByName(HodDto.HODName);
+                    var hod = await _hodRepository.GetHODByUserId(HodDto.UserId);
 
                     response.Data = hod;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
@@ -191,16 +189,16 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                             for (int row = 1; row < serviceDetails.Rows.Count; row++)
                             {
 
-                                string hODName = serviceDetails.Rows[row][0].ToString();
+                                var hODName =await _hodRepository.GetHODByName(serviceDetails.Rows[row][0].ToString());
                                 var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][1].ToString());
 
-                                
+                                long userId= hODName.UserId; 
                                 long companyID = company.CompanyId;
 
 
                                 var hodrequest = new CreateHodDTO
                                 {
-                                    HODName = HODName,
+                                    UserId = userId,
                                     CompanyID = companyID
 
 
@@ -303,7 +301,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
                 //validate DepartmentDto payload here 
-                if (String.IsNullOrEmpty(updateDto.HODName)  || updateDto.CompanyID <= 0
+                if (updateDto.UserId <= 0 || updateDto.CompanyID <= 0
                     || updateDto.HodID <= 0 )
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
@@ -396,9 +394,9 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                         var DeletedHOD = await _hodRepository.GetHODById(deleteDto.HodID);
 
-                        _logger.LogInformation($"Hod with name: {DeletedHOD.HODName} Deleted successfully.");
+                        _logger.LogInformation($"Hod with name: {DeletedHOD.UserId} Deleted successfully.");
                         response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"HOD with name: {DeletedHOD.HODName} Deleted successfully.";
+                        response.ResponseMessage = $"HOD with name: {DeletedHOD.UserId} Deleted successfully.";
                         response.Data = null;
                         return response;
 

@@ -37,8 +37,8 @@ namespace Com.XpressPayments.Data.Repositories.Grade
                     var param = new DynamicParameters();
                     param.Add("@Status", GradeEnum.CREATE);
                     param.Add("@GradeName", create.GradeName.Trim());
-                    param.Add("@NumberOfVacationDays", create.NumberOfVacationDays.Trim());
-                    param.Add("@NumberOfVacationSplit", create.NumberOfVacationSplit.Trim());
+                    param.Add("@NumberOfVacationDays", create.NumberOfVacationDays);
+                    param.Add("@NumberOfVacationSplit", create.NumberOfVacationSplit);
                     param.Add("@CompanyID", create.CompanyID);
 
                     param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
@@ -65,8 +65,8 @@ namespace Com.XpressPayments.Data.Repositories.Grade
                     param.Add("@Status", GradeEnum.UPDATE);
                     param.Add("@GradeIDUpd", update.GradeID);
                     param.Add("@GradeNameUpd", update.GradeName);
-                    param.Add("@NumberOfVacationDaysUpd", update.NumberOfVacationDays.Trim());
-                    param.Add("@NumberOfVacationSplitUpd", update.NumberOfVacationSplit.Trim());
+                    param.Add("@NumberOfVacationDaysUpd", update.NumberOfVacationDays);
+                    param.Add("@NumberOfVacationSplitUpd", update.NumberOfVacationSplit);
                     param.Add("@CompanyIdUpd", update.CompanyID);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
@@ -200,15 +200,39 @@ namespace Com.XpressPayments.Data.Repositories.Grade
             }
         }
 
-        public async Task<IEnumerable<GradeDTO>> GetAllGradeCompanyId(long GradeID)
+        public async Task<GradeDTO> GetGradeByCompany(string GradeName, int companyId)
         {
             try
             {
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", 8);
-                    param.Add("@CompanyIdGet", GradeID);
+                    param.Add("@Status", GradeEnum.GETBYCOMPANY);
+                    param.Add("@GradeNameGet", GradeName);
+                    param.Add("@CompanyIdGet", companyId);
+
+                    var GradeDetails = await _dapper.QueryFirstOrDefaultAsync<GradeDTO>(ApplicationConstant.Sp_Grade, param: param, commandType: CommandType.StoredProcedure);
+
+                    return GradeDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName:  GetGradeByName(string GradeName) ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<GradeDTO>> GetAllGradeCompanyId(long CompanyId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", GradeEnum.GETBYCOMPANYID);
+                    param.Add("@CompanyIdGet", CompanyId);
 
                     var GradeDetails = await _dapper.QueryAsync<GradeDTO>(ApplicationConstant.Sp_Grade, param: param, commandType: CommandType.StoredProcedure);
 

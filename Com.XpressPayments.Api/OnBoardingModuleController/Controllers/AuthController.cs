@@ -263,8 +263,8 @@ namespace Com.XpressPayments.Api.Controllers
         }
 
         [Authorize]
-        [HttpGet("GetAllUsersPendingApproval")]
-        public async Task<IActionResult> GetAllUsersPendingApproval()
+        [HttpGet("GetAllUsersPendingApprovalByComapnyId")]
+        public async Task<IActionResult> GetAllUsersPendingApproval(long CompanyId)
         {
             var response = new BaseResponse();
             try
@@ -278,7 +278,7 @@ namespace Com.XpressPayments.Api.Controllers
                     Port = Request.HttpContext.Connection.LocalPort.ToString()
                 };
 
-                return Ok(await _authService.GetAllUsersPendingApproval(requester));
+                return Ok(await _authService.GetAllUsersPendingApproval(CompanyId,requester));
             }
             catch (Exception ex)
             {

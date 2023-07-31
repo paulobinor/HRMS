@@ -194,6 +194,30 @@ namespace Com.XpressPayments.Data.Repositories.EmployeeType
             }
         }
 
+        public async Task<EmployeeTypeDTO> GetEmployeeTypeByCompany(string EmployeeTypeName, int companyId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", EmployeeTypeEnum.GETEMPBYCOMANY);
+                    param.Add("@EmployeeTypeNameGet", EmployeeTypeName);
+                    param.Add("@CompanyIdGet", companyId);
+
+                    var EmployeeTypeDetails = await _dapper.QueryFirstOrDefaultAsync<EmployeeTypeDTO>(ApplicationConstant.Sp_EmployeeType, param: param, commandType: CommandType.StoredProcedure);
+
+                    return EmployeeTypeDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName:  GetEmployeeTypeByName(string EmployeeTypeName) ===>{ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<EmployeeTypeDTO>> GetAllEmployeeTypeCompanyId(long EmployeeTypeID)
         {
             try
@@ -201,7 +225,7 @@ namespace Com.XpressPayments.Data.Repositories.EmployeeType
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", 8);
+                    param.Add("@Status", EmployeeTypeEnum.GETCompanyBYID);
                     param.Add("@CompanyIdGet", EmployeeTypeID);
 
                     var EmployeeTypeDetails = await _dapper.QueryAsync<EmployeeTypeDTO>(ApplicationConstant.Sp_EmployeeType, param: param, commandType: CommandType.StoredProcedure);

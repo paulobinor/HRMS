@@ -15,6 +15,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Threading.Tasks;
+using System.ComponentModel.Design;
+using Com.XpressPayments.Data.DTOs;
 
 namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
 {
@@ -35,7 +37,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             _loginUrl = configuration["Frontend:LoginUrl"];
         }
 
-        public async Task<User> FindUser(string email)
+        public async Task<User> FindUser(string officialMail)
         {
             try
             {
@@ -43,7 +45,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", Account.FETCH);
-                    param.Add("@Email", email);
+                    param.Add("@officialMail", officialMail);
 
                     var userDetails = await _dapper.QueryFirstOrDefaultAsync<User>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
 
@@ -104,20 +106,14 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     param.Add("@PhoneNumber", user.PhoneNumber == null ? "" : user.PhoneNumber.ToString().Trim());
                     //param.Add("@PasswordHash", passwordHash);
                     param.Add("@UnitID", user.UnitID);
-                    param.Add("@UnitHeadID", user.UnitHeadID);
-                    param.Add("@HodID", user.HodID);
                     param.Add("@GradeID", user.GradeID);
                     param.Add("@EmployeeTypeID", user.EmployeeTypeID);
-                
                     param.Add("@BranchID", user.BranchID);
                     param.Add("@EmploymentStatusID", user.EmploymentStatusID);
-                    param.Add("@GroupID", user.GroupID);
                     param.Add("@JobDescriptionID", user.JobDescriptionID);
                     param.Add("@RoleId", user.RoleId);
-
                     param.Add("@DeptId", user.DepartmentId);
                     param.Add("@CompanyId", user.CompanyId);
-
                     //add this parameter to sp for create user
                     param.Add("@CreatedByUserId", createdbyUserId);
                     param.Add("@CreatedByUserEmail", createdbyuseremail);
@@ -145,29 +141,24 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", Account.UPDUSER);
-                    param.Add("@UserToupdate", user.Email);
+                    param.Add("@Email", user.Email);
                     param.Add("@FirstNameUpdate", user.FirstName == null ? "" : user.FirstName.ToString());
                     param.Add("@MiddleNameUpdate", user.MiddleName == null ? "" : user.MiddleName.ToString());
                     param.Add("@LastNameUpdate", user.LastName == null ? "" : user.LastName.ToString());
-                    param.Add("@OfficialMail", user.OfficialMail == null ? "" : user.OfficialMail.ToString().Trim());
+                    param.Add("@UserToupdate", user.OfficialMail == null ? "" : user.OfficialMail.ToString().Trim());
                     param.Add("@PhoneNumberUpdate", user.PhoneNumber == null ? "" : user.PhoneNumber.ToString().Trim());
                     param.Add("@DOB", user.Email == null ? "" : user.DOB.ToString().Trim());
                     param.Add("@ResumptionDate", user.ResumptionDate == null ? "" : user.DOB.ToString().Trim());
                     param.Add("@UnitID", user.UnitID);
-                    param.Add("@UnitHeadID", user.UnitHeadID);
-                    param.Add("@HodID", user.HodID);
                     param.Add("@GradeID", user.GradeID);
                     param.Add("@EmployeeTypeID", user.EmployeeTypeID);
-                  
                     param.Add("@BranchID", user.BranchID);
                     param.Add("@EmploymentStatusID", user.EmploymentStatusID);
-                    param.Add("@GroupID", user.GroupID);
                     param.Add("@JobDescriptionID", user.JobDescriptionID);
                     param.Add("@RoleIdUpdate", user.RoleId);
                     param.Add("@UpdatedByUserId", updatedbyUserId);
-
                     //add this parameter to sp for update user
-                    param.Add("@UpdatedByUserEmail", updatedbyUserId);
+                    param.Add("@LastUpdatedByUserEmail", updatedbyUserId);
 
                     dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
 
@@ -227,7 +218,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             }
         }
 
-        public async Task<IEnumerable<User>> GetUsersPendingApproval()
+        public async Task<IEnumerable<User>> GetUsersPendingApproval(long CompanyId)
         {
             try
             {
@@ -235,7 +226,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", Account.USERSPENDINGAPPROVAL);
-                    //param.Add("@OrgIdGetPending", orgId);
+                    param.Add("@CompanyIdGet", CompanyId);
 
                     var userDetails = await _dapper.QueryAsync<User>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
 
@@ -347,7 +338,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             }
         }
 
-        public async Task<dynamic> DeclineUser(long disapprovedByuserId, string userEmail, string comment)
+        public async Task<dynamic> DeclineUser(long disapprovedByuserId, string officialMail, string comment)
         {
             try
             {
@@ -356,7 +347,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", Account.DISAPPROVEUSER);
                     param.Add("@UserIdDisapprove", disapprovedByuserId);
-                    param.Add("@UserEmailDisapprove", userEmail);
+                    param.Add("@UserEmailDisapprove", officialMail);
                     param.Add("@DisapprovedComment", comment);
 
                     dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
@@ -372,7 +363,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             }
         }
 
-        public async Task<dynamic> DeactivateUser(long deactivatedByuserId, string userEmail, string comment)
+        public async Task<dynamic> DeactivateUser(long deactivatedByuserId, string OfficialMail, string comment)
         {
             try
             {
@@ -381,7 +372,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", Account.DEACTIVATEUSER);
                     param.Add("@DeactivatedByUserId", deactivatedByuserId);
-                    param.Add("@UserEmailDeactivate", userEmail);
+                    param.Add("@UserEmailDeactivate", OfficialMail);
                     param.Add("@DeactivatedComment", comment);
 
                     dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
@@ -397,7 +388,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             }
         }
 
-        public async Task<dynamic> ReactivateUser(long reactivatedByuserId, string userEmail, string comment, string defaultpass)
+        public async Task<dynamic> ReactivateUser(long reactivatedByuserId, string OfficialMail, string comment, string defaultpass)
         {
             try
             {
@@ -409,7 +400,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     param.Add("@Status", Account.REACTIVATEUSER);
                     param.Add("@PasswordHashReactivate", hashdefaultPassword);
                     param.Add("@ReactivatedByUserId", reactivatedByuserId);
-                    param.Add("@UserEmailReactivate", userEmail);
+                    param.Add("@UserEmailReactivate", OfficialMail);
                     param.Add("@ReactivatedComment", comment);
 
                     dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
@@ -474,6 +465,30 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             {
                 var err = ex.Message;
                 _logger.LogError($"MethodName: ChangePassword(long userId, string newPassword) ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<User> GetUserByCompany(string OfficialMail, int companyId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", Account.GETALLUSERNAMEBYCOMPANY);
+                    param.Add("@OfficialMailGet", OfficialMail);
+                    param.Add("@CompanyIdGet", companyId);
+
+                    var UserDetails = await _dapper.QueryFirstOrDefaultAsync<User>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
+
+                    return UserDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetDepartmentById(int DepartmentId) ===>{ex.Message}");
                 throw;
             }
         }

@@ -35,10 +35,8 @@ namespace Com.XpressPayments.Data.Repositories.Departments.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", Department.CREATE);
                     param.Add("@DepartmentName", Dept.DepartmentName.Trim());
-                    param.Add("@HodID", Dept.HodID);
-                    param.Add("@GroupID", Dept.GroupID);
-                    param.Add("@BranchID", Dept.BranchID);
-                    param.Add("@Email", Dept.Email.Trim());
+                    param.Add("@HODUserId", Dept.HODUserId);
+                   
                     param.Add("@CompanyId", Dept.CompanyId);
 
                     param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
@@ -66,10 +64,8 @@ namespace Com.XpressPayments.Data.Repositories.Departments.Repository
                     param.Add("@Status", Department.UPDATE);
                     param.Add("@DepartmentIdUpd", Convert.ToInt32(Dept.DeptId));
                     param.Add("@DepartmentNameUpd", Dept.DepartmentName == null ? "" : Dept.DepartmentName.ToString().Trim());
-                    param.Add("@HodIDUpd", Dept.HodID);
-                    param.Add("@GroupIDUpd", Dept.GroupID);
-                    param.Add("@BranchIDUpd", Dept.BranchID);
-                    param.Add("@EmailUpd", Dept.Email.Trim());
+                    param.Add("@HODUserIdUpd", Dept.HODUserId);
+                  
                     param.Add("@CompanyIdUpd", Dept.CompanyId);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
@@ -202,6 +198,30 @@ namespace Com.XpressPayments.Data.Repositories.Departments.Repository
             }
         }
 
+        public async Task<DepartmentsDTO> GetDepartmentByCompany(string DepartmentName, int companyId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", Department.GETBYCOMPANY);
+                    param.Add("@DepartmentNameGet", DepartmentName);
+                    param.Add("@CompanyIdGet", companyId);
+
+                    var DepartmentDetails = await _dapper.QueryFirstOrDefaultAsync<DepartmentsDTO>(ApplicationConstant.Sp_Departments, param: param, commandType: CommandType.StoredProcedure);
+
+                    return DepartmentDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetDepartmentById(int DepartmentId) ===>{ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<DepartmentsDTO>> GetAllDepartmentsbyCompanyId(long companyId)
         {
             try
@@ -209,7 +229,7 @@ namespace Com.XpressPayments.Data.Repositories.Departments.Repository
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", 8);
+                    param.Add("@Status", Department.GETBYCOMPANYID);
                     param.Add("@CompanyIdGet", companyId);
 
                     var DepartmentDetails = await _dapper.QueryAsync<DepartmentsDTO>(ApplicationConstant.Sp_Departments, param: param, commandType: CommandType.StoredProcedure);

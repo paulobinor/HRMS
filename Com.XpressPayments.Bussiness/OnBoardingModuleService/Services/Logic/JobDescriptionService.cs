@@ -103,11 +103,11 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 //creatDto.JobDescriptionName = $"{creatDto.JobDescriptionName} ({isExistsComp.CompanyName})";
 
-                var isExists = await _jobDescriptionRepository.GetJobDescriptionByName(creatDto.JobDescriptionName);
+                var isExists = await _jobDescriptionRepository.GetJobDescriptionByCompany(creatDto.JobDescriptionName, (int)creatDto.CompanyID);
                 if (null != isExists)
                 {
                     response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"JobDescription with name : {creatDto.JobDescriptionName} already exists.";
+                    response.ResponseMessage = $"JobDescription with name : {creatDto.JobDescriptionName} already exists for your Company.";
                     return response;
                 }
 

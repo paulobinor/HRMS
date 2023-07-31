@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\saheed.alabi\source\repos\hrms-be-backend\XpressHRMS\bin\Release\net5.0\publish\</_PublishTargetUrl>
+    <History>True|2023-01-26T11:23:17.1625412Z;True|2023-01-26T12:22:32.2970776+01:00;True|2023-01-26T12:18:45.7282388+01:00;True|2023-01-26T12:02:52.4651589+01:00;True|2023-01-26T11:55:36.2086586+01:00;True|2023-01-25T09:32:44.9877884+01:00;True|2023-01-24T20:26:19.5737975+01:00;True|2023-01-24T13:53:23.0973626+01:00;True|2023-01-16T16:39:50.0791030+01:00;True|2023-01-16T09:41:38.1970642+01:00;True|2023-01-16T09:28:20.2038096+01:00;True|2023-01-15T20:47:13.6360214+01:00;True|2023-01-11T16:48:45.5814489+01:00;True|2023-01-10T22:49:27.0033426+01:00;True|2023-01-10T17:52:44.6018841+01:00;True|2023-01-10T17:06:57.0714880+01:00;True|2023-01-10T11:13:18.6474327+01:00;True|2023-01-10T09:05:19.5932955+01:00;</History>
+  </PropertyGroup>
+</Project>

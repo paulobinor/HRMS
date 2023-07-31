@@ -33,20 +33,14 @@ namespace Com.XpressPayments.Bussiness.ViewModels
         public string RoleName { get; set; }
         public long UnitID { get; set; }
         public string UnitName { get; set; }
-        public long UnitHeadID { get; set; }
-        public string UnitHeadName { get; set; }
-        public long HodID { get; set; }
-        public string HODName { get; set; }
+       
         public long GradeID { get; set; }
         public string GradeName { get; set; }
         public long EmployeeTypeID { get; set; }
         public string EmployeeTypeName { get; set; }
-        public long PositionID { get; set; }
-        public string PositionName { get; set; }
+    
         public long EmploymentStatusID { get; set; }
         public string EmploymentStatusName { get; set; }
-        public long GroupID { get; set; }
-        public string GroupName { get; set; }
         public long JobDescriptionID { get; set; }
         public string JobDescriptionName { get; set; }
 

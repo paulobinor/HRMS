@@ -9,7 +9,7 @@ namespace Com.XpressPayments.Data.DTOs.Account
     public class ReactivateUserDto
     {
         [Required]
-        public string Email { get; set; }
+        public string OfficialMail { get; set; }
         public string ReactivatedComment { get; set; }
     }
 }

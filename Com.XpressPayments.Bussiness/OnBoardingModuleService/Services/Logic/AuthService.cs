@@ -6,6 +6,7 @@ using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.DTOs.Account;
 using Com.XpressPayments.Data.Enums;
 using Com.XpressPayments.Data.GenericResponse;
+using Com.XpressPayments.Data.OnBoardingRepositorie.Repositories.UserAccount.IRepository;
 using Com.XpressPayments.Data.Repositories;
 using Com.XpressPayments.Data.Repositories.Branch;
 using Com.XpressPayments.Data.Repositories.Company.IRepository;
@@ -111,12 +112,12 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 //var Un = Convert.ToBase64String(Encoding.UTF8.GetBytes(Convert.ToString(login.Email)));
                 //var pw = Convert.ToBase64String(Encoding.UTF8.GetBytes(Convert.ToString(login.Password)));
 
-                var email = Encoding.UTF8.GetString(Convert.FromBase64String(login.Email));
+                var email = Encoding.UTF8.GetString(Convert.FromBase64String(login.OfficialMail));
                 var password = Encoding.UTF8.GetString(Convert.FromBase64String(login.Password));
 
                 var hashPassword = Utils.HashPassword(password);
 
-                var decodedLogin = new LoginModel { Email = email, Password = hashPassword };
+                var decodedLogin = new LoginModel { OfficialMail = email, Password = hashPassword };
 
                 var payload = JsonSerializer.Serialize(decodedLogin);
 
@@ -233,7 +234,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                         }
 
                         var attemptCount = user.LoginFailedAttemptsCount + 1;
-                        await _unitOfWork.UpdateLastLoginAttempt(attemptCount, user.Email);
+                        await _unitOfWork.UpdateLastLoginAttempt(attemptCount, user.officialMail);
 
                         if (attemptCount >= MaxNumberOfFailedAttemptsToLogin)
                         {
@@ -341,7 +342,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             {
                 //update action performed into audit log here
 
-                await _unitOfWork.UpdateLogout(Encoding.UTF8.GetString(Convert.FromBase64String(logout.Email)));
+                await _unitOfWork.UpdateLogout(Encoding.UTF8.GetString(Convert.FromBase64String(logout.OfficialMail)));
 
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = "Logged out successfully";
@@ -401,11 +402,9 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     }
                 }
 
-
-
                 //validate CreateUserDto payload here 
                 if (String.IsNullOrEmpty(userDto.FirstName) || String.IsNullOrEmpty(userDto.LastName) ||
-                    String.IsNullOrEmpty(userDto.Email) || String.IsNullOrEmpty(userDto.PhoneNumber) ||
+                    String.IsNullOrEmpty(userDto.OfficialMail) || String.IsNullOrEmpty(userDto.PhoneNumber) ||
                     userDto.RoleId <= 0 || userDto.RoleId > 4 || userDto.CompanyId <= 0 || userDto.DepartmentId <= 0)
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
@@ -413,12 +412,12 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (requester.RoleId == 1 & userDto.DepartmentId != 1)
-                {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your user role is not authorized to create a new user with the selected Department.";
-                    return response;
-                }
+                //if (requester.RoleId == 1 & userDto.DepartmentId != 1)
+                //{
+                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"Your user role is not authorized to create a new user with the selected Department.";
+                //    return response;
+                //}
 
                 if ( requester.RoleId == 2 & userDto.RoleId <= 2)
                 {
@@ -427,11 +426,19 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                var isExists = await _accountRepository.FindUser(userDto.Email);
-                if (null != isExists)
+                //var isExists = await _accountRepository.FindUser(userDto.Email);
+                //if (null != isExists)
+                //{
+                //    response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = "User with email already exists.";
+                //    return response;
+                //}
+
+                var isExistsNew = await _accountRepository.GetUserByCompany(userDto.OfficialMail, (int)userDto.CompanyId);
+                if (null != isExistsNew)
                 {
                     response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "User with email already exists.";
+                    response.ResponseMessage = $"User with OfficialMail : {userDto.OfficialMail} already exists for this Company.";
                     return response;
                 }
 
@@ -517,7 +524,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                         string PositionName = serviceDetails.Rows[0][13].ToString();
                         string BranchName = serviceDetails.Rows[0][14].ToString();
                         string EmploymentStatusName = serviceDetails.Rows[0][15].ToString();
-                        string GroupName = serviceDetails.Rows[0][16].ToString();
+                      
                         string JobDescriptionName = serviceDetails.Rows[0][17].ToString();
                         string RoleName = serviceDetails.Rows[0][18].ToString();
                         string DepartmentName = serviceDetails.Rows[0][19].ToString();
@@ -528,7 +535,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                         || LastName != "LastName" || Email != "Email" || DOB != "DOB" || ResumptionDate != "ResumptionDate"
                         || OfficialMail != "OfficialMail" || PhoneNumber != "PhoneNumber" || UnitName != "UnitName" || UnitHeadName != "UnitHeadName"
                         || HODName != "HODName" || GradeName != "GradeName" || EmployeeTypeName != "EmployeeTypeName" || PositionName != "PositionName"
-                        || BranchName != "BranchName" || EmploymentStatusName != "EmploymentStatusName" || GroupName != "GroupName" || JobDescriptionName != "JobDescriptionName"
+                        || BranchName != "BranchName" || EmploymentStatusName != "EmploymentStatusName"  || JobDescriptionName != "JobDescriptionName"
                         || RoleName != "RoleName" || DepartmentName != "DepartmentName" || CompanyName != "CompanyName")
                         {
                             response.ResponseCode = "08";
@@ -549,14 +556,14 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                 string officialMail = serviceDetails.Rows[row][6].ToString();
                                 string phoneNumber = serviceDetails.Rows[row][7].ToString();
                                 var unitName = await _unitRepository.GetUnitByName(serviceDetails.Rows[row][8].ToString());
-                                var unitHeadName = await _unitHeadRepository.GetUnitHeadByName(serviceDetails.Rows[row][9].ToString());
+                                var unitHeadName = await _unitHeadRepository.GetUnitHeadByUnitHeadName(serviceDetails.Rows[row][9].ToString());
                                 var hODName = await _HODRepository.GetHODByName(serviceDetails.Rows[row][10].ToString());
                                 var gradeName = await _GradeRepository.GetGradeByName(serviceDetails.Rows[row][11].ToString());
                                 var employeeTypeName = await _EmployeeTypeRepository.GetEmployeeTypeByName(serviceDetails.Rows[row][12].ToString());
                                 var positionName = await _PositionRepository.GetPositionByName(serviceDetails.Rows[row][13].ToString());
                                 var branchName = await _branchRepository.GetBranchByName(serviceDetails.Rows[row][14].ToString());
                                 var employmentStatusName = await _EmploymentStatusRepository.GetEmpLoymentStatusByName(serviceDetails.Rows[row][15].ToString());
-                                var groupName = await _GroupRepository.GetGroupByName(serviceDetails.Rows[row][16].ToString());
+                               
                                 var jobDescriptionName = await _jobDescriptionRepository.GetJobDescriptionByName(serviceDetails.Rows[row][17].ToString());
                                 var roleName = await _rolesRepo.GetRolesByName(serviceDetails.Rows[row][18].ToString());
                                 var departmentName = await _departmentrepository.GetDepartmentByName(serviceDetails.Rows[row][19].ToString());
@@ -570,7 +577,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                 long positionID = positionName.PositionID;
                                 long branchID = branchName.BranchID;
                                 long employmentStatusID = employmentStatusName.EmploymentStatusID;
-                                long groupID = groupName.GroupID;
+                         
                                 long jobDescriptionID = jobDescriptionName.JobDescriptionID;
                                 long roleID = roleName.RoleId;
                                 long departmentID = departmentName.DeptId;
@@ -588,14 +595,13 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                                     OfficialMail = OfficialMail,
                                     PhoneNumber = phoneNumber,
                                     UnitID = unitID,
-                                    UnitHeadID = unitHeadID,
-                                    HodID = hODID,
+                                  
                                     GradeID = gradeID,
                                     EmployeeTypeID = employeeTypeID,
                                    
                                     BranchID = branchID,
                                     EmploymentStatusID = employmentStatusID,
-                                    GroupID = groupID,
+                                
                                     JobDescriptionID = jobDescriptionID,
                                     RoleId = roleID,
                                     DepartmentId = departmentID,
@@ -712,14 +718,14 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
 
-                if (String.IsNullOrEmpty(updateDto.FirstName) || String.IsNullOrEmpty(updateDto.LastName) ||
-                    String.IsNullOrEmpty(updateDto.Email) || String.IsNullOrEmpty(updateDto.PhoneNumber) ||
-                    updateDto.RoleId <= 0 || updateDto.RoleId > 3 || updateDto.CompanyId <= 0 || updateDto.DeptId <= 0)
-                {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Please ensure all required fields are entered.";
-                    return response;
-                }
+                //if (String.IsNullOrEmpty(updateDto.FirstName) || String.IsNullOrEmpty(updateDto.LastName) ||
+                //    String.IsNullOrEmpty(updateDto.OfficialMail) || String.IsNullOrEmpty(updateDto.PhoneNumber) ||
+                //    updateDto.RoleId <= 0 || updateDto.RoleId > 3 || updateDto.CompanyId <= 0 || updateDto.DeptId <= 0)
+                //{
+                //    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"Please ensure all required fields are entered.";
+                //    return response;
+                //}
 
                 if (requester.RoleId == 2 & updateDto.RoleId <= 2)
                 {
@@ -729,7 +735,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
 
-                var user = await _accountRepository.FindUser(updateDto.Email);
+                var user = await _accountRepository.FindUser(updateDto.OfficialMail);
                 if (null != user)
                 {
                     dynamic resp = await _accountRepository.UpdateUser(updateDto, Convert.ToInt32(requesterUserId), requesterUserEmail);
@@ -737,7 +743,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     {
                         //update action performed into audit log here
 
-                        var updatedUser = await _accountRepository.FindUser(updateDto.Email);
+                        var updatedUser = await _accountRepository.FindUser(updateDto.OfficialMail);
                         var mapped = _mapper.Map<UserViewModel>(updatedUser);
 
                         _logger.LogInformation("User updated successfully.");
@@ -823,7 +829,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
             var response = new BaseResponse();
 
             //var npw = Convert.ToBase64String(Encoding.UTF8.GetBytes(Convert.ToString("Password1234")));
-            string email = Encoding.UTF8.GetString(Convert.FromBase64String(changePassword.Email));
+            string email = Encoding.UTF8.GetString(Convert.FromBase64String(changePassword.officialMail));
             string oldPassword = Encoding.UTF8.GetString(Convert.FromBase64String(changePassword.OldPassword));
             string newPassword = Encoding.UTF8.GetString(Convert.FromBase64String(changePassword.NewPassword));
 
@@ -1035,7 +1041,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
         }
 
       
-        public async Task<BaseResponse> GetAllUsersPendingApproval(RequesterInfo requester)
+        public async Task<BaseResponse> GetAllUsersPendingApproval(long CompanyId,RequesterInfo requester)
         {
             var response = new BaseResponse();
             try
@@ -1055,8 +1061,19 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
+                //if (Convert.ToInt32(RoleId) != 1)
+                //{
+                //    if (Convert.ToInt32(RoleId) != 4)
+                //    {   
+                //            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //            return response;
+
+                //    }
+                //}
+
                 var mappeduser = new List<UserViewModel>();
-                var users = await _accountRepository.GetUsersPendingApproval();
+                var users = await _accountRepository.GetUsersPendingApproval(CompanyId);
                 if (users.Any())
                 {
                     //update action performed into audit log here
@@ -1148,7 +1165,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
 
-                var UserInfo = await _accountRepository.FindUser(approveUser.Email);
+                var UserInfo = await _accountRepository.FindUser(approveUser.officialMail);
 
                 if (null == requesterInfo)
                 {
@@ -1184,7 +1201,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 //    return response;
                 //}
 
-                var user = await _accountRepository.FindUser(approveUser.Email);
+                var user = await _accountRepository.FindUser(approveUser.officialMail);
                 if (user != null)
                 {
                     if (user.CreatedByUserId == Convert.ToInt32(requesterUserId))
@@ -1195,16 +1212,16 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     }
                     //string defaultPass = Utils.RandomPassword();
                     string defaultPass = ApplicationConstant.DefaultPassword;
-                    dynamic resp = await _accountRepository.ApproveUser(Convert.ToInt32(requesterUserId), defaultPass, user.Email);
+                    dynamic resp = await _accountRepository.ApproveUser(Convert.ToInt32(requesterUserId), defaultPass, user.officialMail);
 
                     if (resp > 0)
                     {
                         //update action performed into audit log here
 
-                        _logger.LogInformation($"User with email: {user.Email} approved successfully.");
-                        _accountRepository.SendEmail(user.Email, user.FirstName, defaultPass, "Activation Email", _hostEnvironment.ContentRootPath, "", port);
+                        _logger.LogInformation($"User with email: {user.officialMail} approved successfully.");
+                        _accountRepository.SendEmail(user.officialMail, user.FirstName, defaultPass, "Activation Email", _hostEnvironment.ContentRootPath, "", port);
                         response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"User with email: {user.Email} approved successfully. Activation has been sent to the users email.";
+                        response.ResponseMessage = $"User with email: {user.officialMail} approved successfully. Activation has been sent to the users email.";
                         return response;
                     }
                     response.ResponseCode = ResponseCode.Exception.ToString();
@@ -1241,7 +1258,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
                 var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
 
-                var UserInfo = await _accountRepository.FindUser(disapproveUser.Email);
+                var UserInfo = await _accountRepository.FindUser(disapproveUser.officialMail);
 
                 if (null == requesterInfo)
                 {
@@ -1268,7 +1285,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 //    return response;
                 //}
 
-                var user = await _accountRepository.FindUser(disapproveUser.Email);
+                var user = await _accountRepository.FindUser(disapproveUser.officialMail);
                 if (user != null)
                 {
                     if (user.CreatedByUserId == Convert.ToInt32(requesterUserId))
@@ -1281,14 +1298,14 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
 
 
 
-                    dynamic resp = await _accountRepository.DeclineUser(Convert.ToInt32(requesterUserId), user.Email, disapproveUser.DisapprovedComment);
+                    dynamic resp = await _accountRepository.DeclineUser(Convert.ToInt32(requesterUserId), user.officialMail, disapproveUser.DisapprovedComment);
                     if (resp > 0)
                     {
                         //update action performed into audit log here
 
-                        _logger.LogInformation($"Employee with email: {user.Email} disapproved successfully.");
+                        _logger.LogInformation($"Employee with email: {user.officialMail} disapproved successfully.");
                         response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Employee with email: {user.Email} disapproved successfully.";
+                        response.ResponseMessage = $"Employee with email: {user.officialMail} disapproved successfully.";
                         return response;
                     }
                     response.ResponseCode = ResponseCode.Exception.ToString();
@@ -1320,7 +1337,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 string requesterUserId = requester.UserId.ToString();
                 string RoleId = requester.RoleId.ToString();
 
-                var ipAddress = requester.IpAddress.ToString();
+                 var ipAddress = requester.IpAddress.ToString();
                 var port = requester.Port.ToString();
 
                 var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
@@ -1332,24 +1349,39 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                 }
 
 
-                if (Convert.ToInt32(RoleId) > 2)
+
+                //Tuple<bool, bool> checkRole = checkPermission(requesterInfo.RoleId, requesterInfo.RoleId);
+
+
+                //if (!checkRole.Item2)
+                //{
+                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //    return response;
+                //}
+
+                if (Convert.ToInt32(RoleId) > 1)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) > 4)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+                    }
+                      
                 }
 
-                var user = await _accountRepository.FindUser(deactivateUser.Email);
+                var user = await _accountRepository.FindUser(deactivateUser.OfficialMail);
                 if (user != null)
                 {
-                    dynamic resp = await _accountRepository.DeactivateUser(Convert.ToInt32(requesterUserId), user.Email, deactivateUser.DeactivatedComment);
+                    dynamic resp = await _accountRepository.DeactivateUser(Convert.ToInt32(requesterUserId), user.officialMail, deactivateUser.DeactivatedComment);
                     if (resp > 0)
                     {
                         //update action performed into audit log here
 
-                        _logger.LogInformation($"User with email: {user.Email} deactivated successfully.");
+                        _logger.LogInformation($"User with email: {user.officialMail} deactivated successfully.");
                         response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"User with email: {user.Email} deactivated successfully.";
+                        response.ResponseMessage = $"User with email: {user.officialMail} deactivated successfully.";
                         return response;
                     }
                     response.ResponseCode = ResponseCode.Exception.ToString();
@@ -1391,26 +1423,41 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) > 2)
+
+                //Tuple<bool, bool> checkRole = checkPermission(requesterInfo.RoleId, requesterInfo.RoleId);
+
+
+                //if (!checkRole.Item2)
+                //{
+                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //    return response;
+                //}
+
+                if (Convert.ToInt32(RoleId) > 1)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    if (Convert.ToInt32(RoleId) > 4)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+                    }
+
                 }
 
-                var user = await _accountRepository.FindUser(reactivateUser.Email);
+                var user = await _accountRepository.FindUser(reactivateUser.OfficialMail);
                 if (user != null)
                 {
                     string defaultPass = Utils.RandomPassword();
-                    dynamic resp = await _accountRepository.ReactivateUser(Convert.ToInt32(requesterUserId), user.Email, reactivateUser.ReactivatedComment, defaultPass);
+                    dynamic resp = await _accountRepository.ReactivateUser(Convert.ToInt32(requesterUserId), user.officialMail, reactivateUser.ReactivatedComment, defaultPass);
                     if (resp > 0)
                     {
                         //update action performed into audit log here
 
-                        _logger.LogInformation($"User with email: {user.Email} reactivated successfully.");
-                        _accountRepository.SendEmail(user.Email, user.FirstName, defaultPass, "Re-Activation Email", _hostEnvironment.ContentRootPath, "", port);
+                        _logger.LogInformation($"User with email: {user.officialMail} reactivated successfully.");
+                        _accountRepository.SendEmail(user.officialMail, user.FirstName, defaultPass, "Re-Activation Email", _hostEnvironment.ContentRootPath, "", port);
                         response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"User with email: {user.Email} reactivated successfully.";
+                        response.ResponseMessage = $"User with email: {user.officialMail} reactivated successfully.";
                         return response;
                     }
                     response.ResponseCode = ResponseCode.Exception.ToString();
@@ -1452,7 +1499,7 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     return response;
                 }
 
-                var user = await _accountRepository.FindUser(unblockUser.Email);
+                var user = await _accountRepository.FindUser(unblockUser.OfficialMail);
                 if (user != null)
                 {
                     string defaultPass = Utils.RandomPassword();
@@ -1461,10 +1508,10 @@ namespace Com.XpressPayments.Bussiness.Services.Logic
                     {
                         //update action performed into audit log here
 
-                        _logger.LogInformation($"User with email: {user.Email} unblocked successfully.");
-                        _accountRepository.SendEmail(user.Email, user.FirstName, defaultPass, "Unblock Account", _hostEnvironment.ContentRootPath, "", port);
+                        _logger.LogInformation($"User with email: {user.officialMail} unblocked successfully.");
+                        _accountRepository.SendEmail(user.officialMail, user.FirstName, defaultPass, "Unblock Account", _hostEnvironment.ContentRootPath, "", port);
                         response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"A link has been sent to User with email: {user.Email} to reset password";
+                        response.ResponseMessage = $"A link has been sent to User with email: {user.officialMail} to reset password";
                         return response;
                     }
                     response.ResponseCode = ResponseCode.Exception.ToString();

@@ -9,7 +9,8 @@ namespace Com.XpressPayments.Data.DTOs.Account
     {
         public long UserId { get; set; }
 
-        //public long StaffID { get; set; }
+        public long UnitHeadUserId { get; set; }
+        public long HODUserId { get; set; }
 
         public long DeptId { get; set; }
         public long EmpID { get; set; }
@@ -40,10 +41,7 @@ namespace Com.XpressPayments.Data.DTOs.Account
         public string ResumptionDate { get; set; }
         public long UnitID { get; set; }
         public string UnitName { get; set; }
-        public long UnitHeadID { get; set; }
-        public string UnitHeadName { get; set; }
-        public long HodID { get; set; }
-        public string HODName { get; set; }
+      
         public long GradeID { get; set; }
         public string GradeName { get; set; }
         public long EmployeeTypeID { get; set; }

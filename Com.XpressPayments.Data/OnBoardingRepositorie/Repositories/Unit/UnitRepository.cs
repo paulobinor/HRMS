@@ -1,16 +1,13 @@
 ﻿using Com.XpressPayments.Data.AppConstants;
 using Com.XpressPayments.Data.DTOs;
 using Com.XpressPayments.Data.Enums;
-using Com.XpressPayments.Data.Repositories.HOD;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Data;
-using System.Linq;
-using System.Text;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 
 namespace Com.XpressPayments.Data.Repositories.Unit
@@ -37,7 +34,7 @@ namespace Com.XpressPayments.Data.Repositories.Unit
                     var param = new DynamicParameters();
                     param.Add("@Status", UnitEnum.CREATE);
                     param.Add("@UnitName", unit.UnitName.Trim());
-                    param.Add("@HodID", unit.HodID);
+                    param.Add("@UnitHeadUserId", unit.UnitHeadUserId);
                     param.Add("@DeptId", unit.DeptId);
                     param.Add("@CompanyId", unit.CompanyId);
 
@@ -64,13 +61,11 @@ namespace Com.XpressPayments.Data.Repositories.Unit
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", UnitEnum.UPDATE);
-                    param.Add("@UnitIDUpd", unit.HodID);
+                    param.Add("@UnitIDUpd", unit.UnitID);
+                    param.Add("@UnitHeadUserIdUpd", unit.UnitHeadUserId);
                     param.Add("@UnitNameUpd", unit.UnitName.Trim());
-                    param.Add("@HodIDUpd", unit.HodID);
-                 
                     param.Add("@DeptIdUpd", unit.DeptId);
                     param.Add("@CompanyIdUpd", unit.CompanyId);
-
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
 
                     dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Unit, param: param, commandType: CommandType.StoredProcedure);
@@ -201,6 +196,30 @@ namespace Com.XpressPayments.Data.Repositories.Unit
             }
         }
 
+        public async Task<UnitDTO> GetUnitByCompany(string UnitName, int companyId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", UnitEnum.GETCOMPANY);
+                    param.Add("@UnitNameGet", UnitName);
+                    param.Add("@CompanyIdGet", companyId);
+
+                    var UnitDetails = await _dapper.QueryFirstOrDefaultAsync<UnitDTO>(ApplicationConstant.Sp_Unit, param: param, commandType: CommandType.StoredProcedure);
+
+                    return UnitDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName:  GetUnitByName(string UnitName) ===>{ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<UnitDTO>> GetAllUnitCompanyId(long CompanyId)
         {
             try
@@ -208,7 +227,7 @@ namespace Com.XpressPayments.Data.Repositories.Unit
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", 8);
+                    param.Add("@Status", UnitEnum.GETCOMPANYBYID);
                     param.Add("@CompanyIdGet", CompanyId);
 
                     var UnitDetails = await _dapper.QueryAsync<UnitDTO>(ApplicationConstant.Sp_Unit, param: param, commandType: CommandType.StoredProcedure);

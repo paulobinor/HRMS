@@ -98,3 +98,4 @@ C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\o
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\Com.XpressPayments.Bussiness.pdb
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\Com.XpressPayments.Data.pdb
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\Com.XpressPayments.Common.pdb
+C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\obj\Release\net6.0\PubTmp\Out\Com.XpressPayments.Api.xml

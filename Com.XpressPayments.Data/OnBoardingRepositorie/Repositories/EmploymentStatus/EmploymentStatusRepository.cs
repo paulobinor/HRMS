@@ -91,7 +91,7 @@ namespace Com.XpressPayments.Data.Repositories.EmploymentStatus
                     param.Add("@Status", EmploymentStatusEnum.DELETE);
                     param.Add("@EmploymentStatusIDDelete", Convert.ToInt32(DelEmpStatus.EmploymentStatusID));
                     param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
-                    param.Add("@Reasons_For_Deleting_Department", DelEmpStatus.Reasons_For_Delete == null ? "" : DelEmpStatus.Reasons_For_Delete.ToString().Trim());
+                    param.Add("@Reasons_For_Deleting", DelEmpStatus.Reasons_For_Delete == null ? "" : DelEmpStatus.Reasons_For_Delete.ToString().Trim());
 
                     dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.sp_EmploymentStatus, param: param, commandType: CommandType.StoredProcedure);
 
@@ -197,7 +197,7 @@ namespace Com.XpressPayments.Data.Repositories.EmploymentStatus
             }
         }
 
-        public async Task<EmploymentStatusDTO> GetEmpLoymentStatusByName(string EmploymentStatusName, int companyId)
+        public async Task<EmploymentStatusDTO> GetEmpLoymentStatusByCompany(string EmploymentStatusName, int companyId)
         {
             try
             {
@@ -220,6 +220,7 @@ namespace Com.XpressPayments.Data.Repositories.EmploymentStatus
                 throw;
             }
         }
+
 
         public async Task<IEnumerable<EmploymentStatusDTO>> GetAllEmploymentStatusCompanyId(long companyId)
         {

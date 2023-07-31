@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using Com.XpressPayments.Data.DTOs.Account;
+using System.ComponentModel.Design;
 
 namespace Com.XpressPayments.Api.Controllers
 {
@@ -173,7 +174,7 @@ namespace Com.XpressPayments.Api.Controllers
 
         [Authorize]
         [HttpGet("GetAllEmpPendingApproval")]
-        public async Task<IActionResult> GetAllEmpPendingApproval()
+        public async Task<IActionResult> GetAllEmpPendingApproval(long CompanyID)
         {
             var response = new BaseResponse();
             try
@@ -187,7 +188,7 @@ namespace Com.XpressPayments.Api.Controllers
                     Port = Request.HttpContext.Connection.LocalPort.ToString()
                 };
 
-                return Ok(await _EmployeeService.GetEmpPendingApproval(requester));
+                return Ok(await _EmployeeService.GetEmpPendingApproval(CompanyID, requester));
             }
             catch (Exception ex)
             {

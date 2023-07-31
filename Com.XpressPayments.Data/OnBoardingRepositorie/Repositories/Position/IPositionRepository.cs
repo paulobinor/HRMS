@@ -16,6 +16,7 @@ namespace Com.XpressPayments.Data.Repositories.Position
         Task<IEnumerable<PositionDTO>> GetAllPosition();
         Task<PositionDTO> GetPositionById(long PositionID);
         Task<PositionDTO> GetPositionByName(string PositionName);
+        Task<PositionDTO> GetPositionByCompany(string PositionName, int companyId);
         Task<IEnumerable<PositionDTO>> GetAllPositionCompanyId(long PositionID);
 
     }
