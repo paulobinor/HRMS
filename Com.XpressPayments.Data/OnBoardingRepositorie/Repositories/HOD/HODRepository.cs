@@ -228,7 +228,7 @@ namespace Com.XpressPayments.Data.Repositories.HOD
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", HODenum.GETCOMPANY);
-                    param.Add("@UserIdGet", UserId);
+                    param.Add("@@UserIdGet", UserId);
                     param.Add("@CompanyIdGet", companyId);
 
                     var HODDetails = await _dapper.QueryFirstOrDefaultAsync<HodDTO>(ApplicationConstant.Sp_HOD, param: param, commandType: CommandType.StoredProcedure);

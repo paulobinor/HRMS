@@ -14,8 +14,18 @@ namespace XpressHRMS.Data.DTO
         public int StateID { get; set; }
         public int LgaID { get; set; }
         public string BranchName { get; set; }
+<<<<<<< HEAD:HRMS/XpressHRMS.Data/DTO/BranchDTO.cs
+<<<<<<< HEAD:HRMS/XpressHRMS.Data/DTO/BranchDTO.cs
         public DateTime DateCreated { get; set; }
         public string CreatedBy { get; set; }
+=======
+        //public DateTime DateCreated { get; set; }
+        //public string CreatedBy { get; set; }
+>>>>>>> parent of 55b359c (commit):XpressHRMS.Data/DTO/BranchDTO.cs
+=======
+        //public DateTime DateCreated { get; set; }
+        //public string CreatedBy { get; set; }
+>>>>>>> parent of 55b359c (commit):XpressHRMS.Data/DTO/BranchDTO.cs
         public int CompanyID { get; set; }
         public int IsDeleted { get; set; }
         public int IsHeadQuater { get; set; }
@@ -24,7 +34,15 @@ namespace XpressHRMS.Data.DTO
     public class CreateBranchDTO
     {
         public string BranchName { get; set; }
+<<<<<<< HEAD:HRMS/XpressHRMS.Data/DTO/BranchDTO.cs
+<<<<<<< HEAD:HRMS/XpressHRMS.Data/DTO/BranchDTO.cs
         public string CreatedBy { get; set; }
+=======
+        //public string CreatedBy { get; set; }
+>>>>>>> parent of 55b359c (commit):XpressHRMS.Data/DTO/BranchDTO.cs
+=======
+        //public string CreatedBy { get; set; }
+>>>>>>> parent of 55b359c (commit):XpressHRMS.Data/DTO/BranchDTO.cs
         public int CompanyID { get; set; }
         public int IsHeadQuater { get; set; }
         public string Address { get; set; }

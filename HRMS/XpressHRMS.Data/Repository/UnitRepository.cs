@@ -40,7 +40,15 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Status", ACTION.INSERT);
                     param.Add("@UnitName", payload.UnitName);
                     param.Add("@HODEmployeeID", payload.HODEmployeeID);
+<<<<<<< HEAD:HRMS/XpressHRMS.Data/Repository/UnitRepository.cs
+<<<<<<< HEAD:HRMS/XpressHRMS.Data/Repository/UnitRepository.cs
                     param.Add("@CreatedBy", payload.CreatedByUserID);
+=======
+                    //param.Add("@CreatedBy", payload.CreatedByUserID);
+>>>>>>> parent of 55b359c (commit):XpressHRMS.Data/Repository/UnitRepository.cs
+=======
+                    //param.Add("@CreatedBy", payload.CreatedByUserID);
+>>>>>>> parent of 55b359c (commit):XpressHRMS.Data/Repository/UnitRepository.cs
                     param.Add("@CompanyID", payload.CompanyID);
                     dynamic response = await _dapper.ExecuteAsync("Sp_Unit", param: param, commandType: CommandType.StoredProcedure);
                     return response;

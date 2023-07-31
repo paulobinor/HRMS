@@ -46,7 +46,15 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Companyphonenumber", payload.Companyphonenumber);
                     param.Add("@CompanyTheme", payload.CompanyTheme);
                     param.Add("@Email", payload.Email);
+<<<<<<< HEAD:HRMS/XpressHRMS.Data/Repository/CompanyRepository.cs
+<<<<<<< HEAD:HRMS/XpressHRMS.Data/Repository/CompanyRepository.cs
                     param.Add("@EstablishmentDate", payload.EstablishmentDate);
+=======
+                    //param.Add("@EstablishmentDate", payload.EstablishmentDate);
+>>>>>>> parent of 55b359c (commit):XpressHRMS.Data/Repository/CompanyRepository.cs
+=======
+                    //param.Add("@EstablishmentDate", payload.EstablishmentDate);
+>>>>>>> parent of 55b359c (commit):XpressHRMS.Data/Repository/CompanyRepository.cs
                     param.Add("@MissionStmt", payload.MissionStmt);
                     param.Add("@VisionStmt", payload.VisionStmt);
                     param.Add("@Website", payload.Website);
@@ -149,7 +157,15 @@ namespace XpressHRMS.Data.Repository
                     param.Add("@Companyphonenumber", payload.Companyphonenumber);
                     param.Add("@CompanyID", payload.CompanyID);
                     param.Add("@Email", payload.Email);
+<<<<<<< HEAD:HRMS/XpressHRMS.Data/Repository/CompanyRepository.cs
+<<<<<<< HEAD:HRMS/XpressHRMS.Data/Repository/CompanyRepository.cs
                     param.Add("@EstablishmentDate", payload.EstablishmentDate);
+=======
+                    //param.Add("@EstablishmentDate", payload.EstablishmentDate);
+>>>>>>> parent of 55b359c (commit):XpressHRMS.Data/Repository/CompanyRepository.cs
+=======
+                    //param.Add("@EstablishmentDate", payload.EstablishmentDate);
+>>>>>>> parent of 55b359c (commit):XpressHRMS.Data/Repository/CompanyRepository.cs
                     param.Add("@MissionStmt", payload.MissionStmt);
                     param.Add("@VisionStmt", payload.VisionStmt);
                     param.Add("@Website", payload.Website);
