@@ -246,6 +246,7 @@
               "target": "Package",
               "version": "[2.0.123, )"
             },
+<<<<<<< HEAD:Com.XpressPayments.Bussiness/obj/Com.XpressPayments.Bussiness.csproj.nuget.dgspec.json
             "MailKit": {
               "target": "Package",
               "version": "[3.3.0, )"
@@ -263,8 +264,15 @@
 =======
             "RestSharp": {
 >>>>>>> parent of 55b359c (commit):XpressHRMS/obj/XpressHRMS.csproj.nuget.dgspec.json
+=======
+            "RestSharp": {
               "target": "Package",
-              "version": "[5.0.0, )"
+              "version": "[108.0.3, )"
+            },
+            "Serilog": {
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/XpressHRMS.csproj.nuget.dgspec.json
+              "target": "Package",
+              "version": "[2.12.0, )"
             },
             "MimeKit": {
               "target": "Package",

@@ -24,9 +24,12 @@ namespace XpressHRMS.Data.DTO
         public string PositionName { get; set; }
         //public string CreatedBy { get; set; }
 <<<<<<< HEAD:HRMS/XpressHRMS.Data/DTO/PostionDTO.cs
+<<<<<<< HEAD:HRMS/XpressHRMS.Data/DTO/PostionDTO.cs
         public DateTime DateCreated { get; set; }
         public int IsActive { get; set; }
 =======
+=======
+>>>>>>> parent of 55b359c (commit):XpressHRMS.Data/DTO/PostionDTO.cs
         //public DateTime DateCreated { get; set; }
         //public int IsActive { get; set; }
 >>>>>>> parent of 55b359c (commit):XpressHRMS.Data/DTO/PostionDTO.cs
@@ -40,9 +43,12 @@ namespace XpressHRMS.Data.DTO
         //public string PositionName { get; set; }
         //public string CreatedBy { get; set; }
 <<<<<<< HEAD:HRMS/XpressHRMS.Data/DTO/PostionDTO.cs
+<<<<<<< HEAD:HRMS/XpressHRMS.Data/DTO/PostionDTO.cs
         public DateTime DateCreated { get; set; }
         public int IsActive { get; set; }
 =======
+=======
+>>>>>>> parent of 55b359c (commit):XpressHRMS.Data/DTO/PostionDTO.cs
         //public DateTime DateCreated { get; set; }
         //public int IsActive { get; set; }
 >>>>>>> parent of 55b359c (commit):XpressHRMS.Data/DTO/PostionDTO.cs

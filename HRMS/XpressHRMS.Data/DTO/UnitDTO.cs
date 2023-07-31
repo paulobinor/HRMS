@@ -12,9 +12,12 @@ namespace XpressHRMS.Data.DTO
         public string UnitName { get; set; }
         public int HODEmployeeID { get; set; }
 <<<<<<< HEAD:HRMS/XpressHRMS.Data/DTO/UnitDTO.cs
+<<<<<<< HEAD:HRMS/XpressHRMS.Data/DTO/UnitDTO.cs
         public DateTime DateCreated { get; set; }
         public int CreatedByUserID { get; set; }
 =======
+=======
+>>>>>>> parent of 55b359c (commit):XpressHRMS.Data/DTO/UnitDTO.cs
         //public DateTime DateCreated { get; set; }
         //public int CreatedByUserID { get; set; }
 >>>>>>> parent of 55b359c (commit):XpressHRMS.Data/DTO/UnitDTO.cs
@@ -26,8 +29,13 @@ namespace XpressHRMS.Data.DTO
         public string UnitName { get; set; }
         public int HODEmployeeID { get; set; }
 <<<<<<< HEAD:HRMS/XpressHRMS.Data/DTO/UnitDTO.cs
+<<<<<<< HEAD:HRMS/XpressHRMS.Data/DTO/UnitDTO.cs
         public DateTime DateCreated { get; set; }
         public int CreatedByUserID { get; set; }
+=======
+        //public DateTime DateCreated { get; set; }
+        //public int CreatedByUserID { get; set; }
+>>>>>>> parent of 55b359c (commit):XpressHRMS.Data/DTO/UnitDTO.cs
 =======
         //public DateTime DateCreated { get; set; }
         //public int CreatedByUserID { get; set; }
