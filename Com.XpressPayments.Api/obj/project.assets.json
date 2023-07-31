@@ -9005,11 +9005,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\Com.XpressPayments.Api\\Com.XpressPayments.Api.csproj",
+      "projectUniqueName": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\Com.XpressPayments.Api\\Com.XpressPayments.Api.csproj",
       "projectName": "Com.XpressPayments.Api",
-      "projectPath": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\Com.XpressPayments.Api\\Com.XpressPayments.Api.csproj",
+      "projectPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\Com.XpressPayments.Api\\Com.XpressPayments.Api.csproj",
       "packagesPath": "C:\\Users\\peter.omolayo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\Com.XpressPayments.Api\\obj\\",
+      "outputPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\Com.XpressPayments.Api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\peter.omolayo\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -9026,11 +9026,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\Com.XpressPayments.Bussiness\\Com.XpressPayments.Bussiness.csproj": {
-              "projectPath": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\Com.XpressPayments.Bussiness\\Com.XpressPayments.Bussiness.csproj"
+            "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\Com.XpressPayments.Bussiness\\Com.XpressPayments.Bussiness.csproj": {
+              "projectPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\Com.XpressPayments.Bussiness\\Com.XpressPayments.Bussiness.csproj"
             },
-            "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\Com.XpressPayments.Data\\Com.XpressPayments.Data.csproj": {
-              "projectPath": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\Com.XpressPayments.Data\\Com.XpressPayments.Data.csproj"
+            "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\Com.XpressPayments.Data\\Com.XpressPayments.Data.csproj": {
+              "projectPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\Com.XpressPayments.Data\\Com.XpressPayments.Data.csproj"
             }
           }
         }
