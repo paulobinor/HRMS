@@ -61,11 +61,11 @@ namespace Com.XpressPayments.Data.Repositories.Unit
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", UnitEnum.UPDATE);
+                    param.Add("@UnitIDUpd", unit.UnitID);
                     param.Add("@UnitHeadUserIdUpd", unit.UnitHeadUserId);
                     param.Add("@UnitNameUpd", unit.UnitName.Trim());
                     param.Add("@DeptIdUpd", unit.DeptId);
                     param.Add("@CompanyIdUpd", unit.CompanyId);
-
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
 
                     dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Unit, param: param, commandType: CommandType.StoredProcedure);

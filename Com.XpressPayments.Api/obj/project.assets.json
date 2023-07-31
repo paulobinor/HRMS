@@ -77,6 +77,7 @@
           }
         }
       },
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
       "BCrypt.Net-Next/4.0.3": {
         "type": "package",
         "compile": {
@@ -90,6 +91,8 @@
           }
         }
       },
+=======
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
       "Dapper/2.0.123": {
         "type": "package",
         "compile": {
@@ -431,6 +434,7 @@
           "buildMultiTargeting/Microsoft.Extensions.ApiDescription.Server.targets": {}
         }
       },
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
       "Microsoft.Extensions.Caching.Abstractions/5.0.0": {
         "type": "package",
         "dependencies": {
@@ -468,12 +472,15 @@
         }
       },
       "Microsoft.Extensions.Configuration/6.0.1": {
+=======
+      "Microsoft.Extensions.Configuration/3.1.30": {
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
         "type": "package",
         "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "6.0.0",
-          "Microsoft.Extensions.Primitives": "6.0.0"
+          "Microsoft.Extensions.Configuration.Abstractions": "3.1.30"
         },
         "compile": {
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
           "lib/netstandard2.0/Microsoft.Extensions.Configuration.dll": {
             "related": ".xml"
           }
@@ -482,6 +489,12 @@
           "lib/netstandard2.0/Microsoft.Extensions.Configuration.dll": {
             "related": ".xml"
           }
+=======
+          "lib/netcoreapp3.1/Microsoft.Extensions.Configuration.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/Microsoft.Extensions.Configuration.dll": {}
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
         }
       },
       "Microsoft.Extensions.Configuration.Abstractions/6.0.0": {
@@ -500,6 +513,7 @@
           }
         }
       },
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
       "Microsoft.Extensions.Configuration.Binder/2.0.0": {
         "type": "package",
         "dependencies": {
@@ -517,6 +531,9 @@
         }
       },
       "Microsoft.Extensions.Configuration.FileExtensions/6.0.0": {
+=======
+      "Microsoft.Extensions.Configuration.FileExtensions/3.1.30": {
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Configuration": "6.0.0",
@@ -556,6 +573,7 @@
           }
         }
       },
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
       "Microsoft.Extensions.DependencyInjection/5.0.2": {
         "type": "package",
         "dependencies": {
@@ -573,6 +591,9 @@
         }
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions/5.0.0": {
+=======
+      "Microsoft.Extensions.DependencyInjection.Abstractions/7.0.0": {
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
@@ -585,6 +606,7 @@
           }
         }
       },
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
       "Microsoft.Extensions.DependencyModel/3.0.0": {
         "type": "package",
         "dependencies": {
@@ -602,6 +624,9 @@
         }
       },
       "Microsoft.Extensions.FileProviders.Abstractions/6.0.0": {
+=======
+      "Microsoft.Extensions.FileProviders.Abstractions/3.1.30": {
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Primitives": "6.0.0"
@@ -657,6 +682,7 @@
           "buildTransitive/netcoreapp3.1/_._": {}
         }
       },
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
       "Microsoft.Extensions.Hosting.Abstractions/3.1.8": {
         "type": "package",
         "dependencies": {
@@ -715,6 +741,9 @@
         }
       },
       "Microsoft.Extensions.Logging.Abstractions/5.0.0": {
+=======
+      "Microsoft.Extensions.Logging.Abstractions/7.0.0": {
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.dll": {
@@ -744,6 +773,7 @@
           }
         }
       },
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
       "Microsoft.Extensions.Options.ConfigurationExtensions/2.0.0": {
         "type": "package",
         "dependencies": {
@@ -764,6 +794,9 @@
         }
       },
       "Microsoft.Extensions.Primitives/6.0.0": {
+=======
+      "Microsoft.Extensions.Primitives/7.0.0": {
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
         "type": "package",
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
@@ -1313,9 +1346,10 @@
           }
         }
       },
-      "Serilog/2.10.0": {
+      "Serilog/2.12.0": {
         "type": "package",
         "compile": {
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
           "lib/netstandard2.1/Serilog.dll": {
             "related": ".xml"
           }
@@ -1514,6 +1548,12 @@
           "lib/net5.0/Serilog.Sinks.File.dll": {
             "related": ".pdb;.xml"
           }
+=======
+          "lib/net5.0/Serilog.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/Serilog.dll": {}
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
         }
       },
       "Swashbuckle.AspNetCore/6.2.3": {
@@ -3008,7 +3048,22 @@
       },
       "Com.XpressPayments.Common/1.0.0": {
         "type": "project",
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
         "framework": ".NETCoreApp,Version=v6.0",
+=======
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "Dapper": "2.0.123",
+          "Microsoft.AspNetCore.Authorization": "7.0.2",
+          "Microsoft.AspNetCore.Http.Features": "5.0.17",
+          "Microsoft.Data.SqlClient": "5.0.1",
+          "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "7.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "7.0.0",
+          "Newtonsoft.Json": "13.0.2",
+          "System.Data.SqlClient": "4.8.3"
+        },
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
         "compile": {
           "bin/placeholder/Com.XpressPayments.Common.dll": {}
         },
@@ -3104,37 +3159,6 @@
         "lib/netstandard2.0/Azure.Identity.dll",
         "lib/netstandard2.0/Azure.Identity.xml",
         "pkgicon.png"
-      ]
-    },
-    "BCrypt.Net-Next/4.0.3": {
-      "sha512": "W+U9WvmZQgi5cX6FS5GDtDoPzUCV4LkBLkywq/kRZhuDwcbavOzcDAr3LXJFqHUi952Yj3LEYoWW0jbEUQChsA==",
-      "type": "package",
-      "path": "bcrypt.net-next/4.0.3",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "bcrypt.net-next.4.0.3.nupkg.sha512",
-        "bcrypt.net-next.nuspec",
-        "ico.png",
-        "lib/net20/BCrypt.Net-Next.dll",
-        "lib/net20/BCrypt.Net-Next.xml",
-        "lib/net35/BCrypt.Net-Next.dll",
-        "lib/net35/BCrypt.Net-Next.xml",
-        "lib/net462/BCrypt.Net-Next.dll",
-        "lib/net462/BCrypt.Net-Next.xml",
-        "lib/net472/BCrypt.Net-Next.dll",
-        "lib/net472/BCrypt.Net-Next.xml",
-        "lib/net48/BCrypt.Net-Next.dll",
-        "lib/net48/BCrypt.Net-Next.xml",
-        "lib/net5.0/BCrypt.Net-Next.dll",
-        "lib/net5.0/BCrypt.Net-Next.xml",
-        "lib/net6.0/BCrypt.Net-Next.dll",
-        "lib/net6.0/BCrypt.Net-Next.xml",
-        "lib/netstandard2.0/BCrypt.Net-Next.dll",
-        "lib/netstandard2.0/BCrypt.Net-Next.xml",
-        "lib/netstandard2.1/BCrypt.Net-Next.dll",
-        "lib/netstandard2.1/BCrypt.Net-Next.xml",
-        "readme.md"
       ]
     },
     "Dapper/2.0.123": {
@@ -3648,6 +3672,7 @@
         "tools/netcoreapp2.1/GetDocument.Insider.runtimeconfig.json"
       ]
     },
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
     "Microsoft.Extensions.Caching.Abstractions/5.0.0": {
       "sha512": "bu8As90/SBAouMZ6fJ+qRNo1X+KgHGrVueFhhYi+E5WqEhcnp2HoWRFnMzXQ6g4RdZbvPowFerSbKNH4Dtg5yg==",
       "type": "package",
@@ -3690,21 +3715,22 @@
     },
     "Microsoft.Extensions.Configuration/6.0.1": {
       "sha512": "BUyFU9t+HzlSE7ri4B+AQN2BgTgHv/uM82s5ZkgU1BApyzWzIl48nDsG5wR1t0pniNuuyTBzG3qCW8152/NtSw==",
+=======
+    "Microsoft.Extensions.Configuration/3.1.30": {
+      "sha512": "IDvwPfQAAouJWTOezYRLEq7IjcoqTVMM6Ql/jR5KmnK3OcX74DoBrO9GrFl70ujyYyL6FWJSnZnZ1MyT3B54qQ==",
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
       "type": "package",
-      "path": "microsoft.extensions.configuration/6.0.1",
+      "path": "microsoft.extensions.configuration/3.1.30",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
-        "LICENSE.TXT",
-        "THIRD-PARTY-NOTICES.TXT",
-        "lib/net461/Microsoft.Extensions.Configuration.dll",
-        "lib/net461/Microsoft.Extensions.Configuration.xml",
+        "lib/netcoreapp3.1/Microsoft.Extensions.Configuration.dll",
+        "lib/netcoreapp3.1/Microsoft.Extensions.Configuration.xml",
         "lib/netstandard2.0/Microsoft.Extensions.Configuration.dll",
         "lib/netstandard2.0/Microsoft.Extensions.Configuration.xml",
-        "microsoft.extensions.configuration.6.0.1.nupkg.sha512",
-        "microsoft.extensions.configuration.nuspec",
-        "useSharedDesignerContext.txt"
+        "microsoft.extensions.configuration.3.1.30.nupkg.sha512",
+        "microsoft.extensions.configuration.nuspec"
       ]
     },
     "Microsoft.Extensions.Configuration.Abstractions/6.0.0": {
@@ -3726,6 +3752,7 @@
         "useSharedDesignerContext.txt"
       ]
     },
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
     "Microsoft.Extensions.Configuration.Binder/2.0.0": {
       "sha512": "IznHHzGUtrdpuQqIUdmzF6TYPcsYHONhHh3o9dGp39sX/9Zfmt476UnhvU0UhXgJnXXAikt/MpN6AuSLCCMdEQ==",
       "type": "package",
@@ -3741,6 +3768,10 @@
     },
     "Microsoft.Extensions.Configuration.FileExtensions/6.0.0": {
       "sha512": "V4Dth2cYMZpw3HhGw9XUDIijpI6gN+22LDt0AhufIgOppCUfpWX4483OmN+dFXRJkJLc8Tv0Q8QK+1ingT2+KQ==",
+=======
+    "Microsoft.Extensions.Configuration.FileExtensions/3.1.30": {
+      "sha512": "P1jMakV2jIOHLnt3rRAglEChR0QYsy+YocAOUoZJjr9B/EJdrMNdKwe7nLbvVo/BqAiG82cEjyVODrJbZvDgsw==",
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
       "type": "package",
       "path": "microsoft.extensions.configuration.fileextensions/6.0.0",
       "files": [
@@ -3779,6 +3810,7 @@
         "useSharedDesignerContext.txt"
       ]
     },
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
     "Microsoft.Extensions.DependencyInjection/5.0.2": {
       "sha512": "xzFW00AZEvOXM1OX+0+AYH5op/Hf3u//e6wszBd/rK72sypD+jx5CtsHxM4BVuFBEs8SajfO4QzSJtrQaHDr4A==",
       "type": "package",
@@ -3805,6 +3837,10 @@
     },
     "Microsoft.Extensions.DependencyInjection.Abstractions/5.0.0": {
       "sha512": "ORj7Zh81gC69TyvmcUm9tSzytcy8AVousi+IVRAI8nLieQjOFryRusSFh7+aLk16FN9pQNqJAiMd7BTKINK0kA==",
+=======
+    "Microsoft.Extensions.DependencyInjection.Abstractions/7.0.0": {
+      "sha512": "h3j/QfmFN4S0w4C2A6X7arXij/M/OVw3uQHSOFxnND4DyAzO1F9eMX7Eti7lU/OkSthEE0WzRsfT/Dmx86jzCw==",
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
       "type": "package",
       "path": "microsoft.extensions.dependencyinjection.abstractions/5.0.0",
       "files": [
@@ -3823,6 +3859,7 @@
         "version.txt"
       ]
     },
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
     "Microsoft.Extensions.DependencyModel/3.0.0": {
       "sha512": "Iaectmzg9Dc4ZbKX/FurrRjgO/I8rTumL5UU+Uube6vZuGetcnXoIgTA94RthFWePhdMVm8MMhVFJZdbzMsdyQ==",
       "type": "package",
@@ -3846,6 +3883,10 @@
     },
     "Microsoft.Extensions.FileProviders.Abstractions/6.0.0": {
       "sha512": "0pd4/fho0gC12rQswaGQxbU34jOS1TPS8lZPpkFCH68ppQjHNHYle9iRuHeev1LhrJ94YPvzcRd8UmIuFk23Qw==",
+=======
+    "Microsoft.Extensions.FileProviders.Abstractions/3.1.30": {
+      "sha512": "rSQFZTMP4d8Fg+tFe0ifCE7/jzl/bye9vaD/LLvG3lpn1bmBIQysIRK3+pAoZaFnj/kLh4JNvFDJsfOdNRtTZw==",
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
       "type": "package",
       "path": "microsoft.extensions.fileproviders.abstractions/6.0.0",
       "files": [
@@ -3913,6 +3954,7 @@
         "useSharedDesignerContext.txt"
       ]
     },
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
     "Microsoft.Extensions.Hosting.Abstractions/3.1.8": {
       "sha512": "7ZJUKwPipkDvuv2KJPZ3r01wp2AWNMiYH+61i0dL89F7QICknjKpWgLKLpTSUYFgl77S3b4264I6i4HzDdrb2A==",
       "type": "package",
@@ -3973,6 +4015,10 @@
     },
     "Microsoft.Extensions.Logging.Abstractions/5.0.0": {
       "sha512": "NxP6ahFcBnnSfwNBi2KH2Oz8Xl5Sm2krjId/jRR3I7teFphwiUoUeZPwTNA21EX+5PtjqmyAvKaOeBXcJjcH/w==",
+=======
+    "Microsoft.Extensions.Logging.Abstractions/7.0.0": {
+      "sha512": "kmn78+LPVMOWeITUjIlfxUPDsI0R6G0RkeAMBmQxAJ7vBJn4q2dTva7pWi65ceN5vPGjJ9q/Uae2WKgvfktJAw==",
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
       "type": "package",
       "path": "microsoft.extensions.logging.abstractions/5.0.0",
       "files": [
@@ -4013,6 +4059,7 @@
         "version.txt"
       ]
     },
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
     "Microsoft.Extensions.Options.ConfigurationExtensions/2.0.0": {
       "sha512": "Y/lGICwO27fCkQRK3tZseVzFjZaxfGmui990E67sB4MuiPzdJHnJDS/BeYWrHShSSBgCl4KyKRx4ux686fftPg==",
       "type": "package",
@@ -4028,6 +4075,10 @@
     },
     "Microsoft.Extensions.Primitives/6.0.0": {
       "sha512": "9+PnzmQFfEFNR9J2aDTfJGGupShHjOuGw4VUv+JB044biSHrnmCIMD+mJHmb2H7YryrfBEXDurxQ47gJZdCKNQ==",
+=======
+    "Microsoft.Extensions.Primitives/7.0.0": {
+      "sha512": "um1KU5kxcRp3CNuI8o/GrZtD4AIOXDk+RLsytjZ9QPok3ttLUelLKpilVPuaFT3TFjOhSibUAso0odbOaCDj3Q==",
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
       "type": "package",
       "path": "microsoft.extensions.primitives/6.0.0",
       "files": [
@@ -4792,10 +4843,10 @@
         "version.txt"
       ]
     },
-    "Serilog/2.10.0": {
-      "sha512": "+QX0hmf37a0/OZLxM3wL7V6/ADvC1XihXN4Kq/p6d8lCPfgkRdiuhbWlMaFjR9Av0dy5F0+MBeDmDdRZN/YwQA==",
+    "Serilog/2.12.0": {
+      "sha512": "xaiJLIdu6rYMKfQMYUZgTy8YK7SMZjB4Yk50C/u//Z4OsvxkUfSPJy4nknfvwAC34yr13q7kcyh4grbwhSxyZg==",
       "type": "package",
-      "path": "serilog/2.10.0",
+      "path": "serilog/2.12.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -4804,6 +4855,12 @@
         "lib/net45/Serilog.xml",
         "lib/net46/Serilog.dll",
         "lib/net46/Serilog.xml",
+        "lib/net47/Serilog.dll",
+        "lib/net47/Serilog.xml",
+        "lib/net5.0/Serilog.dll",
+        "lib/net5.0/Serilog.xml",
+        "lib/net6.0/Serilog.dll",
+        "lib/net6.0/Serilog.xml",
         "lib/netstandard1.0/Serilog.dll",
         "lib/netstandard1.0/Serilog.xml",
         "lib/netstandard1.3/Serilog.dll",
@@ -4812,10 +4869,11 @@
         "lib/netstandard2.0/Serilog.xml",
         "lib/netstandard2.1/Serilog.dll",
         "lib/netstandard2.1/Serilog.xml",
-        "serilog.2.10.0.nupkg.sha512",
+        "serilog.2.12.0.nupkg.sha512",
         "serilog.nuspec"
       ]
     },
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
     "Serilog.AspNetCore/5.0.0": {
       "sha512": "/JO/txIxRR61x1UXQAgUzG2Sx05o1QHCkokVBWrKzmAoDu+p5EtCAj7L/TVVg7Ezhh3GPiZ0JI9OJCmRO9tSRw==",
       "type": "package",
@@ -5022,6 +5080,10 @@
     },
     "Swashbuckle.AspNetCore/6.2.3": {
       "sha512": "cnzQDn0Le+hInsw2SYwlOhOCPXpYi/szcvnyqZJ12v+QyrLBwAmWXBg6RIyHB18s/mLeywC+Rg2O9ndz0IUNYQ==",
+=======
+    "Swashbuckle.AspNetCore/5.6.3": {
+      "sha512": "UkL9GU0mfaA+7RwYjEaBFvAzL8qNQhNqAeV5uaWUu/Z+fVgvK9FHkGCpTXBqSQeIHuZaIElzxnLDdIqGzuCnVg==",
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
       "type": "package",
       "path": "swashbuckle.aspnetcore/6.2.3",
       "files": [
@@ -8977,6 +9039,7 @@
     }
   },
   "projectFileDependencyGroups": {
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
     "net6.0": [
       "BCrypt.Net-Next >= 4.0.3",
       "Com.XpressPayments.Bussiness >= 1.0.0",
@@ -8997,6 +9060,16 @@
       "System.Data.SqlClient >= 4.8.3",
       "System.Drawing.Common >= 6.0.0",
       "System.IdentityModel.Tokens.Jwt >= 6.22.0"
+=======
+    "net5.0": [
+      "AutoMapper >= 12.0.0",
+      "Microsoft.AspNetCore.Authentication.JwtBearer >= 5.0.16",
+      "RestSharp >= 108.0.3",
+      "Serilog >= 2.12.0",
+      "Swashbuckle.AspNetCore >= 5.6.3",
+      "XpressHRMS.Business >= 1.0.0",
+      "XpressHRMS.Data >= 1.0.0"
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
     ]
   },
   "packageFolders": {
@@ -9069,17 +9142,21 @@
             "target": "Package",
             "version": "[5.0.17, )"
           },
+<<<<<<< HEAD:Com.XpressPayments.Api/obj/project.assets.json
           "MimeKit": {
             "target": "Package",
             "version": "[3.3.0, )"
           },
           "Newtonsoft.Json": {
+=======
+          "RestSharp": {
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/project.assets.json
             "target": "Package",
             "version": "[13.0.1, )"
           },
-          "Serilog.AspNetCore": {
+          "Serilog": {
             "target": "Package",
-            "version": "[5.0.0, )"
+            "version": "[2.12.0, )"
           },
           "Serilog.Enrichers.Environment": {
             "target": "Package",
@@ -9136,5 +9213,13 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\Users\\olajumoke.owolabi\\source\\repos\\hrms-be-backend\\Com.XpressPayments.Api\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

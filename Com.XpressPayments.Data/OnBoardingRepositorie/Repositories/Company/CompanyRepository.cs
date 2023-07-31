@@ -40,7 +40,7 @@ namespace Com.XpressPayments.Data.Repositories.Company.Repository
                     param.Add("@Address", Comp.Address.Trim());
                     param.Add("@Email", Comp.Email.Trim());
                     param.Add("@Website", Comp.Website.Trim());
-                    param.Add("@CompanyLogo", Comp.CompanyLogo.Trim());
+                    param.Add("@CompanyLogo", Comp.CompanyLogo);
                     param.Add("@ContactPhone", Comp.ContactPhone.Trim());
 
                     param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());

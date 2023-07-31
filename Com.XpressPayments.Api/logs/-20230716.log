@@ -1,0 +1,14 @@
+[2023-07-16 15:05:05.019 +01:00  INF]  User profile is available. Using 'C:\Users\olajumoke.owolabi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-07-16 15:05:05.305 +01:00  INF]  Creating key {c47e7849-293a-4e22-a2e0-0f04716ccee1} with creation date 2023-07-16 14:05:05Z, activation date 2023-07-17 08:56:19Z, and expiration date 2023-10-14 14:05:05Z.
+[2023-07-16 15:05:05.333 +01:00  INF]  Writing data to file 'C:\Users\olajumoke.owolabi\AppData\Local\ASP.NET\DataProtection-Keys\key-c47e7849-293a-4e22-a2e0-0f04716ccee1.xml'.
+[2023-07-16 15:05:05.784 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-07-16 15:05:05.787 +01:00  INF]  Hosting environment: Development
+[2023-07-16 15:05:05.787 +01:00  INF]  Content root path: C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-07-16 15:05:05.929 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-07-16 15:05:07.358 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 1435.2030ms
+[2023-07-16 15:05:07.684 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-07-16 15:05:07.712 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 16.6017ms
+[2023-07-16 15:05:07.713 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-07-16 15:05:07.844 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 131.4572ms
+[2023-07-16 15:05:09.278 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-07-16 15:05:09.662 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 383.7632ms

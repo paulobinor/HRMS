@@ -133,8 +133,51 @@
         }
       },
       "frameworks": {
+<<<<<<< HEAD:Com.XpressPayments.Bussiness/obj/Com.XpressPayments.Bussiness.csproj.nuget.dgspec.json
         "net6.0": {
           "targetAlias": "net6.0",
+=======
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.123, )"
+            },
+            "Microsoft.AspNetCore.Authorization": {
+              "target": "Package",
+              "version": "[7.0.2, )"
+            },
+            "Microsoft.AspNetCore.Http.Features": {
+              "target": "Package",
+              "version": "[5.0.17, )"
+            },
+            "Microsoft.Data.SqlClient": {
+              "target": "Package",
+              "version": "[5.0.1, )"
+            },
+            "Microsoft.Extensions.Configuration.Abstractions": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Microsoft.Extensions.Logging.Abstractions": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.2, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.3, )"
+            }
+          },
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/XpressHRMS.csproj.nuget.dgspec.json
           "imports": [
             "net461",
             "net462",
@@ -203,6 +246,7 @@
               "target": "Package",
               "version": "[2.0.123, )"
             },
+<<<<<<< HEAD:Com.XpressPayments.Bussiness/obj/Com.XpressPayments.Bussiness.csproj.nuget.dgspec.json
             "MailKit": {
               "target": "Package",
               "version": "[3.3.0, )"
@@ -211,13 +255,24 @@
               "target": "Package",
               "version": "[5.0.15, )"
             },
+<<<<<<< HEAD:Com.XpressPayments.Bussiness/obj/Com.XpressPayments.Bussiness.csproj.nuget.dgspec.json
             "Microsoft.Extensions.Configuration": {
               "target": "Package",
               "version": "[6.0.1, )"
             },
             "Microsoft.Extensions.Options": {
+=======
+            "RestSharp": {
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/XpressHRMS.csproj.nuget.dgspec.json
+=======
+            "RestSharp": {
               "target": "Package",
-              "version": "[5.0.0, )"
+              "version": "[108.0.3, )"
+            },
+            "Serilog": {
+>>>>>>> parent of 55b359c (commit):XpressHRMS/obj/XpressHRMS.csproj.nuget.dgspec.json
+              "target": "Package",
+              "version": "[2.12.0, )"
             },
             "MimeKit": {
               "target": "Package",
@@ -227,9 +282,9 @@
               "target": "Package",
               "version": "[13.0.1, )"
             },
-            "Serilog.AspNetCore": {
+            "Serilog": {
               "target": "Package",
-              "version": "[5.0.0, )"
+              "version": "[2.12.0, )"
             },
             "System.Data.SqlClient": {
               "target": "Package",

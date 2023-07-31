@@ -197,6 +197,8 @@ namespace Com.XpressPayments.Data.DTOs
         
         public bool IsDeactivated { get; set; }
         public bool IsReactivated { get; set; }
+        public string DeactivatedByUserEmail { get; set; }
+        public string ReactivatedByUserEmail { get; set; }
     }
 
     public class UpdateEmployeeDTO

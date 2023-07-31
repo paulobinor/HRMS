@@ -1,0 +1,447 @@
+[2023-07-11 11:18:46.029 +01:00  INF]  User profile is available. Using 'C:\Users\olajumoke.owolabi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-07-11 11:18:46.285 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-07-11 11:18:46.286 +01:00  INF]  Hosting environment: Development
+[2023-07-11 11:18:46.286 +01:00  INF]  Content root path: C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-07-11 11:18:46.337 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-07-11 11:18:46.925 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 591.7836ms
+[2023-07-11 11:18:46.952 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-07-11 11:18:46.970 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-07-11 11:18:46.979 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 29.2207ms
+[2023-07-11 11:18:47.043 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 69.0196ms
+[2023-07-11 11:18:47.092 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-07-11 11:18:47.397 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 305.0638ms
+[2023-07-11 11:19:54.620 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveType/GetLeaveTypebyCompanyId?CompanyID=1 - -
+[2023-07-11 11:19:55.014 +01:00  INF]  Successfully validated the token.
+[2023-07-11 11:19:55.025 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetLeaveTypebyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 11:19:55.063 +01:00  INF]  Route matched with {action = "GetLeaveTypebyCompanyId", controller = "LeaveType"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetLeaveTypebyCompanyId(Int64) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController (Com.XpressPayments.Api).
+[2023-07-11 11:21:14.236 +01:00  ERR]  MethodName: GetAllGradeCompanyId(long GradeID) ===>Procedure or function 'Sp_LeaveType' expects parameter '@IsPaidLeave', which was not supplied.
+[2023-07-11 11:21:14.287 +01:00  ERR]  Exception Occured: GetAllLeaveTypeCompanyId(long companyId) ==> Procedure or function 'Sp_LeaveType' expects parameter '@IsPaidLeave', which was not supplied.
+[2023-07-11 11:21:14.300 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 11:21:14.310 +01:00  INF]  Executed action Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetLeaveTypebyCompanyId (Com.XpressPayments.Api) in 79241.1283ms
+[2023-07-11 11:21:14.317 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetLeaveTypebyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 11:21:14.319 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/LeaveType/GetLeaveTypebyCompanyId?CompanyID=1 - - - 200 - application/json;+charset=utf-8 79699.2271ms
+[2023-07-11 11:21:30.913 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveType/GetLeaveTypebyCompanyId?CompanyID=1 - -
+[2023-07-11 11:21:30.927 +01:00  INF]  Successfully validated the token.
+[2023-07-11 11:21:30.955 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetLeaveTypebyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 11:21:30.957 +01:00  INF]  Route matched with {action = "GetLeaveTypebyCompanyId", controller = "LeaveType"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetLeaveTypebyCompanyId(Int64) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController (Com.XpressPayments.Api).
+[2023-07-11 11:21:33.959 +01:00  ERR]  MethodName: GetAllGradeCompanyId(long GradeID) ===>Procedure or function 'Sp_LeaveType' expects parameter '@IsPaidLeaveUpd', which was not supplied.
+[2023-07-11 11:21:34.028 +01:00  ERR]  Exception Occured: GetAllLeaveTypeCompanyId(long companyId) ==> Procedure or function 'Sp_LeaveType' expects parameter '@IsPaidLeaveUpd', which was not supplied.
+[2023-07-11 11:21:34.028 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 11:21:34.029 +01:00  INF]  Executed action Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetLeaveTypebyCompanyId (Com.XpressPayments.Api) in 3071.7157ms
+[2023-07-11 11:21:34.029 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetLeaveTypebyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 11:21:34.029 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/LeaveType/GetLeaveTypebyCompanyId?CompanyID=1 - - - 200 - application/json;+charset=utf-8 3116.4367ms
+[2023-07-11 11:22:33.375 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveType/GetLeaveTypebyCompanyId?CompanyID=1 - -
+[2023-07-11 11:22:33.403 +01:00  INF]  Successfully validated the token.
+[2023-07-11 11:22:33.403 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetLeaveTypebyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 11:22:33.403 +01:00  INF]  Route matched with {action = "GetLeaveTypebyCompanyId", controller = "LeaveType"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetLeaveTypebyCompanyId(Int64) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController (Com.XpressPayments.Api).
+[2023-07-11 11:22:38.932 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 11:22:38.948 +01:00  INF]  Executed action Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetLeaveTypebyCompanyId (Com.XpressPayments.Api) in 5544.3145ms
+[2023-07-11 11:22:38.948 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.GetLeaveTypebyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 11:22:38.948 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/LeaveType/GetLeaveTypebyCompanyId?CompanyID=1 - - - 200 - application/json;+charset=utf-8 5573.3305ms
+[2023-07-11 11:23:44.689 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/LeaveType/CreateLeaveType application/json 129
+[2023-07-11 11:23:44.695 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 11:23:44.695 +01:00  INF]  Successfully validated the token.
+[2023-07-11 11:23:44.695 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.CreateLeaveType (Com.XpressPayments.Api)'
+[2023-07-11 11:23:44.698 +01:00  INF]  Route matched with {action = "CreateLeaveType", controller = "LeaveType"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateLeaveType(Com.XpressPayments.Data.LeaveModuleDTO.DTO.CreateLeaveTypeDTO) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController (Com.XpressPayments.Api).
+[2023-07-11 11:23:55.313 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 11:23:55.315 +01:00  INF]  Executed action Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.CreateLeaveType (Com.XpressPayments.Api) in 10617.0512ms
+[2023-07-11 11:23:55.315 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveTypeController.CreateLeaveType (Com.XpressPayments.Api)'
+[2023-07-11 11:23:55.316 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/LeaveType/CreateLeaveType application/json 129 - 200 - application/json;+charset=utf-8 10626.9839ms
+[2023-07-11 11:44:11.374 +01:00  INF]  User profile is available. Using 'C:\Users\olajumoke.owolabi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-07-11 11:44:11.623 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-07-11 11:44:11.623 +01:00  INF]  Hosting environment: Development
+[2023-07-11 11:44:11.623 +01:00  INF]  Content root path: C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-07-11 11:44:11.671 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-07-11 11:44:12.166 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-07-11 11:44:12.166 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-07-11 11:44:12.172 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 506.0514ms
+[2023-07-11 11:44:12.188 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 14.9347ms
+[2023-07-11 11:44:12.234 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 67.8168ms
+[2023-07-11 11:44:12.275 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-07-11 11:44:12.517 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 241.9853ms
+[2023-07-11 11:46:59.853 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - -
+[2023-07-11 11:47:00.256 +01:00  INF]  Successfully validated the token.
+[2023-07-11 11:47:00.269 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 11:47:00.301 +01:00  INF]  Route matched with {action = "GetLeaveRequestbyCompanyId", controller = "LeaveRequest"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetLeaveRequestbyCompanyId(System.String, Int64) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController (Com.XpressPayments.Api).
+[2023-07-11 11:48:22.617 +01:00  ERR]  MethodName: GetLeaveRequestByCompany(string RequestYear, int companyId) ===>Procedure or function 'Sp_LeaveRequest' expects parameter '@RequestYear', which was not supplied.
+[2023-07-11 11:48:22.670 +01:00  ERR]  Exception Occured: GetLeaveRequestByCompanyID(string RequestYear,long companyId) ==> Procedure or function 'Sp_LeaveRequest' expects parameter '@RequestYear', which was not supplied.
+[2023-07-11 11:48:22.684 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 11:48:22.695 +01:00  INF]  Executed action Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api) in 82387.3886ms
+[2023-07-11 11:48:22.699 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 11:48:22.702 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - - - 200 - application/json;+charset=utf-8 82849.2996ms
+[2023-07-11 11:48:27.097 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - -
+[2023-07-11 11:48:27.127 +01:00  INF]  Successfully validated the token.
+[2023-07-11 11:48:27.130 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 11:48:27.130 +01:00  INF]  Route matched with {action = "GetLeaveRequestbyCompanyId", controller = "LeaveRequest"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetLeaveRequestbyCompanyId(System.String, Int64) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController (Com.XpressPayments.Api).
+[2023-07-11 11:51:27.401 +01:00  ERR]  MethodName: GetLeaveRequestByCompany(string RequestYear, int companyId) ===>Procedure or function 'Sp_LeaveRequest' expects parameter '@RequestYear', which was not supplied.
+[2023-07-11 11:51:27.468 +01:00  ERR]  Exception Occured: GetLeaveRequestByCompanyID(string RequestYear,long companyId) ==> Procedure or function 'Sp_LeaveRequest' expects parameter '@RequestYear', which was not supplied.
+[2023-07-11 11:51:27.469 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 11:51:27.475 +01:00  INF]  Executed action Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api) in 180344.7206ms
+[2023-07-11 11:51:27.475 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 11:51:27.475 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - - - 200 - application/json;+charset=utf-8 180378.4254ms
+[2023-07-11 11:51:30.845 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - -
+[2023-07-11 11:51:30.849 +01:00  INF]  Successfully validated the token.
+[2023-07-11 11:51:30.850 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 11:51:30.856 +01:00  INF]  Route matched with {action = "GetLeaveRequestbyCompanyId", controller = "LeaveRequest"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetLeaveRequestbyCompanyId(System.String, Int64) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController (Com.XpressPayments.Api).
+[2023-07-11 11:54:35.975 +01:00  INF]  User profile is available. Using 'C:\Users\olajumoke.owolabi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-07-11 11:54:36.213 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-07-11 11:54:36.214 +01:00  INF]  Hosting environment: Development
+[2023-07-11 11:54:36.214 +01:00  INF]  Content root path: C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-07-11 11:54:36.261 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-07-11 11:54:36.744 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-07-11 11:54:36.744 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-07-11 11:54:36.776 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 519.7028ms
+[2023-07-11 11:54:36.776 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 27.2728ms
+[2023-07-11 11:54:36.840 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 95.8127ms
+[2023-07-11 11:54:36.888 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-07-11 11:54:37.105 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 217.0406ms
+[2023-07-11 11:55:14.831 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - -
+[2023-07-11 11:55:15.235 +01:00  INF]  Successfully validated the token.
+[2023-07-11 11:55:15.250 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 11:55:15.288 +01:00  INF]  Route matched with {action = "GetLeaveRequestbyCompanyId", controller = "LeaveRequest"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetLeaveRequestbyCompanyId(System.String, Int64) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController (Com.XpressPayments.Api).
+[2023-07-11 12:01:56.410 +01:00  INF]  User profile is available. Using 'C:\Users\olajumoke.owolabi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-07-11 12:01:56.636 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-07-11 12:01:56.637 +01:00  INF]  Hosting environment: Development
+[2023-07-11 12:01:56.637 +01:00  INF]  Content root path: C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-07-11 12:01:56.679 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-07-11 12:01:57.167 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-07-11 12:01:57.167 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-07-11 12:01:57.173 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 497.8613ms
+[2023-07-11 12:01:57.177 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 7.6195ms
+[2023-07-11 12:01:57.242 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 74.2411ms
+[2023-07-11 12:01:57.296 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-07-11 12:01:57.518 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 222.3880ms
+[2023-07-11 12:02:37.914 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - -
+[2023-07-11 12:02:38.313 +01:00  INF]  Successfully validated the token.
+[2023-07-11 12:02:38.326 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 12:02:38.355 +01:00  INF]  Route matched with {action = "GetLeaveRequestbyCompanyId", controller = "LeaveRequest"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetLeaveRequestbyCompanyId(System.String, Int64) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController (Com.XpressPayments.Api).
+[2023-07-11 12:04:36.192 +01:00  ERR]  MethodName: GetLeaveRequestByCompany(string RequestYear, int companyId) ===>Procedure or function 'Sp_LeaveRequest' expects parameter '@RequestYear', which was not supplied.
+[2023-07-11 12:04:36.241 +01:00  ERR]  Exception Occured: GetLeaveRequestByCompanyID(string RequestYear,long companyId) ==> Procedure or function 'Sp_LeaveRequest' expects parameter '@RequestYear', which was not supplied.
+[2023-07-11 12:04:36.254 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 12:04:36.265 +01:00  INF]  Executed action Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api) in 117928.012ms
+[2023-07-11 12:04:36.271 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 12:04:36.274 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - - - 200 - application/json;+charset=utf-8 118384.0894ms
+[2023-07-11 12:04:42.523 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - -
+[2023-07-11 12:04:42.547 +01:00  INF]  Successfully validated the token.
+[2023-07-11 12:04:42.553 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 12:04:42.554 +01:00  INF]  Route matched with {action = "GetLeaveRequestbyCompanyId", controller = "LeaveRequest"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetLeaveRequestbyCompanyId(System.String, Int64) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController (Com.XpressPayments.Api).
+[2023-07-11 12:06:00.994 +01:00  ERR]  MethodName: GetLeaveRequestByCompany(string RequestYear, int companyId) ===>Procedure or function 'Sp_LeaveRequest' expects parameter '@RequestYear', which was not supplied.
+[2023-07-11 12:06:01.053 +01:00  ERR]  Exception Occured: GetLeaveRequestByCompanyID(string RequestYear,long companyId) ==> Procedure or function 'Sp_LeaveRequest' expects parameter '@RequestYear', which was not supplied.
+[2023-07-11 12:06:01.057 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 12:06:01.063 +01:00  INF]  Executed action Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api) in 78534.1213ms
+[2023-07-11 12:06:01.063 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 12:06:01.066 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - - - 200 - application/json;+charset=utf-8 78568.3965ms
+[2023-07-11 12:06:03.853 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - -
+[2023-07-11 12:06:03.856 +01:00  INF]  Successfully validated the token.
+[2023-07-11 12:06:03.856 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 12:06:03.857 +01:00  INF]  Route matched with {action = "GetLeaveRequestbyCompanyId", controller = "LeaveRequest"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetLeaveRequestbyCompanyId(System.String, Int64) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController (Com.XpressPayments.Api).
+[2023-07-11 12:08:48.377 +01:00  ERR]  MethodName: GetLeaveRequestByCompany(string RequestYear, int companyId) ===>Procedure or function 'Sp_LeaveRequest' expects parameter '@RequestYear', which was not supplied.
+[2023-07-11 12:08:48.443 +01:00  ERR]  Exception Occured: GetLeaveRequestByCompanyID(string RequestYear,long companyId) ==> Procedure or function 'Sp_LeaveRequest' expects parameter '@RequestYear', which was not supplied.
+[2023-07-11 12:08:48.444 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 12:08:48.448 +01:00  INF]  Executed action Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api) in 164635.9695ms
+[2023-07-11 12:08:48.448 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 12:08:48.449 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - - - 200 - application/json;+charset=utf-8 164639.9184ms
+[2023-07-11 12:08:51.860 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - -
+[2023-07-11 12:08:51.861 +01:00  INF]  Successfully validated the token.
+[2023-07-11 12:08:51.861 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 12:08:51.861 +01:00  INF]  Route matched with {action = "GetLeaveRequestbyCompanyId", controller = "LeaveRequest"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetLeaveRequestbyCompanyId(System.String, Int64) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController (Com.XpressPayments.Api).
+[2023-07-11 12:14:46.669 +01:00  ERR]  MethodName: GetLeaveRequestByCompany(string RequestYear, int companyId) ===>Procedure or function 'Sp_LeaveRequest' expects parameter '@RequestYear', which was not supplied.
+[2023-07-11 12:14:46.728 +01:00  ERR]  Exception Occured: GetLeaveRequestByCompanyID(string RequestYear,long companyId) ==> Procedure or function 'Sp_LeaveRequest' expects parameter '@RequestYear', which was not supplied.
+[2023-07-11 12:14:46.732 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 12:14:46.733 +01:00  INF]  Executed action Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api) in 354872.8174ms
+[2023-07-11 12:14:46.733 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 12:14:46.733 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - - - 200 - application/json;+charset=utf-8 354873.6797ms
+[2023-07-11 12:14:52.216 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - -
+[2023-07-11 12:14:52.236 +01:00  INF]  Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '11/07/2023 11:04:09', Current time: '11/07/2023 11:14:52'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateJWS(String token, TokenValidationParameters validationParameters, BaseConfiguration currentConfiguration, SecurityToken& signatureValidatedToken, ExceptionDispatchInfo& exceptionThrown)
+--- End of stack trace from previous location ---
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, JwtSecurityToken outerToken, TokenValidationParameters validationParameters, SecurityToken& signatureValidatedToken)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+[2023-07-11 12:14:52.320 +01:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '11/07/2023 11:04:09', Current time: '11/07/2023 11:14:52'.
+[2023-07-11 12:14:52.321 +01:00  INF]  Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+[2023-07-11 12:14:52.330 +01:00  INF]  AuthenticationScheme: Bearer was challenged.
+[2023-07-11 12:14:52.333 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - - - 401 - - 116.8845ms
+[2023-07-11 12:16:01.220 +01:00  INF]  User profile is available. Using 'C:\Users\olajumoke.owolabi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-07-11 12:16:01.451 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-07-11 12:16:01.452 +01:00  INF]  Hosting environment: Development
+[2023-07-11 12:16:01.452 +01:00  INF]  Content root path: C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-07-11 12:16:01.491 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-07-11 12:16:01.950 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-07-11 12:16:01.953 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 464.2930ms
+[2023-07-11 12:16:01.958 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-07-11 12:16:01.959 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 8.5662ms
+[2023-07-11 12:16:02.022 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 63.6270ms
+[2023-07-11 12:16:02.088 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-07-11 12:16:02.267 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 178.9558ms
+[2023-07-11 12:17:02.777 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/Logout application/json 48
+[2023-07-11 12:17:02.797 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 12:17:02.896 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-07-11 12:17:02.930 +01:00  INF]  Route matched with {action = "Logout", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Logout(Com.XpressPayments.Data.DTOs.Account.LogoutDto) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 12:17:04.310 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 12:17:04.326 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api) in 1386.4619ms
+[2023-07-11 12:17:04.334 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-07-11 12:17:04.337 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/Logout application/json 48 - 200 - application/json;+charset=utf-8 1560.0712ms
+[2023-07-11 12:17:22.806 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/Login application/json 82
+[2023-07-11 12:17:22.814 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 12:17:22.817 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-07-11 12:17:22.825 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Com.XpressPayments.Bussiness.ViewModels.LoginModel) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 12:17:28.461 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.LoginResponse'.
+[2023-07-11 12:17:28.471 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api) in 5645.4978ms
+[2023-07-11 12:17:28.471 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-07-11 12:17:28.472 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/Login application/json 82 - 200 - application/json;+charset=utf-8 5665.5963ms
+[2023-07-11 12:18:04.616 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - -
+[2023-07-11 12:18:04.719 +01:00  INF]  Successfully validated the token.
+[2023-07-11 12:18:04.728 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 12:18:04.731 +01:00  INF]  Route matched with {action = "GetLeaveRequestbyCompanyId", controller = "LeaveRequest"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetLeaveRequestbyCompanyId(System.String, Int64) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController (Com.XpressPayments.Api).
+[2023-07-11 12:20:08.472 +01:00  ERR]  MethodName: GetLeaveRequestByCompany(string RequestYear, int companyId) ===>Procedure or function 'Sp_LeaveRequest' expects parameter '@RequestYear', which was not supplied.
+[2023-07-11 12:20:08.528 +01:00  ERR]  Exception Occured: GetLeaveRequestByCompanyID(string RequestYear,long companyId) ==> Procedure or function 'Sp_LeaveRequest' expects parameter '@RequestYear', which was not supplied.
+[2023-07-11 12:20:08.529 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 12:20:08.529 +01:00  INF]  Executed action Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api) in 123798.4355ms
+[2023-07-11 12:20:08.529 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 12:20:08.531 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - - - 200 - application/json;+charset=utf-8 123914.7191ms
+[2023-07-11 12:20:11.961 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - -
+[2023-07-11 12:20:11.962 +01:00  INF]  Successfully validated the token.
+[2023-07-11 12:20:11.963 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 12:20:11.973 +01:00  INF]  Route matched with {action = "GetLeaveRequestbyCompanyId", controller = "LeaveRequest"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetLeaveRequestbyCompanyId(System.String, Int64) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController (Com.XpressPayments.Api).
+[2023-07-11 12:22:08.330 +01:00  ERR]  MethodName: GetLeaveRequestByCompany(string RequestYear, int companyId) ===>Procedure or function 'Sp_LeaveRequest' expects parameter '@StartDate', which was not supplied.
+[2023-07-11 12:22:08.388 +01:00  ERR]  Exception Occured: GetLeaveRequestByCompanyID(string RequestYear,long companyId) ==> Procedure or function 'Sp_LeaveRequest' expects parameter '@StartDate', which was not supplied.
+[2023-07-11 12:22:08.388 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 12:22:08.389 +01:00  INF]  Executed action Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api) in 116416.6728ms
+[2023-07-11 12:22:08.389 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 12:22:08.390 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - - - 200 - application/json;+charset=utf-8 116428.9345ms
+[2023-07-11 12:22:10.939 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - -
+[2023-07-11 12:22:10.950 +01:00  INF]  Successfully validated the token.
+[2023-07-11 12:22:10.950 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 12:22:10.951 +01:00  INF]  Route matched with {action = "GetLeaveRequestbyCompanyId", controller = "LeaveRequest"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetLeaveRequestbyCompanyId(System.String, Int64) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController (Com.XpressPayments.Api).
+[2023-07-11 12:22:24.560 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 12:22:24.566 +01:00  INF]  Executed action Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api) in 13615.7467ms
+[2023-07-11 12:22:24.567 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-07-11 12:22:24.567 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - - - 200 - application/json;+charset=utf-8 13627.9892ms
+[2023-07-11 12:28:49.912 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/Logout application/json 60
+[2023-07-11 12:28:49.914 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 12:28:49.916 +01:00  INF]  Successfully validated the token.
+[2023-07-11 12:28:49.916 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-07-11 12:28:49.954 +01:00  INF]  Route matched with {action = "Logout", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Logout(Com.XpressPayments.Data.DTOs.Account.LogoutDto) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 12:28:50.750 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 12:28:50.753 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api) in 798.7257ms
+[2023-07-11 12:28:50.754 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-07-11 12:28:50.754 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/Logout application/json 60 - 200 - application/json;+charset=utf-8 841.5504ms
+[2023-07-11 12:47:54.785 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Employee/ApproveEmp application/json 60
+[2023-07-11 12:47:54.786 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 12:47:54.787 +01:00  INF]  Successfully validated the token.
+[2023-07-11 12:47:54.787 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.EmployeeController.ApproveEmp (Com.XpressPayments.Api)'
+[2023-07-11 12:47:54.814 +01:00  INF]  Route matched with {action = "ApproveEmp", controller = "Employee"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApproveEmp(Com.XpressPayments.Data.DTOs.ApproveEmp) on controller Com.XpressPayments.Api.Controllers.EmployeeController (Com.XpressPayments.Api).
+[2023-07-11 12:48:31.590 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 12:48:31.592 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.EmployeeController.ApproveEmp (Com.XpressPayments.Api) in 36777.978ms
+[2023-07-11 12:48:31.592 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.EmployeeController.ApproveEmp (Com.XpressPayments.Api)'
+[2023-07-11 12:48:31.592 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Employee/ApproveEmp application/json 60 - 200 - application/json;+charset=utf-8 36807.3037ms
+[2023-07-11 12:50:20.849 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/Logout application/json 60
+[2023-07-11 12:50:20.854 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 12:50:20.854 +01:00  INF]  Successfully validated the token.
+[2023-07-11 12:50:20.854 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-07-11 12:50:20.854 +01:00  INF]  Route matched with {action = "Logout", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Logout(Com.XpressPayments.Data.DTOs.Account.LogoutDto) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 12:50:21.062 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 12:50:21.067 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api) in 212.1465ms
+[2023-07-11 12:50:21.067 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-07-11 12:50:21.067 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/Logout application/json 60 - 200 - application/json;+charset=utf-8 218.3656ms
+[2023-07-11 12:51:09.072 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/Login application/json 98
+[2023-07-11 12:51:09.072 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 12:51:09.072 +01:00  INF]  Successfully validated the token.
+[2023-07-11 12:51:09.072 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-07-11 12:51:09.075 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Com.XpressPayments.Bussiness.ViewModels.LoginModel) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 12:51:13.594 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.LoginResponse'.
+[2023-07-11 12:51:13.608 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api) in 4533.1231ms
+[2023-07-11 12:51:13.608 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-07-11 12:51:13.608 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/Login application/json 98 - 200 - application/json;+charset=utf-8 4536.5874ms
+[2023-07-11 12:53:17.447 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/ApproveUser application/json 42
+[2023-07-11 12:53:17.447 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 12:53:17.448 +01:00  INF]  Successfully validated the token.
+[2023-07-11 12:53:17.448 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.ApproveUser (Com.XpressPayments.Api)'
+[2023-07-11 12:53:17.451 +01:00  INF]  Route matched with {action = "ApproveUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApproveUser(Com.XpressPayments.Data.DTOs.Account.ApproveUserDto) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 12:53:50.648 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 12:53:50.648 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.ApproveUser (Com.XpressPayments.Api) in 33197.3005ms
+[2023-07-11 12:53:50.649 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.ApproveUser (Com.XpressPayments.Api)'
+[2023-07-11 12:53:50.649 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/ApproveUser application/json 42 - 200 - application/json;+charset=utf-8 33201.8838ms
+[2023-07-11 13:16:30.316 +01:00  INF]  User profile is available. Using 'C:\Users\olajumoke.owolabi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-07-11 13:16:30.529 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-07-11 13:16:30.530 +01:00  INF]  Hosting environment: Development
+[2023-07-11 13:16:30.530 +01:00  INF]  Content root path: C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-07-11 13:16:30.578 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-07-11 13:16:31.014 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-07-11 13:16:31.018 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 441.9246ms
+[2023-07-11 13:16:31.034 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 8.0260ms
+[2023-07-11 13:16:31.034 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-07-11 13:16:31.089 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 55.6288ms
+[2023-07-11 13:16:31.149 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-07-11 13:16:31.344 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 195.7117ms
+[2023-07-11 13:16:50.733 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/Logout application/json 48
+[2023-07-11 13:16:50.741 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 13:16:50.849 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-07-11 13:16:50.887 +01:00  INF]  Route matched with {action = "Logout", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Logout(Com.XpressPayments.Data.DTOs.Account.LogoutDto) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 13:16:52.418 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 13:16:52.436 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api) in 1537.6734ms
+[2023-07-11 13:16:52.443 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-07-11 13:16:52.446 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/Logout application/json 48 - 200 - application/json;+charset=utf-8 1712.8810ms
+[2023-07-11 13:17:07.463 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/Login application/json 82
+[2023-07-11 13:17:07.471 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 13:17:07.471 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-07-11 13:17:07.480 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Com.XpressPayments.Bussiness.ViewModels.LoginModel) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 13:17:14.875 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.LoginResponse'.
+[2023-07-11 13:17:14.885 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api) in 7404.3539ms
+[2023-07-11 13:17:14.885 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-07-11 13:17:14.885 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/Login application/json 82 - 200 - application/json;+charset=utf-8 7421.7512ms
+[2023-07-11 13:17:42.956 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/Employee/GetAllEmpPendingApproval?CompanyID=1 - -
+[2023-07-11 13:17:43.075 +01:00  INF]  Successfully validated the token.
+[2023-07-11 13:17:43.083 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.EmployeeController.GetAllEmpPendingApproval (Com.XpressPayments.Api)'
+[2023-07-11 13:17:43.087 +01:00  INF]  Route matched with {action = "GetAllEmpPendingApproval", controller = "Employee"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllEmpPendingApproval(Int64) on controller Com.XpressPayments.Api.Controllers.EmployeeController (Com.XpressPayments.Api).
+[2023-07-11 13:17:51.272 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 13:17:51.304 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.EmployeeController.GetAllEmpPendingApproval (Com.XpressPayments.Api) in 8216.7711ms
+[2023-07-11 13:17:51.304 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.EmployeeController.GetAllEmpPendingApproval (Com.XpressPayments.Api)'
+[2023-07-11 13:17:51.306 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/Employee/GetAllEmpPendingApproval?CompanyID=1 - - - 200 - application/json;+charset=utf-8 8350.2340ms
+[2023-07-11 13:23:42.869 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Employee/ApproveEmp application/json 39
+[2023-07-11 13:23:42.885 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 13:23:42.885 +01:00  INF]  Successfully validated the token.
+[2023-07-11 13:23:42.887 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.EmployeeController.ApproveEmp (Com.XpressPayments.Api)'
+[2023-07-11 13:23:42.900 +01:00  INF]  Route matched with {action = "ApproveEmp", controller = "Employee"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApproveEmp(Com.XpressPayments.Data.DTOs.ApproveEmp) on controller Com.XpressPayments.Api.Controllers.EmployeeController (Com.XpressPayments.Api).
+[2023-07-11 13:26:12.360 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 13:26:12.368 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.EmployeeController.ApproveEmp (Com.XpressPayments.Api) in 149468.3916ms
+[2023-07-11 13:26:12.369 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.EmployeeController.ApproveEmp (Com.XpressPayments.Api)'
+[2023-07-11 13:26:12.371 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Employee/ApproveEmp application/json 39 - 200 - application/json;+charset=utf-8 149501.4207ms
+[2023-07-11 13:28:54.530 +01:00  INF]  User profile is available. Using 'C:\Users\olajumoke.owolabi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-07-11 13:28:54.873 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-07-11 13:28:54.873 +01:00  INF]  Hosting environment: Development
+[2023-07-11 13:28:54.874 +01:00  INF]  Content root path: C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-07-11 13:28:54.959 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-07-11 13:28:55.759 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-07-11 13:28:55.763 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-07-11 13:28:55.767 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 814.3990ms
+[2023-07-11 13:28:55.769 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 8.1166ms
+[2023-07-11 13:28:55.856 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 92.5883ms
+[2023-07-11 13:28:55.912 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-07-11 13:28:56.197 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 285.9248ms
+[2023-07-11 13:29:17.496 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/Logout application/json 52
+[2023-07-11 13:29:17.516 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 13:29:17.708 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-07-11 13:29:17.744 +01:00  INF]  Route matched with {action = "Logout", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Logout(Com.XpressPayments.Data.DTOs.Account.LogoutDto) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 13:29:19.421 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 13:29:19.434 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api) in 1682.7943ms
+[2023-07-11 13:29:19.441 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-07-11 13:29:19.444 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/Logout application/json 52 - 200 - application/json;+charset=utf-8 1948.5704ms
+[2023-07-11 13:29:51.498 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/Logout application/json 52
+[2023-07-11 13:29:51.508 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 13:29:51.524 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-07-11 13:29:51.530 +01:00  INF]  Route matched with {action = "Logout", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Logout(Com.XpressPayments.Data.DTOs.Account.LogoutDto) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 13:29:51.721 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 13:29:51.724 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api) in 193.2382ms
+[2023-07-11 13:29:51.724 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-07-11 13:29:51.725 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/Logout application/json 52 - 200 - application/json;+charset=utf-8 227.3068ms
+[2023-07-11 13:30:03.901 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/Login application/json 90
+[2023-07-11 13:30:03.902 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 13:30:03.904 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-07-11 13:30:03.906 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Com.XpressPayments.Bussiness.ViewModels.LoginModel) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 13:30:04.498 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.LoginResponse'.
+[2023-07-11 13:30:04.499 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api) in 592.5591ms
+[2023-07-11 13:30:04.499 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-07-11 13:30:04.499 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/Login application/json 90 - 200 - application/json;+charset=utf-8 597.7605ms
+[2023-07-11 13:33:46.055 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/Logout application/json 48
+[2023-07-11 13:33:46.058 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 13:33:46.059 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-07-11 13:33:46.059 +01:00  INF]  Route matched with {action = "Logout", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Logout(Com.XpressPayments.Data.DTOs.Account.LogoutDto) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 13:33:46.245 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 13:33:46.255 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api) in 195.4441ms
+[2023-07-11 13:33:46.255 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-07-11 13:33:46.258 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/Logout application/json 48 - 200 - application/json;+charset=utf-8 202.5940ms
+[2023-07-11 13:34:06.537 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/Login application/json 82
+[2023-07-11 13:34:06.537 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 13:34:06.537 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-07-11 13:34:06.537 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Com.XpressPayments.Bussiness.ViewModels.LoginModel) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 13:34:10.474 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.LoginResponse'.
+[2023-07-11 13:34:10.493 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api) in 3956.3262ms
+[2023-07-11 13:34:10.494 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-07-11 13:34:10.494 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/Login application/json 82 - 200 - application/json;+charset=utf-8 3957.1421ms
+[2023-07-11 13:34:40.565 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/Employee/GetAllEmpPendingApproval?CompanyID=1 - -
+[2023-07-11 13:34:40.676 +01:00  INF]  Successfully validated the token.
+[2023-07-11 13:34:40.684 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.EmployeeController.GetAllEmpPendingApproval (Com.XpressPayments.Api)'
+[2023-07-11 13:34:40.688 +01:00  INF]  Route matched with {action = "GetAllEmpPendingApproval", controller = "Employee"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllEmpPendingApproval(Int64) on controller Com.XpressPayments.Api.Controllers.EmployeeController (Com.XpressPayments.Api).
+[2023-07-11 13:34:44.446 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 13:34:44.477 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.EmployeeController.GetAllEmpPendingApproval (Com.XpressPayments.Api) in 3788.5905ms
+[2023-07-11 13:34:44.477 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.EmployeeController.GetAllEmpPendingApproval (Com.XpressPayments.Api)'
+[2023-07-11 13:34:44.479 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/Employee/GetAllEmpPendingApproval?CompanyID=1 - - - 200 - application/json;+charset=utf-8 3913.4547ms
+[2023-07-11 13:36:13.378 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Employee/ApproveEmp application/json 39
+[2023-07-11 13:36:13.386 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 13:36:13.386 +01:00  INF]  Successfully validated the token.
+[2023-07-11 13:36:13.388 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.EmployeeController.ApproveEmp (Com.XpressPayments.Api)'
+[2023-07-11 13:36:13.401 +01:00  INF]  Route matched with {action = "ApproveEmp", controller = "Employee"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApproveEmp(Com.XpressPayments.Data.DTOs.ApproveEmp) on controller Com.XpressPayments.Api.Controllers.EmployeeController (Com.XpressPayments.Api).
+[2023-07-11 13:49:30.601 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 13:49:30.602 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.EmployeeController.ApproveEmp (Com.XpressPayments.Api) in 797199.6443ms
+[2023-07-11 13:49:30.602 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.EmployeeController.ApproveEmp (Com.XpressPayments.Api)'
+[2023-07-11 13:49:30.602 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Employee/ApproveEmp application/json 39 - 200 - application/json;+charset=utf-8 797222.8790ms
+[2023-07-11 13:49:51.655 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Employee/ApproveEmp application/json 39
+[2023-07-11 13:49:51.662 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 13:49:51.664 +01:00  INF]  Successfully validated the token.
+[2023-07-11 13:49:51.666 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.EmployeeController.ApproveEmp (Com.XpressPayments.Api)'
+[2023-07-11 13:49:51.666 +01:00  INF]  Route matched with {action = "ApproveEmp", controller = "Employee"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApproveEmp(Com.XpressPayments.Data.DTOs.ApproveEmp) on controller Com.XpressPayments.Api.Controllers.EmployeeController (Com.XpressPayments.Api).
+[2023-07-11 13:50:37.687 +01:00  INF]  User with email: Test1@gmail.com approved successfully.
+[2023-07-11 13:50:37.687 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 13:50:37.688 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.EmployeeController.ApproveEmp (Com.XpressPayments.Api) in 46021.8976ms
+[2023-07-11 13:50:37.688 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.EmployeeController.ApproveEmp (Com.XpressPayments.Api)'
+[2023-07-11 13:50:37.689 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Employee/ApproveEmp application/json 39 - 200 - application/json;+charset=utf-8 46033.4068ms
+[2023-07-11 13:53:19.886 +01:00  INF]  User profile is available. Using 'C:\Users\olajumoke.owolabi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-07-11 13:53:20.136 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-07-11 13:53:20.137 +01:00  INF]  Hosting environment: Development
+[2023-07-11 13:53:20.137 +01:00  INF]  Content root path: C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-07-11 13:53:20.188 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-07-11 13:53:20.718 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-07-11 13:53:20.718 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-07-11 13:53:20.726 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 540.8604ms
+[2023-07-11 13:53:20.739 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 12.0629ms
+[2023-07-11 13:53:20.799 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 84.2134ms
+[2023-07-11 13:53:20.843 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-07-11 13:53:21.083 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 239.1817ms
+[2023-07-11 13:59:56.788 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/Logout application/json 60
+[2023-07-11 13:59:56.846 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 13:59:56.958 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-07-11 13:59:56.992 +01:00  INF]  Route matched with {action = "Logout", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Logout(Com.XpressPayments.Data.DTOs.Account.LogoutDto) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 13:59:58.551 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 13:59:58.564 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api) in 1565.6713ms
+[2023-07-11 13:59:58.571 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-07-11 13:59:58.573 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/Logout application/json 60 - 200 - application/json;+charset=utf-8 1785.7989ms
+[2023-07-11 14:00:38.844 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/Login application/json 98
+[2023-07-11 14:00:38.853 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 14:00:38.862 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-07-11 14:00:38.874 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Com.XpressPayments.Bussiness.ViewModels.LoginModel) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 14:00:45.309 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.LoginResponse'.
+[2023-07-11 14:00:45.336 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api) in 6461.9549ms
+[2023-07-11 14:00:45.336 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-07-11 14:00:45.336 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/Login application/json 98 - 200 - application/json;+charset=utf-8 6492.1894ms
+[2023-07-11 14:02:02.001 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/Auth/GetAllUsersPendingApprovalByComapnyId?CompanyId=37 - -
+[2023-07-11 14:02:02.104 +01:00  INF]  Successfully validated the token.
+[2023-07-11 14:02:02.112 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.GetAllUsersPendingApproval (Com.XpressPayments.Api)'
+[2023-07-11 14:02:02.115 +01:00  INF]  Route matched with {action = "GetAllUsersPendingApproval", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllUsersPendingApproval(Int64) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 14:02:02.544 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 14:02:02.545 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.GetAllUsersPendingApproval (Com.XpressPayments.Api) in 429.1845ms
+[2023-07-11 14:02:02.545 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.GetAllUsersPendingApproval (Com.XpressPayments.Api)'
+[2023-07-11 14:02:02.546 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/Auth/GetAllUsersPendingApprovalByComapnyId?CompanyId=37 - - - 200 - application/json;+charset=utf-8 545.6460ms
+[2023-07-11 14:03:43.651 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/ApproveUser application/json 61
+[2023-07-11 14:03:43.654 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 14:03:43.677 +01:00  INF]  Successfully validated the token.
+[2023-07-11 14:03:43.679 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.ApproveUser (Com.XpressPayments.Api)'
+[2023-07-11 14:03:43.691 +01:00  INF]  Route matched with {action = "ApproveUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApproveUser(Com.XpressPayments.Data.DTOs.Account.ApproveUserDto) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 14:10:43.337 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 14:10:43.338 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.ApproveUser (Com.XpressPayments.Api) in 419615.7719ms
+[2023-07-11 14:10:43.338 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.ApproveUser (Com.XpressPayments.Api)'
+[2023-07-11 14:10:43.338 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/ApproveUser application/json 61 - 200 - application/json;+charset=utf-8 419657.1831ms
+[2023-07-11 14:11:23.516 +01:00  INF]  Request starting HTTP/2 POST https://localhost:44317/api/Auth/ApproveUser application/json 39
+[2023-07-11 14:11:23.519 +01:00  INF]  CORS policy execution successful.
+[2023-07-11 14:11:23.521 +01:00  INF]  Successfully validated the token.
+[2023-07-11 14:11:23.522 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.ApproveUser (Com.XpressPayments.Api)'
+[2023-07-11 14:11:23.522 +01:00  INF]  Route matched with {action = "ApproveUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApproveUser(Com.XpressPayments.Data.DTOs.Account.ApproveUserDto) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-07-11 14:11:52.286 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-07-11 14:11:52.286 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.ApproveUser (Com.XpressPayments.Api) in 28763.7301ms
+[2023-07-11 14:11:52.286 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.ApproveUser (Com.XpressPayments.Api)'
+[2023-07-11 14:11:52.287 +01:00  INF]  Request finished HTTP/2 POST https://localhost:44317/api/Auth/ApproveUser application/json 39 - 200 - application/json;+charset=utf-8 28770.1098ms
