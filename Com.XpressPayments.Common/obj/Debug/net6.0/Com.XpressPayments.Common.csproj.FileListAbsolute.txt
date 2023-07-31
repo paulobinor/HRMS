@@ -10,6 +10,9 @@ C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Commo
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Common\obj\Debug\net6.0\refint\Com.XpressPayments.Common.dll
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Common\obj\Debug\net6.0\Com.XpressPayments.Common.pdb
 C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Common\obj\Debug\net6.0\ref\Com.XpressPayments.Common.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Common\bin\Debug\net6.0\Com.XpressPayments.Common.deps.json
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Common\bin\Debug\net6.0\Com.XpressPayments.Common.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Common\bin\Debug\net6.0\Com.XpressPayments.Common.pdb
 C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Common\obj\Debug\net6.0\Com.XpressPayments.Common.csproj.AssemblyReference.cache
 C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Common\obj\Debug\net6.0\Com.XpressPayments.Common.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Common\obj\Debug\net6.0\Com.XpressPayments.Common.AssemblyInfoInputs.cache
@@ -18,3 +21,4 @@ C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Common\ob
 C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Common\obj\Debug\net6.0\Com.XpressPayments.Common.dll
 C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Common\obj\Debug\net6.0\refint\Com.XpressPayments.Common.dll
 C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Common\obj\Debug\net6.0\Com.XpressPayments.Common.pdb
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Common\obj\Debug\net6.0\ref\Com.XpressPayments.Common.dll

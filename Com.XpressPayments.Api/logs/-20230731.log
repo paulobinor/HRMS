@@ -1,24 +1,36 @@
-[2023-07-31 15:10:58.743 +01:00  INF]  User profile is available. Using 'C:\Users\olajumoke.owolabi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
-[2023-07-31 15:10:59.299 +01:00  INF]  Application started. Press Ctrl+C to shut down.
-[2023-07-31 15:10:59.299 +01:00  INF]  Hosting environment: Development
-[2023-07-31 15:10:59.299 +01:00  INF]  Content root path: C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\
-[2023-07-31 15:10:59.475 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
-[2023-07-31 15:11:01.108 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 1641.1076ms
-[2023-07-31 15:11:01.637 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger-ui.css - -
-[2023-07-31 15:11:01.652 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger-ui-bundle.js - -
-[2023-07-31 15:11:01.691 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger-ui-standalone-preset.js - -
-[2023-07-31 15:11:01.734 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
-[2023-07-31 15:11:01.734 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
-[2023-07-31 15:11:01.766 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 32.0068ms
-[2023-07-31 15:11:01.773 +01:00  INF]  Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
-[2023-07-31 15:11:01.773 +01:00  INF]  Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
-[2023-07-31 15:11:01.776 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger-ui.css - - - 200 143632 text/css 138.8895ms
-[2023-07-31 15:11:01.822 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger-ui-bundle.js - - - 200 1092889 application/javascript 169.6724ms
-[2023-07-31 15:11:01.864 +01:00  INF]  Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
-[2023-07-31 15:11:01.896 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger-ui-standalone-preset.js - - - 200 337162 application/javascript 204.6862ms
-[2023-07-31 15:11:04.275 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 2540.3754ms
-[2023-07-31 15:11:04.945 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
-[2023-07-31 15:11:04.981 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/favicon-32x32.png - -
-[2023-07-31 15:11:04.982 +01:00  INF]  Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
-[2023-07-31 15:11:04.982 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/favicon-32x32.png - - - 200 628 image/png 0.7460ms
-[2023-07-31 15:11:05.247 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 302.0884ms
+[2023-07-31 22:47:03.603 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-07-31 22:47:04.326 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-07-31 22:47:04.327 +01:00  INF]  Hosting environment: Development
+[2023-07-31 22:47:04.327 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-07-31 22:47:04.495 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-07-31 22:47:05.727 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger-ui.css - -
+[2023-07-31 22:47:05.729 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 1244.6924ms
+[2023-07-31 22:47:05.736 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger-ui-bundle.js - -
+[2023-07-31 22:47:05.757 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger-ui-standalone-preset.js - -
+[2023-07-31 22:47:05.840 +01:00  INF]  Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+[2023-07-31 22:47:05.840 +01:00  INF]  Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+[2023-07-31 22:47:05.846 +01:00  INF]  Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+[2023-07-31 22:47:05.850 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger-ui.css - - - 200 143632 text/css 121.2351ms
+[2023-07-31 22:47:05.885 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-07-31 22:47:05.885 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger-ui-standalone-preset.js - - - 200 337162 application/javascript 127.6505ms
+[2023-07-31 22:47:05.911 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 22.5818ms
+[2023-07-31 22:47:05.924 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-07-31 22:47:05.947 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger-ui-bundle.js - - - 200 1092889 application/javascript 210.5677ms
+[2023-07-31 22:47:06.078 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 153.6974ms
+[2023-07-31 22:47:06.354 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-07-31 22:47:06.414 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/favicon-32x32.png - -
+[2023-07-31 22:47:06.416 +01:00  INF]  Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+[2023-07-31 22:47:06.416 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/favicon-32x32.png - - - 200 628 image/png 2.0399ms
+[2023-07-31 22:47:06.798 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 443.5539ms
+[2023-07-31 22:56:00.106 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-07-31 22:56:00.573 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-07-31 22:56:00.573 +01:00  INF]  Hosting environment: Development
+[2023-07-31 22:56:00.573 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-07-31 22:56:00.665 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-07-31 22:56:01.723 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 1064.7384ms
+[2023-07-31 22:56:01.728 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-07-31 22:56:01.757 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 29.4113ms
+[2023-07-31 22:56:01.798 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-07-31 22:56:01.930 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 131.5396ms
+[2023-07-31 22:56:02.269 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-07-31 22:56:02.733 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 464.4979ms
