@@ -43,6 +43,7 @@ namespace Com.XpressPayments.Data.AppConstants
         public static string Sp_HospitalPlan = "Sp_HospitalPlan";
         public static string Sp_Roles = "Sp_Roles";
         public static string Sp_Reviwer = "Sp_Reviwer";
+        public static string Sp_ReviwersRole = "Sp_ReviwersRole";
 
         //Vacation module
         public static string Sp_LeaveType = "Sp_LeaveType";
