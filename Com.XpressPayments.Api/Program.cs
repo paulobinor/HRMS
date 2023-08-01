@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Com.XpressPayments.Bussiness.LeaveModuleService.Service.ILogic;
 using Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic;
+using Com.XpressPayments.Bussiness.OnBoardingModuleService.Services.ILogic;
+using Com.XpressPayments.Bussiness.OnBoardingModuleService.Services.Logic;
 using Com.XpressPayments.Bussiness.Profiles;
 using Com.XpressPayments.Bussiness.Services.ILogic;
 using Com.XpressPayments.Bussiness.Services.Logic;
@@ -9,6 +11,8 @@ using Com.XpressPayments.Common.Configuration;
 using Com.XpressPayments.Data.DapperGeneric;
 using Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo;
 using Com.XpressPayments.Data.LeaveModuleRepository.LeaveType;
+using Com.XpressPayments.Data.OnBoardingRepositorie.Repositories.Reviwer;
+using Com.XpressPayments.Data.OnBoardingRepositorie.Repositories.ReviwerRole;
 using Com.XpressPayments.Data.OnBoardingRepositorie.Repositories.UserAccount.IRepository;
 using Com.XpressPayments.Data.Repositories;
 using Com.XpressPayments.Data.Repositories.Branch;
@@ -174,6 +178,10 @@ builder.Services.AddScoped<IHospitalProvidersRepository, HospitalProvidersReposi
 builder.Services.AddScoped<IHospitalPlanRepository, HospitalPlanRepository>();
 builder.Services.AddScoped<IChildrenRepository, ChildrenRepository>();
 builder.Services.AddScoped<IRolesRepo, RolesRepo>();
+builder.Services.AddScoped<IReviwerRepository, ReviwerRepository>();
+builder.Services.AddScoped<IReviwerRoleRepository, ReviwerRoleRepository>();
+
+
 
 
 //VacationModul
@@ -207,6 +215,8 @@ builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<IHMOService, HMOService>();
 builder.Services.AddScoped<IHospitalProvidersService, HospitalProvidersService>();
 builder.Services.AddScoped<IChildrenService, ChildrenService>();
+builder.Services.AddScoped<IReviwerRoleService, ReviwerRoleService>();
+builder.Services.AddScoped<IReviwerService, ReviwerService>();
 
 //VacationModul
 builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
