@@ -1,0 +1,36 @@
+[2023-08-09 10:11:11.601 +01:00  INF]  User profile is available. Using 'C:\Users\olajumoke.owolabi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-09 10:11:11.930 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-09 10:11:11.930 +01:00  INF]  Hosting environment: Development
+[2023-08-09 10:11:11.930 +01:00  INF]  Content root path: C:\Users\olajumoke.owolabi\source\repos\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-09 10:11:12.015 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/index.html - -
+[2023-08-09 10:11:12.936 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/index.html - - - 200 - text/html;charset=utf-8 855.2005ms
+[2023-08-09 10:11:12.956 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-09 10:11:12.966 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 9.4055ms
+[2023-08-09 10:11:12.995 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/_vs/browserLink - -
+[2023-08-09 10:11:13.057 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 62.7455ms
+[2023-08-09 10:11:13.270 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - -
+[2023-08-09 10:11:13.505 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 235.0310ms
+[2023-08-09 10:17:39.468 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - -
+[2023-08-09 10:17:39.998 +01:00  INF]  Successfully validated the token.
+[2023-08-09 10:17:40.016 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-08-09 10:17:40.057 +01:00  INF]  Route matched with {action = "GetLeaveRequestbyCompanyId", controller = "LeaveRequest"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetLeaveRequestbyCompanyId(System.String, Int64) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController (Com.XpressPayments.Api).
+[2023-08-09 10:17:48.528 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-09 10:17:48.551 +01:00  INF]  Executed action Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api) in 8487.6447ms
+[2023-08-09 10:17:48.557 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-08-09 10:17:48.559 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - - - 200 - application/json;+charset=utf-8 9126.5984ms
+[2023-08-09 10:56:49.500 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - -
+[2023-08-09 10:56:49.525 +01:00  INF]  Successfully validated the token.
+[2023-08-09 10:56:49.527 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-08-09 10:56:49.527 +01:00  INF]  Route matched with {action = "GetLeaveRequestbyCompanyId", controller = "LeaveRequest"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetLeaveRequestbyCompanyId(System.String, Int64) on controller Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController (Com.XpressPayments.Api).
+[2023-08-09 10:56:51.971 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-09 10:56:51.971 +01:00  INF]  Executed action Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api) in 2444.1601ms
+[2023-08-09 10:56:51.971 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LeaveModuleController.Controller.LeaveRequestController.GetLeaveRequestbyCompanyId (Com.XpressPayments.Api)'
+[2023-08-09 10:56:51.972 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44317/api/LeaveRequest/GetLeaveRequestbyCompanyId?RequestYear=2023&CompanyID=1 - - - 200 - application/json;+charset=utf-8 2471.2966ms
+[2023-08-09 13:56:16.439 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-09 13:56:17.744 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-09 13:56:17.765 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-09 13:56:17.776 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-09 13:56:17.779 +01:00  INF]  Hosting environment: Development
+[2023-08-09 13:56:17.788 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-09 13:56:22.784 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger - -
+[2023-08-09 13:56:23.174 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger - - - 404 0 - 393.4457ms

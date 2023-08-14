@@ -361,17 +361,6 @@ namespace Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic
                 }
 
 
-                //if (Convert.ToInt32(RoleId) != 2)
-                //{
-                //    if (Convert.ToInt32(RoleId) != 4)
-                //    {
-                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                //        return response;
-
-                //    }
-
-                //}
 
                 var LeaveRquest = await _leaveRequestRepository.GetLeaveRequestByCompany( RequestYear, companyId);
 

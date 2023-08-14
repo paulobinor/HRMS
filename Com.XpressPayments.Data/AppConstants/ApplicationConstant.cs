@@ -50,6 +50,8 @@ namespace Com.XpressPayments.Data.AppConstants
         public static string Sp_LeaveRequest = "Sp_LeaveRequest";
         public static string Sp_RescheduleLeave = "Sp_RescheduleLeave";
 
+        //Learning and development module
+        public static string Sp_TrainingPlan = "Sp_TrainingPlan";
 
         //System Default
         public static int DefaultDeptId = 1;
