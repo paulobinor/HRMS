@@ -13,9 +13,11 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
     {
         Task<string> CreateTrainingPlan(TrainingPlanCreate TrainingPlan);
         Task<IEnumerable<TrainingPlanDTO>> GetAllTrainingPlan();
-        Task<TrainingPlanDTO> GetTrainingPlanByUserId( long UserId);
-        Task<LeaveRequestDTO> GetTrainingPlanById(long TrainingPlanID);
+        Task<TrainingPlanDTO> GetTrainingPlanById(long TrainingPlanID);
         Task<string> ApproveTrainingPlan(long TrainingPlanID, long ApprovedByUserId);
-        Task<string> DisaproveTrainingPlant(long TrainingPlanID, long DisapprovedByUserId, string DisapprovedComment);
+        Task<string> DisaproveTrainingPlan(long TrainingPlanID, long DisapprovedByUserId, string DisapprovedComment);
+        Task<dynamic> DeleteTrainingPlan(TrainingPlanDelete delete, string deletedbyUserEmail);
+        Task<IEnumerable<TrainingPlanDTO>> GetTrainingPlanPendingApproval(long UserIdGet);
+        Task<IEnumerable<TrainingPlanDTO>> GetTrainingPlanByCompany(long companyId);
     }
 }

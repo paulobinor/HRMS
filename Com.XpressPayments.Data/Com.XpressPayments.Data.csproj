@@ -24,8 +24,4 @@
 	  <ProjectReference Include="..\Com.XpressPayments.Common\Com.XpressPayments.Common.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="LearningAndDevelopmentDTO\DTOs\" />
-	</ItemGroup>
-
 </Project>

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Com.XpressPayments.Bussiness.ExitModuleService.Services.ILogic;
 using Com.XpressPayments.Bussiness.ExitModuleService.Services.Logic;
+using Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Service.ILogic;
+using Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Service.Logic;
 using Com.XpressPayments.Bussiness.LeaveModuleService.Service.ILogic;
 using Com.XpressPayments.Bussiness.LeaveModuleService.Service.Logic;
 using Com.XpressPayments.Bussiness.OnBoardingModuleService.Services.ILogic;
@@ -236,6 +238,10 @@ builder.Services.AddScoped<IResignationService, ResignationService>();
 
 //Mail Service
 builder.Services.AddScoped<IMailService, MailService>();
+
+//Learning and development module
+builder.Services.AddScoped<ITrainingPlanService, TrainingPlanService>();
+builder.Services.AddScoped<ITrainingScheduleService, TrainingScheduleService>();
 
 
 var app = builder.Build();
