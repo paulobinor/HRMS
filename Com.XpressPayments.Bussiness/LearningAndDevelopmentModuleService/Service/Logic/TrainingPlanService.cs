@@ -568,17 +568,17 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
             try
             {
 
-                //if (Convert.ToInt32(requester.RoleId) != 2)
-                //{
-                //    if (Convert.ToInt32(requester.RoleId) != 4)
-                //    {
-                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                //        return response;
+                if (Convert.ToInt32(requester.RoleId) != 2)
+                {
+                    if (Convert.ToInt32(requester.RoleId) != 4)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
 
-                //    }
+                    }
 
-                //}
+                }
                 var trainingplan = await _trainingPlanRepository.GetTrainingPlanById(payload.TrainingPlanID);
                 if (null == trainingplan)
                 {
@@ -598,7 +598,7 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
 
                 var userDetails = await _accountRepository.FindUser(trainingplan.UserId);
 
-                _learningAndDevelopmentmailService.SendTrainingScheduleNotificationMail(userDetails.HODUserId, payload.TrainingOrganizer, payload.TrainingVenue, payload.TrainingMode, payload.TrainingTime, payload.TrainingTopic, payload.StartDate.ToString());
+                _learningAndDevelopmentmailService.SendTrainingScheduleNotificationMail(userDetails.UserId, payload.TrainingOrganizer, payload.TrainingVenue, payload.TrainingMode, payload.TrainingTime, payload.TrainingTopic, payload.StartDate.ToString());
 
 
                 _logger.LogInformation("Training Plan Scheduled successfully.");

@@ -290,7 +290,7 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", TrainingPlanEnum.SCHEDULE);
-                    param.Add("@TrainingPlanID", TrainingPlan.TrainingPlanID);
+                    param.Add("@TrainingPlanIDSch", TrainingPlan.TrainingPlanID);
                     param.Add("@TrainingOrganizer", TrainingPlan.TrainingOrganizer);
                     param.Add("@StartDate", TrainingPlan.StartDate);
                     param.Add("@EndDate", TrainingPlan.EndDate);
@@ -298,6 +298,7 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
                     param.Add("@TrainingTopic", TrainingPlan.TrainingTopic);
                     param.Add("@TrainingTime", TrainingPlan.TrainingTime);
                     param.Add("@TrainingMode", TrainingPlan.TrainingMode);
+                    param.Add("@CompanyIdSch", TrainingPlan.CompanyID);
                     param.Add("@Scheduled_By_User_Email", scheduledbyUserEmail.Trim());
 
                     dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);

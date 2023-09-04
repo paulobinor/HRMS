@@ -170,8 +170,6 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
             try
             {
                 var userDetails = await _accountRepository.FindUser(StaffUserId);
-                var HodId = userDetails.HODUserId;
-                var unitHeadId = userDetails.UnitHeadUserId;
                 
 
                 //Mail to staff
@@ -194,10 +192,10 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
                 };
                 SendEmailAsync(mailPayload, null);
 
-                if (unitHeadId == null)
+                if (userDetails.UnitHeadUserId == null)
                 {
                     //Mail to Hod
-                    var HodDetails = await _accountRepository.FindUser(HodId);
+                    var HodDetails = await _accountRepository.FindUser(userDetails.HODUserId);
                     StringBuilder HodmailBody = new StringBuilder();
                     mailBody.Append($"Dear {HodDetails.FirstName} {HodDetails.LastName} {HodDetails.MiddleName} <br/> <br/>");
                     mailBody.Append($"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} have been Scheduled for training <br/> <br/>");
@@ -220,7 +218,7 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
                 }
                 else {
                     //Mail to UnitHead
-                    var unitHeadDetails = await _accountRepository.FindUser(unitHeadId);
+                    var unitHeadDetails = await _accountRepository.FindUser(userDetails.UnitHeadUserId);
                     StringBuilder UnitHeadmailBody = new StringBuilder();
                     mailBody.Append($"Dear {unitHeadDetails.FirstName} {unitHeadDetails.LastName} {unitHeadDetails.MiddleName} <br/> <br/>");
                     mailBody.Append($"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} have been Scheduled for training <br/> <br/>");
