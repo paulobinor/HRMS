@@ -4,6 +4,7 @@ using Com.XpressPayments.Data.Enums;
 using Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs;
 using Com.XpressPayments.Data.LeaveModuleDTO.DTO;
 using Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo;
+using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -17,42 +18,96 @@ using System.Threading.Tasks;
 
 namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanRepo
 {
-    internal class TrainingPlanRepository : ITrainingPlanRepository
+    public class TrainingPlanRepository : ITrainingPlanRepository
     {
         private string _connectionString;
+        private readonly IAccountRepository _accountRepository;
         private readonly ILogger<TrainingPlanRepository> _logger;
         private readonly IDapperGenericRepository _dapperGeneric;
         private readonly IConfiguration _configuration;
 
-        public TrainingPlanRepository(IConfiguration configuration, ILogger<TrainingPlanRepository> logger, IDapperGenericRepository dapperGeneric)
+        public TrainingPlanRepository(IAccountRepository accountRepository, IConfiguration configuration, ILogger<TrainingPlanRepository> logger, IDapperGenericRepository dapperGeneric)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
             _logger = logger;
+            _accountRepository = accountRepository;
             _configuration = configuration;
             _dapperGeneric = dapperGeneric;
         }
 
-        public async Task<string> CreateTrainingPlan(TrainingPlanCreate TrainingPlan)
+        public async Task<string> CreateTrainingPlan(TrainingPlanCreate TrainingPlan, string createdbyUserEmail)
         {
             try
             {
+                var userDetails = await _accountRepository.FindUser(TrainingPlan.UserId);
                 var param = new DynamicParameters();
                 param.Add("@Status", TrainingPlanEnum.CREATE);
                 param.Add("@UserId", TrainingPlan.UserId);
-                param.Add("@Name", TrainingPlan.Name);
-                param.Add("@Department", TrainingPlan.Department);
+                param.Add("@CompanyId", TrainingPlan.CompanyID);
                 param.Add("@IdentifiedSkills", TrainingPlan.IdentifiedSkills);
                 param.Add("@TrainingNeeds", TrainingPlan.TrainingNeeds);
                 param.Add("@TrainingProvider", TrainingPlan.TrainingProvider);
                 param.Add("@EstimatedCost", TrainingPlan.EstimatedCost);
-                param.Add("@Created_By_User_Email", TrainingPlan.Created_By_User_Email.Trim());
-
+                param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
+       
                 return await _dapperGeneric.Get<string>(ApplicationConstant.Sp_TrainingPlan, param, commandType: CommandType.StoredProcedure);
 
             }
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: CreateTrainingPlan ===>{ex}");
+                throw;
+            }
+        }
+        public async Task<dynamic> UpdateTrainingPlan(TrainingPlanUpdate TrainingPlan, string updatedbyUserEmail)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", TrainingPlanEnum.UPDATE);
+                    param.Add("@TrainingPlanIDUpd", TrainingPlan.TrainingPlanID);
+                    param.Add("@IdentifiedSkillsUpd", TrainingPlan.IdentifiedSkills);                
+                    param.Add("@TrainingNeedsUpd", TrainingPlan.TrainingNeeds);
+                    param.Add("@TrainingProviderUpd", TrainingPlan.TrainingProvider);
+                    param.Add("@EstimatedCostUpd", TrainingPlan.EstimatedCost);
+                    param.Add("@CompanyIdUpd", TrainingPlan.CompanyID);
+                    param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
+
+                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
+
+                    return response;
+                }
+                 
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: UpdateTrainingPlan ===>{ex}");
+                throw;
+            }
+        }
+        public async Task<dynamic> DeleteTrainingPlan(TrainingPlanDelete delete, string deletedbyUserEmail)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", TrainingPlanEnum.DELETE);
+                    param.Add("@TrainingPlanIDDelete", delete.TrainingPlanID);
+                    param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
+                    param.Add("@Reasons_For_Delete", delete.Reasons_For_Delete == null ? "" : delete.Reasons_For_Delete.ToString().Trim());
+
+                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
+
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: Task<dynamic> DeleteTrainingPlan(TrainingPlanDelete delete, string deletedbyUserEmail) ===>{ex.Message}");
                 throw;
             }
         }
@@ -116,6 +171,26 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
             }
         }
 
+        public async Task<IEnumerable<TrainingPlanDTO>> GetAllActiveTrainingPlan()
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", TrainingPlanEnum.GETALLACTIVE);
+
+                    var TrainingPlans = await _dapper.QueryAsync<TrainingPlanDTO>(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
+
+                    return TrainingPlans;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: GetAllActiveTrainingPlan() ===>{ex.Message}");
+                throw;
+            }
+        }
 
         public async Task<TrainingPlanDTO> GetTrainingPlanById(long TrainingPlanID)
         {
@@ -141,32 +216,7 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
             }
         }
 
-        public async Task<dynamic> DeleteTrainingPlan(TrainingPlanDelete delete, string deletedbyUserEmail)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", TrainingPlanEnum.DELETE);
-                    param.Add("@TrainingPlanIDDelete", Convert.ToInt32(delete.TrainingPlanID));
-                    param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
-                    param.Add("@Reasons_For_Delete", delete.Reasons_For_Delete == null ? "" : delete.Reasons_For_Delete.ToString().Trim());
-
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
-
-                    return response;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: Task<dynamic> DeleteTrainingPlan(TrainingPlanDelete delete, string deletedbyUserEmail) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<IEnumerable<TrainingPlanDTO>> GetTrainingPlanPendingApproval(long UserIdGet)
+        public async Task<IEnumerable<TrainingPlanDTO>> GetTrainingPlanPendingApproval()
         {
             try
             {
@@ -174,11 +224,10 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", TrainingPlanEnum.GETPENDINGAPPROVAL);
-                    param.Add("@UserIdGet", UserIdGet);
 
-                    var userDetails = await _dapper.QueryAsync<TrainingPlanDTO>(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapper.QueryAsync<TrainingPlanDTO>(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
 
-                    return userDetails;
+                    return response;
                 }
             }
             catch (Exception ex)
@@ -206,6 +255,60 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
             {
                 var err = ex.Message;
                 _logger.LogError($"MethodName: GetTrainingPlanByCompany(int companyId) ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<TrainingPlanDTO>> GetAllTrainingPlanByUserId(long UserId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", TrainingPlanEnum.GETBYUSERID);
+                    param.Add("@UserIDGet", UserId);
+
+
+                    var TrainingPlans = await _dapper.QueryAsync<TrainingPlanDTO>(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
+
+                    return TrainingPlans;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: GetAllTrainingPlanByUserId() ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<dynamic> ScheduleTrainingPlan(TrainingPlanSchedule TrainingPlan, string scheduledbyUserEmail)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", TrainingPlanEnum.SCHEDULE);
+                    param.Add("@TrainingPlanID", TrainingPlan.TrainingPlanID);
+                    param.Add("@TrainingOrganizer", TrainingPlan.TrainingOrganizer);
+                    param.Add("@StartDate", TrainingPlan.StartDate);
+                    param.Add("@EndDate", TrainingPlan.EndDate);
+                    param.Add("@TrainingVenue", TrainingPlan.TrainingVenue);
+                    param.Add("@TrainingTopic", TrainingPlan.TrainingTopic);
+                    param.Add("@TrainingTime", TrainingPlan.TrainingTime);
+                    param.Add("@TrainingMode", TrainingPlan.TrainingMode);
+                    param.Add("@Scheduled_By_User_Email", scheduledbyUserEmail.Trim());
+
+                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
+
+                    return response;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: ScheduleTrainingPlan ===>{ex}");
                 throw;
             }
         }

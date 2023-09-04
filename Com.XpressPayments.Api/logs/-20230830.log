@@ -1,0 +1,1009 @@
+[2023-08-30 09:19:44.413 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 09:19:46.483 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 09:19:46.491 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 09:19:46.506 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 09:19:46.508 +01:00  INF]  Hosting environment: Development
+[2023-08-30 09:19:46.510 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 09:19:52.011 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 09:19:52.805 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 799.4967ms
+[2023-08-30 09:19:52.813 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 09:19:52.830 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 16.9766ms
+[2023-08-30 09:19:52.849 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 09:19:52.939 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 90.1623ms
+[2023-08-30 09:19:53.061 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 09:19:53.396 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 335.1101ms
+[2023-08-30 09:27:23.854 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 09:27:24.814 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 09:27:24.817 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 09:27:24.824 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 09:27:24.825 +01:00  INF]  Hosting environment: Development
+[2023-08-30 09:27:24.826 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 09:27:31.480 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 09:27:32.482 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 1005.3236ms
+[2023-08-30 09:27:32.556 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 09:27:32.568 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 11.4824ms
+[2023-08-30 09:27:32.578 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 09:27:32.622 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 44.2064ms
+[2023-08-30 09:27:32.872 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 09:27:33.235 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 363.0600ms
+[2023-08-30 09:48:48.230 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 09:48:48.665 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 09:48:48.668 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 09:48:48.674 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 09:48:48.676 +01:00  INF]  Hosting environment: Development
+[2023-08-30 09:48:48.678 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 09:48:49.572 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 09:48:49.996 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 428.3880ms
+[2023-08-30 09:48:50.019 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 09:48:50.026 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 09:48:50.028 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 8.7415ms
+[2023-08-30 09:48:50.051 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 25.5335ms
+[2023-08-30 09:48:50.162 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 09:48:50.417 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 255.1118ms
+[2023-08-30 09:53:20.399 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 09:53:20.908 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 09:53:20.910 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 09:53:20.919 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 09:53:20.921 +01:00  INF]  Hosting environment: Development
+[2023-08-30 09:53:20.923 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 09:53:21.712 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 09:53:22.218 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 519.2861ms
+[2023-08-30 09:53:22.230 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 09:53:22.237 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 6.9267ms
+[2023-08-30 09:53:22.252 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 09:53:22.283 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 30.6844ms
+[2023-08-30 09:53:22.393 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 09:53:22.688 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 294.4427ms
+[2023-08-30 09:54:04.667 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 09:54:05.099 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 09:54:05.100 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 09:54:05.104 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 09:54:05.105 +01:00  INF]  Hosting environment: Development
+[2023-08-30 09:54:05.106 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 09:54:05.782 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 09:54:06.194 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 415.7052ms
+[2023-08-30 09:54:06.213 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 09:54:06.217 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 09:54:06.222 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 8.7034ms
+[2023-08-30 09:54:06.244 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 26.8006ms
+[2023-08-30 09:54:06.337 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 09:54:06.540 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 203.3442ms
+[2023-08-30 09:55:25.615 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 09:55:26.095 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 09:55:26.096 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 09:55:26.102 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 09:55:26.104 +01:00  INF]  Hosting environment: Development
+[2023-08-30 09:55:26.105 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 09:55:26.910 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 09:55:27.312 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 405.7425ms
+[2023-08-30 09:55:27.338 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 09:55:27.338 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 09:55:27.359 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 20.9506ms
+[2023-08-30 09:55:27.371 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 32.7475ms
+[2023-08-30 09:55:27.457 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 09:55:27.695 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 238.0870ms
+[2023-08-30 09:56:12.637 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62
+[2023-08-30 09:56:12.650 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 09:56:12.864 +01:00  INF]  Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+[2023-08-30 09:56:12.879 +01:00  INF]  AuthenticationScheme: Bearer was challenged.
+[2023-08-30 09:56:12.882 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62 - 401 0 - 245.1766ms
+[2023-08-30 09:57:36.993 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/Auth/Logout application/json 48
+[2023-08-30 09:57:37.012 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 09:57:37.018 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-08-30 09:57:37.059 +01:00  INF]  Route matched with {action = "Logout", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Logout(Com.XpressPayments.Data.DTOs.Account.LogoutDto) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-08-30 09:57:38.861 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 09:57:38.880 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api) in 1805.4788ms
+[2023-08-30 09:57:38.888 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-08-30 09:57:38.892 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/Auth/Logout application/json 48 - 200 - application/json;+charset=utf-8 1898.3551ms
+[2023-08-30 09:58:09.786 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/Auth/Login application/json 82
+[2023-08-30 09:58:09.800 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 09:58:09.802 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-08-30 09:58:09.806 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Com.XpressPayments.Bussiness.ViewModels.LoginModel) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-08-30 09:58:17.799 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.LoginResponse'.
+[2023-08-30 09:58:17.833 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api) in 8023.1262ms
+[2023-08-30 09:58:17.837 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-08-30 09:58:17.845 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/Auth/Login application/json 82 - 200 - application/json;+charset=utf-8 8058.9041ms
+[2023-08-30 09:58:45.597 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62
+[2023-08-30 09:58:45.615 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 09:58:45.730 +01:00  INF]  Successfully validated the token.
+[2023-08-30 09:58:45.735 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 09:58:45.743 +01:00  INF]  Route matched with {action = "DeleteTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanDelete) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 09:59:37.508 +01:00  ERR]  MethodName: Task<dynamic> DeleteTrainingPlan(TrainingPlanDelete delete, string deletedbyUserEmail) ===>@Reasons_For_Delete is not a parameter for procedure Sp_TrainingPlan.
+[2023-08-30 09:59:37.551 +01:00  ERR]  Exception Occurred ==> @Reasons_For_Delete is not a parameter for procedure Sp_TrainingPlan.
+[2023-08-30 09:59:37.552 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 09:59:37.554 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api) in 51806.8815ms
+[2023-08-30 09:59:37.556 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 09:59:37.558 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62 - 200 - application/json;+charset=utf-8 51962.2671ms
+[2023-08-30 10:03:05.148 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62
+[2023-08-30 10:03:05.157 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 10:03:05.164 +01:00  INF]  Successfully validated the token.
+[2023-08-30 10:03:05.165 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 10:03:05.167 +01:00  INF]  Route matched with {action = "DeleteTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanDelete) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 10:04:02.468 +01:00  ERR]  Exception Occurred ==> 'int' does not contain a definition for 'Contains'
+[2023-08-30 10:04:02.480 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 10:04:02.532 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api) in 57361.5428ms
+[2023-08-30 10:04:02.650 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 10:04:02.656 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62 - 200 - application/json;+charset=utf-8 57508.0072ms
+[2023-08-30 10:08:50.862 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62
+[2023-08-30 10:08:50.876 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 10:08:50.879 +01:00  INF]  Successfully validated the token.
+[2023-08-30 10:08:50.880 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 10:08:50.882 +01:00  INF]  Route matched with {action = "DeleteTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanDelete) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 10:10:20.635 +01:00  ERR]  MethodName: Task<dynamic> DeleteTrainingPlan(TrainingPlanDelete delete, string deletedbyUserEmail) ===>The ConnectionString property has not been initialized.
+[2023-08-30 10:10:20.680 +01:00  ERR]  Exception Occurred ==> The ConnectionString property has not been initialized.
+[2023-08-30 10:10:20.682 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 10:10:20.684 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api) in 89798.2389ms
+[2023-08-30 10:10:20.685 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 10:10:20.687 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62 - 200 - application/json;+charset=utf-8 89825.4596ms
+[2023-08-30 10:12:59.672 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62
+[2023-08-30 10:12:59.684 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 10:12:59.690 +01:00  INF]  Successfully validated the token.
+[2023-08-30 10:12:59.691 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 10:12:59.693 +01:00  INF]  Route matched with {action = "DeleteTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanDelete) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 10:13:54.186 +01:00  ERR]  Exception Occurred ==> 'int' does not contain a definition for 'Contains'
+[2023-08-30 10:13:59.960 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 10:13:59.961 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api) in 60266.6048ms
+[2023-08-30 10:13:59.964 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 10:13:59.965 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62 - 200 - application/json;+charset=utf-8 60294.9354ms
+[2023-08-30 10:17:56.554 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62
+[2023-08-30 10:17:56.576 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 10:17:56.577 +01:00  INF]  Successfully validated the token.
+[2023-08-30 10:17:56.579 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 10:17:56.581 +01:00  INF]  Route matched with {action = "DeleteTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanDelete) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 10:22:52.155 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 10:22:52.670 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 10:22:52.672 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 10:22:52.676 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 10:22:52.679 +01:00  INF]  Hosting environment: Development
+[2023-08-30 10:22:52.681 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 10:22:53.612 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 10:22:54.026 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 416.9411ms
+[2023-08-30 10:22:54.027 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 10:22:54.041 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 10:22:54.043 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 15.7583ms
+[2023-08-30 10:22:54.068 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 30.7542ms
+[2023-08-30 10:22:54.158 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 10:22:54.352 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 193.1429ms
+[2023-08-30 10:23:35.587 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62
+[2023-08-30 10:23:35.600 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 10:23:36.136 +01:00  INF]  Successfully validated the token.
+[2023-08-30 10:23:36.151 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 10:23:36.198 +01:00  INF]  Route matched with {action = "DeleteTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanDelete) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 10:24:45.777 +01:00  ERR]  Exception Occurred ==> 'int' does not contain a definition for 'Contains'
+[2023-08-30 10:24:45.789 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 10:24:45.801 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api) in 69592.1642ms
+[2023-08-30 10:24:45.808 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 10:24:45.814 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62 - 200 - application/json;+charset=utf-8 70226.5207ms
+[2023-08-30 10:26:10.184 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62
+[2023-08-30 10:26:10.226 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 10:26:10.228 +01:00  INF]  Successfully validated the token.
+[2023-08-30 10:26:10.231 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 10:26:10.233 +01:00  INF]  Route matched with {action = "DeleteTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanDelete) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 10:27:56.719 +01:00  ERR]  Exception Occurred ==> 'int' does not contain a definition for 'Contains'
+[2023-08-30 10:27:56.722 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 10:27:56.723 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api) in 106486.7735ms
+[2023-08-30 10:27:56.725 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 10:27:56.726 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62 - 200 - application/json;+charset=utf-8 106543.8679ms
+[2023-08-30 10:28:03.211 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62
+[2023-08-30 10:28:03.217 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 10:28:03.223 +01:00  INF]  Successfully validated the token.
+[2023-08-30 10:28:03.224 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 10:28:03.226 +01:00  INF]  Route matched with {action = "DeleteTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanDelete) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 10:30:41.723 +01:00  ERR]  Exception Occurred ==> 'int' does not contain a definition for 'Contains'
+[2023-08-30 10:30:41.741 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 10:30:41.743 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api) in 158515.3763ms
+[2023-08-30 10:30:41.744 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 10:30:41.745 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62 - 200 - application/json;+charset=utf-8 158533.8903ms
+[2023-08-30 11:29:08.537 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 11:29:09.189 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 11:29:09.190 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 11:29:09.194 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 11:29:09.195 +01:00  INF]  Hosting environment: Development
+[2023-08-30 11:29:09.196 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 11:29:10.329 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 11:29:10.983 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 659.8132ms
+[2023-08-30 11:29:10.991 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 11:29:10.999 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 11:29:10.999 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 8.2074ms
+[2023-08-30 11:29:11.060 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 60.9843ms
+[2023-08-30 11:29:11.129 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 11:29:11.375 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 245.8450ms
+[2023-08-30 11:29:30.943 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/Auth/Logout application/json 48
+[2023-08-30 11:29:30.953 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 11:29:31.130 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-08-30 11:29:31.170 +01:00  INF]  Route matched with {action = "Logout", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Logout(Com.XpressPayments.Data.DTOs.Account.LogoutDto) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-08-30 11:29:32.310 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 11:29:32.341 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api) in 1151.9665ms
+[2023-08-30 11:29:32.364 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-08-30 11:29:32.373 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/Auth/Logout application/json 48 - 200 - application/json;+charset=utf-8 1430.5801ms
+[2023-08-30 11:30:03.134 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/Auth/Login application/json 82
+[2023-08-30 11:30:03.176 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 11:30:03.178 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-08-30 11:30:03.182 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Com.XpressPayments.Bussiness.ViewModels.LoginModel) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-08-30 11:30:09.272 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.LoginResponse'.
+[2023-08-30 11:30:09.282 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api) in 6097.5391ms
+[2023-08-30 11:30:09.284 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-08-30 11:30:09.285 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/Auth/Login application/json 82 - 200 - application/json;+charset=utf-8 6151.7488ms
+[2023-08-30 11:30:56.143 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 59
+[2023-08-30 11:30:56.154 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 11:30:56.261 +01:00  INF]  Successfully validated the token.
+[2023-08-30 11:30:56.271 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 11:30:56.276 +01:00  INF]  Route matched with {action = "DeleteTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanDelete) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 11:34:55.746 +01:00  ERR]  Exception Occurred ==> 'int' does not contain a definition for 'Contains'
+[2023-08-30 11:34:55.748 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 11:34:55.749 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api) in 239494.569ms
+[2023-08-30 11:34:55.750 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 11:34:55.752 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 59 - 200 - application/json;+charset=utf-8 239633.8518ms
+[2023-08-30 11:34:58.309 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 59
+[2023-08-30 11:34:58.314 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 11:34:58.316 +01:00  INF]  Successfully validated the token.
+[2023-08-30 11:34:58.317 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 11:34:58.320 +01:00  INF]  Route matched with {action = "DeleteTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanDelete) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 11:37:34.823 +01:00  ERR]  Exception Occurred ==> 'int' does not contain a definition for 'Contains'
+[2023-08-30 11:37:34.837 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 11:37:34.856 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api) in 156533.5003ms
+[2023-08-30 11:37:34.858 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 11:37:34.859 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 59 - 200 - application/json;+charset=utf-8 156550.4556ms
+[2023-08-30 11:37:38.093 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 59
+[2023-08-30 11:37:38.100 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 11:37:38.102 +01:00  INF]  Successfully validated the token.
+[2023-08-30 11:37:38.105 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 11:37:38.109 +01:00  INF]  Route matched with {action = "DeleteTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanDelete) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 11:44:07.541 +01:00  ERR]  Exception Occurred ==> 'int' does not contain a definition for 'Contains'
+[2023-08-30 11:44:07.556 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 11:44:07.612 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api) in 389500.0904ms
+[2023-08-30 11:44:07.613 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 11:44:07.615 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 59 - 200 - application/json;+charset=utf-8 389521.5809ms
+[2023-08-30 11:44:22.868 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62
+[2023-08-30 11:44:22.877 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 11:44:22.878 +01:00  INF]  Successfully validated the token.
+[2023-08-30 11:44:22.879 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 11:44:22.880 +01:00  INF]  Route matched with {action = "DeleteTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanDelete) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 11:51:12.658 +01:00  ERR]  Exception Occurred ==> 'int' does not contain a definition for 'Contains'
+[2023-08-30 11:51:12.750 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 11:51:12.764 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/CreateTrainingPlan application/json 260
+[2023-08-30 11:51:12.795 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62
+[2023-08-30 11:51:12.796 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 11:51:12.797 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 11:51:12.795 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/CreateTrainingPlan application/json 260
+[2023-08-30 11:51:12.798 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api) in 409915.0177ms
+[2023-08-30 11:51:12.798 +01:00  INF]  Successfully validated the token.
+[2023-08-30 11:51:12.798 +01:00  INF]  Successfully validated the token.
+[2023-08-30 11:51:12.799 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 11:51:12.800 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 11:51:12.801 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.CreateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 11:51:12.802 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 11:51:12.803 +01:00  INF]  Successfully validated the token.
+[2023-08-30 11:51:12.804 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62 - 0 - application/json;+charset=utf-8 409935.5725ms
+[2023-08-30 11:51:12.806 +01:00  INF]  Route matched with {action = "DeleteTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanDelete) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 11:51:12.807 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.CreateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 11:51:12.808 +01:00  INF]  Route matched with {action = "CreateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanCreate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 11:51:14.139 +01:00  INF]  Route matched with {action = "CreateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanCreate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 11:51:16.595 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.CreateTrainingPlan (Com.XpressPayments.Api) in 7.0427ms
+[2023-08-30 11:51:16.597 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.CreateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 11:51:16.618 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+System.IO.IOException: The request stream was aborted.
+ ---> Microsoft.AspNetCore.Connections.ConnectionAbortedException: The HTTP/2 connection faulted.
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpRequestStream.ReadAsyncInternal(Memory`1 destination, CancellationToken cancellationToken)
+   at System.Text.Json.JsonSerializer.ReadFromStreamAsync(Stream utf8Json, ReadBufferState bufferState, CancellationToken cancellationToken)
+   at System.Text.Json.JsonSerializer.ReadAllAsync[TValue](Stream utf8Json, JsonTypeInfo jsonTypeInfo, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter.ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
+   at Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter.ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinder.BindModelAsync(ModelBindingContext bindingContext)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.BindModelAsync(ActionContext actionContext, IModelBinder modelBinder, IValueProvider valueProvider, ParameterDescriptor parameter, ModelMetadata metadata, Object value, Object container)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerBinderDelegateProvider.<>c__DisplayClass0_0.<<CreateBinderDelegate>g__Bind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_5>d.MoveNext() in C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\Program.cs:line 297
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[2023-08-30 11:51:30.481 +01:00  ERR]  Exception Occurred ==> 'int' does not contain a definition for 'Contains'
+[2023-08-30 11:51:42.732 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 11:51:42.734 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api) in 29924.401ms
+[2023-08-30 11:51:42.735 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/CreateTrainingPlan application/json 260 - 500 - text/plain;+charset=utf-8 29971.1282ms
+[2023-08-30 11:51:42.736 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 11:51:42.738 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62 - 200 - application/json;+charset=utf-8 29943.2128ms
+[2023-08-30 11:52:14.958 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 11:52:14.970 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.CreateTrainingPlan (Com.XpressPayments.Api) in 58378.8067ms
+[2023-08-30 11:52:14.971 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.CreateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 11:52:14.972 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/CreateTrainingPlan application/json 260 - 200 - application/json;+charset=utf-8 62177.6054ms
+[2023-08-30 11:52:21.010 +01:00  ERR]  System.Net.Mail.SmtpException: Error in processing. The server response was: 5.7.3 STARTTLS is required to send mail [PR3P193CA0042.EURP193.PROD.OUTLOOK.COM 2023-08-30T10:52:20.885Z 08DBA8474B5779F2]
+   at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.EndSend(IAsyncResult result)
+   at System.Net.Mail.SendMailAsyncResult.SendMailFromCompleted(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at System.Net.Mail.SendMailAsyncResult.End(IAsyncResult result)
+   at System.Net.Mail.SmtpClient.SendMailCallback(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Service.Logic.LearningAndDevelopmentMailService.SendEmailAsync(MailRequest mailRequest, String attarchDocument) in C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Bussiness\LearningAndDevelopmentModuleService\Service\Logic\LearningAndDevelopmentMailService.cs:line 50
+[2023-08-30 12:07:16.887 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetAllTrainingPlan - -
+[2023-08-30 12:07:17.050 +01:00  INF]  Successfully validated the token.
+[2023-08-30 12:07:17.058 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetAllTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 12:07:17.076 +01:00  INF]  Route matched with {action = "GetAllTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllTrainingPlan() on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 12:07:29.586 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 12:07:29.610 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetAllTrainingPlan (Com.XpressPayments.Api) in 12524.2448ms
+[2023-08-30 12:07:29.628 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetAllTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 12:07:29.634 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetAllTrainingPlan - - - 200 - application/json;+charset=utf-8 12747.9114ms
+[2023-08-30 12:08:06.150 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetTrainingPlanById?TrainingPlanID=4&CompanyId=1 - -
+[2023-08-30 12:08:06.231 +01:00  INF]  Successfully validated the token.
+[2023-08-30 12:08:06.258 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanById (Com.XpressPayments.Api)'
+[2023-08-30 12:08:06.283 +01:00  INF]  Route matched with {action = "GetTrainingPlanById", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTrainingPlanById(Int64, Int64) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 12:08:10.161 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 12:08:10.169 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanById (Com.XpressPayments.Api) in 3873.3257ms
+[2023-08-30 12:08:10.192 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanById (Com.XpressPayments.Api)'
+[2023-08-30 12:08:10.198 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetTrainingPlanById?TrainingPlanID=4&CompanyId=1 - - - 200 - application/json;+charset=utf-8 4047.3635ms
+[2023-08-30 12:08:38.015 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetTrainingPlanPendingApproval - -
+[2023-08-30 12:08:38.041 +01:00  INF]  Successfully validated the token.
+[2023-08-30 12:08:38.046 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api)'
+[2023-08-30 12:08:38.061 +01:00  INF]  Route matched with {action = "GetTrainingPlanPendingApproval", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTrainingPlanPendingApproval() on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 12:08:41.018 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 12:08:41.025 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api) in 2954.6086ms
+[2023-08-30 12:08:41.042 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api)'
+[2023-08-30 12:08:41.048 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetTrainingPlanPendingApproval - - - 200 - application/json;+charset=utf-8 3032.3930ms
+[2023-08-30 12:09:02.629 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetTrainingPlanbyCompanyId?CompanyID=1 - -
+[2023-08-30 12:09:02.651 +01:00  INF]  Successfully validated the token.
+[2023-08-30 12:09:02.656 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanbyCompanyId (Com.XpressPayments.Api)'
+[2023-08-30 12:09:02.673 +01:00  INF]  Route matched with {action = "GetTrainingPlanbyCompanyId", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTrainingPlanbyCompanyId(Int64) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 12:09:06.004 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 12:09:06.012 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanbyCompanyId (Com.XpressPayments.Api) in 3327.9748ms
+[2023-08-30 12:09:06.025 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanbyCompanyId (Com.XpressPayments.Api)'
+[2023-08-30 12:09:06.029 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetTrainingPlanbyCompanyId?CompanyID=1 - - - 200 - application/json;+charset=utf-8 3401.0618ms
+[2023-08-30 12:23:48.427 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 12:23:49.435 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 12:23:49.440 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 12:23:49.455 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 12:23:49.458 +01:00  INF]  Hosting environment: Development
+[2023-08-30 12:23:49.461 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 12:23:51.274 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 12:23:52.120 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 848.2479ms
+[2023-08-30 12:23:52.134 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 12:23:52.150 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 12:23:52.165 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 30.9802ms
+[2023-08-30 12:23:52.207 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 57.4390ms
+[2023-08-30 12:23:52.332 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 12:23:52.703 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 371.5866ms
+[2023-08-30 12:24:24.337 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan?TrainingPlanId=1 application/json 256
+[2023-08-30 12:24:24.377 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 12:24:25.801 +01:00  INF]  Successfully validated the token.
+[2023-08-30 12:24:25.829 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 12:24:25.916 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Int64, Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 12:34:02.983 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 12:34:03.558 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 12:34:03.561 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 12:34:03.575 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 12:34:03.579 +01:00  INF]  Hosting environment: Development
+[2023-08-30 12:34:03.584 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 12:34:04.840 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 12:34:05.466 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 12:34:05.481 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 646.7486ms
+[2023-08-30 12:34:05.484 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 12:34:05.486 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 20.4131ms
+[2023-08-30 12:34:05.552 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 68.7912ms
+[2023-08-30 12:34:05.674 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 12:34:06.036 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 362.2924ms
+[2023-08-30 12:35:41.265 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 245
+[2023-08-30 12:35:41.333 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 12:35:42.620 +01:00  INF]  Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '30/08/2023 11:30:08', Current time: '30/08/2023 11:35:42'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateJWS(String token, TokenValidationParameters validationParameters, BaseConfiguration currentConfiguration, SecurityToken& signatureValidatedToken, ExceptionDispatchInfo& exceptionThrown)
+--- End of stack trace from previous location ---
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, JwtSecurityToken outerToken, TokenValidationParameters validationParameters, SecurityToken& signatureValidatedToken)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+[2023-08-30 12:35:42.829 +01:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '30/08/2023 11:30:08', Current time: '30/08/2023 11:35:42'.
+[2023-08-30 12:35:42.848 +01:00  INF]  Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+[2023-08-30 12:35:42.891 +01:00  INF]  AuthenticationScheme: Bearer was challenged.
+[2023-08-30 12:35:42.900 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 245 - 401 0 - 1639.6488ms
+[2023-08-30 12:36:28.685 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/Auth/Logout application/json 48
+[2023-08-30 12:36:28.733 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 12:36:28.744 +01:00  INF]  Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '30/08/2023 11:30:08', Current time: '30/08/2023 11:36:28'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateJWS(String token, TokenValidationParameters validationParameters, BaseConfiguration currentConfiguration, SecurityToken& signatureValidatedToken, ExceptionDispatchInfo& exceptionThrown)
+--- End of stack trace from previous location ---
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, JwtSecurityToken outerToken, TokenValidationParameters validationParameters, SecurityToken& signatureValidatedToken)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+[2023-08-30 12:36:28.758 +01:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '30/08/2023 11:30:08', Current time: '30/08/2023 11:36:28'.
+[2023-08-30 12:36:28.779 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-08-30 12:36:28.919 +01:00  INF]  Route matched with {action = "Logout", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Logout(Com.XpressPayments.Data.DTOs.Account.LogoutDto) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-08-30 12:36:31.281 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 12:36:31.336 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api) in 2380.03ms
+[2023-08-30 12:36:31.363 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-08-30 12:36:31.377 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/Auth/Logout application/json 48 - 200 - application/json;+charset=utf-8 2692.2814ms
+[2023-08-30 12:36:54.056 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/Auth/Login application/json 82
+[2023-08-30 12:36:54.105 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 12:36:54.112 +01:00  INF]  Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '30/08/2023 11:30:08', Current time: '30/08/2023 11:36:54'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateJWS(String token, TokenValidationParameters validationParameters, BaseConfiguration currentConfiguration, SecurityToken& signatureValidatedToken, ExceptionDispatchInfo& exceptionThrown)
+--- End of stack trace from previous location ---
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, JwtSecurityToken outerToken, TokenValidationParameters validationParameters, SecurityToken& signatureValidatedToken)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+[2023-08-30 12:36:54.125 +01:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '30/08/2023 11:30:08', Current time: '30/08/2023 11:36:54'.
+[2023-08-30 12:36:54.131 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-08-30 12:36:54.145 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Com.XpressPayments.Bussiness.ViewModels.LoginModel) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-08-30 12:37:00.591 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.LoginResponse'.
+[2023-08-30 12:37:00.621 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api) in 6467.0638ms
+[2023-08-30 12:37:00.623 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-08-30 12:37:00.627 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/Auth/Login application/json 82 - 200 - application/json;+charset=utf-8 6570.5229ms
+[2023-08-30 12:37:44.311 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 245
+[2023-08-30 12:37:44.371 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 12:37:44.407 +01:00  INF]  Successfully validated the token.
+[2023-08-30 12:37:44.413 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 12:37:44.422 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 12:39:52.674 +01:00  INF]  Training Plan updated successfully.
+[2023-08-30 12:40:01.718 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 12:40:01.749 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 137322.2964ms
+[2023-08-30 12:40:01.757 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 12:40:01.778 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 245 - 200 - application/json;+charset=utf-8 137466.0799ms
+[2023-08-30 12:42:19.035 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 245
+[2023-08-30 12:42:19.054 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 12:42:19.064 +01:00  INF]  Successfully validated the token.
+[2023-08-30 12:42:19.067 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 12:42:19.070 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 12:42:41.745 +01:00  INF]  Training Plan updated successfully.
+[2023-08-30 12:42:41.751 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 12:42:41.758 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 22683.9267ms
+[2023-08-30 12:42:41.768 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 12:42:41.775 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 245 - 200 - application/json;+charset=utf-8 22740.4855ms
+[2023-08-30 12:43:05.297 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 245
+[2023-08-30 12:43:05.303 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 12:43:05.307 +01:00  INF]  Successfully validated the token.
+[2023-08-30 12:43:05.312 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 12:43:05.353 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 12:43:50.255 +01:00  INF]  Training Plan updated successfully.
+[2023-08-30 12:44:12.842 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 12:44:12.845 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 67481.8569ms
+[2023-08-30 12:44:12.848 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 12:44:12.850 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 245 - 200 - application/json;+charset=utf-8 67552.3996ms
+[2023-08-30 13:00:02.548 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 246
+[2023-08-30 13:00:02.569 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 13:00:02.570 +01:00  INF]  Successfully validated the token.
+[2023-08-30 13:00:02.571 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:00:02.573 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 13:00:37.134 +01:00  INF]  Training Plan updated successfully.
+[2023-08-30 13:00:51.530 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 13:01:03.587 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 61011.4655ms
+[2023-08-30 13:01:03.589 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:01:05.216 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 246 - 200 - application/json;+charset=utf-8 62669.8068ms
+[2023-08-30 13:03:29.239 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 246
+[2023-08-30 13:03:29.315 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 13:03:29.321 +01:00  INF]  Successfully validated the token.
+[2023-08-30 13:03:29.323 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:03:29.333 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 13:03:33.034 +01:00  INF]  Training Plan updated successfully.
+[2023-08-30 13:03:33.038 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 13:03:33.043 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 3705.8987ms
+[2023-08-30 13:03:33.052 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:03:33.058 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 246 - 200 - application/json;+charset=utf-8 3818.6340ms
+[2023-08-30 13:18:15.050 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 246
+[2023-08-30 13:18:15.075 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 13:18:15.076 +01:00  INF]  Successfully validated the token.
+[2023-08-30 13:18:15.077 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:18:15.078 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 13:18:18.870 +01:00  INF]  Training Plan updated successfully.
+[2023-08-30 13:18:18.871 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 13:18:18.874 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 3794.3314ms
+[2023-08-30 13:18:18.876 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:18:18.878 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 246 - 200 - application/json;+charset=utf-8 3828.5804ms
+[2023-08-30 13:19:30.993 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 13:19:31.391 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 13:19:31.393 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 13:19:31.397 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 13:19:31.398 +01:00  INF]  Hosting environment: Development
+[2023-08-30 13:19:31.399 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 13:19:32.422 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 13:19:32.850 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 431.5689ms
+[2023-08-30 13:19:32.852 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 13:19:32.864 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 13:19:32.869 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 16.6919ms
+[2023-08-30 13:19:32.895 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 30.8188ms
+[2023-08-30 13:19:32.997 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 13:19:33.202 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 205.0575ms
+[2023-08-30 13:20:14.174 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 245
+[2023-08-30 13:20:14.195 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 13:20:14.628 +01:00  INF]  Successfully validated the token.
+[2023-08-30 13:20:14.645 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:20:14.693 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 13:20:39.199 +01:00  INF]  Training Plan updated successfully.
+[2023-08-30 13:20:46.591 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 13:20:48.954 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 34250.3592ms
+[2023-08-30 13:20:48.961 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:20:48.966 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 245 - 200 - application/json;+charset=utf-8 34792.5586ms
+[2023-08-30 13:27:26.175 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 244
+[2023-08-30 13:27:26.218 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 13:27:26.220 +01:00  INF]  Successfully validated the token.
+[2023-08-30 13:27:26.223 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:27:26.231 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 13:28:13.054 +01:00  INF]  Training Plan updated successfully.
+[2023-08-30 13:28:25.185 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 13:28:25.189 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 58955.8072ms
+[2023-08-30 13:28:25.192 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:28:25.193 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 244 - 200 - application/json;+charset=utf-8 59017.8949ms
+[2023-08-30 13:32:03.063 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 244
+[2023-08-30 13:32:03.070 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 13:32:03.072 +01:00  INF]  Successfully validated the token.
+[2023-08-30 13:32:03.074 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:32:03.078 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 13:33:32.710 +01:00  ERR]  Exception Occurred ==> Object reference not set to an instance of an object.
+[2023-08-30 13:33:32.711 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 13:33:32.712 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 89632.4984ms
+[2023-08-30 13:33:32.714 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:33:32.715 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 244 - 200 - application/json;+charset=utf-8 89652.4110ms
+[2023-08-30 13:33:39.931 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 244
+[2023-08-30 13:33:39.940 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 13:33:39.941 +01:00  INF]  Successfully validated the token.
+[2023-08-30 13:33:39.942 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:33:39.943 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 13:41:32.999 +01:00  ERR]  Exception Occurred ==> Object reference not set to an instance of an object.
+[2023-08-30 13:41:33.007 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 13:41:33.012 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 473067.5122ms
+[2023-08-30 13:41:33.014 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:41:33.015 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 244 - 200 - application/json;+charset=utf-8 473084.2395ms
+[2023-08-30 13:41:45.734 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 13:41:45.754 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 19.8112ms
+[2023-08-30 13:41:45.758 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 13:41:45.759 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 13:41:45.760 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 1.6496ms
+[2023-08-30 13:41:45.775 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 15.7166ms
+[2023-08-30 13:41:45.860 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 13:41:45.937 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Failed to generate Operation for action - Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api). See inner exception
+ ---> Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Failed to generate schema for type - Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate. See inner exception
+ ---> System.TypeLoadException: Could not load type 'Com.XpressPayments.Data.Repositories.CountryStateLga.ICountryRepository' from assembly 'Com.XpressPayments.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' due to value type mismatch.
+   at System.Signature.GetSignature(Void* pCorSig, Int32 cCorSig, RuntimeFieldHandleInternal fieldHandle, IRuntimeMethodInfo methodHandle, RuntimeType declaringType)
+   at System.Reflection.RuntimeMethodInfo.<get_Signature>g__LazyCreateSignature|24_0()
+   at System.Reflection.RuntimeMethodInfo.FetchNonReturnParameters()
+   at System.Reflection.RuntimePropertyInfo.GetIndexParametersNoCopy()
+   at System.Reflection.RuntimePropertyInfo.GetIndexParameters()
+   at System.Attribute.GetIndexParameterTypes(PropertyInfo element)
+   at System.Attribute.InternalGetCustomAttributes(PropertyInfo element, Type type, Boolean inherit)
+   at System.Attribute.GetCustomAttributes(MemberInfo element, Type attributeType, Boolean inherit)
+   at System.Attribute.GetCustomAttribute(MemberInfo element, Type attributeType, Boolean inherit)
+   at Swashbuckle.AspNetCore.SwaggerGen.JsonSerializerDataContractResolver.<GetDataPropertiesFor>b__6_1(PropertyInfo property)
+   at System.Linq.Enumerable.WhereArrayIterator`1.ToArray()
+   at System.Linq.Buffer`1..ctor(IEnumerable`1 source)
+   at System.Linq.OrderedEnumerable`1.GetEnumerator()+MoveNext()
+   at Swashbuckle.AspNetCore.SwaggerGen.JsonSerializerDataContractResolver.GetDataPropertiesFor(Type objectType, Type& extensionDataType)
+   at Swashbuckle.AspNetCore.SwaggerGen.JsonSerializerDataContractResolver.GetDataContractForType(Type type)
+   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateSchemaForParameter(Type modelType, SchemaRepository schemaRepository, ParameterInfo parameterInfo)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateSchema(Type type, SchemaRepository schemaRepository, PropertyInfo propertyInfo, ParameterInfo parameterInfo)
+   --- End of inner exception stack trace ---
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateSchema(Type type, SchemaRepository schemaRepository, PropertyInfo propertyInfo, ParameterInfo parameterInfo)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateRequestBodyFromBodyParameter(ApiDescription apiDescription, SchemaRepository schemaRepository, ApiParameterDescription bodyParameter)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateRequestBody(ApiDescription apiDescription, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperation(ApiDescription apiDescription, SchemaRepository schemaRepository)
+   --- End of inner exception stack trace ---
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperation(ApiDescription apiDescription, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_5>d.MoveNext() in C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\Program.cs:line 297
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[2023-08-30 13:41:46.224 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 500 - text/plain;+charset=utf-8 363.8370ms
+[2023-08-30 13:41:50.454 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 13:41:50.465 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 11.2332ms
+[2023-08-30 13:41:50.468 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 13:41:50.469 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 13:41:50.470 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 2.4956ms
+[2023-08-30 13:41:50.502 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 32.9486ms
+[2023-08-30 13:41:50.568 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 13:41:50.617 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Failed to generate Operation for action - Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api). See inner exception
+ ---> Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Failed to generate schema for type - Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate. See inner exception
+ ---> System.TypeLoadException: Could not load type 'Com.XpressPayments.Data.Repositories.CountryStateLga.ICountryRepository' from assembly 'Com.XpressPayments.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' due to value type mismatch.
+   at System.Signature.GetSignature(Void* pCorSig, Int32 cCorSig, RuntimeFieldHandleInternal fieldHandle, IRuntimeMethodInfo methodHandle, RuntimeType declaringType)
+   at System.Reflection.RuntimeMethodInfo.<get_Signature>g__LazyCreateSignature|24_0()
+   at System.Reflection.RuntimeMethodInfo.FetchNonReturnParameters()
+   at System.Reflection.RuntimePropertyInfo.GetIndexParametersNoCopy()
+   at System.Reflection.RuntimePropertyInfo.GetIndexParameters()
+   at System.Attribute.GetIndexParameterTypes(PropertyInfo element)
+   at System.Attribute.InternalGetCustomAttributes(PropertyInfo element, Type type, Boolean inherit)
+   at System.Attribute.GetCustomAttributes(MemberInfo element, Type attributeType, Boolean inherit)
+   at System.Attribute.GetCustomAttribute(MemberInfo element, Type attributeType, Boolean inherit)
+   at Swashbuckle.AspNetCore.SwaggerGen.JsonSerializerDataContractResolver.<GetDataPropertiesFor>b__6_1(PropertyInfo property)
+   at System.Linq.Enumerable.WhereArrayIterator`1.ToArray()
+   at System.Linq.Buffer`1..ctor(IEnumerable`1 source)
+   at System.Linq.OrderedEnumerable`1.GetEnumerator()+MoveNext()
+   at Swashbuckle.AspNetCore.SwaggerGen.JsonSerializerDataContractResolver.GetDataPropertiesFor(Type objectType, Type& extensionDataType)
+   at Swashbuckle.AspNetCore.SwaggerGen.JsonSerializerDataContractResolver.GetDataContractForType(Type type)
+   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateSchemaForParameter(Type modelType, SchemaRepository schemaRepository, ParameterInfo parameterInfo)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateSchema(Type type, SchemaRepository schemaRepository, PropertyInfo propertyInfo, ParameterInfo parameterInfo)
+   --- End of inner exception stack trace ---
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateSchema(Type type, SchemaRepository schemaRepository, PropertyInfo propertyInfo, ParameterInfo parameterInfo)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateRequestBodyFromBodyParameter(ApiDescription apiDescription, SchemaRepository schemaRepository, ApiParameterDescription bodyParameter)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateRequestBody(ApiDescription apiDescription, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperation(ApiDescription apiDescription, SchemaRepository schemaRepository)
+   --- End of inner exception stack trace ---
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperation(ApiDescription apiDescription, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_5>d.MoveNext() in C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\Program.cs:line 297
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[2023-08-30 13:41:50.629 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 500 - text/plain;+charset=utf-8 60.8974ms
+[2023-08-30 13:42:24.673 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 13:42:25.258 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 13:42:25.259 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 13:42:25.264 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 13:42:25.265 +01:00  INF]  Hosting environment: Development
+[2023-08-30 13:42:25.266 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 13:42:26.252 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 13:42:26.839 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 589.9507ms
+[2023-08-30 13:42:26.843 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 13:42:26.849 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 13:42:26.855 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 12.6123ms
+[2023-08-30 13:42:26.888 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 39.1181ms
+[2023-08-30 13:42:26.970 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 13:42:27.193 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 222.4880ms
+[2023-08-30 13:44:31.862 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 13:44:32.353 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 13:44:32.355 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 13:44:32.359 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 13:44:32.361 +01:00  INF]  Hosting environment: Development
+[2023-08-30 13:44:32.361 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 13:44:33.062 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 13:44:33.481 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 422.1016ms
+[2023-08-30 13:44:33.501 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 13:44:33.508 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 13:44:33.514 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 12.5792ms
+[2023-08-30 13:44:33.540 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 31.6115ms
+[2023-08-30 13:44:33.676 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 13:44:33.936 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 259.8878ms
+[2023-08-30 13:45:35.377 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161
+[2023-08-30 13:45:35.399 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 13:45:35.911 +01:00  INF]  Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '30/08/2023 12:36:59', Current time: '30/08/2023 12:45:35'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateJWS(String token, TokenValidationParameters validationParameters, BaseConfiguration currentConfiguration, SecurityToken& signatureValidatedToken, ExceptionDispatchInfo& exceptionThrown)
+--- End of stack trace from previous location ---
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, JwtSecurityToken outerToken, TokenValidationParameters validationParameters, SecurityToken& signatureValidatedToken)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+[2023-08-30 13:45:35.977 +01:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '30/08/2023 12:36:59', Current time: '30/08/2023 12:45:35'.
+[2023-08-30 13:45:35.988 +01:00  INF]  Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+[2023-08-30 13:45:36.005 +01:00  INF]  AuthenticationScheme: Bearer was challenged.
+[2023-08-30 13:45:36.009 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161 - 401 0 - 631.8227ms
+[2023-08-30 13:46:28.391 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/Auth/Logout application/json 48
+[2023-08-30 13:46:28.433 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 13:46:28.437 +01:00  INF]  Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '30/08/2023 12:36:59', Current time: '30/08/2023 12:46:28'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateJWS(String token, TokenValidationParameters validationParameters, BaseConfiguration currentConfiguration, SecurityToken& signatureValidatedToken, ExceptionDispatchInfo& exceptionThrown)
+--- End of stack trace from previous location ---
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, JwtSecurityToken outerToken, TokenValidationParameters validationParameters, SecurityToken& signatureValidatedToken)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+[2023-08-30 13:46:28.441 +01:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '30/08/2023 12:36:59', Current time: '30/08/2023 12:46:28'.
+[2023-08-30 13:46:28.448 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-08-30 13:46:28.488 +01:00  INF]  Route matched with {action = "Logout", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Logout(Com.XpressPayments.Data.DTOs.Account.LogoutDto) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-08-30 13:46:29.388 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 13:46:29.409 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api) in 904.6134ms
+[2023-08-30 13:46:29.418 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-08-30 13:46:29.422 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/Auth/Logout application/json 48 - 200 - application/json;+charset=utf-8 1031.6767ms
+[2023-08-30 13:46:53.935 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/Auth/Login application/json 82
+[2023-08-30 13:46:53.946 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 13:46:53.948 +01:00  INF]  Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '30/08/2023 12:36:59', Current time: '30/08/2023 12:46:53'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateJWS(String token, TokenValidationParameters validationParameters, BaseConfiguration currentConfiguration, SecurityToken& signatureValidatedToken, ExceptionDispatchInfo& exceptionThrown)
+--- End of stack trace from previous location ---
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, JwtSecurityToken outerToken, TokenValidationParameters validationParameters, SecurityToken& signatureValidatedToken)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+[2023-08-30 13:46:53.951 +01:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '30/08/2023 12:36:59', Current time: '30/08/2023 12:46:53'.
+[2023-08-30 13:46:53.953 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-08-30 13:46:53.957 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Com.XpressPayments.Bussiness.ViewModels.LoginModel) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-08-30 13:47:03.164 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.LoginResponse'.
+[2023-08-30 13:47:03.173 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api) in 9214.4224ms
+[2023-08-30 13:47:03.175 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-08-30 13:47:03.176 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/Auth/Login application/json 82 - 200 - application/json;+charset=utf-8 9241.4655ms
+[2023-08-30 13:48:12.222 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161
+[2023-08-30 13:48:12.276 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 13:48:12.300 +01:00  INF]  Successfully validated the token.
+[2023-08-30 13:48:12.304 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:48:12.309 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 13:54:02.252 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 13:54:03.001 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 13:54:03.020 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 13:54:03.023 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 13:54:03.024 +01:00  INF]  Hosting environment: Development
+[2023-08-30 13:54:03.026 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 13:54:04.001 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 13:54:04.681 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 690.1062ms
+[2023-08-30 13:54:04.706 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 13:54:04.717 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 10.5392ms
+[2023-08-30 13:54:04.736 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 13:54:04.821 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 85.2627ms
+[2023-08-30 13:54:04.928 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 13:54:05.240 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 312.3512ms
+[2023-08-30 13:55:34.015 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 159
+[2023-08-30 13:55:34.035 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 13:55:34.476 +01:00  INF]  Successfully validated the token.
+[2023-08-30 13:55:34.493 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:55:34.539 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 13:57:40.998 +01:00  ERR]  MethodName: UpdateTrainingPlan ===>System.Data.SqlClient.SqlException (0x80131904): @CompanyIdUpd is not a parameter for procedure Sp_TrainingPlan.
+   at Com.XpressPayments.Data.DapperGeneric.DapperGenericRepository.Get[T](String sp, DynamicParameters parms, CommandType commandType) in C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Data\DapperGeneric\DapperGenericRepository.cs:line 83
+   at Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanRepo.TrainingPlanRepository.UpdateTrainingPlan(TrainingPlanUpdate TrainingPlan, String updatedbyUserEmail) in C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Data\LearningAndDevelopmentRepository\TrainingPlanRepo\TrainingPlanRepository.cs:line 77
+ClientConnectionId:891a0924-6106-4643-8623-dc542eb864f0
+Error Number:8145,State:1,Class:16
+[2023-08-30 13:57:41.052 +01:00  ERR]  Exception Occurred ==> @CompanyIdUpd is not a parameter for procedure Sp_TrainingPlan.
+[2023-08-30 13:57:41.066 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 13:57:41.081 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 126530.4404ms
+[2023-08-30 13:57:41.091 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:57:41.096 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 159 - 200 - application/json;+charset=utf-8 127081.8835ms
+[2023-08-30 13:57:50.404 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 159
+[2023-08-30 13:57:50.414 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 13:57:50.416 +01:00  INF]  Successfully validated the token.
+[2023-08-30 13:57:50.417 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:57:50.419 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 13:59:39.244 +01:00  ERR]  MethodName: UpdateTrainingPlan ===>System.Data.SqlClient.SqlException (0x80131904): @CompanyIdUpd is not a parameter for procedure Sp_TrainingPlan.
+   at Com.XpressPayments.Data.DapperGeneric.DapperGenericRepository.Get[T](String sp, DynamicParameters parms, CommandType commandType) in C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Data\DapperGeneric\DapperGenericRepository.cs:line 83
+   at Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanRepo.TrainingPlanRepository.UpdateTrainingPlan(TrainingPlanUpdate TrainingPlan, String updatedbyUserEmail) in C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Data\LearningAndDevelopmentRepository\TrainingPlanRepo\TrainingPlanRepository.cs:line 77
+ClientConnectionId:891a0924-6106-4643-8623-dc542eb864f0
+Error Number:8145,State:1,Class:16
+[2023-08-30 13:59:39.311 +01:00  ERR]  Exception Occurred ==> @CompanyIdUpd is not a parameter for procedure Sp_TrainingPlan.
+[2023-08-30 13:59:39.312 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 13:59:39.313 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 108892.128ms
+[2023-08-30 13:59:39.315 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:59:39.316 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 159 - 200 - application/json;+charset=utf-8 108912.0104ms
+[2023-08-30 13:59:41.992 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 159
+[2023-08-30 13:59:41.994 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 13:59:41.998 +01:00  INF]  Successfully validated the token.
+[2023-08-30 13:59:41.999 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 13:59:42.000 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 14:03:29.437 +01:00  ERR]  Exception Occurred ==> Object reference not set to an instance of an object.
+[2023-08-30 14:03:29.438 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 14:03:29.439 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 227437.2014ms
+[2023-08-30 14:03:29.440 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 14:03:29.441 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 159 - 200 - application/json;+charset=utf-8 227449.6620ms
+[2023-08-30 14:16:07.788 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161
+[2023-08-30 14:16:07.836 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 14:16:07.838 +01:00  INF]  Successfully validated the token.
+[2023-08-30 14:16:07.840 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 14:16:07.842 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 14:18:48.760 +01:00  ERR]  Exception Occurred ==> Object reference not set to an instance of an object.
+[2023-08-30 14:18:54.379 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 14:18:56.626 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 168779.4155ms
+[2023-08-30 14:18:56.630 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 14:18:56.633 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161 - 200 - application/json;+charset=utf-8 168846.2072ms
+[2023-08-30 14:25:47.919 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 14:25:48.317 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 14:25:48.318 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 14:25:48.322 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 14:25:48.323 +01:00  INF]  Hosting environment: Development
+[2023-08-30 14:25:48.324 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 14:25:49.226 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 14:25:49.649 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 428.4954ms
+[2023-08-30 14:25:49.651 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 14:25:49.663 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 14:25:49.666 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 14.9590ms
+[2023-08-30 14:25:49.691 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 28.1995ms
+[2023-08-30 14:25:49.779 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 14:25:50.048 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 268.5743ms
+[2023-08-30 14:26:52.893 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161
+[2023-08-30 14:26:52.913 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 14:26:53.332 +01:00  INF]  Successfully validated the token.
+[2023-08-30 14:26:53.352 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 14:26:53.400 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 14:27:40.708 +01:00  ERR]  Exception Occurred ==> Cannot perform runtime binding on a null reference
+[2023-08-30 14:27:46.230 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 14:27:48.044 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 54617.0252ms
+[2023-08-30 14:27:48.052 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 14:27:48.056 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161 - 200 - application/json;+charset=utf-8 55147.9147ms
+[2023-08-30 14:32:35.210 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161
+[2023-08-30 14:32:35.217 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 14:32:35.219 +01:00  INF]  Successfully validated the token.
+[2023-08-30 14:32:35.226 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 14:32:35.228 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 14:33:37.301 +01:00  ERR]  Exception Occurred ==> Cannot perform runtime binding on a null reference
+[2023-08-30 14:33:37.303 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 14:33:37.305 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 62074.2548ms
+[2023-08-30 14:33:37.306 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 14:33:37.308 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161 - 200 - application/json;+charset=utf-8 62098.1310ms
+[2023-08-30 14:38:13.315 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 14:38:13.787 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 14:38:13.788 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 14:38:13.792 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 14:38:13.793 +01:00  INF]  Hosting environment: Development
+[2023-08-30 14:38:13.794 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 14:38:14.721 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 14:38:15.144 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 427.7805ms
+[2023-08-30 14:38:15.197 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 14:38:15.197 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 14:38:15.211 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 13.8035ms
+[2023-08-30 14:38:15.230 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 33.5807ms
+[2023-08-30 14:38:15.338 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 14:38:15.558 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 220.0228ms
+[2023-08-30 14:39:00.667 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161
+[2023-08-30 14:39:00.684 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 14:39:00.788 +01:00  INF]  Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+[2023-08-30 14:39:00.801 +01:00  INF]  AuthenticationScheme: Bearer was challenged.
+[2023-08-30 14:39:00.803 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161 - 401 0 - 137.7451ms
+[2023-08-30 14:39:26.231 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161
+[2023-08-30 14:39:26.251 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 14:39:26.583 +01:00  INF]  Successfully validated the token.
+[2023-08-30 14:39:26.591 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 14:39:26.638 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 14:40:08.940 +01:00  ERR]  Exception Occurred ==> Cannot perform runtime binding on a null reference
+[2023-08-30 14:40:25.174 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 14:40:27.709 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 61062.3559ms
+[2023-08-30 14:40:27.717 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 14:40:27.720 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161 - 200 - application/json;+charset=utf-8 61488.6668ms
+[2023-08-30 14:45:29.828 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 14:45:30.204 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 14:45:30.205 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 14:45:30.211 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 14:45:30.212 +01:00  INF]  Hosting environment: Development
+[2023-08-30 14:45:30.213 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 14:45:30.931 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 14:45:31.404 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 479.3894ms
+[2023-08-30 14:45:31.426 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 14:45:31.437 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 14:45:31.442 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 15.3325ms
+[2023-08-30 14:45:31.464 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 26.7032ms
+[2023-08-30 14:45:31.597 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 14:45:31.815 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 218.3468ms
+[2023-08-30 14:46:29.586 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161
+[2023-08-30 14:46:29.606 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 14:46:30.144 +01:00  INF]  Successfully validated the token.
+[2023-08-30 14:46:30.160 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 14:46:30.210 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 14:47:38.820 +01:00  ERR]  Exception Occurred ==> 'int' does not contain a definition for 'Contains'
+[2023-08-30 14:47:42.943 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 14:47:42.955 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 72735.5079ms
+[2023-08-30 14:47:42.982 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 14:47:42.986 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161 - 200 - application/json;+charset=utf-8 73399.9118ms
+[2023-08-30 14:50:12.002 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62
+[2023-08-30 14:50:12.015 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 14:50:12.017 +01:00  INF]  Successfully validated the token.
+[2023-08-30 14:50:12.023 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 14:50:12.031 +01:00  INF]  Route matched with {action = "DeleteTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanDelete) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 14:50:12.324 +01:00  ERR]  Exception Occurred ==> 'int' does not contain a definition for 'Contains'
+[2023-08-30 14:50:12.330 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 14:50:12.336 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api) in 302.8218ms
+[2023-08-30 14:50:12.341 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 14:50:12.345 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62 - 200 - application/json;+charset=utf-8 342.9185ms
+[2023-08-30 14:50:21.564 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62
+[2023-08-30 14:50:21.565 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 14:50:21.568 +01:00  INF]  Successfully validated the token.
+[2023-08-30 14:50:21.570 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 14:50:21.572 +01:00  INF]  Route matched with {action = "DeleteTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanDelete) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 14:50:21.833 +01:00  ERR]  Exception Occurred ==> 'int' does not contain a definition for 'Contains'
+[2023-08-30 14:50:21.837 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 14:50:21.842 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api) in 268.3785ms
+[2023-08-30 14:50:21.851 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.DeleteTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 14:50:21.855 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/DeleteTrainingPlan application/json 62 - 200 - application/json;+charset=utf-8 291.2363ms
+[2023-08-30 15:07:20.367 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161
+[2023-08-30 15:07:20.437 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 15:07:20.532 +01:00  INF]  Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '30/08/2023 13:47:02', Current time: '30/08/2023 14:07:20'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateJWS(String token, TokenValidationParameters validationParameters, BaseConfiguration currentConfiguration, SecurityToken& signatureValidatedToken, ExceptionDispatchInfo& exceptionThrown)
+--- End of stack trace from previous location ---
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, JwtSecurityToken outerToken, TokenValidationParameters validationParameters, SecurityToken& signatureValidatedToken)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+[2023-08-30 15:07:20.689 +01:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '30/08/2023 13:47:02', Current time: '30/08/2023 14:07:20'.
+[2023-08-30 15:07:20.692 +01:00  INF]  Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+[2023-08-30 15:07:20.707 +01:00  INF]  AuthenticationScheme: Bearer was challenged.
+[2023-08-30 15:07:20.709 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161 - 401 0 - 341.8787ms
+[2023-08-30 15:08:11.552 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/Auth/Logout application/json 48
+[2023-08-30 15:08:11.558 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 15:08:11.559 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-08-30 15:08:11.563 +01:00  INF]  Route matched with {action = "Logout", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Logout(Com.XpressPayments.Data.DTOs.Account.LogoutDto) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-08-30 15:08:21.626 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 15:08:21.634 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api) in 10069.4175ms
+[2023-08-30 15:08:21.653 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Logout (Com.XpressPayments.Api)'
+[2023-08-30 15:08:21.658 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/Auth/Logout application/json 48 - 200 - application/json;+charset=utf-8 10106.0236ms
+[2023-08-30 15:08:38.232 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/Auth/Login application/json 82
+[2023-08-30 15:08:38.238 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 15:08:38.240 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-08-30 15:08:38.245 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Com.XpressPayments.Bussiness.ViewModels.LoginModel) on controller Com.XpressPayments.Api.Controllers.AuthController (Com.XpressPayments.Api).
+[2023-08-30 15:08:55.146 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.LoginResponse'.
+[2023-08-30 15:08:55.160 +01:00  INF]  Executed action Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api) in 16907.7947ms
+[2023-08-30 15:08:55.162 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.Controllers.AuthController.Login (Com.XpressPayments.Api)'
+[2023-08-30 15:08:55.164 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/Auth/Login application/json 82 - 200 - application/json;+charset=utf-8 16931.3364ms
+[2023-08-30 15:09:27.522 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161
+[2023-08-30 15:09:27.531 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 15:09:27.533 +01:00  INF]  Successfully validated the token.
+[2023-08-30 15:09:27.534 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 15:09:27.538 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 15:10:19.964 +01:00  ERR]  Exception Occurred ==> 'int' does not contain a definition for 'Contains'
+[2023-08-30 15:10:19.965 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 15:10:19.968 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 52427.999ms
+[2023-08-30 15:10:19.971 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 15:10:19.973 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161 - 200 - application/json;+charset=utf-8 52450.0816ms
+[2023-08-30 15:11:54.015 +01:00  INF]  Request starting HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161
+[2023-08-30 15:11:54.023 +01:00  INF]  CORS policy execution successful.
+[2023-08-30 15:11:54.024 +01:00  INF]  Successfully validated the token.
+[2023-08-30 15:11:54.026 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 15:11:54.027 +01:00  INF]  Route matched with {action = "UpdateTrainingPlan", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateTrainingPlan(Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs.TrainingPlanUpdate) on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 15:12:05.181 +01:00  INF]  Training Plan updated successfully.
+[2023-08-30 15:12:05.182 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 15:12:05.187 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api) in 11158.4763ms
+[2023-08-30 15:12:05.189 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.UpdateTrainingPlan (Com.XpressPayments.Api)'
+[2023-08-30 15:12:05.191 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/UpdateTrainingPlan application/json 161 - 200 - application/json;+charset=utf-8 11176.8804ms
+[2023-08-30 15:39:41.701 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-08-30 15:39:42.497 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-08-30 15:39:42.498 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-08-30 15:39:42.502 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-08-30 15:39:42.504 +01:00  INF]  Hosting environment: Development
+[2023-08-30 15:39:42.504 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-08-30 15:39:43.507 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-08-30 15:39:44.178 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 673.7270ms
+[2023-08-30 15:39:44.191 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-08-30 15:39:44.202 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-08-30 15:39:44.203 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 12.7414ms
+[2023-08-30 15:39:44.248 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 46.0403ms
+[2023-08-30 15:39:44.353 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-08-30 15:39:44.582 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 229.4080ms
+[2023-08-30 15:40:52.230 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetTrainingPlanPendingApproval - -
+[2023-08-30 15:40:52.827 +01:00  INF]  Successfully validated the token.
+[2023-08-30 15:40:52.840 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api)'
+[2023-08-30 15:40:52.858 +01:00  INF]  Route matched with {action = "GetTrainingPlanPendingApproval", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTrainingPlanPendingApproval() on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 15:41:02.922 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 15:41:02.938 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api) in 10068.1492ms
+[2023-08-30 15:41:02.947 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api)'
+[2023-08-30 15:41:02.951 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetTrainingPlanPendingApproval - - - 200 - application/json;+charset=utf-8 10721.4211ms
+[2023-08-30 15:45:02.451 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetTrainingPlanPendingApproval - -
+[2023-08-30 15:45:02.473 +01:00  INF]  Successfully validated the token.
+[2023-08-30 15:45:02.475 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api)'
+[2023-08-30 15:45:02.477 +01:00  INF]  Route matched with {action = "GetTrainingPlanPendingApproval", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTrainingPlanPendingApproval() on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 15:52:00.826 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 15:52:00.844 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api) in 418364.7083ms
+[2023-08-30 15:52:00.852 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api)'
+[2023-08-30 15:52:00.854 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetTrainingPlanPendingApproval - - - 200 - application/json;+charset=utf-8 418402.8792ms
+[2023-08-30 15:52:06.751 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetTrainingPlanPendingApproval - -
+[2023-08-30 15:52:06.755 +01:00  INF]  Successfully validated the token.
+[2023-08-30 15:52:06.757 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api)'
+[2023-08-30 15:52:06.762 +01:00  INF]  Route matched with {action = "GetTrainingPlanPendingApproval", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTrainingPlanPendingApproval() on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 15:54:41.044 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 15:54:41.115 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api) in 154350.1474ms
+[2023-08-30 15:54:41.116 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api)'
+[2023-08-30 15:54:41.117 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetTrainingPlanPendingApproval - - - 200 - application/json;+charset=utf-8 154366.3711ms
+[2023-08-30 15:54:44.863 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetTrainingPlanPendingApproval - -
+[2023-08-30 15:54:44.875 +01:00  INF]  Successfully validated the token.
+[2023-08-30 15:54:44.877 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api)'
+[2023-08-30 15:54:44.879 +01:00  INF]  Route matched with {action = "GetTrainingPlanPendingApproval", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTrainingPlanPendingApproval() on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 15:55:05.280 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 15:55:05.282 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api) in 20400.687ms
+[2023-08-30 15:55:05.284 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api)'
+[2023-08-30 15:55:05.285 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetTrainingPlanPendingApproval - - - 200 - application/json;+charset=utf-8 20422.5960ms
+[2023-08-30 15:58:26.750 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetTrainingPlanPendingApproval - -
+[2023-08-30 15:58:26.762 +01:00  INF]  Successfully validated the token.
+[2023-08-30 15:58:26.763 +01:00  INF]  Executing endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api)'
+[2023-08-30 15:58:26.764 +01:00  INF]  Route matched with {action = "GetTrainingPlanPendingApproval", controller = "TrainingPlan"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTrainingPlanPendingApproval() on controller Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController (Com.XpressPayments.Api).
+[2023-08-30 15:58:44.102 +01:00  INF]  Executing OkObjectResult, writing value of type 'Com.XpressPayments.Data.GenericResponse.BaseResponse'.
+[2023-08-30 15:58:44.121 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api) in 17355.2113ms
+[2023-08-30 15:58:44.123 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.GetTrainingPlanPendingApproval (Com.XpressPayments.Api)'
+[2023-08-30 15:58:44.125 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/api/TrainingPlan/GetTrainingPlanPendingApproval - - - 200 - application/json;+charset=utf-8 17374.6630ms

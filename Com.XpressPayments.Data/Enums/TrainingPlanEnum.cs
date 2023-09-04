@@ -22,5 +22,6 @@ namespace Com.XpressPayments.Data.Enums
         //GETUNITHEADAPPROVAL =12,
         GETPENDINGAPPROVAL = 13,
         GETBYUSERID = 14,
+        SCHEDULE = 15,
     }
 }

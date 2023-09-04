@@ -15,12 +15,12 @@ namespace Com.XpressPayments.Api.LeaveModuleController.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TrainingPlanController : ControllerBase
+    public class LeaveRequestController : ControllerBase
     {
-        private readonly ILogger<TrainingPlanController> _logger;
+        private readonly ILogger<LeaveRequestController> _logger;
         private readonly ILeaveRequestService _leaveRequestService;
 
-        public TrainingPlanController(ILogger<TrainingPlanController> logger, ILeaveRequestService leaveRequestService)
+        public LeaveRequestController(ILogger<LeaveRequestController> logger, ILeaveRequestService leaveRequestService)
         {
             _logger = logger;
             _leaveRequestService = leaveRequestService;

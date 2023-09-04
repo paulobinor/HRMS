@@ -14,6 +14,9 @@ using Com.XpressPayments.Bussiness.Util;
 using Com.XpressPayments.Common.Configuration;
 using Com.XpressPayments.Data.DapperGeneric;
 using Com.XpressPayments.Data.ExitModuleRepository.Repositories;
+using Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingInductionRepo;
+using Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanRepo;
+using Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingScheduleRepo;
 using Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo;
 using Com.XpressPayments.Data.LeaveModuleRepository.LeaveType;
 using Com.XpressPayments.Data.OnBoardingRepositorie.Repositories.Reviwer;
@@ -199,6 +202,12 @@ builder.Services.AddScoped<IRescheduleLeaveRepository, RescheduleLeaveRepository
 //ExitModule
 builder.Services.AddScoped<IResignationRepository, ResignationRepository>();
 
+//Learning an development repo
+builder.Services.AddScoped<ITrainingPlanRepository, TrainingPlanRepository>();
+builder.Services.AddScoped<ITrainingScheduleRepository, TrainingScheduleRepository>();
+builder.Services.AddScoped<ITrainingInductionRepository, TrainingInductionRepository>();
+
+
 //OnboardingModule
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
@@ -242,6 +251,8 @@ builder.Services.AddScoped<IMailService, MailService>();
 //Learning and development module
 builder.Services.AddScoped<ITrainingPlanService, TrainingPlanService>();
 builder.Services.AddScoped<ITrainingScheduleService, TrainingScheduleService>();
+builder.Services.AddScoped<ITrainingInductionService, TrainingInductionService>();
+builder.Services.AddScoped<ILearningAndDevelopmentMailService, LearningAndDevelopmentMailService>();
 
 
 var app = builder.Build();
