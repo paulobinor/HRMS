@@ -1,5 +1,0 @@
-C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Data\obj\Debug\net6.0\Com.XpressPayments.Data.csproj.AssemblyReference.cache
-C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Data\obj\Debug\net6.0\Com.XpressPayments.Data.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Data\obj\Debug\net6.0\Com.XpressPayments.Data.AssemblyInfoInputs.cache
-C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Data\obj\Debug\net6.0\Com.XpressPayments.Data.AssemblyInfo.cs
-C:\Users\peter.omolayo\source\repos\hrms-be-backend\Com.XpressPayments.Data\obj\Debug\net6.0\Com.XpressPayments.Data.csproj.CoreCompileInputs.cache
