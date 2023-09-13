@@ -11,8 +11,8 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs
             public long TrainingPlanID { get; set; }
             public long UserId { get; set; }
             public long CompanyID { get; set; }
-            //public string Name { get; set; }
-            //public long DeptId { get; set; }
+            public string StaffName { get; set; }
+            public string Department { get; set; }
             public DateTime Created_Date { get; set; }
             public bool IsApproved { get; set; }
             public bool IsDisapproved { get; set; }
@@ -48,8 +48,8 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs
     public class TrainingPlanCreate
     {
         public long UserId { get; set; }
-        //public string Name { get; set; }
-        //public long DeptId { get; set; }
+        public string StaffName { get; set; }
+        public string Department { get; set; }
         public string IdentifiedSkills { get; set; }
         public string TrainingNeeds { get; set; }
 

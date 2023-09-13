@@ -1,4 +1,5 @@
 ﻿using Com.XpressPayments.Data.ExitModuleRepository.Repositories;
+using Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingFeedbackFormRepo;
 using Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingInductionRepo;
 using Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanRepo;
 using Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo;
@@ -88,6 +89,7 @@ namespace Com.XpressPayments.Data
             //Learning and development module
             services.AddScoped<ITrainingPlanRepository, TrainingPlanRepository>();
             services.AddScoped<ITrainingInductionRepository, TrainingInductionRepository>();
+            services.AddScoped<ITrainingFeedbackFormRepository, TrainingFeedbackFormRepository>();
         }
     }
 }

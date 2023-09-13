@@ -82,10 +82,12 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
                     return response;
                 }
                 var userDetails = await _accountRepository.FindUser(payload.UserId);
-               
+
+                var HrDetails = await _accountRepository.FindUser(4);
+
 
                 //Send mail to HCM
-               // _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(payload., payload.UserId, payload.TrainingProvider);
+                _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(HrDetails.UserId, payload.UserId, payload.TrainingProvider);
 
                 //Send mail to Hod/UnitHead
                 if (userDetails.UnitHeadUserId == null)
@@ -617,5 +619,7 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
                 return response;
             }
         }
+
+
     }
 }

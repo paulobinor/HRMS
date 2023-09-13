@@ -54,6 +54,7 @@ namespace Com.XpressPayments.Data.AppConstants
         public static string Sp_TrainingPlan = "Sp_TrainingPlan";
         public static string Sp_TrainingSchedule = "Sp_TrainingSchedule";
         public static string Sp_TrainingInduction = "Sp_TrainingInduction";
+        public static string Sp_TrainingFeedbackForm = "Sp_TrainingFeedbackForm";
 
         //System Default
         public static int DefaultDeptId = 1;

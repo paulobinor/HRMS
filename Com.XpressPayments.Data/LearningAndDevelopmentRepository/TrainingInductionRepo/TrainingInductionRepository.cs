@@ -44,7 +44,6 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingInduc
                 param.Add("@TrainingTitle", TrainingInduction.TrainingTitle);
                 param.Add("@TrainingVenue", TrainingInduction.TrainingVenue);
                 param.Add("@TrainingProvider", TrainingInduction.TrainingProvider);
-                param.Add("@TrainingTopic", TrainingInduction.TrainingTopic);
                 param.Add("@TrainingTime", TrainingInduction.TrainingTime);
                 param.Add("@TrainingMode", TrainingInduction.TrainingMode);
                 param.Add("@Documents", TrainingInduction.Documents);
@@ -72,15 +71,17 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingInduc
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", TrainingInductionEnum.UPDATE);
-                    param.Add("@TrainingPlanIDUpd", TrainingInduction.TrainingInductionID);
-                    param.Add("@CompanyId", TrainingInduction.CompanyID);
-                    param.Add("@TrainingTitle", TrainingInduction.TrainingTitle);
-                    param.Add("@TrainingVenue", TrainingInduction.TrainingVenue);
-                    param.Add("@TrainingTopic", TrainingInduction.TrainingTopic);
-                    param.Add("@TrainingTime", TrainingInduction.TrainingTime);
-                    param.Add("@TrainingMode", TrainingInduction.TrainingMode);
-                    param.Add("@StartDate", TrainingInduction.StartDate);
-                    param.Add("@EndDate", TrainingInduction.EndDate);
+                    param.Add("@TrainingInductionIDUpd", TrainingInduction.TrainingInductionID);
+                    param.Add("@CompanyIdUpd", TrainingInduction.CompanyID);
+                    param.Add("@TrainingTitleUpd", TrainingInduction.TrainingTitle);
+                    param.Add("@TrainingVenueUpd", TrainingInduction.TrainingVenue);
+                    param.Add("@TrainingProviderUpd", TrainingInduction.TrainingProvider);
+                    param.Add("@TrainingTimeUpd", TrainingInduction.TrainingTime);
+                    param.Add("@TrainingModeUpd", TrainingInduction.TrainingMode);
+                    param.Add("@DocumentsUpd", TrainingInduction.Documents);
+                    param.Add("@MediaUpd", TrainingInduction.Media);
+                    param.Add("@StartDateUpd", TrainingInduction.StartDate);
+                    param.Add("@EndDateUpd", TrainingInduction.EndDate);
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
 
                     dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_TrainingInduction, param: param, commandType: CommandType.StoredProcedure);

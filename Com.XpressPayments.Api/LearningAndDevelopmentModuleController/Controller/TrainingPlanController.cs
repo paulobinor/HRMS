@@ -302,6 +302,8 @@ namespace Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controll
             }
         }
 
+
+
         [HttpPost("ScheuledTrainingPlan")]
         [Authorize]
         public async Task<IActionResult> ScheduledTrainingPlan([FromBody] TrainingPlanSchedule ScheduleDto)

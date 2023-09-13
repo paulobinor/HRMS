@@ -13,7 +13,6 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs
         public long CompanyID { get; set; }
         public string TrainingTitle { get; set; }
         public string TrainingVenue { get; set; }
-        public string TrainingTopic { get; set; }
         public string TrainingProvider { get; set; }
         public string TrainingTime { get; set; }
         public string TrainingMode { get; set; }
@@ -43,7 +42,6 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs
         public string TrainingTitle { get; set; }
         public string TrainingVenue { get; set; }
         public string TrainingProvider { get; set; }
-        public string TrainingTopic { get; set; }
         public string TrainingTime { get; set; }
         public string TrainingMode { get; set; }
         public string Documents { get; set; }
@@ -61,7 +59,6 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs
         public string TrainingTitle { get; set; }
         public string TrainingVenue { get; set; }
         public string TrainingProvider { get; set; }
-        public string TrainingTopic { get; set; }
         public string TrainingTime { get; set; }
         public string TrainingMode { get; set; }
         public string Documents { get; set; }

@@ -164,3 +164,17 @@ DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
 [2023-09-04 14:20:20.877 +01:00  INF]  Executed action Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.ScheduledTrainingPlan (Com.XpressPayments.Api) in 80006.712ms
 [2023-09-04 14:20:20.881 +01:00  INF]  Executed endpoint 'Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controller.TrainingPlanController.ScheduledTrainingPlan (Com.XpressPayments.Api)'
 [2023-09-04 14:20:20.884 +01:00  INF]  Request finished HTTP/2 POST https://localhost:5001/api/TrainingPlan/ScheuledTrainingPlan application/json 275 - 200 - application/json;+charset=utf-8 80083.8222ms
+[2023-09-04 15:39:40.429 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-09-04 15:39:41.428 +01:00  INF]  Now listening on: https://localhost:5001
+[2023-09-04 15:39:41.431 +01:00  INF]  Now listening on: http://localhost:5000
+[2023-09-04 15:39:41.440 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-09-04 15:39:41.443 +01:00  INF]  Hosting environment: Development
+[2023-09-04 15:39:41.445 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\Downloads\hrms-be-backend\Com.XpressPayments.Api\
+[2023-09-04 15:39:42.410 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/index.html - -
+[2023-09-04 15:39:43.271 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+[2023-09-04 15:39:43.274 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/index.html - - - 200 - text/html;charset=utf-8 868.5386ms
+[2023-09-04 15:39:43.282 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 12014 application/javascript;+charset=utf-8 10.8068ms
+[2023-09-04 15:39:43.292 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+[2023-09-04 15:39:43.345 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 52.5276ms
+[2023-09-04 15:39:43.489 +01:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+[2023-09-04 15:39:43.824 +01:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 335.3124ms

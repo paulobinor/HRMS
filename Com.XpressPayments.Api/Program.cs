@@ -14,6 +14,7 @@ using Com.XpressPayments.Bussiness.Util;
 using Com.XpressPayments.Common.Configuration;
 using Com.XpressPayments.Data.DapperGeneric;
 using Com.XpressPayments.Data.ExitModuleRepository.Repositories;
+using Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingFeedbackFormRepo;
 using Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingInductionRepo;
 using Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanRepo;
 using Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo;
@@ -204,6 +205,7 @@ builder.Services.AddScoped<IResignationRepository, ResignationRepository>();
 //Learning an development repo
 builder.Services.AddScoped<ITrainingPlanRepository, TrainingPlanRepository>();
 builder.Services.AddScoped<ITrainingInductionRepository, TrainingInductionRepository>();
+builder.Services.AddScoped<ITrainingFeedbackFormRepository, TrainingFeedbackFormRepository>();
 
 
 //OnboardingModule
@@ -249,6 +251,7 @@ builder.Services.AddScoped<IMailService, MailService>();
 //Learning and development module
 builder.Services.AddScoped<ITrainingPlanService, TrainingPlanService>();
 builder.Services.AddScoped<ITrainingInductionService, TrainingInductionService>();
+builder.Services.AddScoped<ITrainingFeedbackFormService, TrainingFeedbackFormService>();
 builder.Services.AddScoped<ILearningAndDevelopmentMailService, LearningAndDevelopmentMailService>();
 
 

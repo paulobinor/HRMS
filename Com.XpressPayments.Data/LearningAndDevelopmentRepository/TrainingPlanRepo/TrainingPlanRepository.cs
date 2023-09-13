@@ -1,6 +1,7 @@
 ﻿using Com.XpressPayments.Data.AppConstants;
 using Com.XpressPayments.Data.DapperGeneric;
 using Com.XpressPayments.Data.Enums;
+using Com.XpressPayments.Data.GenericResponse;
 using Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs;
 using Com.XpressPayments.Data.LeaveModuleDTO.DTO;
 using Com.XpressPayments.Data.LeaveModuleRepository.LeaveRequestRepo;
@@ -8,6 +9,7 @@ using Com.XpressPayments.Data.Repositories.UserAccount.IRepository;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -37,13 +39,23 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
 
         public async Task<string> CreateTrainingPlan(TrainingPlanCreate TrainingPlan, string createdbyUserEmail)
         {
+            BaseResponse response = new BaseResponse();
             try
             {
-                var userDetails = await _accountRepository.FindUser(TrainingPlan.UserId);
+                //var userDetails = await _accountRepository.FindUser(TrainingPlan.UserId);
+                //if (userDetails == null)
+                //{
+                //    _logger.LogError($"MethodName: CreateTrainingPlan");
+                //    throw new Exception("User details not found.");
+                //}
                 var param = new DynamicParameters();
                 param.Add("@Status", TrainingPlanEnum.CREATE);
                 param.Add("@UserId", TrainingPlan.UserId);
                 param.Add("@CompanyId", TrainingPlan.CompanyID);
+                //param.Add("@StaffName", string.Concat(userDetails.FirstName, " ", userDetails.LastName));
+                //param.Add("@@Department", userDetails.DepartmentName);
+                param.Add("@StaffName", TrainingPlan.StaffName);
+                param.Add("@@Department", TrainingPlan.Department);
                 param.Add("@IdentifiedSkills", TrainingPlan.IdentifiedSkills);
                 param.Add("@TrainingNeeds", TrainingPlan.TrainingNeeds);
                 param.Add("@TrainingProvider", TrainingPlan.TrainingProvider);
