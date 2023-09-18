@@ -32,6 +32,7 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs
             public long HodUserID { get; set; }
             public long HRUserId { get; set; }
             public bool IsHodApproved { get; set; }
+            public bool IsHrApproved { get; set; }
             public bool IsUpdated { get; set; }
             public DateTime? Updated_Date { get; set; }
             public string Updated_By_User_Email { get; set; }
@@ -57,7 +58,7 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs
         public decimal EstimatedCost { get; set; }
         public long CompanyID { get; set; }
         public bool IsHodApproved { get; set; }
-
+        public bool IsHrApproved { get; set; }
         public DateTime Created_Date { get; set; }
         public string Created_By_User_Email { get; set; }
        // public bool IsDeleted { get; set; }
