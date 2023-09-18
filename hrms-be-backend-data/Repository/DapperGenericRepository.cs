@@ -60,8 +60,7 @@ namespace hrms_be_backend_data.Repository
         public async Task<T> Get<T>(string sp, DynamicParameters parms, CommandType commandType = CommandType.Text)
         {
 
-            // using IDbConnection db = new SqlConnection(_config.GetConnectionString(Connectionstring));
-            //return (await db.QueryAsync<T>(sp, parms, commandType: commandType)).FirstOrDefault();
+           
 
             T result;
             using IDbConnection db = new SqlConnection(_config.GetConnectionString(Connectionstring));

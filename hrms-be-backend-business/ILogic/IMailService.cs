@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace hrms_be_backend_business.AppCode
+﻿namespace hrms_be_backend_business.ILogic
 {
     public interface IMailService
     {

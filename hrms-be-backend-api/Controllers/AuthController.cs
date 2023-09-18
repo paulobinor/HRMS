@@ -25,20 +25,9 @@ namespace hrms_be_backend_api.Controllers
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
             var response = new LoginResponse();
-            try
-            {
-                var IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString();
-                var Port = Request.HttpContext.Connection.LocalPort.ToString();
-                return Ok(await _authService.Login(login, IpAddress, Port));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : Login ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : Login ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+            var IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString();
+            var Port = Request.HttpContext.Connection.LocalPort.ToString();
+            return Ok(await _authService.Login(login, IpAddress, Port));
         }
 
         [AllowAnonymous]

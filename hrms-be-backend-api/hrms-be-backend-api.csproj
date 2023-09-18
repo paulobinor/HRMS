@@ -22,4 +22,8 @@
     <ProjectReference Include="..\hrms-be-backend-business\hrms-be-backend-business.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UploadedDocument\" />
+  </ItemGroup>
+
 </Project>

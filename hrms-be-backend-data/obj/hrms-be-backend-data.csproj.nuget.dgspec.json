@@ -65,6 +65,10 @@
               "target": "Package",
               "version": "[7.0.1, )"
             },
+            "Microsoft.Extensions.Options": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
             "MimeKit": {
               "target": "Package",
               "version": "[4.2.0, )"

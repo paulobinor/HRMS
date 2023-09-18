@@ -3,6 +3,7 @@ using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,6 +16,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
         private readonly IRefreshTokenGenerator _refreshTokenGenerator;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
+       
 
         public JwtManager(IConfiguration configuration, IRefreshTokenGenerator refreshTokenGenerator, IUnitOfWork unitOfWork)
         {
@@ -38,7 +40,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, request.Email),
-                new Claim(ClaimTypes.Name, request.Email),
+                new Claim(ClaimTypes.Name, $"{request.FirstName} {request.LastName}"),
                 new Claim(ClaimTypes.Sid, request.UserId.ToString()),
                 new Claim(ClaimTypes.Role, request.RoleId.ToString())            };
 

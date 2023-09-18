@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using ExcelDataReader;
+using hrms_be_backend_business.AppCode;
 using hrms_be_backend_business.ILogic;
+using hrms_be_backend_common.Communication;
+using hrms_be_backend_common.Configuration;
 using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
@@ -10,9 +13,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System.Data;
+using System.Security.Claims;
 using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace hrms_be_backend_business.Logic
@@ -40,22 +45,18 @@ namespace hrms_be_backend_business.Logic
         private readonly IRolesRepo _rolesRepo;
         private readonly IDepartmentRepository _departmentrepository;
         private readonly ICompanyRepository _companyrepository;
-        private int MaxNumberOfFailedAttemptsToLogin;
-        private int MinutesBeforeResetAfterFailedAttemptsToLogin;
-        private int CharacterLengthMax;
-        private int CharacterLengthMin;
-        private int MustContainUppercase;
-        private int MustContainLowercase;
-        private int MustContainNumber;
-      
+        private readonly AppConfig _appConfig;
+        private readonly JwtConfig _jwt;
 
-        public AuthService(ITokenRefresher tokenRefresher, IUnitOfWork unitOfWork, IConfiguration configuration,
+        public AuthService(ITokenRefresher tokenRefresher, IUnitOfWork unitOfWork, IConfiguration configuration, IOptions<AppConfig> appConfig, IOptions<JwtConfig> jwt,
              IAuditLog audit, IMapper mapper, IJwtManager jwtManager, IHostEnvironment hostEnvironment,
              IAccountRepository accountRepository, ILogger<AuthService> logger, IUnitRepository unitRepository, IUnitHeadRepository unitHeadRepository,
              IHODRepository HODRepository, IGradeRepository GradeRepository, IEmployeeTypeRepository EmployeeTypeRepository, IPositionRepository PositionRepository,
                 IBranchRepository branchRepository, IEmploymentStatusRepository EmploymentStatusRepository, IGroupRepository groupRepository,
                 IJobDescriptionRepository jobDescriptionRepository, IDepartmentRepository departmentrepository, ICompanyRepository companyRepository, IRolesRepo rolesRepo)
         {
+            _appConfig = appConfig.Value;
+            _jwt = jwt.Value;
             _tokenRefresher = tokenRefresher;
             _unitOfWork = unitOfWork;
             _audit = audit;
@@ -67,25 +68,22 @@ namespace hrms_be_backend_business.Logic
             _unitRepository = unitRepository;
             _unitHeadRepository = unitHeadRepository;
             _HODRepository = HODRepository;
-            _GradeRepository    = GradeRepository;
+            _GradeRepository = GradeRepository;
             _EmployeeTypeRepository = EmployeeTypeRepository;
             _PositionRepository = PositionRepository;
             _branchRepository = branchRepository;
             _EmploymentStatusRepository = EmploymentStatusRepository;
             _GroupRepository = groupRepository;
-            _rolesRepo = rolesRepo; 
+            _rolesRepo = rolesRepo;
             _jobDescriptionRepository = jobDescriptionRepository;
             _departmentrepository = departmentrepository;
             _companyrepository = companyRepository;
         }
-
         public async Task<LoginResponse> Login(LoginModel login, string ipAddress, string port)
         {
             var response = new LoginResponse();
             try
             {
-                //var Un = Convert.ToBase64String(Encoding.UTF8.GetBytes(Convert.ToString(login.Email)));
-                //var pw = Convert.ToBase64String(Encoding.UTF8.GetBytes(Convert.ToString(login.Password)));
 
                 var email = Encoding.UTF8.GetString(Convert.FromBase64String(login.OfficialMail));
                 var password = Encoding.UTF8.GetString(Convert.FromBase64String(login.Password));
@@ -93,187 +91,47 @@ namespace hrms_be_backend_business.Logic
                 var hashPassword = Utils.HashPassword(password);
 
                 var decodedLogin = new LoginModel { OfficialMail = email, Password = hashPassword };
-
-                var payload = JsonSerializer.Serialize(decodedLogin);
-
+                var repoResponse = await _accountRepository.AuthenticateUser(email, hashPassword, _appConfig.MaxNumberOfFailedAttemptsToLogin, DateTime.Now);
+                if (!repoResponse.Contains("Success"))
+                {
+                    response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"{repoResponse}";
+                    response.Data = null;
+                    return response;
+                }
                 var user = await _accountRepository.FindUser(email);
+                var authResponse = await _jwtManager.GenerateJsonWebToken(user);
 
-                if (user == null)
+                await _unitOfWork.UpdateUserLoginActivity(user.UserId, ipAddress, authResponse.JwtToken);
+
+                var mapped = _mapper.Map<UserViewModel>(user);
+
+
+                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "User Logged in Successfully";
+                response.JwtToken = authResponse.JwtToken;
+                response.RefreshToken = authResponse.RefreshToken;
+                response.Data = mapped;
+
+                var auditLog = new AuditLogDto
                 {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Invalid login redentials";
-                    return response;
-                }
-
-                if (user.IsLogin && user.LoggedInWithIPAddress == ipAddress)
-                {
-                    response.ResponseCode = ResponseCode.InvalidPassword.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"You are already logged in on this PC.";
-                    return response;
-                }
-
-                if (user.IsLogin && user.LoggedInWithIPAddress != ipAddress)
-                {
-                    response.ResponseCode = ResponseCode.InvalidPassword.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"You are already logged in on another PC.";
-                    return response;
-                }
-
-                var systemConfig = await _unitOfWork.SystemConfiguration();
-
-                foreach (var config in systemConfig)
-                {
-                    if (config.Name.ToLower() == "maxnumberoffailedattemptstologin")
-                        MaxNumberOfFailedAttemptsToLogin = config.Value;
-                    if (config.Name.ToLower() == "minutesbeforeresetafterfailedattemptstologin")
-                        MinutesBeforeResetAfterFailedAttemptsToLogin = config.Value;
-                }
-
-
-                if (user != null)
-                {
-                    if (user.IsDeactivated)
-                    {
-                        response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = "You have been deactivated please contact admin";
-
-                        var LogDeactivatedAccount = new AuditLogDto
-                        {
-                            userId = user.UserId,
-                            actionPerformed = "Login",
-                            payload = payload,
-                            response = JsonSerializer.Serialize(response),
-                            actionStatus = $"Unauthorized: {response.ResponseMessage}",
-                            ipAddress = ipAddress
-                        };
-
-                        await _audit.LogActivity(LogDeactivatedAccount);
-
-                        return response;
-
-                    }
-
-                    if (user.LoginFailedAttemptsCount >= MaxNumberOfFailedAttemptsToLogin
-                        && user.LastLoginAttemptAt.HasValue
-                        && DateTime.Now < user.LastLoginAttemptAt.Value.AddMinutes(MinutesBeforeResetAfterFailedAttemptsToLogin))
-                    {
-                        response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = "You account was blocked, please contact admin";
-
-                        var LogBlockedAccount = new AuditLogDto
-                        {
-                            userId = user.UserId,
-                            actionPerformed = "Login",
-                            payload = payload,
-                            response = JsonSerializer.Serialize(response),
-                            actionStatus = $"Unauthorized: {response.ResponseMessage}",
-                            ipAddress = ipAddress
-                        };
-
-                        await _audit.LogActivity(LogBlockedAccount);
-
-                        return response;
-                    }
-
-
-                    if (user.IsActive)
-                    {
-                        var isPasswordMatch = Utils.DoesPasswordMatch(user.PasswordHash, Encoding.UTF8.GetString(Convert.FromBase64String(login.Password)));
-                        if (isPasswordMatch)
-                        {
-                            var authResponse = await _jwtManager.GenerateJsonWebToken(user);
-
-                            await _unitOfWork.UpdateUserLoginActivity(user.UserId, ipAddress, authResponse.JwtToken);
-
-                            var mapped = _mapper.Map<UserViewModel>(user);
-
-
-                            response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                            response.ResponseMessage = "User Logged in Successfully";
-                            response.JwtToken = authResponse.JwtToken;
-                            response.RefreshToken = authResponse.RefreshToken;
-                            response.Data = mapped;
-
-                            var auditLog = new AuditLogDto
-                            {
-                                userId = user.UserId,
-                                actionPerformed = "Login",
-                                payload = payload,
-                                response = JsonSerializer.Serialize(response),
-                                actionStatus = $"Successful: {response.ResponseMessage}",
-                                ipAddress = ipAddress
-                            };
-                            await _audit.LogActivity(auditLog);
-
-                            return response;
-                        }
-
-                        var attemptCount = user.LoginFailedAttemptsCount + 1;
-                        await _unitOfWork.UpdateLastLoginAttempt(attemptCount, user.officialMail);
-
-                        if (attemptCount >= MaxNumberOfFailedAttemptsToLogin)
-                        {
-                            response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                            response.ResponseMessage = $"You have exceeded number of attempts. your account has been locked. Please contact admin.";
-
-                            var LogLockedAccount = new AuditLogDto
-                            {
-                                userId = user.UserId,
-                                actionPerformed = "Login",
-                                payload = payload,
-                                response = JsonSerializer.Serialize(response),
-                                actionStatus = $"Failed: {response.ResponseMessage}",
-                                ipAddress = ipAddress
-                            };
-
-                            await _audit.LogActivity(LogLockedAccount);
-
-                            return response;
-                        }
-
-                        response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Invalid Password! You have made {attemptCount} unsuccessful attempt(s). " +
-                                                   $"The maximum retry attempts allowed is {MaxNumberOfFailedAttemptsToLogin}. " +
-                                                   $"If {MaxNumberOfFailedAttemptsToLogin} is exceeded, then you will be locked out of the system";
-
-                        var LogInvalidPw = new AuditLogDto
-                        {
-                            userId = user.UserId,
-                            actionPerformed = "Login",
-                            payload = payload,
-                            response = JsonSerializer.Serialize(response),
-                            actionStatus = $"Failed: {response.ResponseMessage}",
-                            ipAddress = ipAddress
-                        };
-                        await _audit.LogActivity(LogInvalidPw);
-
-                        return response;
-                    }
-                    response.ResponseCode = ResponseCode.AuthorizationError.ToString("D");
-                    response.ResponseMessage = "User is inactive";
-
-                    var LogInactiveUserTrail = new AuditLogDto
-                    {
-                        userId = user.UserId,
-                        actionPerformed = "Login",
-                        payload = payload,
-                        response = JsonSerializer.Serialize(response),
-                        actionStatus = $"Failed: {response.ResponseMessage}",
-                        ipAddress = ipAddress
-                    };
-                    await _audit.LogActivity(LogInactiveUserTrail);
-
-
-                    return response;
-                }
+                    userId = user.UserId,
+                    actionPerformed = "Login",
+                    payload = JsonConvert.SerializeObject(login),
+                    response = null,
+                    actionStatus = $"Successful: {response.ResponseMessage}",
+                    ipAddress = ipAddress
+                };
+                await _audit.LogActivity(auditLog);
 
                 return response;
+
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: Login ==> {ex.Message}");
+                _logger.LogError($"AuthService => Login || {ex}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: Login ==> {ex.Message}";
+                response.ResponseMessage = $"Unable to process the operation, kindly contact the support";
                 response.Data = null;
                 return response;
             }
@@ -309,7 +167,42 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }
+        public async Task<ExecutedResult<User>> CheckUserAccess(string AccessToken, IEnumerable<Claim> claim, string IpAddress)
+        {
+            try
+            {
+                var validationResponse = await AccessTokenValidation.ValidateToken(AccessToken, _jwt.Key, _jwt.Issuer, _jwt.Audience);
+                if (!validationResponse.Identity.IsAuthenticated)
+                {
+                    return new ExecutedResult<User>() { responseMessage = "Unathorized User", responseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), data = null };
+                }
+                var userIdAuth = claim.Where(x => x.Type == ClaimTypes.Sid).FirstOrDefault();
+                var ssoToken = claim.Where(x => x.Type == ClaimTypes.UserData).FirstOrDefault();
+                var ssoTokenValue = ssoToken.Value.ToString();
+                var userId = Convert.ToInt64(userIdAuth.Value);
+                var userAccess = await _accountRepository.VerifyUser(AccessToken, IpAddress, DateTime.Now);
+                if (!userAccess.Contains("Success"))
+                {
+                    return new ExecutedResult<User>() { responseMessage = "Unathorized User", responseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), data = null };
+                }
+                var userData = await _accountRepository.GetUserById(Convert.ToInt64(userId));
+                if (userData == null)
+                {
+                    return new ExecutedResult<User>() { responseMessage = ResponseCode.AuthorizationError.ToString(), responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                }
+                if (ssoTokenValue != userData.Token)
+                {
+                    return new ExecutedResult<User>() { responseMessage = ResponseCode.AuthorizationError.ToString(), responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                }
 
+                return new ExecutedResult<User>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = userData };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception || UsersServices (CreateMerchantUser)=====>{ex}");
+                return new ExecutedResult<User>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
         public async Task<BaseResponse> Logout(LogoutDto logout, string ipAddress, string port)
         {
             var response = new BaseResponse();
@@ -373,7 +266,7 @@ namespace hrms_be_backend_business.Logic
                             return response;
 
                         }
-                    
+
                     }
                 }
 
@@ -394,7 +287,7 @@ namespace hrms_be_backend_business.Logic
                 //    return response;
                 //}
 
-                if ( requester.RoleId == 2 & userDto.RoleId <= 2)
+                if (requester.RoleId == 2 & userDto.RoleId <= 2)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your user role is not authorized to create a new user with the selected role.";
@@ -499,7 +392,7 @@ namespace hrms_be_backend_business.Logic
                         string PositionName = serviceDetails.Rows[0][13].ToString();
                         string BranchName = serviceDetails.Rows[0][14].ToString();
                         string EmploymentStatusName = serviceDetails.Rows[0][15].ToString();
-                      
+
                         string JobDescriptionName = serviceDetails.Rows[0][17].ToString();
                         string RoleName = serviceDetails.Rows[0][18].ToString();
                         string DepartmentName = serviceDetails.Rows[0][19].ToString();
@@ -510,7 +403,7 @@ namespace hrms_be_backend_business.Logic
                         || LastName != "LastName" || Email != "Email" || DOB != "DOB" || ResumptionDate != "ResumptionDate"
                         || OfficialMail != "OfficialMail" || PhoneNumber != "PhoneNumber" || UnitName != "UnitName" || UnitHeadName != "UnitHeadName"
                         || HODName != "HODName" || GradeName != "GradeName" || EmployeeTypeName != "EmployeeTypeName" || PositionName != "PositionName"
-                        || BranchName != "BranchName" || EmploymentStatusName != "EmploymentStatusName"  || JobDescriptionName != "JobDescriptionName"
+                        || BranchName != "BranchName" || EmploymentStatusName != "EmploymentStatusName" || JobDescriptionName != "JobDescriptionName"
                         || RoleName != "RoleName" || DepartmentName != "DepartmentName" || CompanyName != "CompanyName")
                         {
                             response.ResponseCode = "08";
@@ -538,7 +431,7 @@ namespace hrms_be_backend_business.Logic
                                 var positionName = await _PositionRepository.GetPositionByName(serviceDetails.Rows[row][13].ToString());
                                 var branchName = await _branchRepository.GetBranchByName(serviceDetails.Rows[row][14].ToString());
                                 var employmentStatusName = await _EmploymentStatusRepository.GetEmpLoymentStatusByName(serviceDetails.Rows[row][15].ToString());
-                               
+
                                 var jobDescriptionName = await _jobDescriptionRepository.GetJobDescriptionByName(serviceDetails.Rows[row][17].ToString());
                                 var roleName = await _rolesRepo.GetRolesByName(serviceDetails.Rows[row][18].ToString());
                                 var departmentName = await _departmentrepository.GetDepartmentByName(serviceDetails.Rows[row][19].ToString());
@@ -552,7 +445,7 @@ namespace hrms_be_backend_business.Logic
                                 long positionID = positionName.PositionID;
                                 long branchID = branchName.BranchID;
                                 long employmentStatusID = employmentStatusName.EmploymentStatusID;
-                         
+
                                 long jobDescriptionID = jobDescriptionName.JobDescriptionID;
                                 long roleID = roleName.RoleId;
                                 long departmentID = departmentName.DeptId;
@@ -570,13 +463,13 @@ namespace hrms_be_backend_business.Logic
                                     OfficialMail = OfficialMail,
                                     PhoneNumber = phoneNumber,
                                     UnitID = unitID,
-                                  
+
                                     GradeID = gradeID,
                                     EmployeeTypeID = employeeTypeID,
-                                   
+
                                     BranchID = branchID,
                                     EmploymentStatusID = employmentStatusID,
-                                
+
                                     JobDescriptionID = jobDescriptionID,
                                     RoleId = roleID,
                                     DepartmentId = departmentID,
@@ -692,15 +585,6 @@ namespace hrms_be_backend_business.Logic
                     }
                 }
 
-
-                //if (String.IsNullOrEmpty(updateDto.FirstName) || String.IsNullOrEmpty(updateDto.LastName) ||
-                //    String.IsNullOrEmpty(updateDto.OfficialMail) || String.IsNullOrEmpty(updateDto.PhoneNumber) ||
-                //    updateDto.RoleId <= 0 || updateDto.RoleId > 3 || updateDto.CompanyId <= 0 || updateDto.DeptId <= 0)
-                //{
-                //    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                //    response.ResponseMessage = $"Please ensure all required fields are entered.";
-                //    return response;
-                //}
 
                 if (requester.RoleId == 2 & updateDto.RoleId <= 2)
                 {
@@ -823,22 +707,22 @@ namespace hrms_be_backend_business.Logic
                 foreach (var config in systemConfig)
                 {
                     if (config.Name.ToLower() == "maxnumberoffailedattemptstologin")
-                        MaxNumberOfFailedAttemptsToLogin = config.Value;
+                        _appConfig.MaxNumberOfFailedAttemptsToLogin = config.Value;
                     if (config.Name.ToLower() == "minutesbeforeresetafterfailedattemptstologin")
-                        MinutesBeforeResetAfterFailedAttemptsToLogin = config.Value;
+                        _appConfig.MinutesBeforeResetAfterFailedAttemptsToLogin = config.Value;
                     if (config.Name.ToLower() == "characterlengthmax")
-                        CharacterLengthMax = config.Value;
+                        _appConfig.CharacterLengthMax = config.Value;
                     if (config.Name.ToLower() == "characterlengthmin")
-                        CharacterLengthMin = config.Value;
+                        _appConfig.CharacterLengthMin = config.Value;
                     if (config.Name.ToLower() == "mustcontainuppercase")
-                        MustContainUppercase = config.Value;
+                        _appConfig.MustContainUppercase = config.Value;
                     if (config.Name.ToLower() == "mustcontainlowercase")
-                        MustContainLowercase = config.Value;
+                        _appConfig.MustContainLowercase = config.Value;
                     if (config.Name.ToLower() == "mustcontainnumber")
-                        MustContainNumber = config.Value;
+                        _appConfig.MustContainNumber = config.Value;
                 }
 
-                if (user.LoginFailedAttemptsCount >= MaxNumberOfFailedAttemptsToLogin)
+                if (user.LoginFailedAttemptsCount >= _appConfig.MaxNumberOfFailedAttemptsToLogin)
                 {
                     response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = "You account was blocked, please contact admin";
@@ -851,14 +735,14 @@ namespace hrms_be_backend_business.Logic
                     var hasNumber = new Regex(@"[0-9]+");
                     var hasUpperChar = new Regex(@"[A-Z]+");
                     var hasLowerChar = new Regex(@"[a-z]+");
-                    var hasMinChars = new Regex(@".{" + CharacterLengthMin + ",}");
-                    var hasMaxChars = new Regex(@".{" + CharacterLengthMax + ",}");
+                    var hasMinChars = new Regex(@".{" + _appConfig.CharacterLengthMin + ",}");
+                    var hasMaxChars = new Regex(@".{" + _appConfig.CharacterLengthMax + ",}");
 
                     bool isValidatedMin = hasMinChars.IsMatch(newPassword);
                     bool isValidatedMax = hasMaxChars.IsMatch(newPassword);
                     if (isValidatedMin && !isValidatedMax)
                     {
-                        if (MustContainNumber == 1) // true
+                        if (_appConfig.MustContainNumber == 1) // true
                         {
                             if (!hasNumber.IsMatch(newPassword))
                             {
@@ -867,7 +751,7 @@ namespace hrms_be_backend_business.Logic
                                 return response;
                             }
                         }
-                        if (MustContainUppercase == 1) // true
+                        if (_appConfig.MustContainUppercase == 1) // true
                         {
                             if (!hasUpperChar.IsMatch(newPassword))
                             {
@@ -876,7 +760,7 @@ namespace hrms_be_backend_business.Logic
                                 return response;
                             }
                         }
-                        if (MustContainLowercase == 1) // true
+                        if (_appConfig.MustContainLowercase == 1) // true
                         {
                             if (!hasLowerChar.IsMatch(newPassword))
                             {
@@ -907,7 +791,7 @@ namespace hrms_be_backend_business.Logic
                     else
                     {
                         response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Password must be between {CharacterLengthMin} and {CharacterLengthMax} characters";
+                        response.ResponseMessage = $"Password must be between {_appConfig.CharacterLengthMin} and {_appConfig.CharacterLengthMax} characters";
                         return response;
                     }
                 }
@@ -951,9 +835,9 @@ namespace hrms_be_backend_business.Logic
                 foreach (var config in systemConfig)
                 {
                     if (config.Name.ToLower() == "maxnumberoffailedattemptstologin")
-                        MaxNumberOfFailedAttemptsToLogin = config.Value;
+                        _appConfig.MaxNumberOfFailedAttemptsToLogin = config.Value;
                     if (config.Name.ToLower() == "minutesbeforeresetafterfailedattemptstologin")
-                        MinutesBeforeResetAfterFailedAttemptsToLogin = config.Value;
+                        _appConfig.MinutesBeforeResetAfterFailedAttemptsToLogin = config.Value;
                 }
 
                 var mappeduser = new List<UserViewModel>();
@@ -966,7 +850,7 @@ namespace hrms_be_backend_business.Logic
                     {
 
                         var usermap = _mapper.Map<UserViewModel>(user);
-                        usermap.IsLockedOut = user.LoginFailedAttemptsCount >= MaxNumberOfFailedAttemptsToLogin;
+                        usermap.IsLockedOut = user.LoginFailedAttemptsCount >= _appConfig.MaxNumberOfFailedAttemptsToLogin;
                         if (usermap.IsLockedOut)
                         {
                             usermap.UserStatus = "LockedOut";
@@ -1015,8 +899,8 @@ namespace hrms_be_backend_business.Logic
 
         }
 
-      
-        public async Task<BaseResponse> GetAllUsersPendingApproval(long CompanyId,RequesterInfo requester)
+
+        public async Task<BaseResponse> GetAllUsersPendingApproval(long CompanyId, RequesterInfo requester)
         {
             var response = new BaseResponse();
             try
@@ -1095,7 +979,7 @@ namespace hrms_be_backend_business.Logic
             if (roleId2 == ApplicationConstant.SuperAdmin)
             {
                 if (roleId == ApplicationConstant.HrHead
-                || roleId == ApplicationConstant.HrAdmin )
+                || roleId == ApplicationConstant.HrAdmin)
                 {
                     checkCanCreateAndRead = true;
                     canApprove = true;
@@ -1105,7 +989,7 @@ namespace hrms_be_backend_business.Logic
 
             if (roleId2 == ApplicationConstant.HrHead)
             {
-                if (roleId == ApplicationConstant.GeneralUser )
+                if (roleId == ApplicationConstant.GeneralUser)
                 {
                     checkCanCreateAndRead = true;
                     canApprove = true;
@@ -1115,7 +999,7 @@ namespace hrms_be_backend_business.Logic
 
             if (roleId2 == ApplicationConstant.HrAdmin)
             {
-                if (roleId == ApplicationConstant.GeneralUser )
+                if (roleId == ApplicationConstant.GeneralUser)
                 {
                     checkCanCreateAndRead = true;
                     canApprove = false;
@@ -1312,7 +1196,7 @@ namespace hrms_be_backend_business.Logic
                 string requesterUserId = requester.UserId.ToString();
                 string RoleId = requester.RoleId.ToString();
 
-                 var ipAddress = requester.IpAddress.ToString();
+                var ipAddress = requester.IpAddress.ToString();
                 var port = requester.Port.ToString();
 
                 var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
@@ -1343,7 +1227,7 @@ namespace hrms_be_backend_business.Logic
                         response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                         return response;
                     }
-                      
+
                 }
 
                 var user = await _accountRepository.FindUser(deactivateUser.OfficialMail);
@@ -1533,9 +1417,9 @@ namespace hrms_be_backend_business.Logic
                 foreach (var config in systemConfig)
                 {
                     if (config.Name.ToLower() == "maxnumberoffailedattemptstologin")
-                        MaxNumberOfFailedAttemptsToLogin = config.Value;
+                        _appConfig.MaxNumberOfFailedAttemptsToLogin = config.Value;
                     if (config.Name.ToLower() == "minutesbeforeresetafterfailedattemptstologin")
-                        MinutesBeforeResetAfterFailedAttemptsToLogin = config.Value;
+                        _appConfig.MinutesBeforeResetAfterFailedAttemptsToLogin = config.Value;
                 }
 
                 var mappeduser = new List<UserViewModel>();
@@ -1548,7 +1432,7 @@ namespace hrms_be_backend_business.Logic
                     {
 
                         var usermap = _mapper.Map<UserViewModel>(user);
-                        usermap.IsLockedOut = user.LoginFailedAttemptsCount >= MaxNumberOfFailedAttemptsToLogin;
+                        usermap.IsLockedOut = user.LoginFailedAttemptsCount >= _appConfig.MaxNumberOfFailedAttemptsToLogin;
                         if (usermap.IsLockedOut)
                         {
                             usermap.UserStatus = "LockedOut";

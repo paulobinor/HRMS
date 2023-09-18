@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using MimeKit;
 using System.Data;
 using System.Data.SqlClient;
+using System.Net.Mail;
 
 namespace hrms_be_backend_data.Repository
 {
@@ -19,14 +20,15 @@ namespace hrms_be_backend_data.Repository
         private readonly IConfiguration _configuration;
         private readonly string _frontendUrl;
         private readonly string _loginUrl;
-
-        public AccountRepository(IConfiguration configuration, ILogger<AccountRepository> logger)
+        private readonly IDapperGenericRepository _dapper;
+        public AccountRepository(IConfiguration configuration, ILogger<AccountRepository> logger, IDapperGenericRepository dapper)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
             _logger = logger;
             _configuration = configuration;
             _frontendUrl = configuration["Frontend:Url"];
             _loginUrl = configuration["Frontend:LoginUrl"];
+            _dapper = dapper;
         }
 
         public async Task<User> FindUser(string officialMail)
@@ -165,6 +167,20 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
+        public async Task<User> GetUserById(long Id)
+        {            
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@Id", Id);
+                return await _dapper.Get<User>("sp_get_user_by_id", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {              
+                _logger.LogError($"AccountRepository => GetUserById || {ex}");
+                return new User();
+            }
+        }
         public async Task<IEnumerable<User>> GetAllUsers()
         {
             try
@@ -303,6 +319,46 @@ namespace hrms_be_backend_data.Repository
         }
 
 
+        public async Task<string> AuthenticateUser(string EmailAddress, string HashPassword, int MaximumLoginAttempt, DateTime DateCreated)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+
+                param.Add("@EmailAddress", EmailAddress);
+                param.Add("@HashPassword", HashPassword);
+                param.Add("@MaximumLoginAttempt", MaximumLoginAttempt);
+                param.Add("@DateCreated", DateCreated);
+              
+                return await _dapper.Get<string>("sp_authenticate_user", param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AccountRepository -> AuthenticateUser => {ex}");
+                return "Unable to submit this detail, kindly contact support";
+            }
+
+        }
+        public async Task<string> VerifyUser(string Token, string LoggedInWithIPAddress, DateTime DateCreated)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@Token", Token);
+                param.Add("@LoggedInWithIPAddress", LoggedInWithIPAddress);                
+                param.Add("@DateCreated", DateCreated);
+
+                return await _dapper.Get<string>("sp_verify_user", param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AccountRepository -> VerifyUser => {ex}");
+                return "Unable to submit this detail, kindly contact support";
+            }
+
+        }
         public async Task<dynamic> ApproveUser(long approvedByuserId, string defaultPass, string userEmail)
         {
             try
@@ -838,37 +894,6 @@ namespace hrms_be_backend_data.Repository
             }
             return body;
         }
-
-        //public string ComposeEmailForApproval(string firstname, string survProcessName, string email, string wwwRootPath, string ip, string port, string appKey = null, string channel = null)
-        //{
-
-        //    string message = string.Empty;
-        //    string body = string.Empty;
-        //    string templatePath = string.Empty;
-
-        //    if (null == channel)
-        //    {
-        //        string qryStr = string.Empty;
-        //        string clientUrl = _loginUrl;
-        //        //string clientUrl = ip;
-        //        //string clientUrl = $"http://{ip}:{port}/";
-        //        templatePath = $"{wwwRootPath}/EmailHandler/SurveyParticipation.html";
-
-        //        qryStr = $"?k={email}";
-
-        //        message = $"Dear {firstname}," +
-        //                  $"<p>You have been added as a participant in Survey Name : {survProcessName}. Kindly login to the survey system to take survey.</p>";
-
-        //        using (StreamReader reader = new StreamReader(Path.Combine(templatePath)))
-        //        {
-        //            body = reader.ReadToEnd();
-        //        }
-
-        //        body = body.Replace("{link}", $"{clientUrl}");
-        //        body = body.Replace("{MailContent}", message);
-
-        //    }
-        //    return body;
-        //}
+        
     }
 }

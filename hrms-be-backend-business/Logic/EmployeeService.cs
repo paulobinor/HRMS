@@ -16,22 +16,18 @@ namespace hrms_be_backend_business.Logic
 
         private readonly ILogger<EmployeeService> _logger;
         //private readonly IConfiguration _configuration;
-        private readonly IAccountRepository _accountRepository;
-        private readonly ICompanyRepository _companyrepository;
+        private readonly IAccountRepository _accountRepository;       
         private readonly IEmployeeRepository _EmployeeRepository;
       
         private readonly IMapper _mapper;
 
         public EmployeeService(/*IConfiguration configuration*/ IAccountRepository accountRepository, ILogger<EmployeeService> logger,
-            IEmployeeRepository EmployeeRepository, IAuditLog audit, ICompanyRepository companyrepository,  IMapper mapper)
+            IEmployeeRepository EmployeeRepository, IAuditLog audit,  IMapper mapper)
         {
             _audit = audit;
-
-            _logger = logger;
-            //_configuration = configuration;
+            _logger = logger;           
             _accountRepository = accountRepository;
-            _EmployeeRepository = EmployeeRepository;
-            _companyrepository = companyrepository;       
+            _EmployeeRepository = EmployeeRepository;           
             _mapper = mapper;
         }
 

@@ -1,6 +1,8 @@
-﻿using hrms_be_backend_data.RepoPayload;
+﻿using hrms_be_backend_common.Communication;
+using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace hrms_be_backend_business.ILogic
 {
@@ -8,6 +10,7 @@ namespace hrms_be_backend_business.ILogic
     {
         Task<LoginResponse> Login(LoginModel login, string ipAddress, string port);
         Task<RefreshTokenResponse> RefreshToken(RefreshTokenModel refresh, string ipAddress, string port);
+        Task<ExecutedResult<User>> CheckUserAccess(string AccessToken, IEnumerable<Claim> claim, string IpAddress);
         Task<BaseResponse> Logout(LogoutDto logout, string ipAddress, string port);
         Task<BaseResponse> CreateUser(CreateUserDto userDto, RequesterInfo requester);
         Task<BaseResponse> CreateUserBulkUpload(IFormFile payload, RequesterInfo requester);

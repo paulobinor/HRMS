@@ -766,6 +766,7 @@
           "MailKit": "4.2.0",
           "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "7.0.1",
+          "Microsoft.Extensions.Options": "7.0.0",
           "MimeKit": "4.2.0",
           "System.Data.SqlClient": "4.8.5",
           "System.IdentityModel.Tokens.Jwt": "6.32.3"

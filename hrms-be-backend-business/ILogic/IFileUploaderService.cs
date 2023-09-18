@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace hrms_be_backend_data.IRepository
+namespace hrms_be_backend_business.ILogic
 {
-    public interface IDapperGenericSqlRepository
+    public interface IFileUploaderService
     {
     }
 }
