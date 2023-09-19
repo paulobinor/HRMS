@@ -8,7 +8,7 @@ using System.Data;
 
 namespace hrms_be_backend_data.Repository
 {
-    public class EarningsRepository
+    public class EarningsRepository: IEarningsRepository
     {
         private readonly ILogger<EarningsRepository> _logger;     
         private readonly IDapperGenericRepository _dapper;

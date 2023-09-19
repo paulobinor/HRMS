@@ -7,6 +7,6 @@ namespace hrms_be_backend_data.IRepository
     {
         Task<string> ProcessCurrency(CurrencyReq payload);
         Task<List<CurrencyVm>> GetCurrencies();
-        Task<List<CurrencyVm>> GetCurrencyById(int Id);
+        Task<CurrencyVm> GetCurrencyById(int Id);
     }
 }

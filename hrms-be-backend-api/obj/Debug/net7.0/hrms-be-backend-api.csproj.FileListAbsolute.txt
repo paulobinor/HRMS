@@ -75,3 +75,15 @@ C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\bin\Debu
 C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\bin\Debug\net7.0\Serilog.Sinks.File.dll
 C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\bin\Debug\net7.0\hrms-be-backend-api.xml
 C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\hrms-be-backend-api.xml
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\bin\Debug\net7.0\itext.barcodes.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\bin\Debug\net7.0\itext.bouncy-castle-connector.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\bin\Debug\net7.0\itext.forms.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\bin\Debug\net7.0\itext.io.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\bin\Debug\net7.0\itext.kernel.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\bin\Debug\net7.0\itext.layout.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\bin\Debug\net7.0\itext.pdfa.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\bin\Debug\net7.0\itext.sign.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\bin\Debug\net7.0\itext.styledxmlparser.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\bin\Debug\net7.0\itext.svg.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\bin\Debug\net7.0\itext.commons.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\bin\Debug\net7.0\Microsoft.DotNet.PlatformAbstractions.dll

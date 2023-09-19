@@ -31,7 +31,7 @@ namespace hrms_be_backend_business.Logic
         private readonly IJwtManager _jwtManager;
         private readonly ITokenRefresher _tokenRefresher;
         private readonly IAuditLog _audit;
-        private readonly IHostEnvironment _hostEnvironment;
+        private readonly IHostingEnvironment _hostEnvironment;
         private readonly IUnitRepository _unitRepository;
         private readonly IUnitHeadRepository _unitHeadRepository;
         private readonly IHODRepository _HODRepository;
@@ -49,7 +49,7 @@ namespace hrms_be_backend_business.Logic
         private readonly JwtConfig _jwt;
 
         public AuthService(ITokenRefresher tokenRefresher, IUnitOfWork unitOfWork, IConfiguration configuration, IOptions<AppConfig> appConfig, IOptions<JwtConfig> jwt,
-             IAuditLog audit, IMapper mapper, IJwtManager jwtManager, IHostEnvironment hostEnvironment,
+             IAuditLog audit, IMapper mapper, IJwtManager jwtManager, IHostingEnvironment hostEnvironment,
              IAccountRepository accountRepository, ILogger<AuthService> logger, IUnitRepository unitRepository, IUnitHeadRepository unitHeadRepository,
              IHODRepository HODRepository, IGradeRepository GradeRepository, IEmployeeTypeRepository EmployeeTypeRepository, IPositionRepository PositionRepository,
                 IBranchRepository branchRepository, IEmploymentStatusRepository EmploymentStatusRepository, IGroupRepository groupRepository,

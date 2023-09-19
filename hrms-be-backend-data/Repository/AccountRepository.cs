@@ -3,13 +3,11 @@ using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
-using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using System.Data;
 using System.Data.SqlClient;
-using System.Net.Mail;
 
 namespace hrms_be_backend_data.Repository
 {
@@ -626,7 +624,7 @@ namespace hrms_be_backend_data.Repository
 
             try
             {
-                SmtpClient client = new SmtpClient();
+                MailKit.Net.Smtp.SmtpClient client = new MailKit.Net.Smtp.SmtpClient();
                 client.Connect(smtpAdress, smtpPort);
                 client.Authenticate(emailAddress, password);
                 client.Send(mailBody);

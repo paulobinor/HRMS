@@ -5,15 +5,11 @@ using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace hrms_be_backend_business.Logic
 {
@@ -24,20 +20,24 @@ namespace hrms_be_backend_business.Logic
         private readonly IAuthService _authService;     
         private readonly IMailService _mailService;
         private readonly JwtConfig _jwt;
-        public CurrencyService(IOptions<JwtConfig> jwt, ILogger<CurrencyService> logger, ICurrencyRepository currencyRepository)
+        private readonly IAuditLog _audit;
+        public CurrencyService(IOptions<JwtConfig> jwt, ILogger<CurrencyService> logger, ICurrencyRepository currencyRepository, IAuditLog audit)
         {
             _logger = logger;
             _currencyRepository = currencyRepository;
-            _jwt = jwt.Value;         
+            _jwt = jwt.Value;
+            _audit = audit;
         }
-        public async Task<ExecutedResult<string>> CreateBank(CurrencyCreateDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        public async Task<ExecutedResult<string>> CreateCurrency(CurrencyCreateDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
+        
             try
             {
                 var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = accessUser.responseMessage, responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                  
                 }
                 //var validateAuthorization = await _usersRepository.CheckXpressUserAuthorization(AppOperationsData.Bank_Management, XpressUserPriviledgeData.Maker, accessUser.data.UserId);
                 //if (!validateAuthorization.Contains("Success"))
@@ -60,162 +60,139 @@ namespace hrms_be_backend_business.Logic
 
                 if (!isModelStateValidate)
                 {
-                    return new ExecutedResult<string>() { responseMessage = validationMessage, responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+                              
                 }
                 var repoPayload = new CurrencyReq() { CurrencyCode = payload.CurrencyCode, CurrencyName = payload.CurrencyName, IsActive =payload.IsActive, IsModifield = false};
 
-                string result = await _bankRepository.ProcessBank(repoPayload);
+                string result = await _currencyRepository.ProcessCurrency(repoPayload);
 
-                if (result.Contains("Success"))
+                if (!result.Contains("Success"))
                 {
-
-                    var auditry = new AuditTrailReq
-                    {
-                        AccessDate = DateTime.Now,
-                        AccessedFromIpAddress = RemoteIpAddress,
-                        AccessedFromPort = RemotePort,
-                        UserId = accessUser.data.UserId,
-                        Operation = "Bank Creation",
-                        Payload = JsonConvert.SerializeObject(payload),
-                        Response = ((int)ResponseCode.Ok).ToString().ToString()
-                    };
-                    await _auditTrail.CreateAuditTrail(auditry);
-                    int bankId = Convert.ToInt32(result.Replace("Success", ""));
-                    var returnVal = await _bankRepository.GetByIdBank(bankId);
-
-
-                    return new ExecutedResult<Banks>() { responseMessage = "Bank added successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = returnVal };
+                    return new ExecutedResult<string>() { responseMessage = $"{result}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };                   
                 }
-                return new ExecutedResult<Banks>() { responseMessage = result, responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "CreateCurrency",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Created Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+               
 
             }
             catch (Exception ex)
             {
-                _logger.LogError($"BankService (CreateBank)=====>{ex}");
-                var msgBody = $"Hi, <br/> <br/> below is an exception detail occured <br/> <hr/>{ex}";
-                _mailService.SendNotificationEmailAsync("Payout Exception", msgBody, AppOperationsData.Application_Operation_Management, XpressUserPriviledgeData.Checker, null);
-                return new ExecutedResult<Banks>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+                _logger.LogError($"CurrencyService (CreateCurrency)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };              
             }
         }
-        public async Task<ExecutedResult<Banks>> UpdateBank(BankUpdateRequest payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        public async Task<ExecutedResult<string>> UpdateCurrency(CurrencyUpdateDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
+
             try
             {
-                var accessUser = await _usersService.CheckUserAccess(AccessKey, claim);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<Banks>() { responseMessage = accessUser.responseMessage, responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
                 }
-                var validateAuthorization = await _usersRepository.CheckXpressUserAuthorization(AppOperationsData.Bank_Management, XpressUserPriviledgeData.Maker, accessUser.data.UserId);
-                if (!validateAuthorization.Contains("Success"))
-                {
-                    return new ExecutedResult<Banks>() { responseMessage = validateAuthorization, responseCode = ((int)ResponseCode.NO_PRIVILEDGE).ToString(), data = null };
-                }
+                //var validateAuthorization = await _usersRepository.CheckXpressUserAuthorization(AppOperationsData.Bank_Management, XpressUserPriviledgeData.Maker, accessUser.data.UserId);
+                //if (!validateAuthorization.Contains("Success"))
+                //{
+                //    return new ExecutedResult<string>() { responseMessage = validateAuthorization, responseCode = ((int)ResponseCode.NO_PRIVILEDGE).ToString(), data = null };
+                //}
                 bool isModelStateValidate = true;
                 string validationMessage = "";
-                if (AccessKey == null)
+
+                if (string.IsNullOrEmpty(payload.CurrencyName))
                 {
                     isModelStateValidate = false;
-                    validationMessage = "  || Access Key is required";
+                    validationMessage += "  Currency name is required";
                 }
-                if (payload.BankId < 1)
+                if (string.IsNullOrEmpty(payload.CurrencyCode))
                 {
                     isModelStateValidate = false;
-                    validationMessage = "  || Bank Id must be greater than zero";
-                }
-                if (payload.BankName == null)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Bank is required";
-                }
-                if (payload.BankCode == null)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Bank Code is required";
-                }
-                if (payload.InstitutionCode == null)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Institution Code is required";
+                    validationMessage += "  || Currency code is required";
                 }
 
                 if (!isModelStateValidate)
                 {
-                    return new ExecutedResult<Banks>() { responseMessage = validationMessage, responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
-                }
-                var repoPayload = new BankReq() { BankCode = payload.BankCode, BankName = payload.BankName, CreatedByUserId = accessUser.data.UserId, DateCreated = DateTime.Now, BankId = payload.BankId, InstitutionCode = payload.InstitutionCode, IsModification = true };
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
-                string result = await _bankRepository.ProcessBank(repoPayload);
-                if (result.Contains("Success"))
+                }
+                var repoPayload = new CurrencyReq() { CurrencyCode = payload.CurrencyCode, CurrencyName = payload.CurrencyName, IsActive = payload.IsActive, IsModifield = true,CurrencyId=payload.CurrencyId };
+
+                string result = await _currencyRepository.ProcessCurrency(repoPayload);
+
+                if (!result.Contains("Success"))
                 {
-
-                    var auditry = new AuditTrailReq
-                    {
-                        AccessDate = DateTime.Now,
-                        AccessedFromIpAddress = RemoteIpAddress,
-                        AccessedFromPort = RemotePort,
-                        UserId = accessUser.data.UserId,
-                        Operation = "UpdateBank",
-                        Payload = JsonConvert.SerializeObject(payload),
-                        Response = ((int)ResponseCode.Ok).ToString().ToString()
-                    };
-                    await _auditTrail.CreateAuditTrail(auditry);
-                    int bankId = Convert.ToInt32(result.Replace("Success", ""));
-                    var returnVal = await _bankRepository.GetByIdBank(bankId);
-
-
-                    return new ExecutedResult<Banks>() { responseMessage = "Bank updated successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = returnVal };
+                    return new ExecutedResult<string>() { responseMessage = $"{result}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
-                return new ExecutedResult<Banks>() { responseMessage = result, responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "UpdateCurrency",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+
 
             }
             catch (Exception ex)
             {
-                _logger.LogError($"BankService (UpdateBank)=====>{ex}");
-                var msgBody = $"Hi, <br/> <br/> below is an exception detail occured <br/> <hr/>{ex}";
-                _mailService.SendNotificationEmailAsync("Payout Exception", msgBody, AppOperationsData.Application_Operation_Management, XpressUserPriviledgeData.Checker, null);
-                return new ExecutedResult<Banks>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+                _logger.LogError($"CurrencyService (CreateCurrency)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-        public async Task<ExecutedResult<IEnumerable<Banks>>> GetAllBanks(string AccessKey, IEnumerable<Claim> claim)
+        public async Task<ExecutedResult<IEnumerable<CurrencyVm>>> GetCurrencies(string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             try
             {
-                var accessUser = await _usersService.CheckUserAccess(AccessKey, claim);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<IEnumerable<Banks>>() { responseMessage = accessUser.responseMessage, responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<IEnumerable<CurrencyVm>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
                 }
-                var result = await _bankRepository.GetAllBanks();
-                return new ExecutedResult<IEnumerable<Banks>>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = result };
+                var result = await _currencyRepository.GetCurrencies();
+                return new ExecutedResult<IEnumerable<CurrencyVm>>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = result };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"BankService (GetAllBanks)=====>{ex}");
-                var msgBody = $"Hi, <br/> <br/> below is an exception detail occured <br/> <hr/>{ex}";
-                _mailService.SendNotificationEmailAsync("Payout Exception", msgBody, AppOperationsData.Application_Operation_Management, XpressUserPriviledgeData.Checker, null);
-                return new ExecutedResult<IEnumerable<Banks>>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+                _logger.LogError($"CurrencyService (GetAllBanks)=====>{ex}");              
+                return new ExecutedResult<IEnumerable<CurrencyVm>>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-        public async Task<ExecutedResult<Banks>> GetByIdBank(int BankId, string AccessKey, IEnumerable<Claim> claim)
+        public async Task<ExecutedResult<CurrencyVm>> GetCurrencyById(int Id, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             try
             {
-                var accessUser = await _usersService.CheckUserAccess(AccessKey, claim);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<Banks>() { responseMessage = accessUser.responseMessage, responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
-                }
-                var result = await _bankRepository.GetByIdBank(BankId);
+                    return new ExecutedResult<CurrencyVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
-                return new ExecutedResult<Banks>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = result };
+                }
+                var result = await _currencyRepository.GetCurrencyById(Id);
+
+                return new ExecutedResult<CurrencyVm>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = result };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"BankService (GetById)=====>{ex}");
-                var msgBody = $"Hi, <br/> <br/> below is an exception detail occured <br/> <hr/>{ex}";
-                _mailService.SendNotificationEmailAsync("Payout Exception", msgBody, AppOperationsData.Application_Operation_Management, XpressUserPriviledgeData.Checker, null);
-                return new ExecutedResult<Banks>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+                _logger.LogError($"CurrencyService (GetCurrencyById)=====>{ex}");              
+                return new ExecutedResult<CurrencyVm>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
     }

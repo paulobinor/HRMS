@@ -55,13 +55,13 @@ namespace hrms_be_backend_data.Repository
                 return null;
             }
         }
-        public async Task<List<CurrencyVm>> GetCurrencyById(int Id)
+        public async Task<CurrencyVm> GetCurrencyById(int Id)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("@Id", Id);
-                return await _dapper.GetAll<CurrencyVm>("sp_get_currency_by_id", param, commandType: CommandType.StoredProcedure);
+                return await _dapper.Get<CurrencyVm>("sp_get_currency_by_id", param, commandType: CommandType.StoredProcedure);
 
             }
             catch (Exception ex)

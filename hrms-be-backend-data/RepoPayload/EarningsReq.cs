@@ -7,5 +7,5 @@
         public long CreatedByUserId { get; set;}
         public DateTime DateCreated { get; set; }
         public bool IsModification { get; set; }
-    }
+    } 
 }
