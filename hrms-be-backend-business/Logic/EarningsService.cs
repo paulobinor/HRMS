@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace hrms_be_backend_business.Logic
 {
-    public class EarningsService: IEarningsService
+    public class EarningsService : IEarningsService
     {
         private readonly ILogger<EarningsService> _logger;
         private readonly IEarningsRepository _earningsRepository;
