@@ -145,10 +145,12 @@ builder.Services.AddScoped<IRolesRepo, RolesRepo>();
 builder.Services.AddScoped<IReviwerRepository, ReviwerRepository>();
 builder.Services.AddScoped<IReviwerRoleRepository, ReviwerRoleRepository>();
 builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+builder.Services.AddScoped<IEarningsRepository, EarningsRepository>();
 
 
 
-
+builder.Services.AddScoped<ICurrencyService, CurrencyService>();
+builder.Services.AddScoped<IEarningsService, EarningsService>();
 
 //VacationModul
 builder.Services.AddScoped<IGradeLeaveRepo, GradeLeaveRepo>();
@@ -200,7 +202,7 @@ builder.Services.AddScoped<IRescheduleLeaveService, RescheduleLeaveService>();
 builder.Services.AddScoped<IResignationService, ResignationService>();
 builder.Services.AddScoped<IResignationInterviewService, ResignationInterviewService>();
 builder.Services.AddScoped<IResignationClearanceService, ResignationClearanceService>();
-builder.Services.AddScoped<ICurrencyService, CurrencyService>();
+
 
 //Mail Service
 builder.Services.AddScoped<IMailService, MailService>();

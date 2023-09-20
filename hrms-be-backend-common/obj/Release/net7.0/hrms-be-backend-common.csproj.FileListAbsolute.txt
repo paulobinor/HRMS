@@ -1,0 +1,11 @@
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-common\bin\Release\net7.0\hrms-be-backend-common.deps.json
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-common\bin\Release\net7.0\hrms-be-backend-common.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-common\bin\Release\net7.0\hrms-be-backend-common.pdb
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-common\obj\Release\net7.0\hrms-be-backend-common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-common\obj\Release\net7.0\hrms-be-backend-common.AssemblyInfoInputs.cache
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-common\obj\Release\net7.0\hrms-be-backend-common.AssemblyInfo.cs
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-common\obj\Release\net7.0\hrms-be-backend-common.csproj.CoreCompileInputs.cache
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-common\obj\Release\net7.0\hrms-be-backend-common.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-common\obj\Release\net7.0\refint\hrms-be-backend-common.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-common\obj\Release\net7.0\hrms-be-backend-common.pdb
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-common\obj\Release\net7.0\ref\hrms-be-backend-common.dll

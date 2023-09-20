@@ -18,7 +18,8 @@ namespace hrms_be_backend_api.Controllers
         }
 
        
-        [HttpPost]
+      
+        [HttpPost("CreateCurrency")]
         public async Task<IActionResult> CreateCurrency(CurrencyCreateDto payload)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -29,7 +30,8 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _currencyService.CreateCurrency(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-        [HttpPost]
+       
+        [HttpPost("UpdateCurrency")]
         public async Task<IActionResult> UpdateCurrency(CurrencyUpdateDto payload)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -40,7 +42,8 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _currencyService.UpdateCurrency(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-        [HttpGet]
+     
+        [HttpPost("GetCurrencies")]
         public async Task<IActionResult> GetCurrencies()
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -51,7 +54,8 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _currencyService.GetCurrencies(accessToken, claim, RemoteIpAddress, RemotePort));
         }
-        [HttpGet]
+      
+        [HttpGet("GetCurrencyById")]
         public async Task<IActionResult> GetCurrencyById(int Id)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
