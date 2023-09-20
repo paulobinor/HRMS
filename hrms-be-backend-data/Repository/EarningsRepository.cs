@@ -24,7 +24,7 @@ namespace hrms_be_backend_data.Repository
             {
                 var param = new DynamicParameters();
 
-                param.Add("@EarningId", payload.EarningId);
+                param.Add("@EarningsId", payload.EarningsId);
                 param.Add("@EarningsName", payload.EarningsName);              
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
                 param.Add("@DateCreated", payload.DateCreated);
@@ -39,13 +39,14 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
+
         public async Task<string> DeleteEarnings(EarningsDeleteReq payload)
         {
             try
             {
                 var param = new DynamicParameters();
 
-                param.Add("@EarningId", payload.EarningId);
+                param.Add("@EarningsId", payload.EarningsId);
                 param.Add("@DeleteComment", payload.DeleteComment);              
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
                 param.Add("@DateCreated", payload.DateCreated);              
@@ -90,15 +91,53 @@ namespace hrms_be_backend_data.Repository
 
         }
 
+      
+
+        public async Task<string> ProcessEarningsComputation(EarningsComputationReq payload)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+
+                param.Add("@EarningsId", payload.EarningsId);
+                param.Add("@EarningsItemId", payload.EarningsItemId);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+                param.Add("@IsDelete", payload.IsDelete);
+                return await _dapper.Get<string>("sp_process_earnings_computation", param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EarningsRepository -> ProcessEarningsComputation => {ex}");
+                return "Unable to submit this detail, kindly contact support";
+            }
+
+        }
+        public async Task<List<EarningsComputationVm>> GetEarningsComputation(long EarningsId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EarningsId", EarningsId);
+                return await _dapper.GetAll<EarningsComputationVm>("sp_get_earnings_computations", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EarningsRepository -> GetEarningsComputation => {ex}");
+                return new List<EarningsComputationVm>();
+            }
+
+        }
         public async Task<string> ProcessEarningsItem(EarningItemReq payload)
         {
             try
             {
                 var param = new DynamicParameters();
 
-                param.Add("@EarningId", payload.EarningId);
+                param.Add("@EarningItemId", payload.EarningItemId);
                 param.Add("@EarningsItemName", payload.EarningsItemName);
-                param.Add("@EarningId", payload.EarningId);
+                param.Add("@CompanyId", payload.CompanyId);
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
                 param.Add("@DateCreated", payload.DateCreated);
                 param.Add("@IsModification", payload.IsModification);
@@ -132,18 +171,33 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
-        public async Task<List<EarningsItemVm>> GetEarningsItem(long EarningsId)
+        public async Task<List<EarningsItemVm>> GetEarningsItem(long CompanyId)
         {
             try
             {
                 var param = new DynamicParameters();
-                param.Add("@EarningsId", EarningsId);
+                param.Add("@CompanyId", CompanyId);
                 return await _dapper.GetAll<EarningsItemVm>("sp_get_earnings_items", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"EarningsRepository -> GetEarningsItem => {ex}");
                 return new List<EarningsItemVm>();
+            }
+
+        }
+        public async Task<EarningsItemVm> GetEarningsItemById(long Id)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@Id", Id);
+                return await _dapper.Get<EarningsItemVm>("sp_get_earnings_items_by_id", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EarningsRepository -> GetEarningsItemById => {ex}");
+                return new EarningsItemVm();
             }
 
         }

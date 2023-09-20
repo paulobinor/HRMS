@@ -2,8 +2,7 @@
 {
     public class EarningsItemVm
     {
-        public long EarningItemId { get; set; }
-        public long EarningsId { get; set; }
+        public long EarningItemId { get; set; }       
         public string EarningItemName { get; set; }
         public long CompanyId { get; set; }
         public long CreatedByUserId { get; set; }

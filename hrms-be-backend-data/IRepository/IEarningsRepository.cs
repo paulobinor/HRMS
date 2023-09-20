@@ -10,8 +10,12 @@ namespace hrms_be_backend_data.IRepository
         Task<List<EarningsVm>> GetEarnings(long CompanyId);
         Task<EarningsVm> GetEarningsById(long Id);
 
+        Task<string> ProcessEarningsComputation(EarningsComputationReq payload);
+        Task<List<EarningsComputationVm>> GetEarningsComputation(long EarningsId);
+
         Task<string> ProcessEarningsItem(EarningItemReq payload);
         Task<string> DeleteEarningsItem(EarningsItemDeleteReq payload);
-        Task<List<EarningsItemVm>> GetEarningsItem(long EarningsId);
+        Task<List<EarningsItemVm>> GetEarningsItem(long CompanyId);
+        Task<EarningsItemVm> GetEarningsItemById(long Id);
     }
 }
