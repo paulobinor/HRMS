@@ -100,7 +100,7 @@ namespace Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controll
 
         [HttpPost("ApproveTrainingPlan")]
         [Authorize]
-        public async Task<IActionResult> ApproveTrainingPlan([FromBody] long TrainingPlanID)
+        public async Task<IActionResult> ApproveTrainingPlan([FromBody] TrainingPlanApproved payload)
         {
             var response = new BaseResponse();
             var requester = new RequesterInfo
@@ -112,7 +112,7 @@ namespace Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controll
                 Port = Request.HttpContext.Connection.LocalPort.ToString()
             };
 
-            return Ok(await _trainingPlanService.ApproveTrainingPlan(TrainingPlanID, requester));
+            return Ok(await _trainingPlanService.ApproveTrainingPlan(payload, requester));
         }
 
         [HttpPost("DisaproveTrainingPlan")]

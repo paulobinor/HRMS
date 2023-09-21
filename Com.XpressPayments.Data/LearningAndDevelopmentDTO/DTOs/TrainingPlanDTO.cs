@@ -28,10 +28,12 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs
             public string TrainingMode { get; set; }
             public DateTime StartDate { get; set; }
             public DateTime EndDate { get; set; }
+            public string RequestedBy { get; set; }
             public long UnitHeadUserID { get; set; }
             public long HodUserID { get; set; }
             public long HRUserId { get; set; }
             public bool IsHodApproved { get; set; }
+            public bool IsUnitHeadApproved { get; set; }
             public bool IsHrApproved { get; set; }
             public bool IsUpdated { get; set; }
             public DateTime? Updated_Date { get; set; }
@@ -57,7 +59,9 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs
         public string TrainingProvider { get; set; }
         public decimal EstimatedCost { get; set; }
         public long CompanyID { get; set; }
+        public string RequestedBy { get; set; }
         public bool IsHodApproved { get; set; }
+        public bool IsUnitHeadApproved { get; set; }
         public bool IsHrApproved { get; set; }
         public DateTime Created_Date { get; set; }
         public string Created_By_User_Email { get; set; }
@@ -87,6 +91,10 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public long CompanyID { get; set; }
+    }
+    public class TrainingPlanApproved
+    {
+        public long TrainingPlanID { get; set; }
     }
     public class TrainingPlanDisapproved
     {

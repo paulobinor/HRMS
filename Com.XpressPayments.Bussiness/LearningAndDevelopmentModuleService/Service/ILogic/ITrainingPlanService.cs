@@ -10,7 +10,7 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
         Task<BaseResponse> UpdateTrainingPlan(TrainingPlanUpdate payload, RequesterInfo requester);
         Task<BaseResponse> ScheduleTrainingPlan(TrainingPlanSchedule payload, RequesterInfo requester);
         Task<BaseResponse> DeleteTrainingPlan(TrainingPlanDelete payload, RequesterInfo requester);
-        Task<BaseResponse> ApproveTrainingPlan(long TrainingPlanID, RequesterInfo requester);
+        Task<BaseResponse> ApproveTrainingPlan(TrainingPlanApproved payload, RequesterInfo requester);
         Task<BaseResponse> DisaproveTrainingPlan(TrainingPlanDisapproved payload, RequesterInfo requester);
         Task<BaseResponse> GetAllTrainingPlan(RequesterInfo requester);
         Task<BaseResponse> GetAllTrainingPlanByUserId(long UserID,RequesterInfo requester);

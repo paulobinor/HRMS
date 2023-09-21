@@ -42,24 +42,23 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
             BaseResponse response = new BaseResponse();
             try
             {
-                //var userDetails = await _accountRepository.FindUser(TrainingPlan.UserId);
-                //if (userDetails == null)
-                //{
-                //    _logger.LogError($"MethodName: CreateTrainingPlan");
-                //    throw new Exception("User details not found.");
-                //}
+                var userDetails = await _accountRepository.FindUser(TrainingPlan.UserId);
+                if (userDetails == null)
+                {
+                    _logger.LogError($"MethodName: CreateTrainingPlan");
+                    throw new Exception("User details not found.");
+                }
                 var param = new DynamicParameters();
                 param.Add("@Status", TrainingPlanEnum.CREATE);
                 param.Add("@UserId", TrainingPlan.UserId);
                 param.Add("@CompanyId", TrainingPlan.CompanyID);
-                //param.Add("@StaffName", string.Concat(userDetails.FirstName, " ", userDetails.LastName));
-                //param.Add("@@Department", userDetails.DepartmentName);
                 param.Add("@StaffName", TrainingPlan.StaffName);
                 param.Add("@@Department", TrainingPlan.Department);
                 param.Add("@IdentifiedSkills", TrainingPlan.IdentifiedSkills);
                 param.Add("@TrainingNeeds", TrainingPlan.TrainingNeeds);
                 param.Add("@TrainingProvider", TrainingPlan.TrainingProvider);
                 param.Add("@EstimatedCost", TrainingPlan.EstimatedCost);
+                param.Add("@RequestedBy", string.Concat(userDetails.FirstName, " ", userDetails.LastName));
                 param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
        
                 return await _dapperGeneric.Get<string>(ApplicationConstant.Sp_TrainingPlan, param, commandType: CommandType.StoredProcedure);
