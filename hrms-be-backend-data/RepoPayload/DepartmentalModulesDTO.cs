@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace hrms_be_backend_data.RepoPayload
 {
-    public class CompanyAppModuleDTO
+    public class DepartmentalModulesDTO
     {
-        public long CompanyAppModuleId { get; set; }
-        public long CompanyId { get; set; }
+        public long DeparmentalModuleId { get; set; }
+        public long DepartmentId { get; set; }
         public int AppModuleId { get; set; }
         public DateTime DateCreated { get; set; }
         public bool IsActive { get; set; }
@@ -17,21 +17,21 @@ namespace hrms_be_backend_data.RepoPayload
         public bool IsApproved { get; set; }
         public long ApprovedByUserId { get; set; }
         public DateTime? DateApproved { get; set; }
-        public bool IsDeleted { get;set; }
-        public long DeletedByUserId { get;set; }
+        public bool IsDeleted { get; set; }
+        public long DeletedByUserId { get; set; }
         public bool IsDisapproved { get; set; }
-        public long DisapprovedByUserId { get; set; }   
+        public long DisapprovedByUserId { get; set; }
     }
 
 
-    public class GetCompanyAppModuleByCompanyDTO
+    public class GetDepartmentModuleByDepartmentDTO
     {
-        public string CompanyName { get; set; }
-        public string Email { get; set; }
+        public string DepartmentName { get; set; }
+       // public string Email { get; set; }
         public string AppModuleName { get; set; }
         public string AppModuleCode { get; set; }
-        public long CompanyAppModuleId { get; set; }
-        public long CompanyId { get; set; }
+        public long DepartmentalModuleId { get; set; }
+        public long DepartmentId { get; set; }
         public int AppModuleId { get; set; }
         public DateTime DateCreated { get; set; }
         public bool IsActive { get; set; }
@@ -43,26 +43,20 @@ namespace hrms_be_backend_data.RepoPayload
         public long DeletedByUserId { get; set; }
     }
 
-    public class AppModuleDTO
-    {
-        public int AppModuleId { get; set; }
-        public string? AppModuleName { get; set; }
-        public string? AppModuleCode { get; set; }
-    }
 
-    public class GetCompanyAppModuleCount
+    public class GetDepartmentalModuleCount
     {
-        public long CompanyID { get; set; }
+        public long DepartmentID { get; set; }
         public string CompanyName { get; set; }
+        public string DepartmentName { get; set; }
         public string Email { get; set; }
         public DateTime Created_Date { get; set; }
         public int ModuleCount { get; set; }
     }
 
-    public class CreateCompanyAppModuleDTO
+    public class CreateDepartmentalModuleDTO
     {
-        //public long CompanyAppModuleId { get; set; }
-        public long CompanyId { get; set; }
-        public int AppModuleId { get; set; }
+        public long DepartmentId { get; set; }
+        public List<int> AppModuleId { get; set; }
     }
 }

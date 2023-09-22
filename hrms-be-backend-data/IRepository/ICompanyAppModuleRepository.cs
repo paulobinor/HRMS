@@ -9,7 +9,7 @@ namespace hrms_be_backend_data.IRepository
 {
     public interface ICompanyAppModuleRepository
     {
-        Task<List<GetCompanyAppModuleByCompanyDTO>> GetCompanyAppModuleCount();
+        Task<List<GetCompanyAppModuleCount>> GetCompanyAppModuleCount();
         Task<List<GetCompanyAppModuleByCompanyDTO>> GetCompanyAppModuleByCompanyID(long companyID);
         Task<int> CreateCompanyAppModule(CompanyAppModuleDTO companyAppModule);
         Task<int> UpdateCompanyAppModule(CompanyAppModuleDTO companyAppModule);

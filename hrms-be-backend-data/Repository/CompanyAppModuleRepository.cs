@@ -28,7 +28,7 @@ namespace hrms_be_backend_data.Repository
         }
 
 
-        public async Task<List<GetCompanyAppModuleByCompanyDTO>> GetCompanyAppModuleCount()
+        public async Task<List<GetCompanyAppModuleCount>> GetCompanyAppModuleCount()
         {
             try
             {
@@ -39,7 +39,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("IsApproved", true);
                 param.Add("IsDeleted", false);
 
-                var resp = await _repository.GetAll<GetCompanyAppModuleByCompanyDTO>(query, param, commandType: CommandType.Text);
+                var resp = await _repository.GetAll<GetCompanyAppModuleCount>(query, param, commandType: CommandType.Text);
 
                 return resp;
 
@@ -82,7 +82,7 @@ namespace hrms_be_backend_data.Repository
             try
             {
                 string query = @"Select c.CompanyName, c.Email, am.AppModuleName , am.AppModuleCode , cam.* from CompanyAppModules cam join Company c on cam.CompanyId = c.CompanyId join AppModules am on cam.AppModuleId = am.AppModuleId 
-                                    where cam.IsDeleted = @IsDeleted and IsDisapproved = @IsDisapproved and and cam.CompanyAppModuleId = @CompanyAppModuleId";
+                                    where cam.IsDeleted = @IsDeleted and IsDisapproved = @IsDisapproved and cam.CompanyAppModuleId = @CompanyAppModuleId";
                 var param = new DynamicParameters();
                 param.Add("IsDisapproved", false);
                 param.Add("IsDeleted", false);
@@ -164,7 +164,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"Select c.CompanyName, c.Email, am.AppModuleName , am.AppModuleCode , cam.* from CompanyAppModules cam join Company c on cam.CompanyId = c.CompanyId join AppModules am on cam.AppModuleId = am.AppModuleId where cam.IsDeleted = @IsDeleted and cam.IsApproved = 'false' and cam.IsDisapproved = @IsDisapproved";
+                string query = @"Select c.CompanyName, c.Email, am.AppModuleName , am.AppModuleCode , cam.* from CompanyAppModules cam join Company c on cam.CompanyId = c.CompanyId join AppModules am on cam.AppModuleId = am.AppModuleId where cam.IsDeleted = @IsDeleted and cam.IsApproved = @IsApproved and cam.IsDisapproved = @IsDisapproved";
                 var param = new DynamicParameters();
                 param.Add("IsDisapproved", false);
                 param.Add("IsApproved", false);
