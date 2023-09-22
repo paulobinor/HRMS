@@ -12,7 +12,7 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
 {
     public interface ITrainingPlanRepository
     {
-        Task<string> CreateTrainingPlan(TrainingPlanCreate TrainingPlan, string createdbyUserEmail);
+        Task<dynamic> CreateTrainingPlan(TrainingPlanCreate TrainingPlan, string createdbyUserEmail);
         Task<dynamic> UpdateTrainingPlan(TrainingPlanUpdate TrainingPlan, string updatedbyUserEmail);
         Task<dynamic> ScheduleTrainingPlan(TrainingPlanSchedule TrainingPlan, string scheduledbyUserEmail);
         Task<IEnumerable<TrainingPlanDTO>> GetAllTrainingPlan();

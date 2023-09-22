@@ -74,29 +74,40 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
                     return response;
                 }
 
-                var repoResponse = await _trainingPlanRepository.CreateTrainingPlan(payload,requester.Username);
-                if (!repoResponse.Contains("Success"))
+                var createdTrainingPlanID = await _trainingPlanRepository.CreateTrainingPlan(payload,requester.Username);
+                if (createdTrainingPlanID < 0)
                 {
                     response.ResponseCode = "08";
-                    response.ResponseMessage = repoResponse;
+                    response.ResponseMessage = "Error occured";
                     return response;
                 }
+                //var repoResponse = await _trainingPlanRepository.CreateTrainingPlan(payload,requester.Username);
+                //if (!repoResponse.Contains("Success"))
+                //{
+                //    response.ResponseCode = "08";
+                //    response.ResponseMessage = repoResponse;
+                //    return response;
+                //}
                 var userDetails = await _accountRepository.FindUser(payload.UserId);
 
-                var HrDetails = await _accountRepository.FindUser(4);
+                var trainingP = await _trainingPlanRepository.GetTrainingPlanById(createdTrainingPlanID);
+                //var AllHr = await _accountRepository.GetAllUsersbyRoleID(4);
+                //var HrDetails = AllHr.FirstOrDefault();
+
+
 
 
                 //Send mail to HCM
-                _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(HrDetails.UserId, payload.UserId, payload.TrainingProvider);
+                _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(trainingP.HRUserId, payload.UserId, payload.TrainingProvider);
 
                 //Send mail to Hod/UnitHead
                 if (userDetails.UnitHeadUserId == null)
                 {
-                    _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(userDetails.HODUserId, payload.UserId, payload.TrainingProvider);
+                    _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(trainingP.HodUserID, payload.UserId, payload.TrainingProvider);
                 }
                 else
                 {
-                    _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(userDetails.UnitHeadUserId, payload.UserId, payload.TrainingProvider);
+                    _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(trainingP.HRUserId, payload.UserId, payload.TrainingProvider);
                 }
 
 
