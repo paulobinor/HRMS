@@ -33,8 +33,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _EmployeeTypeService.CreateEmployeeType(CreateDto, requester));
@@ -61,8 +61,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _EmployeeTypeService.CreateEmployeeTypeBulkUpload(payload, requester));
@@ -89,8 +89,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _EmployeeTypeService.UpdateEmployeeType(updateDto, requester));
@@ -117,8 +117,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _EmployeeTypeService.DeleteEmployeeType(deleteDto, requester));
@@ -145,8 +145,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _EmployeeTypeService.GetAllActiveEmployeeType(requester));
@@ -174,8 +174,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _EmployeeTypeService.GetAllEmployeeType(requester));
@@ -202,8 +202,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _EmployeeTypeService.GetEmployeeTypeById(EmployeeTypeID, requester));
@@ -232,8 +232,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _EmployeeTypeService.GetEmployeeTypebyCompanyId(CompanyID, requester));

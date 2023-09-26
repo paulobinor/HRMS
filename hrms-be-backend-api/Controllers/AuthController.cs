@@ -25,8 +25,9 @@ namespace hrms_be_backend_api.Controllers
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
             var response = new LoginResponse();
-            var IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString();
-            var Port = Request.HttpContext.Connection.LocalPort.ToString();
+            var IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var Port = Request.HttpContext.Connection.RemotePort.ToString();
+
             return Ok(await _authService.Login(login, IpAddress, Port));
         }
 
@@ -38,8 +39,8 @@ namespace hrms_be_backend_api.Controllers
             var response = new RefreshTokenResponse();
             try
             {
-                var IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString();
-                var Port = Request.HttpContext.Connection.LocalPort.ToString();
+                var IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                var Port = Request.HttpContext.Connection.RemotePort.ToString();
                 return Ok(await _authService.RefreshToken(refresh, IpAddress, Port));
             }
             catch (Exception ex)
@@ -57,8 +58,8 @@ namespace hrms_be_backend_api.Controllers
             var response = new BaseResponse();
             try
             {
-                var IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString();
-                var Port = Request.HttpContext.Connection.LocalPort.ToString();
+                var IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                var Port = Request.HttpContext.Connection.RemotePort.ToString();
                 return Ok(await _authService.Logout(logout, IpAddress, Port));
             }
             catch (Exception ex)
@@ -84,8 +85,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _authService.CreateUser(userDto, requester));
@@ -112,8 +113,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _authService.CreateUserBulkUpload(payload, requester));
@@ -143,8 +144,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _authService.UpdateUser(updateDto, requester));
@@ -169,8 +170,8 @@ namespace hrms_be_backend_api.Controllers
             var response = new BaseResponse();
             try
             {
-                var IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString();
-                var Port = Request.HttpContext.Connection.LocalPort.ToString();
+                var IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                var Port = Request.HttpContext.Connection.RemotePort.ToString();
                 return Ok(await _authService.SendEmailForPasswordChange(request, IpAddress, Port));
 
             }
@@ -194,8 +195,8 @@ namespace hrms_be_backend_api.Controllers
 
             try
             {
-                var IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString();
-                var Port = Request.HttpContext.Connection.LocalPort.ToString();
+                var IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                var Port = Request.HttpContext.Connection.RemotePort.ToString();
                 return Ok(await _authService.ChangePassword(changePassword, IpAddress, Port));
             }
             catch (Exception ex)
@@ -220,8 +221,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _authService.GetAllUsers(requester));
@@ -249,8 +250,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _authService.GetAllUsersPendingApproval(CompanyId,requester));
@@ -277,8 +278,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _authService.ApproveUser(approveUser, requester));
@@ -306,8 +307,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _authService.DisapproveUser(disapproveUser, requester));
@@ -335,8 +336,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _authService.DeactivateUser(deactivateUser, requester));
@@ -363,8 +364,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _authService.ReactivateUser(reactivateUser, requester));
@@ -391,8 +392,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _authService.UnblockAccount(unblockUser, requester));
@@ -419,8 +420,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _authService.GetAllUsersbyDeptId(DepartmentId, requester));

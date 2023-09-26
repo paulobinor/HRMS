@@ -91,6 +91,8 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
+
+
 // Auto Mapper Configurations
 var mappingConfig = new MapperConfiguration(mc =>
 {
@@ -102,7 +104,7 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.Configure<JwtConfig>(options => builder.Configuration.GetSection("Jwt").Bind(options));
-builder.Services.Configure<AppConfig>(options => builder.Configuration.GetSection("AppSetting").Bind(options));
+builder.Services.Configure<AppConfig>(options => builder.Configuration.GetSection("AppConfig").Bind(options));
 builder.Services.Configure<Smtp>(options => builder.Configuration.GetSection("Smtp").Bind(options));
 builder.Services.Configure<DocumentConfig>(options => builder.Configuration.GetSection("DocumentConfig").Bind(options));
 builder.Services.Configure<ImageDocumentConfig>(options => builder.Configuration.GetSection("ImageDocumentConfig").Bind(options));

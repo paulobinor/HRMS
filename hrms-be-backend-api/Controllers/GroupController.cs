@@ -41,8 +41,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _GroupService.CreateGroup(groupDto, requester));
@@ -69,8 +69,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _GroupService.CreateGroupBulkUpload(payload, requester));
@@ -97,8 +97,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _GroupService.UpdateGroup(updateDto, requester));
@@ -125,8 +125,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _GroupService.DeleteGroup(deleteDto, requester));
@@ -153,8 +153,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _GroupService.GetAllActiveGroup(requester));
@@ -182,8 +182,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _GroupService.GetAllGroup(requester));
@@ -210,8 +210,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _GroupService.GetGroupbyId(GroupID, requester));
@@ -240,8 +240,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _GroupService.GetGroupbyCompanyId(CompanyID, requester));

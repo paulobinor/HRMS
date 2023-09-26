@@ -33,7 +33,7 @@ namespace hrms_be_backend_business.Logic
         
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -97,7 +97,7 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -160,7 +160,7 @@ namespace hrms_be_backend_business.Logic
         {
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<IEnumerable<CurrencyVm>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -179,7 +179,7 @@ namespace hrms_be_backend_business.Logic
         {
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<CurrencyVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };

@@ -27,19 +27,20 @@ namespace hrms_be_backend_business.Logic
         private readonly IMailService _mailService;
         private readonly JwtConfig _jwt;
         private readonly IAuditLog _audit;
-        public EarningsService(IOptions<JwtConfig> jwt, ILogger<EarningsService> logger, IEarningsRepository earningsRepository, IAuditLog audit)
+        public EarningsService(IOptions<JwtConfig> jwt, ILogger<EarningsService> logger, IEarningsRepository earningsRepository, IAuditLog audit, IAuthService authService)
         {
             _logger = logger;
             _earningsRepository = earningsRepository;
             _jwt = jwt.Value;
             _audit = audit;
+            _authService = authService;
         }
         public async Task<ExecutedResult<string>> CreateEarning(EarningsCreateDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
 
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -121,7 +122,7 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -209,7 +210,7 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -277,7 +278,7 @@ namespace hrms_be_backend_business.Logic
         {
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<IEnumerable<EarningsView>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -309,7 +310,7 @@ namespace hrms_be_backend_business.Logic
         {
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<EarningsView>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -338,10 +339,10 @@ namespace hrms_be_backend_business.Logic
 
         public async Task<ExecutedResult<string>> CreateEarningItem(EarningsItemCreateDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-
+            _logger.LogError($"EarningsService (AccessKey)=====>{AccessKey} || RemoteIpAddress {RemoteIpAddress}");
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -408,7 +409,7 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -476,7 +477,7 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -544,7 +545,7 @@ namespace hrms_be_backend_business.Logic
         {
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<IEnumerable<EarningsItemVm>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -563,7 +564,7 @@ namespace hrms_be_backend_business.Logic
         {
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<EarningsItemVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };

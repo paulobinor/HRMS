@@ -37,8 +37,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _unitHeadService.CreateUnitHead(UnitHeadDto, requester));
@@ -65,8 +65,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _unitHeadService.CreateUnitHeadBulkUpload(payload, requester));
@@ -93,8 +93,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _unitHeadService.UpdateUnitHead(updateDto, requester));
@@ -121,8 +121,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _unitHeadService.DeleteUnitHead(deleteDto, requester));
@@ -149,8 +149,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _unitHeadService.GetAllActiveUnitHead(requester));
@@ -179,8 +179,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _unitHeadService.GetAllUnitHead(requester));
@@ -207,8 +207,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _unitHeadService.GetUnitHeadById(UnitHeadID, requester));
@@ -236,8 +236,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _unitHeadService.GetUnitHeadbyCompanyId(CompanyID, requester));
