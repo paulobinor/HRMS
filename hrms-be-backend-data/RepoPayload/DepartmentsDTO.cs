@@ -37,6 +37,7 @@ namespace hrms_be_backend_data.RepoPayload
         public long HODUserId { get; set; }
         public string DepartmentName { get; set; }
         public long CompanyId { get; set; }
+        public List<int> AppModules { get; set; }
     }
 
     public class UpdateDepartmentDto

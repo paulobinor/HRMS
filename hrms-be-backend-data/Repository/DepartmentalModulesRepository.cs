@@ -51,6 +51,54 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
+
+        public async Task<List<GetDepartmentalModuleCount>> GetDisapprovedDepartmentalAppModuleCount()
+        {
+            try
+            {
+                string query = @"Select d.DeptId as 'DepartmentId', c.CompanyName , d.DepartmentName , c.Email , d.Created_Date , Count(dm.AppModuleId) as ModuleCount from Department D Left Join DepartmentalModules dm On d.DeptId = dm.DepartmentID
+								 join Company c on d.CompanyId = c.CompanyId where dm.IsDisapproved = @IsDisapproved and dm.ISDeleted = @IsDeleted 
+								 GROUP BY d.DeptId, c.CompanyName , d.DepartmentName , c.Email , d.Created_Date";
+                var param = new DynamicParameters();
+                param.Add("IsDisapproved", true);
+                param.Add("IsDeleted", false);
+
+                var resp = await _repository.GetAll<GetDepartmentalModuleCount>(query, param, commandType: CommandType.Text);
+
+                return resp;
+
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetDisapprovedDepartmentalAppModuleCount => {ex.ToString()}");
+                throw;
+            }
+        }
+
+        public async Task<List<GetDepartmentalModuleCount>> GetAllDepartmentalAppModuleCount()
+        {
+            try
+            {
+                string query = @"Select d.DeptId as 'DepartmentId', c.CompanyName , d.DepartmentName , c.Email , d.Created_Date , Count(dm.AppModuleId) as ModuleCount from Department D Left Join DepartmentalModules dm On d.DeptId = dm.DepartmentID
+								 join Company c on d.CompanyId = c.CompanyId where dm.ISDeleted = @IsDeleted 
+								 GROUP BY d.DeptId, c.CompanyName , d.DepartmentName , c.Email , d.Created_Date";
+                var param = new DynamicParameters();
+                param.Add("IsDeleted", false);
+
+                var resp = await _repository.GetAll<GetDepartmentalModuleCount>(query, param, commandType: CommandType.Text);
+
+                return resp;
+
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetAllDepartmentalAppModuleCount => {ex.ToString()}");
+                throw;
+            }
+        }
+
         public async Task<GetDepartmentModuleByDepartmentDTO> GetDepartmentalAppModuleByDepartmentandModuleID(long departmentID, int moduleID)
         {
             try

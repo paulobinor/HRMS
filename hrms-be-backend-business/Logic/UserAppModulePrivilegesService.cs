@@ -12,22 +12,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static hrms_be_backend_business.Logic.CompanyAppModuleService;
 
 namespace hrms_be_backend_business.Logic
 {
-    public class DepartmentalModulesService : IDepartmentalModulesService
+    public class UserAppModulePrivilegesService : IUserAppModulePrivilegeService
     {
         private readonly IAuditLog _audit;
         private readonly IMapper _mapper;
-        private readonly ILogger<DepartmentalModulesService> _logger;
+        private readonly ILogger<UserAppModulePrivilegesService> _logger;
         private readonly IConfiguration _configuration;
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyAppModuleRepository _companyAppModuleRepository;
-        private readonly IDepartmentalModulesRepository _departmentalModulesRepository;
+        private readonly IUserAppModulePrivilegeRepository _userAppModulePrivilegeRepository;
         private readonly IDepartmentRepository _departmentRepository;
-        public DepartmentalModulesService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<DepartmentalModulesService> logger,
-            IDepartmentalModulesRepository departmentalModulesRepository, IDepartmentRepository departmentRepository, IAuditLog audit, IMapper mapper, ICompanyAppModuleRepository companyAppModuleRepository)
+        public UserAppModulePrivilegesService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<UserAppModulePrivilegesService> logger,
+            IUserAppModulePrivilegeRepository userAppModulePrivilegeRepository, IDepartmentRepository departmentRepository, IAuditLog audit, IMapper mapper, ICompanyAppModuleRepository companyAppModuleRepository)
         {
             _audit = audit;
             _mapper = mapper;
@@ -35,11 +34,71 @@ namespace hrms_be_backend_business.Logic
             _configuration = configuration;
             _departmentRepository = departmentRepository;
             _accountRepository = accountRepository;
-            _departmentalModulesRepository = departmentalModulesRepository;
+            _userAppModulePrivilegeRepository = userAppModulePrivilegeRepository;
             _companyAppModuleRepository = companyAppModuleRepository;
         }
 
-        public async Task<BaseResponse> GetDepartmentalAppModuleCount(RequesterInfo requester)
+        public async Task<BaseResponse> GetAppModulePrivileges(RequesterInfo requester)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                string createdbyUserEmail = requester.Username;
+                string createdbyUserId = requester.UserId.ToString();
+                string RoleId = requester.RoleId.ToString();
+
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
+
+
+
+                var data = await _userAppModulePrivilegeRepository.GetAppModulePrivileges();
+
+                response.Data = data;
+                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"App module privileges fetched successfully";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetAppModulePrivileges ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Operation failed. Kindly contact admin";
+                response.Data = null;
+                return response;
+            }
+        }
+
+        public async Task<BaseResponse> GetAppModulePrivilegesByAppModuleID(long appModuleID ,RequesterInfo requester)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                string createdbyUserEmail = requester.Username;
+                string createdbyUserId = requester.UserId.ToString();
+                string RoleId = requester.RoleId.ToString();
+
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
+
+                var data = await _userAppModulePrivilegeRepository.GetAppModulePrivilegeByAppModuleID(appModuleID);
+
+                response.Data = data;
+                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"App module privileges fetched successfully";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetAppModulePrivileges ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Operation failed. Kindly contact admin";
+                response.Data = null;
+                return response;
+            }
+        }
+
+        public async Task<BaseResponse> GetUserAppModulePrivileges(RequesterInfo requester)
         {
             var response = new BaseResponse();
             try
@@ -60,16 +119,16 @@ namespace hrms_be_backend_business.Logic
                 //}
 
 
-                var data = await _departmentalModulesRepository.GetDepartmentalAppModuleCount();
+                var data = await _userAppModulePrivilegeRepository.GetUserAppModulePrivileges();
 
                 response.Data = data;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Departmental app module fetched successfully";
+                response.ResponseMessage = $"User app module privileges fetched successfully";
                 return response;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetDepartmentalAppModuleCount ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: GetUserAppModulePrivileges ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Operation failed. Kindly contact admin";
                 response.Data = null;
@@ -77,60 +136,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> GetDepartmentAppModuleStatus(GetByStatus status, RequesterInfo requester)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                string createdbyUserEmail = requester.Username;
-                string createdbyUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-                var data = new List<GetDepartmentalModuleCount>();
-
-                //if (Convert.ToInt32(RoleId) != 1)
-                //{
-                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                //    return response;
-                //}
-
-                switch (status)
-                {
-                    case GetByStatus.All:
-                        data = await _departmentalModulesRepository.GetAllDepartmentalAppModuleCount();
-                        break;
-                    case GetByStatus.Approved:
-                        data = await _departmentalModulesRepository.GetDepartmentalAppModuleCount();
-                        break;
-                    case GetByStatus.DisApproved:
-                        data = await _departmentalModulesRepository.GetDisapprovedDepartmentalAppModuleCount();
-                        break;
-                    default:
-
-                        response.ResponseCode = ResponseCode.InvalidApprovalStatus.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Invalid status provided";
-                        return response;
-                }
-
-                response.Data = data;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Department app module fetched successfully";
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: GetCompanyAppModuleCount ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Operation failed. Kindly contact admin";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> GetPendingDepartmentalAppModule(RequesterInfo requester)
+        public async Task<BaseResponse> GetPendingUserAppModulePRivilege(RequesterInfo requester)
         {
             var response = new BaseResponse();
             try
@@ -151,16 +157,16 @@ namespace hrms_be_backend_business.Logic
                 }
 
 
-                var data = await _departmentalModulesRepository.GetPendingDepartmentalAppModule();
+                var data = await _userAppModulePrivilegeRepository.GetPendingUserAppModulePrivileges();
 
                 response.Data = data;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Pending departmental app modules fetched successfully";
+                response.ResponseMessage = $"Pending user app modules fetched successfully";
                 return response;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetPendingDepartmentalAppModule ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: GetPendingUserAppModulePRivilege ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Operation failed. Kindly contact admin";
                 response.Data = null;
@@ -168,7 +174,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> GetDepartmentalAppModuleByDepartmentID(long departmentID, RequesterInfo requester)
+        public async Task<BaseResponse> GetUserAppModulePrivilegesByUserID(long userID, RequesterInfo requester)
         {
             var response = new BaseResponse();
             try
@@ -180,17 +186,16 @@ namespace hrms_be_backend_business.Logic
                 var ipAddress = requester.IpAddress.ToString();
                 var port = requester.Port.ToString();
 
-
-                var data = await _departmentalModulesRepository.GetDepartmentalAppModuleByDepartmentID(departmentID);
+                var data = await _userAppModulePrivilegeRepository.GetUserAppModulePrivilegesByUserID(userID);
 
                 response.Data = data;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Department app modules fetched successfully";
+                response.ResponseMessage = $"User app modules privileges fetched successfully";
                 return response;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetDepartmentalAppModuleByDepartmentID ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: GetUserAppModulePrivilegesByUserID ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Operation failed. Kindly contact admin";
                 response.Data = null;
@@ -199,14 +204,14 @@ namespace hrms_be_backend_business.Logic
         }
 
 
-        public async Task<BaseResponse> CreateDepartmentalAppModule(CreateDepartmentalModuleDTO createDepartmentalAppModule, RequesterInfo requester)
+        public async Task<BaseResponse> CreateUserAppModulePrivileges(CreateUserAppModulePrivilegesDTO createUserAppModulePrivileges, RequesterInfo requester)
         {
             var response = new BaseResponse();
             string successfulModules = string.Empty;
             string failedModules = string.Empty;
             try
             {
-                _logger.LogInformation($"CreateDepartmentalAppModule Request ==> {JsonConvert.SerializeObject(createDepartmentalAppModule)}");
+                _logger.LogInformation($"CreateUserAppModulePrivileges Request ==> {JsonConvert.SerializeObject(createUserAppModulePrivileges)}");
                 string createdbyUserEmail = requester.Username;
                 string createdbyUserId = requester.UserId.ToString();
                 string RoleId = requester.RoleId.ToString();
@@ -222,72 +227,73 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-                if (createDepartmentalAppModule.AppModuleId == null || createDepartmentalAppModule.AppModuleId.Any(m => m <= 0))
+                if (createUserAppModulePrivileges.PrivilegeID == null ||createUserAppModulePrivileges.PrivilegeID.Any(m => m <= 0))
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Invalid App Module selected";
+                    response.ResponseMessage = $"Invalid App Module privilege selected";
                     return response;
                 }
-                else if (createDepartmentalAppModule.DepartmentId <= 0)
+                else if (createUserAppModulePrivileges.UserID <= 0)
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Invalid Department selected";
-                    return response;
-                }
-
-                var department = await _departmentRepository.GetDepartmentById(createDepartmentalAppModule.DepartmentId);
-
-                if (department == null)
-                {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Department not found";
+                    response.ResponseMessage = $"Invalid User selected";
                     return response;
                 }
 
-                foreach (var appModule in createDepartmentalAppModule.AppModuleId)
-                {
-                    var appModuleDetails = await _companyAppModuleRepository.GetAppModuleByID(appModule);
+                var User = await _accountRepository.GetUserById(createUserAppModulePrivileges.UserID);
 
-                    if (appModuleDetails == null)
+                if (User == null)
+                {
+                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"User not found";
+                    return response;
+                }
+
+                var appModulePrivilegeList = await _userAppModulePrivilegeRepository.GetAppModulePrivileges();
+
+                foreach (var privileges in createUserAppModulePrivileges.PrivilegeID)
+                {
+                    var privilegesDetails = appModulePrivilegeList.FirstOrDefault(x => x.AppModulePrivilegeID == privileges);
+
+                    if (privilegesDetails == null)
                     {
-                        failedModules = $"{failedModules} , Module with ID - {appModule} not found";
+                        failedModules = $"{failedModules} , privilege with ID - {privilegesDetails} not found";
                         continue;
                     }
 
-                    var isExists = await _departmentalModulesRepository.GetDepartmentalAppModuleByDepartmentandModuleID(createDepartmentalAppModule.DepartmentId, appModule);
+                    var isExists = await _userAppModulePrivilegeRepository.GetUserAppModuleByUserandPrivilegeID(createUserAppModulePrivileges.UserID, privileges);
                     if (null != isExists)
                     {
                         response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"{appModuleDetails.AppModuleName} have already been added to {department.DepartmentName}";
+                        response.ResponseMessage = $"{privilegesDetails.PrivilegeName} have already been added to {User.GradeName}";
 
-                        failedModules = $"{failedModules}, {appModuleDetails.AppModuleName} have already been added to {department.DepartmentName}";
+                        failedModules = $"{failedModules}, {privilegesDetails.PrivilegeName} have already been added to {User.GradeName}";
 
-                        continue;
                         //return response;
                     }
 
-                    var departmentAppModule = new DepartmentalModulesDTO
+                    var userAppModulePrivilege = new UserAppModulePrivilegesDTO
                     {
                         DateCreated = DateTime.Now,
                         IsDeleted = false,
-                        DepartmentId = createDepartmentalAppModule.DepartmentId,
+                        AppModulePrivilegeID = privileges,
                         CreatedByUserId = requester.UserId,
-                        AppModuleId = appModule,
+                        UserID = createUserAppModulePrivileges.UserID,
                         IsActive = false
                     };
 
 
-                    var resp = await _departmentalModulesRepository.CreateDepartmentalAppModule(departmentAppModule);
+                    var resp = await _userAppModulePrivilegeRepository.CreateUserAppModulePrivileges(userAppModulePrivilege);
                     if (resp > 0)
                     {
-                        successfulModules = $"{successfulModules} , {appModuleDetails.AppModuleName}";
+                        successfulModules = $"{successfulModules} , {privilegesDetails.PrivilegeName}";
 
-                        departmentAppModule.DeparmentalModuleId = resp;
+                        userAppModulePrivilege.UserAppModulePrivilegesId = resp;
                         var auditLog = new AuditLogDto
                         {
                             userId = requester.UserId,
-                            actionPerformed = "DepartmentAppModuleCreation",
-                            payload = JsonConvert.SerializeObject(departmentAppModule),
+                            actionPerformed = "UserAppModulePrivilegeCreation",
+                            payload = JsonConvert.SerializeObject(userAppModulePrivilege),
                             response = JsonConvert.SerializeObject(response),
                             actionStatus = response.ResponseMessage,
                             ipAddress = ipAddress
@@ -297,20 +303,20 @@ namespace hrms_be_backend_business.Logic
                     }
                     else
                     {
-                        failedModules = $"{failedModules}, {appModuleDetails.AppModuleName} failed";
+                        failedModules = $"{failedModules}, {privilegesDetails.PrivilegeName} failed";
                     }
-                    
+
                 }
-                if(failedModules.Length == 0)
+                if (failedModules.Length == 0)
                 {
-                    response.Data = createDepartmentalAppModule;
+                    response.Data = createUserAppModulePrivileges;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Modules {successfulModules.TrimStart()} have been added successfully to {department.DepartmentName}";
+                    response.ResponseMessage = $"Privileges {successfulModules.TrimStart()} have been added successfully to {User.FirstName}";
                     return response;
                 }
                 else
                 {
-                    response.Data = createDepartmentalAppModule;
+                    response.Data = createUserAppModulePrivileges;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"{failedModules.TrimStart()}";
                     return response;
@@ -319,7 +325,7 @@ namespace hrms_be_backend_business.Logic
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: CreateDepartmentAppModule ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: CreateUserAppModulePrivileges ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Operation failed. Kindly contact admin";
                 response.Data = null;
@@ -327,7 +333,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> ApproveDepartmentalAppModule(long departmentAppModuleID, RequesterInfo requester)
+        public async Task<BaseResponse> ApproveUserAppModulePrivilege(long userAppModulePrivilegeID, RequesterInfo requester)
         {
             var response = new BaseResponse();
             try
@@ -346,12 +352,12 @@ namespace hrms_be_backend_business.Logic
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                     return response;
                 }
-                var request = await _departmentalModulesRepository.GetDepartmentalAppModuleByID(departmentAppModuleID);
+                var request = await _userAppModulePrivilegeRepository.GetUserAppModulePrivilegeByID(userAppModulePrivilegeID);
 
                 if (request == null)
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Departmental App Module not found";
+                    response.ResponseMessage = $"User App Module privilege not found";
                     return response;
                 }
 
@@ -374,12 +380,12 @@ namespace hrms_be_backend_business.Logic
                 request.IsActive = true;
                 request.ApprovedByUserId = requester.UserId;
 
-                var resp = await _departmentalModulesRepository.ApproveDepartmentalAppModule(request);
+                var resp = await _userAppModulePrivilegeRepository.ApproveUserAppModulePrivileges(request);
                 var auditLog = new AuditLogDto
                 {
                     userId = requester.UserId,
-                    actionPerformed = "DepartmentalAppModuleApproval",
-                    payload = JsonConvert.SerializeObject(new { DepartmentalAppModuleID = departmentAppModuleID }),
+                    actionPerformed = "UserAppModulePrivilegeApproval",
+                    payload = JsonConvert.SerializeObject(new { UserAppModulePrivilegeID = userAppModulePrivilegeID }),
                     response = JsonConvert.SerializeObject(request),
                     actionStatus = response.ResponseMessage,
                     ipAddress = ipAddress
@@ -389,7 +395,7 @@ namespace hrms_be_backend_business.Logic
 
                 response.Data = request;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Departmental app module approved successfully";
+                response.ResponseMessage = $"User app module privilege approved successfully";
                 return response;
             }
             catch (Exception ex)
@@ -401,7 +407,7 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }
-        public async Task<BaseResponse> DisapproveDepartmentalAppModule(long departmentAppModuleID, RequesterInfo requester)
+        public async Task<BaseResponse> DisapproveUserAppModulePrivilage(long userAppModulePrivilegeID, RequesterInfo requester)
         {
             var response = new BaseResponse();
             try
@@ -420,12 +426,12 @@ namespace hrms_be_backend_business.Logic
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                     return response;
                 }
-                var request = await _departmentalModulesRepository.GetDepartmentalAppModuleByID(departmentAppModuleID);
+                var request = await _userAppModulePrivilegeRepository.GetUserAppModulePrivilegeByID(userAppModulePrivilegeID);
 
                 if (request == null)
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Department App Module not found";
+                    response.ResponseMessage = $"User App Module privilege not found";
                     return response;
                 }
 
@@ -448,12 +454,12 @@ namespace hrms_be_backend_business.Logic
                 request.IsActive = false;
                 request.DisapprovedByUserId = requester.UserId;
 
-                var resp = await _departmentalModulesRepository.DisapproveDepartmentalAppModule(request);
+                var resp = await _userAppModulePrivilegeRepository.DisapproveUserAppModulePrivilege(request);
                 var auditLog = new AuditLogDto
                 {
                     userId = requester.UserId,
-                    actionPerformed = "DepartmentalAppModuleDisapproval",
-                    payload = JsonConvert.SerializeObject(new { DepartmentalAppModuleID = departmentAppModuleID }),
+                    actionPerformed = "USerAppModulePrivilegeDisapproval",
+                    payload = JsonConvert.SerializeObject(new { UserAppModulePrivilegeID = userAppModulePrivilegeID }),
                     response = JsonConvert.SerializeObject(request),
                     actionStatus = response.ResponseMessage,
                     ipAddress = ipAddress
@@ -463,12 +469,12 @@ namespace hrms_be_backend_business.Logic
 
                 response.Data = request;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Departmental app module disapproved successfully";
+                response.ResponseMessage = $"User app module privilege disapproved successfully";
                 return response;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: DisapproveDepartmentalAppModule ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: DisapproveUserAppModulePrivilage ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Operation failed. Kindly contact admin";
                 response.Data = null;
@@ -476,7 +482,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> DepartmentAppModuleActivationSwitch(long departmentAppModuleID, RequesterInfo requester)
+        public async Task<BaseResponse> UserAppModulePrivilegeActivationSwitch(long userAppModulePrivilegeID, RequesterInfo requester)
         {
             var response = new BaseResponse();
             try
@@ -495,12 +501,12 @@ namespace hrms_be_backend_business.Logic
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                     return response;
                 }
-                var request = await _departmentalModulesRepository.GetDepartmentalAppModuleByID(departmentAppModuleID);
+                var request = await _userAppModulePrivilegeRepository.GetUserAppModulePrivilegeByID(userAppModulePrivilegeID);
 
                 if (request == null)
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Department App Module not found";
+                    response.ResponseMessage = $"User App Module privilege not found";
                     return response;
                 }
 
@@ -508,12 +514,12 @@ namespace hrms_be_backend_business.Logic
                 request.IsActive = !request.IsActive;
 
 
-                var resp = await _departmentalModulesRepository.UpdateDepartmentAppModule(request);
+                var resp = await _userAppModulePrivilegeRepository.UpdateUserAppModulePRivileges(request);
                 var auditLog = new AuditLogDto
                 {
                     userId = requester.UserId,
                     actionPerformed = "DepartmentAppModuleActivationSwitch",
-                    payload = JsonConvert.SerializeObject(new { departmentAppModuleID = departmentAppModuleID }),
+                    payload = JsonConvert.SerializeObject(new { UserAppModulePrivilegeID = userAppModulePrivilegeID }),
                     response = JsonConvert.SerializeObject(request),
                     actionStatus = response.ResponseMessage,
                     ipAddress = ipAddress
@@ -536,7 +542,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> DeleteDepartmentAppModule(long departmentAppModuleID, RequesterInfo requester)
+        public async Task<BaseResponse> DeleteUserAppModulePrivilege(long userAppModulePrivilegeID, RequesterInfo requester)
         {
             var response = new BaseResponse();
             try
@@ -555,12 +561,12 @@ namespace hrms_be_backend_business.Logic
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                     return response;
                 }
-                var request = await _departmentalModulesRepository.GetDepartmentalAppModuleByID(departmentAppModuleID);
+                var request = await _userAppModulePrivilegeRepository.GetUserAppModulePrivilegeByID(userAppModulePrivilegeID);
 
                 if (request == null)
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Company App Module not found";
+                    response.ResponseMessage = $"User App Module privilege not found";
                     return response;
                 }
 
@@ -570,12 +576,12 @@ namespace hrms_be_backend_business.Logic
 
 
 
-                var resp = await _departmentalModulesRepository.UpdateDepartmentAppModule(request);
+                var resp = await _userAppModulePrivilegeRepository.UpdateUserAppModulePRivileges(request);
                 var auditLog = new AuditLogDto
                 {
                     userId = requester.UserId,
-                    actionPerformed = "DepartmentAppModuleDeletion",
-                    payload = JsonConvert.SerializeObject(new { departmentAppModuleID = departmentAppModuleID }),
+                    actionPerformed = "UserAppModulePrivilageDeletion",
+                    payload = JsonConvert.SerializeObject(new { userAppModulePrivilegeID = userAppModulePrivilegeID }),
                     response = JsonConvert.SerializeObject(request),
                     actionStatus = response.ResponseMessage,
                     ipAddress = ipAddress
@@ -585,12 +591,12 @@ namespace hrms_be_backend_business.Logic
 
                 response.Data = request;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Department app module deleted successfully";
+                response.ResponseMessage = $"User app module privilege deleted successfully";
                 return response;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: DeleteDepartmentAppModule ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: DeleteUserAppModulePrivilege ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Operation failed. Kindly contact admin";
                 response.Data = null;

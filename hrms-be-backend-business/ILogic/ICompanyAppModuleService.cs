@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static hrms_be_backend_business.Logic.CompanyAppModuleService;
 
 namespace hrms_be_backend_business.ILogic
 {
     public interface ICompanyAppModuleService
     {
         Task<BaseResponse> GetAllAppModules(RequesterInfo requester);
+        Task<BaseResponse> GetCompanyAppModuleStatus(GetByStatus status, RequesterInfo requester);
         Task<BaseResponse> GetCompanyAppModuleCount(RequesterInfo requester);
         Task<BaseResponse> GetPendingCompanyAppModule(RequesterInfo requester);
         Task<BaseResponse> GetCompanyAppModuleByCompanyID(long companyID, RequesterInfo requester);

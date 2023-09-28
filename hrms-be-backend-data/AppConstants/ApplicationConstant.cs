@@ -62,5 +62,6 @@
         public static int GeneralUser = 3;
         public static int HrHead = 4;
 
+
     }
 }

@@ -10,6 +10,8 @@ namespace hrms_be_backend_data.IRepository
     public interface IDepartmentalModulesRepository
     {
         Task<List<GetDepartmentalModuleCount>> GetDepartmentalAppModuleCount();
+        Task<List<GetDepartmentalModuleCount>> GetAllDepartmentalAppModuleCount();
+        Task<List<GetDepartmentalModuleCount>> GetDisapprovedDepartmentalAppModuleCount();
         Task<GetDepartmentModuleByDepartmentDTO> GetDepartmentalAppModuleByDepartmentandModuleID(long departmentID, int moduleID);
         Task<DepartmentalModulesDTO> GetDepartmentalAppModuleByID(long departmentalAppModuleID);
         Task<List<GetDepartmentModuleByDepartmentDTO>> GetDepartmentalAppModuleByDepartmentID(long departmentID);

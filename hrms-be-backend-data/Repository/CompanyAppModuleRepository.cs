@@ -47,7 +47,7 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: CreateCompanyAppModule => {ex.ToString()}");
+                _logger.LogError($"MethodName: GetCompanyAppModuleCount => {ex.ToString()}");
                 throw;
             }
         }
@@ -160,6 +160,55 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+        
+        public async Task<List<GetCompanyAppModuleCount>> GetAllCompanyAppModule()
+        {
+            try
+            {
+                string query = @"SELECT c.CompanyId, c.CompanyName, c.Email, c.Created_Date, COUNT(cam.AppModuleId) AS ModuleCount FROM Company AS c
+                                 LEFT JOIN CompanyAppModules AS cam ON c.CompanyId = cam.CompanyId where cam.ISDeleted = @IsDeleted 
+                                 GROUP BY c.CompanyId, c.CompanyName, c.Email , c.Created_Date";
+                var param = new DynamicParameters();
+                param.Add("IsDeleted", false);
+
+                var resp = await _repository.GetAll<GetCompanyAppModuleCount>(query, param, commandType: CommandType.Text);
+
+                return resp;
+
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetAllCompanyAppModule => {ex.ToString()}");
+                throw;
+            }
+        }
+
+
+        public async Task<List<GetCompanyAppModuleCount>> GetDisapprovedCompanyAppModule()
+        {
+            try
+            {
+                string query = @"SELECT c.CompanyId, c.CompanyName, c.Email, c.Created_Date, COUNT(cam.AppModuleId) AS ModuleCount FROM Company AS c
+                                 LEFT JOIN CompanyAppModules AS cam ON c.CompanyId = cam.CompanyId where cam.IsDisapproved = @IsDisapproved and cam.ISDeleted = @IsDeleted 
+                                 GROUP BY c.CompanyId, c.CompanyName, c.Email , c.Created_Date";
+                var param = new DynamicParameters();
+                param.Add("IsDisapproved", true);
+                param.Add("IsDeleted", false);
+
+                var resp = await _repository.GetAll<GetCompanyAppModuleCount>(query, param, commandType: CommandType.Text);
+
+                return resp;
+
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetDisapprovedCompanyAppModule => {ex.ToString()}");
+                throw;
+            }
+        }
+
         public async Task<List<GetCompanyAppModuleByCompanyDTO>> GetPendingCompanyAppModule()
         {
             try

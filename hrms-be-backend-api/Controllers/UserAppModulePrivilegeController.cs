@@ -5,27 +5,24 @@ using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using static hrms_be_backend_business.Logic.CompanyAppModuleService;
 
 namespace hrms_be_backend_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DepartmentalModulesController : ControllerBase
+    public class UserAppModulePrivilegeController : ControllerBase
     {
-        private readonly ILogger<DepartmentalModulesController> _logger;
-        private readonly IDepartmentalModulesService _departmentalModulesService;
+        private readonly ILogger<UserAppModulePrivilegeController> _logger;
+        private readonly IUserAppModulePrivilegeService _userAppModulePrivilegeService;
 
-        public DepartmentalModulesController(ILogger<DepartmentalModulesController> logger, IDepartmentalModulesService departmentalModulesService)
+        public UserAppModulePrivilegeController(ILogger<UserAppModulePrivilegeController> logger, IUserAppModulePrivilegeService userAppModulePrivilegeService)
         {
             _logger = logger;
-            _departmentalModulesService = departmentalModulesService;
+            _userAppModulePrivilegeService = userAppModulePrivilegeService;
         }
 
-       
-
-        [HttpGet("GetDepartmetalAppModuleCount")]
-        public async Task<IActionResult> GetDepartmetalAppModuleCount()
+        [HttpGet("GetUserAppModulePrivileges")]
+        public async Task<IActionResult> GetUserAppModulePrivileges()
         {
             var response = new BaseResponse();
             try
@@ -39,11 +36,11 @@ namespace hrms_be_backend_api.Controllers
                     Port = Request.HttpContext.Connection.LocalPort.ToString()
                 };
 
-                return Ok(await _departmentalModulesService.GetDepartmentalAppModuleCount(requester));
+                return Ok(await _userAppModulePrivilegeService.GetUserAppModulePrivileges(requester));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetDepartmetalAppModuleCount ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: ControllerMethod : GetUserAppModulePrivileges ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Anunexpected error occured";
                 response.Data = null;
@@ -51,8 +48,8 @@ namespace hrms_be_backend_api.Controllers
             }
         }
 
-        [HttpGet("GetDepartmentAppModuleBySatus/{status}")]
-        public async Task<IActionResult> GetDepartmentAppModuleByStatus(GetByStatus status)
+        [HttpGet("GetUserAppModulePrivilegesByUserID")]
+        public async Task<IActionResult> GetUserAppModulePrivilegesByUserID(long userID)
         {
             var response = new BaseResponse();
             try
@@ -66,11 +63,11 @@ namespace hrms_be_backend_api.Controllers
                     Port = Request.HttpContext.Connection.LocalPort.ToString()
                 };
 
-                return Ok(await _departmentalModulesService.GetDepartmentAppModuleStatus(status, requester));
+                return Ok(await _userAppModulePrivilegeService.GetUserAppModulePrivilegesByUserID(userID,requester));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetCompanyAppModuleByCompanyID ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: ControllerMethod : GetUserAppModulePrivilegesByUserID ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Anunexpected error occured";
                 response.Data = null;
@@ -78,8 +75,8 @@ namespace hrms_be_backend_api.Controllers
             }
         }
 
-        [HttpGet("GetDepartmentAppModuleByDepartmentID/{departmentID}")]
-        public async Task<IActionResult> GetDepartmentAppModuleByDepartmentID(long departmentID)
+        [HttpGet("GetAppModulePrivileges")]
+        public async Task<IActionResult> GetAppModulePrivileges()
         {
             var response = new BaseResponse();
             try
@@ -93,11 +90,11 @@ namespace hrms_be_backend_api.Controllers
                     Port = Request.HttpContext.Connection.LocalPort.ToString()
                 };
 
-                return Ok(await _departmentalModulesService.GetDepartmentalAppModuleByDepartmentID(departmentID, requester));
+                return Ok(await _userAppModulePrivilegeService.GetAppModulePrivileges( requester));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetDepartmentAppModuleByDepartmentID ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: ControllerMethod : GetUserAppModulePrivilegesByUserID ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Anunexpected error occured";
                 response.Data = null;
@@ -105,10 +102,8 @@ namespace hrms_be_backend_api.Controllers
             }
         }
 
-
-
-        [HttpGet("GetPendingDepartmentalAppModule")]
-        public async Task<IActionResult> GetPendingDepartmentalAppModule()
+        [HttpGet("GetAppModulePrivilegesByModuleID/{appModuleID}")]
+        public async Task<IActionResult> GetAppModulePrivilegesByModuleID(long appModuleID)
         {
             var response = new BaseResponse();
             try
@@ -122,20 +117,19 @@ namespace hrms_be_backend_api.Controllers
                     Port = Request.HttpContext.Connection.LocalPort.ToString()
                 };
 
-                return Ok(await _departmentalModulesService.GetPendingDepartmentalAppModule(requester));
+                return Ok(await _userAppModulePrivilegeService.GetAppModulePrivilegesByAppModuleID(appModuleID,requester));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetPendingDepartmentalAppModule ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: ControllerMethod : GetAppModulePrivilegesByModuleID ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Anunexpected error occured";
                 response.Data = null;
                 return Ok(response);
             }
         }
-
-        [HttpPost("CreateDepartmentalAppModule")]
-        public async Task<IActionResult> CreateDepartmentalAppModule(CreateDepartmentalModuleDTO request)
+        [HttpGet("GetPendingUserAppModulePrivileges")]
+        public async Task<IActionResult> GetPendingUserAppModulePrivileges()
         {
             var response = new BaseResponse();
             try
@@ -149,11 +143,11 @@ namespace hrms_be_backend_api.Controllers
                     Port = Request.HttpContext.Connection.LocalPort.ToString()
                 };
 
-                return Ok(await _departmentalModulesService.CreateDepartmentalAppModule(request, requester));
+                return Ok(await _userAppModulePrivilegeService.GetPendingUserAppModulePRivilege( requester));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ControllerMethod : CreateDepartmentalAppModule ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: ControllerMethod : GetPendingUserAppModulePrivileges ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Anunexpected error occured";
                 response.Data = null;
@@ -161,8 +155,8 @@ namespace hrms_be_backend_api.Controllers
             }
         }
 
-        [HttpGet("ApproveDepartmentAppModule/{departmentAppModuleID}")]
-        public async Task<IActionResult> ApproveDepartmentAppModule(long departmentAppModuleID)
+        [HttpPost("CreateUserAppModulePrivileges")]
+        public async Task<IActionResult> CreateUserAppModulePrivileges(CreateUserAppModulePrivilegesDTO request)
         {
             var response = new BaseResponse();
             try
@@ -176,11 +170,11 @@ namespace hrms_be_backend_api.Controllers
                     Port = Request.HttpContext.Connection.LocalPort.ToString()
                 };
 
-                return Ok(await _departmentalModulesService.ApproveDepartmentalAppModule(departmentAppModuleID, requester));
+                return Ok(await _userAppModulePrivilegeService.CreateUserAppModulePrivileges(request ,requester));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ControllerMethod : ApproveDepartmentAppModule ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: ControllerMethod : CreateUserAppModulePrivileges ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Anunexpected error occured";
                 response.Data = null;
@@ -188,8 +182,8 @@ namespace hrms_be_backend_api.Controllers
             }
         }
 
-        [HttpGet("DisapproveDepartmentalAppModule/{departmentAppModuleID}")]
-        public async Task<IActionResult> DisapproveDepartmentalAppModule(long departmentAppModuleID)
+        [HttpGet("ApproveUserAppModulePrivileges/{userAppModulePrivilegeID}")]
+        public async Task<IActionResult> ApproveUserAppModulePrivileges(long userAppModulePrivilegeID)
         {
             var response = new BaseResponse();
             try
@@ -203,11 +197,11 @@ namespace hrms_be_backend_api.Controllers
                     Port = Request.HttpContext.Connection.LocalPort.ToString()
                 };
 
-                return Ok(await _departmentalModulesService.DisapproveDepartmentalAppModule(departmentAppModuleID, requester));
+                return Ok(await _userAppModulePrivilegeService.ApproveUserAppModulePrivilege(userAppModulePrivilegeID, requester));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ControllerMethod : DisapproveDepartmentalAppModule ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: ControllerMethod : ApproveUserAppModulePrivileges ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Anunexpected error occured";
                 response.Data = null;
@@ -215,8 +209,8 @@ namespace hrms_be_backend_api.Controllers
             }
         }
 
-        [HttpGet("DeleteDepartmentAppModule/{departmentAppModuleID}")]
-        public async Task<IActionResult> DeleteDepartmentalAppModule(long departmentAppModuleID)
+        [HttpGet("DisapproveUserAppModulePrivileges/{userAppModulePrivilegeID}")]
+        public async Task<IActionResult> DisapproveUserAppModulePrivileges(long userAppModulePrivilegeID)
         {
             var response = new BaseResponse();
             try
@@ -230,19 +224,20 @@ namespace hrms_be_backend_api.Controllers
                     Port = Request.HttpContext.Connection.LocalPort.ToString()
                 };
 
-                return Ok(await _departmentalModulesService.DeleteDepartmentAppModule(departmentAppModuleID, requester));
+                return Ok(await _userAppModulePrivilegeService.DisapproveUserAppModulePrivilage(userAppModulePrivilegeID, requester));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ControllerMethod : DeleteDepartmentalAppModule ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: ControllerMethod : DisapproveUserAppModulePrivileges ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Anunexpected error occured";
                 response.Data = null;
                 return Ok(response);
             }
         }
-        [HttpGet("DepartmentalAppModuleActivationSwitch/{departmentAppModuleID}")]
-        public async Task<IActionResult> DepartmentalAppModuleActivationSwitch(long departmentAppModuleID)
+
+        [HttpGet("UserAppModulePrivilegesActivationSwitch/{userAppModulePrivilegeID}")]
+        public async Task<IActionResult> UserAppModulePrivilegesActivationSwitch(long userAppModulePrivilegeID)
         {
             var response = new BaseResponse();
             try
@@ -256,11 +251,11 @@ namespace hrms_be_backend_api.Controllers
                     Port = Request.HttpContext.Connection.LocalPort.ToString()
                 };
 
-                return Ok(await _departmentalModulesService.DepartmentAppModuleActivationSwitch(departmentAppModuleID, requester));
+                return Ok(await _userAppModulePrivilegeService.UserAppModulePrivilegeActivationSwitch(userAppModulePrivilegeID, requester));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ControllerMethod : DepartmentalAppModuleActivationSwitch ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: ControllerMethod : UserAppModulePrivilegesActivationSwitch ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Anunexpected error occured";
                 response.Data = null;
@@ -268,5 +263,31 @@ namespace hrms_be_backend_api.Controllers
             }
         }
 
+        [HttpGet("DeleteUserAppModulePrivileges/{userAppModulePrivilegeID}")]
+        public async Task<IActionResult> DeleteUserAppModulePrivileges(long userAppModulePrivilegeID)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var requester = new RequesterInfo
+                {
+                    Username = this.User.Claims.ToList()[2].Value,
+                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                };
+
+                return Ok(await _userAppModulePrivilegeService.DeleteUserAppModulePrivilege(userAppModulePrivilegeID, requester));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: ControllerMethod : DeleteUserAppModulePrivileges ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Anunexpected error occured";
+                response.Data = null;
+                return Ok(response);
+            }
+        }
     }
 }

@@ -63,6 +63,6 @@ namespace hrms_be_backend_data.RepoPayload
     {
         //public long CompanyAppModuleId { get; set; }
         public long CompanyId { get; set; }
-        public int AppModuleId { get; set; }
+        public List<int> AppModuleId { get; set; }
     }
 }

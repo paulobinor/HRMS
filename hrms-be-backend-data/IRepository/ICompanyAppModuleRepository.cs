@@ -17,6 +17,8 @@ namespace hrms_be_backend_data.IRepository
         Task<AppModuleDTO> GetAppModuleByID(int appMpduleID);
         Task<List<AppModuleDTO>> GetAllAppModules();
         Task<List<GetCompanyAppModuleByCompanyDTO>> GetPendingCompanyAppModule();
+        Task<List<GetCompanyAppModuleCount>> GetAllCompanyAppModule();
+        Task<List<GetCompanyAppModuleCount>> GetDisapprovedCompanyAppModule();
         Task<int> DisapproveCompanyAppModule(CompanyAppModuleDTO companyAppModule);
         Task<GetCompanyAppModuleByCompanyDTO> GetCompanyAppModuleByCompanyandModuleID(long companyID, int moduleID);
         Task<CompanyAppModuleDTO> GetCompanyAppModuleByID(long companyAppModuleID);

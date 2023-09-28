@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static hrms_be_backend_business.Logic.CompanyAppModuleService;
 
 namespace hrms_be_backend_business.ILogic
 {
@@ -17,6 +18,7 @@ namespace hrms_be_backend_business.ILogic
         Task<BaseResponse> ApproveDepartmentalAppModule(long departmentAppModuleID, RequesterInfo requester);
         Task<BaseResponse> DisapproveDepartmentalAppModule(long departmentAppModuleID, RequesterInfo requester);
         Task<BaseResponse> DeleteDepartmentAppModule(long departmentAppModuleID, RequesterInfo requester);
+        Task<BaseResponse> GetDepartmentAppModuleStatus(GetByStatus status, RequesterInfo requester);
         Task<BaseResponse> DepartmentAppModuleActivationSwitch(long departmentAppModuleID, RequesterInfo requester);
     }
 }
