@@ -148,11 +148,12 @@ builder.Services.AddScoped<IReviwerRepository, ReviwerRepository>();
 builder.Services.AddScoped<IReviwerRoleRepository, ReviwerRoleRepository>();
 builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
 builder.Services.AddScoped<IEarningsRepository, EarningsRepository>();
-
+builder.Services.AddScoped<IDeductionsRepository, DeductionsRepository>();
 
 
 builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 builder.Services.AddScoped<IEarningsService, EarningsService>();
+builder.Services.AddScoped<IDeductionsService, DeductionsService>();
 
 //VacationModul
 builder.Services.AddScoped<IGradeLeaveRepo, GradeLeaveRepo>();

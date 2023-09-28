@@ -35,7 +35,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpPost("UpdateEarning")]
         [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
-        public async Task<IActionResult> UpdateEarning(EarningsCreateDto payload)
+        public async Task<IActionResult> UpdateEarning(EarningsUpdateDto payload)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -58,7 +58,7 @@ namespace hrms_be_backend_api.Controllers
             return this.CustomResponse(await _earningsService.DeleteEarnings(EarningsId, Comments, accessToken, claim, RemoteIpAddress, RemotePort));
         }
         [HttpGet("GetEarnings")]
-        [ProducesResponseType(typeof(ExecutedResult<IEnumerable<EarningsView>>), 200)]
+        [ProducesResponseType(typeof(ExecutedResult<EarningsView>), 200)]
         public async Task<IActionResult> GetEarnings()
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -69,18 +69,7 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _earningsService.GetEarnings(accessToken, claim, RemoteIpAddress, RemotePort));
         }
-        [HttpGet("GetEarningsById")]
-        [ProducesResponseType(typeof(ExecutedResult<EarningsView>), 200)]
-        public async Task<IActionResult> GetEarningsById(long Id)
-        {
-            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claim = identity.Claims;
-            var accessToken = Request.Headers["Authorization"];
-            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
-            return this.CustomResponse(await _earningsService.GetEarningsById(Id, accessToken, claim, RemoteIpAddress, RemotePort));
-        }
+       
 
         [HttpPost("CreateEarningItem")]
         [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
