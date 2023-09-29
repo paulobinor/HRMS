@@ -281,7 +281,14 @@ namespace hrms_be_backend_business.Logic
 
                 }
                 var result = await _earningsRepository.GetEarnings(accessUser.data.CompanyId);
-               
+                if (result==null)
+                {
+                    return new ExecutedResult<EarningsView>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                }
+                if (result.EarningsId <1)
+                {
+                    return new ExecutedResult<EarningsView>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                }
                 var computations = await _earningsRepository.GetEarningsComputation(result.EarningsId);
                 var cra = await _earningsRepository.GetEarningsCRA(accessUser.data.CompanyId);
                
