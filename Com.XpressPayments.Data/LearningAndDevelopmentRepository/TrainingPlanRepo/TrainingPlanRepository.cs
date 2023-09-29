@@ -100,6 +100,8 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
                     param.Add("@EstimatedCostUpd", TrainingPlan.EstimatedCost);
                     param.Add("@CompanyIdUpd", TrainingPlan.CompanyID);
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
+                        //creaating an unused parameter called @TrainingPlanIDOut to avoid error
+                    param.Add("@TrainingPlanIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
 
                     dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
 
@@ -124,6 +126,8 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
                     param.Add("@TrainingPlanIDDelete", delete.TrainingPlanID);
                     param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
                     param.Add("@Reasons_For_Delete", delete.Reasons_For_Delete == null ? "" : delete.Reasons_For_Delete.ToString().Trim());
+                    //creaating an unused parameter called @TrainingPlanIDOut to avoid error
+                    param.Add("@TrainingPlanIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
 
                     dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
 
@@ -146,6 +150,8 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
                 param.Add("@TrainingPlanID", TrainingPlanID);
                 param.Add("@ApprovedByUserId", ApprovedByUserId);
                 param.Add("@DateApproved", DateTime.Now);
+                //creaating an unused parameter called @TrainingPlanIDOut to avoid error
+                param.Add("@TrainingPlanIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
                 return await _dapperGeneric.Get<string>(ApplicationConstant.Sp_TrainingPlan, param, commandType: CommandType.StoredProcedure);
 
             }
@@ -166,6 +172,8 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
                 param.Add("@DisapprovedByUserId", DisapprovedByUserId);
                 param.Add("@DisapprovedComment", DisapprovedComment);
                 param.Add("@DateDisapproved", DateTime.Now);
+                //creaating an unused parameter called @TrainingPlanIDOut to avoid error
+                param.Add("@TrainingPlanIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
                 return await _dapperGeneric.Get<string>(ApplicationConstant.Sp_TrainingPlan, param, commandType: CommandType.StoredProcedure);
 
             }
@@ -184,6 +192,8 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", TrainingPlanEnum.GETALL);
+                    //creaating an unused parameter called @TrainingPlanIDOut to avoid error
+                    param.Add("@TrainingPlanIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
 
                     var TrainingPlans = await _dapper.QueryAsync<TrainingPlanDTO>(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
 
@@ -205,6 +215,8 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", TrainingPlanEnum.GETALLACTIVE);
+                    //creaating an unused parameter called @TrainingPlanIDOut to avoid error
+                    param.Add("@TrainingPlanIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
 
                     var TrainingPlans = await _dapper.QueryAsync<TrainingPlanDTO>(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
 
@@ -227,6 +239,9 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
                     var param = new DynamicParameters();
                     param.Add("@Status", TrainingPlanEnum.GETBYID);
                     param.Add("@TrainingPlanIDGet", TrainingPlanID);
+                    //creaating an unused parameter called @TrainingPlanIDOut to avoid error
+                    param.Add("@TrainingPlanIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
+
 
 
                     var TrainingPlanDetails = await _dapper.QueryFirstOrDefaultAsync<TrainingPlanDTO>(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
@@ -250,6 +265,8 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", TrainingPlanEnum.GETPENDINGAPPROVAL);
+                    //creaating an unused parameter called @TrainingPlanIDOut to avoid error
+                    param.Add("@TrainingPlanIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
 
                     var response = await _dapper.QueryAsync<TrainingPlanDTO>(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
 
@@ -271,6 +288,8 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
                     var param = new DynamicParameters();
                     param.Add("@Status", TrainingPlanEnum.GETBYCOMPANYID);
                     param.Add("@CompanyIdGet", companyId);
+                    //creaating an unused parameter called @TrainingPlanIDOut to avoid error
+                    param.Add("@TrainingPlanIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
 
                     var TrainingPlanDetails = await _dapper.QueryAsync<TrainingPlanDTO>(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
 
@@ -294,6 +313,8 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
                     var param = new DynamicParameters();
                     param.Add("@Status", TrainingPlanEnum.GETBYUSERID);
                     param.Add("@UserIDGet", UserId);
+                    //creaating an unused parameter called @TrainingPlanIDOut to avoid error
+                    param.Add("@TrainingPlanIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
 
 
                     var TrainingPlans = await _dapper.QueryAsync<TrainingPlanDTO>(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
@@ -326,6 +347,8 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
                     param.Add("@TrainingMode", TrainingPlan.TrainingMode);
                     param.Add("@CompanyIdSch", TrainingPlan.CompanyID);
                     param.Add("@Scheduled_By_User_Email", scheduledbyUserEmail.Trim());
+                    //creaating an unused parameter called @TrainingPlanIDOut to avoid error
+                    param.Add("@TrainingPlanIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
 
                     dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_TrainingPlan, param: param, commandType: CommandType.StoredProcedure);
 

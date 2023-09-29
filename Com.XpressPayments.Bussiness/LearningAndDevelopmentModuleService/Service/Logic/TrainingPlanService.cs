@@ -88,26 +88,24 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
                 //    response.ResponseMessage = repoResponse;
                 //    return response;
                 //}
-                var userDetails = await _accountRepository.FindUser(payload.UserId);
-
-                var trainingP = await _trainingPlanRepository.GetTrainingPlanById(createdTrainingPlanID);
+                // var userDetails = await _accountRepository.FindUser(payload.UserId);
                 //var AllHr = await _accountRepository.GetAllUsersbyRoleID(4);
                 //var HrDetails = AllHr.FirstOrDefault();
 
-
+                var trainingP = await _trainingPlanRepository.GetTrainingPlanById(createdTrainingPlanID);
 
 
                 //Send mail to HCM
                 _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(trainingP.HRUserId, payload.UserId, payload.TrainingProvider);
 
                 //Send mail to Hod/UnitHead
-                if (userDetails.UnitHeadUserId == null)
+                if (trainingP.UnitHeadUserID == null)
                 {
                     _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(trainingP.HodUserID, payload.UserId, payload.TrainingProvider);
                 }
                 else
                 {
-                    _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(trainingP.HRUserId, payload.UserId, payload.TrainingProvider);
+                    _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(trainingP.UnitHeadUserID, payload.UserId, payload.TrainingProvider);
                 }
 
 
