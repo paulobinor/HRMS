@@ -36,8 +36,8 @@
 //                Username = this.User.Claims.ToList()[2].Value,
 //                UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                Port = Request.HttpContext.Connection.RemotePort.ToString()
 //            };
 
 //            return Ok(await _RescheduleLeaveService.CreateRescheduleLeaveRequest(CreateDto, requester));
@@ -53,8 +53,8 @@
 //                Username = this.User.Claims.ToList()[2].Value,
 //                UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                Port = Request.HttpContext.Connection.RemotePort.ToString()
 //            };
 
 //            return Ok(await _RescheduleLeaveService.ApproveRescheduleLeaveRequest(RescheduleLeaveRequestID, requester));
@@ -70,8 +70,8 @@
 //                Username = this.User.Claims.ToList()[2].Value,
 //                UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                Port = Request.HttpContext.Connection.RemotePort.ToString()
 //            };
 
 //            return Ok(await _RescheduleLeaveService.DisaproveRescheduleLeaveRequest(payload, requester));
@@ -89,8 +89,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _RescheduleLeaveService.GetAllRescheduleLeaveRquest(requester));
@@ -117,8 +117,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _RescheduleLeaveService.GetRescheduleLeaveRequsetById(RescheduleLeaveRequestID,requester));
@@ -146,8 +146,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _RescheduleLeaveService.GetRescheduleLeaveRequsetByUserId(UserId, CompanyId, requester));
@@ -175,8 +175,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _RescheduleLeaveService.GetRescheduleLeaveRequestbyCompanyId(RequestYear, CompanyID, requester));
@@ -204,8 +204,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _RescheduleLeaveService.GetRescheduleLeaveRequestPendingApproval(requester));

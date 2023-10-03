@@ -179,6 +179,20 @@ namespace hrms_be_backend_data.Repository
                 return new User();
             }
         }
+        public async Task<User> GetUserByToken(string Token)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@Token", Token);
+                return await _dapper.Get<User>("sp_get_user_by_token", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AccountRepository => GetUserByToken || {ex}");
+                return new User();
+            }
+        }
         public async Task<IEnumerable<User>> GetAllUsers()
         {
             try
@@ -317,14 +331,13 @@ namespace hrms_be_backend_data.Repository
         }
 
 
-        public async Task<string> AuthenticateUser(string EmailAddress, string HashPassword, int MaximumLoginAttempt, DateTime DateCreated)
+        public async Task<string> AuthenticateUser(string EmailAddress, int MaximumLoginAttempt, DateTime DateCreated)
         {
             try
             {
                 var param = new DynamicParameters();
 
-                param.Add("@EmailAddress", EmailAddress);
-                param.Add("@HashPassword", HashPassword);
+                param.Add("@EmailAddress", EmailAddress);               
                 param.Add("@MaximumLoginAttempt", MaximumLoginAttempt);
                 param.Add("@DateCreated", DateCreated);
               

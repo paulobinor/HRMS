@@ -90,8 +90,7 @@ namespace hrms_be_backend_business.Logic
 
                 var hashPassword = Utils.HashPassword(password);
 
-                var decodedLogin = new LoginModel { OfficialMail = email, Password = hashPassword };
-                var repoResponse = await _accountRepository.AuthenticateUser(email, hashPassword, _appConfig.MaxNumberOfFailedAttemptsToLogin, DateTime.Now);
+                var repoResponse = await _accountRepository.AuthenticateUser(email, _appConfig.MaxNumberOfFailedAttemptsToLogin, DateTime.Now);
                 if (!repoResponse.Contains("Success"))
                 {
                     response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
@@ -100,6 +99,40 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
                 var user = await _accountRepository.FindUser(email);
+                if (user.LoginFailedAttemptsCount >= _appConfig.MaxNumberOfFailedAttemptsToLogin
+                        && user.LastLoginAttemptAt.HasValue
+                        && DateTime.Now < user.LastLoginAttemptAt.Value.AddMinutes(_appConfig.MinutesBeforeResetAfterFailedAttemptsToLogin))
+                {
+                    response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "You account was blocked, please contact admin";
+
+                    return response;
+                }
+
+                var isPasswordMatch = Utils.DoesPasswordMatch(user.PasswordHash, Encoding.UTF8.GetString(Convert.FromBase64String(login.Password)));
+                if (!isPasswordMatch)
+                {
+                    var attemptCount = user.LoginFailedAttemptsCount + 1;
+                    await _unitOfWork.UpdateLastLoginAttempt(attemptCount, user.officialMail);
+
+                    if (attemptCount >= _appConfig.MaxNumberOfFailedAttemptsToLogin)
+                    {
+                        response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"You have exceeded number of attempts. your account has been locked. Please contact admin.";
+                        return response;
+                    }
+
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Invalid Password! You have made {attemptCount} unsuccessful attempt(s). " +
+                                               $"The maximum retry attempts allowed is {_appConfig.MaxNumberOfFailedAttemptsToLogin}. " +
+                                               $"If {_appConfig.MaxNumberOfFailedAttemptsToLogin} is exceeded, then you will be locked out of the system";
+
+                    return response;
+                }
+
+
+
+
                 var authResponse = await _jwtManager.GenerateJsonWebToken(user);
 
                 await _unitOfWork.UpdateUserLoginActivity(user.UserId, ipAddress, authResponse.JwtToken);
@@ -167,33 +200,40 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }
-        public async Task<ExecutedResult<User>> CheckUserAccess(string AccessToken, IEnumerable<Claim> claim, string IpAddress)
+        public async Task<ExecutedResult<User>> CheckUserAccess(string AccessToken, string IpAddress)
         {
             try
             {
-                var validationResponse = await AccessTokenValidation.ValidateToken(AccessToken, _jwt.Key, _jwt.Issuer, _jwt.Audience);
-                if (!validationResponse.Identity.IsAuthenticated)
-                {
-                    return new ExecutedResult<User>() { responseMessage = "Unathorized User", responseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), data = null };
-                }
-                var userIdAuth = claim.Where(x => x.Type == ClaimTypes.Sid).FirstOrDefault();
-                var ssoToken = claim.Where(x => x.Type == ClaimTypes.UserData).FirstOrDefault();
-                var ssoTokenValue = ssoToken.Value.ToString();
-                var userId = Convert.ToInt64(userIdAuth.Value);
+                //var validationResponse = await AccessTokenValidation.ValidateToken(AccessToken, _jwt.Key, _jwt.Issuer, _jwt.Audience);
+                //if (!validationResponse.Identity.IsAuthenticated)
+                //{
+                //    _logger.LogError($"AuthService || (validationResponse)  Unable to valiate token=====>{validationResponse}");
+                //    return new ExecutedResult<User>() { responseMessage = "Unathorized User", responseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), data = null };
+                //}
+                //var userIdAuth = claim.Where(x => x.Type == ClaimTypes.Sid).FirstOrDefault();
+              
                 var userAccess = await _accountRepository.VerifyUser(AccessToken, IpAddress, DateTime.Now);
                 if (!userAccess.Contains("Success"))
                 {
+                    _logger.LogError($"AuthService || (VerifyUser)  Unable to verify access =====>{userAccess}");
                     return new ExecutedResult<User>() { responseMessage = "Unathorized User", responseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), data = null };
                 }
-                var userData = await _accountRepository.GetUserById(Convert.ToInt64(userId));
+                var userData = await _accountRepository.GetUserByToken(AccessToken);
                 if (userData == null)
                 {
+                    _logger.LogError($"AuthService || (GetUserById)  Unable to get user details =====>");
                     return new ExecutedResult<User>() { responseMessage = ResponseCode.AuthorizationError.ToString(), responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
-                }
-                if (ssoTokenValue != userData.Token)
+                }             
+                if (userData.IsDeactivated)
                 {
+                    _logger.LogError($"AuthService || User has been deactivated");
                     return new ExecutedResult<User>() { responseMessage = ResponseCode.AuthorizationError.ToString(), responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
                 }
+                //if (userData.LoggedInWithIPAddress != IpAddress)
+                //{
+                //    _logger.LogError($"AuthService || User IP Address does not match");
+                //    return new ExecutedResult<User>() { responseMessage = ResponseCode.AuthorizationError.ToString(), responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                //}
 
                 return new ExecutedResult<User>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = userData };
             }

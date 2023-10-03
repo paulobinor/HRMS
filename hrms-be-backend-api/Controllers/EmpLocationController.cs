@@ -38,8 +38,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _EmpLocationService.CreateEmpLocation(EmplocationDto, requester));
@@ -66,8 +66,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _EmpLocationService.UpdateEmpLocation(updateDto, requester));
@@ -94,8 +94,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _EmpLocationService.DeleteEmpLocation(deleteDto, requester));
@@ -122,8 +122,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _EmpLocationService.GetAllActiveEmpLocation(requester));
@@ -151,8 +151,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _EmpLocationService.GetAllEmpLocation(requester));
@@ -179,8 +179,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _EmpLocationService.GetEmpLocationbyId(EmpLocationID, requester));
@@ -208,8 +208,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _EmpLocationService.GetEmpLocationbyCompanyId(CompanyID, requester));

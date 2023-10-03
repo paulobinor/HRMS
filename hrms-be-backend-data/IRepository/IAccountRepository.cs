@@ -10,6 +10,7 @@ namespace hrms_be_backend_data.IRepository
         Task<dynamic> UpdateUser(UpdateUserDto user, int updatedbyUserId, string updatedbyuseremail);
         Task<dynamic> MapUserToDepartment(string email, long deptId, long CompId, int updatedbyUserId);
 
+        Task<User> GetUserByToken(string Token);
         Task<User> GetUserById(long Id);
         Task<IEnumerable<User>> GetAllUsers();
 
@@ -18,7 +19,7 @@ namespace hrms_be_backend_data.IRepository
         Task<IEnumerable<User>> GetAllUsersbyRoleID(long RoleId);
         Task<IEnumerable<User>> GetAllUsersbyCompanyId(long companyId);
         Task<IEnumerable<User>> GetUsersPendingApproval(long CompanyId);
-        Task<string> AuthenticateUser(string EmailAddress, string HashPassword, int MaximumLoginAttempt, DateTime DateCreated);
+        Task<string> AuthenticateUser(string EmailAddress, int MaximumLoginAttempt, DateTime DateCreated);
         Task<string> VerifyUser(string Token, string LoggedInWithIPAddress, DateTime DateCreated);
         Task<dynamic> ApproveUser(long approvedByuserId, string defaultPass, string userEmail);
         Task<dynamic> DeclineUser(long disapprovedByuserId, string officialMail, string comment);

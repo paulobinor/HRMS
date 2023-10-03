@@ -41,8 +41,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _HODService.CreateHOD(hodDto, requester));
@@ -69,8 +69,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _HODService.CreateHODBulkUpload(payload, requester));
@@ -97,8 +97,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _HODService.UpdateHOD(updateDto, requester));
@@ -125,8 +125,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _HODService.DeleteHOD(deleteDto, requester));
@@ -153,8 +153,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _HODService.GetAllActiveHOD(requester));
@@ -182,8 +182,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _HODService.GetAllHOD(requester));
@@ -210,8 +210,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _HODService.GetHODbyId(HodID, requester));
@@ -240,8 +240,8 @@
 //                    Username = this.User.Claims.ToList()[2].Value,
 //                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
 //                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-//                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-//                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+//                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+//                    Port = Request.HttpContext.Connection.RemotePort.ToString()
 //                };
 
 //                return Ok(await _HODService.GetHODbyCompanyId(CompanyID, requester));

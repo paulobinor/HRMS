@@ -8,6 +8,14 @@ namespace hrms_be_backend_common.DTO
         public string EarningsName { get; set; }
         public List<EarningsItemsDto> EarningItems { get; set; }
     }
+    public class EarningsUpdateDto
+    {
+        [Required]
+        public long EarningsId { get; set; }
+        [Required]
+        public string EarningsName { get; set; }
+        public List<EarningsItemsDto> EarningItems { get; set; }
+    }
     public class EarningsItemsDto
     {
         [Required]

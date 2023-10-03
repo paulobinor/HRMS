@@ -5,6 +5,7 @@ using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
 using iText.StyledXmlParser.Jsoup.Helper;
 using Microsoft.Extensions.Logging;
@@ -23,33 +24,31 @@ namespace hrms_be_backend_business.Logic
     {
         private readonly ILogger<EarningsService> _logger;
         private readonly IEarningsRepository _earningsRepository;
+        private readonly IDeductionsRepository _deductionsRepository;
         private readonly IAuthService _authService;
         private readonly IMailService _mailService;
         private readonly JwtConfig _jwt;
         private readonly IAuditLog _audit;
-        public EarningsService(IOptions<JwtConfig> jwt, ILogger<EarningsService> logger, IEarningsRepository earningsRepository, IAuditLog audit)
+        public EarningsService(IOptions<JwtConfig> jwt, ILogger<EarningsService> logger, IEarningsRepository earningsRepository, IDeductionsRepository deductionsRepository, IAuditLog audit, IAuthService authService)
         {
             _logger = logger;
             _earningsRepository = earningsRepository;
+            _deductionsRepository = deductionsRepository;
             _jwt = jwt.Value;
             _audit = audit;
+            _authService = authService;
         }
         public async Task<ExecutedResult<string>> CreateEarning(EarningsCreateDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
 
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
-                }
-                //var validateAuthorization = await _usersRepository.CheckXpressUserAuthorization(AppOperationsData.Bank_Management, XpressUserPriviledgeData.Maker, accessUser.data.UserId);
-                //if (!validateAuthorization.Contains("Success"))
-                //{
-                //    return new ExecutedResult<string>() { responseMessage = validateAuthorization, responseCode = ((int)ResponseCode.NO_PRIVILEDGE).ToString(), data = null };
-                //}
+                }               
                 bool isModelStateValidate = true;
                 string validationMessage = "";
 
@@ -116,22 +115,18 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-        public async Task<ExecutedResult<string>> UpdateEarning(EarningsCreateDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        public async Task<ExecutedResult<string>> UpdateEarning(EarningsUpdateDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
 
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
                 }
-                //var validateAuthorization = await _usersRepository.CheckXpressUserAuthorization(AppOperationsData.Bank_Management, XpressUserPriviledgeData.Maker, accessUser.data.UserId);
-                //if (!validateAuthorization.Contains("Success"))
-                //{
-                //    return new ExecutedResult<string>() { responseMessage = validateAuthorization, responseCode = ((int)ResponseCode.NO_PRIVILEDGE).ToString(), data = null };
-                //}
+             
                 bool isModelStateValidate = true;
                 string validationMessage = "";
 
@@ -155,8 +150,9 @@ namespace hrms_be_backend_business.Logic
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
-                    EarningsName = payload.EarningsName,
-                    IsModification = false,
+                    EarningsName = payload.EarningsName,                    
+                    IsModification = true,
+                    EarningsId = payload.EarningsId,
                 };
                 string repoResponse = await _earningsRepository.ProcessEarnings(repoPayload);
                 if (!repoResponse.Contains("Success"))
@@ -194,13 +190,13 @@ namespace hrms_be_backend_business.Logic
                 };
                 await _audit.LogActivity(auditLog);
 
-                return new ExecutedResult<string>() { responseMessage = "Created Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
 
 
             }
             catch (Exception ex)
             {
-                _logger.LogError($"EarningsService (CreateEarning)=====>{ex}");
+                _logger.LogError($"EarningsService (UpdateEarning)=====>{ex}");
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
@@ -209,7 +205,7 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -273,51 +269,39 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-        public async Task<ExecutedResult<IEnumerable<EarningsView>>> GetEarnings(string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+      
+        public async Task<ExecutedResult<EarningsView>> GetEarnings(string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
-                if (accessUser.data == null)
-                {
-                    return new ExecutedResult<IEnumerable<EarningsView>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
-
-                }
-                var result = await _earningsRepository.GetEarnings(accessUser.data.CompanyId);
-                var earningsView = new List<EarningsView>();
-                foreach (var item in result)
-                {
-                    var computations=await _earningsRepository.GetEarningsComputation(item.EarningsId);
-                    earningsView.Add(new EarningsView
-                    {
-                        CreatedByUserId = item.CreatedByUserId,
-                        DateCreated = item.DateCreated,
-                        EarningsId = item.EarningsId,
-                        EarningsName = item.EarningsName,
-                        EarningsComputations = computations,
-                    });
-                }
-                return new ExecutedResult<IEnumerable<EarningsView>>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = earningsView };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"EarningsService (GetEarnings)=====>{ex}");
-                return new ExecutedResult<IEnumerable<EarningsView>>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
-            }
-        }
-        public async Task<ExecutedResult<EarningsView>> GetEarningsById(long Id, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
-        {
-            try
-            {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<EarningsView>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
                 }
-                var result = await _earningsRepository.GetEarningsById(Id);
-               
+                var result = await _earningsRepository.GetEarnings(accessUser.data.CompanyId);
+                if (result==null)
+                {
+                    return new ExecutedResult<EarningsView>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                }
+                if (result.EarningsId <1)
+                {
+                    return new ExecutedResult<EarningsView>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                }
                 var computations = await _earningsRepository.GetEarningsComputation(result.EarningsId);
+                var cra = await _earningsRepository.GetEarningsCRA(accessUser.data.CompanyId);
+               
+                var deductions = await _deductionsRepository.GetDeduction(accessUser.data.CompanyId);
+               StringBuilder restatedGross = new StringBuilder();
+                restatedGross.Append("Gross ");
+                foreach (var deduction in deductions)
+                {
+                    restatedGross.Append($" - {deduction.DeductionName}");
+                }
+                string craDetails = $"{cra.EarningsCRAPercentage}% * RestatedGross <br/><br/> OR <br/><br/>";
+                craDetails = $"Higher of {cra.EarningsCRAHigherOfPercentage}% * RestatedGross or {cra.EarningsCRAHigherOfValue.ToString("0,0.00")}";
+
                 var earningsView = new EarningsView
                 {
                     CreatedByUserId = result.CreatedByUserId,
@@ -325,12 +309,14 @@ namespace hrms_be_backend_business.Logic
                     EarningsId = result.EarningsId,
                     EarningsName = result.EarningsName,
                     EarningsComputations = computations,
+                    EarningsCRA = craDetails,
+                    RestatedGross = restatedGross.ToString()
                 };
                 return new ExecutedResult<EarningsView>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = earningsView };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"EarningsService (GetEarningsById)=====>{ex}");
+                _logger.LogError($"EarningsService (GetEarning)=====>{ex}");
                 return new ExecutedResult<EarningsView>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
@@ -338,10 +324,10 @@ namespace hrms_be_backend_business.Logic
 
         public async Task<ExecutedResult<string>> CreateEarningItem(EarningsItemCreateDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-
+            _logger.LogError($"EarningsService (AccessKey)=====>{AccessKey} || RemoteIpAddress {RemoteIpAddress}");
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -408,7 +394,7 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -476,7 +462,7 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -544,7 +530,7 @@ namespace hrms_be_backend_business.Logic
         {
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<IEnumerable<EarningsItemVm>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
@@ -563,7 +549,7 @@ namespace hrms_be_backend_business.Logic
         {
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, claim, RemoteIpAddress);
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<EarningsItemVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };

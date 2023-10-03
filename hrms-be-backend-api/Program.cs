@@ -91,6 +91,8 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
+
+
 // Auto Mapper Configurations
 var mappingConfig = new MapperConfiguration(mc =>
 {
@@ -102,7 +104,7 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.Configure<JwtConfig>(options => builder.Configuration.GetSection("Jwt").Bind(options));
-builder.Services.Configure<AppConfig>(options => builder.Configuration.GetSection("AppSetting").Bind(options));
+builder.Services.Configure<AppConfig>(options => builder.Configuration.GetSection("AppConfig").Bind(options));
 builder.Services.Configure<Smtp>(options => builder.Configuration.GetSection("Smtp").Bind(options));
 builder.Services.Configure<DocumentConfig>(options => builder.Configuration.GetSection("DocumentConfig").Bind(options));
 builder.Services.Configure<ImageDocumentConfig>(options => builder.Configuration.GetSection("ImageDocumentConfig").Bind(options));
@@ -148,11 +150,13 @@ builder.Services.AddScoped<IReviwerRepository, ReviwerRepository>();
 builder.Services.AddScoped<IReviwerRoleRepository, ReviwerRoleRepository>();
 builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
 builder.Services.AddScoped<IEarningsRepository, EarningsRepository>();
-
-
+builder.Services.AddScoped<IDeductionsRepository, DeductionsRepository>();
+builder.Services.AddScoped<ITaxRepository, TaxRepository>();
 
 builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 builder.Services.AddScoped<IEarningsService, EarningsService>();
+builder.Services.AddScoped<IDeductionsService, DeductionsService>();
+builder.Services.AddScoped<ITaxService, TaxService>();
 
 //VacationModul
 builder.Services.AddScoped<IGradeLeaveRepo, GradeLeaveRepo>();

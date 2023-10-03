@@ -22,6 +22,7 @@ namespace hrms_be_backend_business.AppCode
             }
             catch (NullReferenceException)
             {
+
                 return Task.FromResult<IPrincipal>(null);
             }
         }

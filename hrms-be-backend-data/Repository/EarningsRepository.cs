@@ -60,18 +60,18 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
-        public async Task<List<EarningsVm>> GetEarnings(long CompanyId)
+        public async Task<EarningsVm> GetEarnings(long CompanyId)
         {           
             try
             {
                 var param = new DynamicParameters();
                 param.Add("@CompanyId", CompanyId);              
-                return await _dapper.GetAll<EarningsVm>("sp_get_earnings", param, commandType: CommandType.StoredProcedure);
+                return await _dapper.Get<EarningsVm>("sp_get_earnings", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"EarningsRepository -> GetEarnings => {ex}");
-                return new List<EarningsVm>();
+                return new EarningsVm();
             }
 
         }
@@ -198,6 +198,22 @@ namespace hrms_be_backend_data.Repository
             {
                 _logger.LogError($"EarningsRepository -> GetEarningsItemById => {ex}");
                 return new EarningsItemVm();
+            }
+
+        }
+
+        public async Task<EarningsCRAVm> GetEarningsCRA(long CompanyId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@CompanyId", CompanyId);
+                return await _dapper.Get<EarningsCRAVm>("sp_get_earning_cra", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EarningsRepository -> GetEarningsCRA => {ex}");
+                return new EarningsCRAVm();
             }
 
         }

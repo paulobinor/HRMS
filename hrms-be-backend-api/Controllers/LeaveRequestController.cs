@@ -29,8 +29,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 Username = this.User.Claims.ToList()[2].Value,
                 UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                 RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                Port = Request.HttpContext.Connection.LocalPort.ToString()
+                IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                Port = Request.HttpContext.Connection.RemotePort.ToString()
             };
 
             return Ok(await _leaveRequestService.CreateLeaveRequest(CreateDto, requester));
@@ -48,8 +48,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _leaveRequestService.RescheduleLeaveRequest(updateDto, requester));
@@ -73,8 +73,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 Username = this.User.Claims.ToList()[2].Value,
                 UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                 RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                Port = Request.HttpContext.Connection.LocalPort.ToString()
+                IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                Port = Request.HttpContext.Connection.RemotePort.ToString()
             };
 
             return Ok(await _leaveRequestService.ApproveLeaveRequest(LeaveRequestID, requester));
@@ -89,8 +89,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 Username = this.User.Claims.ToList()[2].Value,
                 UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                 RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                Port = Request.HttpContext.Connection.LocalPort.ToString()
+                IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                Port = Request.HttpContext.Connection.RemotePort.ToString()
             };
 
             return Ok(await _leaveRequestService.DisaproveLeaveRequest(payload, requester));
@@ -108,8 +108,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _leaveRequestService.GetAllLeaveRquest(requester));
@@ -136,8 +136,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _leaveRequestService.GetLeaveRequsetById(LeaveRequestID,  requester));
@@ -165,8 +165,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _leaveRequestService.GetLeaveRequsetByUerId(UserId, CompanyId, requester));
@@ -194,8 +194,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _leaveRequestService.GetLeaveRquestbyCompanyId(RequestYear,CompanyID, requester));
@@ -222,8 +222,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _leaveRequestService.GetLeaveRequestPendingApproval(requester));
