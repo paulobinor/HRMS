@@ -120,7 +120,9 @@ builder.Services.AddTransient<ITokenRefresher, TokenRefresher>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<ICompanyAppModuleRepository, CompanyAppModuleRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<IDepartmentalModulesRepository, DepartmentalModulesRepository>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
 builder.Services.AddScoped<IHODRepository, HODRepository>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
@@ -169,7 +171,9 @@ builder.Services.AddScoped<IResignationClearanceRepository, ResignationClearance
 
 //OnboardingModule
 builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddScoped<ICompanyAppModuleService, CompanyAppModuleService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IDepartmentalModulesService, DepartmentalModulesService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBranchService, BranchService>();
 builder.Services.AddScoped<IHODService, HODService>();

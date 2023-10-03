@@ -1,4 +1,5 @@
 ﻿using hrms_be_backend_business.ILogic;
+using hrms_be_backend_business.Logic;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
@@ -24,7 +25,7 @@ namespace hrms_be_backend_api.Controllers
         [Authorize]
         public async Task<IActionResult> CreateCompany([FromBody] CreateCompanyDto CompanyDto)
         {
-            var response = new BaseResponse();
+            var response =  new BaseResponse();
             try
             {
                 var requester = new RequesterInfo

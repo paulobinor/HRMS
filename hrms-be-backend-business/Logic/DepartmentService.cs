@@ -25,11 +25,12 @@ namespace hrms_be_backend_business.Logic
         private readonly IHODRepository _hODRepository;
         private readonly IGroupRepository _GroupRepository;
         private readonly IBranchRepository _branchRepository;
+        private readonly IDepartmentalModulesService _departmentalModulesService;
         
 
         public DepartmentService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<DepartmentService> logger,
             IDepartmentRepository departmentRepository, IAuditLog audit, IMapper mapper, ICompanyRepository companyrepository,
-            IHODRepository hODRepository, IGroupRepository groupRepository, IBranchRepository branchRepository)
+            IHODRepository hODRepository, IGroupRepository groupRepository, IBranchRepository branchRepository, IDepartmentalModulesService departmentalModulesService)
         {
             _audit = audit;
             _mapper = mapper;
@@ -41,6 +42,7 @@ namespace hrms_be_backend_business.Logic
             _hODRepository = hODRepository;
             _GroupRepository    = groupRepository;
             _branchRepository = branchRepository;
+            _departmentalModulesService = departmentalModulesService;
         }
 
         public async Task<BaseResponse> CreateDepartment(CreateDepartmentDto DepartmentDto, RequesterInfo requester)
@@ -130,6 +132,18 @@ namespace hrms_be_backend_business.Logic
                     //update action performed into audit log here
 
                     var Department = await _departmentrepository.GetDepartmentByName(DepartmentDto.DepartmentName);
+
+                    //Create Departmental Moduels
+                    if(DepartmentDto.AppModules != null && DepartmentDto.AppModules.Count > 0)
+                    {
+                        var creatDepartmentalModuleReq = new CreateDepartmentalModuleDTO
+                        {
+                            DepartmentId = Department.DeptId,
+                            AppModuleId = DepartmentDto.AppModules,
+                        };
+                        var createDepartmentalModuleResp = await _departmentalModulesService.CreateDepartmentalAppModule(creatDepartmentalModuleReq, requester);
+                    }
+                   
 
                     response.Data = Department;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');

@@ -1801,30 +1801,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\peter.omolayo\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
-    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {},
+    "C:\\Users\\abiola.olatunji\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj",
+      "projectUniqueName": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj",
       "projectName": "hrms-be-backend-data",
-      "projectPath": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj",
-      "packagesPath": "C:\\Users\\peter.omolayo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-data\\obj\\",
+      "projectPath": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj",
+      "packagesPath": "C:\\Users\\abiola.olatunji\\.nuget\\packages\\",
+      "outputPath": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-data\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\peter.omolayo\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Users\\abiola.olatunji\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
