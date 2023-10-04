@@ -150,11 +150,20 @@ builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
 builder.Services.AddScoped<IEarningsRepository, EarningsRepository>();
 builder.Services.AddScoped<IDeductionsRepository, DeductionsRepository>();
 builder.Services.AddScoped<ITaxRepository, TaxRepository>();
+builder.Services.AddScoped<IPayrollRepository, PayrollRepository>();
 
 builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 builder.Services.AddScoped<IEarningsService, EarningsService>();
 builder.Services.AddScoped<IDeductionsService, DeductionsService>();
 builder.Services.AddScoped<ITaxService, TaxService>();
+builder.Services.AddScoped<IPayrollService, PayrollService>();
+builder.Services.AddSingleton<IUriService>(o =>
+{
+    var accessor = o.GetRequiredService<IHttpContextAccessor>();
+    var request = accessor.HttpContext.Request;
+    var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+    return new UriService(uri);
+});
 
 //VacationModul
 builder.Services.AddScoped<IGradeLeaveRepo, GradeLeaveRepo>();
