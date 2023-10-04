@@ -43,6 +43,21 @@ namespace hrms_be_backend_data.RepoPayload
 
     }
 
+
+    public class CreateAdminUserDto
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public long RoleId { get; set; }
+        public long CompanyId { get; set; }
+        public long DepartmentId { get; set; }
+
+    }
+
+
+
+
     public class CreateUserResponse
     {
         public string ExecMessage { get; set; }
