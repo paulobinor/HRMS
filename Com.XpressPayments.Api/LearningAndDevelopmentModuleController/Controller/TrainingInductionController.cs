@@ -100,7 +100,7 @@ namespace Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controll
 
         [HttpPost("ApproveTrainingInduction")]
         [Authorize]
-        public async Task<IActionResult> ApproveTrainingInduction([FromBody] long TrainingInductionID)
+        public async Task<IActionResult> ApproveTrainingInduction([FromBody] TrainingInductionApproved payload)
         {
             var response = new BaseResponse();
             var requester = new RequesterInfo
@@ -112,7 +112,7 @@ namespace Com.XpressPayments.Api.LearningAndDevelopmentModuleController.Controll
                 Port = Request.HttpContext.Connection.LocalPort.ToString()
             };
 
-            return Ok(await _trainingInductionService.ApproveTrainingInduction(TrainingInductionID, requester));
+            return Ok(await _trainingInductionService.ApproveTrainingInduction(payload, requester));
         }
 
         [HttpPost("DisaproveTrainingInduction")]

@@ -13,7 +13,7 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
         Task<BaseResponse> CreateTrainingInduction(TrainingInductionCreate payload, RequesterInfo requester);
         Task<BaseResponse> UpdateTrainingInduction(TrainingInductionUpdate payload, RequesterInfo requester);
         Task<BaseResponse> DeleteTrainingInduction(TrainingInductionDelete payload, RequesterInfo requester);
-        Task<BaseResponse> ApproveTrainingInduction(long TrainingInductionID, RequesterInfo requester);
+        Task<BaseResponse> ApproveTrainingInduction(TrainingInductionApproved payload, RequesterInfo requester);
         Task<BaseResponse> DisaproveTrainingInduction(TrainingInductionDisapproved payload, RequesterInfo requester);
         Task<BaseResponse> GetAllTrainingInduction(RequesterInfo requester);
         Task<BaseResponse> GetAllActiveTrainingInduction(RequesterInfo requester);

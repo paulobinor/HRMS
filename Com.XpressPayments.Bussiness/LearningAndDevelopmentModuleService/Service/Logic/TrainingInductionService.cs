@@ -86,14 +86,32 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
                     return response;
                 }
 
-                var repoResponse = await _trainingInductionRepository.CreateTrainingInduction(payload, requester.Username);
-                if (!repoResponse.Contains("Success"))
+
+                var createdTrainingInductionID = await _trainingInductionRepository.CreateTrainingInduction(payload, requester.Username);
+                if (createdTrainingInductionID < 0)
                 {
                     response.ResponseCode = "08";
-                    response.ResponseMessage = repoResponse;
+                    response.ResponseMessage = "Error occured";
                     return response;
                 }
-             
+
+
+                var trainingInduction = await _trainingInductionRepository.GetTrainingInductionById(createdTrainingInductionID);
+
+
+                //Send mail to HCM
+                _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(trainingInduction.HRUserId, payload.UserID, payload.TrainingProvider);
+
+                //Send mail to Hod/UnitHead
+                if (trainingInduction.UnitHeadUserID == null)
+                {
+                    _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(trainingInduction.HodUserID, payload.UserID, payload.TrainingProvider);
+                }
+                else
+                {
+                    _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(trainingInduction.UnitHeadUserID, payload.UserID, payload.TrainingProvider);
+                }
+
                 response.Data = payload;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = "Training Induction created successfully.";
@@ -185,26 +203,39 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
         }
 
 
-        public async Task<BaseResponse> ApproveTrainingInduction(long TrainingInductionID, RequesterInfo requester)
+        public async Task<BaseResponse> ApproveTrainingInduction(TrainingInductionApproved payload, RequesterInfo requester)
         {
-            //check if us
-            StringBuilder errorOutput = new StringBuilder();
+            var trainingInductionDetail = await _trainingInductionRepository.GetTrainingInductionById(payload.TrainingInductionID);
+            if (trainingInductionDetail == null)
+            {
+                return SetErrorResponse("training Induction not found.");
+            }
+            var userDetails = await _accountRepository.FindUser(trainingInductionDetail.UserId);
+
             var response = new BaseResponse();
+
             try
             {
-                if (Convert.ToInt32(requester.RoleId) != 2)
+
+                if (userDetails == null)
                 {
-                    if (Convert.ToInt32(requester.RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
-
+                    return SetErrorResponse("User details not found.");
                 }
 
-                var repoResponse = await _trainingInductionRepository.ApproveTrainingInduction(TrainingInductionID, requester.UserId);
+                if (payload.UserID != userDetails.HODUserId && payload.UserID != userDetails.UnitHeadUserId)
+                {
+                    if (trainingInductionDetail.IsHodApproved && !trainingInductionDetail.IsUnitHeadApproved)
+                    {
+                        return SetErrorResponse("This hasn't been approved by Staff's HOD/Unit-Head");
+                    }
+                    else if (Convert.ToInt32(requester.RoleId) != 4)
+                    {
+                        return SetErrorResponse("Your role is not authorized to carry out this action.");
+                    }
+                }
+
+                var repoResponse = await _trainingInductionRepository.ApproveTrainingInduction(payload.TrainingInductionID, payload.UserID);
+
                 if (!repoResponse.Contains("Success"))
                 {
                     response.ResponseCode = "08";
@@ -212,51 +243,58 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
                     return response;
                 }
 
-                var trainingInductionDetail = await _trainingInductionRepository.GetTrainingInductionById(TrainingInductionID);
-
-                var userDetails = await _accountRepository.FindUser(trainingInductionDetail.UserId);
-
-                //Send mail to requester
-                _learningAndDevelopmentmailService.SendTrainingPlanApproveConfirmationMail(trainingInductionDetail.UserId, requester.UserId, trainingInductionDetail.TrainingTitle);
+                // Send mail to requester
+                _learningAndDevelopmentmailService.SendTrainingPlanApproveConfirmationMail(trainingInductionDetail.UserId, requester.UserId, trainingInductionDetail.TrainingProvider);
 
                 response.ResponseCode = "00";
-                response.ResponseMessage = "Record inserted successfully";
+                response.ResponseMessage = "Approved successfully";
                 return response;
-
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Exception Occured ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Exception occured";
-                response.Data = null;
-
-
-
-                return response;
+                return SetErrorResponse("Exception occurred");
             }
+        }
+
+        // Helper method to set error responses
+        private BaseResponse SetErrorResponse(string message)
+        {
+            var response = new BaseResponse
+            {
+                ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'),
+                ResponseMessage = message,
+                Data = null
+            };
+            return response;
         }
 
         public async Task<BaseResponse> DisaproveTrainingInduction(TrainingInductionDisapproved payload, RequesterInfo requester)
         {
             //check if us
-            StringBuilder errorOutput = new StringBuilder();
+
+            var trainingInductionDetail = await _trainingInductionRepository.GetTrainingInductionById(payload.TrainingInductionID);
+            var userDetails = await _accountRepository.FindUser(trainingInductionDetail.UserId);
+
             var response = new BaseResponse();
             try
             {
-                if (Convert.ToInt32(requester.RoleId) != 2)
+                // int requesterUserId = Convert.ToInt32(requester.UserId);
+
+                if (userDetails == null)
+                {
+                    return SetErrorResponse("User details not found.");
+                }
+
+                if (payload.UserID != userDetails.HODUserId && payload.UserID != userDetails.UnitHeadUserId)
                 {
                     if (Convert.ToInt32(requester.RoleId) != 4)
                     {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
+                        return SetErrorResponse("Your role is not authorized to carry out this action.");
                     }
-
                 }
 
-                var repoResponse = await _trainingInductionRepository.DisaproveTrainingInduction(payload.TrainingInductionID, requester.UserId, payload.Reasons_For_Disapprove);
+                var repoResponse = await _trainingInductionRepository.DisaproveTrainingInduction(payload.TrainingInductionID, payload.UserID, payload.Reasons_For_Disapprove);
                 if (!repoResponse.Contains("Success"))
                 {
                     response.ResponseCode = "08";
@@ -264,21 +302,13 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
                     return response;
                 }
 
-                var trainingPlanDetails = await _trainingInductionRepository.GetTrainingInductionById(payload.TrainingInductionID);
-
-                var userDetails = await _accountRepository.FindUser(trainingPlanDetails.UserId);
 
                 //Send mail to requester
-                _learningAndDevelopmentmailService.SendTrainingPlanDisapproveConfirmationMail(trainingPlanDetails.UserId, requester.UserId);
+                _learningAndDevelopmentmailService.SendTrainingPlanDisapproveConfirmationMail(trainingInductionDetail.UserId, requester.UserId);
 
-                //Send mail to approval
-                //if (!trainingPlanDetails.IsHodApproved)
-                //{
-                //    _learningAndDevelopmentmailService.SendTrainingPlanDisapproveConfirmationMail(userDetails.HODUserId, trainingPlanDetails.UserId);
-                //}
 
                 response.ResponseCode = "00";
-                response.ResponseMessage = "Record inserted successfully";
+                response.ResponseMessage = "Disapproved successfully";
                 return response;
 
             }

@@ -9,7 +9,7 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingInduc
 {
     public interface ITrainingInductionRepository
     {
-        Task<string> CreateTrainingInduction(TrainingInductionCreate TrainingInduction, string createdbyUserEmail);
+        Task<dynamic> CreateTrainingInduction(TrainingInductionCreate TrainingInduction, string createdbyUserEmail);
         Task<dynamic> UpdateTrainingInduction(TrainingInductionUpdate TrainingInduction, string updatedbyUserEmail);
         Task<IEnumerable<TrainingInductionDTO>> GetAllTrainingInduction();
         Task<IEnumerable<TrainingInductionDTO>> GetAllActiveTrainingInduction();

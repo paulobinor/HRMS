@@ -92,20 +92,20 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
                 //var AllHr = await _accountRepository.GetAllUsersbyRoleID(4);
                 //var HrDetails = AllHr.FirstOrDefault();
 
-                var trainingP = await _trainingPlanRepository.GetTrainingPlanById(createdTrainingPlanID);
+                var trainingPlan = await _trainingPlanRepository.GetTrainingPlanById(createdTrainingPlanID);
 
 
                 //Send mail to HCM
-                _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(trainingP.HRUserId, payload.UserId, payload.TrainingProvider);
+                _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(trainingPlan.HRUserId, payload.UserId, payload.TrainingProvider);
 
                 //Send mail to Hod/UnitHead
-                if (trainingP.UnitHeadUserID == null)
+                if (trainingPlan.UnitHeadUserID == null)
                 {
-                    _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(trainingP.HodUserID, payload.UserId, payload.TrainingProvider);
+                    _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(trainingPlan.HodUserID, payload.UserId, payload.TrainingProvider);
                 }
                 else
                 {
-                    _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(trainingP.UnitHeadUserID, payload.UserId, payload.TrainingProvider);
+                    _learningAndDevelopmentmailService.SendTrainingPlanApprovalMailToApprover(trainingPlan.UnitHeadUserID, payload.UserId, payload.TrainingProvider);
                 }
 
 
@@ -201,20 +201,23 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
         public async Task<BaseResponse> ApproveTrainingPlan(TrainingPlanApproved payload, RequesterInfo requester)
         {
             var trainingPlanDetail = await _trainingPlanRepository.GetTrainingPlanById(payload.TrainingPlanID);
+            if (trainingPlanDetail == null)
+            {
+                return SetErrorResponse("training plan not found.");
+            }
             var userDetails = await _accountRepository.FindUser(trainingPlanDetail.UserId);
 
             var response = new BaseResponse();
 
             try
             {
-                int requesterUserId = Convert.ToInt32(requester.UserId);
-
+             
                 if (userDetails == null)
                 {
                     return SetErrorResponse("User details not found.");
                 }
 
-                if (requesterUserId != userDetails.HODUserId && requesterUserId != userDetails.UnitHeadUserId)
+                if (payload.UserId != userDetails.HODUserId && payload.UserId != userDetails.UnitHeadUserId)
                 {
                     if (trainingPlanDetail.IsHodApproved && !trainingPlanDetail.IsUnitHeadApproved)
                     {
@@ -226,7 +229,7 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
                     }
                 }
 
-                var repoResponse = await _trainingPlanRepository.ApproveTrainingPlan(payload.TrainingPlanID, requester.UserId);
+                var repoResponse = await _trainingPlanRepository.ApproveTrainingPlan(payload.TrainingPlanID, payload.UserId);
 
                 if (!repoResponse.Contains("Success"))
                 {
@@ -271,14 +274,14 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
             var response = new BaseResponse();
             try
             {
-                int requesterUserId = Convert.ToInt32(requester.UserId);
+               // int requesterUserId = Convert.ToInt32(requester.UserId);
 
                 if (userDetails == null)
                 {
                     return SetErrorResponse("User details not found.");
                 }
 
-                if (requesterUserId != userDetails.HODUserId && requesterUserId != userDetails.UnitHeadUserId)
+                if (payload.UserId != userDetails.HODUserId && payload.UserId != userDetails.UnitHeadUserId)
                 {
                     if (Convert.ToInt32(requester.RoleId) != 4)
                     {
@@ -286,7 +289,7 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
                     }
                 }
 
-                var repoResponse = await _trainingPlanRepository.DisaproveTrainingPlan(payload.TrainingPlanID, requester.UserId, payload.Reasons_For_Disapprove);
+                var repoResponse = await _trainingPlanRepository.DisaproveTrainingPlan(payload.TrainingPlanID, payload.UserId, payload.Reasons_For_Disapprove);
                 if (!repoResponse.Contains("Success"))
                 {
                     response.ResponseCode = "08";

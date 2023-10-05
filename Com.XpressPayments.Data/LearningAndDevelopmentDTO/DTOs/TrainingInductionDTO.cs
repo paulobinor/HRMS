@@ -23,6 +23,9 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs
         public long UnitHeadUserID { get; set; }
         public long HodUserID { get; set; }
         public long HrUserID { get; set; }
+        public bool IsHodApproved { get; set; }
+        public bool IsUnitHeadApproved { get; set; }
+        public bool IsHrApproved { get; set; }
         public DateTime Created_Date { get; set; }
         public string Created_By_User_Email { get; set; }
 
@@ -69,9 +72,15 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs
         public string Updated_By_User_Email { get; set; }
 
     }
+    public class TrainingInductionApproved
+    {
+        public long TrainingInductionID { get; set; }
+        public long UserID { get; set; }
+    }
     public class TrainingInductionDisapproved
     {
         public long TrainingInductionID { get; set; }
+        public long UserID { get; set; }
         public string Reasons_For_Disapprove { get; set; }
     }
     public class TrainingInductionDelete

@@ -95,10 +95,12 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentDTO.DTOs
     public class TrainingPlanApproved
     {
         public long TrainingPlanID { get; set; }
+        public long UserId { get; set; }
     }
     public class TrainingPlanDisapproved
     {
         public long TrainingPlanID { get; set; }
+        public long UserId { get; set; }
         public string Reasons_For_Disapprove { get; set; }
     }
     public class TrainingPlanDelete
