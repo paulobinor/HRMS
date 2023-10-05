@@ -1,10 +1,9 @@
 ﻿namespace hrms_be_backend_data.RepoPayload
 {
-    public class ApproveResignationInterviewDTO
+    public class DisapprovePendingResignationClearanceDTO
     {
         public long userID { get; set; }
-        public bool isApproved { get; set; }
         public long ID { get; set; }
-
+        public string reason { get; set; }
     }
 }

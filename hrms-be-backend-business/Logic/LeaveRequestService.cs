@@ -13,7 +13,7 @@ namespace hrms_be_backend_business.Logic
     {
         private readonly IAuditLog _audit;
 
-        private readonly ILogger<LeaveRequestService> _logger;       
+        private readonly ILogger<LeaveRequestService> _logger;
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
         private readonly ILeaveRequestRepository _leaveRequestRepository;
@@ -24,7 +24,7 @@ namespace hrms_be_backend_business.Logic
         {
             _audit = audit;
             _mailService = mailService;
-            _logger = logger;           
+            _logger = logger;
             _accountRepository = accountRepository;
             _leaveRequestRepository = leaveRequestRepository;
             _companyrepository = companyrepository;
@@ -62,7 +62,7 @@ namespace hrms_be_backend_business.Logic
                 _mailService.SendLeaveMailToReliever(payload.ReliverUserID, payload.UserId, payload.StartDate, payload.EndDate);
 
                 //Send mail to approval
-                if(userDetails.UnitHeadUserId == null)
+                if (userDetails.UnitHeadUserId == null)
                 {
                     _mailService.SendLeaveApproveMailToApprover(userDetails.HODUserId, payload.UserId, payload.StartDate, payload.EndDate);
                 }
@@ -169,15 +169,15 @@ namespace hrms_be_backend_business.Logic
                 //response.Data = null;
                 //return response;
             }
-                    
 
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Exception Occured: RescheduleLeaveRequest ==> {ex.Message}");
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Exception Occured: RescheduleLeaveRequest ==> {ex.Message}";
-                    response.Data = null;
-                    return response;
+
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: RescheduleLeaveRequest ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: RescheduleLeaveRequest ==> {ex.Message}";
+                response.Data = null;
+                return response;
             }
         }
 
@@ -188,7 +188,7 @@ namespace hrms_be_backend_business.Logic
             var response = new BaseResponse();
             try
             {
-                
+
 
                 var repoResponse = await _leaveRequestRepository.ApproveLeaveRequest(LeaveRequestID, requester.UserId);
                 if (!repoResponse.Contains("Success"))
@@ -198,7 +198,7 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-                var leaveRequestDetail=await _leaveRequestRepository.GetLeaveRequestById(LeaveRequestID);
+                var leaveRequestDetail = await _leaveRequestRepository.GetLeaveRequestById(LeaveRequestID);
 
                 var userDetails = await _accountRepository.FindUser(leaveRequestDetail.UserId);
 
@@ -220,9 +220,9 @@ namespace hrms_be_backend_business.Logic
                     {
                         _mailService.SendLeaveApproveMailToApprover(leaveRequestDetail.HRUserId, leaveRequestDetail.UserId, leaveRequestDetail.StartDate, leaveRequestDetail.EndDate);
                     }
-                   
+
                 }
-               
+
 
                 response.ResponseCode = "00";
                 response.ResponseMessage = "Record inserted successfully";
@@ -241,7 +241,7 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }
-        public async Task<BaseResponse> DisaproveLeaveRequest(LeaveRequestDisapproved payload,  RequesterInfo requester)
+        public async Task<BaseResponse> DisaproveLeaveRequest(LeaveRequestDisapproved payload, RequesterInfo requester)
         {
             //check if us
             StringBuilder errorOutput = new StringBuilder();
@@ -250,7 +250,7 @@ namespace hrms_be_backend_business.Logic
             {
 
 
-                var repoResponse = await _leaveRequestRepository.DisaproveLeaveRequest(payload.LeaveRequestID, requester.UserId,payload.Reasons_For_Disapprove);
+                var repoResponse = await _leaveRequestRepository.DisaproveLeaveRequest(payload.LeaveRequestID, requester.UserId, payload.Reasons_For_Disapprove);
                 if (!repoResponse.Contains("Success"))
                 {
                     response.ResponseCode = "08";
@@ -347,7 +347,7 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }
-        public async Task<BaseResponse> GetLeaveRequsetById(long LeaveRequestID,  RequesterInfo requester)
+        public async Task<BaseResponse> GetLeaveRequsetById(long LeaveRequestID, RequesterInfo requester)
         {
             BaseResponse response = new BaseResponse();
 
@@ -430,17 +430,6 @@ namespace hrms_be_backend_business.Logic
                 }
 
 
-                //if (Convert.ToInt32(RoleId) != 2)
-                //{
-                //    if (Convert.ToInt32(RoleId) != 4)
-                //    {
-                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                //        return response;
-
-                //    }
-
-                //}
 
                 var LeaveRequest = await _leaveRequestRepository.GetLeaveRequestByUserId(UserId, CompanyId);
 
@@ -469,7 +458,7 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }
-        public async Task<BaseResponse> GetLeaveRquestbyCompanyId(string RequestYear,long companyId, RequesterInfo requester)
+        public async Task<BaseResponse> GetLeaveRquestbyCompanyId(string RequestYear, long companyId, RequesterInfo requester)
         {
             BaseResponse response = new BaseResponse();
 
@@ -492,7 +481,7 @@ namespace hrms_be_backend_business.Logic
 
 
 
-                var LeaveRquest = await _leaveRequestRepository.GetLeaveRequestByCompany( RequestYear, companyId);
+                var LeaveRquest = await _leaveRequestRepository.GetLeaveRequestByCompany(RequestYear, companyId);
 
                 if (LeaveRquest == null)
                 {
@@ -519,7 +508,7 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }
-        public async Task<BaseResponse> GetLeaveRequestPendingApproval(RequesterInfo requester )
+        public async Task<BaseResponse> GetLeaveRequestPendingApproval(RequesterInfo requester)
         {
             BaseResponse response = new BaseResponse();
 
@@ -540,7 +529,7 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-                var leave = await _leaveRequestRepository.GetLeaveRequestPendingApproval(requester.UserId );
+                var leave = await _leaveRequestRepository.GetLeaveRequestPendingApproval(requester.UserId);
 
                 if (leave.Any())
                 {

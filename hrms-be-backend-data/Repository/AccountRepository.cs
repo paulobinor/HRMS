@@ -134,15 +134,17 @@ namespace hrms_be_backend_data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", Account.UPDUSER);
                     param.Add("@Email", user.Email);
+                    param.Add("@OfficialMail", user.OfficialMail);
                     param.Add("@FirstNameUpdate", user.FirstName == null ? "" : user.FirstName.ToString());
                     param.Add("@MiddleNameUpdate", user.MiddleName == null ? "" : user.MiddleName.ToString());
                     param.Add("@LastNameUpdate", user.LastName == null ? "" : user.LastName.ToString());
-                    param.Add("@UserToupdate", user.OfficialMail == null ? "" : user.OfficialMail.ToString().Trim());
+                    param.Add("@UserToupdate", user.OfficialMail);
                     param.Add("@PhoneNumberUpdate", user.PhoneNumber == null ? "" : user.PhoneNumber.ToString().Trim());
                     param.Add("@DOB", user.Email == null ? "" : user.DOB.ToString().Trim());
                     param.Add("@ResumptionDate", user.ResumptionDate == null ? "" : user.DOB.ToString().Trim());
                     param.Add("@UnitID", user.UnitID);
                     param.Add("@GradeID", user.GradeID);
+                    param.Add("@DeptId", user.DeptId);
                     param.Add("@EmployeeTypeID", user.EmployeeTypeID);
                     param.Add("@BranchID", user.BranchID);
                     param.Add("@EmploymentStatusID", user.EmploymentStatusID);

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace hrms_be_backend_business.Logic
 {
-    public  class GradeLeaveService : IGradeLeaveService
+    public class GradeLeaveService : IGradeLeaveService
     {
         private readonly IAuditLog _audit;
 
@@ -63,8 +63,8 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 //validate JobDescription payload here 
-                if (creatDto.LeaveTypeId <= 0 || creatDto.CompanyID <= 0 || creatDto.GradeID <= 0 )
-                  
+                if (creatDto.LeaveTypeId <= 0 || creatDto.CompanyID <= 0 || creatDto.GradeID <= 0)
+
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";

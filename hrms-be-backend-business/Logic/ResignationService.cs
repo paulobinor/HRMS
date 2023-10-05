@@ -433,7 +433,7 @@ namespace hrms_be_backend_business.Logic
                             response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
                             break;
                         case -2:
-                            response.ResponseMessage = "UnAthorized";
+                            response.ResponseMessage = "You don't have access to approve this Resignation";
                             response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
                             break;
                         case -3:
@@ -445,7 +445,7 @@ namespace hrms_be_backend_business.Logic
                     }
                     return response;
                 }
-                
+
 
                 response.Data = resignation;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
@@ -501,7 +501,11 @@ namespace hrms_be_backend_business.Logic
                             response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
                             break;
                         case -3:
-                            response.ResponseMessage = "Invalid Approval Status";
+                            response.ResponseMessage = "Record already disapproved";
+                            response.ResponseCode = ResponseCode.InvalidApprovalStatus.ToString("D").PadLeft(2, '0');
+                            break;
+                        case -4:
+                            response.ResponseMessage = "Record cannot be disapproved";
                             response.ResponseCode = ResponseCode.InvalidApprovalStatus.ToString("D").PadLeft(2, '0');
                             break;
                         default:
