@@ -310,53 +310,53 @@ namespace hrms_be_backend_business.Logic
                 return PaginationHelper.CreatePagedReponse<PayrollAllView>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
             }
         }
-        public async Task<ExecutedResult<PayrollSingleView>> GetPayrollById(long Id, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
-        {
-            try
-            {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-                if (accessUser.data == null)
-                {
-                    return new ExecutedResult<PayrollSingleView>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+        //public async Task<ExecutedResult<PayrollSingleView>> GetPayrollById(long Id, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        //{
+        //    try
+        //    {
+        //        var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+        //        if (accessUser.data == null)
+        //        {
+        //            return new ExecutedResult<PayrollSingleView>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
-                }
-                var result = await _payrollRepository.GetPayrollById(Id);
-                if (result == null)
-                {
-                    return new ExecutedResult<PayrollSingleView>() { responseMessage = ((int)ResponseCode.NotFound).ToString().ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
-                }
+        //        }
+        //        var result = await _payrollRepository.GetPayrollById(Id);
+        //        if (result == null)
+        //        {
+        //            return new ExecutedResult<PayrollSingleView>() { responseMessage = ((int)ResponseCode.NotFound).ToString().ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+        //        }
                
-                var computations = await _earningsRepository.GetEarningsComputation(result.EarningsId);
-                var cra = await _earningsRepository.GetEarningsCRA(accessUser.data.CompanyId);
+        //        var computations = await _earningsRepository.GetEarningsComputation(result.EarningsId);
+        //        var cra = await _earningsRepository.GetEarningsCRA(accessUser.data.CompanyId);
 
-                var deductions = await _deductionsRepository.GetDeduction(accessUser.data.CompanyId);
-                StringBuilder restatedGross = new StringBuilder();
-                restatedGross.Append("Gross ");
-                foreach (var deduction in deductions)
-                {
-                    restatedGross.Append($" - {deduction.DeductionName}");
-                }
-                string craDetails = $"{cra.EarningsCRAPercentage}% * RestatedGross <br/><br/> OR <br/><br/>";
-                craDetails = $"Higher of {cra.EarningsCRAHigherOfPercentage}% * RestatedGross or {cra.EarningsCRAHigherOfValue.ToString("0,0.00")}";
+        //        var deductions = await _deductionsRepository.GetDeduction(accessUser.data.CompanyId);
+        //        StringBuilder restatedGross = new StringBuilder();
+        //        restatedGross.Append("Gross ");
+        //        foreach (var deduction in deductions)
+        //        {
+        //            restatedGross.Append($" - {deduction.DeductionName}");
+        //        }
+        //        string craDetails = $"{cra.EarningsCRAPercentage}% * RestatedGross <br/><br/> OR <br/><br/>";
+        //        craDetails = $"Higher of {cra.EarningsCRAHigherOfPercentage}% * RestatedGross or {cra.EarningsCRAHigherOfValue.ToString("0,0.00")}";
 
-                var earningsView = new EarningsView
-                {
-                    CreatedByUserId = result.CreatedByUserId,
-                    DateCreated = result.DateCreated,
-                    EarningsId = result.EarningsId,
-                    EarningsName = result.EarningsName,
-                    EarningsComputations = computations,
-                    EarningsCRA = craDetails,
-                    RestatedGross = restatedGross.ToString()
-                };
-                return new ExecutedResult<EarningsView>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = earningsView };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"PayrollService (GetEarning)=====>{ex}");
-                return new ExecutedResult<EarningsView>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
-            }
-        }
+        //        var earningsView = new EarningsView
+        //        {
+        //            CreatedByUserId = result.CreatedByUserId,
+        //            DateCreated = result.DateCreated,
+        //            EarningsId = result.EarningsId,
+        //            EarningsName = result.EarningsName,
+        //            EarningsComputations = computations,
+        //            EarningsCRA = craDetails,
+        //            RestatedGross = restatedGross.ToString()
+        //        };
+        //        return new ExecutedResult<EarningsView>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = earningsView };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"PayrollService (GetEarning)=====>{ex}");
+        //        return new ExecutedResult<EarningsView>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+        //    }
+        //}
 
         public async Task<ExecutedResult<IEnumerable<PayrollCyclesVm>>> GetPayrollCycles(string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {

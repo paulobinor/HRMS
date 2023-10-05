@@ -1,0 +1,35 @@
+[2023-10-05 09:32:33.987 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-10-05 09:32:34.513 +01:00  INF]  Now listening on: http://localhost:5008
+[2023-10-05 09:32:34.519 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-10-05 09:32:34.521 +01:00  INF]  Hosting environment: Development
+[2023-10-05 09:32:34.524 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api
+[2023-10-05 09:32:38.356 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2023-10-05 09:32:43.387 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 5025.5712ms
+[2023-10-05 09:32:43.398 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger-ui-bundle.js - -
+[2023-10-05 09:32:43.387 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger-ui.css - -
+[2023-10-05 09:32:43.398 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger-ui-standalone-preset.js - -
+[2023-10-05 09:32:43.410 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2023-10-05 09:32:43.454 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12370 application/javascript;+charset=utf-8 43.9458ms
+[2023-10-05 09:32:43.683 +01:00  INF]  Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+[2023-10-05 09:32:43.686 +01:00  INF]  Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+[2023-10-05 09:32:43.690 +01:00  INF]  Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+[2023-10-05 09:32:43.713 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger-ui.css - - - 200 144929 text/css 325.4855ms
+[2023-10-05 09:32:43.719 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger-ui-standalone-preset.js - - - 200 312163 text/javascript 320.4853ms
+[2023-10-05 09:32:43.734 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2023-10-05 09:32:43.725 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger-ui-bundle.js - - - 200 1061536 text/javascript 327.0108ms
+[2023-10-05 09:32:43.910 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 175.3782ms
+[2023-10-05 09:32:44.040 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2023-10-05 09:32:44.677 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 636.6086ms
+[2023-10-05 09:42:19.549 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-10-05 09:42:19.901 +01:00  INF]  Now listening on: http://localhost:5008
+[2023-10-05 09:42:19.922 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-10-05 09:42:19.927 +01:00  INF]  Hosting environment: Development
+[2023-10-05 09:42:19.931 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api
+[2023-10-05 09:42:21.042 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2023-10-05 09:42:21.704 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2023-10-05 09:42:21.705 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2023-10-05 09:42:21.711 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 673.9718ms
+[2023-10-05 09:42:21.715 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12370 application/javascript;+charset=utf-8 10.5106ms
+[2023-10-05 09:42:21.741 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 35.3630ms
+[2023-10-05 09:42:22.022 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2023-10-05 09:42:22.303 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 280.4485ms
