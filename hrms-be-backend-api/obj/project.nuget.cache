@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "02suI8Xya/Xgij+gjfswjslMj/+1JHgTbMEHxCR2RjRCEKdZRR4SmhGolAQn7zX+sAIMtSmoMcdaI3NYltnBZA==",
+  "dgSpecHash": "0agF+sM51Vd0TxrTGd7vIWh0Iy8i/4AKrFNY5M3Rc/9UBz1/Soc3F5Nig6OyiS6m0X59QXoogpYVzuzT5Uc+5w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-api\\hrms-be-backend-api.csproj",
+  "projectFilePath": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-api\\hrms-be-backend-api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\peter.omolayo\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\peter.omolayo\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
@@ -134,12 +134,5 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-api\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  "logs": []
 }

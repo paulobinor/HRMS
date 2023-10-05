@@ -6979,11 +6979,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-api\\hrms-be-backend-api.csproj",
+      "projectUniqueName": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-api\\hrms-be-backend-api.csproj",
       "projectName": "hrms-be-backend-api",
-      "projectPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-api\\hrms-be-backend-api.csproj",
+      "projectPath": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-api\\hrms-be-backend-api.csproj",
       "packagesPath": "C:\\Users\\peter.omolayo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-api\\obj\\",
+      "outputPath": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -7007,8 +7007,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-business\\hrms-be-backend-business.csproj": {
-              "projectPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-business\\hrms-be-backend-business.csproj"
+            "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-business\\hrms-be-backend-business.csproj": {
+              "projectPath": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-business\\hrms-be-backend-business.csproj"
             }
           }
         }
@@ -7062,13 +7062,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-api\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  }
 }
