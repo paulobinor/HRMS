@@ -33,7 +33,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
                     IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
+                    Port =  Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _resignationClearanceService.SubmitResignationClearance(requester, request));
@@ -61,7 +61,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
                     IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
+                    Port =  Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _resignationClearanceService.UploadItemsReturnedToDepartmant(file));
@@ -89,7 +89,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
                     IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
+                    Port =  Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _resignationClearanceService.GetResignationClearanceByID(ID, requester));
@@ -117,7 +117,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
                     IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
+                    Port =  Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _resignationClearanceService.GetResignationClearanceByUserID(userID, requester));
@@ -145,7 +145,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
                     IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
+                    Port =  Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _resignationClearanceService.GetPendingResignationClearanceByUserID(requester, userID));
@@ -174,7 +174,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
                     IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
+                    Port =  Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _resignationClearanceService.ApprovePendingResignationClearance(request, requester));
@@ -203,7 +203,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
                     IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
+                    Port =  Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _resignationClearanceService.DisapprovePendingResignationClearance(request, requester));

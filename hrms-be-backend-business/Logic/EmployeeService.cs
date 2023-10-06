@@ -5,29 +5,35 @@ using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace hrms_be_backend_business.Logic
 {
-    public  class EmployeeService : IEmployeeService
+    public class EmployeeService : IEmployeeService
     {
         private readonly IAuditLog _audit;
 
         private readonly ILogger<EmployeeService> _logger;
         //private readonly IConfiguration _configuration;
-        private readonly IAccountRepository _accountRepository;       
+        private readonly IAccountRepository _accountRepository;
+        private readonly ICompanyRepository _companyrepository;
         private readonly IEmployeeRepository _EmployeeRepository;
-      
+        private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IMapper _mapper;
 
         public EmployeeService(/*IConfiguration configuration*/ IAccountRepository accountRepository, ILogger<EmployeeService> logger,
-            IEmployeeRepository EmployeeRepository, IAuditLog audit,  IMapper mapper)
+            IEmployeeRepository EmployeeRepository, IAuditLog audit, ICompanyRepository companyrepository, IWebHostEnvironment hostEnvironment, IMapper mapper)
         {
             _audit = audit;
-            _logger = logger;           
+
+            _logger = logger;
+            //_configuration = configuration;
             _accountRepository = accountRepository;
-            _EmployeeRepository = EmployeeRepository;           
+            _EmployeeRepository = EmployeeRepository;
+            _companyrepository = companyrepository;
+            _hostEnvironment = hostEnvironment;
             _mapper = mapper;
         }
 
@@ -66,7 +72,7 @@ namespace hrms_be_backend_business.Logic
                     response.ResponseMessage = "Profile Image is required";
                     return response;
                 }
-               
+
                 if (updateDto.Nationality < 1)
                 {
                     response.ResponseCode = "08";
@@ -984,6 +990,7 @@ namespace hrms_be_backend_business.Logic
 
                 if (Convert.ToInt32(RoleId) != 1)
                 {
+
                     if (Convert.ToInt32(RoleId) != 2)
                     {
                         if (Convert.ToInt32(RoleId) != 3)
@@ -996,9 +1003,14 @@ namespace hrms_be_backend_business.Logic
                             }
                         }
 
+                        //if (Convert.ToInt32(RoleId) != 4)
+                        //{
+                        //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        //    return response;
+                        //}
 
                     }
-
                 }
 
                 var EmployeeType = await _EmployeeRepository.GetEmployeeById(EmpID);
@@ -1140,7 +1152,7 @@ namespace hrms_be_backend_business.Logic
 
         }
 
-        public async Task<BaseResponse> GetEmpPendingApproval( long CompanyID, RequesterInfo requester)
+        public async Task<BaseResponse> GetEmpPendingApproval(long CompanyID, RequesterInfo requester)
         {
             BaseResponse response = new BaseResponse();
 
@@ -1193,12 +1205,12 @@ namespace hrms_be_backend_business.Logic
                     }
 
 
-                    
-                        response.Data = mappeduser;
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = "Employee Details fetched successfully.";
-                        return response;
-                    
+
+                    response.Data = mappeduser;
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Employee Details fetched successfully.";
+                    return response;
+
                 }
                 else
                 {
@@ -1209,7 +1221,7 @@ namespace hrms_be_backend_business.Logic
                 }
 
 
-             
+
 
                 //update action performed into audit log here
 
@@ -1297,9 +1309,9 @@ namespace hrms_be_backend_business.Logic
                         response.ResponseMessage = "You cannot approve this User because User was created by you.";
                         return response;
                     }
-                  
 
-                    dynamic resp = await _EmployeeRepository.ApproveEmp(Convert.ToInt32(requesterUserId),  user.officialMail);
+
+                    dynamic resp = await _EmployeeRepository.ApproveEmp(Convert.ToInt32(requesterUserId), user.officialMail);
                     //dynamic resp = await _EmployeeRepository.ApproveEmp(requesterUserId, defaultPass, user.Email);
 
                     if (resp > 0)

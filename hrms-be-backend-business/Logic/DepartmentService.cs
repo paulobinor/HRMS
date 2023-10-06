@@ -25,12 +25,11 @@ namespace hrms_be_backend_business.Logic
         private readonly IHODRepository _hODRepository;
         private readonly IGroupRepository _GroupRepository;
         private readonly IBranchRepository _branchRepository;
-        private readonly IDepartmentalModulesService _departmentalModulesService;
-        
+
 
         public DepartmentService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<DepartmentService> logger,
             IDepartmentRepository departmentRepository, IAuditLog audit, IMapper mapper, ICompanyRepository companyrepository,
-            IHODRepository hODRepository, IGroupRepository groupRepository, IBranchRepository branchRepository, IDepartmentalModulesService departmentalModulesService)
+            IHODRepository hODRepository, IGroupRepository groupRepository, IBranchRepository branchRepository)
         {
             _audit = audit;
             _mapper = mapper;
@@ -40,9 +39,8 @@ namespace hrms_be_backend_business.Logic
             _departmentrepository = departmentRepository;
             _companyrepository = companyrepository;
             _hODRepository = hODRepository;
-            _GroupRepository    = groupRepository;
+            _GroupRepository = groupRepository;
             _branchRepository = branchRepository;
-            _departmentalModulesService = departmentalModulesService;
         }
 
         public async Task<BaseResponse> CreateDepartment(CreateDepartmentDto DepartmentDto, RequesterInfo requester)
@@ -91,7 +89,7 @@ namespace hrms_be_backend_business.Logic
 
 
                 //validate DepartmentDto payload here 
-                if (String.IsNullOrEmpty(DepartmentDto.DepartmentName)  
+                if (String.IsNullOrEmpty(DepartmentDto.DepartmentName)
                      )
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
@@ -132,18 +130,6 @@ namespace hrms_be_backend_business.Logic
                     //update action performed into audit log here
 
                     var Department = await _departmentrepository.GetDepartmentByName(DepartmentDto.DepartmentName);
-
-                    //Create Departmental Moduels
-                    if(DepartmentDto.AppModules != null && DepartmentDto.AppModules.Count > 0)
-                    {
-                        var creatDepartmentalModuleReq = new CreateDepartmentalModuleDTO
-                        {
-                            DepartmentId = Department.DeptId,
-                            AppModuleId = DepartmentDto.AppModules,
-                        };
-                        var createDepartmentalModuleResp = await _departmentalModulesService.CreateDepartmentalAppModule(creatDepartmentalModuleReq, requester);
-                    }
-                   
 
                     response.Data = Department;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
@@ -205,11 +191,11 @@ namespace hrms_be_backend_business.Logic
                         string HodName = serviceDetails.Rows[0][1].ToString();
                         string GroupName = serviceDetails.Rows[0][2].ToString();
                         string BranchName = serviceDetails.Rows[0][3].ToString();
-                      
+
                         string CompanyName = serviceDetails.Rows[0][5].ToString();
 
 
-                        if (DepartmentName != "DepartmentName" 
+                        if (DepartmentName != "DepartmentName"
                         || GroupName != "GroupName" || BranchName != "BranchName" || CompanyName != "CompanyName")
                         {
                             response.ResponseCode = "08";
@@ -225,7 +211,7 @@ namespace hrms_be_backend_business.Logic
                                 var hod = await _hODRepository.GetHODByName(serviceDetails.Rows[row][1].ToString());
                                 var group = await _GroupRepository.GetGroupByName(serviceDetails.Rows[row][2].ToString());
                                 var branch = await _branchRepository.GetBranchByName(serviceDetails.Rows[row][3].ToString());
-                             
+
                                 var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][5].ToString());
 
                                 long hodID = hod.HodID;
@@ -236,9 +222,9 @@ namespace hrms_be_backend_business.Logic
                                 var departmentrequest = new CreateDepartmentDto
                                 {
                                     DepartmentName = departmentName,
-                                  
 
-                                   
+
+
                                     CompanyId = companyID,
 
                                 };
@@ -345,8 +331,8 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 //validate DepartmentDto payload here 
-                if (String.IsNullOrEmpty(updateDto.DepartmentName)  || updateDto.CompanyId <= 0 
-                    || updateDto.DeptId <= 0 )
+                if (String.IsNullOrEmpty(updateDto.DepartmentName) || updateDto.CompanyId <= 0
+                    || updateDto.DeptId <= 0)
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";

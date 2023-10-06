@@ -56,7 +56,7 @@ namespace hrms_be_backend_data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", CountryStateLgaEnum.GETBYID);
                     param.Add("@StateIDGet", StateID);
-                    
+
 
                     var LgaDetails = await _dapper.QueryAsync<LgaDTO>(ApplicationConstant.Sp_get_lga, param: param, commandType: CommandType.StoredProcedure);
 

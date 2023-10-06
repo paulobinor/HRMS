@@ -20,7 +20,7 @@ namespace hrms_be_backend_data.Repository
             _configuration = configuration;
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-        public async Task<int> CreateResignationInterview(ResignationInterviewDTO resignation , DataTable sectionOne , DataTable sectionTwo)
+        public async Task<int> CreateResignationInterview(ResignationInterviewDTO resignation, DataTable sectionOne, DataTable sectionTwo)
         {
             try
             {
@@ -41,13 +41,14 @@ namespace hrms_be_backend_data.Repository
                 param.Add("QuestionThree", resignation.QuestionThree);
                 param.Add("QuestionFour", resignation.QuestionFour);
                 param.Add("QuestionFive", resignation.QuestionFive);
+                param.Add("Comment", resignation.Comment);
                 param.Add("SectionOne", sectionOne.AsTableValuedParameter("InterviewDetailsSectionType"));
                 param.Add("SectionTwo", sectionTwo.AsTableValuedParameter("InterviewDetailsSectionType"));
                 param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
                 //int response =  _dapper.ExecuteReader("Sp_SubmitResignation", param: param, commandType: CommandType.StoredProcedure);
 
-                await _repository.BulkInsert<int>(param,"Sp_SubmitResignationInterview");
+                await _repository.BulkInsert<int>(param, "Sp_SubmitResignationInterview");
 
                 int resp = param.Get<int>("Resp");
 
@@ -67,7 +68,7 @@ namespace hrms_be_backend_data.Repository
             try
             {
                 string sqlQuery = @"select * from InterviewRateScaleDetails";
-                var resp = await _repository.GetAll<InterviewScaleDetailsDTO>(sqlQuery,null,CommandType.Text);
+                var resp = await _repository.GetAll<InterviewScaleDetailsDTO>(sqlQuery, null, CommandType.Text);
                 return resp;
             }
             catch (Exception ex)
@@ -80,16 +81,16 @@ namespace hrms_be_backend_data.Repository
         public async Task<ResignationInterviewDTO> GetResignationInterview(long SRFID)
         {
             try
-            { 
-                
-                    string query = "select * from ResignationInterview where SRFID = @SRFID";
-                    var param = new DynamicParameters();
-                    param.Add("SRFID", SRFID);
+            {
 
-                    var response = (await _repository.Get<ResignationInterviewDTO>(query, param, commandType: CommandType.Text));
+                string query = "select * from ResignationInterview where SRFID = @SRFID";
+                var param = new DynamicParameters();
+                param.Add("SRFID", SRFID);
 
-                    return response;
-                
+                var response = (await _repository.Get<ResignationInterviewDTO>(query, param, commandType: CommandType.Text));
+
+                return response;
+
             }
             catch (Exception ex)
             {
@@ -101,15 +102,15 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                
-                    string query = "select IRSV.*,IRSD.Name,IRSD.Section from InterviewRateScaleValue IRSV JOIN InterviewRateScaleDetails IRSD \r\nON IRSV.ResignationDetailID = IRSD.ID WHERE IRSV.InterviewID = 1 ORDER BY IRSD.ID , IRSD.Section";
-                    var param = new DynamicParameters();
-                    param.Add("SRFID", InterviewID);
 
-                    var response = (await _repository.GetAll<InterviewScaleValue>(query, param, commandType: CommandType.Text));
+                string query = "select IRSV.*,IRSD.Name,IRSD.Section from InterviewRateScaleValue IRSV JOIN InterviewRateScaleDetails IRSD ON IRSV.ResignationDetailID = IRSD.ID WHERE IRSV.InterviewID = 1 ORDER BY IRSD.ID , IRSD.Section";
+                var param = new DynamicParameters();
+                param.Add("SRFID", InterviewID);
 
-                    return response;
-                
+                var response = (await _repository.GetAll<InterviewScaleValue>(query, param, commandType: CommandType.Text));
+
+                return response;
+
             }
             catch (Exception ex)
             {
@@ -119,51 +120,49 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<int> ApprovePendingResignationInterview(long userID, long InterviewID, bool isApproved)
+        public async Task<int> ApprovePendingResignationInterview(long userID, long ID, bool isApproved)
         {
             try
             {
-                string query = "UPDATE ResignationInterview set IsApproved = @IsApproved, ApprovedByUserId = @ApprovedByUserId WHERE ID = @InterviewID";
                 var param = new DynamicParameters();
                 param.Add("ApprovedByUserId", userID);
-                param.Add("InterviewID", InterviewID);
-                param.Add("isApproved",isApproved);
+                param.Add("ID", ID);
+                param.Add("isApproved", isApproved);
                 param.Add("DateApproved", DateTime.Now);
                 param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                var response = await _repository.Execute<int>(query, param, commandType: CommandType.Text);
+                var response = await _repository.Execute<int>("Sp_ApprovePendingResignationInterview", param, commandType: CommandType.StoredProcedure);
                 return response;
 
             }
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: ApprovePendingResignationAsync(long userID, long InterviewID) => {ex.Message}");
+                _logger.LogError($"MethodName: ApprovePendingResignationAsync(long userID, long ID) => {ex.Message}");
                 throw;
             }
         }
 
-        public async Task<int> DisapprovePendingResignationInterview(long userID, long InterviewID, bool isDisapproved, string DisapprovedComment)
+        public async Task<int> DisapprovePendingResignationInterview(long userID, long ID, bool isDisapproved, string DisapprovedComment)
         {
             try
             {
-                string query = "UPDATE ResignationInterview set isDisapproved = @isDisapproved, DisapprovedByUserId = @DisapprovedByUserId WHERE ID = @InterviewID";
                 var param = new DynamicParameters();
                 param.Add("DisapprovedByUserId", userID);
-                param.Add("InterviewID", InterviewID);
+                param.Add("ID", ID);
                 param.Add("isDisapproved", isDisapproved);
                 param.Add("DisapprovedComment", DisapprovedComment);
                 param.Add("DateDisapproved", DateTime.Now);
                 param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                var response = await _repository.Execute<int>(query, param, commandType: CommandType.Text);
+                var response = await _repository.Execute<int>("Sp_DisapprovePendingResignationIntyerview", param, commandType: CommandType.StoredProcedure);
                 return response;
 
             }
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: DisapprovePendingResignationAsync(long userID, long InterviewID) => {ex.Message}");
+                _logger.LogError($"MethodName: DisapprovePendingResignationInterview(long userID, long ID) => {ex.Message}");
                 throw;
             }
         }
@@ -171,7 +170,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-               
+
                 {
                     string query = "Select * from ResignationInterview where IsApproved = @IsApproved";
                     var param = new DynamicParameters();

@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 
 namespace hrms_be_backend_data.Repository
 {
-    public  class EmploymentStatusRepository : IEmploymentStatusRepository
+    public class EmploymentStatusRepository : IEmploymentStatusRepository
     {
         private string _connectionString;
         private readonly ILogger<EmploymentStatusRepository> _logger;
@@ -177,7 +177,7 @@ namespace hrms_be_backend_data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", EmploymentStatusEnum.GETBYEMAIL);
                     param.Add("@EmploymentStatusNameGet", EmploymentStatusName);
-                   
+
 
                     var EmpLocationDetails = await _dapper.QueryFirstOrDefaultAsync<EmploymentStatusDTO>(ApplicationConstant.sp_EmploymentStatus, param: param, commandType: CommandType.StoredProcedure);
 

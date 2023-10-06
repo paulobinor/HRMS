@@ -63,12 +63,12 @@ namespace hrms_be_backend_business.Logic
                         response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                         return response;
                     }
-                      
+
                 }
 
                 //validate DepartmentDto payload here 
-                if (HodDto.UserId <= 0 || HodDto.CompanyID <= 0 )
-                    //String.IsNullOrEmpty(DepartmentDto.Email) || String.IsNullOrEmpty(DepartmentDto.ContactPhone))
+                if (HodDto.UserId <= 0 || HodDto.CompanyID <= 0)
+                //String.IsNullOrEmpty(DepartmentDto.Email) || String.IsNullOrEmpty(DepartmentDto.ContactPhone))
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";
@@ -169,7 +169,7 @@ namespace hrms_be_backend_business.Logic
                         string CompanyName = serviceDetails.Rows[0][1].ToString();
 
 
-                        if (HODName != "HODName" 
+                        if (HODName != "HODName"
                         || CompanyName != "CompanyName")
 
                         {
@@ -182,10 +182,10 @@ namespace hrms_be_backend_business.Logic
                             for (int row = 1; row < serviceDetails.Rows.Count; row++)
                             {
 
-                                var hODName =await _hodRepository.GetHODByName(serviceDetails.Rows[row][0].ToString());
+                                var hODName = await _hodRepository.GetHODByName(serviceDetails.Rows[row][0].ToString());
                                 var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][1].ToString());
 
-                                long userId= hODName.UserId; 
+                                long userId = hODName.UserId;
                                 long companyID = company.CompanyId;
 
 
@@ -295,7 +295,7 @@ namespace hrms_be_backend_business.Logic
 
                 //validate DepartmentDto payload here 
                 if (updateDto.UserId <= 0 || updateDto.CompanyID <= 0
-                    || updateDto.HodID <= 0 )
+                    || updateDto.HodID <= 0)
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace hrms_be_backend_business.Logic
 {
-    public  class GenderService : IGenderService
+    public class GenderService : IGenderService
     {
         private readonly IAuditLog _audit;
 
@@ -59,7 +59,7 @@ namespace hrms_be_backend_business.Logic
                             response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                             return response;
                         }
-                       
+
                     }
                 }
 

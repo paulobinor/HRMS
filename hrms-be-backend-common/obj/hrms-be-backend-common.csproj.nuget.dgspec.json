@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {}
+    "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {}
   },
   "projects": {
-    "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {
+    "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
+        "projectUniqueName": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
         "projectName": "hrms-be-backend-common",
-        "projectPath": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
+        "projectPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
         "packagesPath": "C:\\Users\\peter.omolayo\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\peter.omolayo\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-common\\obj\\",
         "projectStyle": "PackageReference",

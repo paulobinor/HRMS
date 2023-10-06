@@ -11,24 +11,24 @@ namespace hrms_be_backend_business.Logic
         private readonly IAuditLog _audit;
 
         private readonly ILogger<LgaService> _logger;
-       
+
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
         private readonly ILgaRepository _lgaRepository;
 
-        public LgaService( IAccountRepository accountRepository, ILogger<LgaService> logger,
+        public LgaService(IAccountRepository accountRepository, ILogger<LgaService> logger,
             ILgaRepository lgaRepository, IAuditLog audit, ICompanyRepository companyrepository)
         {
             _audit = audit;
 
             _logger = logger;
-          
+
             _accountRepository = accountRepository;
             _lgaRepository = lgaRepository;
             _companyrepository = companyrepository;
         }
 
-        public async Task<BaseResponse> GetAllLga(long StateID,RequesterInfo requester)
+        public async Task<BaseResponse> GetAllLga(long StateID, RequesterInfo requester)
         {
             BaseResponse response = new BaseResponse();
 
@@ -59,7 +59,7 @@ namespace hrms_be_backend_business.Logic
                             response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                             return response;
                         }
-                         
+
                     }
                 }
 

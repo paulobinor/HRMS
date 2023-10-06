@@ -153,6 +153,9 @@ builder.Services.AddScoped<IEarningsRepository, EarningsRepository>();
 builder.Services.AddScoped<IDeductionsRepository, DeductionsRepository>();
 builder.Services.AddScoped<ITaxRepository, TaxRepository>();
 builder.Services.AddScoped<IPayrollRepository, PayrollRepository>();
+builder.Services.AddScoped<ITrainingFeedbackFormRepository, TrainingFeedbackFormRepository>();
+builder.Services.AddScoped<ITrainingInductionRepository, TrainingInductionRepository>();
+builder.Services.AddScoped<ITrainingPlanRepository, TrainingPlanRepository>();
 
 builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 builder.Services.AddScoped<IEarningsService, EarningsService>();
@@ -207,6 +210,10 @@ builder.Services.AddScoped<IHospitalProvidersService, HospitalProvidersService>(
 builder.Services.AddScoped<IChildrenService, ChildrenService>();
 builder.Services.AddScoped<IReviwerRoleService, ReviwerRoleService>();
 builder.Services.AddScoped<IReviwerService, ReviwerService>();
+builder.Services.AddScoped<ILearningAndDevelopmentMailService, LearningAndDevelopmentMailService>();
+builder.Services.AddScoped<ITrainingFeedbackFormService, TrainingFeedbackFormService>();
+builder.Services.AddScoped<ITrainingInductionService, TrainingInductionService>();
+builder.Services.AddScoped<ITrainingPlanService, TrainingPlanService>();
 
 //VacationModul
 builder.Services.AddScoped<IGradeLeaveService, GradeLeaveService>();

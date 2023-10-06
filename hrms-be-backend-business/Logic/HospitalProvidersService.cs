@@ -25,7 +25,7 @@ namespace hrms_be_backend_business.Logic
 
         public HospitalProvidersService(/*IConfiguration configuration*/ IAccountRepository accountRepository, ILogger<HospitalProvidersService> logger,
             IHospitalProvidersRepository HospitalProvidersRepository, IAuditLog audit, ICompanyRepository companyrepository,
-            IHospitalPlanRepository hospitalPlanRepository , IStateRepository stateRepository)
+            IHospitalPlanRepository hospitalPlanRepository, IStateRepository stateRepository)
         {
             _audit = audit;
 
@@ -67,12 +67,12 @@ namespace hrms_be_backend_business.Logic
                         response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                         return response;
                     }
-                   
+
                 }
 
                 //validate DepartmentDto payload here 
                 if (String.IsNullOrEmpty(create.ProvidersNames) || create.CompanyID <= 0)
-               
+
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";
@@ -177,7 +177,7 @@ namespace hrms_be_backend_business.Logic
                         string Address2 = serviceDetails.Rows[0][5].ToString();
                         string HospitalPlan = serviceDetails.Rows[0][6].ToString();
                         string CompanyName = serviceDetails.Rows[0][7].ToString();
-                        
+
 
                         if (ProvidersName != "ProvidersName" || State != "State" || Town1 != "Town1" || Town2 != "Town2"
                          || Address1 != "Address1" || Address2 != "Address2" || HospitalPlan != "HospitalPlan"

@@ -20,7 +20,7 @@ namespace hrms_be_backend_business.Logic
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
 
-        public CompanyService(IConfiguration configuration,IAccountRepository accountRepository, ILogger<CompanyService> logger, 
+        public CompanyService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<CompanyService> logger,
             ICompanyRepository companyRepository, IAuditLog audit, IMapper mapper)
         {
             _audit = audit;
@@ -31,7 +31,6 @@ namespace hrms_be_backend_business.Logic
             _companyrepository = companyRepository;
         }
 
-       
         public async Task<BaseResponse> CreateCompany(CreateCompanyDto CompanyDto, RequesterInfo requester)
         {
             var response = new BaseResponse();
@@ -60,7 +59,7 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 //validate CreateCompanyDto payload here 
-                if(String.IsNullOrEmpty(CompanyDto.CompanyName) || String.IsNullOrEmpty(CompanyDto.Address) ||
+                if (String.IsNullOrEmpty(CompanyDto.CompanyName) || String.IsNullOrEmpty(CompanyDto.Address) ||
                     String.IsNullOrEmpty(CompanyDto.Email) || String.IsNullOrEmpty(CompanyDto.ContactPhone))
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');

@@ -21,5 +21,7 @@
     <ProjectReference Include="..\hrms-be-backend-common\hrms-be-backend-common.csproj" />
     <ProjectReference Include="..\hrms-be-backend-data\hrms-be-backend-data.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
 </Project>

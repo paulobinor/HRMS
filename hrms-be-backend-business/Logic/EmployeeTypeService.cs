@@ -11,7 +11,7 @@ using System.Text;
 
 namespace hrms_be_backend_business.Logic
 {
-    public  class EmployeeTypeService : IEmployeeTypeService
+    public class EmployeeTypeService : IEmployeeTypeService
     {
         private readonly IAuditLog _audit;
 
@@ -53,7 +53,7 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-            
+
 
 
                 if (Convert.ToInt32(RoleId) != 2)

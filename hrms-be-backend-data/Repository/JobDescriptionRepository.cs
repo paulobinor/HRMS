@@ -240,6 +240,6 @@ namespace hrms_be_backend_data.Repository
 
 
 
-    } 
+    }
 }
 

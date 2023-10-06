@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 
 namespace hrms_be_backend_data.Repository
 {
-    public  class ReviwerRoleRepository : IReviwerRoleRepository
+    public class ReviwerRoleRepository : IReviwerRoleRepository
     {
         private string _connectionString;
         private readonly ILogger<ReviwerRoleRepository> _logger;
@@ -68,6 +68,6 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        
+
     }
 }

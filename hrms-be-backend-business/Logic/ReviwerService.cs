@@ -16,7 +16,7 @@ namespace hrms_be_backend_business.Logic
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
         private readonly IReviwerRepository _ReviwerRepository;
-      
+
 
         public ReviwerService(/*IConfiguration configuration*/ IAccountRepository accountRepository, ILogger<ReviwerService> logger,
             IReviwerRepository ReviwerRepository, IAuditLog audit, ICompanyRepository companyrepository)
@@ -28,7 +28,7 @@ namespace hrms_be_backend_business.Logic
             _accountRepository = accountRepository;
             _ReviwerRepository = ReviwerRepository;
             _companyrepository = companyrepository;
-            
+
         }
 
         public async Task<BaseResponse> CreateReviwer(CreateReviwerDTO create, RequesterInfo requester)

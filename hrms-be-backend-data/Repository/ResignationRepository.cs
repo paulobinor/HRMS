@@ -38,8 +38,6 @@ namespace hrms_be_backend_data.Repository
                 param.Add("DateCreated", resignation.DateCreated);
                 param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                //int response =  _dapper.ExecuteReader("Sp_SubmitResignation", param: param, commandType: CommandType.StoredProcedure);
-
                 await _repository.Insert<int>("Sp_SubmitResignation", param, commandType: CommandType.StoredProcedure);
 
                 int resp = param.Get<int>("Resp");
@@ -53,21 +51,21 @@ namespace hrms_be_backend_data.Repository
                 _logger.LogError($"MethodName: CreateResignation(ResignationDTO resignation) => {ex.Message}");
                 throw;
             }
-        } 
+        }
 
 
         public async Task<ResignationDTO> GetResignationByID(long ID)
         {
             try
             {
-                    string query = "select * from SubmitResignation where SRFID = @SRFID and IsDeleted = @IsDeleted";
-                    var param = new DynamicParameters();
-                    param.Add("SRFID", ID);
-                    param.Add("IsDeleted", false);
+                string query = "select * from SubmitResignation where SRFID = @SRFID and IsDeleted = @IsDeleted";
+                var param = new DynamicParameters();
+                param.Add("SRFID", ID);
+                param.Add("IsDeleted", false);
 
-                    var response = await _repository.Get<ResignationDTO>(query, param, commandType: CommandType.Text);
+                var response = await _repository.Get<ResignationDTO>(query, param, commandType: CommandType.Text);
 
-                    return response;
+                return response;
             }
             catch (Exception ex)
             {
@@ -163,14 +161,14 @@ namespace hrms_be_backend_data.Repository
         }
 
 
-        public async Task<List<ResignationDTO>> GetPendingResignationByUserID(long userID)
+        public async Task<List<PendingResignationDTO>> GetPendingResignationByUserID(long userID)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("UserID", userID);
 
-                var response = await _repository.GetAll<ResignationDTO>("Sp_GetPendingResignationByUserID", param, commandType: CommandType.StoredProcedure);
+                var response = await _repository.GetAll<PendingResignationDTO>("Sp_GetPendingResignationByUserID", param, commandType: CommandType.StoredProcedure);
 
                 return response;
 

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace hrms_be_backend_business.Logic
 {
-    public  class MaritalStatusService : IMaritalStatusService
+    public class MaritalStatusService : IMaritalStatusService
     {
         private readonly IAuditLog _audit;
 

@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 
 namespace hrms_be_backend_data.Repository
 {
-    public  class MaritalStatusReposiorty : IMaritalStatusReposiorty
+    public class MaritalStatusReposiorty : IMaritalStatusReposiorty
     {
         private string _connectionString;
         private readonly ILogger<MaritalStatusReposiorty> _logger;
