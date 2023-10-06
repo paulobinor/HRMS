@@ -60,7 +60,7 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingInduc
 
 
                     /*   return*/
-                    await _dapper.ExecuteAsync(ApplicationConstant.Sp_TrainingPlan, param, commandType: CommandType.StoredProcedure);
+                    await _dapper.ExecuteAsync(ApplicationConstant.Sp_TrainingInduction, param, commandType: CommandType.StoredProcedure);
                     // Retrieve the TrainingPlanID from the output parameter
                     int trainingInductionId = param.Get<int>("@TrainingInductionIDOut");
 
@@ -169,8 +169,10 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingInduc
                 param.Add("@DisapprovedByUserId", DisapprovedByUserId);
                 param.Add("@DisapprovedComment", DisapprovedComment);
                 param.Add("@DateDisapproved", DateTime.Now);
+
                 //creaating an unused parameter called @TrainingInductionIDOut to avoid error
                 param.Add("@TrainingInductionIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
+
                 return await _dapperGeneric.Get<string>(ApplicationConstant.Sp_TrainingInduction, param, commandType: CommandType.StoredProcedure);
 
             }
@@ -189,6 +191,10 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingInduc
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", TrainingInductionEnum.GETALLACTIVE);
+
+                    //creaating an unused parameter called @TrainingInductionIDOut to avoid error
+                    param.Add("@TrainingInductionIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
+
 
                     var TrainingInductions = await _dapper.QueryAsync<TrainingInductionDTO>(ApplicationConstant.Sp_TrainingInduction, param: param, commandType: CommandType.StoredProcedure);
 
@@ -211,6 +217,9 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingInduc
                     var param = new DynamicParameters();
                     param.Add("@Status", TrainingInductionEnum.GETALL);
 
+                    //creaating an unused parameter called @TrainingInductionIDOut to avoid error
+                    param.Add("@TrainingInductionIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
+
                     var TrainingInductions = await _dapper.QueryAsync<TrainingInductionDTO>(ApplicationConstant.Sp_TrainingInduction, param: param, commandType: CommandType.StoredProcedure);
 
                     return TrainingInductions;
@@ -223,7 +232,7 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingInduc
             }
         }
 
-        public async Task<IEnumerable<TrainingInductionDTO>> GetTrainingInductionByCompany(long companyId)
+        public async Task<IEnumerable<TrainingInductionDTO>> GetTrainingInductionByCompanyId(long companyId)
         {
             try
             {
@@ -231,7 +240,8 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingInduc
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", TrainingInductionEnum.GETBYCOMPANYID);
-                    param.Add("@CompanyIdGet", companyId);
+                    param.Add("@CompanyIDGet", companyId);
+
                     //creaating an unused parameter called @TrainingInductionIDOut to avoid error
                     param.Add("@TrainingInductionIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
 
@@ -257,6 +267,7 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingInduc
                     var param = new DynamicParameters();
                     param.Add("@Status", TrainingInductionEnum.GETBYID);
                     param.Add("@TrainingInductionIDGet", TrainingInductionID);
+
                     //creaating an unused parameter called @TrainingInductionIDOut to avoid error
                     param.Add("@TrainingInductionIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
 
@@ -281,6 +292,7 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingInduc
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", TrainingInductionEnum.GETPENDINGAPPROVAL);
+
                     //creaating an unused parameter called @TrainingInductionIDOut to avoid error
                     param.Add("@TrainingInductionIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
 

@@ -18,6 +18,6 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingInduc
         Task<string> DisaproveTrainingInduction(long TrainingInductionID, long DisapprovedByUserId, string DisapprovedComment);
         Task<dynamic> DeleteTrainingInduction(TrainingInductionDelete delete, string deletedbyUserEmail);
         Task<IEnumerable<TrainingInductionDTO>> GetTrainingInductionPendingApproval();
-        Task<IEnumerable<TrainingInductionDTO>> GetTrainingInductionByCompany(long companyId);
+        Task<IEnumerable<TrainingInductionDTO>> GetTrainingInductionByCompanyId(long companyId);
     }
 }

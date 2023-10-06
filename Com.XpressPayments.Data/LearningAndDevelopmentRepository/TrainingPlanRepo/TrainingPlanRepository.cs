@@ -279,7 +279,7 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
                 throw;
             }
         }
-        public async Task<IEnumerable<TrainingPlanDTO>> GetTrainingPlanByCompany(long companyId)
+        public async Task<IEnumerable<TrainingPlanDTO>> GetTrainingPlanByCompanyId(long companyId)
         {
             try
             {
@@ -287,7 +287,7 @@ namespace Com.XpressPayments.Data.LearningAndDevelopmentRepository.TrainingPlanR
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", TrainingPlanEnum.GETBYCOMPANYID);
-                    param.Add("@CompanyIdGet", companyId);
+                    param.Add("@CompanyIDGet", companyId);
                     //creaating an unused parameter called @TrainingPlanIDOut to avoid error
                     param.Add("@TrainingPlanIDOut", dbType: DbType.Int64, direction: ParameterDirection.Output);
 

@@ -519,7 +519,7 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
 
 
 
-                var TrainingPlan = await _trainingPlanRepository.GetTrainingPlanByCompany(companyId);
+                var TrainingPlan = await _trainingPlanRepository.GetTrainingPlanByCompanyId(companyId);
 
                 if (TrainingPlan == null)
                 {

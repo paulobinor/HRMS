@@ -430,7 +430,7 @@ namespace Com.XpressPayments.Bussiness.LearningAndDevelopmentModuleService.Servi
                     return response;
                 }
 
-                var trainingInduction = await _trainingInductionRepository.GetTrainingInductionByCompany(companyId);
+                var trainingInduction = await _trainingInductionRepository.GetTrainingInductionByCompanyId(companyId);
 
                 if (trainingInduction == null)
                 {
