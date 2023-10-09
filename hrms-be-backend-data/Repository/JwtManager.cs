@@ -40,9 +40,9 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, request.Email),
-                new Claim(ClaimTypes.Name, $"{request.FirstName} {request.LastName}"),
+                new Claim(ClaimTypes.Name, request.Email),
                 new Claim(ClaimTypes.Sid, request.UserId.ToString()),
-                new Claim(ClaimTypes.Role, request.RoleId.ToString())            };
+                new Claim(ClaimTypes.Role, request.RoleId.ToString())           };
 
             JwtSecurityToken token = new(
                 issuer: issuer,

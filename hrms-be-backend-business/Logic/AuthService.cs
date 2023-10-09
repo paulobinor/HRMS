@@ -93,7 +93,7 @@ namespace hrms_be_backend_business.Logic
                 var repoResponse = await _accountRepository.AuthenticateUser(email, _appConfig.MaxNumberOfFailedAttemptsToLogin, DateTime.Now);
                 if (!repoResponse.Contains("Success"))
                 {
-                    response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
+                    response.ResponseCode = ResponseCode.InvalidPassword.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"{repoResponse}";
                     response.Data = null;
                     return response;
@@ -103,7 +103,7 @@ namespace hrms_be_backend_business.Logic
                         && user.LastLoginAttemptAt.HasValue
                         && DateTime.Now < user.LastLoginAttemptAt.Value.AddMinutes(_appConfig.MinutesBeforeResetAfterFailedAttemptsToLogin))
                 {
-                    response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
+                    response.ResponseCode = ResponseCode.InvalidPassword.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = "You account was blocked, please contact admin";
 
                     return response;

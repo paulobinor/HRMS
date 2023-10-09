@@ -6,23 +6,23 @@ using Microsoft.Extensions.Logging;
 
 namespace hrms_be_backend_business.Logic
 {
-    public  class CountyService : ICountyService
+    public class CountyService : ICountyService
     {
         private readonly IAuditLog _audit;
 
         private readonly ILogger<CountyService> _logger;
-       
+
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
         private readonly ICountryRepository _countryRepository;
 
-        public CountyService( IAccountRepository accountRepository, ILogger<CountyService> logger,
+        public CountyService(IAccountRepository accountRepository, ILogger<CountyService> logger,
             ICountryRepository countryRepository, IAuditLog audit, ICompanyRepository companyrepository)
         {
             _audit = audit;
 
             _logger = logger;
-           
+
             _accountRepository = accountRepository;
             _countryRepository = countryRepository;
             _companyrepository = companyrepository;
@@ -58,7 +58,7 @@ namespace hrms_be_backend_business.Logic
                         return response;
                     }
                 }
-                
+
 
                 //update action performed into audit log here
 

@@ -33,7 +33,7 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@Status", Department.CREATE);
                     param.Add("@DepartmentName", Dept.DepartmentName.Trim());
                     param.Add("@HODUserId", Dept.HODUserId);
-                   
+
                     param.Add("@CompanyId", Dept.CompanyId);
 
                     param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
@@ -62,7 +62,7 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@DepartmentIdUpd", Convert.ToInt32(Dept.DeptId));
                     param.Add("@DepartmentNameUpd", Dept.DepartmentName == null ? "" : Dept.DepartmentName.ToString().Trim());
                     param.Add("@HODUserIdUpd", Dept.HODUserId);
-                  
+
                     param.Add("@CompanyIdUpd", Dept.CompanyId);
 
                     param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
@@ -122,7 +122,7 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllActiveDepartments() ===>{ ex.Message}");
+                _logger.LogError($"MethodName: GetAllActiveDepartments() ===>{ex.Message}");
                 throw;
             }
         }
@@ -144,7 +144,7 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllDepartments() ===>{ ex.Message}");
+                _logger.LogError($"MethodName: GetAllDepartments() ===>{ex.Message}");
                 throw;
             }
         }
@@ -167,7 +167,7 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: GetDepartmentById(int DepartmentId) ===>{ ex.Message}");
+                _logger.LogError($"MethodName: GetDepartmentById(int DepartmentId) ===>{ex.Message}");
                 throw;
             }
         }
@@ -190,7 +190,7 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: GetDepartmentById(int DepartmentId) ===>{ ex.Message}");
+                _logger.LogError($"MethodName: GetDepartmentById(int DepartmentId) ===>{ex.Message}");
                 throw;
             }
         }
@@ -237,7 +237,7 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllDepartmentsbyCompanyId(long companyId) ===>{ ex.Message}");
+                _logger.LogError($"MethodName: GetAllDepartmentsbyCompanyId(long companyId) ===>{ex.Message}");
                 throw;
             }
         }

@@ -96,7 +96,7 @@ namespace hrms_be_backend_business.Logic
 
                 //creatDto.EmploymentStatusName = $"{creatDto.EmploymentStatusName} ({isExistsComp.CompanyName})";
 
-                var isExists = await _EmploymentStatusRepository.GetEmpLoymentStatusByCompany(creatDto.EmploymentStatusName,   (int)creatDto.CompanyID);
+                var isExists = await _EmploymentStatusRepository.GetEmpLoymentStatusByCompany(creatDto.EmploymentStatusName, (int)creatDto.CompanyID);
                 if (null != isExists)
                 {
                     response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');

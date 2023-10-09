@@ -16,7 +16,6 @@ namespace hrms_be_backend_api.Controllers
         {
             _currencyService = currencyService;
         }
-
        
       
         [HttpPost("CreateCurrency")]
@@ -43,7 +42,7 @@ namespace hrms_be_backend_api.Controllers
             return this.CustomResponse(await _currencyService.UpdateCurrency(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
      
-        [HttpPost("GetCurrencies")]
+        [HttpGet("GetCurrencies")]
         public async Task<IActionResult> GetCurrencies()
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();

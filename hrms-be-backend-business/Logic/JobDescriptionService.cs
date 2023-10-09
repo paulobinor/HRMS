@@ -169,7 +169,7 @@ namespace hrms_be_backend_business.Logic
                         string CompanyName = serviceDetails.Rows[0][1].ToString();
 
 
-                        if (JobDescriptionName != "JobDescriptionName" 
+                        if (JobDescriptionName != "JobDescriptionName"
                         || CompanyName != "CompanyName")
 
                         {
@@ -185,7 +185,7 @@ namespace hrms_be_backend_business.Logic
                                 string jobDescriptionName = serviceDetails.Rows[row][0].ToString();
                                 var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][1].ToString());
 
-                               
+
                                 long companyID = company.CompanyId;
 
 

@@ -10,7 +10,7 @@ using hrms_be_backend_data.AppConstants;
 
 namespace hrms_be_backend_data.Repository
 {
-    public  class EmployeeRepository : IEmployeeRepository
+    public class EmployeeRepository : IEmployeeRepository
     {
         private string _connectionString;
         private readonly ILogger<EmployeeRepository> _logger;
@@ -33,7 +33,7 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@Status", EmployeeEnum.UPDATE);
                     param.Add("@EmpIDUpd", Convert.ToInt32(Emp.EmpID));
                     param.Add("@ProfileImageUpd", Emp.ProfileImage.Trim());
-                 
+
                     param.Add("@NationalityUpd", Emp.Nationality);
                     param.Add("@StateOfOriginUpd", Emp.StateOfOrigin);
                     param.Add("@LGAUpd", Emp.LGA);
@@ -45,7 +45,7 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@MaritalStatusUpd", Emp.MaritalStatus);
                     param.Add("@SpouseContactAddressUpd", Emp.SpouseContactAddress.Trim());
                     param.Add("@SpouseMobileUpd", Emp.SpouseMobile.Trim());
-                    param.Add("@ResidentialAddressUpd", Emp.ResidentialAddress.Trim()); 
+                    param.Add("@ResidentialAddressUpd", Emp.ResidentialAddress.Trim());
                     param.Add("@HomeAddressUpd", Emp.HomeAddress.Trim());
                     param.Add("@MailingAddressUpd", Emp.MailingAddress.Trim());
                     param.Add("@NofNameUpd", Emp.NofName.Trim());
@@ -308,7 +308,7 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<dynamic> ApproveEmp(long approvedByuserId,  string officialMail)
+        public async Task<dynamic> ApproveEmp(long approvedByuserId, string officialMail)
         {
             try
             {
@@ -317,7 +317,7 @@ namespace hrms_be_backend_data.Repository
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", EmployeeEnum.APPROVEEMP);  
+                    param.Add("@Status", EmployeeEnum.APPROVEEMP);
                     param.Add("@ApprovedByUserId", approvedByuserId);
                     param.Add("@officialMailApproval", officialMail);
 

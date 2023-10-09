@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 
 namespace hrms_be_backend_data.Repository
 {
-    public  class GradeRepository : IGradeRepository
+    public class GradeRepository : IGradeRepository
     {
         private string _connectionString;
         private readonly ILogger<GradeRepository> _logger;

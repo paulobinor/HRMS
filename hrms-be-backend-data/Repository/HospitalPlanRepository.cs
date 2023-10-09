@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 
 namespace hrms_be_backend_data.Repository
 {
-    public  class HospitalPlanRepository : IHospitalPlanRepository
+    public class HospitalPlanRepository : IHospitalPlanRepository
     {
 
         private string _connectionString;

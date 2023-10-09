@@ -51,7 +51,7 @@ namespace hrms_be_backend_data.Repository
 
             }
             catch (Exception ex)
-            {               
+            {
                 _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex}");
                 throw;
             }
@@ -59,7 +59,7 @@ namespace hrms_be_backend_data.Repository
 
 
         public async Task<dynamic> RescheduleLeaveRequest(RescheduleLeaveRequest update, string requesterUserEmail)
-        { 
+        {
             try
             {
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
@@ -101,13 +101,13 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
                 param.Add("@Status", 10);
                 param.Add("@LeaveRequestID", LeaveRequestID);
-                param.Add("@ApprovedByUserId", ApprovedByUserId);               
-                param.Add("@DateApproved",DateTime.Now);
+                param.Add("@ApprovedByUserId", ApprovedByUserId);
+                param.Add("@DateApproved", DateTime.Now);
                 return await _dapperGeneric.Get<string>(ApplicationConstant.Sp_LeaveRequest, param, commandType: CommandType.StoredProcedure);
 
             }
             catch (Exception ex)
-            {               
+            {
                 _logger.LogError($"MethodName: ApproveLeaveRequest ===>{ex}");
                 throw;
             }
@@ -172,7 +172,7 @@ namespace hrms_be_backend_data.Repository
                 }
             }
             catch (Exception ex)
-            {              
+            {
                 _logger.LogError($"MethodName: GetAllLeaveRequest() ===>{ex.Message}");
                 throw;
             }
@@ -202,7 +202,7 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<IEnumerable<LeaveRequestDTO>>GetLeaveRequestByUserId(long UserId , long CompanyId)
+        public async Task<IEnumerable<LeaveRequestDTO>> GetLeaveRequestByUserId(long UserId, long CompanyId)
         {
             try
             {
@@ -219,7 +219,7 @@ namespace hrms_be_backend_data.Repository
                     return LeaveDetails;
 
 
-                    
+
                 }
             }
             catch (Exception ex)
@@ -286,14 +286,14 @@ namespace hrms_be_backend_data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", LeaveRequestEnum.GETPENDINGAPPROVAL);
                     param.Add("@UserIdGet", UserIdGet);
-                    
+
                     var userDetails = await _dapper.QueryAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
 
                     return userDetails;
                 }
             }
             catch (Exception ex)
-            {               
+            {
                 _logger.LogError($"MethodName: GetLeaveRequestPendingApproval() ===>{ex.Message}");
                 throw;
             }

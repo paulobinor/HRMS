@@ -38,7 +38,7 @@ namespace hrms_be_backend_business.Logic
                 _logger.LogInformation($"IncomingRequest TraceID --- {traceID} Body ---- {JsonConvert.SerializeObject(payload)}");
                 var uploadPath = _config["Resignation:UploadFolderPath"];
                 var errorMessages = String.Empty;
-                StringBuilder errorBuilder= new StringBuilder();
+                StringBuilder errorBuilder = new StringBuilder();
 
                 if (payload.LastDayOfWork < DateTime.Now)
                     errorMessages = errorMessages + "|Invalid Last Day of work";
@@ -58,7 +58,7 @@ namespace hrms_be_backend_business.Logic
                 if (errorMessages.Length > 0)
                     return new BaseResponse { ResponseCode = ((int)ResponseCode.ValidationError).ToString(), ResponseMessage = errorMessages.Remove(0, 1) };
 
-                if(payload.SectionOne.Count < ApplicationConstant.totalFormCountSectionOne)
+                if (payload.SectionOne.Count < ApplicationConstant.totalFormCountSectionOne)
                 {
                     return new BaseResponse { ResponseCode = ((int)ResponseCode.ValidationError).ToString(), ResponseMessage = "Please kindly check all radio button on section one" };
                 }
@@ -76,9 +76,9 @@ namespace hrms_be_backend_business.Logic
                     }
                 });
 
-                for(int x = 0; payload.SectionOne.Count > x; x++)
+                for (int x = 0; payload.SectionOne.Count > x; x++)
                 {
-                    if(payload.SectionOne[x].Value < 1)
+                    if (payload.SectionOne[x].Value < 1)
                         return new BaseResponse { ResponseCode = ((int)ResponseCode.ValidationError).ToString(), ResponseMessage = "Please kindly check all radio button on section one" };
 
                     payload.SectionOne[x].Scale = Enum.GetName(typeof(ExitInterviewScaleSectionOne), (ExitInterviewScaleSectionOne)payload.SectionOne[x].Value);
@@ -108,12 +108,18 @@ namespace hrms_be_backend_business.Logic
                     UserID = payload.UserID,
                     SRFID = payload.SRFID,
                     ReasonForResignation = payload.ReasonForResignation,
+                    QuestionOne = payload.QuestionOne,
+                    QuestionTwo = payload.QuestionTwo,
+                    QuestionThree = payload.QuestionThree,
+                    QuestionFour = payload.QuestionFour,
+                    QuestionFive = payload.QuestionFive,
+                    Comment = payload.Comment
                 };
 
 
                 var resp = await _resignationInterviewRepository.CreateResignationInterview(resignationInterview, sectionOneDataTable, sectionTwoDataTable);
 
-                if(resp < 1)
+                if (resp < 1)
                 {
                     switch (resp)
                     {
@@ -257,7 +263,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> ApprovePendingResignationInterview(ApproveResignationInterviewDTO request , RequesterInfo requester)
+        public async Task<BaseResponse> ApprovePendingResignationInterview(ApproveResignationInterviewDTO request, RequesterInfo requester)
         {
             var response = new BaseResponse();
             try
@@ -272,7 +278,7 @@ namespace hrms_be_backend_business.Logic
 
 
 
-                var resignation = await _resignationInterviewRepository.GetResignationInterview(request.InterviewID);
+                var resignation = await _resignationInterviewRepository.GetResignationInterview(request.ID);
                 if (resignation == null)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
@@ -280,19 +286,39 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) != 2)
+                //if (Convert.ToInt32(RoleId) != 2)
+                //{
+                //    if (Convert.ToInt32(RoleId) != 4)
+                //    {
+                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //        return response;
+
+                //    }
+
+                //}
+                var ApprovedResignation = await _resignationInterviewRepository.ApprovePendingResignationInterview(request.userID, request.ID, request.isApproved);
+                if (ApprovedResignation < 0)
                 {
-                    if (Convert.ToInt32(RoleId) != 4)
+                    switch (ApprovedResignation)
                     {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
+                        case -1:
+                            response.ResponseMessage = "Resignation not found";
+                            response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                            break;
+                        case -2:
+                            response.ResponseMessage = "You don't have access to approve this Resignation";
+                            response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
+                            break;
+                        case -3:
+                            response.ResponseMessage = "Already Approved";
+                            response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
+                            break;
+                        default:
+                            return new BaseResponse { ResponseCode = ((int)ResponseCode.ValidationError).ToString(), ResponseMessage = "Processing error" };
                     }
-
+                    return response;
                 }
-                var ApprovedResignation = await _resignationInterviewRepository.ApprovePendingResignationInterview(request.userID, request.InterviewID, request.isApproved);
-
 
                 response.Data = resignation;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
@@ -311,7 +337,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> DisapprovePendingResignationInterview(DisapproveResignationInterviewDTO request , RequesterInfo requester)
+        public async Task<BaseResponse> DisapprovePendingResignationInterview(DisapproveResignationInterviewDTO request, RequesterInfo requester)
         {
             var response = new BaseResponse();
             try
@@ -326,7 +352,7 @@ namespace hrms_be_backend_business.Logic
 
 
 
-                var resignation = await _resignationInterviewRepository.GetResignationInterview(request.InterviewID);
+                var resignation = await _resignationInterviewRepository.GetResignationInterview(request.ID);
                 if (resignation == null)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
@@ -334,18 +360,33 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-                if (Convert.ToInt32(RoleId) != 2)
+                var DisapprovedResignation = await _resignationInterviewRepository.DisapprovePendingResignationInterview(request.userID, request.ID, request.IsDisapproved, request.DisapprovedComment);
+                if (DisapprovedResignation < 0)
                 {
-                    if (Convert.ToInt32(RoleId) != 4)
+                    switch (DisapprovedResignation)
                     {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
+                        case -1:
+                            response.ResponseMessage = "Resignation not found";
+                            response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                            break;
+                        case -2:
+                            response.ResponseMessage = "UnAuthorize";
+                            response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
+                            break;
+                        case -3:
+                            response.ResponseMessage = "Record already disapproved";
+                            response.ResponseCode = ResponseCode.InvalidApprovalStatus.ToString("D").PadLeft(2, '0');
+                            break;
+                        case -4:
+                            response.ResponseMessage = "Record cannot be disapproved";
+                            response.ResponseCode = ResponseCode.InvalidApprovalStatus.ToString("D").PadLeft(2, '0');
+                            break;
+                        default:
+                            return new BaseResponse { ResponseCode = ((int)ResponseCode.ValidationError).ToString(), ResponseMessage = "Processing error" };
                     }
 
+                    return response;
                 }
-                var ApprovedResignation = await _resignationInterviewRepository.DisapprovePendingResignationInterview(request.userID, request.InterviewID, request.IsDisapproved, request.DisapprovedComment);
 
 
                 response.Data = resignation;
@@ -375,19 +416,19 @@ namespace hrms_be_backend_business.Logic
                 string requesterUserId = requester.UserId.ToString();
                 string RoleId = requester.RoleId.ToString();
 
-                //var ipAddress = requester.IpAddress.ToString();
-                //var port = requester.Port.ToString();
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
 
 
 
-                //var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
 
-                //if (requesterInfo == null)
-                //{
-                //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                //    response.ResponseMessage = "Requester information cannot be found.";
-                //    return response;
-                //}
+                if (requesterInfo == null)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Requester information cannot be found.";
+                    return response;
+                }
 
                 var Resignation = await _resignationInterviewRepository.GetAllApprovedResignationInterview(UserID, isApproved);
 
@@ -419,3 +460,4 @@ namespace hrms_be_backend_business.Logic
         }
     }
 }
+

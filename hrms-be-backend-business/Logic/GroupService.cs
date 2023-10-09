@@ -69,8 +69,8 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 //validate DepartmentDto payload here 
-                if (String.IsNullOrEmpty(GroupDto.GroupName) || GroupDto.CompanyID <= 0 )
-            
+                if (String.IsNullOrEmpty(GroupDto.GroupName) || GroupDto.CompanyID <= 0)
+
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";

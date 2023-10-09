@@ -12,10 +12,10 @@ using System.Text;
 
 namespace hrms_be_backend_business.Logic
 {
-    public  class BranchService : IBranchService
+    public class BranchService : IBranchService
     {
         private readonly IAuditLog _audit;
-        
+
         private readonly ILogger<BranchService> _logger;
         private readonly IConfiguration _configuration;
         private readonly IAccountRepository _accountRepository;
@@ -30,7 +30,7 @@ namespace hrms_be_backend_business.Logic
             IStateRepository stateRepo, ILgaRepository lgaRepo)
         {
             _audit = audit;
-            
+
             _logger = logger;
             _configuration = configuration;
             _accountRepository = accountRepository;
@@ -70,13 +70,13 @@ namespace hrms_be_backend_business.Logic
                         return response;
 
                     }
-                    
+
                 }
 
                 //validate BranchDto payload here 
                 if (String.IsNullOrEmpty(BranchDto.BranchName) || String.IsNullOrEmpty(BranchDto.Address))
-                    //||
-                    //String.IsNullOrEmpty(BranchDto.CountryID) || String.IsNullOrEmpty(BranchDto.StateID))
+                //||
+                //String.IsNullOrEmpty(BranchDto.CountryID) || String.IsNullOrEmpty(BranchDto.StateID))
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";
@@ -158,9 +158,6 @@ namespace hrms_be_backend_business.Logic
                 else
                 {
                     var stream = new MemoryStream();
-
-
-
                     await payload.CopyToAsync(stream);
 
                     System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
@@ -168,7 +165,6 @@ namespace hrms_be_backend_business.Logic
                     DataSet ds = new DataSet();
                     ds = reader.AsDataSet();
                     reader.Close();
-                  
 
                     int rowCount = ds.Tables[0].Rows.Count;
                     DataTable serviceDetails = ds.Tables[0];
@@ -183,7 +179,7 @@ namespace hrms_be_backend_business.Logic
                         string CountryName = serviceDetails.Rows[0][3].ToString();
                         string StateName = serviceDetails.Rows[0][4].ToString();
                         string LgaName = serviceDetails.Rows[0][5].ToString();
-                       
+
 
                         if (BranchName != "BranchName" || CompanyName != "CompanyName"
                         || Address != "Address" || CountryName != "CountryName" || StateName != "StateName" || LgaName != "LgaName")
@@ -228,11 +224,11 @@ namespace hrms_be_backend_business.Logic
                                     RoleId = requester.RoleId,
                                     IpAddress = requester.IpAddress,
                                     Port = requester.Port,
-                                  
+
 
                                 };
 
-                                var resp = await CreateBranch (branchrequest, branchrequester);
+                                var resp = await CreateBranch(branchrequest, branchrequester);
 
 
                                 if (resp.ResponseCode == "00")
@@ -320,8 +316,8 @@ namespace hrms_be_backend_business.Logic
 
                 //validate BranchDto payload here 
                 if (String.IsNullOrEmpty(updateDto.BranchName) || String.IsNullOrEmpty(updateDto.Address) || updateDto.CompanyID <= 0
-                    || updateDto.CountryID <= 0 || updateDto.StateID <= 0 || updateDto.LgaID <= 0 )
-                    //String.IsNullOrEmpty(updateDto.Email) || String.IsNullOrEmpty(updateDto.ContactPhone))
+                    || updateDto.CountryID <= 0 || updateDto.StateID <= 0 || updateDto.LgaID <= 0)
+                //String.IsNullOrEmpty(updateDto.Email) || String.IsNullOrEmpty(updateDto.ContactPhone))
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Please ensure all required fields are entered.";

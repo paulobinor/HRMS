@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 
 namespace hrms_be_backend_data.Repository
 {
-    public  class EmpLocationRepository : IEmpLocationRepository
+    public class EmpLocationRepository : IEmpLocationRepository
     {
         private string _connectionString;
         private readonly ILogger<EmpLocationRepository> _logger;

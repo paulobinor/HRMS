@@ -62,6 +62,11 @@
         public static int GeneralUser = 3;
         public static int HrHead = 4;
 
+        //Learning and development module
+        public static string Sp_TrainingPlan = "Sp_TrainingPlan";
+        public static string Sp_TrainingSchedule = "Sp_TrainingSchedule";
+        public static string Sp_TrainingInduction = "Sp_TrainingInduction";
+        public static string Sp_TrainingFeedbackForm = "Sp_TrainingFeedbackForm";
 
     }
 }

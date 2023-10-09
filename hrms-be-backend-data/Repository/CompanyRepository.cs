@@ -131,7 +131,7 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllActiveCompanys() ===>{ ex.Message}");
+                _logger.LogError($"MethodName: GetAllActiveCompanys() ===>{ex.Message}");
                 throw;
             }
         }
@@ -153,7 +153,7 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllCompanys() ===>{ ex.Message}");
+                _logger.LogError($"MethodName: GetAllCompanys() ===>{ex.Message}");
                 throw;
             }
         }
@@ -176,7 +176,7 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: GetCompanyById(int CompanyId) ===>{ ex.Message}");
+                _logger.LogError($"MethodName: GetCompanyById(int CompanyId) ===>{ex.Message}");
                 throw;
             }
         }
@@ -199,7 +199,7 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: GetCompanyById(int CompanyId) ===>{ ex.Message}");
+                _logger.LogError($"MethodName: GetCompanyById(int CompanyId) ===>{ex.Message}");
                 throw;
             }
         }

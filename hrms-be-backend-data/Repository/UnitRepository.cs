@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 
 namespace hrms_be_backend_data.Repository
 {
-    public  class UnitRepository : IUnitRepository
+    public class UnitRepository : IUnitRepository
     {
         private string _connectionString;
         private readonly ILogger<UnitRepository> _logger;

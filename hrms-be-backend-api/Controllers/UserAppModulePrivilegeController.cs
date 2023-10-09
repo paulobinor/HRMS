@@ -32,8 +32,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _userAppModulePrivilegeService.GetUserAppModulePrivileges(requester));
@@ -59,8 +59,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _userAppModulePrivilegeService.GetUserAppModulePrivilegesByUserID(userID,requester));
@@ -86,8 +86,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _userAppModulePrivilegeService.GetAppModulePrivileges( requester));
@@ -113,8 +113,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _userAppModulePrivilegeService.GetAppModulePrivilegesByAppModuleID(appModuleID,requester));
@@ -139,8 +139,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _userAppModulePrivilegeService.GetPendingUserAppModulePRivilege( requester));
@@ -166,8 +166,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _userAppModulePrivilegeService.CreateUserAppModulePrivileges(request ,requester));
@@ -193,8 +193,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _userAppModulePrivilegeService.ApproveUserAppModulePrivilege(userAppModulePrivilegeID, requester));
@@ -220,8 +220,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _userAppModulePrivilegeService.DisapproveUserAppModulePrivilage(userAppModulePrivilegeID, requester));
@@ -247,8 +247,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _userAppModulePrivilegeService.UserAppModulePrivilegeActivationSwitch(userAppModulePrivilegeID, requester));
@@ -274,8 +274,8 @@ namespace hrms_be_backend_api.Controllers
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.LocalIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.LocalPort.ToString()
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
                 return Ok(await _userAppModulePrivilegeService.DeleteUserAppModulePrivilege(userAppModulePrivilegeID, requester));

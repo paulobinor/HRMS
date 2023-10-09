@@ -61,7 +61,7 @@ namespace hrms_be_backend_business.Logic
                         response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                         return response;
                     }
-                       
+
                 }
 
                 //validate JobDescription payload here 
@@ -168,7 +168,7 @@ namespace hrms_be_backend_business.Logic
                         string CompanyName = serviceDetails.Rows[0][1].ToString();
 
 
-                        if (PositionName != "PositionName" ||  CompanyName != "CompanyName")
+                        if (PositionName != "PositionName" || CompanyName != "CompanyName")
                         {
                             response.ResponseCode = "08";
                             response.ResponseMessage = "File header not in the Right format";

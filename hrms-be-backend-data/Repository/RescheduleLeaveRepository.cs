@@ -148,7 +148,7 @@ namespace hrms_be_backend_data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", LeaveRequestEnum.GETBYID);
                     param.Add("@RescheduleLeaveIDGet", RescheduleLeaveID);
-                    
+
 
                     var LeaveDetails = await _dapper.QueryFirstOrDefaultAsync<RescheduleLeaveRequestDTO>(ApplicationConstant.Sp_RescheduleLeave, param: param, commandType: CommandType.StoredProcedure);
 

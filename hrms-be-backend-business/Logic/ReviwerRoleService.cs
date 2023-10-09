@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace hrms_be_backend_business.Logic
 {
-    public  class ReviwerRoleService : IReviwerRoleService
+    public class ReviwerRoleService : IReviwerRoleService
     {
         private readonly IAuditLog _audit;
 

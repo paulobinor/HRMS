@@ -28,7 +28,7 @@ namespace hrms_be_backend_business.Logic
             _companyrepository = companyrepository;
         }
 
-        public async Task<BaseResponse> GetAllState (long CountryID, RequesterInfo requester)
+        public async Task<BaseResponse> GetAllState(long CountryID, RequesterInfo requester)
         {
             BaseResponse response = new BaseResponse();
 
@@ -59,7 +59,7 @@ namespace hrms_be_backend_business.Logic
                             response.ResponseMessage = $"Your role is not authorized to carry out this action.";
                             return response;
                         }
-                            
+
                     }
                 }
 
@@ -89,7 +89,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> GetStateByCountryId(long CountryID,  RequesterInfo requester)
+        public async Task<BaseResponse> GetStateByCountryId(long CountryID, RequesterInfo requester)
         {
             BaseResponse response = new BaseResponse();
 
