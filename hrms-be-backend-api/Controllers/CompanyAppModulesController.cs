@@ -11,7 +11,7 @@ namespace hrms_be_backend_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class CompanyAppModulesController : ControllerBase
     {
         private readonly ILogger<CompanyAppModulesController> _logger;
@@ -29,6 +29,7 @@ namespace hrms_be_backend_api.Controllers
             var response = new BaseResponse();
             try
             {
+
                 var requester = new RequesterInfo
                 {
                     Username = this.User.Claims.ToList()[2].Value,

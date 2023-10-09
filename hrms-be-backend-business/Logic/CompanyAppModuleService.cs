@@ -121,7 +121,7 @@ namespace hrms_be_backend_business.Logic
                         return response;
                 }
 
-                data = await _companyAppModuleRepository.GetDisapprovedCompanyAppModule();
+               // data = await _companyAppModuleRepository.GetDisapprovedCompanyAppModule();
 
                 response.Data = data;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');

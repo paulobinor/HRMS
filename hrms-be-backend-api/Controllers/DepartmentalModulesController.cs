@@ -3,6 +3,7 @@ using hrms_be_backend_business.Logic;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static hrms_be_backend_business.Logic.CompanyAppModuleService;
@@ -11,6 +12,7 @@ namespace hrms_be_backend_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DepartmentalModulesController : ControllerBase
     {
         private readonly ILogger<DepartmentalModulesController> _logger;
@@ -51,7 +53,7 @@ namespace hrms_be_backend_api.Controllers
             }
         }
 
-        [HttpGet("GetDepartmentAppModuleBySatus/{status}")]
+        [HttpGet("GetDepartmentAppModuleByStatus/{status}")]
         public async Task<IActionResult> GetDepartmentAppModuleByStatus(GetByStatus status)
         {
             var response = new BaseResponse();

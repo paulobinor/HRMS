@@ -3,6 +3,7 @@ using hrms_be_backend_business.Logic;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace hrms_be_backend_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserAppModulePrivilegeController : ControllerBase
     {
         private readonly ILogger<UserAppModulePrivilegeController> _logger;
