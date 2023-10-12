@@ -2,6 +2,8 @@
 {
     public enum RoleEnum
     {
+        GetAll = 1,
         GETBYname = 7,
+        
     }
 }

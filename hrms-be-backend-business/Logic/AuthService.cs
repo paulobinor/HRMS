@@ -9,16 +9,21 @@ using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
+using iText.Layout.Element;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Numerics;
 using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
+using static iText.Kernel.Pdf.Colorspace.PdfSpecialCs;
 
 namespace hrms_be_backend_business.Logic
 {
@@ -211,7 +216,7 @@ namespace hrms_be_backend_business.Logic
                 //    return new ExecutedResult<User>() { responseMessage = "Unathorized User", responseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), data = null };
                 //}
                 //var userIdAuth = claim.Where(x => x.Type == ClaimTypes.Sid).FirstOrDefault();
-              
+
                 var userAccess = await _accountRepository.VerifyUser(AccessToken, IpAddress, DateTime.Now);
                 if (!userAccess.Contains("Success"))
                 {
@@ -223,7 +228,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     _logger.LogError($"AuthService || (GetUserById)  Unable to get user details =====>");
                     return new ExecutedResult<User>() { responseMessage = ResponseCode.AuthorizationError.ToString(), responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
-                }             
+                }
                 if (userData.IsDeactivated)
                 {
                     _logger.LogError($"AuthService || User has been deactivated");
@@ -582,6 +587,327 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
+        
+        public async Task<BaseResponse> CreateUserBulkUploadTwo(IFormFile payload, int companyID, RequesterInfo requester)
+        {
+            //check if us
+            StringBuilder errorOutput = new StringBuilder();
+            var response = new BaseResponse();
+            try
+            {
+                if (payload == null || payload.Length <= 0)
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "No file for Upload";
+                    return response;
+                }
+                else if (!Path.GetExtension(payload.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "File not an Excel Format";
+                    return response;
+                }
+                else
+                {
+                    var stream = new MemoryStream();
+                    await payload.CopyToAsync(stream);
+
+                    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                    var reader = ExcelReaderFactory.CreateReader(stream);
+                    DataSet ds = new DataSet();
+                    ds = reader.AsDataSet();
+                    reader.Close();
+
+                    int rowCount = ds.Tables[0].Rows.Count;
+                    DataTable serviceDetails = ds.Tables[0];
+
+                    int k = 0;
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        var dataTable = GenerateUserDataTableHeader();
+                        var createUserList = new List<CreateUserDto>();
+                        string FirstName = serviceDetails.Rows[0][0].ToString();
+                        string MiddleName = serviceDetails.Rows[0][1].ToString();
+                        string LastName = serviceDetails.Rows[0][2].ToString();
+                        string Email = serviceDetails.Rows[0][3].ToString();
+                        string DOB = serviceDetails.Rows[0][4].ToString();
+                        string ResumptionDate = serviceDetails.Rows[0][5].ToString();
+                        string OfficialMail = serviceDetails.Rows[0][6].ToString();
+                        string PhoneNumber = serviceDetails.Rows[0][7].ToString();
+                        string StaffID = serviceDetails.Rows[0][8].ToString();
+                        string UnitName = serviceDetails.Rows[0][9].ToString();
+                        string GradeName = serviceDetails.Rows[0][10].ToString();
+                        string EmployeeTypeName = serviceDetails.Rows[0][11].ToString();
+                        string BranchName = serviceDetails.Rows[0][12].ToString();
+                        string EmploymentStatusName = serviceDetails.Rows[0][13].ToString();
+                        string RoleName = serviceDetails.Rows[0][14].ToString();
+                        string DepartmentName = serviceDetails.Rows[0][15].ToString();
+                        string CompanyName = serviceDetails.Rows[0][16].ToString();
+
+
+                        if (FirstName != "FirstName" || MiddleName != "MiddleName"
+                        || LastName != "LastName" || Email != "Email" || DOB != "DOB" || ResumptionDate != "ResumptionDate"
+                        || OfficialMail != "OfficialMail" || PhoneNumber != "PhoneNumber" || StaffID != "StaffID" || UnitName != "UnitName" || GradeName != "GradeName" || EmployeeTypeName != "EmployeeTypeName"
+                        || BranchName != "BranchName" || EmploymentStatusName != "EmploymentStatusName"
+                        || RoleName != "RoleName" || DepartmentName != "DepartmentName" || CompanyName != "CompanyName")
+                        {
+                            response.ResponseCode = "08";
+                            response.ResponseMessage = "File header not in the Right format";
+                            return response;
+                        }
+                        else
+                        {
+                            var company = await _companyrepository.GetCompanyById(companyID);
+                            if (company == null || company.IsDeleted)
+                            {
+                                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                                response.ResponseMessage = "Company not found";
+                                return response;
+                            }
+
+                            var compnayUnitsTask = _unitRepository.GetAllUnitCompanyId(companyID);
+                            var departmentsTask = _departmentrepository.GetAllDepartmentsbyCompanyId(companyID);
+                            var unitsTask = _unitRepository.GetAllUnitCompanyId(companyID);
+                            var gradsTask = _GradeRepository.GetAllGradeCompanyId(companyID);
+                            var employeTypesTask = _EmployeeTypeRepository.GetAllEmployeeTypeCompanyId(companyID);
+                            var employeStatusTask = _EmploymentStatusRepository.GetAllEmploymentStatusCompanyId(companyID);
+                            var rolesTask = _rolesRepo.GetAllRoles();
+                            var branchesTask = _branchRepository.GetAllBranchbyCompanyId(companyID);
+
+
+
+                            await Task.WhenAll(
+        compnayUnitsTask,
+        departmentsTask,
+        unitsTask,
+        gradsTask,
+        employeTypesTask,
+        employeStatusTask,
+        rolesTask,
+        branchesTask
+    );
+
+                            // You can access the results directly
+                            var companyUnits = compnayUnitsTask.Result;
+                            var departments = departmentsTask.Result;
+                            var units = unitsTask.Result;
+                            var grades = gradsTask.Result;
+                            var employeeTypes = employeTypesTask.Result;
+                            var employmentStatuses = employeStatusTask.Result;
+                            var roles = rolesTask.Result;
+                            var branches = branchesTask.Result;
+                            string patternEmail = @"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$";
+
+                            for (int row = 1; row < serviceDetails.Rows.Count; row++)
+                            {
+                                long unitID = 0;
+                                long gradeID = 0;
+                                long employeeTypeID = 0;
+                                long branchID = 0;
+                                long employmentStatusID = 0;
+                                long roleID = 0;
+                                long departmentID = 0;
+
+                                string rowError = string.Empty;
+                                string firstName = serviceDetails.Rows[row][0].ToString();
+                                string middleName = serviceDetails.Rows[row][1].ToString();
+                                string lastName = serviceDetails.Rows[row][2].ToString();
+                                string email = serviceDetails.Rows[row][3].ToString();
+                                string dOB = serviceDetails.Rows[row][4].ToString();
+                                string resumptionDate = serviceDetails.Rows[row][5].ToString();
+                                string officialMail = serviceDetails.Rows[row][6].ToString();
+                                string phoneNumber = serviceDetails.Rows[row][7].ToString();
+                                string staffID = serviceDetails.Rows[row][8].ToString();
+                                var unitName = serviceDetails.Rows[row][9].ToString();
+                                var gradeName = serviceDetails.Rows[row][10].ToString();
+                                var employeeTypeName = serviceDetails.Rows[row][11].ToString();
+                                var branchName = serviceDetails.Rows[row][12].ToString();
+                                var employmentStatusName = serviceDetails.Rows[row][13].ToString();
+                                var roleName = serviceDetails.Rows[row][14].ToString();
+                                var departmentName = serviceDetails.Rows[row][15].ToString();
+                                var companyName = serviceDetails.Rows[row][16].ToString();
+
+                                if (string.IsNullOrEmpty(firstName))
+                                    rowError = $"{rowError} First name is required.";
+                                else if(string.IsNullOrEmpty(lastName))
+                                    rowError = $"{rowError} Last name is required.";
+                                else if (string.IsNullOrEmpty(email) || !Regex.IsMatch(email, patternEmail))
+                                    rowError = $"{rowError} Invalid email supplied.";
+                                else if (string.IsNullOrEmpty(officialMail) || !Regex.IsMatch(officialMail, patternEmail))
+                                    rowError = $"{rowError} Invalid official supplied.";
+                                else if (string.IsNullOrEmpty(phoneNumber))
+                                    rowError = $"{rowError} Phone number is required.";
+                                else if(string.IsNullOrEmpty(staffID))
+                                    rowError = $"{rowError} StaffID is required.";
+                                else if (string.IsNullOrEmpty(employeeTypeName))
+                                    rowError = $"{rowError} Employee type is required.";
+                                else if (string.IsNullOrEmpty(departmentName))
+                                    rowError = $"{rowError} Department name is required.";
+                                else if (string.IsNullOrEmpty(companyName))
+                                    rowError = $"{rowError} Company name is required.";
+
+                                if (!string.IsNullOrEmpty(unitName))
+                                {
+                                    var unit = units.FirstOrDefault(m => m.UnitName == unitName.Trim());
+
+                                    if (unit == null)
+                                        rowError = $"{rowError} Unit {unitName} doesn't exist.";
+                                    else
+                                        unitID = unit.UnitID;
+                                }
+
+
+                                if (!string.IsNullOrEmpty(gradeName))
+                                {
+                                    var grade = grades.FirstOrDefault(m => m.GradeName == gradeName.Trim());
+                                    if (grade == null)
+                                        rowError = $"{rowError} Grade {gradeName} doesn't exist.";
+                                    else
+                                        gradeID = grade.GradeID;
+                                }
+
+                                if (!string.IsNullOrEmpty(employeeTypeName))
+                                {
+                                    var employeeType = employeeTypes.FirstOrDefault(m => m.EmployeeTypeName == employeeTypeName.Trim());
+                                    if (employeeType == null)
+                                        rowError = $"{rowError} employee Type {employeeTypeName} doesn't exist.";
+                                    else
+                                        employeeTypeID = employeeType.EmployeeTypeID;
+                                }
+
+
+                                if (!string.IsNullOrEmpty(branchName))
+                                {
+                                    var branch = branches.FirstOrDefault(m => m.BranchName == branchName.Trim());
+                                    if (branch == null)
+                                        rowError = $"{rowError} branch {branchName} doesn't exist.";
+                                    else
+                                        branchID = branch.BranchID;
+                                }
+
+                                if (!string.IsNullOrEmpty(employmentStatusName))
+                                {
+                                    var employeeStatus = employmentStatuses.FirstOrDefault(m => m.EmploymentStatusName == employmentStatusName.Trim());
+                                    if (employeeStatus == null)
+                                        rowError = $"{rowError} employee status name {employmentStatusName} doesn't exist.";
+                                    else
+                                        employmentStatusID = employeeStatus.EmploymentStatusID;
+                                }
+
+
+                                if (!string.IsNullOrEmpty(departmentName))
+                                {
+                                    var department = departments.FirstOrDefault(m => m.DepartmentName == departmentName.Trim());
+                                    if (department == null)
+                                        rowError = $"{rowError} department {departmentName} doesn't exist.";
+                                    else
+                                        departmentID = department.DeptId;
+                                }
+
+
+                                if (!string.IsNullOrEmpty(roleName))
+                                {
+                                    var role = roles.FirstOrDefault(m => m.RoleName == roleName.Trim());
+                                    if (role == null)
+                                        rowError = $"{rowError} role {roleName} doesn't exist.";
+                                    else
+                                        roleID = role.RoleId;
+                                }
+
+                                if(companyName.ToUpper().Trim() != company.CompanyName.ToUpper().Trim())
+                                    rowError = $"{rowError} Company name {companyName} is different from the selected company.";
+
+                                if (rowError.Length > 0)
+                                {
+                                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                                    response.ResponseMessage = $"Error on excel row {row} - {rowError}";
+                                    return response;
+                                }
+
+                                
+
+                                var userrequest = new CreateUserDto
+                                {
+                                    FirstName = firstName,
+                                    MiddleName = middleName,
+                                    LastName = lastName,
+                                    Email = email,
+                                    DOB = dOB,
+                                    ResumptionDate = resumptionDate,
+                                    OfficialMail = OfficialMail,
+                                    PhoneNumber = phoneNumber,
+                                    UnitID = unitID,
+                                    GradeID = gradeID,
+                                    EmployeeTypeID = employeeTypeID,
+                                    BranchID = branchID,
+                                    EmploymentStatusID = employmentStatusID,
+                                    RoleId = roleID,
+                                    DepartmentId = departmentID,
+                                    CompanyId = companyID,
+                                };
+
+                                createUserList.Add(userrequest);
+                                dataTable.Rows.Add(new object[] { userrequest.FirstName, userrequest.MiddleName, userrequest.LastName, userrequest.Email, userrequest.DOB, userrequest.ResumptionDate, userrequest.OfficialMail, userrequest.PhoneNumber, userrequest.UnitID , userrequest.GradeID ,userrequest.EmployeeTypeID , userrequest.RoleId, userrequest.DepartmentId , userrequest.CompanyId });
+                                var userrequester = new RequesterInfo
+                                {
+                                    Username = requester.Username,
+                                    UserId = requester.UserId,
+                                    RoleId = requester.RoleId,
+                                    IpAddress = requester.IpAddress,
+                                    Port = requester.Port,
+
+                                };
+
+                                //await _accountRepository.AddUser
+                                if (/*resp.ResponseCode == "00"*/ true)
+                                {
+                                    k++;
+                                }
+                                else
+                                {
+                                    errorOutput.Append($"Row {row} failed due to /**/" + "\n");
+                                }
+                            }
+                        }
+
+                    }
+
+
+
+                    if (k == rowCount - 1)
+                    {
+                        response.ResponseCode = "00";
+                        response.ResponseMessage = "All record inserted successfully";
+
+
+
+                        return response;
+                    }
+                    else
+                    {
+                        response.ResponseCode = "02";
+                        response.ResponseMessage = errorOutput.ToString();
+
+
+
+                        return response;
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Exception occured";
+                response.Data = null;
+
+
+
+                return response;
+            }
+        }
 
         public async Task<BaseResponse> UpdateUser(UpdateUserDto updateDto, RequesterInfo requester)
         {
@@ -1518,6 +1844,107 @@ namespace hrms_be_backend_business.Logic
                 response.Data = null;
                 return response;
             }
+        }
+
+
+        private DataTable GenerateUserDataTableHeader()
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "FirstName",
+                DataType = typeof(string)
+            });
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "MiddleName",
+                DataType = typeof(string)
+            });
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "LastName",
+                DataType = typeof(string)
+            });
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "Email",
+                DataType = typeof(string)
+            });
+
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "DOB",
+                DataType = typeof(string)
+            });
+
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "ResumptionDate",
+                DataType = typeof(string)
+            });
+
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "OfficialMail",
+                DataType = typeof(string)
+            });
+
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "PhoneNumber",
+                DataType = typeof(string)
+            });
+
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "UnitID",
+                DataType = typeof(BigInteger)
+            });
+
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "GradeID",
+                DataType = typeof(BigInteger)
+            });
+
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "EmployeeTypeID",
+                DataType = typeof(BigInteger)
+            });
+
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "BranchID",
+                DataType = typeof(BigInteger)
+            });
+
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "EmploymentStatusID",
+                DataType = typeof(BigInteger)
+            });
+
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "RoleId",
+                DataType = typeof(BigInteger)
+            });
+
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "DepartmentId",
+                DataType = typeof(BigInteger)
+            });
+
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "CompanyId",
+                DataType = typeof(BigInteger)
+            });
+
+            return table;
         }
 
         //public async Task<BaseResponse> GetUserbyRoleId(long RoleId, RequesterInfo requester)
