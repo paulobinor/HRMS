@@ -149,7 +149,7 @@ namespace hrms_be_backend_business.Logic
                 var port = requester.Port.ToString();
 
 
-                if (Convert.ToInt32(RoleId) != 1)
+                if (Convert.ToInt32(RoleId) != 2 && Convert.ToInt32(RoleId) != 4)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
@@ -220,7 +220,7 @@ namespace hrms_be_backend_business.Logic
                 var port = requester.Port.ToString();
 
 
-                if (Convert.ToInt32(RoleId) != 1)
+                if (Convert.ToInt32(RoleId) != 2 && Convert.ToInt32(RoleId) != 4)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
@@ -346,7 +346,7 @@ namespace hrms_be_backend_business.Logic
                 var port = requester.Port.ToString();
 
 
-                if (Convert.ToInt32(RoleId) != 1)
+                if (Convert.ToInt32(RoleId) != 2 && Convert.ToInt32(RoleId) != 4)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
@@ -420,7 +420,7 @@ namespace hrms_be_backend_business.Logic
                 var port = requester.Port.ToString();
 
 
-                if (Convert.ToInt32(RoleId) != 1)
+                if (Convert.ToInt32(RoleId) != 2 && Convert.ToInt32(RoleId) != 4)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
@@ -495,7 +495,7 @@ namespace hrms_be_backend_business.Logic
                 var port = requester.Port.ToString();
 
 
-                if (Convert.ToInt32(RoleId) != 1)
+                if (Convert.ToInt32(RoleId) != 2 && Convert.ToInt32(RoleId) != 4)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
@@ -555,7 +555,7 @@ namespace hrms_be_backend_business.Logic
                 var port = requester.Port.ToString();
 
 
-                if (Convert.ToInt32(RoleId) != 1)
+                if (Convert.ToInt32(RoleId) != 2 && Convert.ToInt32(RoleId) != 4)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Your role is not authorized to carry out this action.";
