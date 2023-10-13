@@ -12,7 +12,13 @@ namespace hrms_be_backend_data.IRepository
 
 
         Task<List<PayrollCyclesVm>> GetPayrollCycles();
+
+        Task<string> ProcessPayrollEarnings(PayrollEarningsReq payload);
+        Task<string> DeletePayrollEarnings(PayrollEarningsDeleteReq payload);
         Task<List<PayrollEarningsVm>> GetPayrollEarnings(long PayrollId);
+
+        Task<string> ProcessPayrollDeduction(PayrollDeductionReq payload);
+        Task<string> DeletePayrollDeduction(PayrollDeductionDeleteReq payload);       
         Task<List<PayrollDeductionsVm>> GetPayrollDeductions(long PayrollId);
     }
 }

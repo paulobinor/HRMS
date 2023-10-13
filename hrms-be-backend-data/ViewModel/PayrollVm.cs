@@ -44,8 +44,19 @@
         public int CurrencyId { get; set; }
         public string CurrencyName { get; set; }
         public string EarningsName { get; set; }
-        public List<PayrollEarningsVm> EarningsItems { get; set; }
+        public List<PayrollEarnings> EarningsItems { get; set; }
         public decimal TotalEarningAmount { get; set; }
+        public List<PayrollDeduction> PayrollDeductions { get; set; }
+        public decimal DeductionTotalAmount { get; set; }
+        public string CRAComputation { get; set; }
+        public decimal CRAAmount { get; set; }
+        public string RestatedGrossComputation { get; set; }
+        public decimal RestatedGrossAmount { get; set; }
+        public string TaxIncomeComputation { get; set; }
+        public decimal TaxIncomeAmount { get; set; }
+        public string TaxPayableComputation { get; set; }
+        public decimal TaxPayableAmount { get; set; }
+        public List<PayrollPayments> Payments { get; set; }
         public int PayrollCycleId { get; set; }
         public string PayrollCycleName { get; set; }
         public DateTime Payday { get; set; }
@@ -54,5 +65,27 @@
         public bool PaydayLastDayOfTheCycle { get; set; }
         public bool ProrationPolicy { get; set; }
     }
+    public class PayrollEarnings
+    {
+        public long EarningsItemId { get; set; }
+        public string EarningsItemName { get; set; }
+        public decimal EarningsItemAmount { get; set; }
+    }
+    public class PayrollDeduction
+    {
+        public long DeductionId { get; set; }
+        public string DeductionName { get; set; }
+        public bool IsFixed { get; set; }
+        public decimal DeductionFixedAmount { get; set; }
+        public bool IsPercentage { get; set; }
+        public decimal DeductionPercentageAmount { get; set; }
+    }
+    public class PayrollPayments
+    {
+        public string PaymentName { get; set; }
+        public string PaymentSubTitle { get; set; }
+        public decimal PaymentAmount { get; set; }
+    }
+
 }
 

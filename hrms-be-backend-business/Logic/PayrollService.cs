@@ -9,6 +9,7 @@ using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MimeKit.Cryptography;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using System.Text;
@@ -79,6 +80,12 @@ namespace hrms_be_backend_business.Logic
                     CurrencyId = payload.CurrencyId,
                     PayrollDescription = payload.PayrollDescription,
                     PayrollTitle = payload.PayrollTitle,
+                    Payday = payload.Payday,
+                    PaydayCustomDayOfTheCycle = payload.PaydayCustomDayOfTheCycle,
+                    PaydayLastDayOfTheCycle = payload.PaydayLastDayOfTheCycle,
+                    PaydayLastWeekOfTheCycle = payload.PaydayLastWeekOfTheCycle,
+                    PayrollCycleId = payload.PayrollCycleId,
+                    ProrationPolicy = payload.ProrationPolicy,
                     IsModification = false,
                 };
                 string repoResponse = await _payrollRepository.ProcessPayroll(repoPayload);
@@ -86,9 +93,64 @@ namespace hrms_be_backend_business.Logic
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
-                long Id = Convert.ToInt64(repoResponse.Replace("Success", ""));
-
-
+                long payrollId = Convert.ToInt64(repoResponse.Replace("Success", ""));
+                foreach (var item in payload.Earnings)
+                {
+                    var payrollEarningsReq = new PayrollEarningsReq
+                    {
+                        EarningsItemAmount = item.EarningsItemAmount,
+                        CreatedByUserId = accessUser.data.UserId,
+                        DateCreated = DateTime.Now,
+                        EarningsItemId = item.EarningsItemId,
+                        PayrollId = payrollId
+                    };
+                    await _payrollRepository.ProcessPayrollEarnings(payrollEarningsReq);
+                }
+                var payrollEarnings = await _payrollRepository.GetPayrollEarnings(payrollId);
+                foreach (var item in payrollEarnings)
+                {
+                    if (payload.Earnings.Any(p => p.EarningsItemId != item.EarningItemsId))
+                    {
+                        var payrollEarningsDeleteReq = new PayrollEarningsDeleteReq
+                        {
+                            CreatedByUserId = accessUser.data.UserId,
+                            DateCreated = DateTime.Now,
+                            EarningsItemId = item.EarningsId,
+                            PayrollId = payrollId
+                        };
+                        await _payrollRepository.DeletePayrollEarnings(payrollEarningsDeleteReq);
+                    }
+                }
+                foreach (var item in payload.Deductions)
+                {
+                    var payrollDeductionReq = new PayrollDeductionReq
+                    {
+                        DeductionFixedAmount = item.DeductionFixedAmount,
+                        CreatedByUserId = accessUser.data.UserId,
+                        DateCreated = DateTime.Now,
+                        DeductionPercentageAmount = item.DeductionPercentageAmount,
+                        DeductionId = item.DeductionId,
+                        IsFixed = item.IsFixed,
+                        IsPercentage = item.IsPercentage,
+                        PayrollId = payrollId
+                    };
+                    await _payrollRepository.ProcessPayrollDeduction(payrollDeductionReq);
+                }
+                var payrollDeductions = await _payrollRepository.GetPayrollDeductions(payrollId);
+                foreach (var item in payrollDeductions)
+                {
+                    if (payload.Deductions.Any(p => p.DeductionId != item.DeductionId))
+                    {
+                        var payrollDeductionDeleteReq = new PayrollDeductionDeleteReq
+                        {
+                            CreatedByUserId = accessUser.data.UserId,
+                            DateCreated = DateTime.Now,
+                            DeductionId = item.DeductionId,
+                            PayrollId = payrollId
+                        };
+                        await _payrollRepository.DeletePayrollDeduction(payrollDeductionDeleteReq);
+                    }
+                }
                 var auditLog = new AuditLogDto
                 {
                     userId = accessUser.data.UserId,
@@ -166,7 +228,64 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
                 long Id = Convert.ToInt64(repoResponse.Replace("Success", ""));
-
+                long payrollId = Convert.ToInt64(repoResponse.Replace("Success", ""));
+                foreach (var item in payload.Earnings)
+                {
+                    var payrollEarningsReq = new PayrollEarningsReq
+                    {
+                        EarningsItemAmount = item.EarningsItemAmount,
+                        CreatedByUserId = accessUser.data.UserId,
+                        DateCreated = DateTime.Now,
+                        EarningsItemId = item.EarningsItemId,
+                        PayrollId = payrollId
+                    };
+                    await _payrollRepository.ProcessPayrollEarnings(payrollEarningsReq);
+                }
+                var payrollEarnings = await _payrollRepository.GetPayrollEarnings(payrollId);
+                foreach (var item in payrollEarnings)
+                {
+                    if (payload.Earnings.Any(p => p.EarningsItemId != item.EarningItemsId))
+                    {
+                        var payrollEarningsDeleteReq = new PayrollEarningsDeleteReq
+                        {
+                            CreatedByUserId = accessUser.data.UserId,
+                            DateCreated = DateTime.Now,
+                            EarningsItemId = item.EarningsId,
+                            PayrollId = payrollId
+                        };
+                        await _payrollRepository.DeletePayrollEarnings(payrollEarningsDeleteReq);
+                    }
+                }
+                foreach (var item in payload.Deductions)
+                {
+                    var payrollDeductionReq = new PayrollDeductionReq
+                    {
+                        DeductionFixedAmount = item.DeductionFixedAmount,
+                        CreatedByUserId = accessUser.data.UserId,
+                        DateCreated = DateTime.Now,
+                        DeductionPercentageAmount = item.DeductionPercentageAmount,
+                        DeductionId = item.DeductionId,
+                        IsFixed = item.IsFixed,
+                        IsPercentage = item.IsPercentage,
+                        PayrollId = payrollId
+                    };
+                    await _payrollRepository.ProcessPayrollDeduction(payrollDeductionReq);
+                }
+                var payrollDeductions = await _payrollRepository.GetPayrollDeductions(payrollId);
+                foreach (var item in payrollDeductions)
+                {
+                    if (payload.Deductions.Any(p => p.DeductionId != item.DeductionId))
+                    {
+                        var payrollDeductionDeleteReq = new PayrollDeductionDeleteReq
+                        {
+                            CreatedByUserId = accessUser.data.UserId,
+                            DateCreated = DateTime.Now,
+                            DeductionId = item.DeductionId,
+                            PayrollId = payrollId
+                        };
+                        await _payrollRepository.DeletePayrollDeduction(payrollDeductionDeleteReq);
+                    }
+                }
 
                 var auditLog = new AuditLogDto
                 {
@@ -310,53 +429,156 @@ namespace hrms_be_backend_business.Logic
                 return PaginationHelper.CreatePagedReponse<PayrollAllView>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
             }
         }
-        //public async Task<ExecutedResult<PayrollSingleView>> GetPayrollById(long Id, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
-        //{
-        //    try
-        //    {
-        //        var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-        //        if (accessUser.data == null)
-        //        {
-        //            return new ExecutedResult<PayrollSingleView>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+        public async Task<ExecutedResult<PayrollSingleView>> GetPayrollById(long Id, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<PayrollSingleView>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
-        //        }
-        //        var result = await _payrollRepository.GetPayrollById(Id);
-        //        if (result == null)
-        //        {
-        //            return new ExecutedResult<PayrollSingleView>() { responseMessage = ((int)ResponseCode.NotFound).ToString().ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
-        //        }
-               
-        //        var computations = await _earningsRepository.GetEarningsComputation(result.EarningsId);
-        //        var cra = await _earningsRepository.GetEarningsCRA(accessUser.data.CompanyId);
+                }
+                var payroll = await _payrollRepository.GetPayrollById(Id);
+                if (payroll == null)
+                {
+                    return new ExecutedResult<PayrollSingleView>() { responseMessage = ((int)ResponseCode.NotFound).ToString().ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+                }
+                var returnData = new PayrollSingleView();
+                returnData.PayrollId = payroll.PayrollId;
+                returnData.Payday = payroll.Payday;
+                returnData.PayRollTitle = payroll.PayRollTitle;
+                returnData.PayRollDescription = payroll.PayRollDescription;
+                returnData.ProrationPolicy = payroll.ProrationPolicy;
+                returnData.CurrencyId = payroll.CurrencyId;
+                returnData.CurrencyName = payroll.CurrencyName;
+                returnData.PayrollCycleId = payroll.PayrollCycleId;
+                returnData.PayrollCycleName = payroll.PayrollCycleName;
+                returnData.PaydayCustomDayOfTheCycle = payroll.PaydayCustomDayOfTheCycle;
+                returnData.PaydayLastWeekOfTheCycle = payroll.PaydayLastWeekOfTheCycle;
+                returnData.PaydayLastDayOfTheCycle = payroll.PaydayLastDayOfTheCycle;
 
-        //        var deductions = await _deductionsRepository.GetDeduction(accessUser.data.CompanyId);
-        //        StringBuilder restatedGross = new StringBuilder();
-        //        restatedGross.Append("Gross ");
-        //        foreach (var deduction in deductions)
-        //        {
-        //            restatedGross.Append($" - {deduction.DeductionName}");
-        //        }
-        //        string craDetails = $"{cra.EarningsCRAPercentage}% * RestatedGross <br/><br/> OR <br/><br/>";
-        //        craDetails = $"Higher of {cra.EarningsCRAHigherOfPercentage}% * RestatedGross or {cra.EarningsCRAHigherOfValue.ToString("0,0.00")}";
+                var earnings = await _payrollRepository.GetPayrollEarnings(Id);
+                decimal totalEarningsAmount = 0; string restatedGrossComputation = "";
+                if (earnings != null)
+                {
+                    string earningName = earnings.FirstOrDefault().EarningsName;
+                    returnData.EarningsName = earningName;
+                    restatedGrossComputation = earningName;
+                    var payrollEarnings = new List<PayrollEarnings>();
+                    foreach (var item in earnings)
+                    {
+                        totalEarningsAmount += item.EarningItemAmount;
+                        payrollEarnings.Add(new PayrollEarnings()
+                        {
+                            EarningsItemAmount = item.EarningItemAmount,
+                            EarningsItemId = item.EarningItemsId,
+                            EarningsItemName = item.EarningItemName
+                        });
+                    }
+                }
+                returnData.TotalEarningAmount = totalEarningsAmount;
+                var deductions = await _payrollRepository.GetPayrollDeductions(Id);
+                decimal deductionTotalAmount = 0;
+                if (deductions != null)
+                {
+                    var payrollDeduction = new List<PayrollDeduction>();
+                    foreach (var item in deductions)
+                    {
+                        restatedGrossComputation += $" - {item.DeductionName}";
+                        if (item.IsFixed)
+                        {
+                            deductionTotalAmount += item.DeductionFixedAmount;
+                        }
+                        if (item.IsPercentage)
+                        {
+                            var deductionComputations = await _deductionsRepository.GetDeductionComputation(item.DeductionId);
+                            foreach (var deductionItem in deductionComputations)
+                            {
+                                decimal deductionItemAmount = earnings.Where(p => p.EarningItemsId == deductionItem.EarningsItemId).Select(p => p.EarningItemAmount).FirstOrDefault();
+                                if (deductionItemAmount > 0)
+                                {
+                                    if (item.DeductionPercentageAmount > 0)
+                                    {
+                                        decimal percentage = decimal.Divide(item.DeductionPercentageAmount, 100);
+                                        decimal amt = decimal.Multiply(percentage, deductionItemAmount);
+                                        deductionTotalAmount += amt;
+                                    }
+                                }
+                            }
 
-        //        var earningsView = new EarningsView
-        //        {
-        //            CreatedByUserId = result.CreatedByUserId,
-        //            DateCreated = result.DateCreated,
-        //            EarningsId = result.EarningsId,
-        //            EarningsName = result.EarningsName,
-        //            EarningsComputations = computations,
-        //            EarningsCRA = craDetails,
-        //            RestatedGross = restatedGross.ToString()
-        //        };
-        //        return new ExecutedResult<EarningsView>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = earningsView };
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"PayrollService (GetEarning)=====>{ex}");
-        //        return new ExecutedResult<EarningsView>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
-        //    }
-        //}
+                        }
+                        payrollDeduction.Add(new PayrollDeduction()
+                        {
+                            DeductionFixedAmount = item.DeductionFixedAmount,
+                            DeductionPercentageAmount = item.DeductionPercentageAmount,
+                            DeductionId = item.DeductionId,
+                            DeductionName = item.DeductionName,
+                            IsFixed = item.IsFixed,
+                            IsPercentage = item.IsPercentage,
+                        });
+                    }
+                }
+                returnData.DeductionTotalAmount = deductionTotalAmount;
+                decimal restatedAmount = totalEarningsAmount - deductionTotalAmount;
+                returnData.RestatedGrossAmount = restatedAmount;
+
+                //----CRA Calculation
+                #region CRA Calculation
+                var cra = await _earningsRepository.GetEarningsCRA(accessUser.data.CompanyId);
+                if (cra != null)
+                {
+                    decimal percentage = decimal.Divide(Convert.ToDecimal(cra.EarningsCRAPercentage), 100);
+                    decimal craAmount = decimal.Multiply(percentage, restatedAmount);
+                    decimal earningsCRAHigherOfPercentage = decimal.Divide(Convert.ToDecimal(cra.EarningsCRAHigherOfPercentage), 100);
+                    decimal earningsCRAHigherOfPercentageAmount = decimal.Multiply(earningsCRAHigherOfPercentage, restatedAmount);
+                    decimal amountToAdd = 0;
+                    if (earningsCRAHigherOfPercentageAmount > cra.EarningsCRAHigherOfValue)
+                    {
+                        amountToAdd = earningsCRAHigherOfPercentageAmount;
+                    }
+                    else
+                    {
+                        amountToAdd = cra.EarningsCRAHigherOfValue;
+                    }
+                    craAmount += amountToAdd;
+                    returnData.CRAComputation = $"{cra.EarningsCRAPercentage} of Restated Gross + (Higher of {cra.EarningsCRAHigherOfPercentage} * Restated Gross or {cra.EarningsCRAHigherOfValue})";
+                    returnData.CRAAmount = craAmount;
+                }
+                #endregion
+
+
+                var computations = await _earningsRepository.GetEarningsComputation(result.EarningsId);
+                var cra = await _earningsRepository.GetEarningsCRA(accessUser.data.CompanyId);
+
+                var deductions = await _deductionsRepository.GetDeduction(accessUser.data.CompanyId);
+                StringBuilder restatedGross = new StringBuilder();
+                restatedGross.Append("Gross ");
+                foreach (var deduction in deductions)
+                {
+                    restatedGross.Append($" - {deduction.DeductionName}");
+                }
+                string craDetails = $"{cra.EarningsCRAPercentage}% * RestatedGross <br/><br/> OR <br/><br/>";
+                craDetails = $"Higher of {cra.EarningsCRAHigherOfPercentage}% * RestatedGross or {cra.EarningsCRAHigherOfValue.ToString("0,0.00")}";
+
+                var earningsView = new EarningsView
+                {
+                    CreatedByUserId = result.CreatedByUserId,
+                    DateCreated = result.DateCreated,
+                    EarningsId = result.EarningsId,
+                    EarningsName = result.EarningsName,
+                    EarningsComputations = computations,
+                    EarningsCRA = craDetails,
+                    RestatedGross = restatedGross.ToString()
+                };
+                return new ExecutedResult<EarningsView>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = earningsView };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollService (GetEarning)=====>{ex}");
+                return new ExecutedResult<EarningsView>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
 
         public async Task<ExecutedResult<IEnumerable<PayrollCyclesVm>>> GetPayrollCycles(string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
