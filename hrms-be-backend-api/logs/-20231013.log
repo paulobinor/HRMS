@@ -106,3 +106,42 @@
 [2023-10-13 10:24:58.927 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.CurrencyController.GetCurrencies (hrms-be-backend-api) in 7553.1895ms
 [2023-10-13 10:24:58.984 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.CurrencyController.GetCurrencies (hrms-be-backend-api)'
 [2023-10-13 10:24:59.068 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/api/Currency/GetCurrencies - - - 200 - application/json;+charset=utf-8 7958.8816ms
+[2023-10-13 16:04:08.381 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-10-13 16:04:09.223 +01:00  INF]  Now listening on: http://localhost:5008
+[2023-10-13 16:04:09.255 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-10-13 16:04:09.263 +01:00  INF]  Hosting environment: Development
+[2023-10-13 16:04:09.269 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api
+[2023-10-13 16:04:10.515 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2023-10-13 16:04:12.114 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2023-10-13 16:04:12.123 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2023-10-13 16:04:12.137 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12370 application/javascript;+charset=utf-8 16.2687ms
+[2023-10-13 16:04:12.140 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 1640.8639ms
+[2023-10-13 16:04:12.200 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 76.6370ms
+[2023-10-13 16:04:12.345 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2023-10-13 16:04:13.372 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 1026.9954ms
+[2023-10-13 16:17:10.891 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-10-13 16:17:11.639 +01:00  INF]  Now listening on: http://localhost:5008
+[2023-10-13 16:17:11.656 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-10-13 16:17:11.680 +01:00  INF]  Hosting environment: Development
+[2023-10-13 16:17:11.688 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api
+[2023-10-13 16:17:12.981 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2023-10-13 16:17:14.302 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2023-10-13 16:17:14.302 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2023-10-13 16:17:14.534 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 1535.6949ms
+[2023-10-13 16:17:14.534 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12370 application/javascript;+charset=utf-8 213.5400ms
+[2023-10-13 16:17:14.552 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 249.7972ms
+[2023-10-13 16:17:14.648 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2023-10-13 16:17:15.369 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 720.9528ms
+[2023-10-13 16:32:46.496 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-10-13 16:32:47.015 +01:00  INF]  Now listening on: http://localhost:5008
+[2023-10-13 16:32:47.025 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-10-13 16:32:47.031 +01:00  INF]  Hosting environment: Development
+[2023-10-13 16:32:47.035 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api
+[2023-10-13 16:32:48.473 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2023-10-13 16:32:49.711 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2023-10-13 16:32:49.712 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2023-10-13 16:32:49.761 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 1297.3224ms
+[2023-10-13 16:32:49.761 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12370 application/javascript;+charset=utf-8 50.6837ms
+[2023-10-13 16:32:49.810 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 97.2715ms
+[2023-10-13 16:32:49.930 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2023-10-13 16:32:50.827 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 896.7914ms

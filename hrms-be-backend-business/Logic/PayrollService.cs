@@ -6,6 +6,7 @@ using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -22,12 +23,13 @@ namespace hrms_be_backend_business.Logic
         private readonly IDeductionsRepository _deductionsRepository;
         private readonly IEarningsRepository _earningsRepository;
         private readonly IPayrollRepository _payrollRepository;
+        private readonly ITaxRepository _taxRepository;
         private readonly IAuthService _authService;
         private readonly IMailService _mailService;
         private readonly IUriService _uriService;
         private readonly JwtConfig _jwt;
         private readonly IAuditLog _audit;
-        public PayrollService(IOptions<JwtConfig> jwt, ILogger<PayrollService> logger, IPayrollRepository payrollRepository, IEarningsRepository earningsRepository, IDeductionsRepository deductionsRepository, IAuditLog audit, IAuthService authService, IUriService uriService)
+        public PayrollService(IOptions<JwtConfig> jwt, ILogger<PayrollService> logger, IPayrollRepository payrollRepository, IEarningsRepository earningsRepository, IDeductionsRepository deductionsRepository, ITaxRepository taxRepository, IAuditLog audit, IAuthService authService, IUriService uriService)
         {
             _logger = logger;
             _earningsRepository = earningsRepository;
@@ -36,6 +38,7 @@ namespace hrms_be_backend_business.Logic
             _audit = audit;
             _authService = authService;
             _payrollRepository = payrollRepository;
+            _taxRepository = taxRepository;
             _uriService = uriService;
         }
         public async Task<ExecutedResult<string>> CreatePayroll(PayrollCreateDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
@@ -67,7 +70,46 @@ namespace hrms_be_backend_business.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || Currency is required";
                 }
-
+                if (payload.PayrollCycleId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Payrol cycle is required";
+                }
+                if (payload.Earnings==null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Payrol earning is required";
+                }
+                if (payload.Earnings.Any(p=>p.EarningsItemId < 1))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || One of the earning contain invalid data, EarningsItemId must be greater than 0";
+                }
+                if (payload.Earnings.Any(p => p.EarningsItemAmount <1))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || One of the earning contain invalid data, EarningsItemAmount must be greater than 0";
+                }
+                if (payload.Deductions == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Payrol deduction is required";
+                }
+                if (payload.Deductions.Any(p => p.DeductionId < 1))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || One of the deduction contain invalid data, deductionId must be greater than 0";
+                }
+                if (payload.Deductions.Any(p => p.IsFixed) && payload.Deductions.Any(p => p.DeductionFixedAmount <1))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || One of the deduction contain invalid data, DeductionFixedAmount must be greater than 0";
+                }
+                if (payload.Deductions.Any(p => p.IsPercentage) && payload.Deductions.Any(p => p.DeductionPercentageAmount < 1))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || One of the deduction contain invalid data, DeductionPercentageAmount must be greater than 0";
+                }
                 if (!isModelStateValidate)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
@@ -459,12 +501,13 @@ namespace hrms_be_backend_business.Logic
                 returnData.PaydayLastDayOfTheCycle = payroll.PaydayLastDayOfTheCycle;
 
                 var earnings = await _payrollRepository.GetPayrollEarnings(Id);
-                decimal totalEarningsAmount = 0; string restatedGrossComputation = "";
+                decimal totalEarningsAmount = 0, taxIncome=0; string restatedGrossComputation = "", taxComputation="", earningName="";
                 if (earnings != null)
                 {
-                    string earningName = earnings.FirstOrDefault().EarningsName;
+                    earningName = earnings.FirstOrDefault().EarningsName;
                     returnData.EarningsName = earningName;
                     restatedGrossComputation = earningName;
+                    taxComputation = earningName;
                     var payrollEarnings = new List<PayrollEarnings>();
                     foreach (var item in earnings)
                     {
@@ -478,6 +521,13 @@ namespace hrms_be_backend_business.Logic
                     }
                 }
                 returnData.TotalEarningAmount = totalEarningsAmount;
+                var payrollPayments = new List<PayrollPayments>();
+                payrollPayments.Add(new PayrollPayments
+                {
+                    PaymentAmount = decimal.Divide(totalEarningsAmount, 12),
+                    PaymentName = earningName,
+                    PaymentSubTitle = $"{earningName} / 12"
+                });
                 var deductions = await _payrollRepository.GetPayrollDeductions(Id);
                 decimal deductionTotalAmount = 0;
                 if (deductions != null)
@@ -486,9 +536,12 @@ namespace hrms_be_backend_business.Logic
                     foreach (var item in deductions)
                     {
                         restatedGrossComputation += $" - {item.DeductionName}";
+                        taxComputation += $" - {item.DeductionName}";
+                        decimal deductionAmount = 0;
                         if (item.IsFixed)
                         {
                             deductionTotalAmount += item.DeductionFixedAmount;
+                            deductionAmount= item.DeductionFixedAmount;
                         }
                         if (item.IsPercentage)
                         {
@@ -503,11 +556,19 @@ namespace hrms_be_backend_business.Logic
                                         decimal percentage = decimal.Divide(item.DeductionPercentageAmount, 100);
                                         decimal amt = decimal.Multiply(percentage, deductionItemAmount);
                                         deductionTotalAmount += amt;
+                                        deductionAmount = amt;
                                     }
                                 }
                             }
 
                         }
+
+                        payrollPayments.Add(new PayrollPayments
+                        {
+                            PaymentAmount = decimal.Divide(deductionAmount, 12),
+                            PaymentName = $"{item.DeductionName}",
+                            PaymentSubTitle = $"{item.DeductionName} / 12"
+                        });
                         payrollDeduction.Add(new PayrollDeduction()
                         {
                             DeductionFixedAmount = item.DeductionFixedAmount,
@@ -526,10 +587,11 @@ namespace hrms_be_backend_business.Logic
                 //----CRA Calculation
                 #region CRA Calculation
                 var cra = await _earningsRepository.GetEarningsCRA(accessUser.data.CompanyId);
+                decimal craAmount = 0;
                 if (cra != null)
                 {
                     decimal percentage = decimal.Divide(Convert.ToDecimal(cra.EarningsCRAPercentage), 100);
-                    decimal craAmount = decimal.Multiply(percentage, restatedAmount);
+                    craAmount = decimal.Multiply(percentage, restatedAmount);
                     decimal earningsCRAHigherOfPercentage = decimal.Divide(Convert.ToDecimal(cra.EarningsCRAHigherOfPercentage), 100);
                     decimal earningsCRAHigherOfPercentageAmount = decimal.Multiply(earningsCRAHigherOfPercentage, restatedAmount);
                     decimal amountToAdd = 0;
@@ -547,36 +609,63 @@ namespace hrms_be_backend_business.Logic
                 }
                 #endregion
 
+                #region Tax Calculation
+                taxComputation += " - CRA";
+                taxIncome = totalEarningsAmount - deductionTotalAmount - craAmount;
+                returnData.TaxIncomeAmount = taxIncome;
 
-                var computations = await _earningsRepository.GetEarningsComputation(result.EarningsId);
-                var cra = await _earningsRepository.GetEarningsCRA(accessUser.data.CompanyId);
-
-                var deductions = await _deductionsRepository.GetDeduction(accessUser.data.CompanyId);
-                StringBuilder restatedGross = new StringBuilder();
-                restatedGross.Append("Gross ");
-                foreach (var deduction in deductions)
+                var taxPayable = await _taxRepository.GetTaxPayable(accessUser.data.CompanyId);
+                decimal taxPayableAmount = 0, taxIncomeRemained = taxIncome;
+                if (taxPayable != null)
                 {
-                    restatedGross.Append($" - {deduction.DeductionName}");
+                    taxPayable.OrderBy(p => p.StepNumber);
+                    foreach (var item in taxPayable)
+                    {
+                        if (!item.IsLast) {
+                            if (item.PayableAmount >= taxIncomeRemained)
+                            {
+                                decimal percentage = decimal.Divide(item.PayablePercentage, 100);
+                                decimal amt=decimal.Multiply(item.PayableAmount, percentage);
+                                taxIncomeRemained -= item.PayableAmount;
+                                taxPayableAmount += amt;
+                            }
+                        }
+                        else
+                        {
+                            decimal percentage = decimal.Divide(item.PayablePercentage, 100);
+                            decimal amt = decimal.Multiply(taxIncomeRemained, percentage);                
+                            taxPayableAmount += amt;
+                            break;
+                        }
+                        
+                    }
                 }
-                string craDetails = $"{cra.EarningsCRAPercentage}% * RestatedGross <br/><br/> OR <br/><br/>";
-                craDetails = $"Higher of {cra.EarningsCRAHigherOfPercentage}% * RestatedGross or {cra.EarningsCRAHigherOfValue.ToString("0,0.00")}";
-
-                var earningsView = new EarningsView
+                returnData.TaxPayableAmount = taxPayableAmount;
+                payrollPayments.Add(new PayrollPayments
                 {
-                    CreatedByUserId = result.CreatedByUserId,
-                    DateCreated = result.DateCreated,
-                    EarningsId = result.EarningsId,
-                    EarningsName = result.EarningsName,
-                    EarningsComputations = computations,
-                    EarningsCRA = craDetails,
-                    RestatedGross = restatedGross.ToString()
-                };
-                return new ExecutedResult<EarningsView>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = earningsView };
+                    PaymentAmount = decimal.Divide(taxPayableAmount, 12),
+                    PaymentName = "Tax",
+                    PaymentSubTitle = $"Tax / 12"
+                });
+                decimal monthlyEarnings=decimal.Divide(totalEarningsAmount, 12);
+                decimal monthlyDeduction = decimal.Divide(deductionTotalAmount, 12);
+                payrollPayments.Add(new PayrollPayments
+                {
+                    PaymentAmount = monthlyEarnings - monthlyDeduction,
+                    PaymentName = "Net Pay",
+                    PaymentSubTitle = $"Net Pay / 12"
+                });
+                #endregion
+
+
+
+               
+                return new ExecutedResult<PayrollSingleView>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = returnData };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"PayrollService (GetEarning)=====>{ex}");
-                return new ExecutedResult<EarningsView>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+                _logger.LogError($"PayrollService (GetPayrollById)=====>{ex}");
+                return new ExecutedResult<PayrollSingleView>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
 
