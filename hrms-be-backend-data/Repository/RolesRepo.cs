@@ -46,5 +46,30 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
+
+
+        public async Task<IEnumerable<RolesDTO>> GetAllRoles()
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", RoleEnum.GetAll);
+
+
+                    var roles = await _dapper.QueryAsync<RolesDTO>(ApplicationConstant.Sp_Roles, param: param, commandType: CommandType.StoredProcedure);
+
+                    return roles;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName:  GetRolesByName(string RoleName) ===>{ex.Message}");
+                throw;
+            }
+        }
+
     }
 }
