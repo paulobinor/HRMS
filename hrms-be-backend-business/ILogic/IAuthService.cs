@@ -14,6 +14,7 @@ namespace hrms_be_backend_business.ILogic
         Task<BaseResponse> Logout(LogoutDto logout, string ipAddress, string port);
         Task<BaseResponse> CreateUser(CreateUserDto userDto, RequesterInfo requester);
         Task<BaseResponse> CreateUserBulkUpload(IFormFile payload, RequesterInfo requester);
+        Task<BaseResponse> CreateUserBulkUploadTwo(IFormFile payload, long companyID, RequesterInfo requester);
         Task<BaseResponse> UpdateUser(UpdateUserDto updateDto, RequesterInfo requester);
         Task<BaseResponse> SendEmailForPasswordChange(RequestPasswordChange request, string ipAddress, string port);
         Task<BaseResponse> ChangePassword(ChangePasswordViewModel changePassword, string ipAddress, string port);

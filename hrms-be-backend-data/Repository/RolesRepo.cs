@@ -15,12 +15,14 @@ namespace hrms_be_backend_data.Repository
         private string _connectionString;
         private readonly ILogger<RolesRepo> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IDapperGenericRepository _dapperGenericRepository;
 
-        public RolesRepo(IConfiguration configuration, ILogger<RolesRepo> logger)
+        public RolesRepo(IConfiguration configuration, ILogger<RolesRepo> logger , IDapperGenericRepository dapperGenericRepository)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
             _logger = logger;
             _configuration = configuration;
+            _dapperGenericRepository = dapperGenericRepository;
         }
 
         public async Task<RolesDTO> GetRolesByName(string RoleName)
@@ -52,16 +54,24 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", RoleEnum.GetAll);
+                //using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                //{
+                //    var param = new DynamicParameters();
+                //    param.Add("@Status", (int)RoleEnum.GetAll);
 
 
-                    var roles = await _dapper.QueryAsync<RolesDTO>(ApplicationConstant.Sp_Roles, param: param, commandType: CommandType.StoredProcedure);
+                //    var roles = await _dapper.QueryAsync<RolesDTO>(ApplicationConstant.Sp_Roles, param: param, commandType: CommandType.StoredProcedure);
 
-                    return roles;
-                }
+                //    return roles;
+                //}
+                string sqlquery = "Select * from Roles";
+
+                var param = new DynamicParameters();
+                param.Add("@Status", (int)RoleEnum.GetAll);
+
+                var roles = await _dapperGenericRepository.GetAll<RolesDTO>(sqlquery, parms: param , commandType:CommandType.Text);
+
+                return roles;
             }
             catch (Exception ex)
             {

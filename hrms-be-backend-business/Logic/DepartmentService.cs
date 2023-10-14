@@ -25,11 +25,12 @@ namespace hrms_be_backend_business.Logic
         private readonly IHODRepository _hODRepository;
         private readonly IGroupRepository _GroupRepository;
         private readonly IBranchRepository _branchRepository;
+        private readonly ICompanyAppModuleService _companyAppModuleService;
 
 
         public DepartmentService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<DepartmentService> logger,
             IDepartmentRepository departmentRepository, IAuditLog audit, IMapper mapper, ICompanyRepository companyrepository,
-            IHODRepository hODRepository, IGroupRepository groupRepository, IBranchRepository branchRepository)
+            IHODRepository hODRepository, IGroupRepository groupRepository, IBranchRepository branchRepository , ICompanyAppModuleService _companyAppModuleService)
         {
             _audit = audit;
             _mapper = mapper;
@@ -150,7 +151,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> CreateDepartmentBulkUpload(IFormFile payload, RequesterInfo requester)
+        public async Task<BaseResponse> CreateDepartmentBulkUpload(IFormFile payload,long companyID , RequesterInfo requester)
         {
             //check if us
             StringBuilder errorOutput = new StringBuilder();
@@ -186,17 +187,16 @@ namespace hrms_be_backend_business.Logic
                     int k = 0;
                     if (ds != null && ds.Tables.Count > 0)
                     {
-
+                        var departmentList = new List<CreateDepartmentDto>();
                         string DepartmentName = serviceDetails.Rows[0][0].ToString();
-                        string HodName = serviceDetails.Rows[0][1].ToString();
-                        string GroupName = serviceDetails.Rows[0][2].ToString();
-                        string BranchName = serviceDetails.Rows[0][3].ToString();
-
-                        string CompanyName = serviceDetails.Rows[0][5].ToString();
+                        string HodEmail = serviceDetails.Rows[0][1].ToString();
+                        string CompanyName = serviceDetails.Rows[0][2].ToString();
+                        //string CompanyName = serviceDetails.Rows[0][3].ToString();
+                        //string CompanyName = serviceDetails.Rows[0][5].ToString();
 
 
                         if (DepartmentName != "DepartmentName"
-                        || GroupName != "GroupName" || BranchName != "BranchName" || CompanyName != "CompanyName")
+                        || HodEmail != "HodEmail" || CompanyName != "CompanyName")
                         {
                             response.ResponseCode = "08";
                             response.ResponseMessage = "File header not in the Right format";
@@ -204,44 +204,74 @@ namespace hrms_be_backend_business.Logic
                         }
                         else
                         {
+                            var company = await _companyrepository.GetCompanyById(companyID);
+                            if (company == null)
+                            {
+                                response.ResponseCode = "08";
+                                response.ResponseMessage = "Company not found";
+
+                                return response;
+                            }
                             for (int row = 1; row < serviceDetails.Rows.Count; row++)
                             {
 
                                 string departmentName = serviceDetails.Rows[row][0].ToString();
-                                var hod = await _hODRepository.GetHODByName(serviceDetails.Rows[row][1].ToString());
-                                var group = await _GroupRepository.GetGroupByName(serviceDetails.Rows[row][2].ToString());
-                                var branch = await _branchRepository.GetBranchByName(serviceDetails.Rows[row][3].ToString());
+                                var hodEmail = serviceDetails.Rows[row][1].ToString();
+                                var companyName = serviceDetails.Rows[row][2].ToString();
+                               // var companyName = serviceDetails.Rows[row][3].ToString();
+                                //var group = await _GroupRepository.GetGroupByName(serviceDetails.Rows[row][2].ToString());
+                                //var branch = await _branchRepository.GetBranchByName(serviceDetails.Rows[row][3].ToString());
+                                if (company.CompanyName.ToLower() != companyName.ToLower().Trim())
+                                {
+                                    errorOutput.Append($"Row {row} Invalid company name {companyName}" + "\n");
+                                }
 
-                                var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][5].ToString());
+                                if (string.IsNullOrEmpty(hodEmail))
+                                {
+                                   errorOutput.Append($"Row {row} Hod email is required" + "\n");
+                                }
+                                 var hod = await _hODRepository.GetHODByEmail(hodEmail , companyID);
+                                
+                                if(hod == null)
+                                {
+                                    errorOutput.Append($"Row {row} HOD not found" + "\n");
+                                }
 
-                                long hodID = hod.HodID;
-                                long groupID = group.GroupID;
-                                long branchID = branch.BranchID;
-                                long companyID = company.CompanyId;
+                                if(errorOutput.Length > 0)
+                                {
+                                    response.ResponseCode = "02";
+                                    response.ResponseMessage = errorOutput.ToString();
+                                    return response;
+                                }
+                                
+
+                                long hodID = hod.UserId;
+
 
                                 var departmentrequest = new CreateDepartmentDto
                                 {
-                                    DepartmentName = departmentName,
-
-
-
-                                    CompanyId = companyID,
+                                    DepartmentName = departmentName.Trim(),
+                                    HODUserId = hodID,
+                                    CompanyId = companyID
 
                                 };
 
-                                var departmentrequester = new RequesterInfo
-                                {
-                                    Username = requester.Username,
-                                    UserId = requester.UserId,
-                                    RoleId = requester.RoleId,
-                                    IpAddress = requester.IpAddress,
-                                    Port = requester.Port,
+                                departmentList.Add(departmentrequest);
+                                
+                            }
 
+                            var departmentrequester = new RequesterInfo
+                            {
+                                Username = requester.Username,
+                                UserId = requester.UserId,
+                                RoleId = requester.RoleId,
+                                IpAddress = requester.IpAddress,
+                                Port = requester.Port,
+                            };
 
-                                };
-
-                                var resp = await CreateDepartment(departmentrequest, departmentrequester);
-
+                            foreach (var department in departmentList)
+                            {
+                                var resp = await CreateDepartment(department, departmentrequester);
 
                                 if (resp.ResponseCode == "00")
                                 {
@@ -249,7 +279,7 @@ namespace hrms_be_backend_business.Logic
                                 }
                                 else
                                 {
-                                    errorOutput.Append($"Row {row} failed due to {resp.ResponseMessage}" + "\n");
+                                    errorOutput.Append($"failed due to {resp.ResponseMessage}" + "\n");
                                 }
                             }
                         }

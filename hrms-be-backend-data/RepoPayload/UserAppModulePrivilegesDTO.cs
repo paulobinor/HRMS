@@ -8,7 +8,7 @@ namespace hrms_be_backend_data.RepoPayload
 {
     public class UserAppModulePrivilegesDTO
     {
-        public long UserAppModulePrivilegesId { get; set; }
+        public long UserAppModulePrivilegeID { get; set; }
         public long AppModulePrivilegeID { get; set; }
         public long UserID { get; set; }
         public DateTime DateCreated { get; set; }
@@ -33,7 +33,7 @@ namespace hrms_be_backend_data.RepoPayload
         public string PrivilegeName { get; set; }
         public string AppModuleName { get; set; }
         public string AppModuleCode { get; set; }
-        public long UserAppModulePrivilegesId { get; set; }
+        public long UserAppModulePrivilegeID { get; set; }
         public long AppModulePrivilegeID { get; set; }
         public long UserID { get; set; }
         public DateTime DateCreated { get; set; }

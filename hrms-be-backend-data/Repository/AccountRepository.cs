@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using Org.BouncyCastle.Asn1.Pkcs;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -127,27 +128,22 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<object> AddUserBulk(DataTable dataTable, RequesterInfo requester)
+        public async Task<int> AddUserBulk(DataTable dataTable, RequesterInfo requester , long currentStaffCount , int listCount , long companyID)
         {
             try
             {
                 var param = new
                 {
-                    //Transactions = dataTable.AsTableValuedParameter("UserType"),
-                    //DebitAccount = debitAccount,
-                    //BatchNumber = batchNumber,
-                    //BatchTransactionStatusCode = batchTransactionStatusCode,
-                    //DateCreated = dateCreated,
-                    //CreatedByUserId = createdByUserId,
-                    //PaymentTransactionChannelCode = paymentTransactionChannelCode,
-                    //SaveOnTemp = saveOnTemp,
-                    //Mandate = Mandate,
-                    //DefaultProcessorCode = defaultProcessor,
-                    //BatchCount = batchCount
-
+                    DateCreated = DateTime.Now,
+                    CreatedBy = requester.Username,
+                    UserID = requester.UserId,
+                    CurrentStaffCount = currentStaffCount,
+                    Count = listCount,
+                    CompanyID = companyID,
+                    Users = dataTable.AsTableValuedParameter("UserType"),
                 };
-                var resp = await _dapper.BulkInsert<object>(param, "sp_Batch_Transaction_Upload");
-                return resp.ToString();
+                var resp = await _dapper.BulkInsert<int>(param, "sp_CreateUserBulk");
+                return resp;
             }
             catch (Exception ex)
             {

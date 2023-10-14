@@ -1,4 +1,6 @@
 ﻿using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.ViewModel;
+using System.Data;
 
 namespace hrms_be_backend_data.IRepository
 {
@@ -7,6 +9,7 @@ namespace hrms_be_backend_data.IRepository
         Task<User> FindUser(string officialMail);
         Task<User> FindUser(long userId);
         Task<CreateUserResponse> AddUser(CreateUserDto user, int createdbyUserId, string createdbyuseremail);
+        Task<int> AddUserBulk(DataTable dataTable, RequesterInfo requester, long currentStaffCount, int listCount, long companyID);
         Task<dynamic> UpdateUser(UpdateUserDto user, int updatedbyUserId, string updatedbyuseremail);
         Task<dynamic> MapUserToDepartment(string email, long deptId, long CompId, int updatedbyUserId);
 

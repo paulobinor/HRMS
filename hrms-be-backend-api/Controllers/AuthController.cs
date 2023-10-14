@@ -101,9 +101,9 @@ namespace hrms_be_backend_api.Controllers
             }
         }
 
-        [HttpPost("CreateUserBulkUpload")]
-        [Authorize]
-        public async Task<IActionResult> CreateUserBulkUpload(IFormFile payload)
+        [HttpPost("CreateUserBulkUpload/{companyID}")]
+        //[Authorize]
+        public async Task<IActionResult> CreateUserBulkUpload(IFormFile payload , long companyID)
         {
             var response = new BaseResponse();
             try
@@ -117,7 +117,7 @@ namespace hrms_be_backend_api.Controllers
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
-                return Ok(await _authService.CreateUserBulkUpload(payload, requester));
+                return Ok(await _authService.CreateUserBulkUploadTwo(payload, companyID ,requester));
             }
             catch (Exception ex)
             {
