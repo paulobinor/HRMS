@@ -588,7 +588,7 @@ namespace hrms_be_backend_business.Logic
         }
 
         
-        public async Task<BaseResponse> CreateUserBulkUploadTwo(IFormFile payload, int companyID, RequesterInfo requester)
+        public async Task<BaseResponse> CreateUserBulkUploadTwo(IFormFile payload, long companyID, RequesterInfo requester)
         {
             //check if us
             StringBuilder errorOutput = new StringBuilder();
@@ -664,7 +664,6 @@ namespace hrms_be_backend_business.Logic
                                 response.ResponseMessage = "Company not found";
                                 return response;
                             }
-
                             var compnayUnitsTask = _unitRepository.GetAllUnitCompanyId(companyID);
                             var departmentsTask = _departmentrepository.GetAllDepartmentsbyCompanyId(companyID);
                             var unitsTask = _unitRepository.GetAllUnitCompanyId(companyID);
@@ -676,16 +675,8 @@ namespace hrms_be_backend_business.Logic
 
 
 
-                            await Task.WhenAll(
-        compnayUnitsTask,
-        departmentsTask,
-        unitsTask,
-        gradsTask,
-        employeTypesTask,
-        employeStatusTask,
-        rolesTask,
-        branchesTask
-    );
+                            await Task.WhenAll(compnayUnitsTask,departmentsTask,unitsTask,gradsTask,
+                            employeTypesTask,employeStatusTask, rolesTask,branchesTask);
 
                             // You can access the results directly
                             var companyUnits = compnayUnitsTask.Result;
@@ -715,7 +706,7 @@ namespace hrms_be_backend_business.Logic
                                 string email = serviceDetails.Rows[row][3].ToString();
                                 string dOB = serviceDetails.Rows[row][4].ToString();
                                 string resumptionDate = serviceDetails.Rows[row][5].ToString();
-                                string officialMail = serviceDetails.Rows[row][6].ToString();
+                                string officialMaildata = serviceDetails.Rows[row][6].ToString();
                                 string phoneNumber = serviceDetails.Rows[row][7].ToString();
                                 string staffID = serviceDetails.Rows[row][8].ToString();
                                 var unitName = serviceDetails.Rows[row][9].ToString();
@@ -733,7 +724,7 @@ namespace hrms_be_backend_business.Logic
                                     rowError = $"{rowError} Last name is required.";
                                 else if (string.IsNullOrEmpty(email) || !Regex.IsMatch(email, patternEmail))
                                     rowError = $"{rowError} Invalid email supplied.";
-                                else if (string.IsNullOrEmpty(officialMail) || !Regex.IsMatch(officialMail, patternEmail))
+                                else if (string.IsNullOrEmpty(officialMaildata) || !Regex.IsMatch(officialMaildata, patternEmail))
                                     rowError = $"{rowError} Invalid official supplied.";
                                 else if (string.IsNullOrEmpty(phoneNumber))
                                     rowError = $"{rowError} Phone number is required.";
@@ -834,7 +825,7 @@ namespace hrms_be_backend_business.Logic
                                     Email = email,
                                     DOB = dOB,
                                     ResumptionDate = resumptionDate,
-                                    OfficialMail = OfficialMail,
+                                    OfficialMail = officialMaildata,
                                     PhoneNumber = phoneNumber,
                                     UnitID = unitID,
                                     GradeID = gradeID,
@@ -843,55 +834,30 @@ namespace hrms_be_backend_business.Logic
                                     EmploymentStatusID = employmentStatusID,
                                     RoleId = roleID,
                                     DepartmentId = departmentID,
-                                    CompanyId = companyID,
+                                    CompanyId = companyID
+                                    
                                 };
 
                                 createUserList.Add(userrequest);
-                                dataTable.Rows.Add(new object[] { userrequest.FirstName, userrequest.MiddleName, userrequest.LastName, userrequest.Email, userrequest.DOB, userrequest.ResumptionDate, userrequest.OfficialMail, userrequest.PhoneNumber, userrequest.UnitID , userrequest.GradeID ,userrequest.EmployeeTypeID , userrequest.RoleId, userrequest.DepartmentId , userrequest.CompanyId });
-                                var userrequester = new RequesterInfo
-                                {
-                                    Username = requester.Username,
-                                    UserId = requester.UserId,
-                                    RoleId = requester.RoleId,
-                                    IpAddress = requester.IpAddress,
-                                    Port = requester.Port,
+                                dataTable.Rows.Add(new object[] { userrequest.FirstName.Trim(), staffID.Trim(), userrequest.MiddleName.Trim(), userrequest.LastName.Trim(), userrequest.Email.Trim(), userrequest.DOB.Trim(), userrequest.ResumptionDate.Trim(), userrequest.OfficialMail.Trim(), userrequest.PhoneNumber.Trim(), userrequest.UnitID, userrequest.GradeID, userrequest.EmployeeTypeID, userrequest.BranchID, userrequest.EmploymentStatusID, userrequest.RoleId, userrequest.DepartmentId, userrequest.CompanyId });
 
-                                };
-
-                                //await _accountRepository.AddUser
-                                if (/*resp.ResponseCode == "00"*/ true)
-                                {
-                                    k++;
-                                }
-                                else
-                                {
-                                    errorOutput.Append($"Row {row} failed due to /**/" + "\n");
-                                }
                             }
+
+                            var resp = await _accountRepository.AddUserBulk(dataTable, requester, company.LastStaffNumber, createUserList.Count, companyID);
+
+                            response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                            response.ResponseMessage = $"Users created successfully";
+                            response.Data = null;
+                            return response;
                         }
 
                     }
 
+                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Error reading file Or file is empty";
+                    response.Data = null;
+                    return response;
 
-
-                    if (k == rowCount - 1)
-                    {
-                        response.ResponseCode = "00";
-                        response.ResponseMessage = "All record inserted successfully";
-
-
-
-                        return response;
-                    }
-                    else
-                    {
-                        response.ResponseCode = "02";
-                        response.ResponseMessage = errorOutput.ToString();
-
-
-
-                        return response;
-                    }
                 }
 
 
@@ -1856,6 +1822,13 @@ namespace hrms_be_backend_business.Logic
                 ColumnName = "FirstName",
                 DataType = typeof(string)
             });
+
+            table.Columns.Add(new DataColumn()
+            {
+                ColumnName = "StaffID",
+                DataType = typeof(string)
+            });
+
             table.Columns.Add(new DataColumn()
             {
                 ColumnName = "MiddleName",
@@ -1899,50 +1872,51 @@ namespace hrms_be_backend_business.Logic
             table.Columns.Add(new DataColumn()
             {
                 ColumnName = "UnitID",
-                DataType = typeof(BigInteger)
+                DataType = typeof(long)
             });
 
             table.Columns.Add(new DataColumn()
             {
                 ColumnName = "GradeID",
-                DataType = typeof(BigInteger)
+                DataType = typeof(long)
             });
 
             table.Columns.Add(new DataColumn()
             {
                 ColumnName = "EmployeeTypeID",
-                DataType = typeof(BigInteger)
+                DataType = typeof(long)
             });
 
             table.Columns.Add(new DataColumn()
             {
                 ColumnName = "BranchID",
-                DataType = typeof(BigInteger)
+                DataType = typeof(long)
             });
 
             table.Columns.Add(new DataColumn()
             {
                 ColumnName = "EmploymentStatusID",
-                DataType = typeof(BigInteger)
+                DataType = typeof(long)
             });
 
             table.Columns.Add(new DataColumn()
             {
                 ColumnName = "RoleId",
-                DataType = typeof(BigInteger)
+                DataType = typeof(long)
             });
 
             table.Columns.Add(new DataColumn()
             {
                 ColumnName = "DepartmentId",
-                DataType = typeof(BigInteger)
+                DataType = typeof(long)
             });
 
             table.Columns.Add(new DataColumn()
             {
                 ColumnName = "CompanyId",
-                DataType = typeof(BigInteger)
+                DataType = typeof(long)
             });
+
 
             return table;
         }

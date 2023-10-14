@@ -288,7 +288,7 @@ namespace hrms_be_backend_business.Logic
                     {
                         successfulModules = $"{successfulModules} , {privilegesDetails.PrivilegeName}";
 
-                        userAppModulePrivilege.UserAppModulePrivilegesId = resp;
+                        userAppModulePrivilege.UserAppModulePrivilegeID = resp;
                         var auditLog = new AuditLogDto
                         {
                             userId = requester.UserId,
@@ -361,7 +361,7 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-                if (request.IsApproved == true)
+                if (request.IsApproved == true || request.IsDisapproved == true)
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Record already approved";

@@ -215,6 +215,33 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
+
+
+        public async Task<HodDTO> GetHODByEmail(string email , long companyID)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", 11);
+                    param.Add("@CompanyId", companyID);
+                    param.Add("@HODNameGet", email);
+
+                    var HODDetails = await _dapper.QueryFirstOrDefaultAsync<HodDTO>(ApplicationConstant.Sp_HOD, param: param, commandType: CommandType.StoredProcedure);
+
+                    return HODDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetHODByEmail(string DepartmentName) ===>{ex.Message}");
+                throw;
+            }
+        }
+
+
         public async Task<HodDTO> GetHODByCompany(long UserId, long companyId)
         {
             try
