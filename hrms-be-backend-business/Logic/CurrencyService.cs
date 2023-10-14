@@ -21,10 +21,11 @@ namespace hrms_be_backend_business.Logic
         private readonly IMailService _mailService;
         private readonly JwtConfig _jwt;
         private readonly IAuditLog _audit;
-        public CurrencyService(IOptions<JwtConfig> jwt, ILogger<CurrencyService> logger, ICurrencyRepository currencyRepository, IAuditLog audit)
+        public CurrencyService(IOptions<JwtConfig> jwt, ILogger<CurrencyService> logger, ICurrencyRepository currencyRepository, IAuthService authService, IAuditLog audit)
         {
             _logger = logger;
             _currencyRepository = currencyRepository;
+            _authService = authService;
             _jwt = jwt.Value;
             _audit = audit;
         }

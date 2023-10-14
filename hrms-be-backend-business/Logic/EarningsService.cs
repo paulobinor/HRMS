@@ -82,7 +82,7 @@ namespace hrms_be_backend_business.Logic
                 }
                 long earningId=Convert.ToInt64(repoResponse.Replace("Success",""));
                 foreach(var item in payload.EarningItems)
-                {
+                {                    
                     var earningCoputationPayload = new EarningsComputationReq
                     {
                         CreatedByUserId = accessUser.data.UserId,
@@ -93,7 +93,22 @@ namespace hrms_be_backend_business.Logic
                     };
                    await _earningsRepository.ProcessEarningsComputation(earningCoputationPayload);
                 }
-              
+                var earnings =await _earningsRepository.GetEarningsComputation(earningId);
+                foreach(var  earningsComputation in earnings)
+                {
+                    if(payload.EarningItems.Any(p=>p.EarningsItemId!= earningsComputation.EarningsItemId))
+                    {
+                        var earningCoputationPayload = new EarningsComputationReq
+                        {
+                            CreatedByUserId = accessUser.data.UserId,
+                            DateCreated = DateTime.Now,
+                            EarningsId = earningId,
+                            EarningsItemId = earningsComputation.EarningsItemId,
+                            IsDelete = true
+                        };
+                        await _earningsRepository.ProcessEarningsComputation(earningCoputationPayload);
+                    }
+                }
                 var auditLog = new AuditLogDto
                 {
                     userId = accessUser.data.UserId,
@@ -160,14 +175,8 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
                 long earningId = Convert.ToInt64(repoResponse.Replace("Success", ""));
-                var earningItems = await _earningsRepository.GetEarningsComputation(earningId);
                 foreach (var item in payload.EarningItems)
                 {
-                    bool isDeleted=false;
-                    if (earningItems.Any(p => p.EarningsItemId == item.EarningsItemId))
-                    {
-                        isDeleted=true;
-                    }
                     var earningCoputationPayload = new EarningsComputationReq
                     {
                         CreatedByUserId = accessUser.data.UserId,
@@ -177,6 +186,22 @@ namespace hrms_be_backend_business.Logic
                         IsDelete = false
                     };
                     await _earningsRepository.ProcessEarningsComputation(earningCoputationPayload);
+                }
+                var earnings = await _earningsRepository.GetEarningsComputation(earningId);
+                foreach (var earningsComputation in earnings)
+                {
+                    if (payload.EarningItems.Any(p => p.EarningsItemId != earningsComputation.EarningsItemId))
+                    {
+                        var earningCoputationPayload = new EarningsComputationReq
+                        {
+                            CreatedByUserId = accessUser.data.UserId,
+                            DateCreated = DateTime.Now,
+                            EarningsId = earningId,
+                            EarningsItemId = earningsComputation.EarningsItemId,
+                            IsDelete = true
+                        };
+                        await _earningsRepository.ProcessEarningsComputation(earningCoputationPayload);
+                    }
                 }
 
                 var auditLog = new AuditLogDto

@@ -29,6 +29,12 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@PayrollTitle", payload.PayrollTitle);
                 param.Add("@PayrollDescription", payload.PayrollDescription);
                 param.Add("@CurrencyId", payload.CurrencyId);
+                param.Add("@PayrollCycleId", payload.PayrollCycleId);
+                param.Add("@Payday", payload.Payday);
+                param.Add("@PaydayLastDayOfTheCycle", payload.PaydayLastDayOfTheCycle);
+                param.Add("@PaydayLastWeekOfTheCycle", payload.PaydayLastWeekOfTheCycle);
+                param.Add("@PaydayCustomDayOfTheCycle", payload.PaydayCustomDayOfTheCycle);
+                param.Add("@ProrationPolicy", payload.ProrationPolicy);
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
                 param.Add("@DateCreated", payload.DateCreated);
                 param.Add("@IsModification", payload.IsModification);
@@ -103,6 +109,47 @@ namespace hrms_be_backend_data.Repository
 
         }
 
+        public async Task<string> ProcessPayrollEarnings(PayrollEarningsReq payload)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+
+                param.Add("@PayrollId", payload.PayrollId);
+                param.Add("@EarningsItemId", payload.EarningsItemId);              
+                param.Add("@EarningsItemAmount", payload.EarningsItemAmount);               
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);              
+                return await _dapper.Get<string>("sp_process_payroll_earnings", param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollRepository -> ProcessPayrollEarnings => {ex}");
+                return "Unable to submit this detail, kindly contact support";
+            }
+
+        }
+        public async Task<string> DeletePayrollEarnings(PayrollEarningsDeleteReq payload)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+
+                param.Add("@PayrollId", payload.PayrollId);
+                param.Add("@EarningsItemId", payload.EarningsItemId);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+                return await _dapper.Get<string>("sp_delete_payroll_earnings", param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollRepository -> DeletePayrollEarnings => {ex}");
+                return "Unable to submit this detail, kindly contact support";
+            }
+
+        }
         public async Task<List<PayrollEarningsVm>> GetPayrollEarnings(long PayrollId)
         {
             try
@@ -115,6 +162,51 @@ namespace hrms_be_backend_data.Repository
             {
                 _logger.LogError($"PayrollRepository -> GetPayrollEarnings => {ex}");
                 return new List<PayrollEarningsVm>();
+            }
+
+        }
+
+        public async Task<string> ProcessPayrollDeduction(PayrollDeductionReq payload)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+
+                param.Add("@PayrollId", payload.PayrollId);
+                param.Add("@DeductionId", payload.DeductionId);
+                param.Add("@IsFixed", payload.IsFixed);                      
+                param.Add("@DeductionFixedAmount", payload.DeductionFixedAmount);
+                param.Add("@IsPercentage", payload.IsPercentage);
+                param.Add("@DeductionPercentageAmount", payload.DeductionPercentageAmount);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+                return await _dapper.Get<string>("sp_process_payroll_deduction", param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollRepository -> ProcessPayrollDeduction => {ex}");
+                return "Unable to submit this detail, kindly contact support";
+            }
+
+        }
+        public async Task<string> DeletePayrollDeduction(PayrollDeductionDeleteReq payload)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+
+                param.Add("@PayrollId", payload.PayrollId);
+                param.Add("@DeductionId", payload.DeductionId);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+                return await _dapper.Get<string>("sp_delete_payroll_deduction", param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollRepository -> DeletePayrollDeduction => {ex}");
+                return "Unable to submit this detail, kindly contact support";
             }
 
         }

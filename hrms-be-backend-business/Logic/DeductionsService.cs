@@ -5,6 +5,7 @@ using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -84,7 +85,22 @@ namespace hrms_be_backend_business.Logic
                     };
                     await _deductionsRepository.ProcessDeductionComputation(earningCoputationPayload);
                 }
-
+                var deductions = await _deductionsRepository.GetDeductionComputation(deductionId);
+                foreach (var deductionComputation in deductions)
+                {
+                    if (payload.EarningItems.Any(p => p.EarningsItemId != deductionComputation.EarningsItemId))
+                    {
+                        var earningCoputationPayload = new DeductionComputationReq
+                        {
+                            CreatedByUserId = accessUser.data.UserId,
+                            DateCreated = DateTime.Now,
+                            DeductionId = deductionId,
+                            EarningsItemId = deductionComputation.EarningsItemId,
+                            IsDelete = true
+                        };
+                        await _deductionsRepository.ProcessDeductionComputation(earningCoputationPayload);
+                    }
+                }
                 var auditLog = new AuditLogDto
                 {
                     userId = accessUser.data.UserId,
@@ -150,15 +166,10 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
                 long deductionId = Convert.ToInt64(repoResponse.Replace("Success", ""));
-                var earningItems = await _deductionsRepository.GetDeductionComputation(deductionId);
+             
                 foreach (var item in payload.EarningItems)
                 {
-                    bool isDeleted = false;
-                    if (earningItems.Any(p => p.EarningsItemId == item.EarningsItemId))
-                    {
-                        isDeleted = true;
-                    }
-                    var computationPayload = new DeductionComputationReq
+                    var earningCoputationPayload = new DeductionComputationReq
                     {
                         CreatedByUserId = accessUser.data.UserId,
                         DateCreated = DateTime.Now,
@@ -166,7 +177,23 @@ namespace hrms_be_backend_business.Logic
                         EarningsItemId = item.EarningsItemId,
                         IsDelete = false
                     };
-                    await _deductionsRepository.ProcessDeductionComputation(computationPayload);
+                    await _deductionsRepository.ProcessDeductionComputation(earningCoputationPayload);
+                }
+                var deductions = await _deductionsRepository.GetDeductionComputation(deductionId);
+                foreach (var deductionComputation in deductions)
+                {
+                    if (payload.EarningItems.Any(p => p.EarningsItemId != deductionComputation.EarningsItemId))
+                    {
+                        var earningCoputationPayload = new DeductionComputationReq
+                        {
+                            CreatedByUserId = accessUser.data.UserId,
+                            DateCreated = DateTime.Now,
+                            DeductionId = deductionId,
+                            EarningsItemId = deductionComputation.EarningsItemId,
+                            IsDelete = true
+                        };
+                        await _deductionsRepository.ProcessDeductionComputation(earningCoputationPayload);
+                    }
                 }
 
                 var auditLog = new AuditLogDto

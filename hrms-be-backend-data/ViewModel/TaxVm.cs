@@ -9,8 +9,9 @@
     public class TaxPayableVm
     {
         public int StepNumber { get; set; }
-        public string PayableAmount { get; set; }
-        public float PayablePercentage { get; set; }
+        public decimal PayableAmount { get; set; }
+        public decimal PayablePercentage { get; set; }
+        public bool IsLast { get; set; }
         public long CreatedByUserId { get;set; }
         public DateTime DateCreated { get; set;}
         public long LastUpdatedByUserId { get; set; }
