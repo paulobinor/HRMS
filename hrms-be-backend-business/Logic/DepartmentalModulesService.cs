@@ -7,11 +7,6 @@ using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static hrms_be_backend_business.Logic.CompanyAppModuleService;
 
 namespace hrms_be_backend_business.Logic

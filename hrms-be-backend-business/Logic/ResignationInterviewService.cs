@@ -421,7 +421,7 @@ namespace hrms_be_backend_business.Logic
 
 
 
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
 
                 if (requesterInfo == null)
                 {

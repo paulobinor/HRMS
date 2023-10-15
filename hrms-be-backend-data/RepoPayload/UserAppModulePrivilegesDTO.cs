@@ -31,6 +31,7 @@ namespace hrms_be_backend_data.RepoPayload
         public string LAstName { get; set; }
         public string Email { get; set; }
         public string PrivilegeName { get; set; }
+        public string PrivilegeCode { get; set; }
         public string AppModuleName { get; set; }
         public string AppModuleCode { get; set; }
         public long UserAppModulePrivilegesId { get; set; }

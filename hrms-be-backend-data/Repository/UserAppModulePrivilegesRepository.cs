@@ -4,12 +4,7 @@ using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace hrms_be_backend_data.Repository
 {
@@ -26,13 +21,32 @@ namespace hrms_be_backend_data.Repository
             _configuration = configuration;
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
+        public async Task<string> CheckUserAppPrivilege(string EmailAddress, int MaximumLoginAttempt, DateTime DateCreated)
+        {
+            try
+            {
+                var param = new DynamicParameters();
 
+                param.Add("@EmailAddress", EmailAddress);
+                param.Add("@MaximumLoginAttempt", MaximumLoginAttempt);
+                param.Add("@DateCreated", DateCreated);
+
+                return await _repository.Get<string>("sp_check_user_app_privilege", param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"UserAppModulePrivilegesRepository -> CheckUserAppPrivilege => {ex}");
+                return "Unable to submit this detail, kindly contact support";
+            }
+
+        }
 
         public async Task<List<GetUserAppModulePrivilegesDTO>> GetUserAppModulePrivileges()
         {
             try
             {
-                string query = @"Select u.StaffID, u.FirstName , u.LastName, u.Email, am.AppModuleName ,amp.PrivilegeName, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId 
+                string query = @"Select u.StaffID, u.FirstName , u.LastName, u.Email, am.AppModuleName ,amp.AppModulePrivilegeName PrivilegeName, amp.AppModulePrivilegeCode PrivilegeCode, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId 
                   Join USers u on u.UserID = uamp.USerID where uamp.IsDeleted = @IsDeleted and uamp.IsApproved = @IsApproved";
                 var param = new DynamicParameters();
                 param.Add("IsApproved", true);
@@ -55,7 +69,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"Select u.StaffID, u.FirstName , u.LastName, u.Email, am.AppModuleName ,amp.PrivilegeName, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId 
+                string query = @"Select u.StaffID, u.FirstName , u.LastName, u.Email, am.AppModuleName ,amp.AppModulePrivilegeName PrivilegeName, amp.AppModulePrivilegeCode PrivilegeCode, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId 
                     Join USers u on u.UserID = uamp.USerID where uamp.IsDeleted = @IsDeleted and uamp.IsDisapproved = @IsDisapproved and uamp.UserID = @UserID and uamp.AppModulePrivilegeID = @AppModulePrivilegeID";
                 var param = new DynamicParameters();
                 param.Add("IsDisapproved", false);
@@ -104,7 +118,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"Select u.StaffID, u.FirstName , u.LastName, u.Email, am.AppModuleName ,amp.PrivilegeName, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId Join USers u on u.UserID = uamp.USerID 
+                string query = @"Select u.StaffID, u.FirstName , u.LastName, u.Email, am.AppModuleName ,amp.AppModulePrivilegeName PrivilegeName, amp.AppModulePrivilegeCode PrivilegeCode, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId Join USers u on u.UserID = uamp.USerID 
                   where uamp.IsDeleted = @IsDeleted and uamp.IsApproved = @IsApproved and uamp.UserID = @UserID";
                 var param = new DynamicParameters();
                 param.Add("UserID", userID);
@@ -169,7 +183,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"Select u.StaffID, u.FirstName , u.LastName, u.Email, am.AppModuleName ,amp.PrivilegeName, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId Join USers u on u.UserID = uamp.USerID 
+                string query = @"Select u.StaffID, u.FirstName , u.LastName, u.Email, am.AppModuleName ,amp.AppModulePrivilegeName PrivilegeName, amp.AppModulePrivilegeCode PrivilegeCode, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId Join USers u on u.UserID = uamp.USerID 
                   where uamp.IsDeleted = @IsDeleted and uamp.IsApproved = @IsApproved and uamp.AppModulePrivilegeID = @AppModulePrivilegeID";
                 var param = new DynamicParameters();
                 param.Add("AppModulePrivilegeID", privilegeID);
@@ -192,7 +206,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"Select u.StaffID, u.FirstName , u.LastName, u.Email, am.AppModuleName ,amp.PrivilegeName, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId 
+                string query = @"Select u.StaffID, u.FirstName , u.LastName, u.Email, am.AppModuleName ,amp.AppModulePrivilegeName PrivilegeName,amp.AppModulePrivilegeCode PrivilegeCode, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId 
                   Join USers u on u.UserID = uamp.USerID  where uamp.IsDeleted = @IsDeleted and uamp.IsApproved = @IsApproved and      uamp.IsDisapproved = @IsDisapproved";
                 var param = new DynamicParameters();
                 param.Add("IsDisapproved", false);
@@ -211,6 +225,7 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+       
 
         public async Task<int> CreateUserAppModulePrivileges(UserAppModulePrivilegesDTO userAppModulePrivilegesDTO)
         {

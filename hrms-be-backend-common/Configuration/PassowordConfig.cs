@@ -1,6 +1,6 @@
 ﻿namespace hrms_be_backend_common.Configuration
 {
-    public class AppConfig
+    public class PassowordConfig
     {
         public int MaxNumberOfFailedAttemptsToLogin { get; set; }
         public int MinutesBeforeResetAfterFailedAttemptsToLogin { get; set; }

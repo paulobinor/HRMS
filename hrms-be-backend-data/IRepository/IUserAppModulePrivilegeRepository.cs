@@ -1,14 +1,10 @@
 ﻿using hrms_be_backend_data.RepoPayload;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace hrms_be_backend_data.IRepository
 {
     public interface IUserAppModulePrivilegeRepository
     {
+        Task<string> CheckUserAppPrivilege(string EmailAddress, int MaximumLoginAttempt, DateTime DateCreated);
         Task<List<GetUserAppModulePrivilegesDTO>> GetUserAppModulePrivileges();
 
         Task<GetUserAppModulePrivilegesDTO> GetUserAppModuleByUserandPrivilegeID(long userID, int privilegeID);

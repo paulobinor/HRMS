@@ -283,6 +283,19 @@
           }
         }
       },
+      "Newtonsoft.Json/13.0.3": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "runtime.native.System.Data.SqlClient.sni/4.7.0": {
         "type": "package",
         "dependencies": {
@@ -554,6 +567,16 @@
           "lib/netcoreapp3.0/System.Text.Json.dll": {
             "related": ".xml"
           }
+        }
+      },
+      "hrms-be-backend-common/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/hrms-be-backend-common.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/hrms-be-backend-common.dll": {}
         }
       }
     }
@@ -1121,6 +1144,36 @@
         "lib/netstandard2.1/MimeKit.xml",
         "mimekit.4.2.0.nupkg.sha512",
         "mimekit.nuspec"
+      ]
+    },
+    "Newtonsoft.Json/13.0.3": {
+      "sha512": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
+      "type": "package",
+      "path": "newtonsoft.json/13.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/net6.0/Newtonsoft.Json.dll",
+        "lib/net6.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.xml",
+        "lib/netstandard2.0/Newtonsoft.Json.dll",
+        "lib/netstandard2.0/Newtonsoft.Json.xml",
+        "newtonsoft.json.13.0.3.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
       ]
     },
     "runtime.native.System.Data.SqlClient.sni/4.7.0": {
@@ -1785,6 +1838,11 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "hrms-be-backend-common/1.0.0": {
+      "type": "project",
+      "path": "../hrms-be-backend-common/hrms-be-backend-common.csproj",
+      "msbuildProject": "../hrms-be-backend-common/hrms-be-backend-common.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -1796,8 +1854,10 @@
       "Microsoft.Extensions.Logging.Abstractions >= 7.0.1",
       "Microsoft.Extensions.Options >= 7.0.0",
       "MimeKit >= 4.2.0",
+      "Newtonsoft.Json >= 13.0.3",
       "System.Data.SqlClient >= 4.8.5",
-      "System.IdentityModel.Tokens.Jwt >= 6.32.3"
+      "System.IdentityModel.Tokens.Jwt >= 6.32.3",
+      "hrms-be-backend-common >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -1832,7 +1892,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {
+              "projectPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -1872,6 +1936,10 @@
           "MimeKit": {
             "target": "Package",
             "version": "[4.2.0, )"
+          },
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[13.0.3, )"
           },
           "System.Data.SqlClient": {
             "target": "Package",

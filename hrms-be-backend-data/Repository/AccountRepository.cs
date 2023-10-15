@@ -6,8 +6,6 @@ using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MimeKit;
-using Org.BouncyCastle.Asn1.Pkcs;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -17,350 +15,347 @@ namespace hrms_be_backend_data.Repository
     {
         private string _connectionString;
         private readonly ILogger<AccountRepository> _logger;
-        private readonly IConfiguration _configuration;
-        private readonly string _frontendUrl;
-        private readonly string _loginUrl;
+        private readonly IConfiguration _configuration;       
         private readonly IDapperGenericRepository _dapper;
         public AccountRepository(IConfiguration configuration, ILogger<AccountRepository> logger, IDapperGenericRepository dapper)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
             _logger = logger;
-            _configuration = configuration;
-            _frontendUrl = configuration["Frontend:Url"];
-            _loginUrl = configuration["Frontend:LoginUrl"];
+            _configuration = configuration;          
             _dapper = dapper;
         }
 
-        public async Task<User> FindUser(string officialMail)
+        public async Task<string> ProcessUser(CreateUserReq payload)
         {
             try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Account.FETCH);
-                    param.Add("@officialMail", officialMail);
+            {              
+                var param = new DynamicParameters();
+                param.Add("@FirstName", payload.FirstName);
+                param.Add("@MiddleName", payload.MiddleName);
+                param.Add("@LastName", payload.LastName);
+                param.Add("@OfficialMail", payload.OfficialMail);
+                param.Add("@PhoneNumber", payload.PhoneNumber);
+                param.Add("@PasswordHash", BCrypt.Net.BCrypt.HashPassword(payload.PasswordHash, BCrypt.Net.BCrypt.GenerateSalt()));
+                param.Add("@UserStatusCode", payload.UserStatusCode);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+                param.Add("@IsModifield", payload.IsModifield);
 
-                    var userDetails = await _dapper.QueryFirstOrDefaultAsync<User>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
-
-                    return userDetails;
-                }
+                return await _dapper.Get<string>("sp_process_user", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: FindUser(string email) ===>{ ex.Message}");
+                _logger.LogError($"AccountRepository => ProcessUser ===> {ex.Message}");
                 throw;
             }
         }
 
-        public async Task<User> FindUser(long userId)
+        public async Task<UserWithTotalVm> GetUsers(int PageNumber, int RowsOfPage)
         {
+            var returnData = new UserWithTotalVm();
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", 21);
-                    param.Add("@UserIdFind", userId);
+                var param = new DynamicParameters();
+              
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                var result = await _dapper.GetMultiple("sp_get_users", param, gr => gr.Read<long>(), gr => gr.Read<UserVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<UserVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
 
-                    var userDetails = await _dapper.QueryFirstOrDefaultAsync<User>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
-
-                    return userDetails;
-                }
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: FindUser(string email) ===>{ ex.Message}");
-                throw;
+                _logger.LogError($"AccountRepository -> GetUsers => {ex}");
+                return returnData;
             }
-        }
 
-        public async Task<CreateUserResponse> AddUser(CreateUserDto user, int createdbyUserId, string createdbyuseremail)
+        }
+        public async Task<UserWithTotalVm> GetUsersBackOffice(int PageNumber, int RowsOfPage)
         {
+            var returnData = new UserWithTotalVm();
             try
             {
-                var response = new CreateUserResponse();
-                //var defaultPassword = Utils.RandomPassword();
-                //var passwordHash = BCrypt.Net.BCrypt.HashPassword(defaultPassword, BCrypt.Net.BCrypt.GenerateSalt());
+                var param = new DynamicParameters();
 
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Account.ADDUSER);
-                   
-                    param.Add("@FirstName", user.FirstName == null ? "" : user.FirstName.ToString().Trim());
-                    param.Add("@MiddleName", user.MiddleName == null ? "" : user.MiddleName.ToString().Trim());
-                    param.Add("@LastName", user.LastName == null ? "" : user.LastName.ToString().Trim());
-                    param.Add("@UserEmail", user.Email == null ? "" : user.Email.ToString().Trim());
-                    param.Add("@DOB", user.DOB == null ? "" : user.DOB.ToString().Trim());
-                    param.Add("@ResumptionDate", user.ResumptionDate == null ? "" : user.ResumptionDate.ToString().Trim());
-                    param.Add("@OfficialMail", user.OfficialMail == null ? "" : user.OfficialMail.ToString().Trim());
-                    param.Add("@PhoneNumber", user.PhoneNumber == null ? "" : user.PhoneNumber.ToString().Trim());
-                    //param.Add("@PasswordHash", passwordHash);
-                    param.Add("@UnitID", user.UnitID);
-                    param.Add("@GradeID", user.GradeID);
-                    param.Add("@EmployeeTypeID", user.EmployeeTypeID);
-                    param.Add("@BranchID", user.BranchID);
-                    param.Add("@EmploymentStatusID", user.EmploymentStatusID);
-                    param.Add("@JobDescriptionID", user.JobDescriptionID);
-                    param.Add("@RoleId", user.RoleId);
-                    param.Add("@DeptId", user.DepartmentId);
-                    param.Add("@CompanyId", user.CompanyId);
-                    //add this parameter to sp for create user
-                    param.Add("@CreatedByUserId", createdbyUserId);
-                    param.Add("@CreatedByUserEmail", createdbyuseremail);
-                    
-       
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                var result = await _dapper.GetMultiple("sp_get_users_back_office", param, gr => gr.Read<long>(), gr => gr.Read<UserVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<UserVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
 
-                    response = await _dapper.QueryFirstOrDefaultAsync<CreateUserResponse>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
-
-                    return response;
-                }
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: AddUser(CreateUserDto user) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"AccountRepository -> GetUsersBackOffice => {ex}");
+                return returnData;
             }
-        }
 
-        public async Task<object> AddUserBulk(DataTable dataTable, RequesterInfo requester)
+        }
+        public async Task<UserWithTotalVm> GetUsersApprovedBackOffice(int PageNumber, int RowsOfPage)
         {
+            var returnData = new UserWithTotalVm();
             try
             {
-                var param = new
-                {
-                    //Transactions = dataTable.AsTableValuedParameter("UserType"),
-                    //DebitAccount = debitAccount,
-                    //BatchNumber = batchNumber,
-                    //BatchTransactionStatusCode = batchTransactionStatusCode,
-                    //DateCreated = dateCreated,
-                    //CreatedByUserId = createdByUserId,
-                    //PaymentTransactionChannelCode = paymentTransactionChannelCode,
-                    //SaveOnTemp = saveOnTemp,
-                    //Mandate = Mandate,
-                    //DefaultProcessorCode = defaultProcessor,
-                    //BatchCount = batchCount
+                var param = new DynamicParameters();
 
-                };
-                var resp = await _dapper.BulkInsert<object>(param, "sp_Batch_Transaction_Upload");
-                return resp.ToString();
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                var result = await _dapper.GetMultiple("sp_get_users_approved_back_office", param, gr => gr.Read<long>(), gr => gr.Read<UserVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<UserVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: AddUserBulk(CreateUserDto user) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"AccountRepository -> GetUsersApprovedBackOffice => {ex}");
+                return returnData;
             }
-        }
 
-        public async Task<dynamic> UpdateUser(UpdateUserDto user, int updatedbyUserId, string updatedbyuseremail)
+        }
+        public async Task<UserWithTotalVm> GetUsersDisapprovedBackOffice(int PageNumber, int RowsOfPage)
         {
+            var returnData = new UserWithTotalVm();
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Account.UPDUSER);
-                    param.Add("@Email", user.Email);
-                    param.Add("@OfficialMail", user.OfficialMail);
-                    param.Add("@FirstNameUpdate", user.FirstName == null ? "" : user.FirstName.ToString());
-                    param.Add("@MiddleNameUpdate", user.MiddleName == null ? "" : user.MiddleName.ToString());
-                    param.Add("@LastNameUpdate", user.LastName == null ? "" : user.LastName.ToString());
-                    param.Add("@UserToupdate", user.OfficialMail);
-                    param.Add("@PhoneNumberUpdate", user.PhoneNumber == null ? "" : user.PhoneNumber.ToString().Trim());
-                    param.Add("@DOB", user.Email == null ? "" : user.DOB.ToString().Trim());
-                    param.Add("@ResumptionDate", user.ResumptionDate == null ? "" : user.DOB.ToString().Trim());
-                    param.Add("@UnitID", user.UnitID);
-                    param.Add("@GradeID", user.GradeID);
-                    param.Add("@DeptId", user.DeptId);
-                    param.Add("@EmployeeTypeID", user.EmployeeTypeID);
-                    param.Add("@BranchID", user.BranchID);
-                    param.Add("@EmploymentStatusID", user.EmploymentStatusID);
-                    param.Add("@JobDescriptionID", user.JobDescriptionID);
-                    param.Add("@RoleIdUpdate", user.RoleId);
-                    param.Add("@UpdatedByUserId", updatedbyUserId);
-                    //add this parameter to sp for update user
-                    param.Add("@LastUpdatedByUserEmail", updatedbyUserId);
+                var param = new DynamicParameters();
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                var result = await _dapper.GetMultiple("sp_get_users_disapproved_back_office", param, gr => gr.Read<long>(), gr => gr.Read<UserVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<UserVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
 
-                    return response;
-                }
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: UpdateUser(UpdateUserDto user, int updatedbyUserId) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"AccountRepository -> GetUsersDisapprovedBackOffice => {ex}");
+                return returnData;
             }
+
+        }
+        public async Task<UserWithTotalVm> GetUsersDeapctivatedBackOffice(int PageNumber, int RowsOfPage)
+        {
+            var returnData = new UserWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                var result = await _dapper.GetMultiple("sp_get_users_deactivated_back_office", param, gr => gr.Read<long>(), gr => gr.Read<UserVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<UserVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AccountRepository -> GetUsersDeapctivatedBackOffice => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<UserWithTotalVm> GetUsersByCompany(long CompanyId, int PageNumber, int RowsOfPage)
+        {
+            var returnData = new UserWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@CompanyId", CompanyId);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                var result = await _dapper.GetMultiple("sp_get_users_by_company", param, gr => gr.Read<long>(), gr => gr.Read<UserVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<UserVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AccountRepository -> GetUsersByCompany => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<UserWithTotalVm> GetUsersApprovedByCompany(long CompanyId, int PageNumber, int RowsOfPage)
+        {
+            var returnData = new UserWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@CompanyId", CompanyId);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                var result = await _dapper.GetMultiple("sp_get_users_approved_by_company", param, gr => gr.Read<long>(), gr => gr.Read<UserVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<UserVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AccountRepository -> GetUsersApprovedByCompany => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<UserWithTotalVm> GetUsersDisapprovedByCompany(long CompanyId, int PageNumber, int RowsOfPage)
+        {
+            var returnData = new UserWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@CompanyId", CompanyId);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                var result = await _dapper.GetMultiple("sp_get_users_disapproved_by_company", param, gr => gr.Read<long>(), gr => gr.Read<UserVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<UserVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AccountRepository -> GetUsersDisapprovedByCompany => {ex}");
+                return returnData;
+            }
+
+        }        
+        public async Task<UserWithTotalVm> GetUsersDeactivatedByCompany(long CompanyId, int PageNumber, int RowsOfPage)
+        {
+            var returnData = new UserWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@CompanyId", CompanyId);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                var result = await _dapper.GetMultiple("sp_get_users_deactivated_by_company", param, gr => gr.Read<long>(), gr => gr.Read<UserVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<UserVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AccountRepository -> GetUsersDeactivatedByCompany => {ex}");
+                return returnData;
+            }
+
         }
 
-        public async Task<User> GetUserById(long Id)
+        public async Task<UserVm> GetUserById(long Id)
         {            
             try
             {
                 var param = new DynamicParameters();
                 param.Add("@Id", Id);
-                return await _dapper.Get<User>("sp_get_user_by_id", param, commandType: CommandType.StoredProcedure);
+                return await _dapper.Get<UserVm>("sp_get_user_by_id", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {              
                 _logger.LogError($"AccountRepository => GetUserById || {ex}");
-                return new User();
+                return new UserVm();
             }
         }
-        public async Task<User> GetUserByToken(string Token)
+        public async Task<UserVm> GetUserByToken(string Token)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("@Token", Token);
-                return await _dapper.Get<User>("sp_get_user_by_token", param, commandType: CommandType.StoredProcedure);
+                return await _dapper.Get<UserVm>("sp_get_user_by_token", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"AccountRepository => GetUserByToken || {ex}");
-                return new User();
+                return new UserVm();
             }
         }
-        public async Task<IEnumerable<User>> GetAllUsers()
+        public async Task<UserFullView> FindUser(long? UserId, string Email, string AccessToken)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Account.GETALLUSERS);
-                    //param.Add("@OrgIdGet", orgId);
-
-                    var userDetails = await _dapper.QueryAsync<User>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
-
-                    return userDetails;
-                }
+                var param = new DynamicParameters();
+                param.Add("@UserId", UserId);
+                param.Add("@Email", Email);
+                param.Add("@AccessToken", AccessToken);
+                return await _dapper.Get<UserFullView>("sp_find_user", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllUsers() ===>{ ex.Message}");
-                throw;
+                _logger.LogError($"AccountRepository => FindUser || {ex}");
+                return new UserFullView();
             }
         }
-
-        public async Task<IEnumerable<User>> GetAllActiveUsers()
+        public async Task<UserFullView> FindUser(long? UserId)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", 23);
-
-                    var userDetails = await _dapper.QueryAsync<User>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
-
-                    return userDetails;
-                }
+                var param = new DynamicParameters();
+                param.Add("@UserId", UserId);
+                param.Add("@Email", null);
+                param.Add("@AccessToken", null);
+                return await _dapper.Get<UserFullView>("sp_find_user", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllActiveUsers() ===>{ ex.Message}");
-                throw;
+                _logger.LogError($"AccountRepository => FindUser || {ex}");
+                return new UserFullView();
             }
         }
-
-        public async Task<IEnumerable<User>> GetUsersPendingApproval(long CompanyId)
+        public async Task<UserFullView> FindUser(string Email)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Account.USERSPENDINGAPPROVAL);
-                    param.Add("@CompanyIdGet", CompanyId);
-
-                    var userDetails = await _dapper.QueryAsync<User>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
-
-                    return userDetails;
-                }
+                var param = new DynamicParameters();
+                param.Add("@UserId", null);
+                param.Add("@Email", Email);
+                param.Add("@AccessToken", null);
+                return await _dapper.Get<UserFullView>("sp_find_user", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetUsersPendingApproval() ===>{ ex.Message}");
-                throw;
+                _logger.LogError($"AccountRepository => FindUser || {ex}");
+                return new UserFullView();
             }
         }
-
-        public async Task<IEnumerable<User>> GetAllUsersbyDeptId(long DeptId)
+        public async Task<List<UserModulesVm>> GetUserAssigned(long UserId)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Account.GETALLUSERSBYDEPTID);
-                    param.Add("@DeptIdGet", DeptId);
-
-                    var userDetails = await _dapper.QueryAsync<User>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
-
-                    return userDetails;
-                }
+                var param = new DynamicParameters();
+                param.Add("@UserId", UserId);
+                return await _dapper.GetAll<UserModulesVm>("sp_get_app_modules_assigned", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllUsersbuDeptId() ===>{ ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<IEnumerable<User>> GetAllUsersbyCompanyId(long companyId)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", 22);
-                    param.Add("@CompanyIdGet", companyId);
-
-                    var userDetails = await _dapper.QueryAsync<User>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
-
-                    return userDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllUsersbuDeptId() ===>{ ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<IEnumerable<User>> GetAllUsersbyRoleID(long RoleId)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Account.GETUSERBYROLEID);
-                    param.Add("@RoleId", RoleId);
-
-                    var userDetails = await _dapper.QueryAsync<User>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
-
-                    return userDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllUsersbyRoleID() ===>{ex.Message}");
-                throw;
+                _logger.LogError($"AccountRepository => GetUserAssigned || {ex}");
+                return new List<UserModulesVm>();
             }
         }
 
@@ -404,6 +399,7 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
+       
         public async Task<dynamic> ApproveUser(long approvedByuserId, string defaultPass, string userEmail)
         {
             try
@@ -561,30 +557,7 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-
-        public async Task<User> GetUserByCompany(string OfficialMail, int companyId)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Account.GETALLUSERNAMEBYCOMPANY);
-                    param.Add("@OfficialMailGet", OfficialMail);
-                    param.Add("@CompanyIdGet", companyId);
-
-                    var UserDetails = await _dapper.QueryFirstOrDefaultAsync<User>(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
-
-                    return UserDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetDepartmentById(int DepartmentId) ===>{ex.Message}");
-                throw;
-            }
-        }
+       
 
         public async Task<dynamic> MapUserToDepartment(string email, long deptId, long CompId, int updatedbyUserId)
         {
@@ -612,333 +585,7 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public void SendEmail(string recipientEmail, string firtname, string defaultPass, string subject, string wwwRootPath, string ip, string port, string appKey = null, string channel = null)
-        {
-            string emailAddress = _configuration["Smtp:EmailAddress"];
-            string smtpAdress = _configuration["Smtp:Host"];
-            int smtpPort = Convert.ToInt16(_configuration["Smtp:Port"]);
-            string password = _configuration["Smtp:Password"];
-            //string sender = _configuration["Smtp:Sender"];
-
-            //var sampleEmail = "yusufsunkanmi3@gmail.com";
-
-            string message = string.Empty;
-            MimeMessage mailBody = new MimeMessage();
-
-            MailboxAddress from = new MailboxAddress("Xpress HRMS", emailAddress);
-            mailBody.From.Add(from);
-
-            MailboxAddress to = new MailboxAddress("User", recipientEmail);
-            //MailboxAddress to = new MailboxAddress("User", sampleEmail);
-            mailBody.To.Add(to);
-
-            mailBody.Subject = subject;
-
-            if (subject.ToLower().Contains("unblock"))
-            {
-                message = ComposeEmailToUnblockAccount(firtname, defaultPass, recipientEmail, wwwRootPath, ip, port, appKey, channel);
-            }
-            else if (subject.ToLower().Contains("password"))
-            {
-                message = ComposeEmailForPasswordChange(firtname, defaultPass, recipientEmail, wwwRootPath, ip, port, appKey, channel);
-            }
-            else if (subject.ToLower().Contains("re-activation"))
-            {
-                message = ComposeEmailForReactivationPasswordChange(firtname, defaultPass, recipientEmail, wwwRootPath, ip, port, appKey, channel);
-            }
-            else if (subject.ToLower().Contains("otp"))
-            {
-                message = ComposeEmailForOTP(firtname, defaultPass, recipientEmail, wwwRootPath, ip, port, appKey, channel);
-            }
-            else if (subject.ToLower().Contains("participation"))
-            {
-                message = ComposeEmailForSurveyParticipation(firtname, defaultPass, recipientEmail, wwwRootPath, ip, port, appKey, channel);
-            }
-            else if (subject.ToLower().Contains("longer"))
-            {
-                message = ComposeEmailForNoSurveyParticipation(firtname, defaultPass, recipientEmail, wwwRootPath, ip, port, appKey, channel);
-            }
-            else
-            {
-                message = ComposeSignUpMail(firtname, defaultPass, recipientEmail, wwwRootPath, ip, port, appKey, channel);
-            }
-
-            BodyBuilder bodyBuilder = new BodyBuilder();
-            _logger.LogInformation($"{subject} for {recipientEmail} with Message==> {message}");
-
-            bodyBuilder.HtmlBody = message;
-            mailBody.Body = bodyBuilder.ToMessageBody();
-
-            try
-            {
-                MailKit.Net.Smtp.SmtpClient client = new MailKit.Net.Smtp.SmtpClient();
-                client.Connect(smtpAdress, smtpPort);
-                client.Authenticate(emailAddress, password);
-                client.Send(mailBody);
-                client.Disconnect(true);
-                client.Dispose();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"MethodName: SendEmail ===>{ex.Message}");
-                throw;
-            }
-        }
-        public string ComposeSignUpMail(string firstname, string defaultPass, string email, string wwwRootPath, string ip, string port, string appKey = null, string channel = null)
-        {
-
-            string message = string.Empty;
-            string body = string.Empty;
-            string templatePath = string.Empty;
-
-            if (null == channel)
-            {
-                string qryStr = string.Empty;
-                string clientUrl = _frontendUrl;
-                //string clientUrl = ip;
-                //string clientUrl = $"http://{ip}:{port}/";
-                templatePath = $"{wwwRootPath}/EmailHandler/SignUp.html";
-                if (appKey == null)
-                {
-                    qryStr = $"?k={defaultPass}&a={email}";
-                }
-                else
-                {
-                    qryStr = $"?k={defaultPass}&a={email}&appkey={appKey}";
-                }
-                message = $"Dear {firstname}," +
-                          $"<p>Thanks for registering on our platform. Please click on the link below to activate your account.</p>";
-
-                using (StreamReader reader = new StreamReader(Path.Combine(templatePath)))
-                {
-                    body = reader.ReadToEnd();
-                }
-
-                body = body.Replace("{link}", $"{clientUrl}{qryStr}");
-                body = body.Replace("{MailContent}", message);
-
-                return body;
-            }
-            else
-            {
-                templatePath = $"{wwwRootPath}/EmailHandler/SignUpWithToken.html";
-                message = $"Dear {firstname}," +
-                          $"<p>Thanks for registering on our platform. Use the following OTP to complete your Sign Up procedures.</p>";
-
-                using (StreamReader reader = new StreamReader(Path.Combine(templatePath)))
-                {
-                    body = reader.ReadToEnd();
-                }
-
-                body = body.Replace("{OTP}", defaultPass);
-                body = body.Replace("{MailContent}", message);
-
-                return body;
-            }
-        }
-        public string ComposeEmailForPasswordChange(string firstname, string defaultPass, string email, string wwwRootPath, string ip, string port, string appKey = null, string channel = null)
-        {
-
-            string message = string.Empty;
-            string body = string.Empty;
-            string templatePath = string.Empty;
-
-            if (null == channel)
-            {
-                string qryStr = string.Empty;
-                string clientUrl = _frontendUrl;
-                //string clientUrl = ip;
-                //string clientUrl = $"http://{ip}:{port}/";
-                templatePath = $"{wwwRootPath}/EmailHandler/ResetPassword.html";
-                if (appKey == null)
-                {
-                    qryStr = $"?k={defaultPass}&a={email}";
-                }
-                else
-                {
-                    qryStr = $"?k={defaultPass}&a={email}&appkey={appKey}";
-                }
-                message = $"Dear {firstname}," +
-                          $"<p>We recieved a password reset request for your account. Please click on the reset password button below to reset your account.</p>";
-
-                using (StreamReader reader = new StreamReader(Path.Combine(templatePath)))
-                {
-                    body = reader.ReadToEnd();
-                }
-
-                body = body.Replace("{link}", $"{clientUrl}{qryStr}");
-                body = body.Replace("{MailContent}", message);
-
-            }
-            return body;
-        }
-        public string ComposeEmailForReactivationPasswordChange(string firstname, string defaultPass, string email, string wwwRootPath, string ip, string port, string appKey = null, string channel = null)
-        {
-
-            string message = string.Empty;
-            string body = string.Empty;
-            string templatePath = string.Empty;
-
-            if (null == channel)
-            {
-                string qryStr = string.Empty;
-                string clientUrl = _frontendUrl;
-                //string clientUrl = ip;
-                //string clientUrl = $"http://{ip}:{port}/";
-                templatePath = $"{wwwRootPath}/EmailHandler/ResetPassword.html";
-                if (appKey == null)
-                {
-                    qryStr = $"?k={defaultPass}&a={email}";
-                }
-                else
-                {
-                    qryStr = $"?k={defaultPass}&a={email}&appkey={appKey}";
-                }
-                message = $"Dear {firstname}," +
-                          $"<p>Your account has been re-activted. Please click on the reset password button below to reset your account.</p>";
-
-                using (StreamReader reader = new StreamReader(Path.Combine(templatePath)))
-                {
-                    body = reader.ReadToEnd();
-                }
-
-                body = body.Replace("{link}", $"{clientUrl}{qryStr}");
-                body = body.Replace("{MailContent}", message);
-
-            }
-            return body;
-        }
-        public string ComposeEmailForOTP(string firstname, string otp, string email, string wwwRootPath, string ip, string port, string appKey = null, string channel = null)
-        {
-
-            string message = string.Empty;
-            string body = string.Empty;
-            string templatePath = string.Empty;
-
-            if (null == channel)
-            {
-                string qryStr = string.Empty;
-                string clientUrl = _frontendUrl;
-                //string clientUrl = ip;
-                //string clientUrl = $"http://{ip}:{port}/";
-                templatePath = $"{wwwRootPath}/EmailHandler/SendOtp.html";
-
-                qryStr = $"?k={email}";
-
-                message = $"Dear {firstname}," +
-                          $"<p>Your request is now in progress. Your order confirmation OTP is : {otp}.</p>";
-
-                using (StreamReader reader = new StreamReader(Path.Combine(templatePath)))
-                {
-                    body = reader.ReadToEnd();
-                }
-
-                body = body.Replace("{link}", $"{otp}");
-                body = body.Replace("{MailContent}", message);
-
-            }
-            return body;
-        }
-        
-        public string ComposeEmailToUnblockAccount(string firstname, string defaultPass, string email, string wwwRootPath, string ip, string port, string appKey = null, string channel = null)
-        {
-
-            string message = string.Empty;
-            string body = string.Empty;
-            string templatePath = string.Empty;
-
-            if (null == channel)
-            {
-                string qryStr = string.Empty;
-                string clientUrl = _frontendUrl;
-                templatePath = $"{wwwRootPath}/EmailHandler/ResetPassword.html";
-                if (appKey == null)
-                {
-                    qryStr = $"?k={defaultPass}&a={email}";
-                }
-                else
-                {
-                    qryStr = $"?k={defaultPass}&a={email}&appkey={appKey}";
-                }
-                message = $"Dear {firstname}," +
-                          $"<p>We recieved request to unblock your account. Please click on the reset password button below to reset your password and unbock your account.</p>";
-
-                using (StreamReader reader = new StreamReader(Path.Combine(templatePath)))
-                {
-                    body = reader.ReadToEnd();
-                }
-
-                body = body.Replace("{link}", $"{clientUrl}{qryStr}");
-                body = body.Replace("{MailContent}", message);
-
-            }
-            return body;
-        }
-
-
-        public string ComposeEmailForSurveyParticipation(string firstname, string survProcessName, string email, string wwwRootPath, string ip, string port, string appKey = null, string channel = null)
-        {
-
-            string message = string.Empty;
-            string body = string.Empty;
-            string templatePath = string.Empty;
-
-            if (null == channel)
-            {
-                string qryStr = string.Empty;
-                string clientUrl = _loginUrl;
-                //string clientUrl = ip;
-                //string clientUrl = $"http://{ip}:{port}/";
-                templatePath = $"{wwwRootPath}/EmailHandler/SurveyParticipation.html";
-
-                qryStr = $"?k={email}";
-
-                message = $"Dear {firstname}," +
-                          $"<p>You have been added as a participant in Survey Name : {survProcessName}. Kindly login to the survey system to take survey.</p>";
-
-                using (StreamReader reader = new StreamReader(Path.Combine(templatePath)))
-                {
-                    body = reader.ReadToEnd();
-                }
-
-                body = body.Replace("{link}", $"{clientUrl}");
-                body = body.Replace("{MailContent}", message);
-
-            }
-            return body;
-        }
-
-        public string ComposeEmailForNoSurveyParticipation(string firstname, string survProcessName, string email, string wwwRootPath, string ip, string port, string appKey = null, string channel = null)
-        {
-
-            string message = string.Empty;
-            string body = string.Empty;
-            string templatePath = string.Empty;
-
-            if (null == channel)
-            {
-                string qryStr = string.Empty;
-                string clientUrl = _loginUrl;
-                //string clientUrl = ip;
-                //string clientUrl = $"http://{ip}:{port}/";
-                templatePath = $"{wwwRootPath}/EmailHandler/SurveyParticipationRemoved.html";
-
-                qryStr = $"?k={email}";
-
-                message = $"Dear {firstname}," +
-                          $"<p>You are no longer a participant in Survey Name : {survProcessName}. Kindly contact HR for enquiries if any.</p>";
-
-                using (StreamReader reader = new StreamReader(Path.Combine(templatePath)))
-                {
-                    body = reader.ReadToEnd();
-                }
-
-                //body = body.Replace("{link}", $"{clientUrl}");
-                body = body.Replace("{MailContent}", message);
-
-            }
-            return body;
-        }
+       
         
     }
 }

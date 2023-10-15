@@ -38,7 +38,7 @@ namespace hrms_be_backend_data.Repository
             {
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
-                    var userDetails = await _accountRepository.FindUser(TrainingPlan.UserId);
+                    var userDetails = await _accountRepository.FindUser(TrainingPlan.UserId,null,null);
                     if (userDetails == null)
                     {
                         _logger.LogError($"MethodName: CreateTrainingPlan");

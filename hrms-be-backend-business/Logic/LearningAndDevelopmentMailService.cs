@@ -16,10 +16,10 @@ namespace hrms_be_backend_business.Logic
 {
     public class LearningAndDevelopmentMailService : ILearningAndDevelopmentMailService
     {
-        private readonly Smtp _smtpParameters;
+        private readonly SmtpConfig _smtpParameters;
         private readonly ILogger<LearningAndDevelopmentMailService> _logger;
         private readonly IAccountRepository _accountRepository;
-        public LearningAndDevelopmentMailService(IOptions<Smtp> smtpParameters, ILogger<LearningAndDevelopmentMailService> logger, IAccountRepository accountRepository)
+        public LearningAndDevelopmentMailService(IOptions<SmtpConfig> smtpParameters, ILogger<LearningAndDevelopmentMailService> logger, IAccountRepository accountRepository)
         {
             _smtpParameters = smtpParameters.Value;
             _accountRepository = accountRepository;
