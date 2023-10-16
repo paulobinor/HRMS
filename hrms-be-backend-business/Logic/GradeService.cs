@@ -128,7 +128,7 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }
-        public async Task<BaseResponse> CreateGradeBulkUpload(IFormFile payload, RequesterInfo requester)
+        public async Task<BaseResponse> CreateGradeBulkUpload(IFormFile payload, long companyID, RequesterInfo requester)
         {
             //check if us
             StringBuilder errorOutput = new StringBuilder();
@@ -164,95 +164,92 @@ namespace hrms_be_backend_business.Logic
                     int k = 0;
                     if (ds != null && ds.Tables.Count > 0)
                     {
-
+                        var gradeList = new List<CreateGradeDTO>();
                         string GradeName = serviceDetails.Rows[0][0].ToString();
-                        string NumberOfVacationDays = serviceDetails.Rows[0][1].ToString();
-                        string NumberOfVacationSplit = serviceDetails.Rows[0][2].ToString();
-                        string CompanyName = serviceDetails.Rows[0][3].ToString();
+                        string CompanyName = serviceDetails.Rows[0][1].ToString();
 
-
-                        if (GradeName != "GradeName" || NumberOfVacationDays != "NumberOfVacationDays"
-                            || NumberOfVacationSplit != "NumberOfVacationSplit" || CompanyName != "CompanyName")
+                        if (GradeName != "GradeName" 
+                             || CompanyName != "CompanyName")
 
                         {
                             response.ResponseCode = "08";
-                            response.ResponseMessage = "File header not in the Right format";
+                            response.ResponseMessage = "File header not in the Right format"; 
                             return response;
                         }
                         else
                         {
+                            var company = await _companyrepository.GetCompanyById(companyID);
+                            if(company == null) {
+                                response.ResponseCode = "08";
+                                response.ResponseMessage = "Company not found";
+
+                                return response;
+                            }
+
+
                             for (int row = 1; row < serviceDetails.Rows.Count; row++)
                             {
-
                                 string gradeName = serviceDetails.Rows[row][0].ToString();
-                                string numberOfVacationDays = serviceDetails.Rows[row][1].ToString();
-                                string numberOfVacationSplit = serviceDetails.Rows[row][2].ToString();
-                                var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][3].ToString());
+                                string companyName = serviceDetails.Rows[row][1].ToString();
 
+                                //var branch = await _branchRepository.GetBranchByName(serviceDetails.Rows[row][3].ToString());
+                                if(company.CompanyName.ToLower() != companyName.ToLower().Trim())
+                                    errorOutput.Append($"Row {row} Invalid company name {companyName}" + "\n");
 
-                                long companyID = company.CompanyId;
+                                if(string.IsNullOrEmpty(gradeName))
+                                    errorOutput.Append($"Row {row} grade is required" + "\n");
 
+                                if(errorOutput.Length > 0)
+                                {
+                                    response.ResponseCode = "02";
+                                    response.ResponseMessage = errorOutput.ToString();
+                                    return response;
+                                }
 
                                 var graderequest = new CreateGradeDTO
                                 {
-                                    GradeName = gradeName,
-                                    //NumberOfVacationDays = numberOfVacationDays,
-                                    //NumberOfVacationSplit = numberOfVacationSplit,
+                                    GradeName = gradeName.Trim(),
                                     CompanyID = companyID
-
-
                                 };
 
-                                var graderequester = new RequesterInfo
-                                {
-                                    Username = requester.Username,
-                                    UserId = requester.UserId,
-                                    RoleId = requester.RoleId,
-                                    IpAddress = requester.IpAddress,
-                                    Port = requester.Port,
+                                gradeList.Add(graderequest);
+                            }
 
+                            var graderequester = new RequesterInfo
+                            {
+                                Username = requester.Username,
+                                UserId = requester.UserId,
+                                RoleId = requester.RoleId,
+                                IpAddress = requester.IpAddress,
+                                Port = requester.Port,
+                            };
 
-                                };
-
-                                var resp = await CreateGrade(graderequest, graderequester);
-
+                            foreach (var grade in gradeList) 
+                            {    
+                                var resp = await CreateGrade(grade, graderequester);
 
                                 if (resp.ResponseCode == "00")
-                                {
                                     k++;
-                                }
                                 else
-                                {
-                                    errorOutput.Append($"Row {row} failed due to {resp.ResponseMessage}" + "\n");
-                                }
+                                    errorOutput.Append($"failed due to {resp.ResponseMessage}" + "\n");
                             }
                         }
-
                     }
-
 
 
                     if (k == rowCount - 1)
                     {
                         response.ResponseCode = "00";
                         response.ResponseMessage = "All record inserted successfully";
-
-
-
                         return response;
                     }
                     else
                     {
                         response.ResponseCode = "02";
                         response.ResponseMessage = errorOutput.ToString();
-
-
-
                         return response;
                     }
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -260,8 +257,6 @@ namespace hrms_be_backend_business.Logic
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = "Exception occured";
                 response.Data = null;
-
-
 
                 return response;
             }

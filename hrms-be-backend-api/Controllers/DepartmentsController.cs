@@ -48,9 +48,9 @@ namespace hrms_be_backend_api.Controllers
             }
         }
 
-        [HttpPost("CreateDepartmentBulkUpload")]
+        [HttpPost("CreateDepartmentBulkUpload/{companyID}")]
         [Authorize]
-        public async Task<IActionResult> CreateDepartmentBulkUpload(IFormFile payload)
+        public async Task<IActionResult> CreateDepartmentBulkUpload(IFormFile payload , long companyID)
         {
             var response = new BaseResponse();
             try
@@ -64,7 +64,7 @@ namespace hrms_be_backend_api.Controllers
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
-                return Ok(await _DepartmentService.CreateDepartmentBulkUpload(payload, requester));
+                return Ok(await _DepartmentService.CreateDepartmentBulkUpload(payload,companyID, requester));
             }
             catch (Exception ex)
             {

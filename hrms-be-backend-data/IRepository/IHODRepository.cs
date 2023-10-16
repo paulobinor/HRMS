@@ -12,6 +12,7 @@ namespace hrms_be_backend_data.IRepository
         Task<HodDTO> GetHODById(long HodID);
         Task<HodDTO> GetHODByUserId(long UserId);
         Task<HodDTO> GetHODByName(string HODName);
+        Task<HodDTO> GetHODByEmail(string email, long companyID);
         Task<HodDTO> GetHODByCompany(long UserId, long companyId);
         Task<IEnumerable<HodDTO>> GetAllHODCompanyId(long companyId);
 

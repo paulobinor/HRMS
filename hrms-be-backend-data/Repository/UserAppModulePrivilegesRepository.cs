@@ -263,7 +263,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("IsActive", userAppModulePrivilegesDTO.IsActive);
                 param.Add("IsDeleted", userAppModulePrivilegesDTO.IsDeleted);
                 param.Add("DeletedByUserId", userAppModulePrivilegesDTO.DeletedByUserId);
-                param.Add("UserAppModulePrivilegeID", userAppModulePrivilegesDTO.UserAppModulePrivilegesId);
+                param.Add("UserAppModulePrivilegeID", userAppModulePrivilegesDTO.UserAppModulePrivilegeID);
 
                 var resp = await _repository.Update<int>(query, param, commandType: CommandType.Text);
 
@@ -290,7 +290,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("IsApproved", userAppModulePrivilegesDTO.IsApproved);
                 param.Add("ApprovedByUserId", userAppModulePrivilegesDTO.ApprovedByUserId);
                 param.Add("DateApproved", userAppModulePrivilegesDTO.DateApproved);
-                param.Add("UserAppModulePrivilegeID", userAppModulePrivilegesDTO.UserAppModulePrivilegesId);
+                param.Add("UserAppModulePrivilegeID", userAppModulePrivilegesDTO.UserAppModulePrivilegeID);
 
                 var resp = await _repository.Update<int>(query, param, commandType: CommandType.Text);
 
@@ -316,7 +316,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("IsDisapproved", userAppModulePrivilegesDTO.IsDisapproved);
                 param.Add("DisapprovedByUserId", userAppModulePrivilegesDTO.DisapprovedByUserId);
                 param.Add("DateApproved", userAppModulePrivilegesDTO.DateApproved);
-                param.Add("UserAppModulePrivilegeID", userAppModulePrivilegesDTO.UserAppModulePrivilegesId);
+                param.Add("UserAppModulePrivilegeID", userAppModulePrivilegesDTO.UserAppModulePrivilegeID);
 
                 var resp = await _repository.Update<int>(query, param, commandType: CommandType.Text);
 

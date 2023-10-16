@@ -7,7 +7,7 @@ namespace hrms_be_backend_business.ILogic
     public  interface IGradeService
     {
         Task<BaseResponse> CreateGrade(CreateGradeDTO creatDto, RequesterInfo requester);
-        Task<BaseResponse> CreateGradeBulkUpload(IFormFile payload, RequesterInfo requester);
+        Task<BaseResponse> CreateGradeBulkUpload(IFormFile payload, long companyID , RequesterInfo requester);
         Task<BaseResponse> UpdateGrade(UpdateGradeDTO updateDto, RequesterInfo requester);
         Task<BaseResponse> DeleteGrade(DeleteGradeDTO deleteDto, RequesterInfo requester);
         Task<BaseResponse> GetAllActiveGrade(RequesterInfo requester);

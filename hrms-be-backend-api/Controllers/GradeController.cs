@@ -49,9 +49,9 @@ namespace hrms_be_backend_api.Controllers
             }
         }
 
-        [HttpPost("CreateGradeBulkUpload")]
+        [HttpPost("CreateGradeBulkUpload/{companyID}")]
         [Authorize]
-        public async Task<IActionResult> CreateGradeBulkUpload(IFormFile payload)
+        public async Task<IActionResult> CreateGradeBulkUpload(IFormFile payload , long companyID)
         {
             var response = new BaseResponse();
             try
@@ -65,7 +65,7 @@ namespace hrms_be_backend_api.Controllers
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
-                return Ok(await _GradeService.CreateGradeBulkUpload(payload, requester));
+                return Ok(await _GradeService.CreateGradeBulkUpload(payload, companyID ,requester));
             }
             catch (Exception ex)
             {
