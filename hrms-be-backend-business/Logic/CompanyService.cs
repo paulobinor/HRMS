@@ -1,12 +1,19 @@
 ﻿using AutoMapper;
+using hrms_be_backend_business.Helpers;
 using hrms_be_backend_business.ILogic;
+using hrms_be_backend_common.Communication;
+using hrms_be_backend_common.DTO;
+using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace hrms_be_backend_business.Logic
@@ -19,414 +26,482 @@ namespace hrms_be_backend_business.Logic
         private readonly IConfiguration _configuration;
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
+        private readonly IUserAppModulePrivilegeRepository _privilegeRepository;
+        private readonly IAuthService _authService;
+        private readonly IMailService _mailService;
+        private readonly IUriService _uriService;
 
         public CompanyService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<CompanyService> logger,
-            ICompanyRepository companyRepository, IAuditLog audit, IMapper mapper)
+            ICompanyRepository companyRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IUserAppModulePrivilegeRepository privilegeRepository)
         {
             _audit = audit;
-            _mapper = mapper;
+            _authService = authService;
+            _mailService = mailService;
             _logger = logger;
             _configuration = configuration;
             _accountRepository = accountRepository;
             _companyrepository = companyRepository;
+            _privilegeRepository = privilegeRepository;
         }
-
-        public async Task<BaseResponse> CreateCompany(CreateCompanyDto CompanyDto, RequesterInfo requester)
+        public async Task<ExecutedResult<string>> CreateCompany(CompanyCreateDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            var response = new BaseResponse();
-            try
-            {
-                string createdbyUserEmail = requester.Username;
-                string createdbyUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(createdbyUserEmail);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (Convert.ToInt32(RoleId) != 1)
-                {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
-                }
-
-                //validate CreateCompanyDto payload here 
-                if (String.IsNullOrEmpty(CompanyDto.CompanyName) || String.IsNullOrEmpty(CompanyDto.Address) ||
-                    String.IsNullOrEmpty(CompanyDto.Email) || String.IsNullOrEmpty(CompanyDto.ContactPhone))
-                {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Please ensure all required fields are entered.";
-                    return response;
-                }
-
-                var isExists = await _companyrepository.GetCompanyByName(CompanyDto.CompanyName);
-                if (null != isExists)
-                {
-                    response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Company with name : {CompanyDto.CompanyName} already exists.";
-                    return response;
-                }
-
-                var isExistsEmail = await _companyrepository.GetCompanyByEmail(CompanyDto.Email);
-                if (null != isExistsEmail)
-                {
-                    response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Company with Email : {CompanyDto.Email} already exists.";
-                    return response;
-                }
-
-                dynamic resp = await _companyrepository.CreateCompany(CompanyDto, createdbyUserEmail);
-                if (resp > 0)
-                {
-                    //USE THIS BELOW EXAMPLE TO UPDATE AUDIT ANY WHERE YOU SEE THIS BELOW COMMENT
-                    //"update action performed into audit log here"
-                    var auditLog = new AuditLogDto
-                    {
-                        userId = requester.UserId,
-                        actionPerformed = "CreateCompany",
-                        payload = JsonSerializer.Serialize(CompanyDto),
-                        response = JsonSerializer.Serialize(response),
-                        actionStatus = response.ResponseMessage,
-                        ipAddress = ipAddress
-                    };
-                    await _audit.LogActivity(auditLog);
-
-
-                    var Company = await _companyrepository.GetCompanyByName(CompanyDto.CompanyName);
-
-                    response.Data = Company;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Company created successfully.";
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "An error occured while Creating Company. Please contact admin.";
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: CreateCompany ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: CreateCompany ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> UpdateCompany(UpdateCompanyDto updateDto, RequesterInfo requester)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (Convert.ToInt32(RoleId) != 1) //1 is roleId for super admin
-                {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
-                }
-
-                //validate CreateCompanyDto payload here 
-                if (String.IsNullOrEmpty(updateDto.CompanyName) || String.IsNullOrEmpty(updateDto.Address) ||
-                    String.IsNullOrEmpty(updateDto.CompanyLogo) ||
-                    String.IsNullOrEmpty(updateDto.Email) || String.IsNullOrEmpty(updateDto.ContactPhone))
-                {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Please ensure all required fields are entered.";
-                    return response;
-                }
-
-                var Company = await _companyrepository.GetCompanyById(updateDto.CompanyId);
-                if (null == Company)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "No record found for the specified Company";
-                    response.Data = null;
-                    return response;
-                }
-
-                dynamic resp = await _companyrepository.UpdateCompany(updateDto, requesterUserEmail);
-                if (resp > 0)
-                {
-                    //update action performed into audit log here
-
-                    var updatedCompany = await _companyrepository.GetCompanyById(updateDto.CompanyId);
-
-                    _logger.LogInformation("Company updated successfully.");
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Company updated successfully.";
-                    response.Data = updatedCompany;
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.Exception.ToString();
-                response.ResponseMessage = "An error occurred while updating Company.";
-                response.Data = null;
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: UpdateCompanyDto ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: UpdateCompanyDto ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> DeleteCompany(DeleteCompanyDto deleteDto, RequesterInfo requester)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (Convert.ToInt32(RoleId) != 1)
-                {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
-                }
-
-                if (deleteDto.CompanyId == 1)
-                {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"System Default Company cannot be deleted.";
-                    return response;
-                }
-
-                var Company = await _companyrepository.GetCompanyById(deleteDto.CompanyId);
-                if (null != Company)
-                {
-                    dynamic resp = await _companyrepository.DeleteCompany(deleteDto, requesterUserEmail);
-                    if (resp > 0)
-                    {
-                        //update action performed into audit log here
-
-                        var DeletedCompany = await _companyrepository.GetCompanyById(deleteDto.CompanyId);
-
-                        _logger.LogInformation($"Company with name: {DeletedCompany.CompanyName} Deleted successfully.");
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Company with name: {DeletedCompany.CompanyName} Deleted successfully.";
-                        response.Data = null;
-                        return response;
-
-                    }
-                    response.ResponseCode = ResponseCode.Exception.ToString();
-                    response.ResponseMessage = "An error occurred while deleting Company.";
-                    response.Data = null;
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No record found for the specified Companyname";
-                response.Data = null;
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: DeleteCompany ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: DeleteCompany ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> GetAllActiveCompanies(RequesterInfo requester)
-        {
-            BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.Create_Company, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.CompanyName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Company Name is required";
+                }
+                if (string.IsNullOrEmpty(payload.FullAddress))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  Full Address is required";
+                }
+                if (string.IsNullOrEmpty(payload.Email))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  Email Address is required";
+                }
+                if (string.IsNullOrEmpty(payload.ContactPhone))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += " Contact Phone is required";
+                }
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new ProcessCompanyReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    FullAddress = payload.FullAddress,
+                    CompanyCode = payload.CompanyCode,
+                    CompanyLogo = payload.CompanyLogo,
+                    CompanyName = payload.CompanyName,
+                    ContactPhone = payload.ContactPhone,
+                    Email = payload.Email,
+                    IsPublicSector = payload.IsPublicSector,
+                    Website = payload.Website,
+                    IsModifield = false,
+                };
+                string repoResponse = await _companyrepository.ProcessCompany(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
 
-                if (Convert.ToInt32(RoleId) > 2) //role id 2 is hr admin i.e super admin & hr admin can view list
+                var auditLog = new AuditLogDto
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
-                }
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "CreateCompany",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
 
-                //update action performed into audit log here
+                return new ExecutedResult<string>() { responseMessage = "Created Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
 
-                var Companys = await _companyrepository.GetAllActiveCompanys();
-
-                if (Companys.Any())
-                {
-                    response.Data = Companys;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Companys fetched successfully.";
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No Companys found.";
-                response.Data = null;
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: GetAllActiveCompanys() ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllActiveCompanys() ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> GetAllCompanies(RequesterInfo requester)
-        {
-            BaseResponse response = new BaseResponse();
-
-            try
-            {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (Convert.ToInt32(RoleId) > 2)
-                {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
-                }
-
-                //update action performed into audit log here
-
-                var Companys = await _companyrepository.GetAllCompanys();
-
-                if (Companys.Any())
-                {
-                    response.Data = Companys;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Company fetched successfully.";
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No Company found.";
-                response.Data = null;
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: GetAllCompanies() ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllCompanies() ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> GetCompanybyId(long companyId, RequesterInfo requester)
-        {
-            BaseResponse response = new BaseResponse();
-
-            try
-            {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (Convert.ToInt32(RoleId) > 2)
-                {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
-                }
-
-                //update action performed into audit log here
-
-                var Company = await _companyrepository.GetCompanyById(companyId);
-
-                if (Company == null)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Company not found.";
-                    response.Data = null;
-                    return response;
-                }
-
-                response.Data = Company;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Company fetched successfully.";
-                return response;
 
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetCompanybyId(long companyId) ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetCompanybyId(long companyId) ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"CompanyService (CreateCompany)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+        public async Task<ExecutedResult<string>> UpdateCompany(CompanyUpdateDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.Update_Company, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.CompanyName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Company Name is required";
+                }
+                if (string.IsNullOrEmpty(payload.FullAddress))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  Full Address is required";
+                }
+                if (string.IsNullOrEmpty(payload.Email))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  Email Address is required";
+                }
+                if (string.IsNullOrEmpty(payload.ContactPhone))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += " Contact Phone is required";
+                }
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new ProcessCompanyReq
+                {
+                    CompanyId = payload.CompanyId,
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    FullAddress = payload.FullAddress,
+                    CompanyCode = payload.CompanyCode,
+                    CompanyLogo = payload.CompanyLogo,
+                    CompanyName = payload.CompanyName,
+                    ContactPhone = payload.ContactPhone,
+                    Email = payload.Email,
+                    IsPublicSector = payload.IsPublicSector,
+                    Website = payload.Website,
+                    IsModifield = true,
+                };
+                string repoResponse = await _companyrepository.ProcessCompany(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "UpdateCompany",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyService (UpdateCompany)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+        public async Task<ExecutedResult<string>> DeleteCompany(long CompanyId, string ReasonToDelete, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.Delete_Company, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(ReasonToDelete))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Reason To Delete is required";
+                }
+
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new DeleteCompanyReq
+                {
+                    CompanyId = CompanyId,
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    Comment = ReasonToDelete
+                };
+                string repoResponse = await _companyrepository.DeleteCompany(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "DeleteCompany",
+                    payload =null,
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Deleted Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyService (DeleteCompany)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+        public async Task<PagedExcutedResult<IEnumerable<CompanyVm>>> GetCompanies(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.View_Company_Details, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                var returnData = await _companyrepository.GetCompanies(filter.PageNumber, filter.PageSize);
+                if (returnData == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (returnData.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+
+                totalRecords = returnData.totalRecords;
+
+                var pagedReponse = PaginationHelper.CreatePagedReponse<CompanyVm>(returnData.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
+
+                return pagedReponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyService (GetCompanies)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
+            }
+        }
+        public async Task<PagedExcutedResult<IEnumerable<CompanyVm>>> GetCompaniesActivated(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.View_Company_Details, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                var returnData = await _companyrepository.GetCompaniesActivated(filter.PageNumber, filter.PageSize);
+                if (returnData == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (returnData.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+
+                totalRecords = returnData.totalRecords;
+
+                var pagedReponse = PaginationHelper.CreatePagedReponse<CompanyVm>(returnData.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
+
+                return pagedReponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyService (GetCompaniesActivated)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
+            }
+        }
+        public async Task<PagedExcutedResult<IEnumerable<CompanyVm>>> GetCompaniesDeactivated(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.View_Company_Details, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                var returnData = await _companyrepository.GetCompaniesDeactivated(filter.PageNumber, filter.PageSize);
+                if (returnData == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (returnData.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+
+                totalRecords = returnData.totalRecords;
+
+                var pagedReponse = PaginationHelper.CreatePagedReponse<CompanyVm>(returnData.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
+
+                return pagedReponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyService (GetCompaniesDeactivated)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
+            }
+        }
+        public async Task<PagedExcutedResult<IEnumerable<CompanyVm>>> GetCompaniesPublicSector(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.View_Company_Details, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                var returnData = await _companyrepository.GetCompaniesPublicSector(filter.PageNumber, filter.PageSize);
+                if (returnData == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (returnData.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+
+                totalRecords = returnData.totalRecords;
+
+                var pagedReponse = PaginationHelper.CreatePagedReponse<CompanyVm>(returnData.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
+
+                return pagedReponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyService (GetCompaniesPublicSector)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
+            }
+        }
+        public async Task<PagedExcutedResult<IEnumerable<CompanyVm>>> GetCompaniesPrivateSector(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.View_Company_Details, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                var returnData = await _companyrepository.GetCompaniesPrivateSector(filter.PageNumber, filter.PageSize);
+                if (returnData == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (returnData.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+
+                totalRecords = returnData.totalRecords;
+
+                var pagedReponse = PaginationHelper.CreatePagedReponse<CompanyVm>(returnData.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
+
+                return pagedReponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyService (GetCompaniesPrivateSector)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
+            }
+        }
+        public async Task<ExecutedResult<CompanyFullVm>> GetCompanyById(long Id, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<CompanyFullVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                var returnData = await _companyrepository.GetCompanyById(Id);
+                if (returnData == null)
+                {
+                    return new ExecutedResult<CompanyFullVm>() { responseMessage = ((int)ResponseCode.NotFound).ToString().ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+                }
+                return new ExecutedResult<CompanyFullVm>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = returnData };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyService (GetCompanyById)=====>{ex}");
+                return new ExecutedResult<CompanyFullVm>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
     }

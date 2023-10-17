@@ -52,7 +52,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                 {
                     if (ex.Message.Contains("The token is expired"))
                     {
-                        var rdetails = await _accountRepository.FindUser(request.Email);
+                        var rdetails = await _accountRepository.FindUser(null, request.Email,null);
 
                         if (request.RefreshToken != rdetails.RefreshToken)
                         {
@@ -75,7 +75,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             if (string.IsNullOrWhiteSpace(userEmailFromClaim))
                 throw new SecurityTokenException("Invalid token passed");
 
-            var details = await _accountRepository.FindUser(userEmailFromClaim);
+            var details = await _accountRepository.FindUser(null, userEmailFromClaim,null);
 
             if (details == null)
                 return new AuthResponse { JwtToken = "", RefreshToken = "", Message = "Invalid Token passed" };

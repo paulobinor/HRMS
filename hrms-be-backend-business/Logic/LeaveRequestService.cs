@@ -17,6 +17,7 @@ namespace hrms_be_backend_business.Logic
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
         private readonly ILeaveRequestRepository _leaveRequestRepository;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly IMailService _mailService;
 
         public LeaveRequestService(IAccountRepository accountRepository, ILogger<LeaveRequestService> logger,
@@ -56,19 +57,19 @@ namespace hrms_be_backend_business.Logic
                     response.ResponseMessage = repoResponse;
                     return response;
                 }
-                var userDetails = await _accountRepository.FindUser(payload.UserId);
+                var userDetails = await _employeeRepository.GetEmployeeById(payload.EmployeeId);
 
                 //Send mail to reliever
-                _mailService.SendLeaveMailToReliever(payload.ReliverUserID, payload.UserId, payload.StartDate, payload.EndDate);
+                _mailService.SendLeaveMailToReliever(payload.ReliverUserID, payload.EmployeeId, payload.StartDate, payload.EndDate);
 
                 //Send mail to approval
-                if (userDetails.UnitHeadUserId == null)
+                if (userDetails.UnitHeadEmployeeId == null)
                 {
-                    _mailService.SendLeaveApproveMailToApprover(userDetails.HODUserId, payload.UserId, payload.StartDate, payload.EndDate);
+                    _mailService.SendLeaveApproveMailToApprover(userDetails.HodEmployeeId, payload.EmployeeId, payload.StartDate, payload.EndDate);
                 }
                 else
                 {
-                    _mailService.SendLeaveApproveMailToApprover(userDetails.UnitHeadUserId, payload.UserId, payload.StartDate, payload.EndDate);
+                    _mailService.SendLeaveApproveMailToApprover(userDetails.UnitHeadEmployeeId, payload.EmployeeId, payload.StartDate, payload.EndDate);
                 }
 
 
@@ -103,7 +104,7 @@ namespace hrms_be_backend_business.Logic
                 var ipAddress = requester.IpAddress.ToString();
                 var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
                 if (null == requesterInfo)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
@@ -144,19 +145,19 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                var userDetails = await _accountRepository.FindUser(updateDto.UserId);
+                var userDetails = await _employeeRepository.GetEmployeeById(updateDto.EmployeeId);
 
                 //Send mail to reliever
-                _mailService.SendLeaveMailToReliever(updateDto.ReliverUserID, updateDto.UserId, updateDto.StartDate, updateDto.EndDate);
+                _mailService.SendLeaveMailToReliever(updateDto.ReliverUserID, updateDto.EmployeeId, updateDto.StartDate, updateDto.EndDate);
 
                 //Send mail to approval
-                if (userDetails.UnitHeadUserId == null)
+                if (userDetails.UnitHeadEmployeeId == null)
                 {
-                    _mailService.SendLeaveApproveMailToApprover(userDetails.HODUserId, updateDto.UserId, updateDto.StartDate, updateDto.EndDate);
+                    _mailService.SendLeaveApproveMailToApprover(userDetails.HodEmployeeId, updateDto.EmployeeId, updateDto.StartDate, updateDto.EndDate);
                 }
                 else
                 {
-                    _mailService.SendLeaveApproveMailToApprover(userDetails.UnitHeadUserId, userDetails.UserId, updateDto.StartDate, updateDto.EndDate);
+                    _mailService.SendLeaveApproveMailToApprover(userDetails.UnitHeadEmployeeId, userDetails.EmployeeID, updateDto.StartDate, updateDto.EndDate);
                 }
 
                 response.Data = updateDto;
@@ -260,7 +261,7 @@ namespace hrms_be_backend_business.Logic
 
                 var leaveRequestDetail = await _leaveRequestRepository.GetLeaveRequestById(payload.LeaveRequestID);
 
-                var userDetails = await _accountRepository.FindUser(leaveRequestDetail.UserId);
+                var userDetails = await _employeeRepository.GetEmployeeByUserId(leaveRequestDetail.UserId);
 
                 //Send mail to reliever
                 _mailService.SendLeaveApproveConfirmationMail(leaveRequestDetail.UserId, requester.UserId, leaveRequestDetail.StartDate, leaveRequestDetail.EndDate);
@@ -268,7 +269,7 @@ namespace hrms_be_backend_business.Logic
                 //Send mail to approval
                 if (!leaveRequestDetail.IsHodApproved)
                 {
-                    _mailService.SendLeaveApproveMailToApprover(userDetails.HODUserId, leaveRequestDetail.UserId, leaveRequestDetail.StartDate, leaveRequestDetail.EndDate);
+                    _mailService.SendLeaveApproveMailToApprover(userDetails.HodEmployeeId, leaveRequestDetail.UserId, leaveRequestDetail.StartDate, leaveRequestDetail.EndDate);
                 }
 
                 response.ResponseCode = "00";
@@ -302,7 +303,7 @@ namespace hrms_be_backend_business.Logic
                 var ipAddress = requester.IpAddress.ToString();
                 var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
                 if (null == requesterInfo)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
@@ -360,7 +361,7 @@ namespace hrms_be_backend_business.Logic
                 var ipAddress = requester.IpAddress.ToString();
                 var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
                 if (null == requesterInfo)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
@@ -421,7 +422,7 @@ namespace hrms_be_backend_business.Logic
                 var ipAddress = requester.IpAddress.ToString();
                 var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
                 if (null == requesterInfo)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
@@ -471,7 +472,7 @@ namespace hrms_be_backend_business.Logic
                 var ipAddress = requester.IpAddress.ToString();
                 var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
                 if (null == requesterInfo)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
@@ -521,7 +522,7 @@ namespace hrms_be_backend_business.Logic
                 var ipAddress = requester.IpAddress.ToString();
                 var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
                 if (null == requesterInfo)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');

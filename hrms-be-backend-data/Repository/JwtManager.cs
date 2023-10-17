@@ -1,10 +1,10 @@
-﻿using hrms_be_backend_data.IRepository;
+﻿using hrms_be_backend_common.Configuration;
 using hrms_be_backend_data.IRepository;
-using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -15,21 +15,24 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
     {
         private readonly IRefreshTokenGenerator _refreshTokenGenerator;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAccountRepository _accountRepository;
         private readonly IConfiguration _configuration;
-       
+        private readonly JwtConfig _jwt;
 
-        public JwtManager(IConfiguration configuration, IRefreshTokenGenerator refreshTokenGenerator, IUnitOfWork unitOfWork)
+        public JwtManager(IOptions<JwtConfig> jwt, IConfiguration configuration, IRefreshTokenGenerator refreshTokenGenerator, IUnitOfWork unitOfWork, IAccountRepository accountRepository)
         {
+            _jwt = jwt.Value;
             _refreshTokenGenerator = refreshTokenGenerator;
             _unitOfWork = unitOfWork;
             _configuration = configuration;
+            _accountRepository = accountRepository;
         }
 
-        public async Task<AuthResponse> GenerateJsonWebToken(User request)
+        public async Task<AuthResponse> GenerateJsonWebToken(AccessUserVm request)
         {
-            string Key = _configuration["Jwt:Key"];
-            string issuer = _configuration["Jwt:Issuer"];
-            string audience = _configuration["Jwt:Audience"];
+            string Key = _jwt.Key;
+            string issuer = _jwt.Issuer;
+            string audience = _jwt.Audience;
 
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -39,10 +42,12 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             List<Claim> claims = new()
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, request.Email),
-                new Claim(ClaimTypes.Name, request.Email),
+                new Claim(JwtRegisteredClaimNames.Email, request.OfficialMail),
+                new Claim(ClaimTypes.Name, request.OfficialMail),
                 new Claim(ClaimTypes.Sid, request.UserId.ToString()),
-                new Claim(ClaimTypes.Role, request.RoleId.ToString())           };
+                new Claim(ClaimTypes.Role, request.UserStatusName.ToString()),
+                  new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(request.Modules)),
+            };
 
             JwtSecurityToken token = new(
                 issuer: issuer,
@@ -56,7 +61,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             string encodedToken = tokenHandler.WriteToken(token);
             var refreshToken = _refreshTokenGenerator.GenerateRefreshToken();
 
-            await _unitOfWork.UpdateRefreshToken(request.UserId, request.Email, refreshToken);
+            await _accountRepository.UpdateRefreshToken(refreshToken, request.UserId);
 
 
             var authResponse = new AuthResponse() { JwtToken = encodedToken, RefreshToken = refreshToken };

@@ -979,8 +979,10 @@
           "Microsoft.Extensions.Logging.Abstractions": "7.0.1",
           "Microsoft.Extensions.Options": "7.0.0",
           "MimeKit": "4.2.0",
+          "Newtonsoft.Json": "13.0.3",
           "System.Data.SqlClient": "4.8.5",
-          "System.IdentityModel.Tokens.Jwt": "6.32.3"
+          "System.IdentityModel.Tokens.Jwt": "6.32.3",
+          "hrms-be-backend-common": "1.0.0"
         },
         "runtime": {
           "hrms-be-backend-data.dll": {}

@@ -47,7 +47,7 @@ namespace hrms_be_backend_business.Logic
                 var ipAddress = requester.IpAddress.ToString();
                 var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(createdbyUserEmail);
+                var requesterInfo = await _accountRepository.FindUser(null,createdbyUserEmail,null);
                 if (null == requesterInfo)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
@@ -278,7 +278,7 @@ namespace hrms_be_backend_business.Logic
                 var ipAddress = requester.IpAddress.ToString();
                 var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
                 if (null == requesterInfo)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
@@ -357,7 +357,7 @@ namespace hrms_be_backend_business.Logic
                 var ipAddress = requester.IpAddress.ToString();
                 var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
                 if (null == requesterInfo)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
@@ -434,7 +434,7 @@ namespace hrms_be_backend_business.Logic
                 var ipAddress = requester.IpAddress.ToString();
                 var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
                 if (null == requesterInfo)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
@@ -494,7 +494,7 @@ namespace hrms_be_backend_business.Logic
                 var ipAddress = requester.IpAddress.ToString();
                 var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
                 if (null == requesterInfo)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
@@ -554,7 +554,7 @@ namespace hrms_be_backend_business.Logic
                 var ipAddress = requester.IpAddress.ToString();
                 var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
                 if (null == requesterInfo)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
@@ -616,7 +616,7 @@ namespace hrms_be_backend_business.Logic
                 var ipAddress = requester.IpAddress.ToString();
                 var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(requesterUserEmail);
+                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
                 if (null == requesterInfo)
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');

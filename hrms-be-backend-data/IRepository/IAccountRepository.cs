@@ -1,27 +1,12 @@
 ﻿using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
-using System.Data;
 
 namespace hrms_be_backend_data.IRepository
 {
     public interface IAccountRepository
     {
-        Task<User> FindUser(string officialMail);
-        Task<User> FindUser(long userId);
-        Task<CreateUserResponse> AddUser(CreateUserDto user, int createdbyUserId, string createdbyuseremail);
-        Task<int> AddUserBulk(DataTable dataTable, RequesterInfo requester, long currentStaffCount, int listCount, long companyID);
-        Task<dynamic> UpdateUser(UpdateUserDto user, int updatedbyUserId, string updatedbyuseremail);
-        Task<dynamic> MapUserToDepartment(string email, long deptId, long CompId, int updatedbyUserId);
 
-        Task<User> GetUserByToken(string Token);
-        Task<User> GetUserById(long Id);
-        Task<IEnumerable<User>> GetAllUsers();
-
-        Task<IEnumerable<User>> GetAllActiveUsers();
-        Task<IEnumerable<User>> GetAllUsersbyDeptId(long DeptId);
-        Task<IEnumerable<User>> GetAllUsersbyRoleID(long RoleId);
-        Task<IEnumerable<User>> GetAllUsersbyCompanyId(long companyId);
-        Task<IEnumerable<User>> GetUsersPendingApproval(long CompanyId);
+        Task<string> ProcessUser(CreateUserReq payload);
         Task<string> AuthenticateUser(string EmailAddress, int MaximumLoginAttempt, DateTime DateCreated);
         Task<string> VerifyUser(string Token, string LoggedInWithIPAddress, DateTime DateCreated);
         Task<dynamic> ApproveUser(long approvedByuserId, string defaultPass, string userEmail);
@@ -30,10 +15,25 @@ namespace hrms_be_backend_data.IRepository
         Task<dynamic> ReactivateUser(long reactivatedByuserId, string userEmail, string comment, string defaultpass);
         Task<dynamic> UnblockUser(long unblocedByuserId, string defaultPassword, string userEmail);
         Task<dynamic> ChangePassword(long userId, string newPassword);
+        Task<string> UpdateRefreshToken(string RefreshToken, long UserId);
 
-        Task<User> GetUserByCompany(string OfficialMail, int companyId);
+        Task<UserWithTotalVm> GetUsers(int PageNumber, int RowsOfPage);
+        Task<UserWithTotalVm> GetUsersBackOffice(int PageNumber, int RowsOfPage);
+        Task<UserWithTotalVm> GetUsersApprovedBackOffice(int PageNumber, int RowsOfPage);
+        Task<UserWithTotalVm> GetUsersDisapprovedBackOffice(int PageNumber, int RowsOfPage);
+        Task<UserWithTotalVm> GetUsersDeapctivatedBackOffice(int PageNumber, int RowsOfPage);
+        Task<UserWithTotalVm> GetUsersByCompany(long CompanyId, int PageNumber, int RowsOfPage);
+        Task<UserWithTotalVm> GetUsersApprovedByCompany(long CompanyId, int PageNumber, int RowsOfPage);
+        Task<UserWithTotalVm> GetUsersDisapprovedByCompany(long CompanyId, int PageNumber, int RowsOfPage);
+        Task<UserWithTotalVm> GetUsersDeactivatedByCompany(long CompanyId, int PageNumber, int RowsOfPage);
+        Task<UserVm> GetUserById(long Id);
+        Task<UserVm> GetUserByToken(string Token);
+        Task<UserFullView> FindUser(long? UserId, string Email, string AccessToken);
+        Task<UserFullView> FindUser(long? UserId);
+        Task<UserFullView> FindUser(string Email);
+        Task<UserVm> GetUserByEmployeeId(long EmployeeId);
+        Task<List<UserModulesVm>> GetAppModulesAssigned(long UserId);
 
-        void SendEmail(string recipientEmail, string firtname, string defaultPass, string subject, string wwwRootPath, string ip, string port, string appKey = null, string channel = null);
-
+        Task<dynamic> MapUserToDepartment(string email, long deptId, long CompId, int updatedbyUserId);
     }
 }

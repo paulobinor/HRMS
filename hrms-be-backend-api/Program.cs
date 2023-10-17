@@ -3,7 +3,6 @@ using Com.XpressPayments.Data.Repositories.UserAccount.Repository;
 using hrms_be_backend_business.AppCode;
 using hrms_be_backend_business.ILogic;
 using hrms_be_backend_business.Logic;
-using hrms_be_backend_business.Profiles;
 using hrms_be_backend_common.Configuration;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.IRepositoryRole;
@@ -92,11 +91,10 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
-
 // Auto Mapper Configurations
 var mappingConfig = new MapperConfiguration(mc =>
 {
-    mc.AddProfile(new HRMSProfile());
+    //mc.AddProfile(new HRMSProfile());
 });
 IMapper mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
@@ -104,10 +102,13 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.Configure<JwtConfig>(options => builder.Configuration.GetSection("Jwt").Bind(options));
-builder.Services.Configure<AppConfig>(options => builder.Configuration.GetSection("AppConfig").Bind(options));
-builder.Services.Configure<Smtp>(options => builder.Configuration.GetSection("Smtp").Bind(options));
+builder.Services.Configure<PassowordConfig>(options => builder.Configuration.GetSection("PassowordConfig").Bind(options));
 builder.Services.Configure<DocumentConfig>(options => builder.Configuration.GetSection("DocumentConfig").Bind(options));
 builder.Services.Configure<ImageDocumentConfig>(options => builder.Configuration.GetSection("ImageDocumentConfig").Bind(options));
+builder.Services.Configure<FrontendConfig>(options => builder.Configuration.GetSection("FrontendConfig").Bind(options));
+builder.Services.Configure<ResignationFileConfig>(options => builder.Configuration.GetSection("ResignationFileConfig").Bind(options));
+builder.Services.Configure<SmtpConfig>(options => builder.Configuration.GetSection("SmtpConfig").Bind(options));
+
 
 builder.Services.AddScoped<IDapperGenericRepository, DapperGenericRepository>();
 
@@ -216,12 +217,13 @@ builder.Services.AddScoped<ILearningAndDevelopmentMailService, LearningAndDevelo
 builder.Services.AddScoped<ITrainingFeedbackFormService, TrainingFeedbackFormService>();
 builder.Services.AddScoped<ITrainingInductionService, TrainingInductionService>();
 builder.Services.AddScoped<ITrainingPlanService, TrainingPlanService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 //VacationModul
 builder.Services.AddScoped<IGradeLeaveService, GradeLeaveService>();
 builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
 builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
-builder.Services.AddScoped<IRescheduleLeaveService, RescheduleLeaveService>();
+
 
 
 //ExitModule

@@ -22,3 +22,6 @@ C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-data\obj
 C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-data\obj\Release\net7.0\refint\hrms-be-backend-data.dll
 C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-data\obj\Release\net7.0\hrms-be-backend-data.pdb
 C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-data\obj\Release\net7.0\ref\hrms-be-backend-data.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-data\bin\Release\net7.0\hrms-be-backend-common.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-data\bin\Release\net7.0\hrms-be-backend-common.pdb
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-data\obj\Release\net7.0\hrms-be-backend-data.csproj.CopyComplete

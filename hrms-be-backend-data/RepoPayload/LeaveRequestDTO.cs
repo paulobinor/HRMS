@@ -56,7 +56,7 @@
     public class LeaveRequestCreate
     {
 
-        public long UserId { get; set; }
+        public long EmployeeId { get; set; }
         public int RequestYear { get; set; }
         public long LeaveTypeId { get; set; }
         public long NoOfDays { get; set; }
@@ -75,7 +75,7 @@
     public class RescheduleLeaveRequest
     {
         public long LeaveRequestID { get; set; }
-        public long UserId { get; set; }
+        public long EmployeeId { get; set; }
         public long RequestYear { get; set; }
         public long LeaveTypeId { get; set; }
         public long NoOfDays { get; set; }

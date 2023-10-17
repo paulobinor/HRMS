@@ -269,7 +269,11 @@
         "frameworks": {
           "net7.0": {
             "targetAlias": "net7.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {
+                "projectPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -309,6 +313,10 @@
             "MimeKit": {
               "target": "Package",
               "version": "[4.2.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
             },
             "System.Data.SqlClient": {
               "target": "Package",

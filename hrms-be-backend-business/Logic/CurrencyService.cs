@@ -17,16 +17,13 @@ namespace hrms_be_backend_business.Logic
     {
         private readonly ILogger<CurrencyService> _logger;
         private readonly ICurrencyRepository _currencyRepository;
-        private readonly IAuthService _authService;     
-        private readonly IMailService _mailService;
-        private readonly JwtConfig _jwt;
+        private readonly IAuthService _authService;      
         private readonly IAuditLog _audit;
-        public CurrencyService(IOptions<JwtConfig> jwt, ILogger<CurrencyService> logger, ICurrencyRepository currencyRepository, IAuthService authService, IAuditLog audit)
+        public CurrencyService(ILogger<CurrencyService> logger, ICurrencyRepository currencyRepository, IAuthService authService, IAuditLog audit)
         {
             _logger = logger;
             _currencyRepository = currencyRepository;
-            _authService = authService;
-            _jwt = jwt.Value;
+            _authService = authService;           
             _audit = audit;
         }
         public async Task<ExecutedResult<string>> CreateCurrency(CurrencyCreateDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)

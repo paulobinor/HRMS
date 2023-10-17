@@ -29,7 +29,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                var userDetails = await _accountRepository.FindUser(TrainingInduction.UserID);
+                var userDetails = await _accountRepository.FindUser(TrainingInduction.UserID,null,null);
                 var param = new DynamicParameters();
                 param.Add("@Status", TrainingInductionEnum.CREATE);
                 param.Add("@UserId", TrainingInduction.UserID);

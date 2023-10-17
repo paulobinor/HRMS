@@ -1,232 +1,218 @@
 ﻿using Dapper;
-using hrms_be_backend_data.AppConstants;
-using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Data;
-using System.Data.SqlClient;
 
 namespace hrms_be_backend_data.Repository
 {
     public class CompanyRepository : ICompanyRepository
-    {
-        private string _connectionString;
-        private readonly ILogger<CompanyRepository> _logger;
-        private readonly IConfiguration _configuration;
+    {       
+        private readonly ILogger<CompanyRepository> _logger;      
+        private readonly IDapperGenericRepository _dapper;
 
-        public CompanyRepository(IConfiguration configuration, ILogger<CompanyRepository> logger)
-        {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
-            _logger = logger;
-            _configuration = configuration;
+        public CompanyRepository(ILogger<CompanyRepository> logger, IDapperGenericRepository dapper)
+        {           
+            _logger = logger;         
+            _dapper = dapper;
         }
-
-        public async Task<dynamic> CreateCompany(CreateCompanyDto Comp, string createdbyUserEmail)
+        public async Task<string> ProcessCompany(ProcessCompanyReq payload)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Cmpany.CREATE);
-                    param.Add("@CompanyName", Comp.CompanyName.Trim());
-                    param.Add("@CompanyCode", Comp.CompanyCode.Trim());
-                    param.Add("@LastStaffNumber", Comp.LastStaffNumber);
-                    param.Add("@Address", Comp.Address.Trim());
-                    param.Add("@Email", Comp.Email.Trim());
-                    param.Add("@Website", Comp.Website.Trim());
-                    param.Add("@CompanyLogo", Comp.CompanyLogo);
-                    param.Add("@ContactPhone", Comp.ContactPhone.Trim());
+                var param = new DynamicParameters();
 
-                    param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
+                param.Add("@CompanyId", payload.CompanyId);
+                param.Add("@CompanyName", payload.CompanyName);
+                param.Add("@CompanyCode", payload.CompanyCode);
+                param.Add("@CompanyLogo", payload.CompanyLogo);
+                param.Add("@Website", payload.Website);
+                param.Add("@FullAddress", payload.FullAddress);
+                param.Add("@Email", payload.Email);
+                param.Add("@ContactPhone", payload.ContactPhone);
+                param.Add("@IsPublicSector", payload.IsPublicSector);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+                param.Add("@IsModifield", payload.IsModifield);
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Company, param: param, commandType: CommandType.StoredProcedure);
+                return await _dapper.Get<string>("sp_process_company", param, commandType: CommandType.StoredProcedure);
 
-                    return response;
-                }
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: CreateCompany(CreateCompanyDto Company, string createdbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"CompanyRepository -> ProcessCompany => {ex}");
+                return "Unable to submit this detail, kindly contact support";
             }
-        }
 
-        public async Task<dynamic> UpdateCompany(UpdateCompanyDto Comp, string updatedbyUserEmail)
+        }
+        public async Task<string> DeleteCompany(DeleteCompanyReq payload)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Cmpany.UPDATE);
-                    param.Add("@CompanyIdUpd", Convert.ToInt32(Comp.CompanyId));
-                    param.Add("@CompanyCodeUpd", Comp.CompanyCode.Trim());
-                    param.Add("@CompanyNameUpd", Comp.CompanyName == null ? "" : Comp.CompanyName.ToString().Trim());
-                    param.Add("@LastStaffNumber", Comp.LastStaffNumber);
-                    param.Add("@AddressUpd", Comp.Address.Trim());
-                    param.Add("@EmailUpd", Comp.Email.Trim());
-                    param.Add("@WebsiteUpd", Comp.Website.Trim());
-                    param.Add("@CompanyLogoUpd", Comp.CompanyLogo.Trim());
-                    param.Add("@ContactPhoneUpd", Comp.ContactPhone.Trim());
-                    param.Add("@CompanyIdUpd", Comp.CompanyId);
+                var param = new DynamicParameters();
 
-                    param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
+                param.Add("@CompanyId", payload.CompanyId);
+                param.Add("@Comment", payload.Comment);               
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);             
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Company, param: param, commandType: CommandType.StoredProcedure);
+                return await _dapper.Get<string>("sp_delete_company", param, commandType: CommandType.StoredProcedure);
 
-                    return response;
-                }
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: UpdateCompany(UpdateCompanyDto Company, string updtedbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"CompanyRepository -> DeleteCompany => {ex}");
+                return "Unable to submit this detail, kindly contact support";
             }
+
+        }
+        public async Task<CompanyWithTotalVm> GetCompanies(int PageNumber, int RowsOfPage)
+        {
+            var returnData = new CompanyWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();               
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                var result = await _dapper.GetMultiple("sp_get_companies", param, gr => gr.Read<long>(), gr => gr.Read<CompanyVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<CompanyVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyRepository -> GetCompanies => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<CompanyWithTotalVm> GetCompaniesActivated(int PageNumber, int RowsOfPage)
+        {
+            var returnData = new CompanyWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                var result = await _dapper.GetMultiple("sp_get_companies_activated", param, gr => gr.Read<long>(), gr => gr.Read<CompanyVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<CompanyVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyRepository -> GetCompaniesActivated => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<CompanyWithTotalVm> GetCompaniesDeactivated(int PageNumber, int RowsOfPage)
+        {
+            var returnData = new CompanyWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                var result = await _dapper.GetMultiple("sp_get_companies_deactivated", param, gr => gr.Read<long>(), gr => gr.Read<CompanyVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<CompanyVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyRepository -> GetCompaniesDeactivated => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<CompanyWithTotalVm> GetCompaniesPublicSector(int PageNumber, int RowsOfPage)
+        {
+            var returnData = new CompanyWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                var result = await _dapper.GetMultiple("sp_get_companies_public_sector", param, gr => gr.Read<long>(), gr => gr.Read<CompanyVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<CompanyVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyRepository -> GetCompaniesPublicSector => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<CompanyWithTotalVm> GetCompaniesPrivateSector(int PageNumber, int RowsOfPage)
+        {
+            var returnData = new CompanyWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                var result = await _dapper.GetMultiple("sp_get_companies_private_sector", param, gr => gr.Read<long>(), gr => gr.Read<CompanyVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<CompanyVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyRepository -> GetCompaniesPrivateSector => {ex}");
+                return returnData;
+            }
+
         }
 
-        public async Task<dynamic> DeleteCompany(DeleteCompanyDto Comp, string deletedbyUserEmail)
+        public async Task<CompanyFullVm> GetCompanyById(long Id)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Cmpany.DELETE);
-                    param.Add("@CompanyIdDelete", Convert.ToInt32(Comp.CompanyId));
-                    param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
-                    param.Add("@Reasons_For_Deleting_Company", Comp.Reasons_For_Delete == null ? "" : Comp.Reasons_For_Delete.ToString().Trim());
-
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Company, param: param, commandType: CommandType.StoredProcedure);
-
-                    return response;
-                }
+                var param = new DynamicParameters();
+                param.Add("@Id", Id);
+                return await _dapper.Get<CompanyFullVm>("sp_get_company_by_id", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: DeleteCompany(DeleteCompanyDto Company, string deletedbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"CompanyRepository -> GetCompanyById => {ex}");
+                return new CompanyFullVm();
             }
-        }
 
-        public async Task<IEnumerable<CompanyDTO>> GetAllActiveCompanys()
+        }
+        public async Task<CompanyFullVm> GetCompanyByName(string CompanyName)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Cmpany.GETALLACTIVE);
-
-                    var CompanyDetails = await _dapper.QueryAsync<CompanyDTO>(ApplicationConstant.Sp_Company, param: param, commandType: CommandType.StoredProcedure);
-
-                    return CompanyDetails;
-                }
+                var param = new DynamicParameters();
+                param.Add("@CompanyName", CompanyName);
+                return await _dapper.Get<CompanyFullVm>("sp_get_company_by_name", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllActiveCompanys() ===>{ex.Message}");
-                throw;
+                _logger.LogError($"CompanyRepository -> GetCompanyByName => {ex}");
+                return new CompanyFullVm();
             }
+
         }
-
-        public async Task<IEnumerable<CompanyDTO>> GetAllCompanys()
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Cmpany.GETALL);
-
-                    var CompanyDetails = await _dapper.QueryAsync<CompanyDTO>(ApplicationConstant.Sp_Company, param: param, commandType: CommandType.StoredProcedure);
-
-                    return CompanyDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllCompanys() ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<CompanyDTO> GetCompanyById(long CompanyId)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Cmpany.GETBYID);
-                    param.Add("@CompanyIdGet", CompanyId);
-
-                    var CompanyDetails = await _dapper.QueryFirstOrDefaultAsync<CompanyDTO>(ApplicationConstant.Sp_Company, param: param, commandType: CommandType.StoredProcedure);
-
-                    return CompanyDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetCompanyById(int CompanyId) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<CompanyDTO> GetCompanyByName(string CompanyName)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Cmpany.GETBYname);
-                    param.Add("@CompanyNameGet", CompanyName);
-
-                    var CompanyDetails = await _dapper.QueryFirstOrDefaultAsync<CompanyDTO>(ApplicationConstant.Sp_Company, param: param, commandType: CommandType.StoredProcedure);
-
-                    return CompanyDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetCompanyById(int CompanyId) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<CompanyDTO> GetCompanyByEmail(string Email)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Cmpany.GETBYEmail);
-                    param.Add("@EmailGet", Email.Trim());
-
-                    var CompanyDetails = await _dapper.QueryFirstOrDefaultAsync<CompanyDTO>(ApplicationConstant.Sp_Company, param: param, commandType: CommandType.StoredProcedure);
-
-                    return CompanyDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetCompanyById(int CompanyId) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-
     }
 }
