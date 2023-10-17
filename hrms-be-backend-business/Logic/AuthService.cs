@@ -90,7 +90,7 @@ namespace hrms_be_backend_business.Logic
 
                     return response;
                 }
-                var modules=await _accountRepository.GetUserAssigned(Convert.ToInt64(userId));
+                var modules=await _accountRepository.GetAppModulesAssigned(Convert.ToInt64(userId));
                 var accessUserVm = new AccessUserVm
                 {
                     CompanyName = user.CompanyName,

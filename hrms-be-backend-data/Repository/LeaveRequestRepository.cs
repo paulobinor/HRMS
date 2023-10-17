@@ -31,7 +31,7 @@ namespace hrms_be_backend_data.Repository
             {
                 var param = new DynamicParameters();
                 param.Add("@Status", LeaveRequestEnum.CREATE);
-                param.Add("@UserID", Leave.UserId);
+                param.Add("@EmployeeId", Leave.EmployeeId);
                 param.Add("@RequestYear", Leave.RequestYear);
                 param.Add("@LeaveTypeId", Leave.LeaveTypeId);
                 param.Add("@NoOfDays", Leave.NoOfDays);
@@ -67,7 +67,7 @@ namespace hrms_be_backend_data.Repository
                     var param = new DynamicParameters();
                     param.Add("@Status", LeaveRequestEnum.UPDATE);
                     param.Add("@LeaveRequestIDUpd", update.LeaveRequestID);
-                    param.Add("@UserIDUpd", update.UserId);
+                    param.Add("@EmployeeId", update.EmployeeId);
                     param.Add("@RequestYearUpd", update.RequestYear);
                     param.Add("@LeaveTypeIdUpd", update.LeaveTypeId);
                     param.Add("@NoOfDaysUpd", update.NoOfDays);

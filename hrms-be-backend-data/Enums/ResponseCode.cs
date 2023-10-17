@@ -26,5 +26,7 @@ namespace hrms_be_backend_data.Enums
         InvalidPassword = 9,
         [Description("Invalid Approval Status")]
         InvalidApprovalStatus = 10,
+        [Description("No privilege")]
+        NoPrivilege = 11,
     }
 }

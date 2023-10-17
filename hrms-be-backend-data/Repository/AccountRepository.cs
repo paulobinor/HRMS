@@ -30,6 +30,7 @@ namespace hrms_be_backend_data.Repository
             try
             {              
                 var param = new DynamicParameters();
+                param.Add("@UserId", payload.UserId);
                 param.Add("@FirstName", payload.FirstName);
                 param.Add("@MiddleName", payload.MiddleName);
                 param.Add("@LastName", payload.LastName);
@@ -344,7 +345,21 @@ namespace hrms_be_backend_data.Repository
                 return new UserFullView();
             }
         }
-        public async Task<List<UserModulesVm>> GetUserAssigned(long UserId)
+        public async Task<UserVm> GetUserByEmployeeId(long EmployeeId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", EmployeeId);
+                return await _dapper.Get<UserVm>("sp_get_user_by_employee_id", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AccountRepository => GetUserByEmployeeId || {ex}");
+                return new UserVm();
+            }
+        }
+        public async Task<List<UserModulesVm>> GetAppModulesAssigned(long UserId)
         {
             try
             {
@@ -399,6 +414,7 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
+
        
         public async Task<dynamic> ApproveUser(long approvedByuserId, string defaultPass, string userEmail)
         {

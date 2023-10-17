@@ -3,7 +3,6 @@ using Com.XpressPayments.Data.Repositories.UserAccount.Repository;
 using hrms_be_backend_business.AppCode;
 using hrms_be_backend_business.ILogic;
 using hrms_be_backend_business.Logic;
-using hrms_be_backend_business.Profiles;
 using hrms_be_backend_common.Configuration;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.IRepositoryRole;
@@ -92,11 +91,10 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
-
 // Auto Mapper Configurations
 var mappingConfig = new MapperConfiguration(mc =>
 {
-    mc.AddProfile(new HRMSProfile());
+   // mc.AddProfile(new HRMSProfile());
 });
 IMapper mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
@@ -225,7 +223,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IGradeLeaveService, GradeLeaveService>();
 builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
 builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
-builder.Services.AddScoped<IRescheduleLeaveService, RescheduleLeaveService>();
+
 
 
 //ExitModule

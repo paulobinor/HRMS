@@ -2,6 +2,7 @@
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
 using System.Text;
@@ -17,9 +18,10 @@ namespace hrms_be_backend_business.Logic
         private readonly ICompanyRepository _companyrepository;
         private readonly ITrainingPlanRepository _trainingPlanRepository;
         private readonly ILearningAndDevelopmentMailService _learningAndDevelopmentmailService;
+        private readonly IEmployeeRepository _employeeRepository;
 
         public TrainingPlanService(IAccountRepository accountRepository, ILogger<TrainingPlanService> logger,
-            ITrainingPlanRepository trainingPlanRepository, IAuditLog audit, ICompanyRepository companyrepository, ILearningAndDevelopmentMailService learningAndDevelopmentmailService)
+            ITrainingPlanRepository trainingPlanRepository, IAuditLog audit, ICompanyRepository companyrepository, ILearningAndDevelopmentMailService learningAndDevelopmentmailService, IEmployeeRepository employeeRepository)
         {
             _audit = audit;
             _learningAndDevelopmentmailService = learningAndDevelopmentmailService;
@@ -27,6 +29,7 @@ namespace hrms_be_backend_business.Logic
             _accountRepository = accountRepository;
             _trainingPlanRepository = trainingPlanRepository;
             _companyrepository = companyrepository;
+            _employeeRepository = employeeRepository;
         }
         public async Task<BaseResponse> CreateTrainingPlan(TrainingPlanCreate payload, RequesterInfo requester)
         {
@@ -193,7 +196,7 @@ namespace hrms_be_backend_business.Logic
         public async Task<BaseResponse> ApproveTrainingPlan(TrainingPlanApproved payload, RequesterInfo requester)
         {
             var trainingPlanDetail = await _trainingPlanRepository.GetTrainingPlanById(payload.TrainingPlanID);
-            var userDetails = await _accountRepository.FindUser(trainingPlanDetail.UserId);
+            var userDetails = await _employeeRepository.GetEmployeeByUserId(trainingPlanDetail.UserId);
 
             var response = new BaseResponse();
 
@@ -206,7 +209,7 @@ namespace hrms_be_backend_business.Logic
                     return SetErrorResponse("User details not found.");
                 }
 
-                if (requesterUserId != userDetails.HODUserId && requesterUserId != userDetails.UnitHeadUserId)
+                if (requesterUserId != userDetails.HodEmployeeId && requesterUserId != userDetails.UnitHeadEmployeeId)
                 {
                     if (trainingPlanDetail.IsHodApproved && !trainingPlanDetail.IsUnitHeadApproved)
                     {
@@ -258,7 +261,7 @@ namespace hrms_be_backend_business.Logic
             //check if us
 
             var trainingPlanDetail = await _trainingPlanRepository.GetTrainingPlanById(payload.TrainingPlanID);
-            var userDetails = await _accountRepository.FindUser(trainingPlanDetail.UserId);
+            var userDetails = await _employeeRepository.GetEmployeeByUserId(trainingPlanDetail.UserId);
 
             var response = new BaseResponse();
             try
@@ -270,7 +273,7 @@ namespace hrms_be_backend_business.Logic
                     return SetErrorResponse("User details not found.");
                 }
 
-                if (requesterUserId != userDetails.HODUserId && requesterUserId != userDetails.UnitHeadUserId)
+                if (requesterUserId != userDetails.HodEmployeeId && requesterUserId != userDetails.UnitHeadEmployeeId)
                 {
                     if (Convert.ToInt32(requester.RoleId) != 4)
                     {

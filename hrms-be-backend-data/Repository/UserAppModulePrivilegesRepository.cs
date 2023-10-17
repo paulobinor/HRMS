@@ -21,16 +21,15 @@ namespace hrms_be_backend_data.Repository
             _configuration = configuration;
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-        public async Task<string> CheckUserAppPrivilege(string EmailAddress, int MaximumLoginAttempt, DateTime DateCreated)
+        public async Task<string> CheckUserAppPrivilege(string PrivilegeCode, long CreatedByUserId)
         {
             try
             {
                 var param = new DynamicParameters();
 
-                param.Add("@EmailAddress", EmailAddress);
-                param.Add("@MaximumLoginAttempt", MaximumLoginAttempt);
-                param.Add("@DateCreated", DateCreated);
-
+                param.Add("@PrivilegeCode", PrivilegeCode);
+                param.Add("@CreatedByUserId", CreatedByUserId);
+               
                 return await _repository.Get<string>("sp_check_user_app_privilege", param, commandType: CommandType.StoredProcedure);
 
             }

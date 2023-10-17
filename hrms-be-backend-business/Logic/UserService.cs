@@ -1,6 +1,8 @@
-﻿using hrms_be_backend_business.Helpers;
+﻿using hrms_be_backend_business.AppCode;
+using hrms_be_backend_business.Helpers;
 using hrms_be_backend_business.ILogic;
 using hrms_be_backend_common.Communication;
+using hrms_be_backend_common.Configuration;
 using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
@@ -9,8 +11,10 @@ using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Security.Claims;
+using System.Text;
 
 namespace hrms_be_backend_business.Logic
 {
@@ -21,14 +25,20 @@ namespace hrms_be_backend_business.Logic
         private readonly IAuditLog _audit;
         private readonly IAuthService _authService;
         private readonly IUriService _uriService;
+        private readonly IMailService _mailService;
+        private readonly FrontendConfig _frontendConfig;
+        private readonly IUserAppModulePrivilegeRepository _privilegeRepository;
 
-        public UserService(IAuditLog audit, IAccountRepository accountRepository, ILogger<UserService> logger, IAuthService authService, IUriService uriService)
-        {          
+        public UserService(IAuditLog audit, IAccountRepository accountRepository, ILogger<UserService> logger, IAuthService authService, IUriService uriService, IMailService mailService, IOptions<FrontendConfig> frontendConfig, IUserAppModulePrivilegeRepository privilegeRepository)
+        {
+            _frontendConfig = frontendConfig.Value;
             _audit = audit;         
             _logger = logger;
             _accountRepository = accountRepository;
             _authService= authService;
             _uriService = uriService;
+            _mailService = mailService;
+            _privilegeRepository = privilegeRepository;
         }
         public async Task<ExecutedResult<string>> CreateBackOfficeUser(CreateUserDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
@@ -39,6 +49,12 @@ namespace hrms_be_backend_business.Logic
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkUserModulePrivilegeConstant.Create_User, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
 
                 }
                 bool isModelStateValidate = true;
@@ -70,6 +86,7 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
                 }
+                var password = Utils.GenerateDefaultPassword(6);
                 var repoPayload = new CreateUserReq
                 {
                     CreatedByUserId = accessUser.data.UserId,
@@ -78,7 +95,7 @@ namespace hrms_be_backend_business.Logic
                     LastName = payload.LastName,
                     MiddleName = payload.MiddleName,
                     OfficialMail = payload.OfficialMail,
-                    PasswordHash = "Password@123",
+                    PasswordHash = password,
                     PhoneNumber=payload.PhoneNumber,
                     UserStatusCode=UserStatusConstant.Back_Office_User,
                     IsModifield = false,
@@ -99,12 +116,126 @@ namespace hrms_be_backend_business.Logic
                     ipAddress = RemoteIpAddress
                 };
                 await _audit.LogActivity(auditLog);
+                StringBuilder mailBody = new StringBuilder();
 
+                mailBody.Append($"Dear {payload.FirstName} {payload.LastName} {payload.MiddleName} <br/> <br/>");
+                mailBody.Append($"You have been created on Xpress HRMS <br/> <br/>");
+                mailBody.Append($"<b>URL : <b/> {_frontendConfig.FrontendUrl}");
+                mailBody.Append($"<b>Username : <b/> {payload.OfficialMail}");
+                mailBody.Append($"<b>Password : <b/> {password}");
+
+                var mailPayload = new MailRequest
+                {
+                    Body = mailBody.ToString(),
+                    Subject = "Leave Request",
+                    ToEmail = payload.OfficialMail,
+                };
+                _mailService.SendEmailAsync(mailPayload, null);
                 return new ExecutedResult<string>() { responseMessage = "Created Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
                 _logger.LogError($"UserService (CreateBackOfficeUser)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+        public async Task<ExecutedResult<string>> UpdateBackOfficeUser(UpdateUserDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkUserModulePrivilegeConstant.Update_User, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.FirstName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "First name is required";
+                }
+                if (payload.LastName == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Last name is required";
+                }
+                if (payload.OfficialMail == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Official email is required";
+                }
+                if (payload.PhoneNumber == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Phone number is required";
+                }
+
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var password = Utils.GenerateDefaultPassword(6);
+                var repoPayload = new CreateUserReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    FirstName = payload.FirstName,
+                    LastName = payload.LastName,
+                    MiddleName = payload.MiddleName,
+                    OfficialMail = payload.OfficialMail,
+                    PasswordHash = password,
+                    PhoneNumber = payload.PhoneNumber,
+                    UserStatusCode = UserStatusConstant.Back_Office_User,
+                    UserId=payload.UserId,
+                    IsModifield = false,
+                };
+                string repoResponse = await _accountRepository.ProcessUser(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "UpdateBackOfficeUser",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+                //StringBuilder mailBody = new StringBuilder();
+
+                //mailBody.Append($"Dear {payload.FirstName} {payload.LastName} {payload.MiddleName} <br/> <br/>");
+                //mailBody.Append($"You have been created on Xpress HRMS <br/> <br/>");
+                //mailBody.Append($"<b>URL : <b/> {_frontendConfig.FrontendUrl}");
+                //mailBody.Append($"<b>Username : <b/> {payload.OfficialMail}");
+                //mailBody.Append($"<b>Password : <b/> {password}");
+
+                //var mailPayload = new MailRequest
+                //{
+                //    Body = mailBody.ToString(),
+                //    Subject = "Leave Request",
+                //    ToEmail = payload.OfficialMail,
+                //};
+                //_mailService.SendEmailAsync(mailPayload, null);
+                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"UserService (UpdateBackOfficeUser)=====>{ex}");
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
@@ -119,6 +250,10 @@ namespace hrms_be_backend_business.Logic
                 {
                     return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
+                }
+                if (accessUser.data.UserStatusCode != UserStatusConstant.Back_Office_User)
+                {
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
                 }
                 var returnData = await _accountRepository.GetUsers(filter.PageNumber, filter.PageSize);
                 if (returnData == null)
@@ -138,7 +273,7 @@ namespace hrms_be_backend_business.Logic
             }
             catch (Exception ex)
             {
-                _logger.LogError($"UserService (GetPayrolls)=====>{ex}");
+                _logger.LogError($"UserService (GetUsers)=====>{ex}");
                 return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
             }
         }
@@ -152,6 +287,12 @@ namespace hrms_be_backend_business.Logic
                 if (accessUser.data == null)
                 {
                     return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkUserModulePrivilegeConstant.Update_User, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
                 var returnData = await _accountRepository.GetUsersBackOffice(filter.PageNumber, filter.PageSize);
@@ -188,6 +329,12 @@ namespace hrms_be_backend_business.Logic
                     return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkUserModulePrivilegeConstant.Update_User, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
                 var returnData = await _accountRepository.GetUsersApprovedBackOffice(filter.PageNumber, filter.PageSize);
                 if (returnData == null)
                 {
@@ -222,6 +369,12 @@ namespace hrms_be_backend_business.Logic
                     return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkUserModulePrivilegeConstant.Update_User, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
                 var returnData = await _accountRepository.GetUsersDisapprovedBackOffice(filter.PageNumber, filter.PageSize);
                 if (returnData == null)
                 {
@@ -254,6 +407,12 @@ namespace hrms_be_backend_business.Logic
                 if (accessUser.data == null)
                 {
                     return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkUserModulePrivilegeConstant.Update_User, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
                 var returnData = await _accountRepository.GetUsersDeapctivatedBackOffice(filter.PageNumber, filter.PageSize);

@@ -1,7 +1,8 @@
 ﻿namespace hrms_be_backend_data.RepoPayload
 {
     public class CreateUserReq
-    {      
+    {
+        public long UserId { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }     
         public string LastName { get; set; }           

@@ -1,11 +1,14 @@
-﻿namespace hrms_be_backend_business.ILogic
+﻿using hrms_be_backend_common.DTO;
+
+namespace hrms_be_backend_business.ILogic
 {
     public interface IMailService
     {
+        Task SendEmailAsync(MailRequest mailRequest, string attarchDocument);
         void SendEmail(string recipientEmail, string firtname, string defaultPass, string subject, string wwwRootPath, string ip, string port, string appKey = null, string channel = null);
         Task SendLeaveMailToReliever(long RelieverUserId, long leaveRequetedByUserId, DateTime startDate, DateTime endDate);
-        Task SendLeaveApproveMailToApprover(long ApprovalUserId, long leaveRequetedByUserId, DateTime startDate, DateTime endDate);
-        Task SendLeaveApproveConfirmationMail(long RequesterUserId, long ApprovedByUserId, DateTime startDate, DateTime endDate);
-        Task SendLeaveDisapproveConfirmationMail(long RequesterUserId, long DiapprovedByUserId);
+        Task SendLeaveApproveMailToApprover(long ApprovalEmployeeId, long leaveRequetedByEmployeeId, DateTime startDate, DateTime endDate);
+        Task SendLeaveApproveConfirmationMail(long RequesterEmployeeId, long ApprovedByEmployeeId, DateTime startDate, DateTime endDate);
+        Task SendLeaveDisapproveConfirmationMail(long RequesterEmployeeId, long DiapprovedByEmployeeId);
     }
 }

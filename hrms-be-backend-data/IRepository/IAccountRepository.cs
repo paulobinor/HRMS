@@ -31,7 +31,8 @@ namespace hrms_be_backend_data.IRepository
         Task<UserFullView> FindUser(long? UserId, string Email, string AccessToken);
         Task<UserFullView> FindUser(long? UserId);
         Task<UserFullView> FindUser(string Email);
-        Task<List<UserModulesVm>> GetUserAssigned(long UserId);
+        Task<UserVm> GetUserByEmployeeId(long EmployeeId);
+        Task<List<UserModulesVm>> GetAppModulesAssigned(long UserId);
 
         Task<dynamic> MapUserToDepartment(string email, long deptId, long CompId, int updatedbyUserId);
     }

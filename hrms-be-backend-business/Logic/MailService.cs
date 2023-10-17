@@ -72,7 +72,7 @@ namespace hrms_be_backend_business.AppCode
                 {
                     Body = mailBody.ToString(),
                     Subject = "Leave Request",
-                    ToEmail = userDetails.officialMail,
+                    ToEmail = userDetails.OfficialMail,
                 };
                 SendEmailAsync(mailPayload, null);
 
@@ -82,12 +82,12 @@ namespace hrms_be_backend_business.AppCode
                 _logger.LogError(ex.ToString(), new { Controller = "MailService", Method = "SendLeaveMailToReliever" });
             }
         }
-        public async Task SendLeaveApproveMailToApprover(long ApprovalUserId, long leaveRequetedByUserId, DateTime startDate, DateTime endDate)
+        public async Task SendLeaveApproveMailToApprover(long ApprovalEmployeeId, long leaveRequetedByEmployeeId, DateTime startDate, DateTime endDate)
         {
             try
             {
-                var userDetails = await _accountRepository.FindUser(ApprovalUserId,null,null);
-                var leaveRequetedBy = await _accountRepository.FindUser(leaveRequetedByUserId,null,null);
+                var userDetails = await _accountRepository.GetUserByEmployeeId(ApprovalEmployeeId);
+                var leaveRequetedBy = await _accountRepository.GetUserByEmployeeId(leaveRequetedByEmployeeId);
                 StringBuilder mailBody = new StringBuilder();
                 mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
                 mailBody.Append($"Kindly login to approve a leave request by {leaveRequetedBy.FirstName} {leaveRequetedBy.LastName} {leaveRequetedBy.MiddleName} <br/> <br/>");
@@ -98,7 +98,7 @@ namespace hrms_be_backend_business.AppCode
                 {
                     Body = mailBody.ToString(),
                     Subject = "Leave Request",
-                    ToEmail = userDetails.Email,
+                    ToEmail = userDetails.OfficialMail,
                 };
                 SendEmailAsync(mailPayload, null);
 
@@ -108,12 +108,12 @@ namespace hrms_be_backend_business.AppCode
                 _logger.LogError(ex.ToString(), new { Controller = "MailService", Method = "SendLeaveMailToUnitHead" });
             }
         }
-        public async Task SendLeaveApproveConfirmationMail(long RequesterUserId, long ApprovedByUserId, DateTime startDate, DateTime endDate)
+        public async Task SendLeaveApproveConfirmationMail(long RequesterEmployeeId, long ApprovedByEmployeeId, DateTime startDate, DateTime endDate)
         {
             try
             {
-                var userDetails = await _accountRepository.FindUser(RequesterUserId,null,null);
-                var ApprovedByUserDetails = await _accountRepository.FindUser(ApprovedByUserId,null,null);
+                var userDetails = await _accountRepository.GetUserByEmployeeId(RequesterEmployeeId);
+                var ApprovedByUserDetails = await _accountRepository.GetUserByEmployeeId(ApprovedByEmployeeId);
                 StringBuilder mailBody = new StringBuilder();
                 mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
                 mailBody.Append($"You leave has been approved by {ApprovedByUserDetails.FirstName} {ApprovedByUserDetails.LastName} {ApprovedByUserDetails.MiddleName} <br/> <br/>");
@@ -125,7 +125,7 @@ namespace hrms_be_backend_business.AppCode
                 {
                     Body = mailBody.ToString(),
                     Subject = "Leave Request",
-                    ToEmail = userDetails.officialMail,
+                    ToEmail = userDetails.OfficialMail,
                 };
                 SendEmailAsync(mailPayload, null);
 
@@ -135,12 +135,12 @@ namespace hrms_be_backend_business.AppCode
                 _logger.LogError(ex.ToString(), new { Controller = "MailService", Method = "SendLeaveMailToUnitHead" });
             }
         }
-        public async Task SendLeaveDisapproveConfirmationMail(long RequesterUserId, long DiapprovedByUserId)
+        public async Task SendLeaveDisapproveConfirmationMail(long RequesterEmployeeId, long DiapprovedByEmployeeId)
         {
             try
             {
-                var userDetails = await _accountRepository.FindUser(RequesterUserId);
-                var disapprovedByUserDetails = await _accountRepository.FindUser(DiapprovedByUserId);
+                var userDetails = await _accountRepository.GetUserByEmployeeId(RequesterEmployeeId);
+                var disapprovedByUserDetails = await _accountRepository.GetUserByEmployeeId(DiapprovedByEmployeeId);
 
                 StringBuilder mailBody = new StringBuilder();
                 mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
@@ -152,7 +152,7 @@ namespace hrms_be_backend_business.AppCode
                 {
                     Body = mailBody.ToString(),
                     Subject = "Leave Request",
-                    ToEmail = userDetails.officialMail,
+                    ToEmail = userDetails.OfficialMail,
                 };
                 SendEmailAsync(mailPayload, null);
 

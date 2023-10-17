@@ -4,13 +4,9 @@ using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.IRepository;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
 using System.Net;
+using System.Net.Mail;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace hrms_be_backend_business.Logic
 {
@@ -19,12 +15,13 @@ namespace hrms_be_backend_business.Logic
         private readonly SmtpConfig _smtpParameters;
         private readonly ILogger<LearningAndDevelopmentMailService> _logger;
         private readonly IAccountRepository _accountRepository;
-        public LearningAndDevelopmentMailService(IOptions<SmtpConfig> smtpParameters, ILogger<LearningAndDevelopmentMailService> logger, IAccountRepository accountRepository)
+        private readonly IEmployeeRepository _employeeRepository;
+        public LearningAndDevelopmentMailService(IOptions<SmtpConfig> smtpParameters, ILogger<LearningAndDevelopmentMailService> logger, IAccountRepository accountRepository, IEmployeeRepository employeeRepository)
         {
             _smtpParameters = smtpParameters.Value;
             _accountRepository = accountRepository;
             _logger = logger;
-
+            _employeeRepository = employeeRepository;
         }
         public async Task SendEmailAsync(MailRequest mailRequest, string attarchDocument)
         {
@@ -99,7 +96,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     Body = mailBody.ToString(),
                     Subject = "Training Plan",
-                    ToEmail = userDetails.Email,
+                    ToEmail = userDetails.OfficialMail,
                 };
                 SendEmailAsync(mailPayload, null);
 
@@ -126,7 +123,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     Body = mailBody.ToString(),
                     Subject = "Training Plan",
-                    ToEmail = userDetails.Email,
+                    ToEmail = userDetails.OfficialMail,
                 };
                 SendEmailAsync(mailPayload, null);
 
@@ -154,7 +151,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     Body = mailBody.ToString(),
                     Subject = "Training Plan",
-                    ToEmail = userDetails.Email,
+                    ToEmail = userDetails.OfficialMail,
                 };
                 SendEmailAsync(mailPayload, null);
 
@@ -169,7 +166,7 @@ namespace hrms_be_backend_business.Logic
         {
             try
             {
-                var userDetails = await _accountRepository.FindUser(StaffUserId);
+                var userDetails = await _employeeRepository.GetEmployeeByUserId(StaffUserId);
 
 
                 //Mail to staff
@@ -188,14 +185,14 @@ namespace hrms_be_backend_business.Logic
                 {
                     Body = mailBody.ToString(),
                     Subject = "Training Schedule",
-                    ToEmail = userDetails.Email,
+                    ToEmail = userDetails.OfficialMail,
                 };
                 SendEmailAsync(mailPayload, null);
 
-                if (userDetails.UnitHeadUserId == null)
+                if (userDetails.UnitHeadEmployeeId == null)
                 {
                     //Mail to Hod
-                    var HodDetails = await _accountRepository.FindUser(userDetails.HODUserId);
+                    var HodDetails = await _employeeRepository.GetEmployeeById(userDetails.HodEmployeeId);
                     StringBuilder HodmailBody = new StringBuilder();
                     mailBody.Append($"Dear {HodDetails.FirstName} {HodDetails.LastName} {HodDetails.MiddleName} <br/> <br/>");
                     mailBody.Append($"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} have been Scheduled for training <br/> <br/>");
@@ -211,7 +208,7 @@ namespace hrms_be_backend_business.Logic
                     {
                         Body = mailBody.ToString(),
                         Subject = "Training Schedule",
-                        ToEmail = HodDetails.Email,
+                        ToEmail = HodDetails.OfficialMail,
                     };
                     SendEmailAsync(HodmailPayload, null);
 
@@ -219,7 +216,7 @@ namespace hrms_be_backend_business.Logic
                 else
                 {
                     //Mail to UnitHead
-                    var unitHeadDetails = await _accountRepository.FindUser(userDetails.UnitHeadUserId);
+                    var unitHeadDetails = await _employeeRepository.GetEmployeeById(userDetails.UnitHeadEmployeeId);
                     StringBuilder UnitHeadmailBody = new StringBuilder();
                     mailBody.Append($"Dear {unitHeadDetails.FirstName} {unitHeadDetails.LastName} {unitHeadDetails.MiddleName} <br/> <br/>");
                     mailBody.Append($"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} have been Scheduled for training <br/> <br/>");
@@ -235,7 +232,7 @@ namespace hrms_be_backend_business.Logic
                     {
                         Body = mailBody.ToString(),
                         Subject = "Training Schedule",
-                        ToEmail = unitHeadDetails.Email,
+                        ToEmail = unitHeadDetails.OfficialMail,
                     };
                     SendEmailAsync(UnitHeadmailPayload, null);
                 }

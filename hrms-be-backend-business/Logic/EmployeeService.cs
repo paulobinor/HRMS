@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
+using hrms_be_backend_business.Helpers;
 using hrms_be_backend_business.ILogic;
+using hrms_be_backend_common.Communication;
+using hrms_be_backend_common.Configuration;
+using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
@@ -7,6 +11,8 @@ using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System.Security.Claims;
 using System.Text;
 
 namespace hrms_be_backend_business.Logic
@@ -16,1413 +22,614 @@ namespace hrms_be_backend_business.Logic
         private readonly IAuditLog _audit;
 
         private readonly ILogger<EmployeeService> _logger;
-        //private readonly IConfiguration _configuration;
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
         private readonly IEmployeeRepository _EmployeeRepository;
+        private readonly IUserAppModulePrivilegeRepository _privilegeRepository;
         private readonly IWebHostEnvironment _hostEnvironment;
-        private readonly IMapper _mapper;
+        private readonly IAuthService _authService;
+        private readonly IUriService _uriService;
+        private readonly IMailService _mailService;
 
-        public EmployeeService(/*IConfiguration configuration*/ IAccountRepository accountRepository, ILogger<EmployeeService> logger,
-            IEmployeeRepository EmployeeRepository, IAuditLog audit, ICompanyRepository companyrepository, IWebHostEnvironment hostEnvironment, IMapper mapper)
+        public EmployeeService(IAccountRepository accountRepository, ILogger<EmployeeService> logger,
+            IEmployeeRepository EmployeeRepository, IAuditLog audit, ICompanyRepository companyrepository, IWebHostEnvironment hostEnvironment, IAuthService authService, IUriService uriService, IMailService mailService, IUserAppModulePrivilegeRepository privilegeRepository)
         {
             _audit = audit;
-
             _logger = logger;
-            //_configuration = configuration;
             _accountRepository = accountRepository;
             _EmployeeRepository = EmployeeRepository;
             _companyrepository = companyrepository;
             _hostEnvironment = hostEnvironment;
-            _mapper = mapper;
+            _authService = authService;
+            _uriService = uriService;
+            _mailService = mailService;
+            _privilegeRepository = privilegeRepository;
         }
 
-        public async Task<BaseResponse> UpdateEmployee(UpdateEmployeeDTO updateDto, RequesterInfo requester)
+        public async Task<ExecutedResult<string>> CreateEmployeeBasis(CreateEmployeeBasisDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            //check if us
-            StringBuilder errorOutput = new StringBuilder();
-            var response = new BaseResponse();
-            try
-            {
-
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (updateDto.EmpID < 1)
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Request EmpID is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.ProfileImage))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Profile Image is required";
-                    return response;
-                }
-
-                if (updateDto.Nationality < 1)
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Nationality is required";
-                    return response;
-                }
-                if (updateDto.StateOfOrigin < 1)
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "StateOfOrigin is required";
-                    return response;
-                }
-                if (updateDto.LGA < 1)
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "LGA is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.Town))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Town is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.MaidenName))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Maiden Name is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.MobileNumber2))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Mobile Number2 is required";
-                    return response;
-                }
-                if (updateDto.Sex < 1)
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Sex is required";
-                    return response;
-                }
-                if (updateDto.MaritalStatus < 1)
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Marital Status is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SpouseContactAddress))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Spouse Contact Address is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SpouseMobile))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Spouse Mobile is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.ResidentialAddress))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Residential Address is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.HomeAddress))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Home Address  is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.MailingAddress))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Mailing Address  is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.NofName))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Nof Name  is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.NofContactAddress))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Nof Contact Address  is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.NofMobile))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Nof Mobile  is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.NofRelationship))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Nof Relationship is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.HighestQualification))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Highest Qualification is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.HighestQualificationYear))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Highest Qualification Year is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.HighestQualificationSchoolAttended))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Highest Qualification School Attended is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.Discipline))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Discipline is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.ContactPersonName))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Contact Person Name is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.ContactPersonAddress))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Contact Person Address is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.ContactPersonPhone))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Contact Person Phone is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.ContactPersonRelationship))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Contact Person Relationship is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.FirstDegree))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "First Degree is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.FirstDegreeSchoolAttended))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "First Degree School Attended is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.GradeObtained))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Grade Obtained is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.GradeObtained))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Grade Obtained is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.FirstDegreeYear))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "First Degree Year is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SchoolAttended))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "School Attended is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondaryEducationStartDate))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Secondary Education Start Date is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondaryEducationYearComleted))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Secondary Education Year Comleted is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondaryEducationCertificateObtained))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Secondary Education Certificate Obtained is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.MRECompanyName))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "MRE Company Name is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.MREContactAddress))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "MRE Contact Address is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.MREPositionHeld))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "MRE Position Held is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.Responsibilities))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Responsibilities is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.GrossSalaryPerAnnum))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Gross Salary PerAnnum is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.YourPresentPensionFundAdminstrator))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Your Present Pension Fund Adminstrator is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.YourPensionPinNumber))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Your Pension Pin Number is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.TaxPayerIdentificationNumber))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Tax Payer Identification Number is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.BankAccountName))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Bank Account Name is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.AccountNumber))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Account Number is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.BankName))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Bank Name is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.BVN))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "BVN is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.FirstReferenceName))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "First Reference Name is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.FirstReferenceAddress))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "First Reference Address is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.FirstReferenceOccupation))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "First Reference Occupation is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.FirstReferencePeriodKnown))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "First Reference Period Known is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.FirstReferenceMobile))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "First Reference Mobile is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.FirstReferenceEmail))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "First Reference Email is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondReferenceName))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Second Reference Name is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondReferenceAddress))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Second Reference Address is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondReferenceOccupation))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Second Reference Occupation is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondReferencePeriodKnown))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Second Reference Period Known is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondReferenceMobile))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Second Reference Mobile is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondReferenceEmail))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Second Reference Email is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.FirstDegreeNameAndLocation))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "First Degree Name And Location is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.FirstDegreeEntranceYear))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "First Degree Entrance Year is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.FirstDegreeEntranceYear))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "First Degree Entrance Year is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.FirstDegreeExitYear))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "First Degree Exit Year is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.FirstDegreeCertificateAndDegreeObtained))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "First Degree Certificate And Degree Obtained is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.FirstDegreeMatricNo))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "First Degree MatricNo is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondDegreeNameAndLocation))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Second Degree Name And Location is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondDegreeEntranceYear))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Second Degree Entrance Year is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondDegreeExitYear))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Second Degree Exit Year is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondDegreeCertificateAndDegreeObtained))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Second Degree Certificate And Degree Obtained is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondDegreeMatricNo))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Second Degree MatricNo is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondrayEducationNameAndLocation))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Secondray Education Name And Location is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondrayEducationEntranceYear))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Secondray Education Entrance Year is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondrayEducationExitYear))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Second Degree Certificate And Degree Obtained is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondrayEducationCertificateAndDegreeObtained))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Secondray Education Certificate And Degree Obtained is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondrayEducationExamNo))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Secondray Education ExamNo is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.NameOfProfessionalBody))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Name Of Professional Body is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.MembershipNo))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Membership Number is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.MemberStatus))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Member Status is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.NameOfLastEmployer))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Name Of Last Employer is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.EmployerTypeOfBusiness))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Employer Type Of Business is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.AddressOfLastEmployer))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Address Of Last Employer is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.LocationOrBranch))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Location Or Branch is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.EmployerStartingDesignation))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Employer Starting Designation is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.LastEmployerDateEmployed))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Last Employer Date Employed is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.ReasonForLeaving))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Reason For Leaving is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.HRmail))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "HR mail is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.OfficeTelephoneNo))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Office Telephone Number is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SupervisorFullName))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Supervisor Full Name is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SecondedBy))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "SecondedBy mail is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.NameOfAgency))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Name Of Agency mail is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.AddressOfAgency))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Address Of Agency mail is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.NameOfPreviousEmployer))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Name Of Previous Employer mail is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.LocationAndBranch))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Location And Branch mail is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.StartingDesignation))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Starting Designation mail is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.LastDesignation))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Last Designation mail is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.DateEmployed))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Date Employed mail is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.ReasonForLeavingPreviousEmployer))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Reason For Leaving Previous Employer mail is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.PreviousEmployerHRmail))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Previous Employer HR mail mail is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.PreviousEmployerOfficePhone))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Previous Employer Office Phone mail is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.PreviousEmployerSupervisorFullName))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Previous Employer Supervisor FullName mail is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.PreviousEmployerSecondedBy))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Previous Employer SecondedBy is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.PreviousEmployerNameOfAgency))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Previous Employer Name Of Agency is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.PreviousEmployerAddressOfAgency))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Previous Employer Address Of Agency is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.DoYouHaveAnyPendingIssuesWithAformerEmployer))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Do You Have Any Pending Issues With A former Employer is required";
-                    return response;
-                }
-                if (updateDto.IdentificationCountryOfIssue < 1)
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Identification Country Of Issue is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.IdentificationType))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Identification Type is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.IdentificationNumber))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Identification Number is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.IdentificationDocument))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Identification Document is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.Signature))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Signature is required";
-                    return response;
-                }
-                if (updateDto.CompanyID < 1)
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "CompanyID is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.StampedResignationLetterfromPreviousEmployer))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Stamped Resignation Letter from Previous Employer is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.DegreeCertificate))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Degree Certificate is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.NYSCCertificate))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "NYSC Certificate is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.SSCEorWAECCertificate))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "SSCE or WAEC Certificate is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.BirthCertificate))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Birth Certificate is required";
-                    return response;
-                }
-                if (string.IsNullOrEmpty(updateDto.AdditionalQualification))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Additional Qualification is required";
-                    return response;
-                }
-
-
-
-                //if (Convert.ToInt32(RoleId) != 1)
-                //{
-                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                //    return response;
-                //}
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 3)
-                    {
-                        if (Convert.ToInt32(RoleId) != 4)
-                        {
-                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                            return response;
-                        }
-
-
-                    }
-
-                }
-
-                var Emp = await _EmployeeRepository.GetEmployeeById(updateDto.EmpID);
-                if (null == Emp)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "No record found for the specified Employee";
-                    response.Data = null;
-                    return response;
-                }
-
-                dynamic resp = await _EmployeeRepository.UpdateEmployee(updateDto, requesterUserEmail);
-                if (resp > 0)
-                {
-                    //update action performed into audit log here
-
-                    var updatedEmp = await _EmployeeRepository.GetEmployeeById(updateDto.EmpID);
-
-                    _logger.LogInformation("Employee updated successfully.");
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Employee updated successfully.";
-                    response.Data = updatedEmp;
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.Exception.ToString();
-                response.ResponseMessage = "An error occurred while updating Employee.";
-                response.Data = null;
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: UpdateEmployeeDTO ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: UpdateEmployeeDTO ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> GetAllActiveEmployee(RequesterInfo requester)
-        {
-            BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 3)
-                    {
-                        if (Convert.ToInt32(RoleId) != 4)
-                        {
-                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                            return response;
-                        }
-
-
-                    }
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
                 }
-
-                //update action performed into audit log here
-
-                var Emp = await _EmployeeRepository.GetAllActiveEmployee();
-
-                if (Emp.Any())
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Create_Onboarding_Basis, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
                 {
-                    response.Data = Emp;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Employee fetched successfully.";
-                    return response;
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
                 }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No Employee found.";
-                response.Data = null;
-                return response;
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.FirstName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "First name is required";
+                }
+                if (payload.LastName == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Last name is required";
+                }
+                if (payload.OfficialEmail == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Official email is required";
+                }
+                if (payload.PhoneNumber == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Phone number is required";
+                }
+                if (payload.BranchId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Branch is required";
+                }
+                if (payload.EmploymentStatusId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Employment Status is required";
+                }
+                if (payload.JobRoleId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Job Role is required";
+                }
+                if (payload.DepartmentId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Department is required";
+                }
+                if (payload.EmployeeTypeId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Employee Type is required";
+                }
+                if (payload.UnitId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Unit is required";
+                }
+
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new ProcessEmployeeBasisReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    FirstName = payload.FirstName,
+                    LastName = payload.LastName,
+                    MiddleName = payload.MiddleName,
+                    OfficialEmail = payload.OfficialEmail,
+                    BranchId = payload.BranchId,
+                    PhoneNumber = payload.PhoneNumber,
+                    DepartmentId = payload.DepartmentId,
+                    DOB = payload.DOB,
+                    EmployeeTypeId = payload.EmployeeTypeId,
+                    EmploymentStatusId = payload.EmploymentStatusId,
+                    JobRoleId = payload.JobRoleId,
+                    PersonalEmail = payload.PersonalEmail,
+                    ResumptionDate = payload.ResumptionDate,
+                    UnitId = payload.UnitId,
+                    IsModifield = false,
+                };
+                string repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "CreateEmployeeBasis",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Created Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetAllActiveEmployee() ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllActiveEmployee() ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"EmployeeService (CreateEmployeeBasis)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-
-        public async Task<BaseResponse> GetAllEmployee(RequesterInfo requester)
+        public async Task<ExecutedResult<string>> UpdateEmployeeBasis(UpdateEmployeeBasisDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                //if (Convert.ToInt32(RoleId) > 2)
-                //{
-                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                //    return response;
-                //}
-
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 3)
-                    {
-                        if (Convert.ToInt32(RoleId) != 4)
-                        {
-                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                            return response;
-                        }
-
-
-                    }
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
                 }
-
-                //update action performed into audit log here
-
-                var Employee = await _EmployeeRepository.GetAllEmployee();
-
-                if (Employee.Any())
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Update_Onboarding_Basis, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
                 {
-                    response.Data = Employee;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Employee fetched successfully.";
-                    return response;
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
                 }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No Employee found.";
-                response.Data = null;
-                return response;
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.FirstName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "First name is required";
+                }
+                if (payload.LastName == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Last name is required";
+                }
+                if (payload.OfficialEmail == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Official email is required";
+                }
+                if (payload.PhoneNumber == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Phone number is required";
+                }
+                if (payload.BranchId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Branch is required";
+                }
+                if (payload.EmploymentStatusId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Employment Status is required";
+                }
+                if (payload.JobRoleId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Job Role is required";
+                }
+                if (payload.DepartmentId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Department is required";
+                }
+                if (payload.EmployeeTypeId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Employee Type is required";
+                }
+                if (payload.UnitId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Unit is required";
+                }
+
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new ProcessEmployeeBasisReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    FirstName = payload.FirstName,
+                    LastName = payload.LastName,
+                    MiddleName = payload.MiddleName,
+                    OfficialEmail = payload.OfficialEmail,
+                    BranchId = payload.BranchId,
+                    PhoneNumber = payload.PhoneNumber,
+                    DepartmentId = payload.DepartmentId,
+                    DOB = payload.DOB,
+                    EmployeeTypeId = payload.EmployeeTypeId,
+                    EmploymentStatusId = payload.EmploymentStatusId,
+                    JobRoleId = payload.JobRoleId,
+                    PersonalEmail = payload.PersonalEmail,
+                    ResumptionDate = payload.ResumptionDate,
+                    UnitId = payload.UnitId,
+                    EmployeeId = payload.EmployeeId,
+                    IsModifield = false,
+                };
+                string repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "UpdateEmployeeBasis",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetAllEmployee() ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllEmployee() ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"EmployeeService (UpdateEmployeeBasis)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-
-        public async Task<BaseResponse> GetEmployeeById(long EmpID, RequesterInfo requester)
+        public async Task<ExecutedResult<string>> ApproveEmployee(long EmployeeId, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Approve_Onboarding, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
                 }
 
-                //if (Convert.ToInt32(RoleId) > 2)
-                //{
-                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                //    return response;
-                //}
 
-
-                if (Convert.ToInt32(RoleId) != 1)
+                string repoResponse = await _EmployeeRepository.ApproveEmployee(EmployeeId, accessUser.data.UserId);
+                if (!repoResponse.Contains("Success"))
                 {
-
-                    if (Convert.ToInt32(RoleId) != 2)
-                    {
-                        if (Convert.ToInt32(RoleId) != 3)
-                        {
-                            if (Convert.ToInt32(RoleId) != 4)
-                            {
-                                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                                response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                                return response;
-                            }
-                        }
-
-                        //if (Convert.ToInt32(RoleId) != 4)
-                        //{
-                        //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        //    return response;
-                        //}
-
-                    }
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
 
-                var EmployeeType = await _EmployeeRepository.GetEmployeeById(EmpID);
-
-                if (EmployeeType == null)
+                var auditLog = new AuditLogDto
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Employee not found.";
-                    response.Data = null;
-                    return response;
-                }
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "ApproveEmployee",
+                    payload = null,
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
 
-                //update action performed into audit log here
-
-                response.Data = EmployeeType;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Employee fetched successfully.";
-                return response;
-
+                return new ExecutedResult<string>() { responseMessage = "Approved Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetEmployeeById(long EmployeeTypeID ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured:  GetEmployeeById(long EmployeeTypeID  ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"EmployeeService (ApproveEmployee)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-
-        public async Task<BaseResponse> GetEmployeebyCompanyId(long companyId, RequesterInfo requester)
+        public async Task<ExecutedResult<string>> DisapproveEmployee(long EmployeeId, string Comment, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Disapprove_Employee, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(Comment))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Comment is required";
                 }
 
-
-
-                if (Convert.ToInt32(RoleId) != 1)
+                if (!isModelStateValidate)
                 {
-                    if (Convert.ToInt32(RoleId) != 2)
-                    {
-                        if (Convert.ToInt32(RoleId) != 3)
-                        {
-                            if (Convert.ToInt32(RoleId) != 4)
-                            {
-                                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                                response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                                return response;
-                            }
-                        }
-
-
-                    }
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
                 }
 
-                var Emp = await _EmployeeRepository.GetAllEmployeeCompanyId(companyId);
-
-                if (Emp == null)
+                string repoResponse = await _EmployeeRepository.DisapproveEmployee(EmployeeId, Comment, accessUser.data.UserId);
+                if (!repoResponse.Contains("Success"))
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Employee not found.";
-                    response.Data = null;
-                    return response;
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
 
-                //update action performed into audit log here
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "DisapproveEmployee",
+                    payload = null,
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
 
-                response.Data = Emp;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Employee fetched successfully.";
-                return response;
-
+                return new ExecutedResult<string>() { responseMessage = "Disapproved Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetAllEmployeeCompanyId(long companyId) ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllEmployeeCompanyId(long companyId) ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"EmployeeService (DisapproveEmployee)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-
-        public Tuple<bool, bool> checkPermission(int roleId, int roleId2)
+        public async Task<ExecutedResult<string>> DeleteEmployee(long EmployeeId, string Comment, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            bool checkCanCreateAndRead = false;
-            bool canApprove = false;
-
-
-            //logically check the role of those that are creating and the created
-            if (roleId2 == ApplicationConstant.SuperAdmin)
-            {
-                if (roleId == ApplicationConstant.HrHead
-                || roleId == ApplicationConstant.HrAdmin)
-                {
-                    checkCanCreateAndRead = true;
-                    canApprove = true;
-                }
-            }
-
-
-            if (roleId2 == ApplicationConstant.HrHead)
-            {
-                if (roleId == ApplicationConstant.GeneralUser)
-                {
-                    checkCanCreateAndRead = true;
-                    canApprove = true;
-                }
-            }
-
-
-            if (roleId2 == ApplicationConstant.HrAdmin)
-            {
-                if (roleId == ApplicationConstant.GeneralUser)
-                {
-                    checkCanCreateAndRead = true;
-                    canApprove = false;
-                }
-            }
-
-            return new Tuple<bool, bool>(checkCanCreateAndRead, canApprove);
-
-        }
-
-        public async Task<BaseResponse> GetEmpPendingApproval(long CompanyID, RequesterInfo requester)
-        {
-            BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Delete_Employee, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(Comment))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Comment is required";
                 }
 
-
-                if (Convert.ToInt32(RoleId) != 2)
+                if (!isModelStateValidate)
                 {
-                    if (Convert.ToInt32(RoleId) != 3)
-                    {
-                        if (Convert.ToInt32(RoleId) != 4)
-                        {
-                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                            return response;
-                        }
-
-
-                    }
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
                 }
 
-                var mappeduser = new List<EmployeeDTO>();
-                var users = await _EmployeeRepository.GetEmpPendingApproval(CompanyID);
-                if (users.Any())
+                string repoResponse = await _EmployeeRepository.DeleteEmployee(EmployeeId, Comment, accessUser.data.UserId);
+                if (!repoResponse.Contains("Success"))
                 {
-                    //update action performed into audit log here
-
-                    foreach (var user in users)
-                    {
-                        var usermap = _mapper.Map<EmployeeDTO>(user);
-                        usermap.UserStatus = "Pending";
-                        usermap.UserStatusId = Convert.ToInt32(UserStatus.PENDING);
-                        mappeduser.Add(usermap);
-                    }
-
-
-
-                    response.Data = mappeduser;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Employee Details fetched successfully.";
-                    return response;
-
-                }
-                else
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "No Users found.";
-                    response.Data = null;
-                    return response;
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
 
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "DeleteEmployee",
+                    payload = null,
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
 
-
-
-                //update action performed into audit log here
-
-                //var Employee = await _EmployeeRepository.GetEmpPendingApproval();
-
-                //if (Employee.Any())
-                //{
-                //    response.Data = Employee;
-                //    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                //    response.ResponseMessage = "Employee Details fetched successfully.";
-                //    return response;
-                //}
-
-                //response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                //response.ResponseMessage = "No Employee Details found.";
-                //response.Data = null;
-                //return response;
+                return new ExecutedResult<string>() { responseMessage = "Deleted Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetEmpPendingApproval(CompanyID) ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetEmpPendingApproval(CompanyID) ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"EmployeeService (DeleteEmployee)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-
-        public async Task<BaseResponse> ApproveEmp(ApproveEmp approveEmp, RequesterInfo requester)
+        public async Task<PagedExcutedResult<IEnumerable<EmployeeVm>>> GetEmployees(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            var response = new BaseResponse();
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-
-                var UserInfo = await _accountRepository.FindUser(approveEmp.officialMail);
-
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                if (accessUser.data.UserStatusCode != UserStatusConstant.Back_Office_User)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                var returnData = await _EmployeeRepository.GetEmployees(filter.PageNumber, filter.PageSize, accessUser.data.UserId);
+                if (returnData == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (returnData.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
                 }
 
-                if (null == UserInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "User information cannot be found.";
-                    return response;
-                }
+                totalRecords = returnData.totalRecords;
 
+                var pagedReponse = PaginationHelper.CreatePagedReponse<EmployeeVm>(returnData.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
 
-
-                //Tuple<bool, bool> checkRole = checkPermission(UserInfo.RoleId, requesterInfo.RoleId);
-
-
-                //if (!checkRole.Item2)
-                //{
-                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                //    return response;
-                //}
-
-
-                if (Convert.ToInt32(RoleId) != 4)
-                {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
-                }
-
-                var user = await _accountRepository.FindUser(approveEmp.officialMail);
-                if (user != null)
-                {
-                    if (user.CreatedByUserId == Convert.ToInt32(requesterUserId))
-                    {
-                        response.ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = "You cannot approve this User because User was created by you.";
-                        return response;
-                    }
-
-
-                    dynamic resp = await _EmployeeRepository.ApproveEmp(Convert.ToInt32(requesterUserId), user.officialMail);
-                    //dynamic resp = await _EmployeeRepository.ApproveEmp(requesterUserId, defaultPass, user.Email);
-
-                    if (resp > 0)
-                    {
-                        //update action performed into audit log here
-
-                        _logger.LogInformation($"User with email: {user.officialMail} approved successfully.");
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"User with email: {user.officialMail} approved successfully.";
-                        return response;
-                    }
-                    response.ResponseCode = ResponseCode.Exception.ToString();
-                    response.ResponseMessage = "An error occurred while approving the user.";
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Invalid user. Not found.";
-                response.Data = null;
-                return response;
+                return pagedReponse;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ControllerMethod : ApproveEmp ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : ApproveEmp ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"EmployeeService (GetEmployees)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
             }
-
         }
-
-        public async Task<BaseResponse> DisapproveEmp(DisapproveEmpDto disapproveEmp, RequesterInfo requester)
+        public async Task<PagedExcutedResult<IEnumerable<EmployeeVm>>> GetEmployeesApproved(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            var response = new BaseResponse();
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                if (accessUser.data.UserStatusCode != UserStatusConstant.Back_Office_User)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                var returnData = await _EmployeeRepository.GetEmployeesApproved(filter.PageNumber, filter.PageSize, accessUser.data.UserId);
+                if (returnData == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (returnData.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
                 }
 
-                //if (Convert.ToInt32(RoleId) != 1 || Convert.ToInt32(RoleId) != 4)
-                //{
-                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                //    return response;
-                //}
+                totalRecords = returnData.totalRecords;
 
+                var pagedReponse = PaginationHelper.CreatePagedReponse<EmployeeVm>(returnData.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
 
-                Tuple<bool, bool> checkRole = checkPermission(requesterInfo.RoleId, requesterInfo.RoleId);
-
-
-                if (!checkRole.Item2)
-                {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
-                }
-
-                var user = await _accountRepository.FindUser(disapproveEmp.Email);
-                if (user != null)
-                {
-                    if (user.CreatedByUserId == Convert.ToInt32(requesterUserId))
-                    {
-                        response.ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = "You cannot disapprove this User because User was created by you.";
-                        return response;
-                    }
-
-
-
-
-                    dynamic resp = await _accountRepository.DeclineUser(Convert.ToInt32(requesterUserId), user.Email, disapproveEmp.DisapprovedComment);
-                    if (resp > 0)
-                    {
-                        //update action performed into audit log here
-
-                        _logger.LogInformation($"User with email: {user.Email} disapproved successfully.");
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"User with email: {user.Email} disapproved successfully.";
-                        return response;
-                    }
-                    response.ResponseCode = ResponseCode.Exception.ToString();
-                    response.ResponseMessage = "An error occurred while disapproving the user.";
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Invalid user. Not found.";
-                response.Data = null;
-                return response;
+                return pagedReponse;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ControllerMethod : DisapproveUser ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : DisapproveUser ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"EmployeeService (GetEmployeesApproved)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
             }
-
         }
+        public async Task<PagedExcutedResult<IEnumerable<EmployeeVm>>> GetEmployeesDisapproved(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
+                }
+                if (accessUser.data.UserStatusCode != UserStatusConstant.Back_Office_User)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                var returnData = await _EmployeeRepository.GetEmployeesDisapproved(filter.PageNumber, filter.PageSize, accessUser.data.UserId);
+                if (returnData == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (returnData.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+
+                totalRecords = returnData.totalRecords;
+
+                var pagedReponse = PaginationHelper.CreatePagedReponse<EmployeeVm>(returnData.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
+
+                return pagedReponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeService (GetEmployeesDisapproved)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
+            }
+        }
+        public async Task<PagedExcutedResult<IEnumerable<EmployeeVm>>> GetEmployeesDeleted(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                if (accessUser.data.UserStatusCode != UserStatusConstant.Back_Office_User)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                var returnData = await _EmployeeRepository.GetEmployeesDeleted(filter.PageNumber, filter.PageSize, accessUser.data.UserId);
+                if (returnData == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (returnData.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+
+                totalRecords = returnData.totalRecords;
+
+                var pagedReponse = PaginationHelper.CreatePagedReponse<EmployeeVm>(returnData.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
+
+                return pagedReponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeService (GetEmployeesDeleted)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
+            }
+        }
+        public async Task<ExecutedResult<EmployeeFullVm>> GetEmployeeById(long EmployeeId, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<EmployeeFullVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Delete_Employee, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new ExecutedResult<EmployeeFullVm>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+
+                var repoResponse = await _EmployeeRepository.GetEmployeeById(EmployeeId);
+                if (repoResponse == null)
+                {
+                    return new ExecutedResult<EmployeeFullVm>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+                }
+
+                return new ExecutedResult<EmployeeFullVm>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = repoResponse };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeService (GetEmployeeById)=====>{ex}");
+                return new ExecutedResult<EmployeeFullVm>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
     }
 }

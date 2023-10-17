@@ -7,11 +7,6 @@ using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace hrms_be_backend_business.Logic
 {
@@ -22,11 +17,12 @@ namespace hrms_be_backend_business.Logic
         private readonly ILogger<UserAppModulePrivilegesService> _logger;
         private readonly IConfiguration _configuration;
         private readonly IAccountRepository _accountRepository;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly ICompanyAppModuleRepository _companyAppModuleRepository;
         private readonly IUserAppModulePrivilegeRepository _userAppModulePrivilegeRepository;
         private readonly IDepartmentRepository _departmentRepository;
         public UserAppModulePrivilegesService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<UserAppModulePrivilegesService> logger,
-            IUserAppModulePrivilegeRepository userAppModulePrivilegeRepository, IDepartmentRepository departmentRepository, IAuditLog audit, IMapper mapper, ICompanyAppModuleRepository companyAppModuleRepository)
+            IUserAppModulePrivilegeRepository userAppModulePrivilegeRepository, IDepartmentRepository departmentRepository, IAuditLog audit, IMapper mapper, ICompanyAppModuleRepository companyAppModuleRepository, IEmployeeRepository employeeRepository)
         {
             _audit = audit;
             _mapper = mapper;
@@ -36,6 +32,7 @@ namespace hrms_be_backend_business.Logic
             _accountRepository = accountRepository;
             _userAppModulePrivilegeRepository = userAppModulePrivilegeRepository;
             _companyAppModuleRepository = companyAppModuleRepository;
+            _employeeRepository = employeeRepository;
         }
 
         public async Task<BaseResponse> GetAppModulePrivileges(RequesterInfo requester)
@@ -240,7 +237,7 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-                var User = await _accountRepository.GetUserById(createUserAppModulePrivileges.UserID);
+                var User = await _employeeRepository.GetEmployeeByUserId(createUserAppModulePrivileges.UserID);
 
                 if (User == null)
                 {

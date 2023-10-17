@@ -40,5 +40,6 @@
         public string RefreshToken { get; set; }
         public string Token { get; set; }
         public String PasswordHash { get; set; }
+        public long EmployeeId { get; set; }
     }
 }

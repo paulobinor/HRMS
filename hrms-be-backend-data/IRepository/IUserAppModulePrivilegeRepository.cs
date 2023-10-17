@@ -4,7 +4,7 @@ namespace hrms_be_backend_data.IRepository
 {
     public interface IUserAppModulePrivilegeRepository
     {
-        Task<string> CheckUserAppPrivilege(string EmailAddress, int MaximumLoginAttempt, DateTime DateCreated);
+        Task<string> CheckUserAppPrivilege(string PrivilegeCode, long CreatedByUserId);
         Task<List<GetUserAppModulePrivilegesDTO>> GetUserAppModulePrivileges();
 
         Task<GetUserAppModulePrivilegesDTO> GetUserAppModuleByUserandPrivilegeID(long userID, int privilegeID);
