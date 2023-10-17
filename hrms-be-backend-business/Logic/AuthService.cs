@@ -110,14 +110,14 @@ namespace hrms_be_backend_business.Logic
 
                 await _unitOfWork.UpdateUserLoginActivity(user.UserId, ipAddress, authResponse.JwtToken);
 
-                var mapped = _mapper.Map<UserViewModel>(user);
+              
 
 
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = "User Logged in Successfully";
                 response.JwtToken = authResponse.JwtToken;
                 response.RefreshToken = authResponse.RefreshToken;
-                response.Data = mapped;
+                response.Data = user;
 
                 var auditLog = new AuditLogDto
                 {

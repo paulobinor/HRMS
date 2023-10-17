@@ -11,3 +11,120 @@
 [2023-10-17 10:55:12.564 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 254.2006ms
 [2023-10-17 10:55:12.614 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
 [2023-10-17 10:55:12.793 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 179.2857ms
+[2023-10-17 11:05:59.231 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-10-17 11:05:59.620 +01:00  INF]  Now listening on: http://localhost:5008
+[2023-10-17 11:05:59.623 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-10-17 11:05:59.625 +01:00  INF]  Hosting environment: Development
+[2023-10-17 11:05:59.627 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api
+[2023-10-17 11:06:00.977 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2023-10-17 11:06:01.599 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2023-10-17 11:06:01.599 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2023-10-17 11:06:01.608 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12370 application/javascript;+charset=utf-8 8.5107ms
+[2023-10-17 11:06:01.609 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 630.1235ms
+[2023-10-17 11:06:01.635 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 36.8168ms
+[2023-10-17 11:06:01.749 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2023-10-17 11:06:01.926 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 176.5581ms
+[2023-10-17 11:07:30.909 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 102
+[2023-10-17 11:07:31.172 +01:00  INF]  CORS policy execution successful.
+[2023-10-17 11:07:31.180 +01:00  WRN]  Failed to determine the https port for redirect.
+[2023-10-17 11:07:32.089 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-17 11:07:32.137 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2023-10-17 11:08:24.300 +01:00  ERR]  MethodName: UpdateRefreshToken(long userid, string email) ===>Invalid column name 'Email'.
+[2023-10-17 11:08:48.499 +01:00  ERR]  AuthService => Login || System.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Email'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.CompleteAsyncExecuteReader()
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQueryInternal(IAsyncResult asyncResult)
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQuery(IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
+--- End of stack trace from previous location ---
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param) in /_/Dapper/SqlMapper.Async.cs:line 647
+   at Com.XpressPayments.Data.Repositories.UserAccount.Repository.UnitOfWork.UpdateRefreshToken(Int64 userid, String email, String refreshToken) in C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-data\Repository\UnitOfWork.cs:line 58
+   at Com.XpressPayments.Data.Repositories.UserAccount.Repository.JwtManager.GenerateJsonWebToken(AccessUserVm request) in C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-data\Repository\JwtManager.cs:line 62
+   at hrms_be_backend_business.Logic.AuthService.Login(LoginModel login, String ipAddress, String port) in C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-business\Logic\AuthService.cs:line 109
+ClientConnectionId:13541349-11a2-4be7-8531-9abbc1a1c49f
+Error Number:207,State:1,Class:16
+[2023-10-17 11:08:53.518 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_data.ViewModel.LoginResponse'.
+[2023-10-17 11:08:53.542 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api) in 80942.5081ms
+[2023-10-17 11:08:53.556 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-17 11:08:53.563 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 102 - 200 - application/json;+charset=utf-8 82656.1902ms
+[2023-10-17 11:08:56.055 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 102
+[2023-10-17 11:08:56.075 +01:00  INF]  CORS policy execution successful.
+[2023-10-17 11:08:56.083 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-17 11:08:56.105 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2023-10-17 11:09:03.631 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_data.ViewModel.LoginResponse'.
+[2023-10-17 11:09:03.638 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api) in 7524.1455ms
+[2023-10-17 11:09:03.645 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-17 11:09:03.646 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 102 - 200 - application/json;+charset=utf-8 7597.9883ms
+[2023-10-17 11:09:22.674 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 102
+[2023-10-17 11:09:22.683 +01:00  INF]  CORS policy execution successful.
+[2023-10-17 11:09:22.690 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-17 11:09:22.693 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2023-10-17 11:11:50.044 +01:00  ERR]  MethodName: UpdateRefreshToken(long userid, string email) ===>Invalid column name 'Email'.
+[2023-10-17 11:11:50.157 +01:00  ERR]  AuthService => Login || System.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Email'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.CompleteAsyncExecuteReader()
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQueryInternal(IAsyncResult asyncResult)
+   at System.Data.SqlClient.SqlCommand.EndExecuteNonQuery(IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
+--- End of stack trace from previous location ---
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param) in /_/Dapper/SqlMapper.Async.cs:line 647
+   at Com.XpressPayments.Data.Repositories.UserAccount.Repository.UnitOfWork.UpdateRefreshToken(Int64 userid, String email, String refreshToken) in C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-data\Repository\UnitOfWork.cs:line 58
+   at Com.XpressPayments.Data.Repositories.UserAccount.Repository.JwtManager.GenerateJsonWebToken(AccessUserVm request) in C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-data\Repository\JwtManager.cs:line 62
+   at hrms_be_backend_business.Logic.AuthService.Login(LoginModel login, String ipAddress, String port) in C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-business\Logic\AuthService.cs:line 109
+ClientConnectionId:13541349-11a2-4be7-8531-9abbc1a1c49f
+Error Number:207,State:1,Class:16
+[2023-10-17 11:35:40.453 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-10-17 11:35:40.669 +01:00  INF]  Now listening on: http://localhost:5008
+[2023-10-17 11:35:40.673 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-10-17 11:35:40.675 +01:00  INF]  Hosting environment: Development
+[2023-10-17 11:35:40.676 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api
+[2023-10-17 11:35:41.608 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2023-10-17 11:35:41.968 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2023-10-17 11:35:41.981 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 371.2169ms
+[2023-10-17 11:35:41.982 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12370 application/javascript;+charset=utf-8 13.9728ms
+[2023-10-17 11:35:41.986 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2023-10-17 11:35:42.013 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 26.2812ms
+[2023-10-17 11:35:42.044 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2023-10-17 11:35:42.208 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 164.4225ms
+[2023-10-17 11:36:19.587 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 102
+[2023-10-17 11:36:19.652 +01:00  INF]  CORS policy execution successful.
+[2023-10-17 11:36:19.666 +01:00  WRN]  Failed to determine the https port for redirect.
+[2023-10-17 11:36:19.902 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-17 11:36:19.949 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2023-10-17 11:37:10.708 +01:00  ERR]  AuthService => Login || AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+UserFullView -> UserViewModel
+hrms_be_backend_data.ViewModel.UserFullView -> hrms_be_backend_data.ViewModel.UserViewModel
+   at lambda_method11(Closure, Object, UserViewModel, ResolutionContext)
+   at hrms_be_backend_business.Logic.AuthService.Login(LoginModel login, String ipAddress, String port) in C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-business\Logic\AuthService.cs:line 113
+[2023-10-17 11:45:04.692 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-10-17 11:45:04.925 +01:00  INF]  Now listening on: http://localhost:5008
+[2023-10-17 11:45:04.929 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-10-17 11:45:04.931 +01:00  INF]  Hosting environment: Development
+[2023-10-17 11:45:04.933 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api
+[2023-10-17 11:45:05.583 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2023-10-17 11:45:05.935 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2023-10-17 11:45:05.944 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 365.8708ms
+[2023-10-17 11:45:05.943 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2023-10-17 11:45:05.957 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12370 application/javascript;+charset=utf-8 22.1185ms
+[2023-10-17 11:45:05.974 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 31.1827ms
+[2023-10-17 11:45:06.037 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2023-10-17 11:45:06.289 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 252.4633ms
+[2023-10-17 11:46:10.172 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 102
+[2023-10-17 11:46:10.210 +01:00  INF]  CORS policy execution successful.
+[2023-10-17 11:46:10.218 +01:00  WRN]  Failed to determine the https port for redirect.
+[2023-10-17 11:46:10.359 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-17 11:46:10.402 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2023-10-17 11:46:27.664 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_data.ViewModel.LoginResponse'.
+[2023-10-17 11:46:27.725 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api) in 17305.7368ms
+[2023-10-17 11:46:27.739 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-17 11:46:27.748 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 102 - 200 - application/json;+charset=utf-8 17575.3377ms

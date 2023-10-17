@@ -15,7 +15,7 @@ namespace hrms_be_backend_data.IRepository
         Task<dynamic> ReactivateUser(long reactivatedByuserId, string userEmail, string comment, string defaultpass);
         Task<dynamic> UnblockUser(long unblocedByuserId, string defaultPassword, string userEmail);
         Task<dynamic> ChangePassword(long userId, string newPassword);
-
+        Task<string> UpdateRefreshToken(string RefreshToken, long UserId);
 
         Task<UserWithTotalVm> GetUsers(int PageNumber, int RowsOfPage);
         Task<UserWithTotalVm> GetUsersBackOffice(int PageNumber, int RowsOfPage);

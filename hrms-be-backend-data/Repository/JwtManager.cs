@@ -15,15 +15,17 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
     {
         private readonly IRefreshTokenGenerator _refreshTokenGenerator;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAccountRepository _accountRepository;
         private readonly IConfiguration _configuration;
         private readonly JwtConfig _jwt;
 
-        public JwtManager(IOptions<JwtConfig> jwt, IConfiguration configuration, IRefreshTokenGenerator refreshTokenGenerator, IUnitOfWork unitOfWork)
+        public JwtManager(IOptions<JwtConfig> jwt, IConfiguration configuration, IRefreshTokenGenerator refreshTokenGenerator, IUnitOfWork unitOfWork, IAccountRepository accountRepository)
         {
             _jwt = jwt.Value;
             _refreshTokenGenerator = refreshTokenGenerator;
             _unitOfWork = unitOfWork;
             _configuration = configuration;
+            _accountRepository = accountRepository;
         }
 
         public async Task<AuthResponse> GenerateJsonWebToken(AccessUserVm request)
@@ -59,7 +61,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             string encodedToken = tokenHandler.WriteToken(token);
             var refreshToken = _refreshTokenGenerator.GenerateRefreshToken();
 
-            await _unitOfWork.UpdateRefreshToken(request.UserId, request.OfficialMail, refreshToken);
+            await _accountRepository.UpdateRefreshToken(refreshToken, request.UserId);
 
 
             var authResponse = new AuthResponse() { JwtToken = encodedToken, RefreshToken = refreshToken };

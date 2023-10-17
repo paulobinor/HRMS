@@ -9,7 +9,7 @@ namespace hrms_be_backend_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
         private readonly ILogger<AuthController> _logger;
         private readonly IAuthService _authService;

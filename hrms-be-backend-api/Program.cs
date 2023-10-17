@@ -94,7 +94,7 @@ builder.Services.AddAuthentication(options =>
 // Auto Mapper Configurations
 var mappingConfig = new MapperConfiguration(mc =>
 {
-   // mc.AddProfile(new HRMSProfile());
+    //mc.AddProfile(new HRMSProfile());
 });
 IMapper mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);

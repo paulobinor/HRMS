@@ -51,6 +51,222 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+        public async Task<string> UpdateRefreshToken(string RefreshToken, long UserId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@UserId", UserId);
+                param.Add("@RefreshToken", RefreshToken);             
+
+                return await _dapper.Get<string>("sp_update_refresh_token", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"AccountRepository => UpdateRefreshToken ===> {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<string> AuthenticateUser(string EmailAddress, int MaximumLoginAttempt, DateTime DateCreated)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+
+                param.Add("@EmailAddress", EmailAddress);
+                param.Add("@MaximumLoginAttempt", MaximumLoginAttempt);
+                param.Add("@DateCreated", DateCreated);
+
+                return await _dapper.Get<string>("sp_authenticate_user", param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AccountRepository -> AuthenticateUser => {ex}");
+                return "Unable to submit this detail, kindly contact support";
+            }
+
+        }
+        public async Task<string> VerifyUser(string Token, string LoggedInWithIPAddress, DateTime DateCreated)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@Token", Token);
+                param.Add("@LoggedInWithIPAddress", LoggedInWithIPAddress);
+                param.Add("@DateCreated", DateCreated);
+
+                return await _dapper.Get<string>("sp_verify_user", param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AccountRepository -> VerifyUser => {ex}");
+                return "Unable to submit this detail, kindly contact support";
+            }
+
+        }
+
+
+        public async Task<dynamic> ApproveUser(long approvedByuserId, string defaultPass, string userEmail)
+        {
+            try
+            {
+                var hashdefaultPassword = BCrypt.Net.BCrypt.HashPassword(defaultPass, BCrypt.Net.BCrypt.GenerateSalt());
+
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", Account.APPROVEUSER);
+                    param.Add("@PasswordHashApprove", hashdefaultPassword);
+                    param.Add("@UserIdApprove", approvedByuserId);
+                    param.Add("@UserEmailApprove", userEmail);
+
+                    dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
+
+                    return resp;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: ApproveUser(long approvedByuserId, string defaultPass, string userEmail) ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<dynamic> DeclineUser(long disapprovedByuserId, string officialMail, string comment)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", Account.DISAPPROVEUSER);
+                    param.Add("@UserIdDisapprove", disapprovedByuserId);
+                    param.Add("@UserEmailDisapprove", officialMail);
+                    param.Add("@DisapprovedComment", comment);
+
+                    dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
+
+                    return resp;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: DeclineUser(long disapprovedByuserId, string userEmail, string comment) ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<dynamic> DeactivateUser(long deactivatedByuserId, string OfficialMail, string comment)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", Account.DEACTIVATEUSER);
+                    param.Add("@DeactivatedByUserId", deactivatedByuserId);
+                    param.Add("@UserEmailDeactivate", OfficialMail);
+                    param.Add("@DeactivatedComment", comment);
+
+                    dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
+
+                    return resp;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: DeactivateUser(long deactivatedByuserId, string userEmail, string comment) ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<dynamic> ReactivateUser(long reactivatedByuserId, string OfficialMail, string comment, string defaultpass)
+        {
+            try
+            {
+                var hashdefaultPassword = BCrypt.Net.BCrypt.HashPassword(defaultpass, BCrypt.Net.BCrypt.GenerateSalt());
+
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", Account.REACTIVATEUSER);
+                    param.Add("@PasswordHashReactivate", hashdefaultPassword);
+                    param.Add("@ReactivatedByUserId", reactivatedByuserId);
+                    param.Add("@UserEmailReactivate", OfficialMail);
+                    param.Add("@ReactivatedComment", comment);
+
+                    dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
+
+                    return resp;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: ReactivateUser(long reactivatedByuserId, string userEmail, string comment) ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<dynamic> UnblockUser(long unblockedByuserId, string defaultPassword, string userEmail)
+        {
+            try
+            {
+                var hashdefaultPassword = BCrypt.Net.BCrypt.HashPassword(defaultPassword, BCrypt.Net.BCrypt.GenerateSalt());
+
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", Account.UNBLOCKUSER);
+                    param.Add("@PasswordHashUnblock", hashdefaultPassword);
+                    param.Add("@LastModifiedByUserIdUnblock", unblockedByuserId);
+                    param.Add("@UserEmailToUnblock", userEmail);
+
+                    dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
+
+                    return resp;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: UnblockUser(long unblocedByuserId, string userEmail) ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<dynamic> ChangePassword(long userId, string newPassword)
+        {
+            try
+            {
+                var hashNewPassword = BCrypt.Net.BCrypt.HashPassword(newPassword, BCrypt.Net.BCrypt.GenerateSalt());
+
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", Account.CHANGEPASSWORD);
+                    param.Add("@PasswordHashModifr", hashNewPassword);
+                    param.Add("@UserIdModifr", userId);
+
+                    dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
+
+                    return resp;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: ChangePassword(long userId, string newPassword) ===>{ex.Message}");
+                throw;
+            }
+        }
 
         public async Task<UserWithTotalVm> GetUsers(int PageNumber, int RowsOfPage)
         {
@@ -375,205 +591,6 @@ namespace hrms_be_backend_data.Repository
         }
 
 
-        public async Task<string> AuthenticateUser(string EmailAddress, int MaximumLoginAttempt, DateTime DateCreated)
-        {
-            try
-            {
-                var param = new DynamicParameters();
-
-                param.Add("@EmailAddress", EmailAddress);               
-                param.Add("@MaximumLoginAttempt", MaximumLoginAttempt);
-                param.Add("@DateCreated", DateCreated);
-              
-                return await _dapper.Get<string>("sp_authenticate_user", param, commandType: CommandType.StoredProcedure);
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"AccountRepository -> AuthenticateUser => {ex}");
-                return "Unable to submit this detail, kindly contact support";
-            }
-
-        }
-        public async Task<string> VerifyUser(string Token, string LoggedInWithIPAddress, DateTime DateCreated)
-        {
-            try
-            {
-                var param = new DynamicParameters();
-                param.Add("@Token", Token);
-                param.Add("@LoggedInWithIPAddress", LoggedInWithIPAddress);                
-                param.Add("@DateCreated", DateCreated);
-
-                return await _dapper.Get<string>("sp_verify_user", param, commandType: CommandType.StoredProcedure);
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"AccountRepository -> VerifyUser => {ex}");
-                return "Unable to submit this detail, kindly contact support";
-            }
-
-        }
-
-       
-        public async Task<dynamic> ApproveUser(long approvedByuserId, string defaultPass, string userEmail)
-        {
-            try
-            {
-                var hashdefaultPassword = BCrypt.Net.BCrypt.HashPassword(defaultPass, BCrypt.Net.BCrypt.GenerateSalt());
-
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Account.APPROVEUSER);
-                    param.Add("@PasswordHashApprove", hashdefaultPassword);
-                    param.Add("@UserIdApprove", approvedByuserId);
-                    param.Add("@UserEmailApprove", userEmail);
-
-                    dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
-
-                    return resp;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: ApproveUser(long approvedByuserId, string defaultPass, string userEmail) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<dynamic> DeclineUser(long disapprovedByuserId, string officialMail, string comment)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Account.DISAPPROVEUSER);
-                    param.Add("@UserIdDisapprove", disapprovedByuserId);
-                    param.Add("@UserEmailDisapprove", officialMail);
-                    param.Add("@DisapprovedComment", comment);
-
-                    dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
-
-                    return resp;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: DeclineUser(long disapprovedByuserId, string userEmail, string comment) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<dynamic> DeactivateUser(long deactivatedByuserId, string OfficialMail, string comment)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Account.DEACTIVATEUSER);
-                    param.Add("@DeactivatedByUserId", deactivatedByuserId);
-                    param.Add("@UserEmailDeactivate", OfficialMail);
-                    param.Add("@DeactivatedComment", comment);
-
-                    dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
-
-                    return resp;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: DeactivateUser(long deactivatedByuserId, string userEmail, string comment) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<dynamic> ReactivateUser(long reactivatedByuserId, string OfficialMail, string comment, string defaultpass)
-        {
-            try
-            {
-                var hashdefaultPassword = BCrypt.Net.BCrypt.HashPassword(defaultpass, BCrypt.Net.BCrypt.GenerateSalt());
-
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Account.REACTIVATEUSER);
-                    param.Add("@PasswordHashReactivate", hashdefaultPassword);
-                    param.Add("@ReactivatedByUserId", reactivatedByuserId);
-                    param.Add("@UserEmailReactivate", OfficialMail);
-                    param.Add("@ReactivatedComment", comment);
-
-                    dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
-
-                    return resp;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: ReactivateUser(long reactivatedByuserId, string userEmail, string comment) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<dynamic> UnblockUser(long unblockedByuserId, string defaultPassword, string userEmail)
-        {
-            try
-            {
-                var hashdefaultPassword = BCrypt.Net.BCrypt.HashPassword(defaultPassword, BCrypt.Net.BCrypt.GenerateSalt());
-
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Account.UNBLOCKUSER);
-                    param.Add("@PasswordHashUnblock", hashdefaultPassword);
-                    param.Add("@LastModifiedByUserIdUnblock", unblockedByuserId);
-                    param.Add("@UserEmailToUnblock", userEmail);
-
-                    dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
-
-                    return resp;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: UnblockUser(long unblocedByuserId, string userEmail) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<dynamic> ChangePassword(long userId, string newPassword)
-        {
-            try
-            {
-                var hashNewPassword = BCrypt.Net.BCrypt.HashPassword(newPassword, BCrypt.Net.BCrypt.GenerateSalt());
-
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", Account.CHANGEPASSWORD);
-                    param.Add("@PasswordHashModifr", hashNewPassword);
-                    param.Add("@UserIdModifr", userId);
-
-                    dynamic resp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
-
-                    return resp;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: ChangePassword(long userId, string newPassword) ===>{ex.Message}");
-                throw;
-            }
-        }
-       
 
         public async Task<dynamic> MapUserToDepartment(string email, long deptId, long CompId, int updatedbyUserId)
         {
