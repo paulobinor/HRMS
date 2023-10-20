@@ -59,7 +59,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpGet("GetCompanies")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<CompanyVm>>), 200)]
-        public async Task<IActionResult> GetCompanies(PaginationFilter filter)
+        public async Task<IActionResult> GetCompanies([FromQuery] PaginationFilter filter)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -72,7 +72,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpGet("GetCompaniesActivated")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<CompanyVm>>), 200)]
-        public async Task<IActionResult> GetCompaniesActivated(PaginationFilter filter)
+        public async Task<IActionResult> GetCompaniesActivated([FromQuery] PaginationFilter filter)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -85,7 +85,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpGet("GetCompaniesDeactivated")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<CompanyVm>>), 200)]
-        public async Task<IActionResult> GetCompaniesDeactivated(PaginationFilter filter)
+        public async Task<IActionResult> GetCompaniesDeactivated([FromQuery] PaginationFilter filter)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -98,7 +98,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpGet("GetCompaniesPublicSector")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<CompanyVm>>), 200)]
-        public async Task<IActionResult> GetCompaniesPublicSector(PaginationFilter filter)
+        public async Task<IActionResult> GetCompaniesPublicSector([FromQuery] PaginationFilter filter)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -111,7 +111,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpGet("GetCompaniesPrivateSector")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<CompanyVm>>), 200)]
-        public async Task<IActionResult> GetCompaniesPrivateSector(PaginationFilter filter)
+        public async Task<IActionResult> GetCompaniesPrivateSector([FromQuery] PaginationFilter filter)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -123,8 +123,8 @@ namespace hrms_be_backend_api.Controllers
             return this.CustomResponse(await _CompanyService.GetCompaniesPrivateSector(filter, route, accessToken, claim, RemoteIpAddress, RemotePort));
         }
         [HttpGet("GetCompanyById")]
-        [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<CompanyFullVm>>), 200)]
-        public async Task<IActionResult> GetCompanyById(long Id)
+        [ProducesResponseType(typeof(ExecutedResult<CompanyFullVm>), 200)]
+        public async Task<IActionResult> GetCompanyById([FromQuery] long Id)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();

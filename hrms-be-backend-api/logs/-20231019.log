@@ -1,0 +1,242 @@
+[2023-10-19 08:59:19.643 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-10-19 08:59:20.613 +01:00  INF]  Now listening on: http://localhost:5008
+[2023-10-19 08:59:20.623 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-10-19 08:59:20.627 +01:00  INF]  Hosting environment: Development
+[2023-10-19 08:59:20.631 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api
+[2023-10-19 08:59:22.695 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2023-10-19 08:59:24.373 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2023-10-19 08:59:24.373 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2023-10-19 08:59:24.397 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 1720.3141ms
+[2023-10-19 08:59:24.397 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12370 application/javascript;+charset=utf-8 21.7274ms
+[2023-10-19 08:59:24.480 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 110.0369ms
+[2023-10-19 08:59:24.593 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2023-10-19 08:59:25.603 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 1009.8600ms
+[2023-10-19 09:00:28.409 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 93
+[2023-10-19 09:00:28.439 +01:00  INF]  CORS policy execution successful.
+[2023-10-19 09:00:28.451 +01:00  WRN]  Failed to determine the https port for redirect.
+[2023-10-19 09:00:28.965 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 09:00:29.059 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2023-10-19 09:00:31.603 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[hrms_be_backend_data.ViewModel.LoginResponse, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[2023-10-19 09:00:31.633 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api) in 2536.9701ms
+[2023-10-19 09:00:31.646 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 09:00:31.653 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 93 - 200 - application/json;+charset=utf-8 3243.2391ms
+[2023-10-19 09:01:10.901 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 93
+[2023-10-19 09:01:10.934 +01:00  INF]  CORS policy execution successful.
+[2023-10-19 09:01:10.941 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 09:01:10.968 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2023-10-19 09:01:11.716 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[hrms_be_backend_data.ViewModel.LoginResponse, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[2023-10-19 09:01:11.724 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api) in 748.7724ms
+[2023-10-19 09:01:11.731 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 09:01:11.737 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 93 - 200 - application/json;+charset=utf-8 839.1129ms
+[2023-10-19 09:01:46.056 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 93
+[2023-10-19 09:01:46.075 +01:00  INF]  CORS policy execution successful.
+[2023-10-19 09:01:46.086 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 09:01:46.090 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2023-10-19 09:01:59.846 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[hrms_be_backend_data.ViewModel.LoginResponse, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[2023-10-19 09:01:59.852 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api) in 13758.4841ms
+[2023-10-19 09:01:59.859 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 09:01:59.862 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 93 - 200 - application/json;+charset=utf-8 13806.0937ms
+[2023-10-19 09:02:44.228 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=1 - -
+[2023-10-19 09:02:44.327 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 09:02:44.344 +01:00  INF]  Route matched with {action = "GetCompanies", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetCompanies(hrms_be_backend_common.Communication.PaginationFilter) on controller hrms_be_backend_api.Controllers.CompanyController (hrms-be-backend-api).
+[2023-10-19 09:23:40.618 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-10-19 09:23:40.938 +01:00  INF]  Now listening on: http://localhost:5008
+[2023-10-19 09:23:40.941 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-10-19 09:23:40.943 +01:00  INF]  Hosting environment: Development
+[2023-10-19 09:23:40.945 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api
+[2023-10-19 09:23:42.099 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2023-10-19 09:23:42.573 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2023-10-19 09:23:42.577 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2023-10-19 09:23:42.578 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 481.0267ms
+[2023-10-19 09:23:42.579 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12370 application/javascript;+charset=utf-8 6.1841ms
+[2023-10-19 09:23:42.605 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 28.7436ms
+[2023-10-19 09:23:42.643 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2023-10-19 09:23:42.804 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 160.6194ms
+[2023-10-19 10:24:04.019 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 93
+[2023-10-19 10:24:04.278 +01:00  INF]  CORS policy execution successful.
+[2023-10-19 10:24:04.287 +01:00  WRN]  Failed to determine the https port for redirect.
+[2023-10-19 10:24:04.556 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 10:24:04.607 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2023-10-19 10:24:07.282 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[hrms_be_backend_data.ViewModel.LoginResponse, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[2023-10-19 10:24:07.305 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api) in 2685.6892ms
+[2023-10-19 10:24:07.314 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 10:24:07.319 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 93 - 200 - application/json;+charset=utf-8 3301.4853ms
+[2023-10-19 10:24:47.263 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=1 - -
+[2023-10-19 10:24:47.377 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 10:24:47.397 +01:00  INF]  Route matched with {action = "GetCompanies", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetCompanies(hrms_be_backend_common.Communication.PaginationFilter) on controller hrms_be_backend_api.Controllers.CompanyController (hrms-be-backend-api).
+[2023-10-19 10:26:37.208 +01:00  ERR]  CompanyService (GetCompanies)=====>System.NullReferenceException: Object reference not set to an instance of an object.
+   at hrms_be_backend_business.Helpers.PaginationHelper.CreatePagedReponse[T](IEnumerable`1 pagedData, PaginationFilter validFilter, Int64 totalRecords, IUriService uriService, String route, String responseCode, String responseMessage) in C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-business\Helpers\PaginationHelper.cs:line 22
+   at hrms_be_backend_business.Logic.CompanyService.GetCompanies(PaginationFilter filter, String route, String AccessKey, IEnumerable`1 claim, String RemoteIpAddress, String RemotePort) in C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-business\Logic\CompanyService.cs:line 299
+[2023-10-19 10:33:37.005 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-10-19 10:33:37.348 +01:00  INF]  Now listening on: http://localhost:5008
+[2023-10-19 10:33:37.351 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-10-19 10:33:37.353 +01:00  INF]  Hosting environment: Development
+[2023-10-19 10:33:37.354 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api
+[2023-10-19 10:33:38.347 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2023-10-19 10:33:38.830 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2023-10-19 10:33:38.831 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 483.2073ms
+[2023-10-19 10:33:38.842 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2023-10-19 10:33:38.852 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12370 application/javascript;+charset=utf-8 9.5615ms
+[2023-10-19 10:33:38.854 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 24.2435ms
+[2023-10-19 10:33:38.929 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2023-10-19 10:33:39.099 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 170.2521ms
+[2023-10-19 10:34:04.672 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 93
+[2023-10-19 10:34:04.702 +01:00  INF]  CORS policy execution successful.
+[2023-10-19 10:34:04.711 +01:00  WRN]  Failed to determine the https port for redirect.
+[2023-10-19 10:34:04.948 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 10:34:05.014 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2023-10-19 10:34:06.355 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[hrms_be_backend_data.ViewModel.LoginResponse, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[2023-10-19 10:34:06.376 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api) in 1348.6169ms
+[2023-10-19 10:34:06.386 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 10:34:06.392 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 93 - 200 - application/json;+charset=utf-8 1718.9547ms
+[2023-10-19 10:34:56.212 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 93
+[2023-10-19 10:34:56.234 +01:00  INF]  CORS policy execution successful.
+[2023-10-19 10:34:56.242 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 10:34:56.268 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2023-10-19 10:34:58.015 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[hrms_be_backend_data.ViewModel.LoginResponse, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[2023-10-19 10:34:58.024 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api) in 1751.0293ms
+[2023-10-19 10:34:58.029 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 10:34:58.033 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 93 - 200 - application/json;+charset=utf-8 1821.1145ms
+[2023-10-19 10:36:07.287 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=1 - -
+[2023-10-19 10:36:07.415 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 10:36:07.435 +01:00  INF]  Route matched with {action = "GetCompanies", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetCompanies(hrms_be_backend_common.Communication.PaginationFilter) on controller hrms_be_backend_api.Controllers.CompanyController (hrms-be-backend-api).
+[2023-10-19 10:36:10.203 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.PagedExcutedResult`1[[System.Collections.Generic.IEnumerable`1[[hrms_be_backend_data.ViewModel.CompanyVm, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2023-10-19 10:36:10.221 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api) in 2777.7732ms
+[2023-10-19 10:36:10.225 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 10:36:10.228 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=1 - - - 200 - application/json;+charset=utf-8 2941.1807ms
+[2023-10-19 11:23:04.975 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-10-19 11:23:06.488 +01:00  INF]  Now listening on: http://localhost:5008
+[2023-10-19 11:23:06.508 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-10-19 11:23:06.514 +01:00  INF]  Hosting environment: Development
+[2023-10-19 11:23:06.523 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api
+[2023-10-19 11:23:08.314 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2023-10-19 11:23:10.065 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2023-10-19 11:23:10.071 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2023-10-19 11:23:10.315 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12370 application/javascript;+charset=utf-8 156.7492ms
+[2023-10-19 11:23:10.316 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 2002.3905ms
+[2023-10-19 11:23:10.445 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 374.2022ms
+[2023-10-19 11:23:10.617 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2023-10-19 11:23:11.948 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 1331.2369ms
+[2023-10-19 11:24:50.533 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 93
+[2023-10-19 11:24:50.580 +01:00  INF]  CORS policy execution successful.
+[2023-10-19 11:24:50.592 +01:00  WRN]  Failed to determine the https port for redirect.
+[2023-10-19 11:24:51.525 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 11:24:51.586 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2023-10-19 11:24:58.979 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[hrms_be_backend_data.ViewModel.LoginResponse, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[2023-10-19 11:24:59.015 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api) in 7413.3378ms
+[2023-10-19 11:24:59.028 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 11:24:59.033 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 93 - 200 - application/json;+charset=utf-8 8499.8853ms
+[2023-10-19 11:26:32.434 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - -
+[2023-10-19 11:26:32.667 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:26:32.690 +01:00  INF]  Route matched with {action = "GetCompanies", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetCompanies(hrms_be_backend_common.Communication.PaginationFilter) on controller hrms_be_backend_api.Controllers.CompanyController (hrms-be-backend-api).
+[2023-10-19 11:26:33.196 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.PagedExcutedResult`1[[System.Collections.Generic.IEnumerable`1[[hrms_be_backend_data.ViewModel.CompanyVm, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2023-10-19 11:26:33.220 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api) in 517.5715ms
+[2023-10-19 11:26:33.225 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:26:33.229 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - - - 200 - application/json;+charset=utf-8 794.2365ms
+[2023-10-19 11:28:07.210 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - -
+[2023-10-19 11:28:07.438 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:28:07.444 +01:00  INF]  Route matched with {action = "GetCompanies", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetCompanies(hrms_be_backend_common.Communication.PaginationFilter) on controller hrms_be_backend_api.Controllers.CompanyController (hrms-be-backend-api).
+[2023-10-19 11:33:07.092 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.PagedExcutedResult`1[[System.Collections.Generic.IEnumerable`1[[hrms_be_backend_data.ViewModel.CompanyVm, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2023-10-19 11:33:07.100 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api) in 299648.2085ms
+[2023-10-19 11:33:07.101 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:33:07.105 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - - - 200 - application/json;+charset=utf-8 299894.7744ms
+[2023-10-19 11:33:10.262 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - -
+[2023-10-19 11:33:10.265 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:33:10.266 +01:00  INF]  Route matched with {action = "GetCompanies", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetCompanies(hrms_be_backend_common.Communication.PaginationFilter) on controller hrms_be_backend_api.Controllers.CompanyController (hrms-be-backend-api).
+[2023-10-19 11:33:12.653 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.PagedExcutedResult`1[[System.Collections.Generic.IEnumerable`1[[hrms_be_backend_data.ViewModel.CompanyVm, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2023-10-19 11:33:12.658 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api) in 2351.7971ms
+[2023-10-19 11:33:12.660 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:33:12.662 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - - - 200 - application/json;+charset=utf-8 2400.6156ms
+[2023-10-19 11:36:10.868 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - -
+[2023-10-19 11:36:10.880 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:36:10.892 +01:00  INF]  Route matched with {action = "GetCompanies", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetCompanies(hrms_be_backend_common.Communication.PaginationFilter) on controller hrms_be_backend_api.Controllers.CompanyController (hrms-be-backend-api).
+[2023-10-19 11:36:13.972 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.PagedExcutedResult`1[[System.Collections.Generic.IEnumerable`1[[hrms_be_backend_data.ViewModel.CompanyVm, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2023-10-19 11:36:13.985 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api) in 2751.4695ms
+[2023-10-19 11:36:14.043 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:36:14.049 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - - - 200 - application/json;+charset=utf-8 3180.6296ms
+[2023-10-19 11:38:01.827 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - -
+[2023-10-19 11:38:01.840 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:38:01.843 +01:00  INF]  Route matched with {action = "GetCompanies", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetCompanies(hrms_be_backend_common.Communication.PaginationFilter) on controller hrms_be_backend_api.Controllers.CompanyController (hrms-be-backend-api).
+[2023-10-19 11:46:38.637 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.PagedExcutedResult`1[[System.Collections.Generic.IEnumerable`1[[hrms_be_backend_data.ViewModel.CompanyVm, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2023-10-19 11:46:38.642 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api) in 516792.7593ms
+[2023-10-19 11:46:38.648 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:46:38.652 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - - - 200 - application/json;+charset=utf-8 516823.2016ms
+[2023-10-19 11:47:54.181 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 81
+[2023-10-19 11:47:54.211 +01:00  INF]  CORS policy execution successful.
+[2023-10-19 11:47:54.215 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 11:47:54.223 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2023-10-19 11:47:54.879 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[hrms_be_backend_data.ViewModel.LoginResponse, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[2023-10-19 11:47:54.886 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api) in 650.6151ms
+[2023-10-19 11:47:54.888 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 11:47:54.890 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 81 - 200 - application/json;+charset=utf-8 709.1833ms
+[2023-10-19 11:48:42.690 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 81
+[2023-10-19 11:48:42.692 +01:00  INF]  CORS policy execution successful.
+[2023-10-19 11:48:42.694 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 11:48:42.701 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2023-10-19 11:48:44.579 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[hrms_be_backend_data.ViewModel.LoginResponse, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[2023-10-19 11:48:44.583 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api) in 1877.8283ms
+[2023-10-19 11:48:44.587 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 11:48:44.590 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 81 - 200 - application/json;+charset=utf-8 1900.5699ms
+[2023-10-19 11:49:13.448 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - -
+[2023-10-19 11:49:13.458 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:49:13.461 +01:00  INF]  Route matched with {action = "GetCompanies", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetCompanies(hrms_be_backend_common.Communication.PaginationFilter) on controller hrms_be_backend_api.Controllers.CompanyController (hrms-be-backend-api).
+[2023-10-19 11:49:20.096 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.PagedExcutedResult`1[[System.Collections.Generic.IEnumerable`1[[hrms_be_backend_data.ViewModel.CompanyVm, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2023-10-19 11:49:20.104 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api) in 6638.2535ms
+[2023-10-19 11:49:20.108 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:49:20.113 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - - - 200 - application/json;+charset=utf-8 6665.8322ms
+[2023-10-19 11:49:41.261 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - -
+[2023-10-19 11:49:41.617 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:49:41.620 +01:00  INF]  Route matched with {action = "GetCompanies", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetCompanies(hrms_be_backend_common.Communication.PaginationFilter) on controller hrms_be_backend_api.Controllers.CompanyController (hrms-be-backend-api).
+[2023-10-19 11:54:37.072 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.PagedExcutedResult`1[[System.Collections.Generic.IEnumerable`1[[hrms_be_backend_data.ViewModel.CompanyVm, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2023-10-19 11:54:37.140 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api) in 295521.7171ms
+[2023-10-19 11:54:37.149 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:54:37.157 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - - - 200 - application/json;+charset=utf-8 295900.8758ms
+[2023-10-19 11:54:40.441 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - -
+[2023-10-19 11:54:40.449 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:54:40.458 +01:00  INF]  Route matched with {action = "GetCompanies", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetCompanies(hrms_be_backend_common.Communication.PaginationFilter) on controller hrms_be_backend_api.Controllers.CompanyController (hrms-be-backend-api).
+[2023-10-19 11:56:14.413 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.PagedExcutedResult`1[[System.Collections.Generic.IEnumerable`1[[hrms_be_backend_data.ViewModel.CompanyVm, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2023-10-19 11:56:14.416 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api) in 93952.6259ms
+[2023-10-19 11:56:14.427 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:56:14.433 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - - - 200 - application/json;+charset=utf-8 93997.4998ms
+[2023-10-19 11:56:19.679 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - -
+[2023-10-19 11:56:19.681 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 11:56:19.683 +01:00  INF]  Route matched with {action = "GetCompanies", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetCompanies(hrms_be_backend_common.Communication.PaginationFilter) on controller hrms_be_backend_api.Controllers.CompanyController (hrms-be-backend-api).
+[2023-10-19 12:04:37.631 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.PagedExcutedResult`1[[System.Collections.Generic.IEnumerable`1[[hrms_be_backend_data.ViewModel.CompanyVm, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2023-10-19 12:04:37.668 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api) in 497950.2969ms
+[2023-10-19 12:04:37.680 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.CompanyController.GetCompanies (hrms-be-backend-api)'
+[2023-10-19 12:04:37.683 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/api/Company/GetCompanies?PageNumber=1&PageSize=10 - - - 200 - application/json;+charset=utf-8 498010.5193ms
+[2023-10-19 13:07:46.927 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-10-19 13:07:47.238 +01:00  INF]  Now listening on: http://localhost:5008
+[2023-10-19 13:07:47.240 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-10-19 13:07:47.242 +01:00  INF]  Hosting environment: Development
+[2023-10-19 13:07:47.243 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api
+[2023-10-19 13:07:48.559 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2023-10-19 13:07:49.159 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger-ui.css - -
+[2023-10-19 13:07:49.168 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger-ui-bundle.js - -
+[2023-10-19 13:07:49.176 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2023-10-19 13:07:49.174 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2023-10-19 13:07:49.176 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger-ui-standalone-preset.js - -
+[2023-10-19 13:07:49.209 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 648.2871ms
+[2023-10-19 13:07:49.212 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12370 application/javascript;+charset=utf-8 38.3324ms
+[2023-10-19 13:07:49.243 +01:00  INF]  Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+[2023-10-19 13:07:49.243 +01:00  INF]  Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+[2023-10-19 13:07:49.249 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger-ui-bundle.js - - - 200 1061536 text/javascript 81.8694ms
+[2023-10-19 13:07:49.252 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger-ui-standalone-preset.js - - - 200 312163 text/javascript 75.8249ms
+[2023-10-19 13:07:49.243 +01:00  INF]  Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+[2023-10-19 13:07:49.256 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 79.8413ms
+[2023-10-19 13:07:49.259 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger-ui.css - - - 200 144929 text/css 99.4614ms
+[2023-10-19 13:07:49.402 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2023-10-19 13:07:49.867 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 465.5555ms
+[2023-10-19 13:12:37.624 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 81
+[2023-10-19 13:12:37.633 +01:00  INF]  CORS policy execution successful.
+[2023-10-19 13:12:37.637 +01:00  WRN]  Failed to determine the https port for redirect.
+[2023-10-19 13:12:37.863 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 13:12:37.883 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2023-10-19 13:12:39.714 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[hrms_be_backend_data.ViewModel.LoginResponse, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[2023-10-19 13:12:39.725 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api) in 1818.0816ms
+[2023-10-19 13:12:39.731 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 13:12:39.735 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 81 - 200 - application/json;+charset=utf-8 2112.2912ms
+[2023-10-19 13:14:11.185 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 81
+[2023-10-19 13:14:11.196 +01:00  INF]  CORS policy execution successful.
+[2023-10-19 13:14:11.248 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2023-10-19 13:14:11.250 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).

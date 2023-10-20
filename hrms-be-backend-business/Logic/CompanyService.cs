@@ -7,14 +7,11 @@ using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
-using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Security.Claims;
-using System.Text.Json;
 
 namespace hrms_be_backend_business.Logic
 {
@@ -32,11 +29,12 @@ namespace hrms_be_backend_business.Logic
         private readonly IUriService _uriService;
 
         public CompanyService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<CompanyService> logger,
-            ICompanyRepository companyRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IUserAppModulePrivilegeRepository privilegeRepository)
+            ICompanyRepository companyRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IUriService uriService, IUserAppModulePrivilegeRepository privilegeRepository)
         {
             _audit = audit;
             _authService = authService;
             _mailService = mailService;
+            _uriService= uriService;
             _logger = logger;
             _configuration = configuration;
             _accountRepository = accountRepository;
@@ -296,7 +294,7 @@ namespace hrms_be_backend_business.Logic
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.View_Company_Details, accessUser.data.UserId);
                 if (!checkPrivilege.Contains("Success"))
                 {
-                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), checkPrivilege);
 
                 }
                 var returnData = await _companyrepository.GetCompanies(filter.PageNumber, filter.PageSize);
@@ -336,7 +334,7 @@ namespace hrms_be_backend_business.Logic
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.View_Company_Details, accessUser.data.UserId);
                 if (!checkPrivilege.Contains("Success"))
                 {
-                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), checkPrivilege);
 
                 }
                 var returnData = await _companyrepository.GetCompaniesActivated(filter.PageNumber, filter.PageSize);
@@ -376,7 +374,7 @@ namespace hrms_be_backend_business.Logic
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.View_Company_Details, accessUser.data.UserId);
                 if (!checkPrivilege.Contains("Success"))
                 {
-                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), checkPrivilege);
 
                 }
                 var returnData = await _companyrepository.GetCompaniesDeactivated(filter.PageNumber, filter.PageSize);
@@ -416,7 +414,7 @@ namespace hrms_be_backend_business.Logic
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.View_Company_Details, accessUser.data.UserId);
                 if (!checkPrivilege.Contains("Success"))
                 {
-                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), checkPrivilege);
 
                 }
                 var returnData = await _companyrepository.GetCompaniesPublicSector(filter.PageNumber, filter.PageSize);
@@ -456,7 +454,7 @@ namespace hrms_be_backend_business.Logic
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.View_Company_Details, accessUser.data.UserId);
                 if (!checkPrivilege.Contains("Success"))
                 {
-                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), checkPrivilege);
 
                 }
                 var returnData = await _companyrepository.GetCompaniesPrivateSector(filter.PageNumber, filter.PageSize);
@@ -494,9 +492,9 @@ namespace hrms_be_backend_business.Logic
                 var returnData = await _companyrepository.GetCompanyById(Id);
                 if (returnData == null)
                 {
-                    return new ExecutedResult<CompanyFullVm>() { responseMessage = ((int)ResponseCode.NotFound).ToString().ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+                    return new ExecutedResult<CompanyFullVm>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
                 }
-                return new ExecutedResult<CompanyFullVm>() { responseMessage = ((int)ResponseCode.Ok).ToString().ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = returnData };
+                return new ExecutedResult<CompanyFullVm>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = returnData };
             }
             catch (Exception ex)
             {

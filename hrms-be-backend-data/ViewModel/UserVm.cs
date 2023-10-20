@@ -27,6 +27,7 @@
         public string OfficialMail { get; set; }
         public string PhoneNumber { get; set; }
         public string UserStatusName { get; set; }
+        public string UserStatusCode { get; set; }
         public string CompanyName { get; set; }
         public List<UserModulesVm> Modules { get; set; }
     }

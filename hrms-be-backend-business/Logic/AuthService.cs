@@ -25,7 +25,7 @@ namespace hrms_be_backend_business.Logic
         private readonly IJwtManager _jwtManager;
         private readonly ITokenRefresher _tokenRefresher;
         private readonly IAuditLog _audit;
-        private readonly IHostingEnvironment _hostEnvironment;      
+        private readonly IHostingEnvironment _hostEnvironment;
         private readonly ICompanyRepository _companyrepository;
         private readonly IMailService _mailService;
         private readonly PassowordConfig _appConfig;
@@ -44,11 +44,12 @@ namespace hrms_be_backend_business.Logic
             _jwtManager = jwtManager;
             _logger = logger;
             _accountRepository = accountRepository;
-            _hostEnvironment = hostEnvironment;           
+            _hostEnvironment = hostEnvironment;
             _companyrepository = companyRepository;
-            _mailService= mailService;
+            _mailService = mailService;
         }
-        public async Task<LoginResponse> Login(LoginModel login, string ipAddress, string port)
+
+        public async Task<ExecutedResult<LoginResponse>> Login(LoginModel login, string ipAddress, string port)
         {
             var response = new LoginResponse();
             try
@@ -62,14 +63,11 @@ namespace hrms_be_backend_business.Logic
                 var repoResponse = await _accountRepository.AuthenticateUser(email, _appConfig.MaxNumberOfFailedAttemptsToLogin, DateTime.Now);
                 if (!repoResponse.Contains("Success"))
                 {
-                    response.ResponseCode = ResponseCode.InvalidPassword.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"{repoResponse}";
-                    response.Data = null;
-                    return response;
+                    return new ExecutedResult<LoginResponse>() { responseMessage = repoResponse, responseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), data = null };
                 }
                 var userId = repoResponse.Replace("Success", "");
-                var user = await _accountRepository.FindUser(Convert.ToInt64(userId),null,null);
-                
+                var user = await _accountRepository.FindUser(Convert.ToInt64(userId), null, null);
+
                 var isPasswordMatch = Utils.DoesPasswordMatch(user.PasswordHash, Encoding.UTF8.GetString(Convert.FromBase64String(login.Password)));
                 if (!isPasswordMatch)
                 {
@@ -78,19 +76,19 @@ namespace hrms_be_backend_business.Logic
 
                     if (attemptCount >= _appConfig.MaxNumberOfFailedAttemptsToLogin)
                     {
-                        response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"You have exceeded number of attempts. your account has been locked. Please contact admin.";
-                        return response;
+                        return new ExecutedResult<LoginResponse>() { responseMessage = $"You have exceeded number of attempts. your account has been locked. Please contact admin.", responseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'), data = null };
                     }
-
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Invalid Password! You have made {attemptCount} unsuccessful attempt(s). " +
+                    return new ExecutedResult<LoginResponse>()
+                    {
+                        responseMessage = $"Invalid Password! You have made {attemptCount} unsuccessful attempt(s). " +
                                                $"The maximum retry attempts allowed is {_appConfig.MaxNumberOfFailedAttemptsToLogin}. " +
-                                               $"If {_appConfig.MaxNumberOfFailedAttemptsToLogin} is exceeded, then you will be locked out of the system";
+                                               $"If {_appConfig.MaxNumberOfFailedAttemptsToLogin} is exceeded, then you will be locked out of the system",
+                        responseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        data = null
+                    };
 
-                    return response;
                 }
-                var modules=await _accountRepository.GetAppModulesAssigned(Convert.ToInt64(userId));
+                var modules = await _accountRepository.GetAppModulesAssigned(Convert.ToInt64(userId));
                 var accessUserVm = new AccessUserVm
                 {
                     CompanyName = user.CompanyName,
@@ -102,6 +100,7 @@ namespace hrms_be_backend_business.Logic
                     PhoneNumber = user.PhoneNumber,
                     UserId = user.UserId,
                     UserStatusName = user.UserStatusName,
+                    UserStatusCode = user.UserStatusCode,
                     Modules = modules,
                 };
 
@@ -110,14 +109,11 @@ namespace hrms_be_backend_business.Logic
 
                 await _unitOfWork.UpdateUserLoginActivity(user.UserId, ipAddress, authResponse.JwtToken);
 
-              
-
-
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "User Logged in Successfully";
-                response.JwtToken = authResponse.JwtToken;
-                response.RefreshToken = authResponse.RefreshToken;
-                response.Data = user;
+                var loginResponse = new LoginResponse
+                {
+                    JwtToken = authResponse.JwtToken,
+                    RefreshToken = authResponse.RefreshToken,
+                };
 
                 var auditLog = new AuditLogDto
                 {
@@ -125,21 +121,18 @@ namespace hrms_be_backend_business.Logic
                     actionPerformed = "Login",
                     payload = JsonConvert.SerializeObject(login),
                     response = null,
-                    actionStatus = $"Successful: {response.ResponseMessage}",
+                    actionStatus = $"Successful:",
                     ipAddress = ipAddress
                 };
                 await _audit.LogActivity(auditLog);
 
-                return response;
+                return new ExecutedResult<LoginResponse>() { responseMessage = $"User Logged in Successfully.", responseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'), data = loginResponse };
 
             }
             catch (Exception ex)
             {
-                _logger.LogError($"AuthService => Login || {ex}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Unable to process the operation, kindly contact the support";
-                response.Data = null;
-                return response;
+                _logger.LogError($"Exception || UsersServices (Login)=====>{ex}");
+                return new ExecutedResult<LoginResponse>() { responseMessage = $"Unable to process the operation, kindly contact the support", responseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'), data = null };
             }
         }
 
@@ -176,7 +169,7 @@ namespace hrms_be_backend_business.Logic
         public async Task<ExecutedResult<UserFullView>> CheckUserAccess(string AccessToken, string IpAddress)
         {
             try
-            {               
+            {
 
                 var userAccess = await _accountRepository.VerifyUser(AccessToken, IpAddress, DateTime.Now);
                 if (!userAccess.Contains("Success"))
@@ -184,12 +177,12 @@ namespace hrms_be_backend_business.Logic
                     _logger.LogError($"AuthService || (VerifyUser)  Unable to verify access =====>{userAccess}");
                     return new ExecutedResult<UserFullView>() { responseMessage = "Unathorized User", responseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), data = null };
                 }
-                var userData = await _accountRepository.FindUser(null,null, AccessToken);
+                var userData = await _accountRepository.FindUser(null, null, AccessToken);
                 if (userData == null)
                 {
                     _logger.LogError($"AuthService || (GetUserById)  Unable to get user details =====>");
                     return new ExecutedResult<UserFullView>() { responseMessage = ResponseCode.AuthorizationError.ToString(), responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
-                }                         
+                }
 
                 return new ExecutedResult<UserFullView>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = userData };
             }
@@ -222,7 +215,7 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }
-              
+
 
         public async Task<BaseResponse> SendEmailForPasswordChange(RequestPasswordChange request, string ipAddress, string port)
         {
@@ -230,7 +223,7 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-                var user = await _accountRepository.FindUser(null, request.officialMail,null);
+                var user = await _accountRepository.FindUser(null, request.officialMail, null);
                 if (null == user)
                 {
                     response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
@@ -244,7 +237,7 @@ namespace hrms_be_backend_business.Logic
                     var resp = await _accountRepository.ChangePassword(user.UserId, password);
                     if (resp > 0)
                     {
-                        
+
                         _mailService.SendEmail(user.OfficialMail, user.FirstName, password, "Password Reset", _hostEnvironment.ContentRootPath, "", port);
 
                         response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
@@ -285,7 +278,7 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-                var user = await _accountRepository.FindUser(null, email,null);
+                var user = await _accountRepository.FindUser(null, email, null);
                 if (null == user)
                 {
                     response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
