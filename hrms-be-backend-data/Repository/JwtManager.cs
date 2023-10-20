@@ -49,7 +49,8 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                 new Claim(ClaimTypes.Role, request.UserStatusCode),               
                 new Claim(ClaimTypes.GivenName, request.FirstName),
                 new Claim(ClaimTypes.Surname, request.LastName),
-                //new Claim(ClaimTypes.MobilePhone, request.PhoneNumber),               
+              
+                new Claim(ClaimTypes.GroupSid, (request.CompanyId!=null)?request.CompanyId.ToString():""),               
                 new Claim(ClaimTypes.Actor, request.UserStatusName),
                 new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(request.Modules)),
             };

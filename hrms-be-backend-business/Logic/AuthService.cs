@@ -102,6 +102,7 @@ namespace hrms_be_backend_business.Logic
                     UserStatusName = user.UserStatusName,
                     UserStatusCode = user.UserStatusCode,
                     Modules = modules,
+                    CompanyId=user.CompanyId,
                 };
 
 
