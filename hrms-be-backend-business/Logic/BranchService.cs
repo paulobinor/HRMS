@@ -1,5 +1,9 @@
 ﻿using ExcelDataReader;
+using hrms_be_backend_business.Helpers;
 using hrms_be_backend_business.ILogic;
+using hrms_be_backend_common.Communication;
+using hrms_be_backend_common.DTO;
+using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
@@ -7,7 +11,9 @@ using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System.Data;
+using System.Security.Claims;
 using System.Text;
 
 namespace hrms_be_backend_business.Logic
@@ -18,664 +24,366 @@ namespace hrms_be_backend_business.Logic
 
         private readonly ILogger<BranchService> _logger;
         private readonly IConfiguration _configuration;
-        private readonly IAccountRepository _accountRepository;
-        private readonly ICompanyRepository _companyrepository;
-        private readonly IBranchRepository _branchRepository;
-        private readonly ICountryRepository _CountryRepository;
-        private readonly IStateRepository _StateRepository;
-        private readonly ILgaRepository _LgaRepository;
+        private readonly IAccountRepository _accountRepository;      
+        private readonly IBranchRepository _branchRepository;        
+        private readonly IUserAppModulePrivilegeRepository _privilegeRepository;
+        private readonly IAuthService _authService;
+        private readonly IMailService _mailService;
+        private readonly IUriService _uriService;
 
         public BranchService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<BranchService> logger,
-            IBranchRepository branchRepository, IAuditLog audit, ICompanyRepository companyrepository, ICountryRepository countryRepo,
-            IStateRepository stateRepo, ILgaRepository lgaRepo)
+            IBranchRepository branchRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IUriService uriService, IUserAppModulePrivilegeRepository privilegeRepository)
         {
             _audit = audit;
 
             _logger = logger;
             _configuration = configuration;
             _accountRepository = accountRepository;
-            _branchRepository = branchRepository;
-            _companyrepository = companyrepository;
-            _CountryRepository = countryRepo;
-            _StateRepository = stateRepo;
-            _LgaRepository = lgaRepo;
+            _branchRepository = branchRepository;          
+            _authService = authService;
+            _mailService = mailService;
+            _uriService = uriService;
+            _privilegeRepository = privilegeRepository;
         }
 
-        public async Task<BaseResponse> CreateBranch(CreateBranchDTO BranchDto, RequesterInfo requester)
+        public async Task<ExecutedResult<string>> CreateBranch(CreateBranchDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            var response = new BaseResponse();
-            try
-            {
-                string createdbyUserEmail = requester.Username;
-                string createdbyUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,createdbyUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
-
-                }
-
-                //validate BranchDto payload here 
-                if (String.IsNullOrEmpty(BranchDto.BranchName) || String.IsNullOrEmpty(BranchDto.Address))
-                //||
-                //String.IsNullOrEmpty(BranchDto.CountryID) || String.IsNullOrEmpty(BranchDto.StateID))
-                {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Please ensure all required fields are entered.";
-                    return response;
-                }
-
-                var isExistsComp = await _companyrepository.GetCompanyById(BranchDto.CompanyID);
-                if (null == isExistsComp)
-                {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Invalid Company suplied.";
-                    return response;
-                }
-                else
-                {
-                    if (isExistsComp.IsDeleted)
-                    {
-                        response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"The Company suplied is already deleted, Branch cannot be created under it.";
-                        return response;
-                    }
-                }
-
-                //BranchDto.BranchName = $"{BranchDto.BranchName} ({isExistsComp.CompanyName})";
-
-                var isExists = await _branchRepository.GetBranchByCompany(BranchDto.BranchName, (int)BranchDto.CompanyID);
-                if (null != isExists)
-                {
-                    response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Branch with name : {BranchDto.BranchName} already exists for this Company.";
-                    return response;
-                }
-
-                dynamic resp = await _branchRepository.CreateBranch(BranchDto, createdbyUserEmail);
-                if (resp > 0)
-                {
-                    //update action performed into audit log here
-
-                    var Branch = await _branchRepository.GetBranchByName(BranchDto.BranchName);
-
-                    response.Data = Branch;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Branch created successfully.";
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "An error occured while Creating Branch. Please contact admin.";
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: CreateBranch ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: CreateBranch ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> CreateBranchBulkUpload(IFormFile payload, RequesterInfo requester)
-        {
-            //check if us
-            StringBuilder errorOutput = new StringBuilder();
-            var response = new BaseResponse();
-            try
-            {
-                if (payload == null || payload.Length <= 0)
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "No file for Upload";
-                    return response;
-                }
-                else if (!Path.GetExtension(payload.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "File not an Excel Format";
-                    return response;
-                }
-                else
-                {
-                    var stream = new MemoryStream();
-                    await payload.CopyToAsync(stream);
-
-                    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-                    var reader = ExcelReaderFactory.CreateReader(stream);
-                    DataSet ds = new DataSet();
-                    ds = reader.AsDataSet();
-                    reader.Close();
-
-                    int rowCount = ds.Tables[0].Rows.Count;
-                    DataTable serviceDetails = ds.Tables[0];
-
-                    int k = 0;
-                    if (ds != null && ds.Tables.Count > 0)
-                    {
-
-                        string BranchName = serviceDetails.Rows[0][0].ToString();
-                        string CompanyName = serviceDetails.Rows[0][1].ToString();
-                        string Address = serviceDetails.Rows[0][2].ToString();
-                        string CountryName = serviceDetails.Rows[0][3].ToString();
-                        string StateName = serviceDetails.Rows[0][4].ToString();
-                        string LgaName = serviceDetails.Rows[0][5].ToString();
-
-
-                        if (BranchName != "BranchName" || CompanyName != "CompanyName"
-                        || Address != "Address" || CountryName != "CountryName" || StateName != "StateName" || LgaName != "LgaName")
-                        {
-                            response.ResponseCode = "08";
-                            response.ResponseMessage = "File header not in the Right format";
-                            return response;
-                        }
-                        else
-                        {
-                            for (int row = 1; row < serviceDetails.Rows.Count; row++)
-                            {
-
-                                string branchName = serviceDetails.Rows[row][0].ToString();
-                                var Company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][1].ToString());
-                                string address = serviceDetails.Rows[row][2].ToString();
-                                var Country = await _CountryRepository.GetCountryByName(serviceDetails.Rows[row][3].ToString());
-                                var State = await _StateRepository.GetStateByName(serviceDetails.Rows[row][4].ToString());
-                                var Lga = await _LgaRepository.GetLgaByName(serviceDetails.Rows[row][5].ToString());
-
-                                long CompanyId = Company.CompanyId;
-                                long CountryId = Country.CountryID;
-                                long StateID = State.StateID;
-                                long LgaID = Lga.LGAID;
-
-
-                                var branchrequest = new CreateBranchDTO
-                                {
-                                    BranchName = branchName,
-                                    CompanyID = CompanyId,
-                                    Address = address,
-                                    CountryID = CountryId,
-                                    StateID = StateID,
-                                    LgaID = LgaID
-
-                                };
-
-                                var branchrequester = new RequesterInfo
-                                {
-                                    Username = requester.Username,
-                                    UserId = requester.UserId,
-                                    RoleId = requester.RoleId,
-                                    IpAddress = requester.IpAddress,
-                                    Port = requester.Port,
-
-
-                                };
-
-                                var resp = await CreateBranch(branchrequest, branchrequester);
-
-
-                                if (resp.ResponseCode == "00")
-                                {
-                                    k++;
-                                }
-                                else
-                                {
-                                    errorOutput.Append($"Row {row} failed due to {resp.ResponseMessage}" + "\n");
-                                }
-                            }
-                        }
-
-                    }
-
-
-
-                    if (k == rowCount - 1)
-                    {
-                        response.ResponseCode = "00";
-                        response.ResponseMessage = "All record inserted successfully";
-
-
-
-                        return response;
-                    }
-                    else
-                    {
-                        response.ResponseCode = "02";
-                        response.ResponseMessage = errorOutput.ToString();
-
-
-
-                        return response;
-                    }
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Exception occured";
-                response.Data = null;
-
-
-
-                return response;
-            }
-        }
-
-
-        public async Task<BaseResponse> UpdateBranch(UpdateBranchDTO updateDto, RequesterInfo requester)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
-
-                }
-
-                //validate BranchDto payload here 
-                if (String.IsNullOrEmpty(updateDto.BranchName) || String.IsNullOrEmpty(updateDto.Address) || updateDto.CompanyID <= 0
-                    || updateDto.CountryID <= 0 || updateDto.StateID <= 0 || updateDto.LgaID <= 0)
-                //String.IsNullOrEmpty(updateDto.Email) || String.IsNullOrEmpty(updateDto.ContactPhone))
-                {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Please ensure all required fields are entered.";
-                    return response;
-                }
-
-                var Branch = await _branchRepository.GetBranchById(updateDto.BranchID);
-                if (null == Branch)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "No record found for the specified Branch";
-                    response.Data = null;
-                    return response;
-                }
-
-                dynamic resp = await _branchRepository.UpdateBranch(updateDto, requesterUserEmail);
-                if (resp > 0)
-                {
-                    //update action performed into audit log here
-
-                    var updatedBranch = await _branchRepository.GetBranchById(updateDto.BranchID);
-
-                    _logger.LogInformation("Branch updated successfully.");
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Branch updated successfully.";
-                    response.Data = updatedBranch;
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.Exception.ToString();
-                response.ResponseMessage = "An error occurred while updating Branch.";
-                response.Data = null;
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: UpdateBranchDTO ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: UpdateBranchDTO ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> DeleteBranch(DeleteBranchDTO deleteDto, RequesterInfo requester)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
-
-                }
-
-                if (deleteDto.BranchID == 1)
-                {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"System Default Branch cannot be deleted.";
-                    return response;
-                }
-
-                var Branch = await _branchRepository.GetBranchById(deleteDto.BranchID);
-                if (null != Branch)
-                {
-                    dynamic resp = await _branchRepository.DeleteBranch(deleteDto, requesterUserEmail);
-                    if (resp > 0)
-                    {
-                        //update action performed into audit log here
-
-                        var DeletedBranch = await _branchRepository.GetBranchById(deleteDto.BranchID);
-
-                        _logger.LogInformation($"Branch with name: {DeletedBranch.BranchName} Deleted successfully.");
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Branch with name: {DeletedBranch.BranchName} Deleted successfully.";
-                        response.Data = null;
-                        return response;
-
-                    }
-                    response.ResponseCode = ResponseCode.Exception.ToString();
-                    response.ResponseMessage = "An error occurred while deleting Branch.";
-                    response.Data = null;
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No record found for the specified Branch";
-                response.Data = null;
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: DeleteBranch ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: DeleteBranch ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> GetAllActiveBranch(RequesterInfo requester)
-        {
-            BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
                 }
-
-                //update action performed into audit log here
-
-                var Branch = await _branchRepository.GetAllActiveBranch();
-
-                if (Branch.Any())
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BranchModulePrivilegeConstant.Create_Branch, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
                 {
-                    response.Data = Branch;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Branch fetched successfully.";
-                    return response;
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
                 }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No Branch found.";
-                response.Data = null;
-                return response;
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.BranchName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Branch Name is required";
+                }
+                if (string.IsNullOrEmpty(payload.Address))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  Address is required";
+                }
+                if (payload.LgaId<1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  Local Gorvernment is required";
+                }                
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new ProcessBranchReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    Address = payload.Address,
+                    BranchName = payload.BranchName,
+                    IsHeadQuater = payload.IsHeadQuater,
+                    LgaId = payload.LgaId,                    
+                    IsModifield = false,
+                };
+                string repoResponse = await _branchRepository.ProcessBranch(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "CreateBranch",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Created Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetAllActiveBranch() ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllActiveBranch() ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"BranchService (CreateBranch)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-
-        public async Task<BaseResponse> GetAllBranch(RequesterInfo requester)
+        public async Task<ExecutedResult<string>> UpdateBranch(UpdateBranchDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
                 }
-
-                //update action performed into audit log here
-
-                var Branch = await _branchRepository.GetAllBranch();
-
-                if (Branch.Any())
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BranchModulePrivilegeConstant.Update_Branch, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
                 {
-                    response.Data = Branch;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Branch fetched successfully.";
-                    return response;
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
                 }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No Branch found.";
-                response.Data = null;
-                return response;
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.BranchName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Branch Name is required";
+                }
+                if (string.IsNullOrEmpty(payload.Address))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  Address is required";
+                }
+                if (payload.LgaId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  Local Gorvernment is required";
+                }
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new ProcessBranchReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    Address = payload.Address,
+                    BranchName = payload.BranchName,
+                    IsHeadQuater = payload.IsHeadQuater,
+                    LgaId = payload.LgaId,
+                    IsModifield = true,
+                    BranchId= payload.BranchId,
+                };
+                string repoResponse = await _branchRepository.ProcessBranch(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "UpdateBranch",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetAllBranch() ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllBranch() ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"BranchService (UpdateBranch)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-
-        public async Task<BaseResponse> GetBranchbyId(long BranchID, RequesterInfo requester)
+        public async Task<ExecutedResult<string>> DeleteBranch(DeleteBranchDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
                 }
-
-                var Branch = await _branchRepository.GetBranchById(BranchID);
-
-                if (Branch == null)
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BranchModulePrivilegeConstant.Delete_Branch, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Branch not found.";
-                    response.Data = null;
-                    return response;
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.Comment))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Comment is required";
+                }              
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new DeleteBranchReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    Comment = payload.Comment,                   
+                    BranchId = payload.BranchId,
+                };
+                string repoResponse = await _branchRepository.DeleteBranch(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
 
-                //update action performed into audit log here
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "DeleteBranch",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
 
-                response.Data = Branch;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Branch fetched successfully.";
-                return response;
-
+                return new ExecutedResult<string>() { responseMessage = "Deleted Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetBranchbyId(long DepartmentId) ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetBranchbyId(long BranchID) ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"BranchService (DeleteBranch)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-
-        public async Task<BaseResponse> GetBranchbyCompanyId(long companyId, RequesterInfo requester)
+        public async Task<PagedExcutedResult<IEnumerable<BranchVm>>> GetBranches(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
-
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null, requesterUserEmail, null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
+                    return PaginationHelper.CreatePagedReponse<BranchVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
-
-                var Branch = await _branchRepository.GetAllBranchbyCompanyId(companyId);
-
-                if (Branch == null)
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BranchModulePrivilegeConstant.View_Branch, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Branch not found.";
-                    response.Data = null;
-                    return response;
+                    return PaginationHelper.CreatePagedReponse<BranchVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), checkPrivilege);
+
+                }
+                var returnData = await _branchRepository.GetBranches(accessUser.data.CompanyId, filter.PageNumber, filter.PageSize);
+                if (returnData == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<BranchVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (returnData.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<BranchVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
                 }
 
-                //update action performed into audit log here
+                totalRecords = returnData.totalRecords;
 
-                response.Data = Branch;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Branch fetched successfully.";
-                return response;
+                var pagedReponse = PaginationHelper.CreatePagedReponse<BranchVm>(returnData.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
 
+                return pagedReponse;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetBranchbyCompanyId(long companyId) ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetBranchbyCompanyId(long companyId) ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"BranchService (GetBranches)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<BranchVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
             }
         }
+        public async Task<PagedExcutedResult<IEnumerable<BranchVm>>> GetBranchesDeleted(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<BranchVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BranchModulePrivilegeConstant.View_Branch, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return PaginationHelper.CreatePagedReponse<BranchVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), checkPrivilege);
+
+                }
+                var returnData = await _branchRepository.GetBranchesDeleted(accessUser.data.CompanyId, filter.PageNumber, filter.PageSize);
+                if (returnData == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<BranchVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (returnData.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<BranchVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+
+                totalRecords = returnData.totalRecords;
+
+                var pagedReponse = PaginationHelper.CreatePagedReponse<BranchVm>(returnData.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
+
+                return pagedReponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"BranchService (GetBranchesDeleted)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<BranchVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
+            }
+        }
+        public async Task<ExecutedResult<BranchVm>> GetBranchById(long Id, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<BranchVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                var returnData = await _branchRepository.GetBranchById(Id);
+                if (returnData == null)
+                {
+                    return new ExecutedResult<BranchVm>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+                }
+                return new ExecutedResult<BranchVm>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = returnData };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"BranchService (GetBranchById)=====>{ex}");
+                return new ExecutedResult<BranchVm>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+        public async Task<ExecutedResult<BranchVm>> GetBranchByName(string BranchName, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<BranchVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                var returnData = await _branchRepository.GetBranchByName(BranchName, accessUser.data.CompanyId);
+                if (returnData == null)
+                {
+                    return new ExecutedResult<BranchVm>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+                }
+                return new ExecutedResult<BranchVm>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = returnData };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"BranchService (GetBranchByName)=====>{ex}");
+                return new ExecutedResult<BranchVm>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
     }
 }

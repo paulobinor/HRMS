@@ -189,12 +189,12 @@ namespace hrms_be_backend_business.Logic
 
                                 string unitName = serviceDetails.Rows[row][0].ToString();
                                 var hod = await _hodRepository.GetHODByName(serviceDetails.Rows[row][1].ToString());
-                                var dept = await _departmentRepository.GetDepartmentByName(serviceDetails.Rows[row][2].ToString());
+                               // var dept = await _departmentRepository.GetDepartmentByName(serviceDetails.Rows[row][2].ToString(),requester.);
                                 var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][3].ToString());
 
 
                                 long HodID = hod.HodID;
-                                long DeptID = dept.DeptId;
+                               // long DeptID = dept.DeptId;
                                 long companyID = company.CompanyId;
 
 
@@ -202,7 +202,7 @@ namespace hrms_be_backend_business.Logic
                                 {
                                     UnitName = unitName,
                                     
-                                    DeptId = DeptID,
+                                  //  DeptId = DeptID,
                                     CompanyId = companyID
                                     
 

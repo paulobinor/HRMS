@@ -290,3 +290,25 @@ Error Number:207,State:1,Class:16
 [2023-10-20 10:34:33.018 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api) in 2137.4279ms
 [2023-10-20 10:34:33.021 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
 [2023-10-20 10:34:33.027 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 81 - 200 - application/json;+charset=utf-8 2257.3431ms
+[2023-10-20 17:44:45.297 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-10-20 17:44:45.871 +01:00  INF]  Now listening on: http://localhost:5008
+[2023-10-20 17:44:45.881 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-10-20 17:44:45.883 +01:00  INF]  Hosting environment: Development
+[2023-10-20 17:44:45.888 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api
+[2023-10-20 17:44:47.258 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2023-10-20 17:44:48.092 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 840.7896ms
+[2023-10-20 17:44:48.136 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2023-10-20 17:44:48.146 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12370 application/javascript;+charset=utf-8 9.7931ms
+[2023-10-20 17:44:48.227 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2023-10-20 17:44:48.990 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 762.4581ms
+[2023-10-20 17:53:31.579 +01:00  INF]  User profile is available. Using 'C:\Users\peter.omolayo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2023-10-20 17:53:32.127 +01:00  INF]  Now listening on: http://localhost:5008
+[2023-10-20 17:53:32.140 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2023-10-20 17:53:32.147 +01:00  INF]  Hosting environment: Development
+[2023-10-20 17:53:32.155 +01:00  INF]  Content root path: C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api
+[2023-10-20 17:53:33.504 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2023-10-20 17:53:34.539 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 1048.9503ms
+[2023-10-20 17:53:34.557 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2023-10-20 17:53:34.578 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12370 application/javascript;+charset=utf-8 20.0740ms
+[2023-10-20 17:53:34.774 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2023-10-20 17:53:35.774 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 999.2706ms
