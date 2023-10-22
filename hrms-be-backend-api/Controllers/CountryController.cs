@@ -1,8 +1,9 @@
 ﻿using hrms_be_backend_business.ILogic;
-using hrms_be_backend_data.Enums;
+using hrms_be_backend_common.Communication;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace hrms_be_backend_api.Controllers
 {
@@ -10,45 +11,27 @@ namespace hrms_be_backend_api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class CountryController : ControllerBase
-    {
-        private readonly ILogger<CountryController> _logger;
-        private readonly ICountyService _countyService;
+    public class CountryController : BaseController
+    {       
+        private readonly ICountryService _countryService;
 
-        public CountryController(ILogger<CountryController> logger, ICountyService countyService)
-        {
-            _logger = logger;
-            _countyService = countyService;
+        public CountryController(ICountryService countryService)
+        {           
+            _countryService = countryService;
         }
 
-        [Authorize]
-        [HttpGet("GetAllCountries")]
-        public async Task<IActionResult> GetAllCountries()
+        [HttpGet("GetCountries")]
+        [ProducesResponseType(typeof(ExecutedResult<List<CountryVm>>), 200)]
+        public async Task<IActionResult> GetCountries()
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _countyService.GetAllCountry(requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetAllCountries ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllCountries ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _countryService.GetCountries(accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-        
     }
 }

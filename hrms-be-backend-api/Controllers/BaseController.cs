@@ -11,13 +11,9 @@ namespace hrms_be_backend_api.Controllers
             ResponseCode.TryParse(result.responseCode, out ResponseCode myStatus);
             result.responseCode = result.responseCode.Length > 1 ? result.responseCode : '0' + result.responseCode;
             switch (myStatus)
-            {
-                case ResponseCode.ProcessingError:
-                    return Ok(result);
+            {               
                 case ResponseCode.AuthorizationError:
-                    return Ok(result);
-                case ResponseCode.NotFound:
-                    return Ok(result);
+                    return Unauthorized(result);               
                 default:
                     return Ok(result);
             }

@@ -1,79 +1,36 @@
 ﻿using hrms_be_backend_business.ILogic;
-using hrms_be_backend_data.Enums;
+using hrms_be_backend_common.Communication;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace hrms_be_backend_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LgaController : ControllerBase
+    [Authorize]
+    public class LgaController : BaseController
     {
-        private readonly ILogger<LgaController> _logger;
-        private readonly ILgaService _IgaService;
+        private readonly ILgaService _lgaService;
 
-        public LgaController(ILogger<LgaController> logger, ILgaService IgaService)
+        public LgaController(ILgaService lgaService)
         {
-            _logger = logger;
-            _IgaService = IgaService;
+            _lgaService = lgaService;
         }
 
-        [Authorize]
-        [HttpGet("GetAllLga")]
-        public async Task<IActionResult> GetAllState(long StateID)
+        [HttpGet("GetLgas")]
+        [ProducesResponseType(typeof(ExecutedResult<List<LgaVm>>), 200)]
+        public async Task<IActionResult> GetLgas(int CountryId)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _IgaService.GetAllLga(StateID,requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetAllState ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllState ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-        }
-
-        [Authorize]
-        [HttpGet("GetLgabyStateId")]
-        public async Task<IActionResult> GetLgabyStateId(long StateID)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _IgaService.GetLgaByStateId(StateID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetLgabyStateId ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetLgabyStateId ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _lgaService.GetLgas(CountryId, accessToken, claim, RemoteIpAddress, RemotePort));
         }
     }
 }

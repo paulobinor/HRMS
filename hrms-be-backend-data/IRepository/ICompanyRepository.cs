@@ -7,7 +7,9 @@ namespace hrms_be_backend_data.IRepository
     {
         Task<string> ProcessCompany(ProcessCompanyReq payload);
         Task<string> DeleteCompany(DeleteCompanyReq payload);
+        Task<string> ApproveCompany(ApproveCompanyReq payload);
         Task<CompanyWithTotalVm> GetCompanies(int PageNumber, int RowsOfPage);
+        Task<CompanyWithTotalVm> GetCompaniesPending(int PageNumber, int RowsOfPage);
         Task<CompanyWithTotalVm> GetCompaniesActivated(int PageNumber, int RowsOfPage);
         Task<CompanyWithTotalVm> GetCompaniesDeactivated(int PageNumber, int RowsOfPage);
         Task<CompanyWithTotalVm> GetCompaniesPublicSector(int PageNumber, int RowsOfPage);

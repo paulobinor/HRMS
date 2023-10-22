@@ -13,6 +13,7 @@
         public long CompanyID { get; set; }       
         public bool IsHR { get; set; }
         public long HodEmployeeId { get; set; }
-        public string HodEmployeeName { get; set; }        
+        public string HodEmployeeName { get; set; }
+        public DateTime DateCreated { get; set; }
     }
 }

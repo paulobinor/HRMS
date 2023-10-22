@@ -1,252 +1,116 @@
 ﻿using hrms_be_backend_business.ILogic;
-using hrms_be_backend_data.Enums;
-using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_common.Communication;
+using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace hrms_be_backend_api.Controllers
 {
 
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeeTypeController : ControllerBase
+    [Authorize]
+    public class EmployeeTypeController : BaseController
     {
-        private readonly ILogger<EmployeeTypeController> _logger;
-        private readonly IEmployeeTypeService _EmployeeTypeService;
 
-        public EmployeeTypeController(ILogger<EmployeeTypeController> logger, IEmployeeTypeService EmployeeTypeService)
+        private readonly ILogger<EmployeeTypeController> _logger;
+        private readonly IEmployeeTypeService _employeeTypeService;
+
+        public EmployeeTypeController(ILogger<EmployeeTypeController> logger, IEmployeeTypeService employeeTypeService)
         {
             _logger = logger;
-            _EmployeeTypeService = EmployeeTypeService;
+            _employeeTypeService = employeeTypeService;
         }
 
         [HttpPost("CreateEmployeeType")]
-        [Authorize]
-        public async Task<IActionResult> CreateEmployeeType([FromBody] CraeteEmployeeTypeDTO CreateDto)
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> CreateEmployeeType(CreateEmployeeTypeDto payload)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _EmployeeTypeService.CreateEmployeeType(CreateDto, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : CreateEmployeeType ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : CreateEmployeeType ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _employeeTypeService.CreateEmployeeType(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-        [HttpPost("CreateEmployeeTypeBulkUpload")]
-        [Authorize]
-        public async Task<IActionResult> CreateEmployeeTypeBulkUpload(IFormFile payload)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _EmployeeTypeService.CreateEmployeeTypeBulkUpload(payload, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : CreateEmployeeTypeBulkUpload ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : CreateEmployeeTypeBulkUpload ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-        }
-
         [HttpPost("UpdateEmployeeType")]
-        [Authorize]
-        public async Task<IActionResult> UpdateEmployeeType([FromBody] UpdateEmployeeTypeDTO updateDto)
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> UpdateEmployeeType(UpdateEmployeeTypeDto payload)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _EmployeeTypeService.UpdateEmployeeType(updateDto, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : UpdateEmployeeType ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : UpdateEmployeeType ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _employeeTypeService.UpdateEmployeeType(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
         [HttpPost("DeleteEmployeeType")]
-        [Authorize]
-        public async Task<IActionResult> DeleteEmployeeType([FromBody] DeleteEmployeeTypeDTO deleteDto)
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> DeleteEmployeeType(DeleteEmployeeTypeDto payload)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _EmployeeTypeService.DeleteEmployeeType(deleteDto, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : DeleteEmployeeType ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : DeleteEmployeeType ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _employeeTypeService.DeleteEmployeeType(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-        [Authorize]
-        [HttpGet("GetAllActiveEmployeeType")]
-        public async Task<IActionResult> GetAllActiveEmployeeType()
+        [HttpGet("GetEmployeeTypes")]
+        [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<CompanyVm>>), 200)]
+        public async Task<IActionResult> GetEmployeeTypes([FromQuery] PaginationFilter filter)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _EmployeeTypeService.GetAllActiveEmployeeType(requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetAllActiveEmployeeType ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllActiveEmployeeType ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _employeeTypeService.GetEmployeeTypes(filter, route, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-        [Authorize]
-        [HttpGet("GetAllEmployeeType")]
-        public async Task<IActionResult> GetAllEmployeeType()
+        [HttpGet("GetEmployeeTypesDeleted")]
+        [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<CompanyVm>>), 200)]
+        public async Task<IActionResult> GetEmployeeTypesDeleted([FromQuery] PaginationFilter filter)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _EmployeeTypeService.GetAllEmployeeType(requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetAllEmployeeType ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllEmployeeType ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _employeeTypeService.GetEmployeeTypesDeleted(filter, route, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-        [Authorize]
         [HttpGet("GetEmployeeTypeById")]
-        public async Task<IActionResult> GetEmployeeTypebyId(long EmployeeTypeID)
+        [ProducesResponseType(typeof(ExecutedResult<EmployeeTypeVm>), 200)]
+        public async Task<IActionResult> GetEmployeeTypeById([FromQuery] long EmployeeTypeId)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _EmployeeTypeService.GetEmployeeTypeById(EmployeeTypeID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetEmployeeTypebyId ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetEmployeeTypebyId ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _employeeTypeService.GetEmployeeTypeById(EmployeeTypeId, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-
-        [Authorize]
-        [HttpGet("GetEmployeeTypebyCompanyId")]
-        public async Task<IActionResult> GetEmployeeTypebyCompanyId(long CompanyID)
+        [HttpGet("GetEmployeeTypeByName")]
+        [ProducesResponseType(typeof(ExecutedResult<EmployeeTypeVm>), 200)]
+        public async Task<IActionResult> GetEmployeeTypeByName([FromQuery] string EmployeeTypeName)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _EmployeeTypeService.GetEmployeeTypebyCompanyId(CompanyID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetEmployeeTypebyCompanyId ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetEmployeeTypebyCompanyId ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _employeeTypeService.GetEmployeeTypeByName(EmployeeTypeName, accessToken, claim, RemoteIpAddress, RemotePort));
         }
     }
 }

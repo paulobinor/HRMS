@@ -279,6 +279,56 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
+        public async Task<ExecutedResult<string>> ApproveCompany(long CompanyId, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.Approve_Company, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }               
+                var repoPayload = new ApproveCompanyReq
+                {
+                    CompanyId = CompanyId,
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now                  
+                };
+                string repoResponse = await _companyrepository.ApproveCompany(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "ApproveCompany",
+                    payload = null,
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Deleted Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyService (ApproveCompany)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
         public async Task<PagedExcutedResult<IEnumerable<CompanyVm>>> GetCompanies(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
@@ -305,7 +355,7 @@ namespace hrms_be_backend_business.Logic
                 if (returnData.data == null)
                 {
                     return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
-                }
+                }               
 
                 totalRecords = returnData.totalRecords;
 
@@ -316,6 +366,46 @@ namespace hrms_be_backend_business.Logic
             catch (Exception ex)
             {
                 _logger.LogError($"CompanyService (GetCompanies)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
+            }
+        }
+        public async Task<PagedExcutedResult<IEnumerable<CompanyVm>>> GetCompaniesPending(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.View_Company_Details, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), checkPrivilege);
+
+                }
+                var returnData = await _companyrepository.GetCompaniesPending(filter.PageNumber, filter.PageSize);
+                if (returnData == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (returnData.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+
+                totalRecords = returnData.totalRecords;
+
+                var pagedReponse = PaginationHelper.CreatePagedReponse<CompanyVm>(returnData.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
+
+                return pagedReponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyService (GetCompaniesActivated)=====>{ex}");
                 return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
             }
         }

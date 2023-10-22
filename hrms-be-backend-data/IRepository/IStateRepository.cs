@@ -1,12 +1,9 @@
-﻿using hrms_be_backend_data.RepoPayload;
-using System.Collections;
+﻿using hrms_be_backend_data.ViewModel;
 
 namespace hrms_be_backend_data.IRepository
 {
     public  interface IStateRepository
     {
-        Task<IEnumerable<StateDTO>> GetAllState(long CountryID);
-        Task<IEnumerable> GetStateByCountryId(long CountryID);
-        Task<StateDTO> GetStateByName(string StateName);
+        Task<List<StateVm>> GetStates(int CountryId);
     }
 }

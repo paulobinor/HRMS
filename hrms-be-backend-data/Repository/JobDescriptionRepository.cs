@@ -3,6 +3,7 @@ using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Data;
@@ -13,233 +14,133 @@ namespace hrms_be_backend_data.Repository
 
     public class JobDescriptionRepository : IJobDescriptionRepository
     {
-        private string _connectionString;
         private readonly ILogger<JobDescriptionRepository> _logger;
-        private readonly IConfiguration _configuration;
+        private readonly IDapperGenericRepository _dapper;
 
-        public JobDescriptionRepository(IConfiguration configuration, ILogger<JobDescriptionRepository> logger)
+        public JobDescriptionRepository(IConfiguration configuration, ILogger<JobDescriptionRepository> logger, IDapperGenericRepository dapper)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
             _logger = logger;
-            _configuration = configuration;
+            _dapper = dapper;
         }
 
-        public async Task<dynamic> CreateJobDescription(CreateJobDescriptionDTO create, string createdbyUserEmail)
+        public async Task<string> ProcessJobDescription(ProcessJobDescriptionReq payload)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", JobDescriptionEnum.CREATE);
-                    param.Add("@JobDescriptionName", create.JobDescriptionName.Trim());
-                    param.Add("@CompanyID", create.CompanyID);
+                var param = new DynamicParameters();
+                param.Add("@JobDescriptionId", payload.JobDescriptionId);
+                param.Add("@JobDescriptionName", payload.JobDescriptionName);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+                param.Add("@IsModifield", payload.IsModifield);
 
-                    param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);
+                return await _dapper.Get<string>("sp_process_job_description", param, commandType: CommandType.StoredProcedure);
 
-                    return response;
-                }
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: CreateJobDescription(CreateJobDescriptionDTO create, string createdbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"JobDescriptionRepository -> ProcessJobDescription => {ex}");
+                return "Unable to submit this detail, kindly contact support";
             }
-        }
 
-        public async Task<dynamic> UpdateJobDescription(UpdateJobDescriptionDTO update, string updatedbyUserEmail)
+        }
+        public async Task<string> DeleteJobDescription(DeleteJobDescriptionReq payload)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", JobDescriptionEnum.UPDATE);
-                    param.Add("@JobDescriptionIDUpd", update.JobDescriptionID);
-                    param.Add("@JobDescriptionNameUpd", update.JobDescriptionName);
-                    param.Add("@CompanyIdUpd", update.CompanyID);
+                var param = new DynamicParameters();
 
-                    param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
+                param.Add("@JobDescriptionId", payload.JobDescriptionId);
+                param.Add("@DeletedComment", payload.Comment);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+                return await _dapper.Get<string>("sp_delete_job_description", param, commandType: CommandType.StoredProcedure);
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);
-
-                    return response;
-                }
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: UpdateJobDescription(UpdateJobDescriptionDTO update, string updatedbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"CompanyRepository -> DeleteJobDescription => {ex}");
+                return "Unable to submit this detail, kindly contact support";
             }
-        }
 
-        public async Task<dynamic> DeleteJobDescription(DeletedJobDescriptionDTO delete, string deletedbyUserEmail)
+        }
+        public async Task<JobDescriptionWithTotalVm> GetJobDescriptions(long CompanyId, int PageNumber, int RowsOfPage)
+        {
+            var returnData = new JobDescriptionWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@RowsOfPage", RowsOfPage);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@CompanyId", CompanyId);
+                var result = await _dapper.GetMultiple("sp_get_job_descriptions", param, gr => gr.Read<long>(), gr => gr.Read<JobDescriptionVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<JobDescriptionVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"JobDescriptionRepository -> GetJobDescriptiones => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<JobDescriptionWithTotalVm> GetJobDescriptionsDeleted(long CompanyId, int PageNumber, int RowsOfPage)
+        {
+            var returnData = new JobDescriptionWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@RowsOfPage", RowsOfPage);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@CompanyId", CompanyId);
+                var result = await _dapper.GetMultiple("sp_get_job_description_deleted", param, gr => gr.Read<long>(), gr => gr.Read<JobDescriptionVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<JobDescriptionVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"JobDescriptionRepository -> GetJobDescriptionesDeleted => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<JobDescriptionVm> GetJobDescriptionById(long Id)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", JobDescriptionEnum.DELETE);
-                    param.Add("@JobDescriptionIDDelete", Convert.ToInt32(delete.JobDescriptionID));
-                    param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
-                    param.Add("@Reasons_For_Deleting", delete.Reasons_For_Delete == null ? "" : delete.Reasons_For_Delete.ToString().Trim());
-
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);
-
-                    return response;
-                }
+                var param = new DynamicParameters();
+                param.Add("@Id", Id);
+                return await _dapper.Get<JobDescriptionVm>("sp_get_job_description_by_id", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: DeleteJobDescription(DeletedJobDescriptionDTO delete, string deletedbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"JobDescriptionRepository -> GetJobDescriptionById => {ex}");
+                return new JobDescriptionVm();
             }
         }
-
-        public async Task<IEnumerable<JobDescriptionDTO>> GetAllActiveJobDescription()
+        public async Task<JobDescriptionVm> GetJobDescriptionByName(string JobDescriptionName, long CompanyId)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", JobDescriptionEnum.GETALLACTIVE);
-
-                    var JobDescriptionDetails = await _dapper.QueryAsync<JobDescriptionDTO>(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);
-
-                    return JobDescriptionDetails;
-                }
+                var param = new DynamicParameters();
+                param.Add("@JobDescriptionName", JobDescriptionName);
+                param.Add("@CompanyId", CompanyId);
+                return await _dapper.Get<JobDescriptionVm>("sp_get_job_description_by_name", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllActiveJobDescription() ===>{ex.Message}");
-                throw;
+                _logger.LogError($"JobDescriptionRepository -> GetJobDescriptionByName => {ex}");
+                return new JobDescriptionVm();
             }
         }
-
-        public async Task<IEnumerable<JobDescriptionDTO>> GetAllJobDescription()
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", JobDescriptionEnum.GETALL);
-
-                    var JobDescriptionDetails = await _dapper.QueryAsync<JobDescriptionDTO>(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);
-
-                    return JobDescriptionDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName:GetAllJobDescription() ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<JobDescriptionDTO> GetJobDescriptionById(long JobDescriptionID)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", JobDescriptionEnum.GETBYID);
-                    param.Add("@JobDescriptionIDUpd", JobDescriptionID);
-
-                    var JobDescriptionDetails = await _dapper.QueryFirstOrDefaultAsync<JobDescriptionDTO>(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);
-
-                    return JobDescriptionDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetJobDescriptionById(long JobDescriptionID)===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<JobDescriptionDTO> GetJobDescriptionByName(string JobDescriptionName)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", JobDescriptionEnum.GETBYEMAIL);
-                    param.Add("@JobDescriptionNameGet", JobDescriptionName);
-
-                    var JobDescriptionDetails = await _dapper.QueryFirstOrDefaultAsync<JobDescriptionDTO>(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);
-
-                    return JobDescriptionDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName:  GetJobDescriptionByName(string JobDescriptionName) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<JobDescriptionDTO> GetJobDescriptionByCompany(string JobDescriptionName, int companyId)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", JobDescriptionEnum.GETCOPANY);
-                    param.Add("@JobDescriptionNameGet", JobDescriptionName);
-                    param.Add("@CompanyIdGet", companyId);
-
-                    var JobDescriptionDetails = await _dapper.QueryFirstOrDefaultAsync<JobDescriptionDTO>(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);
-
-                    return JobDescriptionDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName:  GetJobDescriptionByName(string JobDescriptionName) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<IEnumerable<JobDescriptionDTO>> GetAllJobDescriptionCompanyId(long JobDescriptionID)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", JobDescriptionEnum.GETBYCOPANYID);
-                    param.Add("@CompanyIdGet", JobDescriptionID);
-
-                    var JobDescriptionDetails = await _dapper.QueryAsync<JobDescriptionDTO>(ApplicationConstant.Sp_JobDescription, param: param, commandType: CommandType.StoredProcedure);
-
-                    return JobDescriptionDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllJobDescriptionCompanyId(long JobDescriptionID) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-
-
     }
 }
 

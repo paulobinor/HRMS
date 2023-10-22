@@ -12,6 +12,7 @@ namespace hrms_be_backend_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DepartmentController : BaseController
     {
         private readonly ILogger<DepartmentController> _logger;

@@ -1,9 +1,6 @@
 ﻿using hrms_be_backend_business.ILogic;
-using hrms_be_backend_business.Logic;
 using hrms_be_backend_common.Communication;
 using hrms_be_backend_common.DTO;
-using hrms_be_backend_data.Enums;
-using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +11,7 @@ namespace hrms_be_backend_api.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BranchController : BaseController
     {
         private readonly ILogger<BranchController> _logger;

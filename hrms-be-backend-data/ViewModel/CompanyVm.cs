@@ -18,6 +18,7 @@
         public string ContactPhone { get; set;}
         public bool IsPublicSector { get; set;}
         public DateTime DateCreated { get; set;}
+        public bool IsApproved { get; set; }
     }
     public class CompanyFullVm
     {

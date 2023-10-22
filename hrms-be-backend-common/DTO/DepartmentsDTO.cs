@@ -4,7 +4,7 @@
     {       
         public string DepartmentName { get; set; }
         public bool IsHr { get; set; }
-        public long HodEmployeeId { get; set; }
+        public long? HodEmployeeId { get; set; }
     }
 
     public class UpdateDepartmentDto
@@ -12,7 +12,7 @@
         public long DepartmentId { get; set; }
         public string DepartmentName { get; set; }
         public bool IsHr { get; set; }
-        public long HodEmployeeId { get; set; }
+        public long? HodEmployeeId { get; set; }
     }
 
     public class DeleteDepartmentDto

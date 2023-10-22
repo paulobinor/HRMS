@@ -3,6 +3,7 @@ using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Data;
@@ -12,60 +13,27 @@ namespace hrms_be_backend_data.Repository
 {
     public class CountryRepository : ICountryRepository
     {
-        private string _connectionString;
         private readonly ILogger<CountryRepository> _logger;
-        private readonly IConfiguration _configuration;
+        private readonly IDapperGenericRepository _dapper;
 
-        public CountryRepository(IConfiguration configuration, ILogger<CountryRepository> logger)
+        public CountryRepository(IDapperGenericRepository dapper, ILogger<CountryRepository> logger)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
             _logger = logger;
-            _configuration = configuration;
+            _dapper = dapper;
         }
-
-        public async Task<IEnumerable<CountryDTO>> GetAllCountries()
+       
+        public async Task<List<CountryVm>> GetCountries()
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", CountryStateLgaEnum.GETALL);
-
-                    var CountryDetails = await _dapper.QueryAsync<CountryDTO>(ApplicationConstant.Sp_get_countries, param: param, commandType: CommandType.StoredProcedure);
-
-                    return CountryDetails;
-                }
+                var param = new DynamicParameters();              
+                return await _dapper.GetAll<CountryVm>("sp_get_countries", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllCountries() ===>{ex.Message}");
-                throw;
+                _logger.LogError($"CountryRepository -> GetCountries => {ex}");
+                return new List<CountryVm>();
             }
-        }
-
-        public async Task<CountryDTO> GetCountryByName(string CountryName)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", CountryStateLgaEnum.GETBYNAME);
-                    param.Add("@CountryNameGet", CountryName);
-
-                    var CountryDetails = await _dapper.QueryFirstOrDefaultAsync<CountryDTO>(ApplicationConstant.Sp_get_countries, param: param, commandType: CommandType.StoredProcedure);
-
-                    return CountryDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName:  GetCountryByName(string CountryName) ===>{ex.Message}");
-                throw;
-            }
-        }
+        }        
     }
 }

@@ -1,247 +1,142 @@
 ﻿using Dapper;
-using hrms_be_backend_data.AppConstants;
-using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Data;
-using System.Data.SqlClient;
 
 namespace hrms_be_backend_data.Repository
 {
     public class GradeRepository : IGradeRepository
     {
-        private string _connectionString;
         private readonly ILogger<GradeRepository> _logger;
-        private readonly IConfiguration _configuration;
+        private readonly IDapperGenericRepository _dapper;
 
-        public GradeRepository(IConfiguration configuration, ILogger<GradeRepository> logger)
+        public GradeRepository(IConfiguration configuration, ILogger<GradeRepository> logger, IDapperGenericRepository dapper)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
             _logger = logger;
-            _configuration = configuration;
+            _dapper = dapper;
         }
 
-        public async Task<dynamic> CreateGrade(CreateGradeDTO create, string createdbyUserEmail)
+        public async Task<string> ProcessGrade(ProcessGradeReq payload)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", GradeEnum.CREATE);
-                    param.Add("@GradeName", create.GradeName.Trim());
-                    //param.Add("@NumberOfVacationDays", create.NumberOfVacationDays);
-                    //param.Add("@NumberOfVacationSplit", create.NumberOfVacationSplit);
-                    param.Add("@CompanyID", create.CompanyID);
+                var param = new DynamicParameters();
 
-                    param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Grade, param: param, commandType: CommandType.StoredProcedure);
+                param.Add("@GradeId", payload.GradeId);
+                param.Add("@GradeName", payload.GradeName);              
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+                param.Add("@IsModifield", payload.IsModifield);
 
-                    return response;
-                }
+                return await _dapper.Get<string>("sp_process_grade", param, commandType: CommandType.StoredProcedure);
+
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: CreateGrade(CreateGradeDTO create, string createdbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"GradeRepository -> ProcessGrade => {ex}");
+                return "Unable to submit this detail, kindly contact support";
             }
-        }
 
-        public async Task<dynamic> UpdateGrade(UpdateGradeDTO update, string updatedbyUserEmail)
+        }
+        public async Task<string> DeleteGrade(DeleteGradeReq payload)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", GradeEnum.UPDATE);
-                    param.Add("@GradeIDUpd", update.GradeID);
-                    param.Add("@GradeNameUpd", update.GradeName);
-                    //param.Add("@NumberOfVacationDaysUpd", update.NumberOfVacationDays);
-                    //param.Add("@NumberOfVacationSplitUpd", update.NumberOfVacationSplit);
-                    param.Add("@CompanyIdUpd", update.CompanyID);
+                var param = new DynamicParameters();
 
-                    param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
+                param.Add("@GradeId", payload.GradeId);
+                param.Add("@DeletedComment", payload.Comment);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+                return await _dapper.Get<string>("sp_delete_grade", param, commandType: CommandType.StoredProcedure);
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Grade, param: param, commandType: CommandType.StoredProcedure);
-
-                    return response;
-                }
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: UpdateGrade(UpdateGradeDTO update, string updatedbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"CompanyRepository -> DeleteGrade => {ex}");
+                return "Unable to submit this detail, kindly contact support";
             }
-        }
 
-        public async Task<dynamic> DeleteGrade(DeleteGradeDTO delete, string deletedbyUserEmail)
+        }
+        public async Task<GradeWithTotalVm> GetGrades(long CompanyId, int PageNumber, int RowsOfPage)
+        {
+            var returnData = new GradeWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@RowsOfPage", RowsOfPage);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@CompanyId", CompanyId);
+                var result = await _dapper.GetMultiple("sp_get_grades", param, gr => gr.Read<long>(), gr => gr.Read<GradeVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<GradeVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"GradeRepository -> GetGradees => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<GradeWithTotalVm> GetGradesDeleted(long CompanyId, int PageNumber, int RowsOfPage)
+        {
+            var returnData = new GradeWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@RowsOfPage", RowsOfPage);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@CompanyId", CompanyId);
+                var result = await _dapper.GetMultiple("sp_get_grades_deleted", param, gr => gr.Read<long>(), gr => gr.Read<GradeVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<GradeVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"GradeRepository -> GetGradeesDeleted => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<GradeVm> GetGradeById(long Id)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", GradeEnum.DELETE);
-                    param.Add("@GradeIDDelete", Convert.ToInt32(delete.GradeID));
-                    param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
-                    param.Add("@Reasons_For_Deleting", delete.Reasons_For_Delete == null ? "" : delete.Reasons_For_Delete.ToString().Trim());
-
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Grade, param: param, commandType: CommandType.StoredProcedure);
-
-                    return response;
-                }
+                var param = new DynamicParameters();
+                param.Add("@Id", Id);
+                return await _dapper.Get<GradeVm>("sp_get_grade_by_id", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: DeleteGrade(DeleteGradeDTO delete, string deletedbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"GradeRepository -> GetGradeById => {ex}");
+                return new GradeVm();
             }
         }
-
-        public async Task<IEnumerable<GradeDTO>> GetAllActiveGrade()
+        public async Task<GradeVm> GetGradeByName(string GradeName, long CompanyId)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", GradeEnum.GETALLACTIVE);
-
-                    var GradeDetails = await _dapper.QueryAsync<GradeDTO>(ApplicationConstant.Sp_Grade, param: param, commandType: CommandType.StoredProcedure);
-
-                    return GradeDetails;
-                }
+                var param = new DynamicParameters();
+                param.Add("@GradeName", GradeName);
+                param.Add("@CompanyId", CompanyId);
+                return await _dapper.Get<GradeVm>("sp_get_grade_by_name", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllActiveGrade()===>{ex.Message}");
-                throw;
+                _logger.LogError($"GradeRepository -> GetGradeByName => {ex}");
+                return new GradeVm();
             }
         }
-
-        public async Task<IEnumerable<GradeDTO>> GetAllGrade()
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", GradeEnum.GETALL);
-
-                    var GradeDetails = await _dapper.QueryAsync<GradeDTO>(ApplicationConstant.Sp_Grade, param: param, commandType: CommandType.StoredProcedure);
-
-                    return GradeDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName:GetAllGrade() ===>{ex.Message}");
-                throw;
-            }
-        }
-
-
-        public async Task<GradeDTO> GetGradeById(long GradeID)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", GradeEnum.GETBYID);
-                    param.Add("@GradeIDGet", GradeID);
-
-                    var GradeDetails = await _dapper.QueryFirstOrDefaultAsync<GradeDTO>(ApplicationConstant.Sp_Grade, param: param, commandType: CommandType.StoredProcedure);
-
-                    return GradeDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetGradeById(long GradeID)===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<GradeDTO> GetGradeByName(string GradeName)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", GradeEnum.GETBYEMAIL);
-                    param.Add("@GradeNameGet", GradeName);
-
-                    var GradeDetails = await _dapper.QueryFirstOrDefaultAsync<GradeDTO>(ApplicationConstant.Sp_Grade, param: param, commandType: CommandType.StoredProcedure);
-
-                    return GradeDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName:  GetGradeByName(string GradeName) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<GradeDTO> GetGradeByCompany(string GradeName, int companyId)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", GradeEnum.GETBYCOMPANY);
-                    param.Add("@GradeNameGet", GradeName);
-                    param.Add("@CompanyIdGet", companyId);
-
-                    var GradeDetails = await _dapper.QueryFirstOrDefaultAsync<GradeDTO>(ApplicationConstant.Sp_Grade, param: param, commandType: CommandType.StoredProcedure);
-
-                    return GradeDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName:  GetGradeByName(string GradeName) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<IEnumerable<GradeDTO>> GetAllGradeCompanyId(long CompanyId)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", GradeEnum.GETBYCOMPANYID);
-                    param.Add("@CompanyIdGet", CompanyId);
-
-                    var GradeDetails = await _dapper.QueryAsync<GradeDTO>(ApplicationConstant.Sp_Grade, param: param, commandType: CommandType.StoredProcedure);
-
-                    return GradeDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllGradeCompanyId(long GradeID) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-
     }
 }

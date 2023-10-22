@@ -16,5 +16,6 @@
         public string LGAName { get; set;}
         public int StateID { get; set;}
         public string StateName { get; set;}
+        public DateTime DateCreated { get; set;}
     }
 }

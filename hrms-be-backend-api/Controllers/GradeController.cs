@@ -1,254 +1,114 @@
 ﻿using hrms_be_backend_business.ILogic;
-using hrms_be_backend_data.Enums;
-using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_common.Communication;
+using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace hrms_be_backend_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GradeController : ControllerBase
+    [Authorize]
+    public class GradeController : BaseController
     {
         private readonly ILogger<GradeController> _logger;
-        private readonly IGradeService _GradeService;
+        private readonly IGradeService _gradeService;
 
-        public GradeController(ILogger<GradeController> logger, IGradeService GradeService)
+        public GradeController(ILogger<GradeController> logger, IGradeService gradeService)
         {
             _logger = logger;
-            _GradeService = GradeService;
+            _gradeService = gradeService;
         }
-
 
         [HttpPost("CreateGrade")]
-        [Authorize]
-        public async Task<IActionResult> CreateGrade([FromBody] CreateGradeDTO CreateDto)
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> CreateGrade(CreateGradeDto payload)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _GradeService.CreateGrade(CreateDto, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : CreateGrade ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : CreateGrade ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _gradeService.CreateGrade(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-        [HttpPost("CreateGradeBulkUpload/{companyID}")]
-        [Authorize]
-        public async Task<IActionResult> CreateGradeBulkUpload(IFormFile payload , long companyID)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _GradeService.CreateGradeBulkUpload(payload, companyID ,requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : CreateGradeBulkUpload ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : CreateGradeBulkUpload ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-        }
-
         [HttpPost("UpdateGrade")]
-        [Authorize]
-        public async Task<IActionResult> UpdateGrade([FromBody] UpdateGradeDTO updateDto)
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> UpdateGrade(UpdateGradeDto payload)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _GradeService.UpdateGrade(updateDto, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : UpdateEmployeeType ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : UpdateEmployeeType ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _gradeService.UpdateGrade(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
         [HttpPost("DeleteGrade")]
-        [Authorize]
-        public async Task<IActionResult> DeleteGrade([FromBody] DeleteGradeDTO deleteDto)
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> DeleteGrade(DeleteGradeDto payload)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _GradeService.DeleteGrade(deleteDto, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : DeleteGrade ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : DeleteGrade ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _gradeService.DeleteGrade(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-        [Authorize]
-        [HttpGet("GetAllActiveGrade")]
-        public async Task<IActionResult> GetAllActiveGrade()
+        [HttpGet("GetGrades")]
+        [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<CompanyVm>>), 200)]
+        public async Task<IActionResult> GetGrades([FromQuery] PaginationFilter filter)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _GradeService.GetAllActiveGrade(requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetAllActiveGrade ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllActiveGrade ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _gradeService.GetGrades(filter, route, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-        [Authorize]
-        [HttpGet("GetAllGrade")]
-        public async Task<IActionResult> GetAllGrade()
+        [HttpGet("GetGradesDeleted")]
+        [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<CompanyVm>>), 200)]
+        public async Task<IActionResult> GetGradesDeleted([FromQuery] PaginationFilter filter)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _GradeService.GetAllGrade(requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetAllGrade ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllGrade ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _gradeService.GetGradesDeleted(filter, route, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-
-        [Authorize]
         [HttpGet("GetGradeById")]
-        public async Task<IActionResult> GetGradebyId(long GradeID)
+        [ProducesResponseType(typeof(ExecutedResult<GradeVm>), 200)]
+        public async Task<IActionResult> GetGradeById([FromQuery] long GradeId)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _GradeService.GetGradeById(GradeID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetGradebyId ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetGradebyId ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _gradeService.GetGradeById(GradeId, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-
-        [Authorize]
-        [HttpGet("GetGradebyCompanyId")]
-        public async Task<IActionResult> GetGradebyCompanyId(long CompanyID)
+        [HttpGet("GetGradeByName")]
+        [ProducesResponseType(typeof(ExecutedResult<GradeVm>), 200)]
+        public async Task<IActionResult> GetGradeByName([FromQuery] string GradeName)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _GradeService.GetGradebyCompanyId(CompanyID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetGradebyCompanyId ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetGradebyCompanyId ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _gradeService.GetGradeByName(GradeName, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
     }
 }
