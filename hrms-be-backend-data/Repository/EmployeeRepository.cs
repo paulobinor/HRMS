@@ -221,6 +221,30 @@ namespace hrms_be_backend_data.Repository
                 return new EmployeeFullVm();
             }
         }
+        public async Task<int> AddEmployeeBulk(DataTable dataTable, RequesterInfo requester, long currentStaffCount, int listCount, long companyID)
+        {
+            try
+            {
+                var param = new
+                {
+                    DateCreated = DateTime.Now,
+                    CreatedBy = requester.Username,
+                    UserID = requester.UserId,
+                    CurrentStaffCount = currentStaffCount,
+                    Count = listCount,
+                    CompanyID = companyID,
+                    Users = dataTable.AsTableValuedParameter("UserType"),
+                };
+                var resp = await _dapper.BulkInsert<int>(param, "sp_CreateEmployeeBulk");
+                return resp;
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: AddUserBulk(AddEmployeeBulk user) ===>{ex.Message}");
+                throw;
+            }
+        }
         public async Task<EmployeeFullVm> GetEmployeeByUserId(long UserId)
         {
             try

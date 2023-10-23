@@ -8,7 +8,8 @@
         public DateTime DOB { get; set; }
         public string PersonalEmail { get; set; }
         public string OfficialEmail { get; set; }
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } 
+        public long GradeId { get; set; }
         public long EmploymentStatusId { get; set; }
         public long BranchId { get; set; }
         public long EmployeeTypeId { get; set; }

@@ -11,7 +11,7 @@ namespace hrms_be_backend_data.RepoPayload
         public string DepartmentName { get; set; }
         //public string DepartmentMail { get; set; }
        
-        public long HODUserId { get; set; }
+        public long HodEmployeeId { get; set; }
         public string HODName { get; set; }
 
 
