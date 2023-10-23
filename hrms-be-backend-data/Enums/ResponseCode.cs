@@ -28,5 +28,7 @@ namespace hrms_be_backend_data.Enums
         InvalidApprovalStatus = 10,
         [Description("No privilege")]
         NoPrivilege = 11,
+        [Description("You are not aunthenticated")]
+        NotAuthenticated = 12,
     }
 }

@@ -3,6 +3,7 @@
     public class CreateUnitDto
     {
         public string UnitName { get; set; }
+        public long DepartmentId { get; set; }
         public long? UnitHeadEmployeeId { get; set; }
     }
 
@@ -10,6 +11,7 @@
     {
         public long UnitId { get; set; }
         public string UnitName { get; set; }
+        public long DepartmentId { get; set; }
         public long? UnitHeadEmployeeId { get; set; }
     }
 

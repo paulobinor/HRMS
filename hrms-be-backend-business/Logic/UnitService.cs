@@ -71,6 +71,11 @@ namespace hrms_be_backend_business.Logic
                     isModelStateValidate = false;
                     validationMessage += "Unit Name is required";
                 }
+                if (payload.DepartmentId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "DepartmentId is required";
+                }
 
                 if (!isModelStateValidate)
                 {
@@ -81,7 +86,8 @@ namespace hrms_be_backend_business.Logic
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
-                    UnitName = payload.UnitName,                 
+                    UnitName = payload.UnitName,   
+                    DepartmentId = payload.DepartmentId,
                     UnitHeadEmployeeId = payload.UnitHeadEmployeeId,
                     IsModifield = false,
                 };
@@ -144,7 +150,8 @@ namespace hrms_be_backend_business.Logic
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
-                    UnitName = payload.UnitName,                   
+                    UnitName = payload.UnitName,   
+                    DepartmentId = payload.DepartmentId,
                     UnitHeadEmployeeId = payload.UnitHeadEmployeeId,
                     IsModifield = true,
                     UnitId = payload.UnitId,

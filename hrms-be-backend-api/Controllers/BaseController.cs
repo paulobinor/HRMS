@@ -12,7 +12,7 @@ namespace hrms_be_backend_api.Controllers
             result.responseCode = result.responseCode.Length > 1 ? result.responseCode : '0' + result.responseCode;
             switch (myStatus)
             {               
-                case ResponseCode.AuthorizationError:
+                case ResponseCode.NotAuthenticated:
                     return Unauthorized(result);               
                 default:
                     return Ok(result);

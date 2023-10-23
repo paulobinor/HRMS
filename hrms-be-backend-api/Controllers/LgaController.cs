@@ -21,7 +21,7 @@ namespace hrms_be_backend_api.Controllers
 
         [HttpGet("GetLgas")]
         [ProducesResponseType(typeof(ExecutedResult<List<LgaVm>>), 200)]
-        public async Task<IActionResult> GetLgas(int CountryId)
+        public async Task<IActionResult> GetLgas(int StateId)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -30,7 +30,7 @@ namespace hrms_be_backend_api.Controllers
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             var route = Request.Path.Value;
-            return this.CustomResponse(await _lgaService.GetLgas(CountryId, accessToken, claim, RemoteIpAddress, RemotePort));
+            return this.CustomResponse(await _lgaService.GetLgas(StateId, accessToken, claim, RemoteIpAddress, RemotePort));
         }
     }
 }

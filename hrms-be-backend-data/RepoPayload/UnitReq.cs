@@ -3,7 +3,8 @@
     public class ProcessUnitReq
     {
         public long UnitId { get; set; }
-        public string UnitName { get; set; }      
+        public string UnitName { get; set; }     
+        public long DepartmentId { get; set; }
         public long? UnitHeadEmployeeId { get; set; }
         public long CreatedByUserId { get; set; }
         public DateTime DateCreated { get; set; }

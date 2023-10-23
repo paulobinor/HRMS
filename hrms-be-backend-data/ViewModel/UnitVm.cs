@@ -12,6 +12,8 @@
         public long CompanyID { get; set; }     
         public long UnitHeadEmployeeId { get; set; }
         public string UnitHeadEmployeeName { get; set; }
+        public long DepartmentId { get; set; }
+        public string DepartmentName { get; set; }
         public DateTime DateCreated { get; set; }
     }
 }

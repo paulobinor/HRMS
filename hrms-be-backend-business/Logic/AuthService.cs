@@ -76,14 +76,14 @@ namespace hrms_be_backend_business.Logic
 
                     if (attemptCount >= _appConfig.MaxNumberOfFailedAttemptsToLogin)
                     {
-                        return new ExecutedResult<LoginResponse>() { responseMessage = $"You have exceeded number of attempts. your account has been locked. Please contact admin.", responseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'), data = null };
+                        return new ExecutedResult<LoginResponse>() { responseMessage = $"You have exceeded number of attempts. your account has been locked. Please contact admin.", responseCode = ResponseCode.NotAuthenticated.ToString("D").PadLeft(2, '0'), data = null };
                     }
                     return new ExecutedResult<LoginResponse>()
                     {
                         responseMessage = $"Invalid Password! You have made {attemptCount} unsuccessful attempt(s). " +
                                                $"The maximum retry attempts allowed is {_appConfig.MaxNumberOfFailedAttemptsToLogin}. " +
                                                $"If {_appConfig.MaxNumberOfFailedAttemptsToLogin} is exceeded, then you will be locked out of the system",
-                        responseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0'),
+                        responseCode = ResponseCode.NotAuthenticated.ToString("D").PadLeft(2, '0'),
                         data = null
                     };
 
