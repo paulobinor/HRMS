@@ -87,6 +87,16 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
+
+        public async Task<List<EmployeeTypeVm>> GetEmployeeTypes(long CompanyId)
+        {
+            string query = @"Select * from EmployeeType where CompanyId = @CompanyId and IsDeleted = @IsDeleted";
+            var param = new DynamicParameters();
+            param.Add("CompanyId", CompanyId);
+            param.Add("IsDeleted", false);
+            return await _dapper.GetAll<EmployeeTypeVm>(query, param, commandType: CommandType.Text);
+        }
+
         public async Task<EmployeeTypeWithTotalVm> GetEmployeeTypesDeleted(long CompanyId, int PageNumber, int RowsOfPage)
         {
             var returnData = new EmployeeTypeWithTotalVm();

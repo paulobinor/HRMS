@@ -45,7 +45,6 @@ namespace hrms_be_backend_business.Logic
         private readonly IJobDescriptionRepository _jobDescriptionRepository;
         private readonly IRolesRepo _rolesRepo;
         private readonly IDepartmentRepository _departmentrepository;
-        private readonly IUnitHeadRepository _unitHeadRepository;
 
         public EmployeeService(IAccountRepository accountRepository, ILogger<EmployeeService> logger,
             IEmployeeRepository EmployeeRepository, IAuditLog audit, ICompanyRepository companyrepository, IWebHostEnvironment hostEnvironment, IAuthService authService, IUriService uriService, IMailService mailService, IUnitRepository unitRepository,IUserAppModulePrivilegeRepository privilegeRepository, IGradeRepository GradeRepository, IEmployeeTypeRepository EmployeeTypeRepository, IPositionRepository PositionRepository,
@@ -278,15 +277,13 @@ namespace hrms_be_backend_business.Logic
                                 return response;
                             }
 
-                            var departmentsTask = _departmentrepository.GetAllDepartmentsbyCompanyId(companyID);
-                            var unitsTask = _unitRepository.GetAllUnitCompanyId(companyID);
-                            var gradsTask = _GradeRepository.GetAllGradeCompanyId(companyID);
-                            var employeTypesTask = _EmployeeTypeRepository.GetAllEmployeeTypeCompanyId(companyID);
-                            var employeStatusTask = _EmploymentStatusRepository.GetAllEmploymentStatusCompanyId(companyID);
+                            var departmentsTask = _departmentrepository.GetDepartmentes(companyID);
+                            var unitsTask = _unitRepository.GetUnites(companyID);
+                            var gradsTask = _GradeRepository.GetGrades(companyID);
+                            var employeTypesTask = _EmployeeTypeRepository.GetEmployeeTypes(companyID);
+                            var employeStatusTask = _EmploymentStatusRepository.GetEmploymentStatus(companyID);
                             var rolesTask = _rolesRepo.GetAllRoles();
-                            var branchesTask = _branchRepository.GetAllBranchbyCompanyId(companyID);
-
-
+                            var branchesTask = _branchRepository.GetBranches(companyID);
 
                             await Task.WhenAll(departmentsTask, unitsTask, gradsTask,
                             employeTypesTask, employeStatusTask, rolesTask, branchesTask);
@@ -408,7 +405,7 @@ namespace hrms_be_backend_business.Logic
                                     if (department == null)
                                         rowError = $"{rowError} department {departmentName} doesn't exist.";
                                     else
-                                        departmentID = department.DeptId;
+                                        departmentID = department.DepartmentID;
                                 }
 
 

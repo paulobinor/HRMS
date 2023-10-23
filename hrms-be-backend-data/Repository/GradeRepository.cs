@@ -26,7 +26,7 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
 
                 param.Add("@GradeId", payload.GradeId);
-                param.Add("@GradeName", payload.GradeName);              
+                param.Add("@GradeName", payload.GradeName);
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
                 param.Add("@DateCreated", payload.DateCreated);
                 param.Add("@IsModifield", payload.IsModifield);
@@ -84,6 +84,15 @@ namespace hrms_be_backend_data.Repository
                 return returnData;
             }
 
+        }
+
+        public async Task<List<GradeVm>> GetGrades(long CompanyId)
+        {
+            string query = "select * from grade where CompanyId = @CompanyId and IsDeleted = @IsDeleted";
+            var param = new DynamicParameters();
+            param.Add("CompanyId", CompanyId);
+            param.Add("IsDeleted", false);
+            return await _dapper.GetAll<GradeVm>("sp_get_grades", param, commandType: CommandType.StoredProcedure);
         }
         public async Task<GradeWithTotalVm> GetGradesDeleted(long CompanyId, int PageNumber, int RowsOfPage)
         {

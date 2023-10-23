@@ -7,6 +7,7 @@ namespace hrms_be_backend_data.IRepository
     {
         Task<string> ProcessDepartment(ProcessDepartmentReq payload);
         Task<string> DeleteDepartment(DeleteDepartmentReq payload);
+        Task<List<DepartmentVm>> GetDepartmentes(long CompanyId);
         Task<DepartmentWithTotalVm> GetDepartmentes(long CompanyId, int PageNumber, int RowsOfPage);
         Task<DepartmentWithTotalVm> GetDepartmentesDeleted(long CompanyId, int PageNumber, int RowsOfPage);
         Task<DepartmentVm> GetDepartmentById(long Id);
