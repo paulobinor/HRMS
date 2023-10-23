@@ -1,18 +1,18 @@
-﻿using hrms_be_backend_data.RepoPayload;
+﻿using hrms_be_backend_common.Communication;
+using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.ViewModel;
-using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace hrms_be_backend_business.ILogic
 {
     public  interface  IEmployeeTypeService
     {
-        Task<BaseResponse> CreateEmployeeType(CraeteEmployeeTypeDTO creatDto, RequesterInfo requester);
-        Task<BaseResponse> CreateEmployeeTypeBulkUpload(IFormFile payload, RequesterInfo requester);
-        Task<BaseResponse> UpdateEmployeeType(UpdateEmployeeTypeDTO updateDto, RequesterInfo requester);
-        Task<BaseResponse> DeleteEmployeeType(DeleteEmployeeTypeDTO deleteDto, RequesterInfo requester);
-        Task<BaseResponse> GetAllActiveEmployeeType(RequesterInfo requester);
-        Task<BaseResponse> GetAllEmployeeType(RequesterInfo requester);
-        Task<BaseResponse> GetEmployeeTypeById(long EmployeeTypeID, RequesterInfo requester);
-        Task<BaseResponse> GetEmployeeTypebyCompanyId(long companyId, RequesterInfo requester);
+        Task<ExecutedResult<string>> CreateEmployeeType(CreateEmployeeTypeDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<string>> UpdateEmployeeType(UpdateEmployeeTypeDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<string>> DeleteEmployeeType(DeleteEmployeeTypeDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<PagedExcutedResult<IEnumerable<EmployeeTypeVm>>> GetEmployeeTypes(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<PagedExcutedResult<IEnumerable<EmployeeTypeVm>>> GetEmployeeTypesDeleted(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<EmployeeTypeVm>> GetEmployeeTypeById(long Id, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<EmployeeTypeVm>> GetEmployeeTypeByName(string EmployeeTypeName, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
     }
 }

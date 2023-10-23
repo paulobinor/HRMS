@@ -1,18 +1,18 @@
-﻿using hrms_be_backend_data.RepoPayload;
+﻿using hrms_be_backend_common.Communication;
+using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.ViewModel;
-using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace hrms_be_backend_business.ILogic
 {
     public interface IJobDescriptionService
     {
-        Task<BaseResponse> CreateJobDescription(CreateJobDescriptionDTO creatDto, RequesterInfo requester);
-        Task<BaseResponse> CreateJobDescriptionBulkUpload(IFormFile payload, RequesterInfo requester);
-        Task<BaseResponse> UpdateJobDescription(UpdateJobDescriptionDTO updateDto, RequesterInfo requester);
-        Task<BaseResponse> DeleteJobDescription(DeletedJobDescriptionDTO deleteDto, RequesterInfo requester);
-        Task<BaseResponse> GetAllActiveJobDescription(RequesterInfo requester);
-        Task<BaseResponse> GetAllJobDescription(RequesterInfo requester);
-        Task<BaseResponse> GetJobDescriptionById(long JobDescriptionID, RequesterInfo requester);
-        Task<BaseResponse> GetJobDescriptionbyCompanyId(long companyId, RequesterInfo requester);
+        Task<ExecutedResult<string>> CreateJobDescription(CreateJobDescriptionDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<string>> UpdateJobDescription(UpdateJobDescriptionDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<string>> DeleteJobDescription(DeleteJobDescriptionDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<PagedExcutedResult<IEnumerable<JobDescriptionVm>>> GetJobDescriptions(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<PagedExcutedResult<IEnumerable<JobDescriptionVm>>> GetJobDescriptionsDeleted(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<JobDescriptionVm>> GetJobDescriptionById(long Id, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<JobDescriptionVm>> GetJobDescriptionByName(string JobDescriptionName, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
     }
 }

@@ -1,154 +1,62 @@
 ﻿using hrms_be_backend_business.ILogic;
+using hrms_be_backend_common.Communication;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.ViewModel;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 
 namespace hrms_be_backend_business.Logic
 {
     public class StateService : IStateService
     {
-        private readonly IAuditLog _audit;
-
         private readonly ILogger<StateService> _logger;
-        //private readonly IConfiguration _configuration;
+        private readonly IAuditLog _audit;
+        private readonly IConfiguration _configuration;
         private readonly IAccountRepository _accountRepository;
-        private readonly ICompanyRepository _companyrepository;
         private readonly IStateRepository _stateRepository;
+        private readonly IUserAppModulePrivilegeRepository _privilegeRepository;
+        private readonly IAuthService _authService;
+        private readonly IMailService _mailService;
+        private readonly IUriService _uriService;
 
-        public StateService(/*IConfiguration configuration*/ IAccountRepository accountRepository, ILogger<StateService> logger,
-            IStateRepository stateRepository, IAuditLog audit, ICompanyRepository companyrepository)
+        public StateService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<StateService> logger,
+            IStateRepository stateRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IUriService uriService, IUserAppModulePrivilegeRepository privilegeRepository)
         {
             _audit = audit;
 
             _logger = logger;
-            //_configuration = configuration;
+            _configuration = configuration;
             _accountRepository = accountRepository;
             _stateRepository = stateRepository;
-            _companyrepository = companyrepository;
+            _authService = authService;
+            _mailService = mailService;
+            _uriService = uriService;
+            _privilegeRepository = privilegeRepository;
         }
 
-        public async Task<BaseResponse> GetAllState(long CountryID, RequesterInfo requester)
+        public async Task<ExecutedResult<List<StateVm>>> GetStates(int CountryId, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
-
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
+                    return new ExecutedResult<List<StateVm>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
-                if (Convert.ToInt32(RoleId) != 2)
+                }
+                var returnData = await _stateRepository.GetStates(CountryId);
+                if (returnData == null)
                 {
-                    if (Convert.ToInt32(RoleId) != 3)
-                    {
-                        if (Convert.ToInt32(RoleId) != 4)
-                        {
-                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                            return response;
-                        }
-
-                    }
+                    return new ExecutedResult<List<StateVm>>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
                 }
-
-                //update action performed into audit log here
-
-                var State = await _stateRepository.GetAllState(CountryID);
-
-                if (State.Any())
-                {
-                    response.Data = State;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "State fetched successfully.";
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No State found.";
-                response.Data = null;
-                return response;
+                return new ExecutedResult<List<StateVm>>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = returnData };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetAllState() ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllState() ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> GetStateByCountryId(long CountryID, RequesterInfo requester)
-        {
-            BaseResponse response = new BaseResponse();
-
-            try
-            {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 3)
-                    {
-                        if (Convert.ToInt32(RoleId) != 4)
-                        {
-                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                            return response;
-                        }
-
-                    }
-                }
-
-                var State = await _stateRepository.GetStateByCountryId(CountryID);
-
-                if (State == null)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "State not found.";
-                    response.Data = null;
-                    return response;
-                }
-
-                //update action performed into audit log here
-
-                response.Data = State;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "State fetched successfully.";
-                return response;
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: GetStateId(int CountryID) ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetStateId(int CountryID) ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"StateService (GetStates)=====>{ex}");
+                return new ExecutedResult<List<StateVm>>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
     }

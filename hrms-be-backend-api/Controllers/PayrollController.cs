@@ -57,7 +57,7 @@ namespace hrms_be_backend_api.Controllers
 
         [HttpGet("GetPayrolls")]
         [ProducesResponseType(typeof(ExecutedResult<IEnumerable<PayrollAllView>>), 200)]
-        public async Task<IActionResult> GetPayrolls(PaginationFilter filter)
+        public async Task<IActionResult> GetPayrolls([FromQuery] PaginationFilter filter)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -71,7 +71,7 @@ namespace hrms_be_backend_api.Controllers
 
         [HttpGet("GetPayrollById")]
         [ProducesResponseType(typeof(ExecutedResult<PayrollSingleView>), 200)]
-        public async Task<IActionResult> GetPayrollById(long PayrollId)
+        public async Task<IActionResult> GetPayrollById([FromQuery] long PayrollId)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -85,7 +85,7 @@ namespace hrms_be_backend_api.Controllers
 
         [HttpGet("GetPayrollCycles")]
         [ProducesResponseType(typeof(ExecutedResult<IEnumerable<PayrollCyclesVm>>), 200)]
-        public async Task<IActionResult> GetPayrollCycles(PaginationFilter filter)
+        public async Task<IActionResult> GetPayrollCycles()
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();

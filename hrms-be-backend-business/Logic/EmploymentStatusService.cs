@@ -1,12 +1,19 @@
 ﻿using ExcelDataReader;
+using hrms_be_backend_business.Helpers;
 using hrms_be_backend_business.ILogic;
+using hrms_be_backend_common.Communication;
+using hrms_be_backend_common.DTO;
+using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System.Data;
+using System.Security.Claims;
 using System.Text;
 
 namespace hrms_be_backend_business.Logic
@@ -16,659 +23,343 @@ namespace hrms_be_backend_business.Logic
         private readonly IAuditLog _audit;
 
         private readonly ILogger<EmploymentStatusService> _logger;
-        //private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
         private readonly IAccountRepository _accountRepository;
-        private readonly ICompanyRepository _companyrepository;
-        private readonly IEmploymentStatusRepository _EmploymentStatusRepository;
+        private readonly IEmploymentStatusRepository _employmentStatusRepository;
+        private readonly IUserAppModulePrivilegeRepository _privilegeRepository;
+        private readonly IAuthService _authService;
+        private readonly IMailService _mailService;
+        private readonly IUriService _uriService;
 
-        public EmploymentStatusService(/*IConfiguration configuration*/ IAccountRepository accountRepository, ILogger<EmploymentStatusService> logger,
-            IEmploymentStatusRepository EmploymentStatusRepository, IAuditLog audit, ICompanyRepository companyrepository)
+        public EmploymentStatusService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<EmploymentStatusService> logger,
+            IEmploymentStatusRepository employmentStatusRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IUriService uriService, IUserAppModulePrivilegeRepository privilegeRepository)
         {
             _audit = audit;
 
             _logger = logger;
-            //_configuration = configuration;
+            _configuration = configuration;
             _accountRepository = accountRepository;
-            _EmploymentStatusRepository = EmploymentStatusRepository;
-            _companyrepository = companyrepository;
+            _employmentStatusRepository = employmentStatusRepository;
+            _authService = authService;
+            _mailService = mailService;
+            _uriService = uriService;
+            _privilegeRepository = privilegeRepository;
         }
 
-        public async Task<BaseResponse> CreateEmploymentStatus(CreateEmploymentStatusDTO creatDto, RequesterInfo requester)
+        public async Task<ExecutedResult<string>> CreateEmploymentStatus(CreateEmploymentStatusDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            var response = new BaseResponse();
-            try
-            {
-                string createdbyUserEmail = requester.Username;
-                string createdbyUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,createdbyUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
-
-                }
-
-                //validate JobDescription payload here
-                if (String.IsNullOrEmpty(creatDto.EmploymentStatusName) || creatDto.CompanyID <= 0)
-                //|| creatDto.DepartmentID <= 0 ||
-                //creatDto.HodID <= 0 || creatDto.UnitID <= 0)
-                {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Please ensure all required fields are entered.";
-                    return response;
-                }
-
-                var isExistsComp = await _companyrepository.GetCompanyById(creatDto.CompanyID);
-                if (null == isExistsComp)
-                {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Invalid Company suplied.";
-                    return response;
-                }
-                else
-                {
-                    if (isExistsComp.IsDeleted)
-                    {
-                        response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"The Company suplied is already deleted, EmploymentStatus cannot be created under it.";
-                        return response;
-                    }
-                }
-
-                //creatDto.EmploymentStatusName = $"{creatDto.EmploymentStatusName} ({isExistsComp.CompanyName})";
-
-                var isExists = await _EmploymentStatusRepository.GetEmpLoymentStatusByCompany(creatDto.EmploymentStatusName, (int)creatDto.CompanyID);
-                if (null != isExists)
-                {
-                    response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"EmploymentStatus with name : {creatDto.EmploymentStatusName} already exists for this Comapny.";
-                    return response;
-                }
-
-
-
-                dynamic resp = await _EmploymentStatusRepository.CreateEmploymentStatus(creatDto, createdbyUserEmail);
-                if (resp > 0)
-                {
-                    //update action performed into audit log here
-
-                    var EmploymentStatus = await _EmploymentStatusRepository.GetEmpLoymentStatusByName(creatDto.EmploymentStatusName);
-
-                    response.Data = EmploymentStatus;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "EmploymentStatus created successfully.";
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "An error occured while Creating EmploymentStatus. Please contact admin.";
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: CreateEmploymentStatus ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: CreateEmploymentStatus ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-
-        }
-
-        public async Task<BaseResponse> CreateEmploymentStatusBulkUpload(IFormFile payload, RequesterInfo requester)
-        {
-            //check if us
-            StringBuilder errorOutput = new StringBuilder();
-            var response = new BaseResponse();
-            try
-            {
-                if (payload == null || payload.Length <= 0)
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "No file for Upload";
-                    return response;
-                }
-                else if (!Path.GetExtension(payload.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "File not an Excel Format";
-                    return response;
-                }
-                else
-                {
-                    var stream = new MemoryStream();
-                    await payload.CopyToAsync(stream);
-
-                    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-                    var reader = ExcelReaderFactory.CreateReader(stream);
-                    DataSet ds = new DataSet();
-                    ds = reader.AsDataSet();
-                    reader.Close();
-
-                    int rowCount = ds.Tables[0].Rows.Count;
-                    DataTable serviceDetails = ds.Tables[0];
-
-                    int k = 0;
-                    if (ds != null && ds.Tables.Count > 0)
-                    {
-
-                        string EmploymentStatusName = serviceDetails.Rows[0][0].ToString();
-                        string CompanyName = serviceDetails.Rows[0][1].ToString();
-
-
-                        if (EmploymentStatusName != "EmployeeTypeName" || CompanyName != "CompanyName")
-                        {
-                            response.ResponseCode = "08";
-                            response.ResponseMessage = "File header not in the Right format";
-                            return response;
-                        }
-                        else
-                        {
-                            for (int row = 1; row < serviceDetails.Rows.Count; row++)
-                            {
-
-                                string employmentStatusName = serviceDetails.Rows[row][0].ToString();
-                                var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][1].ToString());
-
-
-                                long companyID = company.CompanyId;
-
-
-                                var employmentStatusprequest = new CreateEmploymentStatusDTO
-                                {
-                                    EmploymentStatusName = EmploymentStatusName,
-                                    CompanyID = companyID
-
-
-                                };
-
-                                var employmentStatusrequester = new RequesterInfo
-                                {
-                                    Username = requester.Username,
-                                    UserId = requester.UserId,
-                                    RoleId = requester.RoleId,
-                                    IpAddress = requester.IpAddress,
-                                    Port = requester.Port,
-
-
-                                };
-
-                                var resp = await CreateEmploymentStatus(employmentStatusprequest, employmentStatusrequester);
-
-
-                                if (resp.ResponseCode == "00")
-                                {
-                                    k++;
-                                }
-                                else
-                                {
-                                    errorOutput.Append($"Row {row} failed due to {resp.ResponseMessage}" + "\n");
-                                }
-                            }
-                        }
-
-                    }
-
-
-
-                    if (k == rowCount - 1)
-                    {
-                        response.ResponseCode = "00";
-                        response.ResponseMessage = "All record inserted successfully";
-
-
-
-                        return response;
-                    }
-                    else
-                    {
-                        response.ResponseCode = "02";
-                        response.ResponseMessage = errorOutput.ToString();
-
-
-
-                        return response;
-                    }
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Exception occured";
-                response.Data = null;
-
-
-
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> UpdateEmploymentStatus(UpdateEmploymentStatusDTO updateDto, RequesterInfo requester)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
-
-                }
-
-                //validate DepartmentDto payload here 
-                if (String.IsNullOrEmpty(updateDto.EmploymentStatusName) || updateDto.CompanyID <= 0)
-                {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Please ensure all required fields are entered.";
-                    return response;
-                }
-
-                var EmploymentStatus = await _EmploymentStatusRepository.GetEmpLoymentStatusById(updateDto.EmploymentStatusID);
-                if (null == EmploymentStatus)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "No record found for the specified Unit";
-                    response.Data = null;
-                    return response;
-                }
-
-                dynamic resp = await _EmploymentStatusRepository.UpdateEmploymentStatus(updateDto, requesterUserEmail);
-                if (resp > 0)
-                {
-                    //update action performed into audit log here
-
-                    var updatedEmploymentStatus = await _EmploymentStatusRepository.GetEmpLoymentStatusById(updateDto.EmploymentStatusID);
-
-                    _logger.LogInformation("EmpLocation updated successfully.");
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "EmploymentStatus updated successfully.";
-                    response.Data = updatedEmploymentStatus;
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.Exception.ToString();
-                response.ResponseMessage = "An error occurred while updating EmploymentStatus.";
-                response.Data = null;
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: UpdateEmploymentStatusDTO ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: UpdateEmploymentStatusDTO ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> DeleteEmploymentStatus(DeleteEmploymentStatusDTO deleteDto, RequesterInfo requester)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
-
-                }
-
-                if (deleteDto.EmploymentStatusID == 1)
-                {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"System Default hod cannot be deleted.";
-                    return response;
-                }
-
-                var EmploymentStatus = await _EmploymentStatusRepository.GetEmpLoymentStatusById(deleteDto.EmploymentStatusID);
-                if (null != EmploymentStatus)
-                {
-                    dynamic resp = await _EmploymentStatusRepository.DeleteEmploymentStatus(deleteDto, requesterUserEmail);
-                    if (resp > 0)
-                    {
-                        //update action performed into audit log here
-
-                        var DeletedEmploymentStatus = await _EmploymentStatusRepository.GetEmpLoymentStatusById(deleteDto.EmploymentStatusID);
-
-                        _logger.LogInformation($"Emplocation with name: {DeletedEmploymentStatus.EmploymentStatusName} Deleted successfully.");
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"EmLocation with name: {DeletedEmploymentStatus.EmploymentStatusName} Deleted successfully.";
-                        response.Data = null;
-                        return response;
-
-                    }
-                    response.ResponseCode = ResponseCode.Exception.ToString();
-                    response.ResponseMessage = "An error occurred while deleting EmploymentStatus.";
-                    response.Data = null;
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No record found for the specified EmploymentStatus";
-                response.Data = null;
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: DeletedEmploymentStatus ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: DeletedEmploymentStatus ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> GetAllActiveEmploymentStatus(RequesterInfo requester)
-        {
-            BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
                 }
-
-                //update action performed into audit log here
-
-                var EmploymentStatus = await _EmploymentStatusRepository.GetAllActiveEmploymentStatus();
-
-                if (EmploymentStatus.Any())
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(EmploymentStatusModulePrivilegeConstant.Create_Employment_Status, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
                 {
-                    response.Data = EmploymentStatus;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "EmploymentStatus fetched successfully.";
-                    return response;
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
                 }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No EmploymentStatus found.";
-                response.Data = null;
-                return response;
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.EmploymentStatusName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "EmploymentStatus Name is required";
+                }
+
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new ProcessEmploymentStatusReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    EmploymentStatusName = payload.EmploymentStatusName,
+                    IsModifield = false,
+                };
+                string repoResponse = await _employmentStatusRepository.ProcessEmploymentStatus(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "CreateEmploymentStatus",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Created Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetAllActiveEmploymentStatus() ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllActiveEmploymentStatus() ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"EmploymentStatusService (CreateEmploymentStatus)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-
-        public async Task<BaseResponse> GetAllEmploymentStatus(RequesterInfo requester)
+        public async Task<ExecutedResult<string>> UpdateEmploymentStatus(UpdateEmploymentStatusDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
                 }
-
-                //update action performed into audit log here
-
-                var EmploymentStatus = await _EmploymentStatusRepository.GetAllEmpLoymentStatus();
-
-                if (EmploymentStatus.Any())
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(EmploymentStatusModulePrivilegeConstant.Update_Employment_Status, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
                 {
-                    response.Data = EmploymentStatus;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "EmploymentStatus fetched successfully.";
-                    return response;
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
                 }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No EmploymentStatus found.";
-                response.Data = null;
-                return response;
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.EmploymentStatusName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "EmploymentStatus Name is required";
+                }
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new ProcessEmploymentStatusReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    EmploymentStatusName = payload.EmploymentStatusName,
+                    IsModifield = true,
+                    EmploymentStatusId = payload.EmploymentStatusId,
+                };
+                string repoResponse = await _employmentStatusRepository.ProcessEmploymentStatus(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "UpdateEmploymentStatus",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetAllEmpLoymentStatus() ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllEmpLoymentStatus() ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"EmploymentStatusService (UpdateEmploymentStatus)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-
-        public async Task<BaseResponse> GetEmploymentStatusbyId(long EmploymentStatusID, RequesterInfo requester)
+        public async Task<ExecutedResult<string>> DeleteEmploymentStatus(DeleteEmploymentStatusDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
                 }
-
-                var EmploymentStatus = await _EmploymentStatusRepository.GetEmpLoymentStatusById(EmploymentStatusID);
-
-                if (EmploymentStatus == null)
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(EmploymentStatusModulePrivilegeConstant.Delete_Employment_Status, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "EmploymentStatus not found.";
-                    response.Data = null;
-                    return response;
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.Comment))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Comment is required";
+                }
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new DeleteEmploymentStatusReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    Comment = payload.Comment,
+                    EmploymentStatusId = payload.EmploymentStatusId,
+                };
+                string repoResponse = await _employmentStatusRepository.DeleteEmploymentStatus(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
 
-                //update action performed into audit log here
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "DeleteEmploymentStatus",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
 
-                response.Data = EmploymentStatus;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "EmploymentStatus fetched successfully.";
-                return response;
-
+                return new ExecutedResult<string>() { responseMessage = "Deleted Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetEmpLoymentStatusById(long EmploymentStatusID) ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetEmpLoymentStatusById(long EmploymentStatusID) ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"EmploymentStatusService (DeleteEmploymentStatus)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-
-        public async Task<BaseResponse> GetEmpLoymentStatusbyCompanyId(long CompanyID, RequesterInfo requester)
+        public async Task<PagedExcutedResult<IEnumerable<EmploymentStatusVm>>> GetEmploymentStatus(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
-
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
+                    return PaginationHelper.CreatePagedReponse<EmploymentStatusVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
-
-                var EmpLoymentStatus = await _EmploymentStatusRepository.GetAllEmploymentStatusCompanyId(CompanyID);
-
-                if (EmpLoymentStatus == null)
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(EmploymentStatusModulePrivilegeConstant.View_Employment_Status, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "EmpLoymentStatus not found.";
-                    response.Data = null;
-                    return response;
+                    return PaginationHelper.CreatePagedReponse<EmploymentStatusVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), checkPrivilege);
+
+                }
+                var returnData = await _employmentStatusRepository.GetEmploymentStatus(accessUser.data.CompanyId, filter.PageNumber, filter.PageSize);
+                if (returnData == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmploymentStatusVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (returnData.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmploymentStatusVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
                 }
 
-                //update action performed into audit log here
+                totalRecords = returnData.totalRecords;
 
-                response.Data = EmpLoymentStatus;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "EmpLoymentStatus fetched successfully.";
-                return response;
+                var pagedReponse = PaginationHelper.CreatePagedReponse<EmploymentStatusVm>(returnData.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
 
+                return pagedReponse;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetAllEmploymentStatusCompanyId(long CompanyID) ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllEmploymentStatusCompanyId(long CompanyID) ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"EmploymentStatusService (GetEmploymentStatuses)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<EmploymentStatusVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
             }
         }
+        public async Task<PagedExcutedResult<IEnumerable<EmploymentStatusVm>>> GetEmploymentStatusDeleted(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmploymentStatusVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(EmploymentStatusModulePrivilegeConstant.View_Employment_Status, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return PaginationHelper.CreatePagedReponse<EmploymentStatusVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), checkPrivilege);
+
+                }
+                var returnData = await _employmentStatusRepository.GetEmploymentStatusDeleted(accessUser.data.CompanyId, filter.PageNumber, filter.PageSize);
+                if (returnData == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmploymentStatusVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (returnData.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmploymentStatusVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+
+                totalRecords = returnData.totalRecords;
+
+                var pagedReponse = PaginationHelper.CreatePagedReponse<EmploymentStatusVm>(returnData.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
+
+                return pagedReponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmploymentStatusService (GetEmploymentStatusesDeleted)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<EmploymentStatusVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
+            }
+        }
+        public async Task<ExecutedResult<EmploymentStatusVm>> GetEmploymentStatusById(long Id, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<EmploymentStatusVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                var returnData = await _employmentStatusRepository.GetEmploymentStatusById(Id);
+                if (returnData == null)
+                {
+                    return new ExecutedResult<EmploymentStatusVm>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+                }
+                return new ExecutedResult<EmploymentStatusVm>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = returnData };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmploymentStatusService (GetEmploymentStatusById)=====>{ex}");
+                return new ExecutedResult<EmploymentStatusVm>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+        public async Task<ExecutedResult<EmploymentStatusVm>> GetEmploymentStatusByName(string EmploymentStatusName, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<EmploymentStatusVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                var returnData = await _employmentStatusRepository.GetEmploymentStatusByName(EmploymentStatusName, accessUser.data.CompanyId);
+                if (returnData == null)
+                {
+                    return new ExecutedResult<EmploymentStatusVm>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+                }
+                return new ExecutedResult<EmploymentStatusVm>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = returnData };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmploymentStatusService (GetEmploymentStatusByName)=====>{ex}");
+                return new ExecutedResult<EmploymentStatusVm>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
     }
 
 }

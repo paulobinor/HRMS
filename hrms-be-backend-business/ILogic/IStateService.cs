@@ -1,10 +1,11 @@
-﻿using hrms_be_backend_data.ViewModel;
+﻿using hrms_be_backend_common.Communication;
+using hrms_be_backend_data.ViewModel;
+using System.Security.Claims;
 
 namespace hrms_be_backend_business.ILogic
 {
     public interface IStateService
     {
-        Task<BaseResponse> GetAllState(long CountryID, RequesterInfo requester);
-        Task<BaseResponse> GetStateByCountryId(long CountryID, RequesterInfo requester);
+        Task<ExecutedResult<List<StateVm>>> GetStates(int CountryId, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
     }
 }

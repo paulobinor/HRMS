@@ -43,10 +43,16 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, request.OfficialMail),
-                new Claim(ClaimTypes.Name, request.OfficialMail),
+                new Claim(ClaimTypes.SerialNumber, request.UserId.ToString()),
+                new Claim(ClaimTypes.Name, request.FullName),
                 new Claim(ClaimTypes.Sid, request.UserId.ToString()),
-                new Claim(ClaimTypes.Role, request.UserStatusName.ToString()),
-                  new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(request.Modules)),
+                new Claim(ClaimTypes.Role, request.UserStatusCode),               
+                new Claim(ClaimTypes.GivenName, request.FirstName),
+                new Claim(ClaimTypes.Surname, request.LastName),
+              
+                new Claim(ClaimTypes.GroupSid, (request.CompanyId!=null)?request.CompanyId.ToString():""),               
+                new Claim(ClaimTypes.Actor, request.UserStatusName),
+                new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(request.Modules)),
             };
 
             JwtSecurityToken token = new(
@@ -55,8 +61,6 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                 claims,
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: credentials);
-
-
 
             string encodedToken = tokenHandler.WriteToken(token);
             var refreshToken = _refreshTokenGenerator.GenerateRefreshToken();
@@ -68,7 +72,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
 
             return authResponse;
         }
-  
+
         public async Task<AuthResponse> RefreshJsonWebToken(long userId, Claim[] claims)
         {
             string Key = _configuration["Jwt:Key"];

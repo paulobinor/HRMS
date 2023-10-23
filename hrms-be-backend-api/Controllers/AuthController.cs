@@ -1,9 +1,13 @@
 ﻿using hrms_be_backend_business.ILogic;
+using hrms_be_backend_business.Logic;
+using hrms_be_backend_common.Communication;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using System.Security.Claims;
 
 namespace hrms_be_backend_api.Controllers
 {
@@ -22,13 +26,12 @@ namespace hrms_be_backend_api.Controllers
 
         [AllowAnonymous]
         [HttpPost("Login")]
+        [ProducesResponseType(typeof(ExecutedResult<LoginResponse>), 200)]
         public async Task<IActionResult> Login([FromBody] LoginModel login)
-        {
-            var response = new LoginResponse();
+        {           
             var IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var Port = Request.HttpContext.Connection.RemotePort.ToString();
-
-            return Ok(await _authService.Login(login, IpAddress, Port));
+            return this.CustomResponse(await _authService.Login(login, IpAddress, Port));           
         }
 
         [AllowAnonymous]

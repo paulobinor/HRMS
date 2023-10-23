@@ -22,4 +22,10 @@
         public long CreatedByUserId { get; set; }
         public DateTime DateCreated { get; set; }       
     }
+    public class ApproveCompanyReq
+    {
+        public long CompanyId { get; set; }      
+        public long CreatedByUserId { get; set; }
+        public DateTime DateCreated { get; set; }
+    }
 }

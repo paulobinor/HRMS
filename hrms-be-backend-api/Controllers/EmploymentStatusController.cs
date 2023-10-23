@@ -1,251 +1,116 @@
 ﻿using hrms_be_backend_business.ILogic;
+using hrms_be_backend_common.Communication;
+using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace hrms_be_backend_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmploymentStatusController : ControllerBase
+    [Authorize]
+    public class EmploymentStatusController : BaseController
     {
         private readonly ILogger<EmploymentStatusController> _logger;
-        private readonly IEmploymentStatusService _EmploymentStatusService;
+        private readonly IEmploymentStatusService _employmentStatusService;
 
-        public EmploymentStatusController(ILogger<EmploymentStatusController> logger, IEmploymentStatusService EmploymentStatusService)
+        public EmploymentStatusController(ILogger<EmploymentStatusController> logger, IEmploymentStatusService employmentStatusService)
         {
             _logger = logger;
-            _EmploymentStatusService = EmploymentStatusService;
+            _employmentStatusService = employmentStatusService;
         }
 
-        [HttpPost("CreateEmpLoymentStatus")]
-        [Authorize]
-        public async Task<IActionResult> CreateEmpLoymentStatus([FromBody] CreateEmploymentStatusDTO EmpLoymentStatusDto)
+        [HttpPost("CreateEmploymentStatus")]
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> CreateEmploymentStatus(CreateEmploymentStatusDto payload)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _EmploymentStatusService.CreateEmploymentStatus(EmpLoymentStatusDto, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : CreateEmpLoymentStatus ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : CreateEmpLoymentStatus ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _employmentStatusService.CreateEmploymentStatus(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-        [HttpPost("CreateEmpLoymentStatusBulkUpload")]
-        [Authorize]
-        public async Task<IActionResult> CreateEmpLoymentStatusBulkUpload(IFormFile payload)
+        [HttpPost("UpdateEmploymentStatus")]
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> UpdateEmploymentStatus(UpdateEmploymentStatusDto payload)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _EmploymentStatusService.CreateEmploymentStatusBulkUpload(payload, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : CreateEmployeeTypeBulkUpload ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : CreateEmployeeTypeBulkUpload ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _employmentStatusService.UpdateEmploymentStatus(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-        [HttpPost("UpdateEmpLoymentStatus")]
-        [Authorize]
-        public async Task<IActionResult> UpdateEmpLoymentStatus([FromBody] UpdateEmploymentStatusDTO updateDto)
+        [HttpPost("DeleteEmploymentStatus")]
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> DeleteEmploymentStatus(DeleteEmploymentStatusDto payload)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _EmploymentStatusService.UpdateEmploymentStatus(updateDto, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : UpdateEmpLoymentStatus ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : UpdateEmpLoymentStatus ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _employmentStatusService.DeleteEmploymentStatus(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-        [HttpPost("DeleteEmpLoymentStatus")]
-        [Authorize]
-        public async Task<IActionResult> DeleteEmpLoymentStatus([FromBody] DeleteEmploymentStatusDTO deleteDto)
+        [HttpGet("GetEmploymentStatus")]
+        [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<CompanyVm>>), 200)]
+        public async Task<IActionResult> GetEmploymentStatus([FromQuery] PaginationFilter filter)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _EmploymentStatusService.DeleteEmploymentStatus(deleteDto, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : DeleteEmpLoymentStatus ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : DeleteEmpLoymentStatus ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _employmentStatusService.GetEmploymentStatus(filter, route, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-        [Authorize]
-        [HttpGet("GetAllActiveEmpLoymentStatus")]
-        public async Task<IActionResult> GetAllActiveEmpLoymentStatus()
+        [HttpGet("GetEmploymentStatusDeleted")]
+        [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<CompanyVm>>), 200)]
+        public async Task<IActionResult> GetEmploymentStatusDeleted([FromQuery] PaginationFilter filter)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _EmploymentStatusService.GetAllActiveEmploymentStatus(requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetAllActiveEmpLoymentStatus ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllActiveEmpLoymentStatus ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _employmentStatusService.GetEmploymentStatusDeleted(filter, route, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-        [Authorize]
-        [HttpGet("GetAllEmpLoymentStatus")]
-        public async Task<IActionResult> GetAllEmpLoymentStatus()
+        [HttpGet("GetEmploymentStatusById")]
+        [ProducesResponseType(typeof(ExecutedResult<EmploymentStatusVm>), 200)]
+        public async Task<IActionResult> GetEmploymentStatusById([FromQuery] long EmploymentStatusId)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _EmploymentStatusService.GetAllEmploymentStatus(requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetAllEmpLoymentStatus ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllEmpLoymentStatus ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _employmentStatusService.GetEmploymentStatusById(EmploymentStatusId, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-        [Authorize]
-        [HttpGet("GetEmpLoymentStatusbyId")]
-        public async Task<IActionResult> GetEmpLoymentStatusbyId(long EmploymentStatusID)
+        [HttpGet("GetEmploymentStatusByName")]
+        [ProducesResponseType(typeof(ExecutedResult<EmploymentStatusVm>), 200)]
+        public async Task<IActionResult> GetEmploymentStatusByName([FromQuery] string EmploymentStatusName)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _EmploymentStatusService.GetEmploymentStatusbyId(EmploymentStatusID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetEmpLoymentStatusbyId ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetEmpLoymentStatusbyId ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _employmentStatusService.GetEmploymentStatusByName(EmploymentStatusName, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-
-        [Authorize]
-        [HttpGet("GetEmpLoymentStatusbyCompanyId")]
-        public async Task<IActionResult> GetEmpLoymentStatusbyCompanyId(long CompanyID)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _EmploymentStatusService.GetEmpLoymentStatusbyCompanyId(CompanyID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetEmpLoymentStatusbyCompanyId ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetEmpLoymentStatusbyCompanyId ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-
-        }
-
     }
 }

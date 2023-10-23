@@ -3,6 +3,7 @@ using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Data;
@@ -12,230 +13,132 @@ namespace hrms_be_backend_data.Repository
 {
     public class EmployeeTypeRepository : IEmployeeTypeRepository
     {
-        private string _connectionString;
         private readonly ILogger<EmployeeTypeRepository> _logger;
-        private readonly IConfiguration _configuration;
+        private readonly IDapperGenericRepository _dapper;
 
-        public EmployeeTypeRepository(IConfiguration configuration, ILogger<EmployeeTypeRepository> logger)
+        public EmployeeTypeRepository(IConfiguration configuration, ILogger<EmployeeTypeRepository> logger, IDapperGenericRepository dapper)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
             _logger = logger;
-            _configuration = configuration;
+            _dapper = dapper;
         }
 
-        public async Task<dynamic> CreateEmployeeType(CraeteEmployeeTypeDTO create, string createdbyUserEmail)
+        public async Task<string> ProcessEmployeeType(ProcessEmployeeTypeReq payload)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", EmployeeTypeEnum.CREATE);
-                    param.Add("@EmployeeTypeName", create.EmployeeTypeName.Trim());
-                    param.Add("@CompanyID", create.CompanyID);
+                var param = new DynamicParameters();
+                param.Add("@EmployeeTypeId", payload.EmployeeTypeId);
+                param.Add("@EmployeeTypeName", payload.EmployeeTypeName);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+                param.Add("@IsModifield", payload.IsModifield);
 
-                    param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_EmployeeType, param: param, commandType: CommandType.StoredProcedure);
+                return await _dapper.Get<string>("sp_process_employee_type", param, commandType: CommandType.StoredProcedure);
 
-                    return response;
-                }
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: CreateEmployeeType(CraeteEmployeeTypeDTO create, string createdbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"EmployeeTypeRepository -> ProcessEmployeeType => {ex}");
+                return "Unable to submit this detail, kindly contact support";
             }
-        }
 
-        public async Task<dynamic> UpdateEmployeeType(UpdateEmployeeTypeDTO update, string updatedbyUserEmail)
+        }
+        public async Task<string> DeleteEmployeeType(DeleteEmployeeTypeReq payload)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", EmployeeTypeEnum.UPDATE);
-                    param.Add("@EmployeeTypeIDUpd", update.EmployeeTypeID);
-                    param.Add("@EmployeeTypeNameUpd", update.EmployeeTypeName);
-                    param.Add("@CompanyIdUpd", update.CompanyID);
+                var param = new DynamicParameters();
 
-                    param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
+                param.Add("@EmployeeTypeId", payload.EmployeeTypeId);
+                param.Add("@DeletedComment", payload.Comment);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+                return await _dapper.Get<string>("sp_delete_employee_type", param, commandType: CommandType.StoredProcedure);
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_EmployeeType, param: param, commandType: CommandType.StoredProcedure);
-
-                    return response;
-                }
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: UpdateEmployeeType(UpdateEmployeeTypeDTO update, string updatedbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"CompanyRepository -> DeleteEmployeeType => {ex}");
+                return "Unable to submit this detail, kindly contact support";
             }
-        }
 
-        public async Task<dynamic> DeleteEmployeeType(DeleteEmployeeTypeDTO delete, string deletedbyUserEmail)
+        }
+        public async Task<EmployeeTypeWithTotalVm> GetEmployeeTypes(long CompanyId, int PageNumber, int RowsOfPage)
+        {
+            var returnData = new EmployeeTypeWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@RowsOfPage", RowsOfPage);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@CompanyId", CompanyId);
+                var result = await _dapper.GetMultiple("sp_get_employee_types", param, gr => gr.Read<long>(), gr => gr.Read<EmployeeTypeVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<EmployeeTypeVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeTypeRepository -> GetEmployeeTypees => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<EmployeeTypeWithTotalVm> GetEmployeeTypesDeleted(long CompanyId, int PageNumber, int RowsOfPage)
+        {
+            var returnData = new EmployeeTypeWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@RowsOfPage", RowsOfPage);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@CompanyId", CompanyId);
+                var result = await _dapper.GetMultiple("sp_get_employee_types_deleted", param, gr => gr.Read<long>(), gr => gr.Read<EmployeeTypeVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<EmployeeTypeVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeTypeRepository -> GetEmployeeTypeesDeleted => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<EmployeeTypeVm> GetEmployeeTypeById(long Id)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", EmployeeTypeEnum.DELETE);
-                    param.Add("@EmployeeTypeIDDelete", Convert.ToInt32(delete.EmployeeTypeID));
-                    param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
-                    param.Add("@Reasons_For_Deleting", delete.Reasons_For_Delete == null ? "" : delete.Reasons_For_Delete.ToString().Trim());
-
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_EmployeeType, param: param, commandType: CommandType.StoredProcedure);
-
-                    return response;
-                }
+                var param = new DynamicParameters();
+                param.Add("@Id", Id);
+                return await _dapper.Get<EmployeeTypeVm>("sp_get_employee_type_by_id", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: DeleteEmployeeType(DeleteEmployeeTypeDTO delete, string deletedbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"EmployeeTypeRepository -> GetEmployeeTypeById => {ex}");
+                return new EmployeeTypeVm();
             }
         }
-
-        public async Task<IEnumerable<EmployeeTypeDTO>> GetAllActiveEmployeeType()
+        public async Task<EmployeeTypeVm> GetEmployeeTypeByName(string EmployeeTypeName, long CompanyId)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", EmployeeTypeEnum.GETALLACTIVE);
-
-                    var EmployeeTypeDetails = await _dapper.QueryAsync<EmployeeTypeDTO>(ApplicationConstant.Sp_EmployeeType, param: param, commandType: CommandType.StoredProcedure);
-
-                    return EmployeeTypeDetails;
-                }
+                var param = new DynamicParameters();
+                param.Add("@EmployeeTypeName", EmployeeTypeName);
+                param.Add("@CompanyId", CompanyId);
+                return await _dapper.Get<EmployeeTypeVm>("sp_get_employee_type_by_name", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllActiveEmployeeType() ===>{ex.Message}");
-                throw;
+                _logger.LogError($"EmployeeTypeRepository -> GetEmployeeTypeByName => {ex}");
+                return new EmployeeTypeVm();
             }
         }
-
-        public async Task<IEnumerable<EmployeeTypeDTO>> GetAllEmployeeType()
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", EmployeeTypeEnum.GETALL);
-
-                    var EmployeeTypeDetails = await _dapper.QueryAsync<EmployeeTypeDTO>(ApplicationConstant.Sp_EmployeeType, param: param, commandType: CommandType.StoredProcedure);
-
-                    return EmployeeTypeDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName:GetAllActiveEmployeeType() ===>{ex.Message}");
-                throw;
-            }
-        }
-        public async Task<EmployeeTypeDTO> GetEmployeeTypeById(long EmployeeTypeID)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", EmployeeTypeEnum.GETBYID);
-                    param.Add("@EmployeeTypeIDUpd", EmployeeTypeID);
-
-                    var EmployeeTypeDetails = await _dapper.QueryFirstOrDefaultAsync<EmployeeTypeDTO>(ApplicationConstant.Sp_EmployeeType, param: param, commandType: CommandType.StoredProcedure);
-
-                    return EmployeeTypeDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetEmployeeTypeById(long EmployeeTypeID)===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<EmployeeTypeDTO> GetEmployeeTypeByName(string EmployeeTypeName)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", EmployeeTypeEnum.GETBYEMAIL);
-                    param.Add("@EmployeeTypeNameGet", EmployeeTypeName);
-
-                    var EmployeeTypeDetails = await _dapper.QueryFirstOrDefaultAsync<EmployeeTypeDTO>(ApplicationConstant.Sp_EmployeeType, param: param, commandType: CommandType.StoredProcedure);
-
-                    return EmployeeTypeDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName:  GetEmployeeTypeByName(string EmployeeTypeName) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<EmployeeTypeDTO> GetEmployeeTypeByCompany(string EmployeeTypeName, int companyId)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", EmployeeTypeEnum.GETEMPBYCOMANY);
-                    param.Add("@EmployeeTypeNameGet", EmployeeTypeName);
-                    param.Add("@CompanyIdGet", companyId);
-
-                    var EmployeeTypeDetails = await _dapper.QueryFirstOrDefaultAsync<EmployeeTypeDTO>(ApplicationConstant.Sp_EmployeeType, param: param, commandType: CommandType.StoredProcedure);
-
-                    return EmployeeTypeDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName:  GetEmployeeTypeByName(string EmployeeTypeName) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<IEnumerable<EmployeeTypeDTO>> GetAllEmployeeTypeCompanyId(long EmployeeTypeID)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", EmployeeTypeEnum.GETCompanyBYID);
-                    param.Add("@CompanyIdGet", EmployeeTypeID);
-
-                    var EmployeeTypeDetails = await _dapper.QueryAsync<EmployeeTypeDTO>(ApplicationConstant.Sp_EmployeeType, param: param, commandType: CommandType.StoredProcedure);
-
-                    return EmployeeTypeDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllEmployeeTypeCompanyId(long EmployeeTypeID) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-
     }
 }

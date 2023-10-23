@@ -3,6 +3,7 @@ using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Data;
@@ -11,233 +12,135 @@ using System.Data.SqlClient;
 namespace hrms_be_backend_data.Repository
 {
     public class UnitRepository : IUnitRepository
-    {
-        private string _connectionString;
+    {     
         private readonly ILogger<UnitRepository> _logger;
-        private readonly IConfiguration _configuration;
+        private readonly IDapperGenericRepository _dapper;
 
-        public UnitRepository(IConfiguration configuration, ILogger<UnitRepository> logger)
-        {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
-            _logger = logger;
-            _configuration = configuration;
+        public UnitRepository(IConfiguration configuration, ILogger<UnitRepository> logger, IDapperGenericRepository dapper)
+        {          
+            _logger = logger;           
+            _dapper = dapper;
         }
 
-        public async Task<dynamic> CreateUnit(CreateUnitDTO unit, string createdbyUserEmail)
+        public async Task<string> ProcessUnit(ProcessUnitReq payload)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", UnitEnum.CREATE);
-                    param.Add("@UnitName", unit.UnitName.Trim());
-                    param.Add("@UnitHeadUserId", unit.UnitHeadUserId);
-                    param.Add("@DeptId", unit.DeptId);
-                    param.Add("@CompanyId", unit.CompanyId);
+                var param = new DynamicParameters();
 
-                    param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
+                param.Add("@UnitId", payload.UnitId);
+                param.Add("@UnitName", payload.UnitName);
+                param.Add("@DepartmentId", payload.DepartmentId);
+                param.Add("@UnitHeadEmployeeId", payload.UnitHeadEmployeeId);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+                param.Add("@IsModifield", payload.IsModifield);
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Unit, param: param, commandType: CommandType.StoredProcedure);
+                return await _dapper.Get<string>("sp_process_unit", param, commandType: CommandType.StoredProcedure);
 
-                    return response;
-                }
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: CreateUnit(CreateUnitDTO unit, string createdbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"UnitRepository -> ProcessUnit => {ex}");
+                return "Unable to submit this detail, kindly contact support";
             }
-        }
 
-        public async Task<dynamic> UpdateUnit(UpdateUnitDTO unit, string updatedbyUserEmail)
+        }
+        public async Task<string> DeleteUnit(DeleteUnitReq payload)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", UnitEnum.UPDATE);
-                    param.Add("@UnitIDUpd", unit.UnitID);
-                    param.Add("@UnitHeadUserIdUpd", unit.UnitHeadUserId);
-                    param.Add("@UnitNameUpd", unit.UnitName.Trim());
-                    param.Add("@DeptIdUpd", unit.DeptId);
-                    param.Add("@CompanyIdUpd", unit.CompanyId);
-                    param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
+                var param = new DynamicParameters();
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Unit, param: param, commandType: CommandType.StoredProcedure);
+                param.Add("@UnitId", payload.UnitId);
+                param.Add("@DeletedComment", payload.Comment);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+                return await _dapper.Get<string>("sp_delete_unit", param, commandType: CommandType.StoredProcedure);
 
-                    return response;
-                }
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: UpdateUnit(UpdateUnitDTO unit, string updatedbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"CompanyRepository -> DeleteUnit => {ex}");
+                return "Unable to submit this detail, kindly contact support";
             }
-        }
 
-        public async Task<dynamic> DeleteUnit(DeleteUnitDTO unit, string deletedbyUserEmail)
+        }
+        public async Task<UnitWithTotalVm> GetUnites(long CompanyId, int PageNumber, int RowsOfPage)
+        {
+            var returnData = new UnitWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@RowsOfPage", RowsOfPage);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@CompanyId", CompanyId);
+                var result = await _dapper.GetMultiple("sp_get_units", param, gr => gr.Read<long>(), gr => gr.Read<UnitVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<UnitVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"UnitRepository -> GetUnites => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<UnitWithTotalVm> GetUnitesDeleted(long CompanyId, int PageNumber, int RowsOfPage)
+        {
+            var returnData = new UnitWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@RowsOfPage", RowsOfPage);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@CompanyId", CompanyId);
+                var result = await _dapper.GetMultiple("sp_get_units_deleted", param, gr => gr.Read<long>(), gr => gr.Read<UnitVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<UnitVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"UnitRepository -> GetUnitesDeleted => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<UnitVm> GetUnitById(long Id)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", UnitEnum.DELETE);
-                    param.Add("@UnitIDDelete", Convert.ToInt32(unit.UnitID));
-                    param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
-                    param.Add("@Reasons_For_Deleting", unit.Reasons_For_Delete == null ? "" : unit.Reasons_For_Delete.ToString().Trim());
-
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Unit, param: param, commandType: CommandType.StoredProcedure);
-
-                    return response;
-                }
+                var param = new DynamicParameters();
+                param.Add("@Id", Id);
+                return await _dapper.Get<UnitVm>("sp_get_unit_by_id", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: DeleteUnit(DeleteUnitDTO unit, string deletedbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"UnitRepository -> GetUnitById => {ex}");
+                return new UnitVm();
             }
         }
-
-        public async Task<IEnumerable<UnitDTO>> GetAllActiveUnit()
+        public async Task<UnitVm> GetUnitByName(string UnitName, long CompanyId)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", UnitEnum.GETALLACTIVE);
-
-                    var UnitDetails = await _dapper.QueryAsync<UnitDTO>(ApplicationConstant.Sp_Unit, param: param, commandType: CommandType.StoredProcedure);
-
-                    return UnitDetails;
-                }
+                var param = new DynamicParameters();
+                param.Add("@UnitName", UnitName);
+                param.Add("@CompanyId", CompanyId);
+                return await _dapper.Get<UnitVm>("sp_get_unit_by_name", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllActiveUnit() ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<IEnumerable<UnitDTO>> GetAllUnit()
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", UnitEnum.GETALL);
-
-                    var UnitDetails = await _dapper.QueryAsync<UnitDTO>(ApplicationConstant.Sp_Unit, param: param, commandType: CommandType.StoredProcedure);
-
-                    return UnitDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName:GetAllUniyt() ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<UnitDTO> GetUnitById(long UnitID)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", UnitEnum.GETBYID);
-                    param.Add("@UnitGet", UnitID);
-
-                    var UnitDetails = await _dapper.QueryFirstOrDefaultAsync<UnitDTO>(ApplicationConstant.Sp_Unit, param: param, commandType: CommandType.StoredProcedure);
-
-                    return UnitDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetUnitById(long UnitID) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<UnitDTO> GetUnitByName(string UnitName)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", UnitEnum.GETBYEMAIL);
-                    param.Add("@UnitNameGet", UnitName);
-
-                    var UnitDetails = await _dapper.QueryFirstOrDefaultAsync<UnitDTO>(ApplicationConstant.Sp_Unit, param: param, commandType: CommandType.StoredProcedure);
-
-                    return UnitDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName:  GetUnitByName(string UnitName) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<UnitDTO> GetUnitByCompany(string UnitName, int companyId)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", UnitEnum.GETCOMPANY);
-                    param.Add("@UnitNameGet", UnitName);
-                    param.Add("@CompanyIdGet", companyId);
-
-                    var UnitDetails = await _dapper.QueryFirstOrDefaultAsync<UnitDTO>(ApplicationConstant.Sp_Unit, param: param, commandType: CommandType.StoredProcedure);
-
-                    return UnitDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName:  GetUnitByName(string UnitName) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<IEnumerable<UnitDTO>> GetAllUnitCompanyId(long CompanyId)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", UnitEnum.GETCOMPANYBYID);
-                    param.Add("@CompanyIdGet", CompanyId);
-
-                    var UnitDetails = await _dapper.QueryAsync<UnitDTO>(ApplicationConstant.Sp_Unit, param: param, commandType: CommandType.StoredProcedure);
-
-                    return UnitDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllUnitCompanyId(long UnitID) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"UnitRepository -> GetUnitByName => {ex}");
+                return new UnitVm();
             }
         }
     }

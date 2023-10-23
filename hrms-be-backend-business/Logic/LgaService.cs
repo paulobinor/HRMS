@@ -1,154 +1,62 @@
 ﻿using hrms_be_backend_business.ILogic;
+using hrms_be_backend_common.Communication;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.ViewModel;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 
 namespace hrms_be_backend_business.Logic
 {
     public class LgaService : ILgaService
     {
-        private readonly IAuditLog _audit;
-
         private readonly ILogger<LgaService> _logger;
-
+        private readonly IAuditLog _audit;
+        private readonly IConfiguration _configuration;
         private readonly IAccountRepository _accountRepository;
-        private readonly ICompanyRepository _companyrepository;
         private readonly ILgaRepository _lgaRepository;
+        private readonly IUserAppModulePrivilegeRepository _privilegeRepository;
+        private readonly IAuthService _authService;
+        private readonly IMailService _mailService;
+        private readonly IUriService _uriService;
 
-        public LgaService(IAccountRepository accountRepository, ILogger<LgaService> logger,
-            ILgaRepository lgaRepository, IAuditLog audit, ICompanyRepository companyrepository)
+        public LgaService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<LgaService> logger,
+            ILgaRepository lgaRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IUriService uriService, IUserAppModulePrivilegeRepository privilegeRepository)
         {
             _audit = audit;
 
             _logger = logger;
-
+            _configuration = configuration;
             _accountRepository = accountRepository;
             _lgaRepository = lgaRepository;
-            _companyrepository = companyrepository;
+            _authService = authService;
+            _mailService = mailService;
+            _uriService = uriService;
+            _privilegeRepository = privilegeRepository;
         }
 
-        public async Task<BaseResponse> GetAllLga(long StateID, RequesterInfo requester)
+        public async Task<ExecutedResult<List<LgaVm>>> GetLgas(int StateId, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            BaseResponse response = new BaseResponse();
-
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
+                    return new ExecutedResult<List<LgaVm>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
-                if (Convert.ToInt32(RoleId) != 2)
+                }
+                var returnData = await _lgaRepository.GetLgas(StateId);
+                if (returnData == null)
                 {
-                    if (Convert.ToInt32(RoleId) != 3)
-                    {
-                        if (Convert.ToInt32(RoleId) != 4)
-                        {
-                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                            return response;
-                        }
-
-                    }
+                    return new ExecutedResult<List<LgaVm>>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
                 }
-
-                //update action performed into audit log here
-
-                var Lga = await _lgaRepository.GetAllLga(StateID);
-
-                if (Lga.Any())
-                {
-                    response.Data = Lga;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Lga fetched successfully.";
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No Lga found.";
-                response.Data = null;
-                return response;
+                return new ExecutedResult<List<LgaVm>>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = returnData };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetAllLga() ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllLga() ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> GetLgaByStateId(long StateID, RequesterInfo requester)
-        {
-            BaseResponse response = new BaseResponse();
-
-            try
-            {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 3)
-                    {
-                        if (Convert.ToInt32(RoleId) != 4)
-                        {
-                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                            return response;
-                        }
-
-                    }
-                }
-
-                var Lga = await _lgaRepository.GetLgaByStateId(StateID);
-
-                if (Lga == null)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Lga not found.";
-                    response.Data = null;
-                    return response;
-                }
-
-                //update action performed into audit log here
-
-                response.Data = Lga;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Lga fetched successfully.";
-                return response;
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: GetLgaByLgaId(int StateID) ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetLgaByLgaId(int StateID) ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"LgaService (GetLgas)=====>{ex}");
+                return new ExecutedResult<List<LgaVm>>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
     }

@@ -1,250 +1,146 @@
 ﻿using Dapper;
-using hrms_be_backend_data.AppConstants;
-using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
-using Microsoft.Extensions.Configuration;
+using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
 using System.Data;
-using System.Data.SqlClient;
 
 namespace hrms_be_backend_data.Repository
 {
     public class BranchRepository : IBranchRepository
     {
-        private string _connectionString;
+
         private readonly ILogger<BranchRepository> _logger;
-        private readonly IConfiguration _configuration;
+        private readonly IDapperGenericRepository _dapper;
 
-        public BranchRepository(IConfiguration configuration, ILogger<BranchRepository> logger)
+        public BranchRepository(IDapperGenericRepository dapper, ILogger<BranchRepository> logger)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
             _logger = logger;
-            _configuration = configuration;
+            _dapper = dapper;
         }
 
-        public async Task<dynamic> CreateBranch(CreateBranchDTO branch, string createdbyUserEmail)
+        public async Task<string> ProcessBranch(ProcessBranchReq payload)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", BranchEnum.CREATE);
-                    param.Add("@BranchName", branch.BranchName.Trim());
-                    param.Add("@Address", branch.Address.Trim());
-                    param.Add("@CountryID", branch.CountryID);
-                    param.Add("@StateID", branch.StateID);
-                    param.Add("@LgaID", branch.LgaID);
-                    param.Add("@CompanyId", branch.CompanyID);
+                var param = new DynamicParameters();
 
-                    param.Add("@Created_By_User_Email", createdbyUserEmail.Trim());
+                param.Add("@BranchId", payload.BranchId);
+                param.Add("@BranchName", payload.BranchName);
+                param.Add("@Address", payload.Address);
+                param.Add("@IsHeadQuater", payload.IsHeadQuater);
+                param.Add("@LgaId", payload.LgaId);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+                param.Add("@IsModifield", payload.IsModifield);
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Branch, param: param, commandType: CommandType.StoredProcedure);
+                return await _dapper.Get<string>("sp_process_branch", param, commandType: CommandType.StoredProcedure);
 
-                    return response;
-                }
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: CreateBranch(CreateBranchDTO branch, string createdbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"CompanyRepository -> ProcessBranch => {ex}");
+                return "Unable to submit this detail, kindly contact support";
             }
-        }
 
-        public async Task<int> UpdateBranch(UpdateBranchDTO payload, string updatedbyUserEmail)
+        }
+        public async Task<string> DeleteBranch(DeleteBranchReq payload)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", BranchEnum.UPDATE);
-                    param.Add("@BranchIDUpd", payload.BranchID);
-                    param.Add("@BranchNameUpd", payload.BranchName.Trim());
-                    param.Add("@AddressUpd", payload.Address.Trim());
-                    param.Add("@CountryIDUpd", payload.CountryID);
-                    param.Add("@StateIDUpd", payload.StateID);
-                    param.Add("@LgaIDUpd", payload.LgaID);
-                    param.Add("@CompanyIdUpd", payload.CompanyID);
+                var param = new DynamicParameters();
 
-                    param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
+                param.Add("@BranchId", payload.BranchId);
+                param.Add("@DeletedComment", payload.Comment);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+                return await _dapper.Get<string>("sp_delete_branch", param, commandType: CommandType.StoredProcedure);
 
-                    dynamic response = await _dapper.ExecuteAsync("Sp_Branch", param: param, commandType: CommandType.StoredProcedure);
-                    return response;
-                }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
-                return 0;
+                _logger.LogError($"CompanyRepository -> DeleteBranch => {ex}");
+                return "Unable to submit this detail, kindly contact support";
             }
 
         }
 
-        public async Task<dynamic> DeleteBranch(DeleteBranchDTO Dept, string deletedbyUserEmail)
+        public async Task<BranchWithTotalVm> GetBranches(long CompanyId, int PageNumber, int RowsOfPage)
+        {
+            var returnData = new BranchWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@RowsOfPage", RowsOfPage);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@CompanyId", CompanyId);
+                var result = await _dapper.GetMultiple("sp_get_branches", param, gr => gr.Read<long>(), gr => gr.Read<BranchVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<BranchVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"BranchRepository -> GetBranches => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<BranchWithTotalVm> GetBranchesDeleted(long CompanyId, int PageNumber, int RowsOfPage)
+        {
+            var returnData = new BranchWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@RowsOfPage", RowsOfPage);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@CompanyId", CompanyId);
+                var result = await _dapper.GetMultiple("sp_get_branches_deleted", param, gr => gr.Read<long>(), gr => gr.Read<BranchVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<BranchVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"BranchRepository -> GetCompaniesDeleted => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<BranchVm> GetBranchById(long Id)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", BranchEnum.DELETE);
-                    param.Add("@BranchIDDelete", Convert.ToInt32(Dept.BranchID));
-                    param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
-                    param.Add("@@Reasons_For_Deleting_Branch", Dept.Reasons_For_Delete == null ? "" : Dept.Reasons_For_Delete.ToString().Trim());
-
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_Branch, param: param, commandType: CommandType.StoredProcedure);
-
-                    return response;
-                }
+                var param = new DynamicParameters();
+                param.Add("@Id", Id);
+                return await _dapper.Get<BranchVm>("sp_get_branch_by_id", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: DeleteBranch(DeleteBranchDTO Dept, string deletedbyUserEmail) ===>{ex.Message}");
-                throw;
+                _logger.LogError($"BranchRepository -> GetBranchById => {ex}");
+                return new BranchVm();
             }
         }
-
-        public async Task<IEnumerable<BranchDTO>> GetAllActiveBranch()
+        public async Task<BranchVm> GetBranchByName(string BranchName, long CompanyId)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", BranchEnum.GETALLACTIVE);
-
-                    var BranchDetails = await _dapper.QueryAsync<BranchDTO>(ApplicationConstant.Sp_Branch, param: param, commandType: CommandType.StoredProcedure);
-
-                    return BranchDetails;
-                }
+                var param = new DynamicParameters();
+                param.Add("@BranchName", BranchName);
+                param.Add("@CompanyId", CompanyId);
+                return await _dapper.Get<BranchVm>("sp_get_branch_by_name", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllActiveBranch() ===>{ex.Message}");
-                throw;
+                _logger.LogError($"BranchRepository -> GetBranchByName => {ex}");
+                return new BranchVm();
             }
         }
-
-        public async Task<IEnumerable<BranchDTO>> GetAllBranch()
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", BranchEnum.GETALL);
-
-                    var BranchDetails = await _dapper.QueryAsync<BranchDTO>(ApplicationConstant.Sp_Branch, param: param, commandType: CommandType.StoredProcedure);
-
-                    return BranchDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllDepartments() ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<BranchDTO> GetBranchById(long BranchID)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", BranchEnum.GETBYID);
-                    param.Add("@BranchIdGet", BranchID);
-
-                    var BranchDetails = await _dapper.QueryFirstOrDefaultAsync<BranchDTO>(ApplicationConstant.Sp_Branch, param: param, commandType: CommandType.StoredProcedure);
-
-                    return BranchDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetBranchById(long BranchID) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<BranchDTO> GetBranchByName(string BranchName)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", BranchEnum.GETBYEMAIL);
-                    param.Add("@BranchNameGet", BranchName);
-
-                    var BranchDetails = await _dapper.QueryFirstOrDefaultAsync<BranchDTO>(ApplicationConstant.Sp_Branch, param: param, commandType: CommandType.StoredProcedure);
-
-                    return BranchDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetBranchByName(string BranchName) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<BranchDTO> GetBranchByCompany(string BranchName, int companyId)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", BranchEnum.GETBYCOMPANY);
-                    param.Add("@BranchNameGet", BranchName);
-                    param.Add("@CompanyIdGet", companyId);
-
-                    var BranchDetails = await _dapper.QueryFirstOrDefaultAsync<BranchDTO>(ApplicationConstant.Sp_Branch, param: param, commandType: CommandType.StoredProcedure);
-
-                    return BranchDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetBranchByName(string BranchName) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task<IEnumerable<BranchDTO>> GetAllBranchbyCompanyId(long companyId)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", BranchEnum.GETBYCOMPANYID);
-                    param.Add("@CompanyIdGet", companyId);
-
-                    var BranchDetails = await _dapper.QueryAsync<BranchDTO>(ApplicationConstant.Sp_Branch, param: param, commandType: CommandType.StoredProcedure);
-
-                    return BranchDetails;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: GetAllBranchbyCompanyId(long companyId) ===>{ex.Message}");
-                throw;
-            }
-        }
-
-
     }
 }

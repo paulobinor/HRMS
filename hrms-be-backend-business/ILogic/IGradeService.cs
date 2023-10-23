@@ -1,18 +1,20 @@
-﻿using hrms_be_backend_data.RepoPayload;
+﻿using hrms_be_backend_common.Communication;
+using hrms_be_backend_common.DTO;
+using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace hrms_be_backend_business.ILogic
 {
     public  interface IGradeService
     {
-        Task<BaseResponse> CreateGrade(CreateGradeDTO creatDto, RequesterInfo requester);
-        Task<BaseResponse> CreateGradeBulkUpload(IFormFile payload, long companyID , RequesterInfo requester);
-        Task<BaseResponse> UpdateGrade(UpdateGradeDTO updateDto, RequesterInfo requester);
-        Task<BaseResponse> DeleteGrade(DeleteGradeDTO deleteDto, RequesterInfo requester);
-        Task<BaseResponse> GetAllActiveGrade(RequesterInfo requester);
-        Task<BaseResponse> GetAllGrade(RequesterInfo requester);
-        Task<BaseResponse> GetGradeById(long GradeID, RequesterInfo requester);
-        Task<BaseResponse> GetGradebyCompanyId(long companyId, RequesterInfo requester);
+        Task<ExecutedResult<string>> CreateGrade(CreateGradeDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<string>> UpdateGrade(UpdateGradeDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<string>> DeleteGrade(DeleteGradeDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<PagedExcutedResult<IEnumerable<GradeVm>>> GetGrades(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<PagedExcutedResult<IEnumerable<GradeVm>>> GetGradesDeleted(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<GradeVm>> GetGradeById(long Id, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<GradeVm>> GetGradeByName(string GradeName, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
     }
 }

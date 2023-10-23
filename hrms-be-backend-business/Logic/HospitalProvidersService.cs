@@ -194,7 +194,7 @@ namespace hrms_be_backend_business.Logic
                             {
 
                                 string providersName = serviceDetails.Rows[row][0].ToString();
-                                var stateName = await _StateRepository.GetStateByName(serviceDetails.Rows[row][1].ToString());
+                               // var stateName = await _StateRepository.GetStateByName(serviceDetails.Rows[row][1].ToString());
                                 string town1 = serviceDetails.Rows[row][2].ToString();
                                 string town2 = serviceDetails.Rows[row][3].ToString();
                                 string address1 = serviceDetails.Rows[row][4].ToString();
@@ -202,7 +202,7 @@ namespace hrms_be_backend_business.Logic
                                 var hospitalPlanName = await _hospitalPlanRepository.GetHospitalPlanByName(serviceDetails.Rows[row][6].ToString());
                                 var company = await _companyrepository.GetCompanyByName(serviceDetails.Rows[row][7].ToString());
 
-                                long stateID = stateName.StateID;
+                                //long stateID = stateName.StateID;
                                 long hospitalPlanID = hospitalPlanName.HospitalPlanID;
                                 long companyID = company.CompanyId;
 
@@ -210,7 +210,7 @@ namespace hrms_be_backend_business.Logic
                                 var providersrequest = new CreateHospitalProvidersDTO
                                 {
                                     ProvidersNames = providersName,
-                                    StateID = stateID,
+                                   // StateID = stateID,
                                     HospitalPlanID = hospitalPlanID,
                                     CompanyID = companyID
 

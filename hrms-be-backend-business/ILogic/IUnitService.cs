@@ -1,18 +1,18 @@
-﻿using hrms_be_backend_data.RepoPayload;
+﻿using hrms_be_backend_common.Communication;
+using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.ViewModel;
-using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace hrms_be_backend_business.ILogic
 {
     public  interface IUnitService
     {
-        Task<BaseResponse> CreateUnit(CreateUnitDTO unitDto, RequesterInfo requester);
-        Task<BaseResponse> CreateUnitBulkUpload(IFormFile payload, RequesterInfo requester);
-        Task<BaseResponse> UpdateUnit(UpdateUnitDTO updateDto, RequesterInfo requester);
-        Task<BaseResponse> DeleteUnit(DeleteUnitDTO deleteDto, RequesterInfo requester);
-        Task<BaseResponse> GetAllActiveUnit(RequesterInfo requester);
-        Task<BaseResponse> GetAllUnit(RequesterInfo requester);
-        Task<BaseResponse> GetUnitById(long UnitID, RequesterInfo requester);
-        Task<BaseResponse> GetUnitbyCompanyId(long companyId, RequesterInfo requester);
+        Task<ExecutedResult<string>> CreateUnit(CreateUnitDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<string>> UpdateUnit(UpdateUnitDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<string>> DeleteUnit(DeleteUnitDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<PagedExcutedResult<IEnumerable<UnitVm>>> GetUnites(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<PagedExcutedResult<IEnumerable<UnitVm>>> GetUnitesDeleted(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<UnitVm>> GetUnitById(long Id, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<UnitVm>> GetUnitByName(string UnitName, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
     }
 }
