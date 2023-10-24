@@ -570,6 +570,7 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<IEnumerable<EarningsItemVm>>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
+       
         public async Task<ExecutedResult<EarningsItemVm>> GetEarningsItemById(long Id, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             try

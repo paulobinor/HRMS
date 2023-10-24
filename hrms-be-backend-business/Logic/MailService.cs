@@ -2,6 +2,7 @@
 using hrms_be_backend_common.Configuration;
 using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.IRepository;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
@@ -17,12 +18,15 @@ namespace hrms_be_backend_business.AppCode
         private readonly FrontendConfig _frontendConfig;
         private readonly ILogger<MailService> _logger;
         private readonly IAccountRepository _accountRepository;
-        public MailService(IOptions<SmtpConfig> smtpParameters, IOptions<FrontendConfig> frontendConfig, ILogger<MailService> logger, IAccountRepository accountRepository)
+        private readonly IHostingEnvironment _hostEnvironment;
+
+        public MailService(IOptions<SmtpConfig> smtpParameters, IOptions<FrontendConfig> frontendConfig, ILogger<MailService> logger, IAccountRepository accountRepository, IHostingEnvironment hostEnvironment)
         {
             _smtpParameters = smtpParameters.Value;
-            _frontendConfig= frontendConfig.Value;
+            _frontendConfig = frontendConfig.Value;
             _accountRepository = accountRepository;
             _logger = logger;
+            _hostEnvironment = hostEnvironment;
 
         }
         public async Task SendEmailAsync(MailRequest mailRequest, string attarchDocument)
@@ -60,7 +64,7 @@ namespace hrms_be_backend_business.AppCode
         {
             try
             {
-                var userDetails = await _accountRepository.FindUser(RelieverUserId,null,null);
+                var userDetails = await _accountRepository.FindUser(RelieverUserId, null, null);
                 var leaveRequetedBy = await _accountRepository.FindUser(leaveRequetedByUserId);
                 StringBuilder mailBody = new StringBuilder();
                 mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
@@ -163,7 +167,46 @@ namespace hrms_be_backend_business.AppCode
             }
         }
 
+        public void SendEmailApproveUser(string recipientEmail, string recipientName, string defaultPass, string subject,string token)
+        {
+            string emailAddress = _smtpParameters.EmailAddress;
+            string smtpAdress = _smtpParameters.Host;
+            int smtpPort = _smtpParameters.Port;
+            string password = _smtpParameters.Password;
 
+            string message = string.Empty;
+            MimeMessage mailBody = new MimeMessage();
+
+            MailboxAddress from = new MailboxAddress("Xpress HRMS", emailAddress);
+            mailBody.From.Add(from);
+
+            MailboxAddress to = new MailboxAddress(_smtpParameters.DisplayName, recipientEmail);
+            //MailboxAddress to = new MailboxAddress("User", sampleEmail);
+            mailBody.To.Add(to);
+
+            mailBody.Subject = subject;
+            message = ComposeApprovedUserMail(recipientName, token);
+            BodyBuilder bodyBuilder = new BodyBuilder();
+            _logger.LogInformation($"{subject} for {recipientEmail} with Message==> {message}");
+
+            bodyBuilder.HtmlBody = message;
+            mailBody.Body = bodyBuilder.ToMessageBody();
+
+            try
+            {
+                MailKit.Net.Smtp.SmtpClient client = new MailKit.Net.Smtp.SmtpClient();
+                client.Connect(smtpAdress, smtpPort);
+                client.Authenticate(emailAddress, password);
+                client.Send(mailBody);
+                client.Disconnect(true);
+                client.Dispose();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: SendEmailApproveUser ===>{ex.Message}");
+                throw;
+            }
+        }
         public void SendEmail(string recipientEmail, string firtname, string defaultPass, string subject, string wwwRootPath, string ip, string port, string appKey = null, string channel = null)
         {
             string emailAddress = _smtpParameters.EmailAddress;
@@ -235,6 +278,34 @@ namespace hrms_be_backend_business.AppCode
                 _logger.LogError($"MethodName: SendEmail ===>{ex.Message}");
                 throw;
             }
+        }
+
+
+        public string ComposeApprovedUserMail(string recipientName, string token)
+        {
+
+            string message = string.Empty;
+            string body = string.Empty;
+            string templatePath = string.Empty;
+
+            string qryStr = string.Empty;
+            string clientUrl = _frontendConfig.FrontendUrl;
+            //string clientUrl = ip;
+            //string clientUrl = $"http://{ip}:{port}/";
+            templatePath = $"{_hostEnvironment.ContentRootPath}/EmailHandler/SignUp.html";
+            qryStr = $"?k={token}";
+            message = $"Dear {recipientName}," +
+                      $"<p>You have been created Xpress HRMS. Please click on the link below to activate your account or copy this link <b> {clientUrl}{qryStr} </b> and paste on your web browser url</p>";
+
+            using (StreamReader reader = new StreamReader(Path.Combine(templatePath)))
+            {
+                body = reader.ReadToEnd();
+            }
+
+            body = body.Replace("{link}", $"{clientUrl}{qryStr}");
+            body = body.Replace("{MailContent}", message);
+
+            return body;
         }
         public string ComposeSignUpMail(string firstname, string defaultPass, string email, string wwwRootPath, string ip, string port, string appKey = null, string channel = null)
         {

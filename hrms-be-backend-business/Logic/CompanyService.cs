@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using hrms_be_backend_business.AppCode;
 using hrms_be_backend_business.Helpers;
 using hrms_be_backend_business.ILogic;
 using hrms_be_backend_common.Communication;
@@ -81,6 +82,26 @@ namespace hrms_be_backend_business.Logic
                     isModelStateValidate = false;
                     validationMessage += " Contact Phone is required";
                 }
+                if (string.IsNullOrEmpty(payload.AdminFirstName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Admin First name is required";
+                }
+                if (payload.AdminLastName == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Admin Last name is required";
+                }
+                if (payload.AdminOfficialMail == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Admin Official email is required";
+                }
+                if (payload.AdminPhoneNumber == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Admin Phone number is required";
+                }
                 if (!isModelStateValidate)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
@@ -105,6 +126,32 @@ namespace hrms_be_backend_business.Logic
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
+                var CompanyId = repoResponse.Replace("Success", "");
+                var password = Utils.GenerateDefaultPassword(6);
+                var userRepoPayload = new CreateCompanyUserReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    FirstName = payload.AdminFirstName,
+                    LastName = payload.AdminLastName,
+                    MiddleName = payload.AdminMiddleName,
+                    OfficialMail = payload.AdminOfficialMail,
+                    PasswordHash = password,
+                    PhoneNumber = payload.AdminPhoneNumber,
+                    CompanyId = Convert.ToInt64(CompanyId),
+                };
+                string userRepoResponse = await _accountRepository.CreateCompanyUser(userRepoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+
+                var UserId = userRepoResponse.Replace("Success", "");
+                var userDetails = await _accountRepository.GetUserById(Convert.ToInt64(UserId));
+                string token = $"{RandomGenerator.GetNumber(20)}{password}";
+
+                _mailService.SendEmailApproveUser(userDetails.OfficialMail, $"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", password, "Xpress HRMS User Creation", EncryptDecrypt.EncryptResult(token));
 
                 var auditLog = new AuditLogDto
                 {
@@ -116,6 +163,8 @@ namespace hrms_be_backend_business.Logic
                     ipAddress = RemoteIpAddress
                 };
                 await _audit.LogActivity(auditLog);
+
+                
 
                 return new ExecutedResult<string>() { responseMessage = "Created Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
 

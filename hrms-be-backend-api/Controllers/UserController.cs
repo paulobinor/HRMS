@@ -44,9 +44,33 @@ namespace hrms_be_backend_api.Controllers
             var route = Request.Path.Value;
             return this.CustomResponse(await _userService.GetUsers(filter, route, accessToken, claim, RemoteIpAddress, RemotePort));
         }
+        [HttpPost("ApproveUserByBackOffice")]
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> ApproveUserByBackOffice(long UserId)
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _userService.ApproveUserByBackOffice(UserId, accessToken, claim, RemoteIpAddress, RemotePort));
+        }
+        [HttpPost("DeactivateUserBackOffice")]
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> DeactivateUserBackOffice(DeactivateUserDto payload)
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _userService.DeactivateUserBackOffice(payload, accessToken, claim, RemoteIpAddress, RemotePort));
+        }
         [HttpGet("GetUsersBackOffice")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<UserVm>>), 200)]
-        public async Task<IActionResult> GetUsersBackOffice(PaginationFilter filter)
+        public async Task<IActionResult> GetUsersBackOffice([FromQuery] PaginationFilter filter)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -59,7 +83,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpGet("GetUsersApprovedBackOffice")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<UserVm>>), 200)]
-        public async Task<IActionResult> GetUsersApprovedBackOffice(PaginationFilter filter)
+        public async Task<IActionResult> GetUsersApprovedBackOffice([FromQuery] PaginationFilter filter)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -72,7 +96,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpGet("GetUsersDisapprovedBackOffice")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<UserVm>>), 200)]
-        public async Task<IActionResult> GetUsersDisapprovedBackOffice(PaginationFilter filter)
+        public async Task<IActionResult> GetUsersDisapprovedBackOffice([FromQuery] PaginationFilter filter)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -85,7 +109,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpGet("GetUsersDeapctivatedBackOffice")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<UserVm>>), 200)]
-        public async Task<IActionResult> GetUsersDeapctivatedBackOffice(PaginationFilter filter)
+        public async Task<IActionResult> GetUsersDeapctivatedBackOffice([FromQuery]PaginationFilter filter)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -98,7 +122,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpGet("GetUsersByCompany")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<UserVm>>), 200)]
-        public async Task<IActionResult> GetUsersByCompany(PaginationFilter filter)
+        public async Task<IActionResult> GetUsersByCompany([FromQuery] PaginationFilter filter)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -111,7 +135,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpGet("GetUsersApprovedByCompany")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<UserVm>>), 200)]
-        public async Task<IActionResult> GetUsersApprovedByCompany(PaginationFilter filter)
+        public async Task<IActionResult> GetUsersApprovedByCompany([FromQuery] PaginationFilter filter)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -124,7 +148,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpGet("GetUsersDisapprovedByCompany")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<UserVm>>), 200)]
-        public async Task<IActionResult> GetUsersDisapprovedByCompany(PaginationFilter filter)
+        public async Task<IActionResult> GetUsersDisapprovedByCompany([FromQuery] PaginationFilter filter)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -137,7 +161,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpGet("GetUsersDeactivatedByCompany")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<UserVm>>), 200)]
-        public async Task<IActionResult> GetUsersDeactivatedByCompany(PaginationFilter filter)
+        public async Task<IActionResult> GetUsersDeactivatedByCompany([FromQuery] PaginationFilter filter)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -150,7 +174,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpGet("GetUserById")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<UserVm>>), 200)]
-        public async Task<IActionResult> GetUserById(long UserId)
+        public async Task<IActionResult> GetUserById([FromQuery] long UserId)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();

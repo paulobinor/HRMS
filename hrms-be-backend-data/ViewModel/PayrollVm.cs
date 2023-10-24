@@ -65,6 +65,7 @@
         public bool PaydayLastDayOfTheCycle { get; set; }
         public bool ProrationPolicy { get; set; }
     }
+
     public class PayrollEarnings
     {
         public long EarningsItemId { get; set; }
