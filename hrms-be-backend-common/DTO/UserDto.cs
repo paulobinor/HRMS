@@ -17,4 +17,9 @@
         public string OfficialMail { get; set; }
         public string PhoneNumber { get; set; }
     }
+    public class DeactivateUserDto
+    {
+        public long UserId { get; set; }
+        public string DeactivatedComment { get; set; }       
+    }
 }

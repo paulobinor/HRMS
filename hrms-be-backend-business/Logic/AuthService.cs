@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using ExcelDataReader.Log;
 using hrms_be_backend_business.AppCode;
 using hrms_be_backend_business.ILogic;
 using hrms_be_backend_common.Communication;
 using hrms_be_backend_common.Configuration;
+using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
@@ -11,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -28,14 +31,14 @@ namespace hrms_be_backend_business.Logic
         private readonly IHostingEnvironment _hostEnvironment;
         private readonly ICompanyRepository _companyrepository;
         private readonly IMailService _mailService;
-        private readonly PassowordConfig _appConfig;
+        private readonly PassowordConfig _passwordConfig;
         private readonly JwtConfig _jwt;
 
-        public AuthService(ITokenRefresher tokenRefresher, IUnitOfWork unitOfWork, IOptions<PassowordConfig> appConfig, IOptions<JwtConfig> jwt,
+        public AuthService(ITokenRefresher tokenRefresher, IUnitOfWork unitOfWork, IOptions<PassowordConfig> passwordConfig, IOptions<JwtConfig> jwt,
              IAuditLog audit, IMapper mapper, IJwtManager jwtManager, IHostingEnvironment hostEnvironment,
              IAccountRepository accountRepository, ILogger<AuthService> logger, ICompanyRepository companyRepository, IMailService mailService)
         {
-            _appConfig = appConfig.Value;
+            _passwordConfig = passwordConfig.Value;
             _jwt = jwt.Value;
             _tokenRefresher = tokenRefresher;
             _unitOfWork = unitOfWork;
@@ -57,10 +60,9 @@ namespace hrms_be_backend_business.Logic
 
                 var email = Encoding.UTF8.GetString(Convert.FromBase64String(login.OfficialMail));
                 var password = Encoding.UTF8.GetString(Convert.FromBase64String(login.Password));
+                            
 
-                var hashPassword = Utils.HashPassword(password);
-
-                var repoResponse = await _accountRepository.AuthenticateUser(email, _appConfig.MaxNumberOfFailedAttemptsToLogin, DateTime.Now);
+                var repoResponse = await _accountRepository.AuthenticateUser(email, _passwordConfig.MaxNumberOfFailedAttemptsToLogin, DateTime.Now);
                 if (!repoResponse.Contains("Success"))
                 {
                     return new ExecutedResult<LoginResponse>() { responseMessage = repoResponse, responseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), data = null };
@@ -74,15 +76,15 @@ namespace hrms_be_backend_business.Logic
                     var attemptCount = user.LoginFailedAttemptsCount + 1;
                     await _unitOfWork.UpdateLastLoginAttempt(attemptCount, user.OfficialMail);
 
-                    if (attemptCount >= _appConfig.MaxNumberOfFailedAttemptsToLogin)
+                    if (attemptCount >= _passwordConfig.MaxNumberOfFailedAttemptsToLogin)
                     {
                         return new ExecutedResult<LoginResponse>() { responseMessage = $"You have exceeded number of attempts. your account has been locked. Please contact admin.", responseCode = ResponseCode.NotAuthenticated.ToString("D").PadLeft(2, '0'), data = null };
                     }
                     return new ExecutedResult<LoginResponse>()
                     {
                         responseMessage = $"Invalid Password! You have made {attemptCount} unsuccessful attempt(s). " +
-                                               $"The maximum retry attempts allowed is {_appConfig.MaxNumberOfFailedAttemptsToLogin}. " +
-                                               $"If {_appConfig.MaxNumberOfFailedAttemptsToLogin} is exceeded, then you will be locked out of the system",
+                                               $"The maximum retry attempts allowed is {_passwordConfig.MaxNumberOfFailedAttemptsToLogin}. " +
+                                               $"If {_passwordConfig.MaxNumberOfFailedAttemptsToLogin} is exceeded, then you will be locked out of the system",
                         responseCode = ResponseCode.NotAuthenticated.ToString("D").PadLeft(2, '0'),
                         data = null
                     };
@@ -217,183 +219,176 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-
-        public async Task<BaseResponse> SendEmailForPasswordChange(RequestPasswordChange request, string ipAddress, string port)
-        {
-            var response = new BaseResponse();
-
+        public async Task<ExecutedResult<string>> ChangeDefaultPassword(ChangeDefaultPasswordDto payload, string ipAddress, string port)
+        {           
             try
             {
-                var user = await _accountRepository.FindUser(null, request.officialMail, null);
-                if (null == user)
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.token))
                 {
-                    response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Invalid email. Please provide a valid email";
-                    return response;
+                    isModelStateValidate = false;
+                    validationMessage += "Token is required";
                 }
-                if (user.IsApproved)
+                if (payload.NewPassword == null)
                 {
-                    var password = Utils.RandomPassword();
+                    isModelStateValidate = false;
+                    validationMessage += "  || New Password is required";
+                }               
 
-                    var resp = await _accountRepository.ChangePassword(user.UserId, password);
-                    if (resp > 0)
-                    {
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
-                        _mailService.SendEmail(user.OfficialMail, user.FirstName, password, "Password Reset", _hostEnvironment.ContentRootPath, "", port);
-
-                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = "A link has been sent to your email to reset your password";
-                        return response;
-                    }
-
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "An error occured. Please contact admin.";
-                    return response;
                 }
+                var password = Encoding.UTF8.GetString(Convert.FromBase64String(payload.NewPassword));
+                if (password.Length < _passwordConfig.CharacterLengthMin)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Invalid password, password must be greater than {_passwordConfig.CharacterLengthMin}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "User Account is either not approved yet or inactive. Pls contact System Admin.";
-                return response;
+                }
+                if (password.Length > _passwordConfig.CharacterLengthMax)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Invalid password, password must be greater than {_passwordConfig.CharacterLengthMin} and less than {_passwordConfig.CharacterLengthMax}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+                }
+                var stringEvaluator=StringEvaluator.EvaluateString(password);
+                if (stringEvaluator.UpperCaseTotal < _passwordConfig.MustContainUppercase)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Invalid password, password must contain more than {_passwordConfig.MustContainUppercase} upper case", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+                }              
+                if (stringEvaluator.LowerCaseTotal < _passwordConfig.MustContainLowercase)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Invalid password, password must contain more than {_passwordConfig.MustContainUppercase} lower case", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+                }
+                if (stringEvaluator.SpecialCharacterNumber < _passwordConfig.MustContainSpecialCharacter)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Invalid password, password must contain more than {_passwordConfig.MustContainSpecialCharacter} special character", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+                }
+                if (stringEvaluator.NumberTotal < _passwordConfig.MustContainNumber)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Invalid password, password must contain more than {_passwordConfig.MustContainNumber} number character", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+                }
+              
+               
+                string decryptedToken= EncryptDecrypt.DecryptResult(payload.token); 
+                string userId = decryptedToken.Substring(20);              
+                var userDetails =await _accountRepository.GetUserById(Convert.ToInt64(userId));
+                var repoResponse = await _accountRepository.ChangePassword(userDetails.UserId,payload.NewPassword,userDetails.UserId);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = repoResponse, responseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), data = null };
+                }
+               
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = userDetails.UserId,
+                    actionPerformed = "Login",                   
+                    actionStatus = $"Successful:",
+                    ipAddress = ipAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = $"Your password has been change successfully.", responseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'), data = "Success" };
 
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ControllerMethod : SendEmailForPasswordChange ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : SendEmailForPasswordChange ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"Exception || UsersServices (ChangeDefaultPassword)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = $"Unable to process the operation, kindly contact the support", responseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'), data = null };
             }
-
-
         }
-
-        public async Task<BaseResponse> ChangePassword(ChangePasswordViewModel changePassword, string ipAddress, string port)
+        public async Task<ExecutedResult<string>> ChangePassword(ChangePasswordDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-            var response = new BaseResponse();
-
-            //var npw = Convert.ToBase64String(Encoding.UTF8.GetBytes(Convert.ToString("Password1234")));
-            string email = Encoding.UTF8.GetString(Convert.FromBase64String(changePassword.officialMail));
-            string oldPassword = Encoding.UTF8.GetString(Convert.FromBase64String(changePassword.OldPassword));
-            string newPassword = Encoding.UTF8.GetString(Convert.FromBase64String(changePassword.NewPassword));
-
             try
             {
-                var user = await _accountRepository.FindUser(null, email, null);
-                if (null == user)
+                var accessUser = await CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Invalid email. Please provide a valid email";
-                    return response;
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.OldPassword))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Old Password is required";
+                }
+                if (payload.NewPassword == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || New Password is required";
                 }
 
-                var systemConfig = await _unitOfWork.SystemConfiguration();
-
-                foreach (var config in systemConfig)
+                if (!isModelStateValidate)
                 {
-                    if (config.Name.ToLower() == "maxnumberoffailedattemptstologin")
-                        _appConfig.MaxNumberOfFailedAttemptsToLogin = config.Value;
-                    if (config.Name.ToLower() == "minutesbeforeresetafterfailedattemptstologin")
-                        _appConfig.MinutesBeforeResetAfterFailedAttemptsToLogin = config.Value;
-                    if (config.Name.ToLower() == "characterlengthmax")
-                        _appConfig.CharacterLengthMax = config.Value;
-                    if (config.Name.ToLower() == "characterlengthmin")
-                        _appConfig.CharacterLengthMin = config.Value;
-                    if (config.Name.ToLower() == "mustcontainuppercase")
-                        _appConfig.MustContainUppercase = config.Value;
-                    if (config.Name.ToLower() == "mustcontainlowercase")
-                        _appConfig.MustContainLowercase = config.Value;
-                    if (config.Name.ToLower() == "mustcontainnumber")
-                        _appConfig.MustContainNumber = config.Value;
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                if (payload.NewPassword.Length < _passwordConfig.CharacterLengthMin)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Invalid password, password must be greater than {_passwordConfig.CharacterLengthMin}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                if (payload.NewPassword.Length > _passwordConfig.CharacterLengthMax)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Invalid password, password must be greater than {_passwordConfig.CharacterLengthMin} and less than {_passwordConfig.CharacterLengthMax}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+                }
+                var stringEvaluator = StringEvaluator.EvaluateString(payload.NewPassword);
+                if (stringEvaluator.UpperCaseTotal < _passwordConfig.MustContainUppercase)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Invalid password, password must contain more than {_passwordConfig.MustContainUppercase} upper case", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+                }
+                if (stringEvaluator.LowerCaseTotal < _passwordConfig.MustContainLowercase)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Invalid password, password must contain more than {_passwordConfig.MustContainUppercase} lower case", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+                }
+                if (stringEvaluator.SpecialCharacterNumber < _passwordConfig.MustContainSpecialCharacter)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Invalid password, password must contain more than {_passwordConfig.MustContainSpecialCharacter} special character", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+                }
+                if (stringEvaluator.NumberTotal < _passwordConfig.MustContainNumber)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Invalid password, password must contain more than {_passwordConfig.MustContainNumber} number character", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
                 }
 
-                if (user.LoginFailedAttemptsCount >= _appConfig.MaxNumberOfFailedAttemptsToLogin)
+                var newPassword = Encoding.UTF8.GetString(Convert.FromBase64String(payload.NewPassword));
+                string oldPassword = Encoding.UTF8.GetString(Convert.FromBase64String(payload.OldPassword));
+
+                var isPasswordMatch = Utils.DoesPasswordMatch(accessUser.data
+                    .PasswordHash, Encoding.UTF8.GetString(Convert.FromBase64String(payload.OldPassword)));
+                if (!isPasswordMatch)
                 {
-                    response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "You account was blocked, please contact admin";
-                    return response;
+                    return new ExecutedResult<string>() { responseMessage = "Invalid Old Password", responseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), data = null };
+                }
+                var userDetails = await _accountRepository.GetUserById(Convert.ToInt64(accessUser.data.UserId));
+                var repoResponse = await _accountRepository.ChangePassword(userDetails.UserId, payload.NewPassword, userDetails.UserId);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = repoResponse, responseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), data = null };
                 }
 
-                var isPasswordMatch = Utils.DoesPasswordMatch(user.PasswordHash, oldPassword);
-                if (isPasswordMatch)
+
+                var auditLog = new AuditLogDto
                 {
-                    var hasNumber = new Regex(@"[0-9]+");
-                    var hasUpperChar = new Regex(@"[A-Z]+");
-                    var hasLowerChar = new Regex(@"[a-z]+");
-                    var hasMinChars = new Regex(@".{" + _appConfig.CharacterLengthMin + ",}");
-                    var hasMaxChars = new Regex(@".{" + _appConfig.CharacterLengthMax + ",}");
+                    userId = userDetails.UserId,
+                    actionPerformed = "Login",
+                    actionStatus = $"Successful:",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
 
-                    bool isValidatedMin = hasMinChars.IsMatch(newPassword);
-                    bool isValidatedMax = hasMaxChars.IsMatch(newPassword);
-                    if (isValidatedMin && !isValidatedMax)
-                    {
-                        if (_appConfig.MustContainNumber == 1) // true
-                        {
-                            if (!hasNumber.IsMatch(newPassword))
-                            {
-                                response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
-                                response.ResponseMessage = "Password must contain a numeric value";
-                                return response;
-                            }
-                        }
-                        if (_appConfig.MustContainUppercase == 1) // true
-                        {
-                            if (!hasUpperChar.IsMatch(newPassword))
-                            {
-                                response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
-                                response.ResponseMessage = "Password must contain upper case character";
-                                return response;
-                            }
-                        }
-                        if (_appConfig.MustContainLowercase == 1) // true
-                        {
-                            if (!hasLowerChar.IsMatch(newPassword))
-                            {
-                                response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
-                                response.ResponseMessage = "Password must contain lower case character";
-                                return response;
-                            }
-                        }
+                return new ExecutedResult<string>() { responseMessage = $"Your password has been change successfully.", responseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'), data = "Success" };
 
-                        if (!user.IsActive)
-                            user.IsActive = true;
-
-
-                        var resp = await _accountRepository.ChangePassword(user.UserId, newPassword);
-                        if (resp > 0)
-                        {
-                            //update action performed into audit log here
-
-                            response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                            response.ResponseMessage = "Password changed successfully.";
-                            return response;
-                        }
-
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = "An error occured while updating your password. Please contact admin.";
-                        return response;
-                    }
-                    else
-                    {
-                        response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Password must be between {_appConfig.CharacterLengthMin} and {_appConfig.CharacterLengthMax} characters";
-                        return response;
-                    }
-                }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Old password is not valid";
-                return response;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ChangePassword ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ChangePassword ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"Exception || UsersServices (ChangeDefaultPassword)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = $"Unable to process the operation, kindly contact the support", responseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'), data = null };
             }
-
-        }
-
+        }     
     }
 }

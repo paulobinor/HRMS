@@ -151,7 +151,8 @@ namespace hrms_be_backend_business.Logic
                 var payrollEarnings = await _payrollRepository.GetPayrollEarnings(payrollId);
                 foreach (var item in payrollEarnings)
                 {
-                    if (payload.Earnings.Any(p => p.EarningsItemId != item.EarningItemsId))
+                    var checkEaningItem = payload.Earnings.Where(p => p.EarningsItemId != item.EarningItemsId).ToList();
+                    if (checkEaningItem.Count()>0)
                     {
                         var payrollEarningsDeleteReq = new PayrollEarningsDeleteReq
                         {
@@ -181,7 +182,8 @@ namespace hrms_be_backend_business.Logic
                 var payrollDeductions = await _payrollRepository.GetPayrollDeductions(payrollId);
                 foreach (var item in payrollDeductions)
                 {
-                    if (payload.Deductions.Any(p => p.DeductionId != item.DeductionId))
+                    var checkDeduction = payload.Deductions.Where(p => p.DeductionId != item.DeductionId).ToList();
+                    if (checkDeduction.Count()>0)
                     {
                         var payrollDeductionDeleteReq = new PayrollDeductionDeleteReq
                         {
@@ -281,7 +283,7 @@ namespace hrms_be_backend_business.Logic
                         EarningsItemId = item.EarningsItemId,
                         PayrollId = payrollId
                     };
-                    await _payrollRepository.ProcessPayrollEarnings(payrollEarningsReq);
+                   await _payrollRepository.ProcessPayrollEarnings(payrollEarningsReq);
                 }
                 var payrollEarnings = await _payrollRepository.GetPayrollEarnings(payrollId);
                 foreach (var item in payrollEarnings)
@@ -292,7 +294,7 @@ namespace hrms_be_backend_business.Logic
                         {
                             CreatedByUserId = accessUser.data.UserId,
                             DateCreated = DateTime.Now,
-                            EarningsItemId = item.EarningsId,
+                            EarningsItemId = item.EarningItemsId,
                             PayrollId = payrollId
                         };
                         await _payrollRepository.DeletePayrollEarnings(payrollEarningsDeleteReq);
@@ -524,8 +526,10 @@ namespace hrms_be_backend_business.Logic
                             EarningsItemName = item.EarningItemName
                         });
                     }
+                    returnData.EarningsItems = payrollEarnings;
                 }
                 returnData.TotalEarningAmount = totalEarningsAmount;
+               
                 var payrollPayments = new List<PayrollPayments>();
                 payrollPayments.Add(new PayrollPayments
                 {
@@ -584,6 +588,7 @@ namespace hrms_be_backend_business.Logic
                             IsPercentage = item.IsPercentage,
                         });
                     }
+                    returnData.PayrollDeductions= payrollDeduction;
                 }
                 returnData.DeductionTotalAmount = deductionTotalAmount;
                 decimal restatedAmount = totalEarningsAmount - deductionTotalAmount;
