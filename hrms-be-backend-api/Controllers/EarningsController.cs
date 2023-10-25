@@ -33,6 +33,7 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _earningsService.CreateEarning(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
+
         [HttpPost("UpdateEarning")]
         [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
         public async Task<IActionResult> UpdateEarning(EarningsUpdateDto payload)
@@ -45,6 +46,7 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _earningsService.UpdateEarning(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
+
         [HttpPost("DeleteEarnings")]
         [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
         public async Task<IActionResult> DeleteEarnings(long EarningsId, string Comments)

@@ -8,6 +8,7 @@ using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -112,6 +113,103 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
+
+
+        public async Task<ExecutedResult<string>> CreateDepartmentBulkUpload(IFormFile payload, string AccessKey, IEnumerable<Claim> claim, RequesterInfo requester)
+        {
+            //check if us
+            StringBuilder errorOutput = new StringBuilder();
+            try
+            {
+                if (payload == null || payload.Length <= 0)
+                    return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ValidationError).ToString(), responseMessage = "No file attached" };
+                else if (!Path.GetExtension(payload.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                    return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ValidationError).ToString(), responseMessage = "File not an Excel Format" };
+                else
+                {
+                    var stream = new MemoryStream();
+                    await payload.CopyToAsync(stream);
+
+                    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                    var reader = ExcelReaderFactory.CreateReader(stream);
+                    DataSet ds = new DataSet();
+                    ds = reader.AsDataSet();
+                    reader.Close();
+
+                    int rowCount = ds.Tables[0].Rows.Count;
+                    DataTable serviceDetails = ds.Tables[0];
+
+                    int k = 0;
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+
+                        string DepartmentName = serviceDetails.Rows[0][0].ToString();
+                        string HODEmail = serviceDetails.Rows[0][1].ToString();
+                        //string CompanyName = serviceDetails.Rows[0][2].ToString();
+
+
+                        if (DepartmentName != "DepartmentName" || HODEmail != "HodEmail")
+                                return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ValidationError).ToString(), responseMessage = "File header not in the Right format" };
+                        else
+                        {
+                            for (int row = 1; row < serviceDetails.Rows.Count; row++)
+                            {
+
+                                string departmentName = serviceDetails.Rows[row][0].ToString();
+                                string hodEmail = serviceDetails.Rows[row][1].ToString();
+                                var user = await _accountRepository.FindUser(hodEmail);
+
+                                if(user == null)
+                                {
+                                    errorOutput.Append($"Row {row} failed due to Invalid HOD email {hodEmail}" + "\n");
+                                    continue;
+                                }
+                                //var company = serviceDetails.Rows[row][2].ToString();
+
+                                var departmentrequest = new CreateDepartmentDto
+                                {
+                                    DepartmentName = departmentName,
+                                    HodEmployeeId = user.EmployeeId
+
+                                };
+
+                                var resp = await CreateDepartment(departmentrequest, AccessKey, claim, requester.IpAddress, requester.Port);
+
+
+                                if (resp.responseCode == "00")
+                                {
+                                    k++;
+                                }
+                                else
+                                {
+                                    errorOutput.Append($"Row {row} failed due to {resp.responseMessage}" + "\n");
+                                }
+                            }
+                        }
+
+                    }
+
+
+
+                    if (k == rowCount - 1)
+                    {
+                        return new ExecutedResult<string> { responseCode = ((int)ResponseCode.Ok).ToString(), responseMessage = "All record inserted successfully" };
+                    }
+                    else
+                    {
+                        return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ProcessingError).ToString(), responseMessage = errorOutput.ToString() };
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured ==> {ex.Message}");
+                return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ProcessingError).ToString(), responseMessage = "Exception occured creating department" };
+            }
+        }
+
         public async Task<ExecutedResult<string>> UpdateDepartment(UpdateDepartmentDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
 

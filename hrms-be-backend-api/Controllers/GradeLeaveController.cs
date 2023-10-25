@@ -1,9 +1,12 @@
 ﻿using hrms_be_backend_business.ILogic;
+using hrms_be_backend_business.Logic;
+using hrms_be_backend_common.Communication;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace hrms_be_backend_api.LeaveModuleController.Controller
 {
@@ -47,6 +50,23 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 return Ok(response);
             }
         }
+
+        //[HttpPost("CreateGradeLevelBulk")]
+        //[ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        //public async Task<IActionResult> CreateGradeLevelBulk(IFormFile payload)
+        //{
+        //    var requester = new RequesterInfo
+        //    {
+        //        IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+        //        Port = Request.HttpContext.Connection.RemotePort.ToString()
+        //    };
+        //    var identity = HttpContext.User.Identity as ClaimsIdentity;
+        //    IEnumerable<Claim> claim = identity.Claims;
+        //    var accessToken = Request.Headers["Authorization"];
+        //    accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+        //    return this.CustomResponse(await _gradeService.CreateGradeBulkUpload(payload, accessToken, claim, requester));
+        //}
+
 
         [HttpPost("UpdateGradeLeave")]
         [Authorize]

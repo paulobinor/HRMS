@@ -15,20 +15,20 @@ namespace hrms_be_backend_data.Repository
     {
         private string _connectionString;
         private readonly ILogger<AccountRepository> _logger;
-        private readonly IConfiguration _configuration;       
+        private readonly IConfiguration _configuration;
         private readonly IDapperGenericRepository _dapper;
         public AccountRepository(IConfiguration configuration, ILogger<AccountRepository> logger, IDapperGenericRepository dapper)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
             _logger = logger;
-            _configuration = configuration;          
+            _configuration = configuration;
             _dapper = dapper;
         }
 
         public async Task<string> ProcessUser(CreateUserReq payload)
         {
             try
-            {              
+            {
                 var param = new DynamicParameters();
                 param.Add("@UserId", payload.UserId);
                 param.Add("@FirstName", payload.FirstName);
@@ -57,7 +57,7 @@ namespace hrms_be_backend_data.Repository
             {
                 var param = new DynamicParameters();
                 param.Add("@UserId", UserId);
-                param.Add("@RefreshToken", RefreshToken);             
+                param.Add("@RefreshToken", RefreshToken);
 
                 return await _dapper.Get<string>("sp_update_refresh_token", param, commandType: CommandType.StoredProcedure);
             }
@@ -187,6 +187,19 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
+        //public async Task<UserFullView> GetUserByEmail(string email)
+        //{
+        //    string query = @"select * from USers where OfficialMail = @Email and IsApproved = @IsApproved";
+        //    var param = new DynamicParameters();
+        //    param.Add("Email", email);
+        //    param.Add("IsApproved", true);
+
+        //    dynamic resp = await _dapper.Get<UserFullView>(query, param, commandType: CommandType.Text);
+
+        //    return resp;
+
+        //}
+
         public async Task<dynamic> ReactivateUser(long reactivatedByuserId, string OfficialMail, string comment, string defaultpass)
         {
             try
@@ -274,7 +287,7 @@ namespace hrms_be_backend_data.Repository
             try
             {
                 var param = new DynamicParameters();
-              
+
                 param.Add("@PageNumber", PageNumber);
                 param.Add("@RowsOfPage", RowsOfPage);
                 var result = await _dapper.GetMultiple("sp_get_users", param, gr => gr.Read<long>(), gr => gr.Read<UserVm>(), commandType: CommandType.StoredProcedure);
@@ -459,7 +472,7 @@ namespace hrms_be_backend_data.Repository
                 return returnData;
             }
 
-        }        
+        }
         public async Task<UserWithTotalVm> GetUsersDeactivatedByCompany(long CompanyId, int PageNumber, int RowsOfPage)
         {
             var returnData = new UserWithTotalVm();
@@ -486,7 +499,7 @@ namespace hrms_be_backend_data.Repository
         }
 
         public async Task<UserVm> GetUserById(long Id)
-        {            
+        {
             try
             {
                 var param = new DynamicParameters();
@@ -494,7 +507,7 @@ namespace hrms_be_backend_data.Repository
                 return await _dapper.Get<UserVm>("sp_get_user_by_id", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
-            {              
+            {
                 _logger.LogError($"AccountRepository => GetUserById || {ex}");
                 return new UserVm();
             }
@@ -618,7 +631,7 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-       
-        
+
+
     }
 }

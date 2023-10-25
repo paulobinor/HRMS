@@ -5,6 +5,8 @@ using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.Security.Claims;
 using static hrms_be_backend_business.Logic.CompanyAppModuleService;
 
 namespace hrms_be_backend_api.Controllers
@@ -12,7 +14,7 @@ namespace hrms_be_backend_api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class CompanyAppModulesController : ControllerBase
+    public class CompanyAppModulesController : BaseController
     {
         private readonly ILogger<CompanyAppModulesController> _logger;
         private readonly ICompanyAppModuleService _companyAppModuleService;
@@ -26,272 +28,146 @@ namespace hrms_be_backend_api.Controllers
         [HttpGet("GetAllAppModules")]
         public async Task<IActionResult> GetAllAppModules()
         {
-            var response = new BaseResponse();
-            try
+            var requester = new RequesterInfo
             {
+                Username = this.User.Claims.ToList()[1].Value,
+                //UserId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                //RoleId = Convert.ToInt64(this.User.Claims.ToList()[5].Value),
+                IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                Port = Request.HttpContext.Connection.RemotePort.ToString()
+            };
 
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+            return this.CustomResponse(await _companyAppModuleService.GetAllAppModules(requester));
 
-                return Ok(await _companyAppModuleService.GetAllAppModules(requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetAllAppModules ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
         }
 
         [HttpGet("GetCompanyAppModuleCount")]
         public async Task<IActionResult> GetCompanyAppModuleCount()
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
 
-                return Ok(await _companyAppModuleService.GetCompanyAppModuleCount(requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetCompanyAppModuleCount ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return this.CustomResponse(await _companyAppModuleService.GetCompanyAppModuleCount(accessToken, claim, RemoteIpAddress, RemotePort));
+
         }
 
         [HttpGet("GetCompanyAppModuleByCompanyID/{companyID}")]
         public async Task<IActionResult> GetCompanyAppModuleByCompanyID(long companyID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _companyAppModuleService.GetCompanyAppModuleByCompanyID(companyID,requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetCompanyAppModuleByCompanyID ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            return this.CustomResponse(await _companyAppModuleService.GetCompanyAppModuleByCompanyID(companyID, accessToken, claim, RemoteIpAddress, RemotePort));
+
         }
 
         [HttpGet("GetCompanyAppModuleBySatus/{status}")]
         public async Task<IActionResult> GetCompanyAppModuleByCompanyID(GetByStatus status)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _companyAppModuleService.GetCompanyAppModuleStatus(status, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetCompanyAppModuleByCompanyID ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            return this.CustomResponse(await _companyAppModuleService.GetCompanyAppModuleStatus(status, accessToken, claim, RemoteIpAddress, RemotePort));
+
         }
 
 
         [HttpGet("GetPendingCompanyAppModule")]
         public async Task<IActionResult> GetPendingCompanyAppModule()
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _companyAppModuleService.GetPendingCompanyAppModule(requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetPendingCompanyAppModule ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            return this.CustomResponse(await _companyAppModuleService.GetPendingCompanyAppModule(accessToken, claim, RemoteIpAddress, RemotePort));
+
         }
 
         [HttpPost("CreateCompanyAppModule")]
         public async Task<IActionResult> CreateCompanyAppModule(CreateCompanyAppModuleDTO request)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _companyAppModuleService.CreateCompanyAppModule(request, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : CreateCompanyAppModule ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            return this.CustomResponse(await _companyAppModuleService.CreateCompanyAppModule(request, accessToken, claim, RemoteIpAddress, RemotePort));
+
         }
 
         [HttpGet("ApproveCompanyAppModule/{companyAppModuleID}")]
         public async Task<IActionResult> ApproveCompanyAppModule(long companyAppModuleID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _companyAppModuleService.ApproveCompanyAppModule(companyAppModuleID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : ApproveCompanyAppModule ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            return this.CustomResponse(await _companyAppModuleService.ApproveCompanyAppModule(companyAppModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
+
         }
 
         [HttpGet("DisapproveCompanyAppModule/{companyAppModuleID}")]
         public async Task<IActionResult> DisapproveCompanyAppModule(long companyAppModuleID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _companyAppModuleService.DisapproveCompanyAppModule(companyAppModuleID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : DisapproveCompanyAppModule ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            return this.CustomResponse(await _companyAppModuleService.DisapproveCompanyAppModule(companyAppModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
+
         }
 
         [HttpGet("DeleteCompanyAppModule/{companyAppModuleID}")]
         public async Task<IActionResult> DeleteCompanyAppModule(long companyAppModuleID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
 
-                return Ok(await _companyAppModuleService.DeleteCompanyAppModule(companyAppModuleID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : DeleteCompanyAppModule ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return this.CustomResponse(await _companyAppModuleService.DeleteCompanyAppModule(companyAppModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
+
         }
         [HttpGet("CompanyAppModuleActivationSwitch/{companyAppModuleID}")]
         public async Task<IActionResult> CompanyAppModuleActivationSwitch(long companyAppModuleID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
 
-                return Ok(await _companyAppModuleService.CompanyAppModuleActivationSwitch(companyAppModuleID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : CompanyAppModuleActivationSwitch ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return this.CustomResponse(await _companyAppModuleService.CompanyAppModuleActivationSwitch(companyAppModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
+
         }
     }
 }

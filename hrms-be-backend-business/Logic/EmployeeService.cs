@@ -452,8 +452,8 @@ namespace hrms_be_backend_business.Logic
                                     MiddleName = middleName,
                                     LastName = lastName,
                                     PersonalEmail = email,
-                                    //DOB = date,
-                                    //ResumptionDate = resumptionDate,
+                                    //DOB = Convert.ToDateTime(date),
+                                    //ResumptionDate = Convert.ToDateTime(resumptionDate),
                                     OfficialEmail = officialMaildata,
                                     PhoneNumber = phoneNumber,
                                     UnitId = unitID,
@@ -464,7 +464,6 @@ namespace hrms_be_backend_business.Logic
                                     JobRoleId = roleID,
                                     DepartmentId = departmentID,
                                     
-                                    // = companyID
                                     
                                 };
 
