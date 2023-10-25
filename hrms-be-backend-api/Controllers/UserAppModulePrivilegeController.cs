@@ -6,13 +6,14 @@ using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace hrms_be_backend_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class UserAppModulePrivilegeController : ControllerBase
+    public class UserAppModulePrivilegeController : BaseController
     {
         private readonly ILogger<UserAppModulePrivilegeController> _logger;
         private readonly IUserAppModulePrivilegeService _userAppModulePrivilegeService;
@@ -26,270 +27,145 @@ namespace hrms_be_backend_api.Controllers
         [HttpGet("GetUserAppModulePrivileges")]
         public async Task<IActionResult> GetUserAppModulePrivileges()
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IEnumerable<Claim> claim = identity.Claims;
+                var accessToken = Request.Headers["Authorization"];
+                accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _userAppModulePrivilegeService.GetUserAppModulePrivileges(requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetUserAppModulePrivileges ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+                return this.CustomResponse(await _userAppModulePrivilegeService.GetUserAppModulePrivileges(accessToken, claim, RemoteIpAddress, RemotePort));
+           
         }
 
         [HttpGet("GetUserAppModulePrivilegesByUserID")]
         public async Task<IActionResult> GetUserAppModulePrivilegesByUserID(long userID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _userAppModulePrivilegeService.GetUserAppModulePrivilegesByUserID(userID,requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetUserAppModulePrivilegesByUserID ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            return this.CustomResponse(await _userAppModulePrivilegeService.GetUserAppModulePrivilegesByUserID(userID, accessToken, claim, RemoteIpAddress, RemotePort));
+           
         }
 
         [HttpGet("GetAppModulePrivileges")]
         public async Task<IActionResult> GetAppModulePrivileges()
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _userAppModulePrivilegeService.GetAppModulePrivileges( requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetUserAppModulePrivilegesByUserID ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _userAppModulePrivilegeService.GetAppModulePrivileges(accessToken, claim, RemoteIpAddress, RemotePort));
+            
         }
 
         [HttpGet("GetAppModulePrivilegesByModuleID/{appModuleID}")]
         public async Task<IActionResult> GetAppModulePrivilegesByModuleID(long appModuleID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _userAppModulePrivilegeService.GetAppModulePrivilegesByAppModuleID(appModuleID,requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetAppModulePrivilegesByModuleID ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            return this.CustomResponse(await _userAppModulePrivilegeService.GetAppModulePrivilegesByAppModuleID(appModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
+           
         }
         [HttpGet("GetPendingUserAppModulePrivileges")]
         public async Task<IActionResult> GetPendingUserAppModulePrivileges()
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
 
-                return Ok(await _userAppModulePrivilegeService.GetPendingUserAppModulePRivilege( requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetPendingUserAppModulePrivileges ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return this.CustomResponse(await _userAppModulePrivilegeService.GetPendingUserAppModulePRivilege(accessToken, claim, RemoteIpAddress, RemotePort));
+           
         }
 
         [HttpPost("CreateUserAppModulePrivileges")]
         public async Task<IActionResult> CreateUserAppModulePrivileges(CreateUserAppModulePrivilegesDTO request)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
 
-                return Ok(await _userAppModulePrivilegeService.CreateUserAppModulePrivileges(request ,requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : CreateUserAppModulePrivileges ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return this.CustomResponse(await _userAppModulePrivilegeService.CreateUserAppModulePrivileges(request , accessToken, claim, RemoteIpAddress, RemotePort));
+           
         }
 
         [HttpGet("ApproveUserAppModulePrivileges/{userAppModulePrivilegeID}")]
         public async Task<IActionResult> ApproveUserAppModulePrivileges(long userAppModulePrivilegeID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
 
-                return Ok(await _userAppModulePrivilegeService.ApproveUserAppModulePrivilege(userAppModulePrivilegeID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : ApproveUserAppModulePrivileges ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return this.CustomResponse(await _userAppModulePrivilegeService.ApproveUserAppModulePrivilege(userAppModulePrivilegeID, accessToken, claim, RemoteIpAddress, RemotePort));
+           
         }
 
         [HttpGet("DisapproveUserAppModulePrivileges/{userAppModulePrivilegeID}")]
         public async Task<IActionResult> DisapproveUserAppModulePrivileges(long userAppModulePrivilegeID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
 
-                return Ok(await _userAppModulePrivilegeService.DisapproveUserAppModulePrivilage(userAppModulePrivilegeID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : DisapproveUserAppModulePrivileges ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return this.CustomResponse(await _userAppModulePrivilegeService.DisapproveUserAppModulePrivilage(userAppModulePrivilegeID, accessToken, claim, RemoteIpAddress, RemotePort));
+           
         }
 
         [HttpGet("UserAppModulePrivilegesActivationSwitch/{userAppModulePrivilegeID}")]
         public async Task<IActionResult> UserAppModulePrivilegesActivationSwitch(long userAppModulePrivilegeID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
 
-                return Ok(await _userAppModulePrivilegeService.UserAppModulePrivilegeActivationSwitch(userAppModulePrivilegeID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : UserAppModulePrivilegesActivationSwitch ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return this.CustomResponse(await _userAppModulePrivilegeService.UserAppModulePrivilegeActivationSwitch(userAppModulePrivilegeID, accessToken, claim, RemoteIpAddress, RemotePort));
+            
         }
 
         [HttpGet("DeleteUserAppModulePrivileges/{userAppModulePrivilegeID}")]
         public async Task<IActionResult> DeleteUserAppModulePrivileges(long userAppModulePrivilegeID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
 
-                return Ok(await _userAppModulePrivilegeService.DeleteUserAppModulePrivilege(userAppModulePrivilegeID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : DeleteUserAppModulePrivileges ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return this.CustomResponse(await _userAppModulePrivilegeService.DeleteUserAppModulePrivilege(userAppModulePrivilegeID, accessToken, claim, RemoteIpAddress, RemotePort));
+           
         }
     }
 }

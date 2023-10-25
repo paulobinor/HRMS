@@ -55,7 +55,7 @@ namespace hrms_be_backend_data.RepoPayload
         public long CompanyID { get; set; }
         public string CompanyName { get; set; }
         public string Email { get; set; }
-        public DateTime Created_Date { get; set; }
+        public DateTime DateCreated { get; set; }
         public int ModuleCount { get; set; }
     }
 

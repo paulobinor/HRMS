@@ -59,7 +59,7 @@ namespace hrms_be_backend_business.Logic
                 }
 
 
-                var data = await _departmentalModulesRepository.GetDepartmentalAppModuleCount();
+                var data = await _departmentalModulesRepository.GetDepartmentalAppModuleCount(accessUser.data.CompanyId);
 
                 response.Data = data;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
@@ -98,13 +98,13 @@ namespace hrms_be_backend_business.Logic
                 switch (status)
                 {
                     case GetByStatus.All:
-                        data = await _departmentalModulesRepository.GetAllDepartmentalAppModuleCount();
+                        data = await _departmentalModulesRepository.GetAllDepartmentalAppModuleCount(accessUser.data.CompanyId);
                         break;
                     case GetByStatus.Approved:
-                        data = await _departmentalModulesRepository.GetDepartmentalAppModuleCount();
+                        data = await _departmentalModulesRepository.GetDepartmentalAppModuleCount(accessUser.data.CompanyId);
                         break;
                     case GetByStatus.DisApproved:
-                        data = await _departmentalModulesRepository.GetDisapprovedDepartmentalAppModuleCount();
+                        data = await _departmentalModulesRepository.GetDisapprovedDepartmentalAppModuleCount(accessUser.data.CompanyId);
                         break;
                     default:
 
@@ -149,7 +149,7 @@ namespace hrms_be_backend_business.Logic
                 
 
 
-                var data = await _departmentalModulesRepository.GetPendingDepartmentalAppModule();
+                var data = await _departmentalModulesRepository.GetPendingDepartmentalAppModule(accessUser.data.CompanyId);
 
                 response.Data = data;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
