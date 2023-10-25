@@ -5,7 +5,7 @@ namespace hrms_be_backend_data.IRepository
     public interface IUserAppModulePrivilegeRepository
     {
         Task<string> CheckUserAppPrivilege(string PrivilegeCode, long CreatedByUserId);
-        Task<List<GetUserAppModulePrivilegesDTO>> GetUserAppModulePrivileges();
+        Task<List<GetUserAppModulePrivilegesDTO>> GetUserAppModulePrivileges(long companyID);
 
         Task<GetUserAppModulePrivilegesDTO> GetUserAppModuleByUserandPrivilegeID(long userID, int privilegeID);
 
@@ -17,7 +17,7 @@ namespace hrms_be_backend_data.IRepository
 
         Task<List<GetUserAppModulePrivilegesDTO>> GetUserAppModulePrivilegesByPrivilegeID(long privilegeID);
 
-        Task<List<GetUserAppModulePrivilegesDTO>> GetPendingUserAppModulePrivileges();
+        Task<List<GetUserAppModulePrivilegesDTO>> GetPendingUserAppModulePrivileges(long companyID);
         Task<int> CreateUserAppModulePrivileges(UserAppModulePrivilegesDTO userAppModulePrivilegesDTO);
 
         Task<int> UpdateUserAppModulePRivileges(UserAppModulePrivilegesDTO userAppModulePrivilegesDTO);

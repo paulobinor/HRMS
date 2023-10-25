@@ -9,6 +9,7 @@ namespace hrms_be_backend_data.IRepository
         Task<string> DeleteEmploymentStatus(DeleteEmploymentStatusReq payload);
         Task<EmploymentStatusWithTotalVm> GetEmploymentStatus(long CompanyId, int PageNumber, int RowsOfPage);
         Task<EmploymentStatusWithTotalVm> GetEmploymentStatusDeleted(long CompanyId, int PageNumber, int RowsOfPage);
+        Task<List<EmploymentStatusVm>> GetEmploymentStatus(long CompanyId);
         Task<EmploymentStatusVm> GetEmploymentStatusById(long Id);
         Task<EmploymentStatusVm> GetEmploymentStatusByName(string EmploymentStatusName, long CompanyId);
     }

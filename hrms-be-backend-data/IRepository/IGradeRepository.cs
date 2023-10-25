@@ -8,6 +8,7 @@ namespace hrms_be_backend_data.IRepository
         Task<string> ProcessGrade(ProcessGradeReq payload);
         Task<string> DeleteGrade(DeleteGradeReq payload);
         Task<GradeWithTotalVm> GetGrades(long CompanyId, int PageNumber, int RowsOfPage);
+        Task<List<GradeVm>> GetGrades(long CompanyId);
         Task<GradeWithTotalVm> GetGradesDeleted(long CompanyId, int PageNumber, int RowsOfPage);
         Task<GradeVm> GetGradeById(long Id);
         Task<GradeVm> GetGradeByName(string GradeName, long CompanyId);

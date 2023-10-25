@@ -26,9 +26,9 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"SELECT c.CompanyId, c.CompanyName, c.Email, c.Created_Date, COUNT(cam.AppModuleId) AS ModuleCount FROM Company AS c
+                string query = @"SELECT c.CompanyId, c.CompanyName, c.Email, c.DateCreated, COUNT(cam.AppModuleId) AS ModuleCount FROM Company AS c
                                  LEFT JOIN CompanyAppModules AS cam ON c.CompanyId = cam.CompanyId where cam.IsApproved = @IsApproved and cam.ISDeleted = @IsDeleted 
-                                 GROUP BY c.CompanyId, c.CompanyName, c.Email , c.Created_Date";
+                                 GROUP BY c.CompanyId, c.CompanyName, c.Email , c.DateCreated";
                 var param = new DynamicParameters();
                 param.Add("IsApproved", true);
                 param.Add("IsDeleted", false);
@@ -159,9 +159,9 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"SELECT c.CompanyId, c.CompanyName, c.Email, c.Created_Date, COUNT(cam.AppModuleId) AS ModuleCount FROM Company AS c
+                string query = @"SELECT c.CompanyId, c.CompanyName, c.Email, c.DateCreated, COUNT(cam.AppModuleId) AS ModuleCount FROM Company AS c
                                  LEFT JOIN CompanyAppModules AS cam ON c.CompanyId = cam.CompanyId where cam.ISDeleted = @IsDeleted 
-                                 GROUP BY c.CompanyId, c.CompanyName, c.Email , c.Created_Date";
+                                 GROUP BY c.CompanyId, c.CompanyName, c.Email , c.DateCreated";
                 var param = new DynamicParameters();
                 param.Add("IsDeleted", false);
 
@@ -183,9 +183,9 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"SELECT c.CompanyId, c.CompanyName, c.Email, c.Created_Date, COUNT(cam.AppModuleId) AS ModuleCount FROM Company AS c
+                string query = @"SELECT c.CompanyId, c.CompanyName, c.Email, c.DateCreated, COUNT(cam.AppModuleId) AS ModuleCount FROM Company AS c
                                  LEFT JOIN CompanyAppModules AS cam ON c.CompanyId = cam.CompanyId where cam.IsDisapproved = @IsDisapproved and cam.ISDeleted = @IsDeleted 
-                                 GROUP BY c.CompanyId, c.CompanyName, c.Email , c.Created_Date";
+                                 GROUP BY c.CompanyId, c.CompanyName, c.Email , c.DateCreated";
                 var param = new DynamicParameters();
                 param.Add("IsDisapproved", true);
                 param.Add("IsDeleted", false);

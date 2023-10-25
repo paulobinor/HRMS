@@ -9,6 +9,7 @@ namespace hrms_be_backend_data.IRepository
         Task<string> DeleteEmployeeType(DeleteEmployeeTypeReq payload);
         Task<EmployeeTypeWithTotalVm> GetEmployeeTypes(long CompanyId, int PageNumber, int RowsOfPage);
         Task<EmployeeTypeWithTotalVm> GetEmployeeTypesDeleted(long CompanyId, int PageNumber, int RowsOfPage);
+        Task<List<EmployeeTypeVm>> GetEmployeeTypes(long CompanyId);
         Task<EmployeeTypeVm> GetEmployeeTypeById(long Id);
         Task<EmployeeTypeVm> GetEmployeeTypeByName(string EmployeeTypeName, long CompanyId);
     }

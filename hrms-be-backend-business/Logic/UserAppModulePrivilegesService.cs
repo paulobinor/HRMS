@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using hrms_be_backend_business.ILogic;
+using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
@@ -7,6 +8,7 @@ using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace hrms_be_backend_business.Logic
 {
@@ -21,8 +23,10 @@ namespace hrms_be_backend_business.Logic
         private readonly ICompanyAppModuleRepository _companyAppModuleRepository;
         private readonly IUserAppModulePrivilegeRepository _userAppModulePrivilegeRepository;
         private readonly IDepartmentRepository _departmentRepository;
+        private readonly IUserAppModulePrivilegeRepository _privilegeRepository;
+        private readonly IAuthService _authService;
         public UserAppModulePrivilegesService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<UserAppModulePrivilegesService> logger,
-            IUserAppModulePrivilegeRepository userAppModulePrivilegeRepository, IDepartmentRepository departmentRepository, IAuditLog audit, IMapper mapper, ICompanyAppModuleRepository companyAppModuleRepository, IEmployeeRepository employeeRepository)
+            IUserAppModulePrivilegeRepository userAppModulePrivilegeRepository, IDepartmentRepository departmentRepository, IAuditLog audit, IMapper mapper, ICompanyAppModuleRepository companyAppModuleRepository, IEmployeeRepository employeeRepository, IUserAppModulePrivilegeRepository privilegeRepository, IAuthService authService)
         {
             _audit = audit;
             _mapper = mapper;
@@ -33,21 +37,22 @@ namespace hrms_be_backend_business.Logic
             _userAppModulePrivilegeRepository = userAppModulePrivilegeRepository;
             _companyAppModuleRepository = companyAppModuleRepository;
             _employeeRepository = employeeRepository;
+            _authService = authService;
+            _companyAppModuleRepository = companyAppModuleRepository;
+
         }
 
-        public async Task<BaseResponse> GetAppModulePrivileges(RequesterInfo requester)
+        public async Task<BaseResponse> GetAppModulePrivileges(string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             var response = new BaseResponse();
             try
             {
-                string createdbyUserEmail = requester.Username;
-                string createdbyUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
 
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-
+                }
 
                 var data = await _userAppModulePrivilegeRepository.GetAppModulePrivileges();
 
@@ -66,18 +71,18 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> GetAppModulePrivilegesByAppModuleID(long appModuleID ,RequesterInfo requester)
+        public async Task<BaseResponse> GetAppModulePrivilegesByAppModuleID(long appModuleID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             var response = new BaseResponse();
             try
             {
-                string createdbyUserEmail = requester.Username;
-                string createdbyUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
 
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
+                }
+                
                 var data = await _userAppModulePrivilegeRepository.GetAppModulePrivilegeByAppModuleID(appModuleID);
 
                 response.Data = data;
@@ -95,28 +100,26 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> GetUserAppModulePrivileges(RequesterInfo requester)
+        public async Task<BaseResponse> GetUserAppModulePrivileges(string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             var response = new BaseResponse();
             try
             {
-                string createdbyUserEmail = requester.Username;
-                string createdbyUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
 
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserAppmodulePrivilegesConstant.View_UserAppModule, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new BaseResponse() { ResponseMessage = $"{checkPrivilege}", ResponseCode = ((int)ResponseCode.NoPrivilege).ToString(), Data = null };
 
-
-                //if (Convert.ToInt32(RoleId) != 1)
-                //{
-                //    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                //    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                //    return response;
-                //}
+                }
 
 
-                var data = await _userAppModulePrivilegeRepository.GetUserAppModulePrivileges();
+                var data = await _userAppModulePrivilegeRepository.GetUserAppModulePrivileges(accessUser.data.CompanyId);
 
                 response.Data = data;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
@@ -133,28 +136,26 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> GetPendingUserAppModulePRivilege(RequesterInfo requester)
+        public async Task<BaseResponse> GetPendingUserAppModulePRivilege(string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             var response = new BaseResponse();
             try
             {
-                string createdbyUserEmail = requester.Username;
-                string createdbyUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-
-                if (Convert.ToInt32(RoleId) != 2 && Convert.ToInt32(RoleId) != 4)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserAppmodulePrivilegesConstant.View_UserAppModule, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new BaseResponse() { ResponseMessage = $"{checkPrivilege}", ResponseCode = ((int)ResponseCode.NoPrivilege).ToString(), Data = null };
+
                 }
 
 
-                var data = await _userAppModulePrivilegeRepository.GetPendingUserAppModulePrivileges();
+                var data = await _userAppModulePrivilegeRepository.GetPendingUserAppModulePrivileges(accessUser.data.CompanyId);
 
                 response.Data = data;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
@@ -171,17 +172,23 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> GetUserAppModulePrivilegesByUserID(long userID, RequesterInfo requester)
+        public async Task<BaseResponse> GetUserAppModulePrivilegesByUserID(long userID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             var response = new BaseResponse();
             try
             {
-                string createdbyUserEmail = requester.Username;
-                string createdbyUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
 
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserAppmodulePrivilegesConstant.View_UserAppModule, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new BaseResponse() { ResponseMessage = $"{checkPrivilege}", ResponseCode = ((int)ResponseCode.NoPrivilege).ToString(), Data = null };
+
+                }
 
                 var data = await _userAppModulePrivilegeRepository.GetUserAppModulePrivilegesByUserID(userID);
 
@@ -201,30 +208,28 @@ namespace hrms_be_backend_business.Logic
         }
 
 
-        public async Task<BaseResponse> CreateUserAppModulePrivileges(CreateUserAppModulePrivilegesDTO createUserAppModulePrivileges, RequesterInfo requester)
+        public async Task<BaseResponse> CreateUserAppModulePrivileges(CreateUserAppModulePrivilegesDTO createUserAppModulePrivileges, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             var response = new BaseResponse();
             string successfulModules = string.Empty;
             string failedModules = string.Empty;
+            _logger.LogInformation($"CreateUserAppModulePrivileges Request ==> {JsonConvert.SerializeObject(createUserAppModulePrivileges)}");
             try
             {
-                _logger.LogInformation($"CreateUserAppModulePrivileges Request ==> {JsonConvert.SerializeObject(createUserAppModulePrivileges)}");
-                string createdbyUserEmail = requester.Username;
-                string createdbyUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-
-                if (Convert.ToInt32(RoleId) != 2 && Convert.ToInt32(RoleId) != 4)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserAppmodulePrivilegesConstant.Create_UserAppModule, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new BaseResponse() { ResponseMessage = $"{checkPrivilege}", ResponseCode = ((int)ResponseCode.NoPrivilege).ToString(), Data = null };
+
                 }
 
-                if (createUserAppModulePrivileges.PrivilegeID == null ||createUserAppModulePrivileges.PrivilegeID.Any(m => m <= 0))
+                if (createUserAppModulePrivileges.PrivilegeID == null || createUserAppModulePrivileges.PrivilegeID.Any(m => m <= 0))
                 {
                     response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Invalid App Module privilege selected";
@@ -274,7 +279,7 @@ namespace hrms_be_backend_business.Logic
                         DateCreated = DateTime.Now,
                         IsDeleted = false,
                         AppModulePrivilegeID = privileges,
-                        CreatedByUserId = requester.UserId,
+                        CreatedByUserId = accessUser.data.UserId,
                         UserID = createUserAppModulePrivileges.UserID,
                         IsActive = false
                     };
@@ -288,12 +293,12 @@ namespace hrms_be_backend_business.Logic
                         userAppModulePrivilege.UserAppModulePrivilegeID = resp;
                         var auditLog = new AuditLogDto
                         {
-                            userId = requester.UserId,
+                            userId = accessUser.data.UserId,
                             actionPerformed = "UserAppModulePrivilegeCreation",
                             payload = JsonConvert.SerializeObject(userAppModulePrivilege),
                             response = JsonConvert.SerializeObject(response),
                             actionStatus = response.ResponseMessage,
-                            ipAddress = ipAddress
+                            ipAddress = RemoteIpAddress
                         };
                         await _audit.LogActivity(auditLog);
 
@@ -330,24 +335,22 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> ApproveUserAppModulePrivilege(long userAppModulePrivilegeID, RequesterInfo requester)
+        public async Task<BaseResponse> ApproveUserAppModulePrivilege(long userAppModulePrivilegeID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             var response = new BaseResponse();
             try
             {
-                string createdbyUserEmail = requester.Username;
-                string createdbyUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-
-                if (Convert.ToInt32(RoleId) != 2 && Convert.ToInt32(RoleId) != 4)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserAppmodulePrivilegesConstant.Approve_UserAppModule, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new BaseResponse() { ResponseMessage = $"{checkPrivilege}", ResponseCode = ((int)ResponseCode.NoPrivilege).ToString(), Data = null };
+
                 }
                 var request = await _userAppModulePrivilegeRepository.GetUserAppModulePrivilegeByID(userAppModulePrivilegeID);
 
@@ -365,7 +368,7 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-                if (request.CreatedByUserId == requester.UserId)
+                if (request.CreatedByUserId == accessUser.data.UserId)
                 {
                     response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Auhorization error. Same user can't act as maker and checker";
@@ -375,17 +378,17 @@ namespace hrms_be_backend_business.Logic
                 request.IsApproved = true;
                 request.DateApproved = DateTime.Now;
                 request.IsActive = true;
-                request.ApprovedByUserId = requester.UserId;
+                request.ApprovedByUserId = accessUser.data.UserId;
 
                 var resp = await _userAppModulePrivilegeRepository.ApproveUserAppModulePrivileges(request);
                 var auditLog = new AuditLogDto
                 {
-                    userId = requester.UserId,
+                    userId = accessUser.data.UserId,
                     actionPerformed = "UserAppModulePrivilegeApproval",
                     payload = JsonConvert.SerializeObject(new { UserAppModulePrivilegeID = userAppModulePrivilegeID }),
                     response = JsonConvert.SerializeObject(request),
                     actionStatus = response.ResponseMessage,
-                    ipAddress = ipAddress
+                    ipAddress = RemoteIpAddress
                 };
                 await _audit.LogActivity(auditLog);
 
@@ -404,24 +407,22 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }
-        public async Task<BaseResponse> DisapproveUserAppModulePrivilage(long userAppModulePrivilegeID, RequesterInfo requester)
+        public async Task<BaseResponse> DisapproveUserAppModulePrivilage(long userAppModulePrivilegeID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             var response = new BaseResponse();
             try
             {
-                string createdbyUserEmail = requester.Username;
-                string createdbyUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-
-                if (Convert.ToInt32(RoleId) != 2 && Convert.ToInt32(RoleId) != 4)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserAppmodulePrivilegesConstant.Approve_UserAppModule, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new BaseResponse() { ResponseMessage = $"{checkPrivilege}", ResponseCode = ((int)ResponseCode.NoPrivilege).ToString(), Data = null };
+
                 }
                 var request = await _userAppModulePrivilegeRepository.GetUserAppModulePrivilegeByID(userAppModulePrivilegeID);
 
@@ -439,7 +440,7 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-                if (request.CreatedByUserId == requester.UserId)
+                if (request.CreatedByUserId == accessUser.data.UserId)
                 {
                     response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = $"Auhorization error. Same user can't act as maker and checker";
@@ -449,17 +450,17 @@ namespace hrms_be_backend_business.Logic
                 request.IsDisapproved = true;
                 request.DateApproved = DateTime.Now;
                 request.IsActive = false;
-                request.DisapprovedByUserId = requester.UserId;
+                request.DisapprovedByUserId = accessUser.data.UserId;
 
                 var resp = await _userAppModulePrivilegeRepository.DisapproveUserAppModulePrivilege(request);
                 var auditLog = new AuditLogDto
                 {
-                    userId = requester.UserId,
+                    userId = accessUser.data.UserId,
                     actionPerformed = "USerAppModulePrivilegeDisapproval",
                     payload = JsonConvert.SerializeObject(new { UserAppModulePrivilegeID = userAppModulePrivilegeID }),
                     response = JsonConvert.SerializeObject(request),
                     actionStatus = response.ResponseMessage,
-                    ipAddress = ipAddress
+                    ipAddress = RemoteIpAddress
                 };
                 await _audit.LogActivity(auditLog);
 
@@ -479,24 +480,22 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> UserAppModulePrivilegeActivationSwitch(long userAppModulePrivilegeID, RequesterInfo requester)
+        public async Task<BaseResponse> UserAppModulePrivilegeActivationSwitch(long userAppModulePrivilegeID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             var response = new BaseResponse();
             try
             {
-                string createdbyUserEmail = requester.Username;
-                string createdbyUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-
-                if (Convert.ToInt32(RoleId) != 2 && Convert.ToInt32(RoleId) != 4)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserAppmodulePrivilegesConstant.Update_UserAppModule, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new BaseResponse() { ResponseMessage = $"{checkPrivilege}", ResponseCode = ((int)ResponseCode.NoPrivilege).ToString(), Data = null };
+
                 }
                 var request = await _userAppModulePrivilegeRepository.GetUserAppModulePrivilegeByID(userAppModulePrivilegeID);
 
@@ -514,12 +513,12 @@ namespace hrms_be_backend_business.Logic
                 var resp = await _userAppModulePrivilegeRepository.UpdateUserAppModulePRivileges(request);
                 var auditLog = new AuditLogDto
                 {
-                    userId = requester.UserId,
+                    userId = accessUser.data.UserId,
                     actionPerformed = "DepartmentAppModuleActivationSwitch",
                     payload = JsonConvert.SerializeObject(new { UserAppModulePrivilegeID = userAppModulePrivilegeID }),
                     response = JsonConvert.SerializeObject(request),
                     actionStatus = response.ResponseMessage,
-                    ipAddress = ipAddress
+                    ipAddress = RemoteIpAddress
                 };
                 await _audit.LogActivity(auditLog);
 
@@ -539,24 +538,22 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> DeleteUserAppModulePrivilege(long userAppModulePrivilegeID, RequesterInfo requester)
+        public async Task<BaseResponse> DeleteUserAppModulePrivilege(long userAppModulePrivilegeID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             var response = new BaseResponse();
             try
             {
-                string createdbyUserEmail = requester.Username;
-                string createdbyUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-
-                if (Convert.ToInt32(RoleId) != 2 && Convert.ToInt32(RoleId) != 4)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                    return response;
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserAppmodulePrivilegesConstant.Delete_UserAppModule, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new BaseResponse() { ResponseMessage = $"{checkPrivilege}", ResponseCode = ((int)ResponseCode.NoPrivilege).ToString(), Data = null };
+
                 }
                 var request = await _userAppModulePrivilegeRepository.GetUserAppModulePrivilegeByID(userAppModulePrivilegeID);
 
@@ -569,19 +566,19 @@ namespace hrms_be_backend_business.Logic
 
 
                 request.IsDeleted = true;
-                request.DeletedByUserId = requester.UserId;
+                request.DeletedByUserId = accessUser.data.UserId;
 
 
 
                 var resp = await _userAppModulePrivilegeRepository.UpdateUserAppModulePRivileges(request);
                 var auditLog = new AuditLogDto
                 {
-                    userId = requester.UserId,
+                    userId = accessUser.data.UserId,
                     actionPerformed = "UserAppModulePrivilageDeletion",
                     payload = JsonConvert.SerializeObject(new { userAppModulePrivilegeID = userAppModulePrivilegeID }),
                     response = JsonConvert.SerializeObject(request),
                     actionStatus = response.ResponseMessage,
-                    ipAddress = ipAddress
+                    ipAddress = RemoteIpAddress
                 };
                 await _audit.LogActivity(auditLog);
 

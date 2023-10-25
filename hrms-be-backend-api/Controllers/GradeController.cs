@@ -1,4 +1,5 @@
 ﻿using hrms_be_backend_business.ILogic;
+using hrms_be_backend_business.Logic;
 using hrms_be_backend_common.Communication;
 using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.ViewModel;
@@ -34,6 +35,23 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _gradeService.CreateGrade(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
+
+        [HttpPost("CreateGradeBulk")]
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> CreateGradeBulk(IFormFile payload)
+        {
+            var requester = new RequesterInfo
+            {
+                IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                Port = Request.HttpContext.Connection.RemotePort.ToString()
+            };
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _gradeService.CreateGradeBulkUpload(payload, accessToken, claim, requester));
+        }
+
         [HttpPost("UpdateGrade")]
         [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
         public async Task<IActionResult> UpdateGrade(UpdateGradeDto payload)
@@ -46,6 +64,7 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _gradeService.UpdateGrade(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
+
         [HttpPost("DeleteGrade")]
         [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
         public async Task<IActionResult> DeleteGrade(DeleteGradeDto payload)

@@ -6,14 +6,17 @@ using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using static hrms_be_backend_business.Logic.CompanyAppModuleService;
 
 namespace hrms_be_backend_api.Controllers
 {
+
+
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class DepartmentalModulesController : ControllerBase
+    public class DepartmentalModulesController : BaseController
     {
         private readonly ILogger<DepartmentalModulesController> _logger;
         private readonly IDepartmentalModulesService _departmentalModulesService;
@@ -29,82 +32,43 @@ namespace hrms_be_backend_api.Controllers
         [HttpGet("GetDepartmetalAppModuleCount")]
         public async Task<IActionResult> GetDepartmetalAppModuleCount()
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _departmentalModulesService.GetDepartmentalAppModuleCount(requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetDepartmetalAppModuleCount ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IEnumerable<Claim> claim = identity.Claims;
+                var accessToken = Request.Headers["Authorization"];
+                accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+                return this.CustomResponse(await _departmentalModulesService.GetDepartmentalAppModuleCount(accessToken, claim, RemoteIpAddress, RemotePort));
+            
+            
         }
 
         [HttpGet("GetDepartmentAppModuleByStatus/{status}")]
         public async Task<IActionResult> GetDepartmentAppModuleByStatus(GetByStatus status)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _departmentalModulesService.GetDepartmentAppModuleStatus(status, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetCompanyAppModuleByCompanyID ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            return this.CustomResponse(await _departmentalModulesService.GetDepartmentAppModuleStatus(status, accessToken, claim, RemoteIpAddress, RemotePort));
+           
         }
 
         [HttpGet("GetDepartmentAppModuleByDepartmentID/{departmentID}")]
         public async Task<IActionResult> GetDepartmentAppModuleByDepartmentID(long departmentID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
 
-                return Ok(await _departmentalModulesService.GetDepartmentalAppModuleByDepartmentID(departmentID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetDepartmentAppModuleByDepartmentID ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return this.CustomResponse(await _departmentalModulesService.GetDepartmentalAppModuleByDepartmentID(departmentID, accessToken, claim, RemoteIpAddress, RemotePort));
+           
         }
 
 
@@ -112,162 +76,82 @@ namespace hrms_be_backend_api.Controllers
         [HttpGet("GetPendingDepartmentalAppModule")]
         public async Task<IActionResult> GetPendingDepartmentalAppModule()
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _departmentalModulesService.GetPendingDepartmentalAppModule(requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetPendingDepartmentalAppModule ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            return this.CustomResponse(await _departmentalModulesService.GetPendingDepartmentalAppModule(accessToken, claim, RemoteIpAddress, RemotePort));
+            
         }
 
         [HttpPost("CreateDepartmentalAppModule")]
         public async Task<IActionResult> CreateDepartmentalAppModule(CreateDepartmentalModuleDTO request)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _departmentalModulesService.CreateDepartmentalAppModule(request, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : CreateDepartmentalAppModule ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _departmentalModulesService.CreateDepartmentalAppModule(request, accessToken, claim, RemoteIpAddress, RemotePort));
+           
         }
 
         [HttpGet("ApproveDepartmentAppModule/{departmentAppModuleID}")]
         public async Task<IActionResult> ApproveDepartmentAppModule(long departmentAppModuleID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-
-                return Ok(await _departmentalModulesService.ApproveDepartmentalAppModule(departmentAppModuleID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : ApproveDepartmentAppModule ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _departmentalModulesService.ApproveDepartmentalAppModule(departmentAppModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
+            
         }
 
         [HttpGet("DisapproveDepartmentalAppModule/{departmentAppModuleID}")]
         public async Task<IActionResult> DisapproveDepartmentalAppModule(long departmentAppModuleID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _departmentalModulesService.DisapproveDepartmentalAppModule(departmentAppModuleID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : DisapproveDepartmentalAppModule ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            return this.CustomResponse(await _departmentalModulesService.DisapproveDepartmentalAppModule(departmentAppModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
+           
         }
 
         [HttpGet("DeleteDepartmentAppModule/{departmentAppModuleID}")]
         public async Task<IActionResult> DeleteDepartmentalAppModule(long departmentAppModuleID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _departmentalModulesService.DeleteDepartmentAppModule(departmentAppModuleID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : DeleteDepartmentalAppModule ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            return this.CustomResponse(await _departmentalModulesService.DeleteDepartmentAppModule(departmentAppModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
+            
         }
         [HttpGet("DepartmentalAppModuleActivationSwitch/{departmentAppModuleID}")]
         public async Task<IActionResult> DepartmentalAppModuleActivationSwitch(long departmentAppModuleID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _departmentalModulesService.DepartmentAppModuleActivationSwitch(departmentAppModuleID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : DepartmentalAppModuleActivationSwitch ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Anunexpected error occured";
-                response.Data = null;
-                return Ok(response);
-            }
+            return this.CustomResponse(await _departmentalModulesService.DepartmentAppModuleActivationSwitch(departmentAppModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
+            
         }
 
     }
