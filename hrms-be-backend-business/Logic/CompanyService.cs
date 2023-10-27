@@ -35,7 +35,7 @@ namespace hrms_be_backend_business.Logic
             _audit = audit;
             _authService = authService;
             _mailService = mailService;
-            _uriService= uriService;
+            _uriService = uriService;
             _logger = logger;
             _configuration = configuration;
             _accountRepository = accountRepository;
@@ -107,6 +107,7 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
                 }
+                var defaultPassword = Utils.GenerateDefaultPassword(6);
                 var repoPayload = new ProcessCompanyReq
                 {
                     CreatedByUserId = accessUser.data.UserId,
@@ -119,6 +120,12 @@ namespace hrms_be_backend_business.Logic
                     Email = payload.Email,
                     IsPublicSector = payload.IsPublicSector,
                     Website = payload.Website,
+                    AdminFirstName = payload.AdminFirstName,
+                    AdminLastName = payload.AdminLastName,
+                    AdminMiddleName = payload.AdminMiddleName,
+                    AdminOfficialMail = payload.AdminOfficialMail,
+                    AdminPasswordHash = defaultPassword,
+                    AdminPhoneNumber = payload.AdminPhoneNumber,
                     IsModifield = false,
                 };
                 string repoResponse = await _companyrepository.ProcessCompany(repoPayload);
@@ -126,32 +133,12 @@ namespace hrms_be_backend_business.Logic
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
-                var CompanyId = repoResponse.Replace("Success", "");
-                var password = Utils.GenerateDefaultPassword(6);
-                var userRepoPayload = new CreateCompanyUserReq
-                {
-                    CreatedByUserId = accessUser.data.UserId,
-                    DateCreated = DateTime.Now,
-                    FirstName = payload.AdminFirstName,
-                    LastName = payload.AdminLastName,
-                    MiddleName = payload.AdminMiddleName,
-                    OfficialMail = payload.AdminOfficialMail,
-                    PasswordHash = password,
-                    PhoneNumber = payload.AdminPhoneNumber,
-                    CompanyId = Convert.ToInt64(CompanyId),
-                };
-                string userRepoResponse = await _accountRepository.CreateCompanyUser(userRepoPayload);
-                if (!repoResponse.Contains("Success"))
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
-                }
 
-
-                var UserId = userRepoResponse.Replace("Success", "");
+                var UserId = repoResponse.Replace("Success", "");
                 var userDetails = await _accountRepository.GetUserById(Convert.ToInt64(UserId));
-                string token = $"{RandomGenerator.GetNumber(20)}{password}";
+                string token = $"{RandomGenerator.GetNumber(20)}{defaultPassword}";
 
-                _mailService.SendEmailApproveUser(userDetails.OfficialMail, $"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", password, "Xpress HRMS User Creation", EncryptDecrypt.EncryptResult(token));
+                _mailService.SendEmailApproveUser(userDetails.OfficialMail, $"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", defaultPassword, "Xpress HRMS User Creation", EncryptDecrypt.EncryptResult(token));
 
                 var auditLog = new AuditLogDto
                 {
@@ -164,7 +151,7 @@ namespace hrms_be_backend_business.Logic
                 };
                 await _audit.LogActivity(auditLog);
 
-                
+
 
                 return new ExecutedResult<string>() { responseMessage = "Created Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
 
@@ -311,7 +298,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     userId = accessUser.data.UserId,
                     actionPerformed = "DeleteCompany",
-                    payload =null,
+                    payload = null,
                     response = null,
                     actionStatus = $"Successful",
                     ipAddress = RemoteIpAddress
@@ -344,12 +331,12 @@ namespace hrms_be_backend_business.Logic
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
 
-                }               
+                }
                 var repoPayload = new ApproveCompanyReq
                 {
                     CompanyId = CompanyId,
                     CreatedByUserId = accessUser.data.UserId,
-                    DateCreated = DateTime.Now                  
+                    DateCreated = DateTime.Now
                 };
                 string repoResponse = await _companyrepository.ApproveCompany(repoPayload);
                 if (!repoResponse.Contains("Success"))
@@ -404,7 +391,7 @@ namespace hrms_be_backend_business.Logic
                 if (returnData.data == null)
                 {
                     return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
-                }               
+                }
 
                 totalRecords = returnData.totalRecords;
 

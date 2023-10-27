@@ -32,6 +32,12 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@Email", payload.Email);
                 param.Add("@ContactPhone", payload.ContactPhone);
                 param.Add("@IsPublicSector", payload.IsPublicSector);
+                param.Add("@AdminFirstName", payload.AdminFirstName);
+                param.Add("@AdminMiddleName", payload.AdminMiddleName);
+                param.Add("@AdminLastName", payload.AdminLastName);
+                param.Add("@AdminOfficialMail", payload.AdminOfficialMail);
+                param.Add("@AdminPhoneNumber", payload.AdminPhoneNumber);
+                param.Add("@AdminPasswordHash", payload.AdminPasswordHash);
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
                 param.Add("@DateCreated", payload.DateCreated);
                 param.Add("@IsModifield", payload.IsModifield);
