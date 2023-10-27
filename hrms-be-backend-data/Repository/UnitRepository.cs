@@ -12,13 +12,13 @@ using System.Data.SqlClient;
 namespace hrms_be_backend_data.Repository
 {
     public class UnitRepository : IUnitRepository
-    {     
+    {
         private readonly ILogger<UnitRepository> _logger;
         private readonly IDapperGenericRepository _dapper;
 
         public UnitRepository(IConfiguration configuration, ILogger<UnitRepository> logger, IDapperGenericRepository dapper)
-        {          
-            _logger = logger;           
+        {
+            _logger = logger;
             _dapper = dapper;
         }
 
@@ -66,6 +66,7 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
+
         public async Task<UnitWithTotalVm> GetUnites(long CompanyId, int PageNumber, int RowsOfPage)
         {
             var returnData = new UnitWithTotalVm();
@@ -90,6 +91,16 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
+
+        public async Task<List<UnitVm>> GetUnites(long CompanyId)
+        {
+            string query = @"select * from Unit where CompanyId = @CompanyId and IsDeleted = @IsDeleted";
+            var param = new DynamicParameters();
+            param.Add("CompanyId", CompanyId);
+            param.Add("IsDeleted", false);
+            return await _dapper.GetAll<UnitVm>(query, param, commandType: CommandType.Text);
+        }
+
         public async Task<UnitWithTotalVm> GetUnitesDeleted(long CompanyId, int PageNumber, int RowsOfPage)
         {
             var returnData = new UnitWithTotalVm();

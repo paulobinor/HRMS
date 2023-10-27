@@ -1,26 +1,33 @@
 ﻿using Dapper;
+using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace hrms_be_backend_data.Repository
 {
     public class AccountRepository : IAccountRepository
-    {       
-        private readonly ILogger<AccountRepository> _logger;         
+    {
+        private string _connectionString;
+        private readonly ILogger<AccountRepository> _logger;
+        private readonly IConfiguration _configuration;
         private readonly IDapperGenericRepository _dapper;
-        public AccountRepository(ILogger<AccountRepository> logger, IDapperGenericRepository dapper)
-        {           
-            _logger = logger;               
+        public AccountRepository(IConfiguration configuration, ILogger<AccountRepository> logger, IDapperGenericRepository dapper)
+        {
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _logger = logger;
+            _configuration = configuration;
             _dapper = dapper;
         }
 
         public async Task<string> ProcessUser(CreateUserReq payload)
         {
             try
-            {              
+            {
                 var param = new DynamicParameters();
                 param.Add("@UserId", payload.UserId);
                 param.Add("@FirstName", payload.FirstName);
@@ -73,7 +80,7 @@ namespace hrms_be_backend_data.Repository
             {
                 var param = new DynamicParameters();
                 param.Add("@UserId", UserId);
-                param.Add("@RefreshToken", RefreshToken);             
+                param.Add("@RefreshToken", RefreshToken);
 
                 return await _dapper.Get<string>("sp_update_refresh_token", param, commandType: CommandType.StoredProcedure);
             }
@@ -184,6 +191,8 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
+       
+
         public async Task<string> ChangePassword(long UserId, string defaultPassword, long CreatedByUserId)
         {
             try
@@ -203,7 +212,7 @@ namespace hrms_be_backend_data.Repository
                 return "Unable to submit this detail, kindly contact support";
             }
 
-        }    
+        }
 
         public async Task<UserWithTotalVm> GetUsers(int PageNumber, int RowsOfPage)
         {
@@ -211,7 +220,7 @@ namespace hrms_be_backend_data.Repository
             try
             {
                 var param = new DynamicParameters();
-              
+
                 param.Add("@PageNumber", PageNumber);
                 param.Add("@RowsOfPage", RowsOfPage);
                 var result = await _dapper.GetMultiple("sp_get_users", param, gr => gr.Read<long>(), gr => gr.Read<UserVm>(), commandType: CommandType.StoredProcedure);
@@ -396,7 +405,7 @@ namespace hrms_be_backend_data.Repository
                 return returnData;
             }
 
-        }        
+        }
         public async Task<UserWithTotalVm> GetUsersDeactivatedByCompany(long CompanyId, int PageNumber, int RowsOfPage)
         {
             var returnData = new UserWithTotalVm();
@@ -423,7 +432,7 @@ namespace hrms_be_backend_data.Repository
         }
 
         public async Task<UserVm> GetUserById(long Id)
-        {            
+        {
             try
             {
                 var param = new DynamicParameters();
@@ -431,7 +440,7 @@ namespace hrms_be_backend_data.Repository
                 return await _dapper.Get<UserVm>("sp_get_user_by_id", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
-            {              
+            {
                 _logger.LogError($"AccountRepository => GetUserById || {ex}");
                 return new UserVm();
             }

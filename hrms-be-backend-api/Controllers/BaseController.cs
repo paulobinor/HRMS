@@ -1,5 +1,6 @@
 ﻿using hrms_be_backend_common.Communication;
 using hrms_be_backend_data.Enums;
+using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace hrms_be_backend_api.Controllers
@@ -14,6 +15,19 @@ namespace hrms_be_backend_api.Controllers
             {               
                 case ResponseCode.NotAuthenticated:
                     return Unauthorized(result);               
+                default:
+                    return Ok(result);
+            }
+        }
+
+        protected IActionResult CustomResponse(BaseResponse result)
+        {
+            ResponseCode.TryParse(result.ResponseCode, out ResponseCode myStatus);
+            result.ResponseCode = result.ResponseCode.Length > 1 ? result.ResponseCode : '0' + result.ResponseCode;
+            switch (myStatus)
+            {
+                case ResponseCode.NotAuthenticated:
+                    return Unauthorized(result);
                 default:
                     return Ok(result);
             }

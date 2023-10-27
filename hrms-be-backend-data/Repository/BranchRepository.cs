@@ -89,6 +89,16 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
+
+        public async Task<List<BranchVm>> GetBranches(long CompanyId)
+        {
+            string query = @"Select * from Branch where CompanyId = @CompanyId and IsDeleted = @IsDeleted";
+            var param = new DynamicParameters();
+            param.Add("CompanyId", CompanyId);
+            param.Add("IsDeleted", false);
+            return await _dapper.GetAll<BranchVm>(query, param, commandType: CommandType.Text);
+
+        }
         public async Task<BranchWithTotalVm> GetBranchesDeleted(long CompanyId, int PageNumber, int RowsOfPage)
         {
             var returnData = new BranchWithTotalVm();

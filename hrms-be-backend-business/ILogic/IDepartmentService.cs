@@ -10,6 +10,7 @@ namespace hrms_be_backend_business.ILogic
     public interface IDepartmentService
     {
         Task<ExecutedResult<string>> CreateDepartment(CreateDepartmentDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<string>> CreateDepartmentBulkUpload(IFormFile payload, string AccessKey, IEnumerable<Claim> claim, RequesterInfo requester);
         Task<ExecutedResult<string>> UpdateDepartment(UpdateDepartmentDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<ExecutedResult<string>> DeleteDepartment(DeleteDepartmentDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<PagedExcutedResult<IEnumerable<DepartmentVm>>> GetDepartmentes(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);

@@ -27,16 +27,17 @@ namespace hrms_be_backend_data.Repository
         }
 
 
-        public async Task<List<GetDepartmentalModuleCount>> GetDepartmentalAppModuleCount()
+        public async Task<List<GetDepartmentalModuleCount>> GetDepartmentalAppModuleCount(long companyID)
         {
             try
             {
-                string query = @"Select d.DeptId as 'DepartmentId', c.CompanyName , d.DepartmentName , c.Email , d.Created_Date , Count(dm.AppModuleId) as ModuleCount from Department D Left Join DepartmentalModules dm On d.DeptId = dm.DepartmentID
-								 join Company c on d.CompanyId = c.CompanyId where dm.IsApproved = @IsApproved and dm.ISDeleted = @IsDeleted 
-								 GROUP BY d.DeptId, c.CompanyName , d.DepartmentName , c.Email , d.Created_Date";
+                string query = @"Select d.DepartmentId, c.CompanyName , d.DepartmentName , c.Email , d.DateCreated , Count(dm.AppModuleId) as ModuleCount from Department D Left Join DepartmentalModules dm On d.DepartmentId = dm.DepartmentID
+								 join Company c on d.CompanyId = c.CompanyId where dm.IsApproved = @IsApproved and dm.ISDeleted = @IsDeleted and c.CompanyId = @CompanyID
+								 GROUP BY d.DepartmentId, c.CompanyName , d.DepartmentName , c.Email , d.DateCreated";
                 var param = new DynamicParameters();
                 param.Add("IsApproved", true);
                 param.Add("IsDeleted", false);
+                param.Add("CompanyID", companyID);
 
                 var resp = await _repository.GetAll<GetDepartmentalModuleCount>(query, param, commandType: CommandType.Text);
 
@@ -52,16 +53,17 @@ namespace hrms_be_backend_data.Repository
         }
 
 
-        public async Task<List<GetDepartmentalModuleCount>> GetDisapprovedDepartmentalAppModuleCount()
+        public async Task<List<GetDepartmentalModuleCount>> GetDisapprovedDepartmentalAppModuleCount(long companyID)
         {
             try
             {
-                string query = @"Select d.DeptId as 'DepartmentId', c.CompanyName , d.DepartmentName , c.Email , d.Created_Date , Count(dm.AppModuleId) as ModuleCount from Department D Left Join DepartmentalModules dm On d.DeptId = dm.DepartmentID
-								 join Company c on d.CompanyId = c.CompanyId where dm.IsDisapproved = @IsDisapproved and dm.ISDeleted = @IsDeleted 
-								 GROUP BY d.DeptId, c.CompanyName , d.DepartmentName , c.Email , d.Created_Date";
+                string query = @"Select d.DepartmentId, c.CompanyName , d.DepartmentName , c.Email , d.DateCreated , Count(dm.AppModuleId) as ModuleCount from Department D Left Join DepartmentalModules dm On d.DepartmentId = dm.DepartmentID
+								 join Company c on d.CompanyId = c.CompanyId where dm.IsDisapproved = @IsDisapproved and dm.ISDeleted = @IsDeleted and c.CompanyId = @CompanyID
+								 GROUP BY d.DepartmentId, c.CompanyName , d.DepartmentName , c.Email , d.DateCreated";
                 var param = new DynamicParameters();
                 param.Add("IsDisapproved", true);
                 param.Add("IsDeleted", false);
+                param.Add("CompanyID", companyID);
 
                 var resp = await _repository.GetAll<GetDepartmentalModuleCount>(query, param, commandType: CommandType.Text);
 
@@ -76,15 +78,16 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<List<GetDepartmentalModuleCount>> GetAllDepartmentalAppModuleCount()
+        public async Task<List<GetDepartmentalModuleCount>> GetAllDepartmentalAppModuleCount(long companyID)
         {
             try
             {
-                string query = @"Select d.DeptId as 'DepartmentId', c.CompanyName , d.DepartmentName , c.Email , d.Created_Date , Count(dm.AppModuleId) as ModuleCount from Department D Left Join DepartmentalModules dm On d.DeptId = dm.DepartmentID
-								 join Company c on d.CompanyId = c.CompanyId where dm.ISDeleted = @IsDeleted 
-								 GROUP BY d.DeptId, c.CompanyName , d.DepartmentName , c.Email , d.Created_Date";
+                string query = @"Select d.DepartmentId, c.CompanyName , d.DepartmentName , c.Email , d.DateCreated , Count(dm.AppModuleId) as ModuleCount from Department D Left Join DepartmentalModules dm On d.DepartmentId = dm.DepartmentID
+								 join Company c on d.CompanyId = c.CompanyId where dm.ISDeleted = @IsDeleted and c.CompanyId = @CompanyId
+								 GROUP BY d.DepartmentId, c.CompanyName , d.DepartmentName , c.Email , d.DateCreated";
                 var param = new DynamicParameters();
                 param.Add("IsDeleted", false);
+                param.Add("CompanyID", companyID);
 
                 var resp = await _repository.GetAll<GetDepartmentalModuleCount>(query, param, commandType: CommandType.Text);
 
@@ -103,7 +106,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"Select d.DepartmentName, am.AppModuleName , am.AppModuleCode , dm.* from DepartmentalModules dm join Department d on dm.DepartmentID = d.DeptId join AppModules am on dm.AppModuleId = am.AppModuleId 
+                string query = @"Select d.DepartmentName, am.AppModuleName , am.AppModuleCode , dm.* from DepartmentalModules dm join Department d on dm.DepartmentID = d.DepartmentId join AppModules am on dm.AppModuleId = am.AppModuleId 
                                     where dm.IsDeleted = @IsDeleted and dm.IsDisapproved = @IsDisapproved and dm.DepartmentId = @DepartmentId and dm.AppModuleId = @AppModuleId";
                 var param = new DynamicParameters();
                 param.Add("IsDisapproved", false);
@@ -171,16 +174,17 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-        public async Task<List<GetDepartmentModuleByDepartmentDTO>> GetPendingDepartmentalAppModule()
+        public async Task<List<GetDepartmentModuleByDepartmentDTO>> GetPendingDepartmentalAppModule(long companyID)
         {
             try
             {
-                string query = @"Select d.DepartmentName, am.AppModuleName , am.AppModuleCode , dm.* from DepartmentalModules dm join Department d on dm.DepartmentID = d.DeptId join AppModules am on dm.AppModuleId = am.AppModuleId 
-                                    where dm.IsDeleted = @IsDeleted and dm.IsApproved = @IsApproved and dm.IsDisapproved = @IsDisapproved";
+                string query = @"Select d.DepartmentName, am.AppModuleName , am.AppModuleCode , dm.* from DepartmentalModules dm join Department d on dm.DepartmentID = d.DepartmentId join AppModules am on dm.AppModuleId = am.AppModuleId 
+                                    where dm.IsDeleted = @IsDeleted and dm.DepartmentID = @DepartmentID and d.CompanyID = @CompanyID";
                 var param = new DynamicParameters();
                 param.Add("IsDisapproved", false);
                 param.Add("IsApproved", false);
                 param.Add("IsDeleted", false);
+                param.Add("CompanyID", companyID);
 
                 var resp = await _repository.GetAll<GetDepartmentModuleByDepartmentDTO>(query, param, commandType: CommandType.Text);
 

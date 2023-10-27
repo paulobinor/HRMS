@@ -29,7 +29,7 @@ namespace hrms_be_backend_data.Repository
 
                 param.Add("@PrivilegeCode", PrivilegeCode);
                 param.Add("@CreatedByUserId", CreatedByUserId);
-               
+
                 return await _repository.Get<string>("sp_check_user_app_privilege", param, commandType: CommandType.StoredProcedure);
 
             }
@@ -41,15 +41,16 @@ namespace hrms_be_backend_data.Repository
 
         }
 
-        public async Task<List<GetUserAppModulePrivilegesDTO>> GetUserAppModulePrivileges()
+        public async Task<List<GetUserAppModulePrivilegesDTO>> GetUserAppModulePrivileges(long companyID)
         {
             try
             {
-                string query = @"Select u.StaffID, u.FirstName , u.LastName, u.Email, am.AppModuleName ,amp.AppModulePrivilegeName PrivilegeName, amp.AppModulePrivilegeCode PrivilegeCode, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId 
-                  Join USers u on u.UserID = uamp.USerID where uamp.IsDeleted = @IsDeleted and uamp.IsApproved = @IsApproved";
+                string query = @"Select e.StaffID, u.FirstName , u.LastName, u.OfficialMail as 'Email', am.AppModuleName ,amp.AppModulePrivilegeName PrivilegeName, amp.AppModulePrivilegeCode PrivilegeCode, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId 
+                  Join USers u on u.UserID = uamp.USerID join Employee e on e.EmployeeID = u.EmployeeId where uamp.IsDeleted = @IsDeleted and uamp.IsApproved = @IsApproved and u.CompanyId = @CompanyID";
                 var param = new DynamicParameters();
                 param.Add("IsApproved", true);
                 param.Add("IsDeleted", false);
+                param.Add("CompanyID", companyID);
 
                 var resp = await _repository.GetAll<GetUserAppModulePrivilegesDTO>(query, param, commandType: CommandType.Text);
 
@@ -68,8 +69,8 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"Select u.StaffID, u.FirstName , u.LastName, u.Email, am.AppModuleName ,amp.AppModulePrivilegeName PrivilegeName, amp.AppModulePrivilegeCode PrivilegeCode, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId 
-                    Join USers u on u.UserID = uamp.USerID where uamp.IsDeleted = @IsDeleted and uamp.IsDisapproved = @IsDisapproved and uamp.UserID = @UserID and uamp.AppModulePrivilegeID = @AppModulePrivilegeID";
+                string query = @"Select e.StaffID, u.FirstName , u.LastName, u.OfficialMail as 'Email', am.AppModuleName ,amp.AppModulePrivilegeName PrivilegeName, amp.AppModulePrivilegeCode PrivilegeCode, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId 
+                    Join USers u on u.UserID = uamp.USerID join Employee e on e.EmployeeID = e.EmployeeID where uamp.IsDeleted = @IsDeleted and uamp.IsDisapproved = @IsDisapproved and uamp.UserID = @UserID and uamp.AppModulePrivilegeID = @AppModulePrivilegeID";
                 var param = new DynamicParameters();
                 param.Add("IsDisapproved", false);
                 param.Add("IsDeleted", false);
@@ -117,7 +118,8 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"Select u.StaffID, u.FirstName , u.LastName, u.Email, am.AppModuleName ,amp.AppModulePrivilegeName PrivilegeName, amp.AppModulePrivilegeCode PrivilegeCode, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId Join USers u on u.UserID = uamp.USerID 
+                string query = @"Select e.StaffID, u.FirstName , u.LastName, u.OfficialMail as 'Email', am.AppModuleName ,amp.AppModulePrivilegeName PrivilegeName, amp.AppModulePrivilegeCode PrivilegeCode, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId 
+                  Join USers u on u.UserID = uamp.USerID join Employee e on e.EmployeeID = u.EmployeeId 
                   where uamp.IsDeleted = @IsDeleted and uamp.IsApproved = @IsApproved and uamp.UserID = @UserID";
                 var param = new DynamicParameters();
                 param.Add("UserID", userID);
@@ -136,7 +138,7 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-        
+
 
         public async Task<List<AppModulePrivilegeDTO>> GetAppModulePrivileges()
         {
@@ -182,7 +184,8 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"Select u.StaffID, u.FirstName , u.LastName, u.Email, am.AppModuleName ,amp.AppModulePrivilegeName PrivilegeName, amp.AppModulePrivilegeCode PrivilegeCode, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId Join USers u on u.UserID = uamp.USerID 
+                string query = @"Select e.StaffID, u.FirstName , u.LastName, u.OfficialMail as 'Email', am.AppModuleName ,amp.AppModulePrivilegeName PrivilegeName, amp.AppModulePrivilegeCode PrivilegeCode, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId 
+                  Join USers u on u.UserID = uamp.USerID join Employee e on e.EmployeeID = u.EmployeeId 
                   where uamp.IsDeleted = @IsDeleted and uamp.IsApproved = @IsApproved and uamp.AppModulePrivilegeID = @AppModulePrivilegeID";
                 var param = new DynamicParameters();
                 param.Add("AppModulePrivilegeID", privilegeID);
@@ -201,16 +204,17 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-        public async Task<List<GetUserAppModulePrivilegesDTO>> GetPendingUserAppModulePrivileges()
+        public async Task<List<GetUserAppModulePrivilegesDTO>> GetPendingUserAppModulePrivileges(long companyID)
         {
             try
             {
-                string query = @"Select u.StaffID, u.FirstName , u.LastName, u.Email, am.AppModuleName ,amp.AppModulePrivilegeName PrivilegeName,amp.AppModulePrivilegeCode PrivilegeCode, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId 
-                  Join USers u on u.UserID = uamp.USerID  where uamp.IsDeleted = @IsDeleted and uamp.IsApproved = @IsApproved and      uamp.IsDisapproved = @IsDisapproved";
+                string query = @"Select e.StaffID, u.FirstName , u.LastName, u.OfficialMail as 'Email', am.AppModuleName ,amp.AppModulePrivilegeName PrivilegeName,amp.AppModulePrivilegeCode PrivilegeCode, am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId 
+                  Join USers u on u.UserID = uamp.USerID join Employee e on e.EmployeeID = u.EmployeeId where uamp.IsDeleted = @IsDeleted and uamp.IsApproved = @IsApproved and uamp.IsDisapproved = @IsDisapproved and u.CompanyId = @CompanyID";
                 var param = new DynamicParameters();
                 param.Add("IsDisapproved", false);
                 param.Add("IsApproved", false);
                 param.Add("IsDeleted", false);
+                param.Add("CompanyID", companyID);
 
                 var resp = await _repository.GetAll<GetUserAppModulePrivilegesDTO>(query, param, commandType: CommandType.Text);
 
@@ -224,7 +228,7 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-       
+
 
         public async Task<int> CreateUserAppModulePrivileges(UserAppModulePrivilegesDTO userAppModulePrivilegesDTO)
         {

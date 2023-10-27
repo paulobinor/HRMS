@@ -1,9 +1,12 @@
 ﻿using hrms_be_backend_business.ILogic;
+using hrms_be_backend_business.Logic;
 using hrms_be_backend_common.Communication;
 using hrms_be_backend_common.DTO;
+using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System.Security.Claims;
 
 namespace hrms_be_backend_api.Controllers
@@ -11,7 +14,7 @@ namespace hrms_be_backend_api.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class EmployeeController : BaseController
     {
         private readonly ILogger<EmployeeController> _logger;
@@ -35,6 +38,35 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _EmployeeService.CreateEmployeeBasis(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
+
+        [HttpPost("CreateEmployeeBulkUpload/{companyID}")]
+        //[Authorize]
+        public async Task<IActionResult> CreateEmployeeBulkUpload(IFormFile payload, long companyID)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var requester = new RequesterInfo
+                {
+                     Username = this.User.Claims.ToList()[2].Value,
+                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
+                };
+
+                return Ok(await _EmployeeService.CreateEmployeeBulkUpload(payload, companyID, requester));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: ControllerMethod : CreateUserBulkUpload ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : CreateUserBulkUpload ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+        }
+
+
         [HttpPost("UpdateEmployeeBasis")]
         [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
         public async Task<IActionResult> UpdateEmployeeBasis(UpdateEmployeeBasisDto payload)
