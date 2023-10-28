@@ -96,7 +96,8 @@ namespace hrms_be_backend_business.Logic
                 var earnings =await _earningsRepository.GetEarningsComputation(earningId);
                 foreach(var  earningsComputation in earnings)
                 {
-                    if(payload.EarningItems.Any(p=>p.EarningsItemId!= earningsComputation.EarningsItemId))
+                    var checkEarningItem = payload.EarningItems.Where(p => p.EarningsItemId == earningsComputation.EarningsItemId).ToList();
+                    if (checkEarningItem.Count<1)
                     {
                         var earningCoputationPayload = new EarningsComputationReq
                         {

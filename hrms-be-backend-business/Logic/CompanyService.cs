@@ -8,6 +8,7 @@ using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -25,12 +26,15 @@ namespace hrms_be_backend_business.Logic
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
         private readonly IUserAppModulePrivilegeRepository _privilegeRepository;
+        private readonly IAppModulesRepository _appModulesRepository;
         private readonly IAuthService _authService;
         private readonly IMailService _mailService;
         private readonly IUriService _uriService;
+        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IDepartmentalModulesRepository _departmentalModulesRepository;
 
         public CompanyService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<CompanyService> logger,
-            ICompanyRepository companyRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IUriService uriService, IUserAppModulePrivilegeRepository privilegeRepository)
+            ICompanyRepository companyRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IUriService uriService, IUserAppModulePrivilegeRepository privilegeRepository, IAppModulesRepository appModulesRepository, IDepartmentRepository departmentRepository, IDepartmentalModulesRepository departmentalModulesRepository)
         {
             _audit = audit;
             _authService = authService;
@@ -41,6 +45,9 @@ namespace hrms_be_backend_business.Logic
             _accountRepository = accountRepository;
             _companyrepository = companyRepository;
             _privilegeRepository = privilegeRepository;
+            _appModulesRepository = appModulesRepository;
+            _departmentRepository = departmentRepository;
+            _departmentalModulesRepository = departmentalModulesRepository;
         }
         public async Task<ExecutedResult<string>> CreateCompany(CompanyCreateDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
@@ -135,6 +142,40 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 var UserId = repoResponse.Replace("Success", "");
+                //var appModules = await _appModulesRepository.GetAppModules();
+                //var departmentPayload = new ProcessDepartmentReq
+                //{
+                //    CreatedByUserId = Convert.ToInt64(UserId),
+                //    DateCreated = DateTime.Now,
+                //    DepartmentName = "Default Department",
+                //    IsHr = true,
+                //    IsModifield = false,
+                //};
+                //var deptResponse = await _departmentRepository.ProcessDepartment(departmentPayload);
+                //var departmentId = deptResponse.Replace("Success", "");
+                //foreach (var appModule in appModules)
+                //{
+                //    var departmentalModulesDTO = new DepartmentalModulesReq
+                //    {
+                //        AppModuleId = appModule.AppModuleId,
+                //        DepartmentId = Convert.ToInt64(departmentId),
+                //        CreatedByUserId = Convert.ToInt64(UserId),
+                //        DateCreated = DateTime.Now,
+                //    };
+                //    await _departmentalModulesRepository.CreateDepartmentalAppModule(departmentalModulesDTO);
+                //    var appModulePrivileges = await _privilegeRepository.GetAppModulePrivilegeByModuleID(appModule.AppModuleId);
+                //    foreach (var appModulePrivilege in appModulePrivileges)
+                //    {
+                //        var userAppModulePrivilegesReq = new UserAppModulePrivilegesReq
+                //        {
+                //            AppModulePrivilegeId = appModulePrivilege.AppModulePrivilegeID,
+                //            CreatedByUserId = Convert.ToInt64(UserId),
+                //            UserId = Convert.ToInt64(UserId),
+                //            DateCreated = DateTime.Now
+                //        };
+                //        await _privilegeRepository.CreateUserAppModulePrivileges(userAppModulePrivilegesReq);
+                //    }
+                //}
                 var userDetails = await _accountRepository.GetUserById(Convert.ToInt64(UserId));
                 string token = $"{RandomGenerator.GetNumber(20)}{defaultPassword}";
 

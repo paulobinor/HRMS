@@ -88,7 +88,8 @@ namespace hrms_be_backend_business.Logic
                 var deductions = await _deductionsRepository.GetDeductionComputation(deductionId);
                 foreach (var deductionComputation in deductions)
                 {
-                    if (payload.EarningItems.Any(p => p.EarningsItemId != deductionComputation.EarningsItemId))
+                    var checkEarningItem = payload.EarningItems.Where(p => p.EarningsItemId == deductionComputation.EarningsItemId).ToList();
+                    if (checkEarningItem.Count < 1)
                     {
                         var earningCoputationPayload = new DeductionComputationReq
                         {

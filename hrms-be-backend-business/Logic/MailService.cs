@@ -51,8 +51,6 @@ namespace hrms_be_backend_business.AppCode
                     smtpClient.Credentials = Credentials;
                     smtpClient.EnableSsl = _smtpParameters.SSL;
                     await smtpClient.SendMailAsync(mail);
-
-
                 }
             }
             catch (Exception ex)
@@ -167,7 +165,7 @@ namespace hrms_be_backend_business.AppCode
             }
         }
 
-        public void SendEmailApproveUser(string recipientEmail, string recipientName, string defaultPass, string subject,string token)
+        public async Task SendEmailApproveUser(string recipientEmail, string recipientName, string defaultPass, string subject, string token)
         {
             string emailAddress = _smtpParameters.EmailAddress;
             string smtpAdress = _smtpParameters.Host;
@@ -197,7 +195,7 @@ namespace hrms_be_backend_business.AppCode
                 MailKit.Net.Smtp.SmtpClient client = new MailKit.Net.Smtp.SmtpClient();
                 client.Connect(smtpAdress, smtpPort);
                 client.Authenticate(emailAddress, password);
-                client.Send(mailBody);
+                await client.SendAsync(mailBody);
                 client.Disconnect(true);
                 client.Dispose();
             }

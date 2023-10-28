@@ -64,8 +64,10 @@ namespace hrms_be_backend_data.RepoPayload
     public class AppModulePrivilegeDTO
     {
         public long AppModulePrivilegeID { get; set; }
-        public string PrivilegeName { get; set; }
-        public int AppModuleID { get; set; }
+        public string AppModulePrivilegeName { get; set; }
+        public string AppModulePrivilegeCode { get; set; }
+        public long AppModuleID { get; set; }
+
     }
 
     public class CreateUserAppModulePrivilegesDTO
