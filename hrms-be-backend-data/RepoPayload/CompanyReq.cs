@@ -11,6 +11,12 @@
         public string Email { get; set;}
         public string ContactPhone { get; set;}
         public bool IsPublicSector { get; set;}
+        public string AdminFirstName { get; set; }
+        public string AdminMiddleName { get; set; }
+        public string AdminLastName { get; set; }
+        public string AdminOfficialMail { get; set; }
+        public string AdminPhoneNumber { get; set; }
+        public string AdminPasswordHash { get; set; }
         public long CreatedByUserId { get; set;}
         public DateTime DateCreated { get; set; }
         public bool IsModifield { get; set; }

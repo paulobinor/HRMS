@@ -1,4 +1,5 @@
 ﻿using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.ViewModel;
 
 namespace hrms_be_backend_data.IRepository
 {
@@ -6,7 +7,8 @@ namespace hrms_be_backend_data.IRepository
     {
         Task<string> CheckUserAppPrivilege(string PrivilegeCode, long CreatedByUserId);
         Task<List<GetUserAppModulePrivilegesDTO>> GetUserAppModulePrivileges(long companyID);
-
+        Task<string> CreateUserAppModulePrivileges(UserAppModulePrivilegesReq userAppModulePrivilegesDTO);
+        Task<List<AppModulePrivilegeVm>> GetAppModulePrivilegeByModuleID(int AppModuleID);
         Task<GetUserAppModulePrivilegesDTO> GetUserAppModuleByUserandPrivilegeID(long userID, int privilegeID);
 
         Task<UserAppModulePrivilegesDTO> GetUserAppModulePrivilegeByID(long userAppModulePrivilegeID);

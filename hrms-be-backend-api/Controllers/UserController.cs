@@ -68,6 +68,18 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _userService.DeactivateUserBackOffice(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
+        [HttpPost("DisapproveUserBackOffice")]
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> DisapproveUserBackOffice(DisapproveUserDto payload)
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _userService.DisapproveUserBackOffice(payload, accessToken, claim, RemoteIpAddress, RemotePort));
+        }
         [HttpGet("GetUsersBackOffice")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<UserVm>>), 200)]
         public async Task<IActionResult> GetUsersBackOffice([FromQuery] PaginationFilter filter)

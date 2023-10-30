@@ -156,6 +156,7 @@ builder.Services.AddScoped<IPayrollRepository, PayrollRepository>();
 builder.Services.AddScoped<ITrainingFeedbackFormRepository, TrainingFeedbackFormRepository>();
 builder.Services.AddScoped<ITrainingInductionRepository, TrainingInductionRepository>();
 builder.Services.AddScoped<ITrainingPlanRepository, TrainingPlanRepository>();
+builder.Services.AddScoped<IAppModulesRepository, AppModulesRepository>();
 
 builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 builder.Services.AddScoped<IEarningsService, EarningsService>();

@@ -8,5 +8,6 @@
         public static string View_User_Details = "008";
         public static string Approve_User_Details = "010";
         public static string Deactivate_User_Details = "011";
+        public static string Disapprove_User = "017";
     }
 }

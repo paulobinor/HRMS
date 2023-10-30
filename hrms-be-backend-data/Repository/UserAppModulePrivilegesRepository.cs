@@ -158,6 +158,24 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+        public async Task<List<AppModulePrivilegeVm>> GetAppModulePrivilegeByModuleID(int AppModuleID)
+        {
+            try
+            {               
+                var param = new DynamicParameters();
+                param.Add("@AppModuleID", AppModuleID);
+                var resp = await _repository.GetAll<AppModulePrivilegeVm>("sp_get_app_modules_privilege_by_module_id", param, commandType: CommandType.StoredProcedure);
+
+                return resp;
+
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetAppModulePrivilegeByModuleID => {ex}");
+                throw;
+            }
+        }
 
         public async Task<List<AppModulePrivilegeDTO>> GetAppModulePrivilegeByAppModuleID(long moduleID)
         {
@@ -165,10 +183,10 @@ namespace hrms_be_backend_data.Repository
             {
                 string query = @"select * from AppModulePrivilege where AppModuleID = @AppModuleID";
                 var param = new DynamicParameters();
-                param.Add("AppModuleID", moduleID);
+                param.Add("@AppModuleID", moduleID);
 
                 var resp = await _repository.GetAll<AppModulePrivilegeDTO>(query, null, commandType: CommandType.Text);
-
+                 
                 return resp;
 
             }
@@ -228,7 +246,28 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+        public async Task<string> CreateUserAppModulePrivileges(UserAppModulePrivilegesReq userAppModulePrivilegesDTO)
+        {
+            try
+            {                
+                var param = new DynamicParameters();
+                param.Add("UserId", userAppModulePrivilegesDTO.UserId);
+                param.Add("AppModulePrivilegeId", userAppModulePrivilegesDTO.AppModulePrivilegeId);
+                param.Add("DateCreated", userAppModulePrivilegesDTO.DateCreated);               
+                param.Add("CreatedByUserId", userAppModulePrivilegesDTO.CreatedByUserId);
 
+                var resp = await _repository.Get<string>("sp_create_user_app_privilege", param, commandType: CommandType.StoredProcedure);
+
+                return resp;
+
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: CreateUserAppModulePrivileges => {ex}");
+                throw;
+            }
+        }
 
         public async Task<int> CreateUserAppModulePrivileges(UserAppModulePrivilegesDTO userAppModulePrivilegesDTO)
         {

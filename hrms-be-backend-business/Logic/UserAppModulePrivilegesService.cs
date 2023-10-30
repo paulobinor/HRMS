@@ -267,9 +267,9 @@ namespace hrms_be_backend_business.Logic
                     if (null != isExists)
                     {
                         response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"{privilegesDetails.PrivilegeName} have already been added to {User.GradeName}";
+                        response.ResponseMessage = $"{privilegesDetails.AppModulePrivilegeName} have already been added to {User.GradeName}";
 
-                        failedModules = $"{failedModules}, {privilegesDetails.PrivilegeName} have already been added to {User.GradeName}";
+                        failedModules = $"{failedModules}, {privilegesDetails.AppModulePrivilegeName} have already been added to {User.GradeName}";
 
                         //return response;
                     }
@@ -288,7 +288,7 @@ namespace hrms_be_backend_business.Logic
                     var resp = await _userAppModulePrivilegeRepository.CreateUserAppModulePrivileges(userAppModulePrivilege);
                     if (resp > 0)
                     {
-                        successfulModules = $"{successfulModules} , {privilegesDetails.PrivilegeName}";
+                        successfulModules = $"{successfulModules} , {privilegesDetails.AppModulePrivilegeName}";
 
                         userAppModulePrivilege.UserAppModulePrivilegeID = resp;
                         var auditLog = new AuditLogDto
@@ -305,7 +305,7 @@ namespace hrms_be_backend_business.Logic
                     }
                     else
                     {
-                        failedModules = $"{failedModules}, {privilegesDetails.PrivilegeName} failed";
+                        failedModules = $"{failedModules}, {privilegesDetails.AppModulePrivilegeName} failed";
                     }
 
                 }

@@ -198,8 +198,27 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+        public async Task<string> CreateDepartmentalAppModule(DepartmentalModulesReq departmentalAppModule)
+        {
+            try
+            {                
+                var param = new DynamicParameters();
+                param.Add("DepartmentId", departmentalAppModule.DepartmentId);
+                param.Add("AppModuleId", departmentalAppModule.AppModuleId);
+                param.Add("DateCreated", departmentalAppModule.DateCreated);              
+                param.Add("CreatedByUserId", departmentalAppModule.CreatedByUserId);
+                var resp = await _repository.Get<string>("sp_create_department_app_module", param, commandType: CommandType.StoredProcedure);
 
-        public async Task<int> CreateDepartmentalAppModule(DepartmentalModulesDTO departmentalAppModule)
+                return resp;
+
+            }
+            catch (Exception ex)
+            {               
+                _logger.LogError($"MethodName: CreateDepartmentalAppModule => {ex}");
+                throw;
+            }
+        }
+        public async Task<long> CreateDepartmentalAppModule(DepartmentalModulesDTO departmentalAppModule)
         {
             try
             {
@@ -225,7 +244,7 @@ namespace hrms_be_backend_data.Repository
         }
 
 
-        public async Task<int> UpdateDepartmentAppModule(DepartmentalModulesDTO departmentalAppModule)
+        public async Task<long> UpdateDepartmentAppModule(DepartmentalModulesDTO departmentalAppModule)
         {
             try
             {
@@ -251,7 +270,7 @@ namespace hrms_be_backend_data.Repository
         }
 
 
-        public async Task<int> ApproveDepartmentalAppModule(DepartmentalModulesDTO departmentalAppModule)
+        public async Task<long> ApproveDepartmentalAppModule(DepartmentalModulesDTO departmentalAppModule)
         {
             try
             {
@@ -277,7 +296,7 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<int> DisapproveDepartmentalAppModule(DepartmentalModulesDTO departmentalAppModule)
+        public async Task<long> DisapproveDepartmentalAppModule(DepartmentalModulesDTO departmentalAppModule)
         {
             try
             {

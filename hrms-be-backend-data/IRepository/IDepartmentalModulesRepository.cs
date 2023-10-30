@@ -16,9 +16,10 @@ namespace hrms_be_backend_data.IRepository
         Task<DepartmentalModulesDTO> GetDepartmentalAppModuleByID(long departmentalAppModuleID);
         Task<List<GetDepartmentModuleByDepartmentDTO>> GetDepartmentalAppModuleByDepartmentID(long departmentID);
         Task<List<GetDepartmentModuleByDepartmentDTO>> GetPendingDepartmentalAppModule(long compnayID);
-        Task<int> CreateDepartmentalAppModule(DepartmentalModulesDTO departmentalAppModule);
-        Task<int> UpdateDepartmentAppModule(DepartmentalModulesDTO departmentalAppModule);
-        Task<int> ApproveDepartmentalAppModule(DepartmentalModulesDTO departmentalAppModule);
-        Task<int> DisapproveDepartmentalAppModule(DepartmentalModulesDTO departmentalAppModule);
+        Task<string> CreateDepartmentalAppModule(DepartmentalModulesReq departmentalAppModule);
+        Task<long> CreateDepartmentalAppModule(DepartmentalModulesDTO departmentalAppModule);
+        Task<long> UpdateDepartmentAppModule(DepartmentalModulesDTO departmentalAppModule);
+        Task<long> ApproveDepartmentalAppModule(DepartmentalModulesDTO departmentalAppModule);
+        Task<long> DisapproveDepartmentalAppModule(DepartmentalModulesDTO departmentalAppModule);
     }
 }

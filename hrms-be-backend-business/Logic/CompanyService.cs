@@ -8,6 +8,7 @@ using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -25,22 +26,28 @@ namespace hrms_be_backend_business.Logic
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
         private readonly IUserAppModulePrivilegeRepository _privilegeRepository;
+        private readonly IAppModulesRepository _appModulesRepository;
         private readonly IAuthService _authService;
         private readonly IMailService _mailService;
         private readonly IUriService _uriService;
+        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IDepartmentalModulesRepository _departmentalModulesRepository;
 
         public CompanyService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<CompanyService> logger,
-            ICompanyRepository companyRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IUriService uriService, IUserAppModulePrivilegeRepository privilegeRepository)
+            ICompanyRepository companyRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IUriService uriService, IUserAppModulePrivilegeRepository privilegeRepository, IAppModulesRepository appModulesRepository, IDepartmentRepository departmentRepository, IDepartmentalModulesRepository departmentalModulesRepository)
         {
             _audit = audit;
             _authService = authService;
             _mailService = mailService;
-            _uriService= uriService;
+            _uriService = uriService;
             _logger = logger;
             _configuration = configuration;
             _accountRepository = accountRepository;
             _companyrepository = companyRepository;
             _privilegeRepository = privilegeRepository;
+            _appModulesRepository = appModulesRepository;
+            _departmentRepository = departmentRepository;
+            _departmentalModulesRepository = departmentalModulesRepository;
         }
         public async Task<ExecutedResult<string>> CreateCompany(CompanyCreateDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
@@ -107,6 +114,7 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
                 }
+                var defaultPassword = Utils.GenerateDefaultPassword(6);
                 var repoPayload = new ProcessCompanyReq
                 {
                     CreatedByUserId = accessUser.data.UserId,
@@ -119,6 +127,12 @@ namespace hrms_be_backend_business.Logic
                     Email = payload.Email,
                     IsPublicSector = payload.IsPublicSector,
                     Website = payload.Website,
+                    AdminFirstName = payload.AdminFirstName,
+                    AdminLastName = payload.AdminLastName,
+                    AdminMiddleName = payload.AdminMiddleName,
+                    AdminOfficialMail = payload.AdminOfficialMail,
+                    AdminPasswordHash = defaultPassword,
+                    AdminPhoneNumber = payload.AdminPhoneNumber,
                     IsModifield = false,
                 };
                 string repoResponse = await _companyrepository.ProcessCompany(repoPayload);
@@ -126,32 +140,46 @@ namespace hrms_be_backend_business.Logic
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
-                var CompanyId = repoResponse.Replace("Success", "");
-                var password = Utils.GenerateDefaultPassword(6);
-                var userRepoPayload = new CreateCompanyUserReq
-                {
-                    CreatedByUserId = accessUser.data.UserId,
-                    DateCreated = DateTime.Now,
-                    FirstName = payload.AdminFirstName,
-                    LastName = payload.AdminLastName,
-                    MiddleName = payload.AdminMiddleName,
-                    OfficialMail = payload.AdminOfficialMail,
-                    PasswordHash = password,
-                    PhoneNumber = payload.AdminPhoneNumber,
-                    CompanyId = Convert.ToInt64(CompanyId),
-                };
-                string userRepoResponse = await _accountRepository.CreateCompanyUser(userRepoPayload);
-                if (!repoResponse.Contains("Success"))
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
-                }
 
-
-                var UserId = userRepoResponse.Replace("Success", "");
+                var UserId = repoResponse.Replace("Success", "");
+                //var appModules = await _appModulesRepository.GetAppModules();
+                //var departmentPayload = new ProcessDepartmentReq
+                //{
+                //    CreatedByUserId = Convert.ToInt64(UserId),
+                //    DateCreated = DateTime.Now,
+                //    DepartmentName = "Default Department",
+                //    IsHr = true,
+                //    IsModifield = false,
+                //};
+                //var deptResponse = await _departmentRepository.ProcessDepartment(departmentPayload);
+                //var departmentId = deptResponse.Replace("Success", "");
+                //foreach (var appModule in appModules)
+                //{
+                //    var departmentalModulesDTO = new DepartmentalModulesReq
+                //    {
+                //        AppModuleId = appModule.AppModuleId,
+                //        DepartmentId = Convert.ToInt64(departmentId),
+                //        CreatedByUserId = Convert.ToInt64(UserId),
+                //        DateCreated = DateTime.Now,
+                //    };
+                //    await _departmentalModulesRepository.CreateDepartmentalAppModule(departmentalModulesDTO);
+                //    var appModulePrivileges = await _privilegeRepository.GetAppModulePrivilegeByModuleID(appModule.AppModuleId);
+                //    foreach (var appModulePrivilege in appModulePrivileges)
+                //    {
+                //        var userAppModulePrivilegesReq = new UserAppModulePrivilegesReq
+                //        {
+                //            AppModulePrivilegeId = appModulePrivilege.AppModulePrivilegeID,
+                //            CreatedByUserId = Convert.ToInt64(UserId),
+                //            UserId = Convert.ToInt64(UserId),
+                //            DateCreated = DateTime.Now
+                //        };
+                //        await _privilegeRepository.CreateUserAppModulePrivileges(userAppModulePrivilegesReq);
+                //    }
+                //}
                 var userDetails = await _accountRepository.GetUserById(Convert.ToInt64(UserId));
-                string token = $"{RandomGenerator.GetNumber(20)}{password}";
+                string token = $"{RandomGenerator.GetNumber(20)}{defaultPassword}";
 
-                _mailService.SendEmailApproveUser(userDetails.OfficialMail, $"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", password, "Xpress HRMS User Creation", EncryptDecrypt.EncryptResult(token));
+                _mailService.SendEmailApproveUser(userDetails.OfficialMail, $"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", defaultPassword, "Xpress HRMS User Creation", EncryptDecrypt.EncryptResult(token));
 
                 var auditLog = new AuditLogDto
                 {
@@ -164,7 +192,7 @@ namespace hrms_be_backend_business.Logic
                 };
                 await _audit.LogActivity(auditLog);
 
-                
+
 
                 return new ExecutedResult<string>() { responseMessage = "Created Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
 
@@ -311,7 +339,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     userId = accessUser.data.UserId,
                     actionPerformed = "DeleteCompany",
-                    payload =null,
+                    payload = null,
                     response = null,
                     actionStatus = $"Successful",
                     ipAddress = RemoteIpAddress
@@ -344,12 +372,12 @@ namespace hrms_be_backend_business.Logic
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
 
-                }               
+                }
                 var repoPayload = new ApproveCompanyReq
                 {
                     CompanyId = CompanyId,
                     CreatedByUserId = accessUser.data.UserId,
-                    DateCreated = DateTime.Now                  
+                    DateCreated = DateTime.Now
                 };
                 string repoResponse = await _companyrepository.ApproveCompany(repoPayload);
                 if (!repoResponse.Contains("Success"))
@@ -404,7 +432,7 @@ namespace hrms_be_backend_business.Logic
                 if (returnData.data == null)
                 {
                     return PaginationHelper.CreatePagedReponse<CompanyVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
-                }               
+                }
 
                 totalRecords = returnData.totalRecords;
 

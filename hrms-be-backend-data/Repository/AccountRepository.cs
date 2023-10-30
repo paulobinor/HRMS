@@ -5,6 +5,7 @@ using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -12,15 +13,12 @@ namespace hrms_be_backend_data.Repository
 {
     public class AccountRepository : IAccountRepository
     {
-        private string _connectionString;
-        private readonly ILogger<AccountRepository> _logger;
-        private readonly IConfiguration _configuration;
+       
+        private readonly ILogger<AccountRepository> _logger;      
         private readonly IDapperGenericRepository _dapper;
-        public AccountRepository(IConfiguration configuration, ILogger<AccountRepository> logger, IDapperGenericRepository dapper)
-        {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
-            _logger = logger;
-            _configuration = configuration;
+        public AccountRepository(ILogger<AccountRepository> logger, IDapperGenericRepository dapper)
+        {           
+            _logger = logger;          
             _dapper = dapper;
         }
 
@@ -171,6 +169,26 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
+        public async Task<string> DisapproveUser(long Id, string Comment, long CreatedByUserId, DateTime DateCreated)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@Id", Id);
+                param.Add("@Comment", Comment);
+                param.Add("@CreatedByUserId", CreatedByUserId);
+                param.Add("@DateCreated", DateCreated);
+
+                return await _dapper.Get<string>("sp_disapprove_user", param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AccountRepository -> DisapproveUser => {ex}");
+                return "Unable to submit this detail, kindly contact support";
+            }
+
+        }
         public async Task<string> UnblockUser(long unblockedByuserId, string defaultPassword, string userEmail)
         {
             try
@@ -191,7 +209,43 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
-       
+        public async Task<string> LogoutUser(string EmailAddress)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmailAddress", EmailAddress);             
+
+                return await _dapper.Get<string>("sp_log_out_user", param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AccountRepository -> LogoutUser => {ex}");
+                return "Unable to submit this detail, kindly contact support";
+            }
+
+        }
+        public async Task<string> UpdateLoginActivity(long UserId, string IpAddress, string Token, DateTime DateCreated)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+
+                param.Add("@UserId", UserId);
+                param.Add("@IpAddress", IpAddress);
+                param.Add("@Token", Token);
+                param.Add("@DateCreated", DateCreated);
+                return await _dapper.Get<string>("sp_update_login_activity", param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AccountRepository -> UpdateLoginActivity => {ex}");
+                return "Unable to submit this detail, kindly contact support";
+            }
+
+        }
 
         public async Task<string> ChangePassword(long UserId, string defaultPassword, long CreatedByUserId)
         {

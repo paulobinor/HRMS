@@ -1,7 +1,8 @@
 ﻿namespace hrms_be_backend_common.DTO
 {
     public class CreateEmployeeBasisDto
-    {       
+    {
+        public string StaffId { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
@@ -21,6 +22,7 @@
     public class UpdateEmployeeBasisDto
     {
         public long EmployeeId { get; set; }
+        public string StaffId { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
