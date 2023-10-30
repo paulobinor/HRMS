@@ -78,7 +78,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                     param.Add("@Status", Account.UPDLOGINACTIVITY);
                     param.Add("@UserIdLactivity", userId);
                     param.Add("@IpAddressLactivity", Ipaddress);
-                    param.Add("@Token", token);
+                    param.Add("@Token", token); 
 
                     dynamic rsp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
 

@@ -12,10 +12,12 @@ namespace hrms_be_backend_data.IRepository
         Task<string> VerifyUser(string Token, string LoggedInWithIPAddress, DateTime DateCreated);
         Task<string> ApproveUser(long Id, string defaultPassword, long CreatedByUserId, DateTime DateCreated);
         Task<string> DeactivateUser(long Id, string Comment, long CreatedByUserId, DateTime DateCreated);
+        Task<string> DisapproveUser(long Id, string Comment, long CreatedByUserId, DateTime DateCreated);
         Task<string> UnblockUser(long unblockedByuserId, string defaultPassword, string userEmail);
         Task<string> UpdateRefreshToken(string RefreshToken, long UserId);
         Task<string> ChangePassword(long UserId, string defaultPassword, long CreatedByUserId);
-
+        Task<string> LogoutUser(string EmailAddress);
+        Task<string> UpdateLoginActivity(long UserId, string IpAddress, string Token, DateTime DateCreated);
 
         Task<UserWithTotalVm> GetUsers(int PageNumber, int RowsOfPage);
         Task<UserWithTotalVm> GetUsersBackOffice(int PageNumber, int RowsOfPage);

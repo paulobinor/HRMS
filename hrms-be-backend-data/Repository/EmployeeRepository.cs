@@ -24,6 +24,7 @@ namespace hrms_be_backend_data.Repository
             {
                 var param = new DynamicParameters();
                 param.Add("@EmployeeId", payload.EmployeeId);
+                param.Add("@StaffId", payload.StaffId);
                 param.Add("@FirstName", payload.FirstName);
                 param.Add("@MiddleName", payload.MiddleName);
                 param.Add("@LastName", payload.LastName);

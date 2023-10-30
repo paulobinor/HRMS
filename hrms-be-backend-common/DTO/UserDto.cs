@@ -22,4 +22,9 @@
         public long UserId { get; set; }
         public string DeactivatedComment { get; set; }       
     }
+    public class DisapproveUserDto
+    {
+        public long UserId { get; set; }
+        public string DisapproveComment { get; set; }
+    }
 }

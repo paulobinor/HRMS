@@ -110,7 +110,7 @@ namespace hrms_be_backend_business.Logic
 
                 var authResponse = await _jwtManager.GenerateJsonWebToken(accessUserVm);
 
-                await _unitOfWork.UpdateUserLoginActivity(user.UserId, ipAddress, authResponse.JwtToken);
+                await _accountRepository.UpdateLoginActivity(user.UserId, ipAddress, authResponse.JwtToken,DateTime.Now);
 
                 var loginResponse = new LoginResponse
                 {
@@ -195,15 +195,20 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<UserFullView>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-        public async Task<BaseResponse> Logout(LogoutDto logout, string ipAddress, string port)
+        public async Task<BaseResponse> Logout(LogoutDto payload, string ipAddress, string port)
         {
             var response = new BaseResponse();
             try
             {
-                //update action performed into audit log here
-
-                await _unitOfWork.UpdateLogout(Encoding.UTF8.GetString(Convert.FromBase64String(logout.OfficialMail)));
-
+                var email = Encoding.UTF8.GetString(Convert.FromBase64String(payload.OfficialMail));
+                var repoRespon = await _accountRepository.LogoutUser(email);
+                if (!repoRespon.Contains("Success"))
+                {
+                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = repoRespon;
+                    response.Data = null;
+                    return response;
+                }
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = "Logged out successfully";
                 response.Data = null;

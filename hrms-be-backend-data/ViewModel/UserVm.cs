@@ -15,7 +15,10 @@
         public string OfficialMail { get; set; }
         public string PhoneNumber { get; set; }
         public string UserStatusName { get; set; }
-        public string CompanyName { get; set; }       
+        public string CompanyName { get; set; }     
+        public bool IsApproved { get; set; }
+        public bool IsDisapproved { get; set; }
+        public bool IsDeactivated { get; set; }
     }
     public class AccessUserVm
     {
@@ -30,6 +33,9 @@
         public string UserStatusCode { get; set; }
         public long CompanyId { get; set; }
         public string CompanyName { get; set; }
+        public bool IsApproved { get; set; }
+        public bool IsDisapproved { get; set; }
+        public bool IsDeactivated { get; set; }
         public List<UserModulesVm> Modules { get; set; }
     }
 
