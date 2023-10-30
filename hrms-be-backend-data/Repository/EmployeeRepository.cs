@@ -261,5 +261,16 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
+        public async Task<EmployeeFullVm> GetEmployeeByEmail(string email)
+        {
+            string query = @"select * from Employee where OfficialMail = @Email and IsDeleted = @IsDeleted and IsApproved = @IsApproved";
+            var param = new DynamicParameters();
+            param.Add("Email", email);
+            param.Add("IsDeleted", false);
+            param.Add("IsApproved", true);
+            return await _dapper.Get<EmployeeFullVm>(query, param, commandType: CommandType.Text);
+
+        }
+
     }
 }

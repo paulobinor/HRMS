@@ -166,7 +166,7 @@ namespace hrms_be_backend_business.Logic
                                 var resp = await CreateGrade(gradeRequest, AccessKey, claim, requester.IpAddress, requester.Port);
 
 
-                                if (resp.responseCode == "00")
+                                if (resp.responseCode == "0")
                                 {
                                     k++;
                                 }

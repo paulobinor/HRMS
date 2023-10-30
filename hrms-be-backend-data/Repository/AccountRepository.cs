@@ -575,6 +575,7 @@ namespace hrms_be_backend_data.Repository
                 return new UserVm();
             }
         }
+
         public async Task<List<UserModulesVm>> GetAppModulesAssigned(long UserId)
         {
             try
