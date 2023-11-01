@@ -15,7 +15,7 @@ namespace hrms_be_backend_api.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class DepartmentalModulesController : BaseController
     {
         private readonly ILogger<DepartmentalModulesController> _logger;
@@ -38,8 +38,8 @@ namespace hrms_be_backend_api.Controllers
                 var identity = HttpContext.User.Identity as ClaimsIdentity;
                 IEnumerable<Claim> claim = identity.Claims;
                 var accessToken = Request.Headers["Authorization"];
-                accessToken = accessToken.ToString().Replace("bearer", "").Trim();
-                return this.CustomResponse(await _departmentalModulesService.GetDepartmentalAppModuleCount(accessToken, claim, RemoteIpAddress, RemotePort));
+            accessToken = accessToken.ToString().ToLower().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _departmentalModulesService.GetDepartmentalAppModuleCount(accessToken, claim, RemoteIpAddress, RemotePort));
             
             
         }
@@ -52,6 +52,7 @@ namespace hrms_be_backend_api.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claim = identity.Claims;
             var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().ToLower().Replace("bearer", "").Trim();
             return this.CustomResponse(await _departmentalModulesService.GetDepartmentAppModuleStatus(status, accessToken, claim, RemoteIpAddress, RemotePort));
            
         }
@@ -65,7 +66,7 @@ namespace hrms_be_backend_api.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claim = identity.Claims;
             var accessToken = Request.Headers["Authorization"];
-            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            accessToken = accessToken.ToString().ToLower().Replace("bearer", "").Trim();
 
             return this.CustomResponse(await _departmentalModulesService.GetDepartmentalAppModuleByDepartmentID(departmentID, accessToken, claim, RemoteIpAddress, RemotePort));
            
@@ -81,7 +82,7 @@ namespace hrms_be_backend_api.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claim = identity.Claims;
             var accessToken = Request.Headers["Authorization"];
-            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            accessToken = accessToken.ToString().ToLower().Replace("bearer", "").Trim();
 
             return this.CustomResponse(await _departmentalModulesService.GetPendingDepartmentalAppModule(accessToken, claim, RemoteIpAddress, RemotePort));
             
@@ -95,7 +96,7 @@ namespace hrms_be_backend_api.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claim = identity.Claims;
             var accessToken = Request.Headers["Authorization"];
-            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            accessToken = accessToken.ToString().ToLower().Replace("bearer", "").Trim();
             return this.CustomResponse(await _departmentalModulesService.CreateDepartmentalAppModule(request, accessToken, claim, RemoteIpAddress, RemotePort));
            
         }
@@ -108,7 +109,7 @@ namespace hrms_be_backend_api.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claim = identity.Claims;
             var accessToken = Request.Headers["Authorization"];
-            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            accessToken = accessToken.ToString().ToLower().Replace("bearer", "").Trim();
             return this.CustomResponse(await _departmentalModulesService.ApproveDepartmentalAppModule(departmentAppModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
             
         }
@@ -121,7 +122,7 @@ namespace hrms_be_backend_api.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claim = identity.Claims;
             var accessToken = Request.Headers["Authorization"];
-            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            accessToken = accessToken.ToString().ToLower().Replace("bearer", "").Trim();
 
             return this.CustomResponse(await _departmentalModulesService.DisapproveDepartmentalAppModule(departmentAppModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
            
@@ -135,7 +136,7 @@ namespace hrms_be_backend_api.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claim = identity.Claims;
             var accessToken = Request.Headers["Authorization"];
-            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            accessToken = accessToken.ToString().ToLower().Replace("bearer", "").Trim();
 
             return this.CustomResponse(await _departmentalModulesService.DeleteDepartmentAppModule(departmentAppModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
             
@@ -148,7 +149,7 @@ namespace hrms_be_backend_api.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claim = identity.Claims;
             var accessToken = Request.Headers["Authorization"];
-            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            accessToken = accessToken.ToString().ToLower().Replace("bearer", "").Trim();
 
             return this.CustomResponse(await _departmentalModulesService.DepartmentAppModuleActivationSwitch(departmentAppModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
             
