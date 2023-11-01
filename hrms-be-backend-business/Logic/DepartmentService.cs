@@ -170,19 +170,18 @@ namespace hrms_be_backend_business.Logic
                                 {
                                     DepartmentName = departmentName,
                                     HodEmployeeId = user.EmployeeId
-
                                 };
 
                                 var resp = await CreateDepartment(departmentrequest, AccessKey, claim, requester.IpAddress, requester.Port);
 
 
-                                if (resp.responseCode == "00")
+                                if (resp.responseCode == "0")
                                 {
                                     k++;
                                 }
                                 else
                                 {
-                                    errorOutput.Append($"Row {row} failed due to {resp.responseMessage}" + "\n");
+                                    errorOutput.Append($"| Row {row} failed due to {resp.responseMessage}");
                                 }
                             }
                         }
@@ -197,11 +196,9 @@ namespace hrms_be_backend_business.Logic
                     }
                     else
                     {
-                        return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ProcessingError).ToString(), responseMessage = errorOutput.ToString() };
+                        return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ProcessingError).ToString(), responseMessage = errorOutput.ToString().TrimStart('|')};
                     }
                 }
-
-
             }
             catch (Exception ex)
             {

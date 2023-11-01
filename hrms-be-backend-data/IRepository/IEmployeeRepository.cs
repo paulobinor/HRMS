@@ -21,5 +21,6 @@ namespace hrms_be_backend_data.IRepository
         Task<EmployeeFullVm> GetEmployeeById(long Id);
         Task<EmployeeFullVm> GetEmployeeByUserId(long UserId);
         Task<int> AddEmployeeBulk(DataTable dataTable, RequesterInfo requester, long currentStaffCount, int listCount, long companyID);
+        Task<EmployeeFullVm> GetEmployeeByEmail(string email);
     }
 }

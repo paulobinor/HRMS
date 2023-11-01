@@ -30,9 +30,10 @@ namespace hrms_be_backend_business.Logic
         private readonly IAuthService _authService;
         private readonly IMailService _mailService;
         private readonly IUriService _uriService;
+        private readonly IEmployeeRepository _employeeRepository;
 
         public UnitService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<UnitService> logger,
-            IUnitRepository unitRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IUriService uriService, IUserAppModulePrivilegeRepository privilegeRepository)
+            IUnitRepository unitRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IUriService uriService, IUserAppModulePrivilegeRepository privilegeRepository, IEmployeeRepository employeeRepository)
         {
             _audit = audit;
 
@@ -44,6 +45,7 @@ namespace hrms_be_backend_business.Logic
             _mailService = mailService;
             _uriService = uriService;
             _privilegeRepository = privilegeRepository;
+            _employeeRepository = employeeRepository;
         }
 
         public async Task<ExecutedResult<string>> CreateUnit(CreateUnitDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
@@ -116,6 +118,107 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
+
+        public async Task<ExecutedResult<string>> CreateUnitBulkUpload(IFormFile payload, string AccessKey, IEnumerable<Claim> claim, RequesterInfo requester)
+        {
+            //check if us
+            StringBuilder errorOutput = new StringBuilder();
+            try
+            {
+                if (payload == null || payload.Length <= 0)
+                    return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ValidationError).ToString(), responseMessage = "No file attached" };
+                else if (!Path.GetExtension(payload.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                    return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ValidationError).ToString(), responseMessage = "File not an Excel Format" };
+                else
+                {
+                    var stream = new MemoryStream();
+                    await payload.CopyToAsync(stream);
+
+                    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                    var reader = ExcelReaderFactory.CreateReader(stream);
+                    DataSet ds = new DataSet();
+                    ds = reader.AsDataSet();
+                    reader.Close();
+
+                    int rowCount = ds.Tables[0].Rows.Count;
+                    DataTable serviceDetails = ds.Tables[0];
+
+                    int k = 0;
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+
+                        string UnitName = serviceDetails.Rows[0][0].ToString();
+                        string UnitHeadEmail = serviceDetails.Rows[0][1].ToString();
+                        //string CompanyName = serviceDetails.Rows[0][2].ToString();
+
+
+                        if (UnitName != "UnitName" || UnitHeadEmail != "UnitHeadEmail")
+                            return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ValidationError).ToString(), responseMessage = "File header not in the Right format" };
+                        else
+                        {
+                            for (int row = 1; row < serviceDetails.Rows.Count; row++)
+                            {
+
+                                string unitName = serviceDetails.Rows[row][0].ToString();
+                                string unitHeadEmail = serviceDetails.Rows[row][1].ToString();
+                                var employee = await _employeeRepository.GetEmployeeByEmail(unitHeadEmail);
+
+                                if (employee == null)
+                                {
+                                    errorOutput.Append($"| Row {row} failed due to Invalid unit head email {unitHeadEmail}");
+                                    continue;
+                                }
+                                if (employee.DepartmentId == 0)
+                                {
+                                    errorOutput.Append($"| Row {row} Unit head with email {unitHeadEmail} doesn't have a department");
+                                    continue;
+                                }
+                                //var company = serviceDetails.Rows[row][2].ToString();
+
+                                var departmentrequest = new CreateUnitDto
+                                {
+                                    DepartmentId = employee.DepartmentId,
+                                    UnitHeadEmployeeId = employee.EmployeeID,
+                                    UnitName = unitName
+
+                                };
+
+                                var resp = await CreateUnit(departmentrequest, AccessKey, claim, requester.IpAddress, requester.Port);
+
+
+                                if (resp.responseCode == "0")
+                                {
+                                    k++;
+                                }
+                                else
+                                {
+                                    errorOutput.Append($"| Row {row} failed due to {resp.responseMessage}");
+                                }
+                            }
+                        }
+
+                    }
+
+
+
+                    if (k == rowCount - 1)
+                    {
+                        return new ExecutedResult<string> { responseCode = ((int)ResponseCode.Ok).ToString(), responseMessage = "All record inserted successfully" };
+                    }
+                    else
+                    {
+                        return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ProcessingError).ToString(), responseMessage = errorOutput.ToString().TrimStart('|') };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured ==> {ex.Message}");
+                return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ProcessingError).ToString(), responseMessage = "Exception occured creating unit" };
+            }
+        }
+
+
         public async Task<ExecutedResult<string>> UpdateUnit(UpdateUnitDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
 

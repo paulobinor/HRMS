@@ -674,10 +674,14 @@ namespace hrms_be_backend_business.Logic
                                 if (!string.IsNullOrEmpty(roleName))
                                 {
                                     var role = roles.FirstOrDefault(m => m.RoleName == roleName.Trim());
-                                    if (role == null)
-                                        rowError = $"{rowError} role {roleName} doesn't exist.";
-                                    else
+
+                                    if(role != null)
                                         roleID = role.RoleId;
+
+                                    //if (role == null)
+                                    //    rowError = $"{rowError} role {roleName} doesn't exist.";
+                                    //else
+                                    //    roleID = role.RoleId;
                                 }
 
                                 if (companyName.ToUpper().Trim() != company.CompanyName.ToUpper().Trim())

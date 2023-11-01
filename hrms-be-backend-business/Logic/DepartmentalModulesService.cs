@@ -38,6 +38,7 @@ namespace hrms_be_backend_business.Logic
             _companyAppModuleRepository = companyAppModuleRepository;
             _authService = authService;
             _companyAppModuleRepository = companyAppModuleRepository;
+            _privilegeRepository = privilegeRepository;
         }
 
         public async Task<BaseResponse> GetDepartmentalAppModuleCount(string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
@@ -287,7 +288,7 @@ namespace hrms_be_backend_business.Logic
                     {
                         successfulModules = $"{successfulModules} , {appModuleDetails.AppModuleName}";
 
-                        departmentAppModule.DeparmentalModuleId = resp;
+                        departmentAppModule.DepartmentalModuleId = resp;
                         var auditLog = new AuditLogDto
                         {
                             userId = accessUser.data.UserId,

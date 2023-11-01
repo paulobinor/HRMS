@@ -8,7 +8,7 @@ namespace hrms_be_backend_data.RepoPayload
 {
     public class DepartmentalModulesDTO
     {
-        public long DeparmentalModuleId { get; set; }
+        public long DepartmentalModuleId { get; set; }
         public long DepartmentId { get; set; }
         public int AppModuleId { get; set; }
         public DateTime DateCreated { get; set; }
