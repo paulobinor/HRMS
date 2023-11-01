@@ -131,12 +131,12 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"Select d.DepartmentName, am.AppModuleName , am.AppModuleCode , dm.* from DepartmentalModules dm join Department d on dm.DepartmentID = d.DeptId join AppModules am on dm.AppModuleId = am.AppModuleId 
-                                    where dm.IsDeleted = @IsDeleted and dm.IsDisapproved = @IsDisapproved and dm.DeparmentalModuleID = @DeparmentalModuleID";
+                string query = @"Select d.DepartmentName, am.AppModuleName , am.AppModuleCode , dm.* from DepartmentalModules dm join Department d on dm.DepartmentID = d.DepartmentID join AppModules am on dm.AppModuleId = am.AppModuleId 
+                                    where dm.IsDeleted = @IsDeleted and dm.IsDisapproved = @IsDisapproved and dm.DepartmentalModuleID = @DepartmentalModuleID";
                 var param = new DynamicParameters();
                 param.Add("IsDisapproved", false);
                 param.Add("IsDeleted", false);
-                param.Add("DeparmentalModuleID", departmentalAppModuleID);
+                param.Add("DepartmentalModuleID", departmentalAppModuleID);
 
                 var resp = await _repository.Get<DepartmentalModulesDTO>(query, param, commandType: CommandType.Text);
 
@@ -179,7 +179,7 @@ namespace hrms_be_backend_data.Repository
             try
             {
                 string query = @"Select d.DepartmentName, am.AppModuleName , am.AppModuleCode , dm.* from DepartmentalModules dm join Department d on dm.DepartmentID = d.DepartmentId join AppModules am on dm.AppModuleId = am.AppModuleId 
-                                    where dm.IsDeleted = @IsDeleted and dm.DepartmentID = @DepartmentID and d.CompanyID = @CompanyID";
+                                    where dm.IsDeleted = @IsDeleted and dm.IsApproved = @IsApproved and dm.IsDisApproved = @IsDisapproved and d.CompanyID = @CompanyID";
                 var param = new DynamicParameters();
                 param.Add("IsDisapproved", false);
                 param.Add("IsApproved", false);
@@ -248,13 +248,13 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"Update DepartmentalModules set IsActive = @IsActive , IsDeleted = @IsDeleted , DeletedByUserId = @DeletedByUserId where DeparmentalModuleId = @DeparmentalModuleId";
+                string query = @"Update DepartmentalModules set IsActive = @IsActive , IsDeleted = @IsDeleted , DeletedByUserId = @DeletedByUserId where DepartmentalModuleId = @DepartmentalModuleId";
                 var param = new DynamicParameters();
 
                 param.Add("IsActive", departmentalAppModule.IsActive);
                 param.Add("IsDeleted", departmentalAppModule.IsDeleted);
                 param.Add("DeletedByUserId", departmentalAppModule.DeletedByUserId);
-                param.Add("DeparmentalModuleId", departmentalAppModule.DeparmentalModuleId);
+                param.Add("DepartmentalModuleId", departmentalAppModule.DepartmentalModuleId);
 
                 var resp = await _repository.Update<int>(query, param, commandType: CommandType.Text);
 
@@ -274,14 +274,14 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"Update DepartmentalModules set IsActive = @IsActive , IsApproved = @IsApproved , ApprovedByUserId = @ApprovedByUserId , DateApproved = @DateApproved where DeparmentalModuleId = @DeparmentalModuleId";
+                string query = @"Update DepartmentalModules set IsActive = @IsActive , IsApproved = @IsApproved , ApprovedByUserId = @ApprovedByUserId , DateApproved = @DateApproved where DepartmentalModuleId = @DepartmentalModuleId";
                 var param = new DynamicParameters();
 
                 param.Add("IsActive", departmentalAppModule.IsActive);
                 param.Add("IsApproved", departmentalAppModule.IsApproved);
                 param.Add("ApprovedByUserId", departmentalAppModule.ApprovedByUserId);
                 param.Add("DateApproved", departmentalAppModule.DateApproved);
-                param.Add("DeparmentalModuleId", departmentalAppModule.DeparmentalModuleId);
+                param.Add("DepartmentalModuleId", departmentalAppModule.DepartmentalModuleId);
 
                 var resp = await _repository.Update<int>(query, param, commandType: CommandType.Text);
 
@@ -300,14 +300,14 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"Update DepartmentalModules set IsActive = @IsActive , IsDisapproved = @IsDisapproved , DisapprovedByUserId = @DisapprovedByUserId , DateApproved = @DateApproved where DeparmentalModuleId = @DeparmentalModuleId";
+                string query = @"Update DepartmentalModules set IsActive = @IsActive , IsDisapproved = @IsDisapproved , DisapprovedByUserId = @DisapprovedByUserId , DateApproved = @DateApproved where DepartmentalModuleId = @DepartmentalModuleId";
                 var param = new DynamicParameters();
 
                 param.Add("IsActive", departmentalAppModule.IsActive);
                 param.Add("IsDisapproved", departmentalAppModule.IsDisapproved);
                 param.Add("DisapprovedByUserId", departmentalAppModule.DisapprovedByUserId);
                 param.Add("DateApproved", departmentalAppModule.DateApproved);
-                param.Add("DeparmentalModuleId", departmentalAppModule.DeparmentalModuleId);
+                param.Add("DepartmentalModuleId", departmentalAppModule.DepartmentalModuleId);
 
                 var resp = await _repository.Update<int>(query, param, commandType: CommandType.Text);
 

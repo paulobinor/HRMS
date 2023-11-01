@@ -288,7 +288,7 @@ namespace hrms_be_backend_business.Logic
                     {
                         successfulModules = $"{successfulModules} , {appModuleDetails.AppModuleName}";
 
-                        departmentAppModule.DeparmentalModuleId = resp;
+                        departmentAppModule.DepartmentalModuleId = resp;
                         var auditLog = new AuditLogDto
                         {
                             userId = accessUser.data.UserId,
