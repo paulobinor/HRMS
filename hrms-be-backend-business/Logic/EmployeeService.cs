@@ -47,7 +47,7 @@ namespace hrms_be_backend_business.Logic
         private readonly IDepartmentRepository _departmentrepository;
 
         public EmployeeService(IAccountRepository accountRepository, ILogger<EmployeeService> logger,
-            IEmployeeRepository EmployeeRepository, IAuditLog audit, ICompanyRepository companyrepository, IWebHostEnvironment hostEnvironment, IAuthService authService, IUriService uriService, IMailService mailService, IUnitRepository unitRepository,IUserAppModulePrivilegeRepository privilegeRepository, IGradeRepository GradeRepository, IEmployeeTypeRepository EmployeeTypeRepository, IPositionRepository PositionRepository,
+            IEmployeeRepository EmployeeRepository, IAuditLog audit, ICompanyRepository companyrepository, IWebHostEnvironment hostEnvironment, IAuthService authService, IUriService uriService, IMailService mailService, IUnitRepository unitRepository, IUserAppModulePrivilegeRepository privilegeRepository, IGradeRepository GradeRepository, IEmployeeTypeRepository EmployeeTypeRepository, IPositionRepository PositionRepository,
                 IBranchRepository branchRepository, IEmploymentStatusRepository EmploymentStatusRepository,
                 IJobDescriptionRepository jobDescriptionRepository, IRolesRepo rolesRepo, IDepartmentRepository departmentrepository)
         {
@@ -190,6 +190,268 @@ namespace hrms_be_backend_business.Logic
             catch (Exception ex)
             {
                 _logger.LogError($"EmployeeService (CreateEmployeeBasis)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+        public async Task<ExecutedResult<string>> UpdateEmployeePersonalInfo(UpdateEmployeePersonalInfoDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }               
+                if (accessUser.data.EmployeeId!=payload.EmployeeId)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"This information is to be completed by the employee", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.BirthPlace))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Birth Place is required";
+                }
+                if (payload.NationalityId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Nationality is required";
+                }
+                if (payload.StateOfOriginId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || State of origin is required";
+                }
+                if (payload.LGAOfOriginId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || LGA of origin is required";
+                }
+                if (!string.IsNullOrEmpty(payload.TownOfOrigin))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Town of origin is required";
+                }
+                if (!string.IsNullOrEmpty(payload.MaidenName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Maiden name is required";
+                }
+                if (payload.MaritalStatusId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Marital Status is required";
+                }
+
+
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new ProcessEmployeePersonalInfoReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    LGAOfOriginId=payload.LGAOfOriginId,
+                    BirthPlace=payload.BirthPlace,
+                    EmployeeId=payload.EmployeeId,
+                    MaidenName=payload.MaidenName,
+                    MaritalStatusId=payload.MaritalStatusId,
+                    NationalityId=payload.NationalityId,
+                    NoOfChildren=payload.NoOfChildren,
+                    SpouseName=payload.SpouseName,
+                    StateOfOriginId=payload.StateOfOriginId,
+                    TownOfOrigin=payload.TownOfOrigin                
+                };
+                string repoResponse = await _EmployeeRepository.ProcessEmployeePersonalInfo(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+                foreach (var dat in payload.Identifications)
+                {
+                    var employeeIdentificationDto = new ProcessEmployeeIdentificationReq
+                    {
+                        CountryIdentificationIssuedId = dat.CountryIdentificationIssuedId,
+                        IdentificationDocument=dat.IdentificationDocument,
+                        IdentificationNumber=dat.IdentificationNumber,
+                        IdentificationTypeId=dat.IdentificationTypeId,
+                        CreatedByUserId=accessUser.data.UserId,
+                        DateCreated=DateTime.Now,
+                        EmployeeId=payload.EmployeeId
+                    };
+                    var employeeIdentification = await _EmployeeRepository.ProcessEmployeeIdentification(employeeIdentificationDto);
+                }
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "CreateEmployeePersonalInfo",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Created Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeService (CreateEmployeeBasis)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+        public async Task<ExecutedResult<string>> UpdateEmployeeContactDetails(UpdateEmployeeContactDetailsDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }
+                if (accessUser.data.EmployeeId != payload.EmployeeId)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"This information is to be completed by the employee", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.PersonalEmail))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Personal Email is required";
+                }
+                if (string.IsNullOrEmpty(payload.PhoneNumber))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Phone Number is required";
+                }
+                if (payload.CurrentAddressStateId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Current Address State is required";
+                }
+                if (payload.CurrentAddressLGAId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Current Address LGA is required";
+                }
+                if (string.IsNullOrEmpty(payload.CurrentAddressCity))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Current Address City is required";
+                }
+                if (string.IsNullOrEmpty(payload.CurrentAddressOne))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Current Address One is required";
+                }
+                if (payload.MailingAddressStateId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Mailing Address State is required";
+                }
+                if (payload.CurrentAddressLGAId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Mailing Address LGA is required";
+                }
+                if (string.IsNullOrEmpty(payload.CurrentAddressCity))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Mailing Address City is required";
+                }
+                if (string.IsNullOrEmpty(payload.CurrentAddressOne))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Current Address One is required";
+                }
+               
+                if (!string.IsNullOrEmpty(payload.NextOfKinName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Next Of Kin Name of origin is required";
+                }
+                if (!string.IsNullOrEmpty(payload.NextOfKinPhoneNumber))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Next Of Kin Phone Number is required";
+                }
+                if (!string.IsNullOrEmpty(payload.NextOfKinEmailAddress))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Next Of Kin Email Address is required";
+                }
+                if (!string.IsNullOrEmpty(payload.NextOfKinRelationship))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Next Of Kin Relationship is required";
+                }
+
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new ProcessEmployeeContactDetailsReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                   CurrentAddressCity=payload.CurrentAddressCity,
+                   NextOfKinEmailAddress=payload.NextOfKinEmailAddress,
+                   CurrentAddressLGAId=payload.CurrentAddressLGAId,
+                   CurrentAddressStateId=payload.CurrentAddressStateId,
+                   CurrentAddressOne=payload.CurrentAddressOne,
+                   CurrentAddressTwo=payload.CurrentAddressTwo,
+                   MailingAddressCity=payload.MailingAddressCity,
+                   MailingAddressLGAId = payload.MailingAddressLGAId,
+                   MailingAddressOne=payload.MailingAddressOne,
+                   MailingAddressStateId=payload.MailingAddressStateId,
+                   MailingAddressTwo=payload.MailingAddressTwo,
+                   SpouseAddressCity=payload.SpouseAddressCity,
+                   SpouseAddressLGAId= payload.SpouseAddressLGAId,
+                   SpouseAddressOne=payload.SpouseAddressOne,
+                   SpouseAddressStateId=payload.SpouseAddressStateId,
+                   SpouseAddressTwo=payload.SpouseAddressTwo,
+                   EmployeeId=payload.EmployeeId,
+                   NextOfKinName=payload.NextOfKinName,
+                   NextOfKinPhoneNumber=payload.NextOfKinPhoneNumber,
+                   NextOfKinRelationship=payload.NextOfKinRelationship,
+                   PersonalEmail=payload.PersonalEmail,
+                   PhoneNumber=payload.PhoneNumber,
+                };
+                string repoResponse = await _EmployeeRepository.ProcessEmployeeContactDetails(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+               
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "CreateEmployeeContactDetails",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Created Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeService (CreateEmployeeContactDetails)=====>{ex}");
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
@@ -444,8 +706,8 @@ namespace hrms_be_backend_business.Logic
                                     response.ResponseMessage = $"Error on excel row {row} - {rowError}";
                                     return response;
                                 }
-                                
-                               
+
+
                                 var userrequest = new CreateEmployeeBasisDto
                                 {
                                     FirstName = firstName,
@@ -463,8 +725,8 @@ namespace hrms_be_backend_business.Logic
                                     EmploymentStatusId = employmentStatusID,
                                     JobRoleId = roleID,
                                     DepartmentId = departmentID,
-                                    
-                                    
+
+
                                 };
 
                                 createEmployeeList.Add(userrequest);

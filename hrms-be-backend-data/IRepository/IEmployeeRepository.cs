@@ -7,6 +7,10 @@ namespace hrms_be_backend_data.IRepository
     public  interface IEmployeeRepository
     {
         Task<string> ProcessEmployeeBasis(ProcessEmployeeBasisReq payload);
+        Task<string> ProcessEmployeePersonalInfo(ProcessEmployeePersonalInfoReq payload);
+        Task<string> ProcessEmployeeIdentification(ProcessEmployeeIdentificationReq payload);
+        Task<string> ProcessEmployeeContactDetails(ProcessEmployeeContactDetailsReq payload);
+
         Task<string> ApproveEmployee(long Id, long CreatedByUserId);
         Task<string> DisapproveEmployee(long Id, string Comment, long CreatedByUserId);
         Task<string> DeleteEmployee(long Id, string Comment, long CreatedByUserId);

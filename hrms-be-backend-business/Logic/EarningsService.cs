@@ -5,18 +5,12 @@ using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
-using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
-using iText.StyledXmlParser.Jsoup.Helper;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace hrms_be_backend_business.Logic
 {
@@ -142,7 +136,6 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
                 }
-             
                 bool isModelStateValidate = true;
                 string validationMessage = "";
 
@@ -166,9 +159,8 @@ namespace hrms_be_backend_business.Logic
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
-                    EarningsName = payload.EarningsName,                    
-                    IsModification = true,
-                    EarningsId = payload.EarningsId,
+                    EarningsName = payload.EarningsName,
+                    IsModification = false,
                 };
                 string repoResponse = await _earningsRepository.ProcessEarnings(repoPayload);
                 if (!repoResponse.Contains("Success"))
@@ -191,7 +183,8 @@ namespace hrms_be_backend_business.Logic
                 var earnings = await _earningsRepository.GetEarningsComputation(earningId);
                 foreach (var earningsComputation in earnings)
                 {
-                    if (payload.EarningItems.Any(p => p.EarningsItemId != earningsComputation.EarningsItemId))
+                    var checkEarningItem = payload.EarningItems.Where(p => p.EarningsItemId == earningsComputation.EarningsItemId).ToList();
+                    if (checkEarningItem.Count < 1)
                     {
                         var earningCoputationPayload = new EarningsComputationReq
                         {
@@ -204,11 +197,10 @@ namespace hrms_be_backend_business.Logic
                         await _earningsRepository.ProcessEarningsComputation(earningCoputationPayload);
                     }
                 }
-
                 var auditLog = new AuditLogDto
                 {
                     userId = accessUser.data.UserId,
-                    actionPerformed = "CreateEarning",
+                    actionPerformed = "UpdateEarning",
                     payload = JsonConvert.SerializeObject(payload),
                     response = null,
                     actionStatus = $"Successful",
@@ -226,6 +218,7 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
+       
         public async Task<ExecutedResult<string>> DeleteEarnings(long EarningsId, string Comments, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
 

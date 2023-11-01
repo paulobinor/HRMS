@@ -246,6 +246,25 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
+        public async Task<string> UpdateLastLoginAttempt(int attemptCount, string OfficialMail)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+
+                param.Add("@UserEmail", OfficialMail);
+                param.Add("@LoginFailedAttemptsCount", attemptCount);              
+                param.Add("@DateCreated", DateTime.Now);
+                return await _dapper.Get<string>("sp_update_login_attempt", param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AccountRepository -> UpdateLastLoginAttempt => {ex}");
+                return "Unable to submit this detail, kindly contact support";
+            }
+
+        }
 
         public async Task<string> ChangePassword(long UserId, string defaultPassword, long CreatedByUserId)
         {

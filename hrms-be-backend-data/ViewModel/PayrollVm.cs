@@ -12,6 +12,7 @@
         public string PayRollDescription { get; set; }
         public int CurrencyId { get; set; }
         public string CurrencyName { get; set; }
+        public string CurrencyCode { get; set; }
         public int PayrollCycleId { get; set; }
         public string PayrollCycleName { get; set; }
         public DateTime Payday { get; set; }
@@ -43,6 +44,7 @@
         public string PayRollDescription { get; set; }
         public int CurrencyId { get; set; }
         public string CurrencyName { get; set; }
+        public string CurrencyCode { get; set; }
         public string EarningsName { get; set; }
         public List<PayrollEarnings> EarningsItems { get; set; }
         public decimal TotalEarningAmount { get; set; }

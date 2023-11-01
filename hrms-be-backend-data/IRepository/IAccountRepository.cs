@@ -18,6 +18,7 @@ namespace hrms_be_backend_data.IRepository
         Task<string> ChangePassword(long UserId, string defaultPassword, long CreatedByUserId);
         Task<string> LogoutUser(string EmailAddress);
         Task<string> UpdateLoginActivity(long UserId, string IpAddress, string Token, DateTime DateCreated);
+        Task<string> UpdateLastLoginAttempt(int attemptCount, string OfficialMail);
 
         Task<UserWithTotalVm> GetUsers(int PageNumber, int RowsOfPage);
         Task<UserWithTotalVm> GetUsersBackOffice(int PageNumber, int RowsOfPage);

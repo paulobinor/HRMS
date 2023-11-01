@@ -6,14 +6,11 @@ using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
-using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MimeKit.Cryptography;
 using Newtonsoft.Json;
 using System.Security.Claims;
-using System.Text;
 
 namespace hrms_be_backend_business.Logic
 {
@@ -229,7 +226,11 @@ namespace hrms_be_backend_business.Logic
                 }
                 bool isModelStateValidate = true;
                 string validationMessage = "";
-
+                if (payload.PayrollId<1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  PayrollId is required";
+                }
                 if (string.IsNullOrEmpty(payload.PayrollTitle))
                 {
                     isModelStateValidate = false;
@@ -245,12 +246,46 @@ namespace hrms_be_backend_business.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || Currency is required";
                 }
-                if (payload.PayrollId < 1)
+                if (payload.PayrollCycleId < 1)
                 {
                     isModelStateValidate = false;
-                    validationMessage += "  || Payroll Id is required";
+                    validationMessage += "  || Payrol cycle is required";
                 }
-
+                if (payload.Earnings == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Payrol earning is required";
+                }
+                if (payload.Earnings.Any(p => p.EarningsItemId < 1))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || One of the earning contain invalid data, EarningsItemId must be greater than 0";
+                }
+                if (payload.Earnings.Any(p => p.EarningsItemAmount < 1))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || One of the earning contain invalid data, EarningsItemAmount must be greater than 0";
+                }
+                if (payload.Deductions == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Payrol deduction is required";
+                }
+                if (payload.Deductions.Any(p => p.DeductionId < 1))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || One of the deduction contain invalid data, deductionId must be greater than 0";
+                }
+                if (payload.Deductions.Any(p => p.IsFixed) && payload.Deductions.Any(p => p.DeductionFixedAmount < 1))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || One of the deduction contain invalid data, DeductionFixedAmount must be greater than 0";
+                }
+                if (payload.Deductions.Any(p => p.IsPercentage) && payload.Deductions.Any(p => p.DeductionPercentageAmount < 1))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || One of the deduction contain invalid data, DeductionPercentageAmount must be greater than 0";
+                }
                 if (!isModelStateValidate)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
@@ -263,6 +298,12 @@ namespace hrms_be_backend_business.Logic
                     CurrencyId = payload.CurrencyId,
                     PayrollDescription = payload.PayrollDescription,
                     PayrollTitle = payload.PayrollTitle,
+                    Payday = payload.Payday,
+                    PaydayCustomDayOfTheCycle = payload.PaydayCustomDayOfTheCycle,
+                    PaydayLastDayOfTheCycle = payload.PaydayLastDayOfTheCycle,
+                    PaydayLastWeekOfTheCycle = payload.PaydayLastWeekOfTheCycle,
+                    PayrollCycleId = payload.PayrollCycleId,
+                    ProrationPolicy = payload.ProrationPolicy,
                     IsModification = true,
                     PayrollId = payload.PayrollId,
                 };
@@ -271,7 +312,6 @@ namespace hrms_be_backend_business.Logic
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
-                long Id = Convert.ToInt64(repoResponse.Replace("Success", ""));
                 long payrollId = Convert.ToInt64(repoResponse.Replace("Success", ""));
                 foreach (var item in payload.Earnings)
                 {
@@ -283,18 +323,19 @@ namespace hrms_be_backend_business.Logic
                         EarningsItemId = item.EarningsItemId,
                         PayrollId = payrollId
                     };
-                   await _payrollRepository.ProcessPayrollEarnings(payrollEarningsReq);
+                    await _payrollRepository.ProcessPayrollEarnings(payrollEarningsReq);
                 }
                 var payrollEarnings = await _payrollRepository.GetPayrollEarnings(payrollId);
                 foreach (var item in payrollEarnings)
                 {
-                    if (payload.Earnings.Any(p => p.EarningsItemId != item.EarningItemsId))
+                    var checkEaningItem = payload.Earnings.Where(p => p.EarningsItemId != item.EarningItemsId).ToList();
+                    if (checkEaningItem.Count() > 0)
                     {
                         var payrollEarningsDeleteReq = new PayrollEarningsDeleteReq
                         {
                             CreatedByUserId = accessUser.data.UserId,
                             DateCreated = DateTime.Now,
-                            EarningsItemId = item.EarningItemsId,
+                            EarningsItemId = item.EarningsId,
                             PayrollId = payrollId
                         };
                         await _payrollRepository.DeletePayrollEarnings(payrollEarningsDeleteReq);
@@ -318,7 +359,8 @@ namespace hrms_be_backend_business.Logic
                 var payrollDeductions = await _payrollRepository.GetPayrollDeductions(payrollId);
                 foreach (var item in payrollDeductions)
                 {
-                    if (payload.Deductions.Any(p => p.DeductionId != item.DeductionId))
+                    var checkDeduction = payload.Deductions.Where(p => p.DeductionId != item.DeductionId).ToList();
+                    if (checkDeduction.Count() > 0)
                     {
                         var payrollDeductionDeleteReq = new PayrollDeductionDeleteReq
                         {
@@ -330,11 +372,10 @@ namespace hrms_be_backend_business.Logic
                         await _payrollRepository.DeletePayrollDeduction(payrollDeductionDeleteReq);
                     }
                 }
-
                 var auditLog = new AuditLogDto
                 {
                     userId = accessUser.data.UserId,
-                    actionPerformed = "UpdatePayroll",
+                    actionPerformed = "CreatePayroll",
                     payload = JsonConvert.SerializeObject(payload),
                     response = null,
                     actionStatus = $"Successful",
@@ -348,10 +389,11 @@ namespace hrms_be_backend_business.Logic
             }
             catch (Exception ex)
             {
-                _logger.LogError($"PayrollService (UpdatePayroll)=====>{ex}");
+                _logger.LogError($"PayrollService (CreatePayroll)=====>{ex}");
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
+       
         public async Task<ExecutedResult<string>> DeletePayroll(long PayrollId, string Comments, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
 
@@ -500,6 +542,7 @@ namespace hrms_be_backend_business.Logic
                 returnData.ProrationPolicy = payroll.ProrationPolicy;
                 returnData.CurrencyId = payroll.CurrencyId;
                 returnData.CurrencyName = payroll.CurrencyName;
+                returnData.CurrencyCode=payroll.CurrencyCode; 
                 returnData.PayrollCycleId = payroll.PayrollCycleId;
                 returnData.PayrollCycleName = payroll.PayrollCycleName;
                 returnData.PaydayCustomDayOfTheCycle = payroll.PaydayCustomDayOfTheCycle;
