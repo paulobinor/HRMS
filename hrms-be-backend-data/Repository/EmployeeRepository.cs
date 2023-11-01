@@ -52,6 +52,94 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+        public async Task<string> ProcessEmployeePersonalInfo(ProcessEmployeePersonalInfoReq payload)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", payload.EmployeeId);
+                param.Add("@BirthPlace", payload.BirthPlace);
+                param.Add("@NationalityId", payload.NationalityId);
+                param.Add("@StateOfOriginId", payload.StateOfOriginId);
+                param.Add("@LGAOfOriginId", payload.LGAOfOriginId);
+                param.Add("@TownOfOrigin", payload.TownOfOrigin);
+                param.Add("@MaidenName", payload.MaidenName);
+                param.Add("@MaritalStatusId", payload.MaritalStatusId);
+                param.Add("@SpouseName", payload.SpouseName);
+                param.Add("@NoOfChildren", payload.NoOfChildren);               
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);              
+
+                return await _dapper.Get<string>("sp_process_employee_personal_info", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"EmployeeRepository => ProcessEmployeePersonalInfo ===> {ex.Message}");
+                throw;
+            }
+        }
+        public async Task<string> ProcessEmployeeIdentification(ProcessEmployeeIdentificationReq payload)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", payload.EmployeeId); 
+                param.Add("@IdentificationTypeId", payload.IdentificationTypeId);
+                param.Add("@IdentificationNumber", payload.IdentificationNumber);
+                param.Add("@CountryIdentificationIssuedId", payload.CountryIdentificationIssuedId);
+                param.Add("@IdentificationDocument", payload.IdentificationDocument);              
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+
+                return await _dapper.Get<string>("sp_process_employee_identification", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"EmployeeRepository => ProcessEmployeeIdentification ===> {ex.Message}");
+                throw;
+            }
+        }
+        public async Task<string> ProcessEmployeeContactDetails(ProcessEmployeeContactDetailsReq payload)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", payload.EmployeeId);
+                param.Add("@PersonalEmail", payload.PersonalEmail);
+                param.Add("@PhoneNumber", payload.PhoneNumber);
+                param.Add("@CurrentAddressStateId", payload.CurrentAddressStateId);
+                param.Add("@CurrentAddressLGAId", payload.CurrentAddressLGAId);
+                param.Add("@CurrentAddressCity", payload.CurrentAddressCity);
+                param.Add("@CurrentAddressOne", payload.CurrentAddressOne);
+                param.Add("@CurrentAddressTwo", payload.CurrentAddressTwo);
+                param.Add("@MailingAddressStateId", payload.MailingAddressStateId);
+                param.Add("@MailingAddressLGAId", payload.MailingAddressLGAId);
+                param.Add("@MailingAddressCity", payload.MailingAddressCity);
+                param.Add("@MailingAddressOne", payload.MailingAddressOne);
+                param.Add("@MailingAddressTwo", payload.MailingAddressTwo);
+                param.Add("@SpouseAddressStateId", payload.SpouseAddressStateId);
+                param.Add("@SpouseAddressLGAId", payload.SpouseAddressLGAId);
+                param.Add("@SpouseAddressCity", payload.SpouseAddressCity);
+                param.Add("@SpouseAddressOne", payload.SpouseAddressOne);
+                param.Add("@SpouseAddressTwo", payload.SpouseAddressTwo);
+                param.Add("@NextOfKinName", payload.NextOfKinName);
+                param.Add("@NextOfKinRelationship", payload.NextOfKinRelationship);
+                param.Add("@NextOfKinPhoneNumber", payload.NextOfKinPhoneNumber);
+                param.Add("@NextOfKinEmailAddress", payload.NextOfKinEmailAddress);               
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+
+                return await _dapper.Get<string>("sp_process_employee_contact_details", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"EmployeeRepository => ProcessEmployeeContactDetails ===> {ex.Message}");
+                throw;
+            }
+        }
         public async Task<string> ApproveEmployee(long Id, long CreatedByUserId)
         {
             try

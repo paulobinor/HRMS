@@ -74,7 +74,7 @@ namespace hrms_be_backend_business.Logic
                 if (!isPasswordMatch)
                 {
                     var attemptCount = user.LoginFailedAttemptsCount + 1;
-                    await _unitOfWork.UpdateLastLoginAttempt(attemptCount, user.OfficialMail);
+                    await _accountRepository.UpdateLastLoginAttempt(attemptCount, user.OfficialMail);
 
                     if (attemptCount >= _passwordConfig.MaxNumberOfFailedAttemptsToLogin)
                     {

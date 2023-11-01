@@ -1,12 +1,9 @@
 ﻿using hrms_be_backend_business.ILogic;
-using hrms_be_backend_business.Logic;
 using hrms_be_backend_common.Communication;
 using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.ViewModel;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Ocsp;
 using System.Security.Claims;
 
 namespace hrms_be_backend_api.Controllers
@@ -37,6 +34,30 @@ namespace hrms_be_backend_api.Controllers
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _EmployeeService.CreateEmployeeBasis(payload, accessToken, claim, RemoteIpAddress, RemotePort));
+        }
+        [HttpPost("UpdateEmployeePersonalInfo")]
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> UpdateEmployeePersonalInfo(UpdateEmployeePersonalInfoDto payload)
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _EmployeeService.UpdateEmployeePersonalInfo(payload, accessToken, claim, RemoteIpAddress, RemotePort));
+        }
+        [HttpPost("UpdateEmployeeContactDetails")]
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> UpdateEmployeeContactDetails(UpdateEmployeeContactDetailsDto payload)
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _EmployeeService.UpdateEmployeeContactDetails(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
 
         [HttpPost("CreateEmployeeBulkUpload/{companyID}")]

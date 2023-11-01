@@ -101,7 +101,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", Account.UPDLOGINATTEMPT);
-                    param.Add("@LoginFailedAttemptsCount", attemptCount);
+                    param.Add("@LoginFailedAttemptsCount", attemptCount); 
                     param.Add("@UserEmailLoginAttempt", OfficialMail);
 
                     dynamic rsp = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UserAuthandLogin, param: param, commandType: CommandType.StoredProcedure);
