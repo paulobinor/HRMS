@@ -39,6 +39,7 @@ namespace hrms_be_backend_business.Logic
             _employeeRepository = employeeRepository;
             _authService = authService;
             _companyAppModuleRepository = companyAppModuleRepository;
+            _privilegeRepository = privilegeRepository;
 
         }
 
