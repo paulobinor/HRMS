@@ -156,7 +156,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"Select d.DepartmentName, am.AppModuleName , am.AppModuleCode , dm.* from DepartmentalModules dm join Department d on dm.DepartmentID = d.DeptId join AppModules am on dm.AppModuleId = am.AppModuleId 
+                string query = @"Select d.DepartmentName, am.AppModuleName , am.AppModuleCode , dm.* from DepartmentalModules dm join Department d on dm.DepartmentID = d.DepartmentID join AppModules am on dm.AppModuleId = am.AppModuleId 
                                     where dm.IsDeleted = @IsDeleted and dm.DepartmentID = @DepartmentID";
                 var param = new DynamicParameters();
                 param.Add("DepartmentID", departmentID);
