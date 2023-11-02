@@ -13,6 +13,11 @@ namespace hrms_be_backend_business.ILogic
         Task<ExecutedResult<string>> UpdateEmployeeContactDetails(UpdateEmployeeContactDetailsDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
 
         Task<ExecutedResult<string>> UpdateEmployeeBasis(UpdateEmployeeBasisDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<string>> UpdateEmployeeEduBackground(UpdateEmployeeEduBackgroundDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<string>> UpdateEmployeeProfesionalBackground(UpdateEmployeeProfesionalBackgroundDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<string>> UpdateEmployeeReference(UpdateEmployeeReferenceDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<string>> UpdateEmployeeBankDetails(UpdateEmployeeBankDetailsDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+
         Task<ExecutedResult<string>> ApproveEmployee(long EmployeeId, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<ExecutedResult<string>> DisapproveEmployee(long EmployeeId, string Comment, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<ExecutedResult<string>> DeleteEmployee(long EmployeeId, string Comment, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);

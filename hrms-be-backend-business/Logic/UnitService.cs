@@ -161,24 +161,13 @@ namespace hrms_be_backend_business.Logic
 
                                 string unitName = serviceDetails.Rows[row][0].ToString();
                                 string unitHeadEmail = serviceDetails.Rows[row][1].ToString();
-                                var employee = await _employeeRepository.GetEmployeeByEmail(unitHeadEmail);
-
-                                if (employee == null)
-                                {
-                                    errorOutput.Append($"| Row {row} failed due to Invalid unit head email {unitHeadEmail}");
-                                    continue;
-                                }
-                                if (employee.DepartmentId == 0)
-                                {
-                                    errorOutput.Append($"| Row {row} Unit head with email {unitHeadEmail} doesn't have a department");
-                                    continue;
-                                }
-                                //var company = serviceDetails.Rows[row][2].ToString();
+                               
+                               
 
                                 var departmentrequest = new CreateUnitDto
                                 {
-                                    DepartmentId = employee.DepartmentId,
-                                    UnitHeadEmployeeId = employee.EmployeeID,
+                                    DepartmentId = 1,
+                                    UnitHeadEmployeeId = 1,
                                     UnitName = unitName
 
                                 };

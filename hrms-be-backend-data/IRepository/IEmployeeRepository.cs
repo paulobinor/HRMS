@@ -6,10 +6,14 @@ namespace hrms_be_backend_data.IRepository
 {
     public  interface IEmployeeRepository
     {
-        Task<string> ProcessEmployeeBasis(ProcessEmployeeBasisReq payload);
-        Task<string> ProcessEmployeePersonalInfo(ProcessEmployeePersonalInfoReq payload);
-        Task<string> ProcessEmployeeIdentification(ProcessEmployeeIdentificationReq payload);
-        Task<string> ProcessEmployeeContactDetails(ProcessEmployeeContactDetailsReq payload);
+        Task<string> ProcessEmployeeBasis(EmployeeBasisReq payload);
+        Task<string> ProcessEmployeePersonalInfo(EmployeePersonalInfoReq payload);
+        Task<string> ProcessEmployeeIdentification(EmployeeIdentificationReq payload);
+        Task<string> ProcessEmployeeContactDetails(EmployeeContactDetailsReq payload);
+        Task<string> ProcessEmployeeProfesionalBackground(EmployeeProfesionalBackgroundReq payload);
+        Task<string> ProcessEmployeeReference(EmployeeReferenceReq payload);
+        Task<string> ProcessEmployeeEduBackground(EmployeeEduBackgroundReq payload);
+        Task<string> ProcessEmployeeBankDetails(EmployeeBankDetailsReq payload);
 
         Task<string> ApproveEmployee(long Id, long CreatedByUserId);
         Task<string> DisapproveEmployee(long Id, string Comment, long CreatedByUserId);
@@ -21,6 +25,5 @@ namespace hrms_be_backend_data.IRepository
         Task<EmployeeFullVm> GetEmployeeById(long Id);
         Task<EmployeeFullVm> GetEmployeeByUserId(long UserId);
         Task<int> AddEmployeeBulk(DataTable dataTable, RequesterInfo requester, long currentStaffCount, int listCount, long companyID);
-        Task<EmployeeFullVm> GetEmployeeByEmail(string email);
     }
 }

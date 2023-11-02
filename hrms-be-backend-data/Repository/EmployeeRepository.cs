@@ -18,7 +18,7 @@ namespace hrms_be_backend_data.Repository
             _logger = logger;
             _dapper = dapper;
         }
-        public async Task<string> ProcessEmployeeBasis(ProcessEmployeeBasisReq payload)
+        public async Task<string> ProcessEmployeeBasis(EmployeeBasisReq payload)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-        public async Task<string> ProcessEmployeePersonalInfo(ProcessEmployeePersonalInfoReq payload)
+        public async Task<string> ProcessEmployeePersonalInfo(EmployeePersonalInfoReq payload)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-        public async Task<string> ProcessEmployeeIdentification(ProcessEmployeeIdentificationReq payload)
+        public async Task<string> ProcessEmployeeIdentification(EmployeeIdentificationReq payload)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-        public async Task<string> ProcessEmployeeContactDetails(ProcessEmployeeContactDetailsReq payload)
+        public async Task<string> ProcessEmployeeContactDetails(EmployeeContactDetailsReq payload)
         {
             try
             {
@@ -140,6 +140,101 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+        public async Task<string> ProcessEmployeeProfesionalBackground(EmployeeProfesionalBackgroundReq payload)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", payload.EmployeeId);
+                param.Add("@CompanyName", payload.CompanyName);
+                param.Add("@PositionHead", payload.PositionHead);
+                param.Add("@StartDate", payload.StartDate);
+                param.Add("@EndDate", payload.EndDate);
+                param.Add("@ContactEmail", payload.ContactEmail);               
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+
+                return await _dapper.Get<string>("sp_process_employee_prof_background", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"EmployeeRepository => ProcessEmployeeProfesionalBackground ===> {ex.Message}");
+                throw;
+            }
+        }
+        public async Task<string> ProcessEmployeeReference(EmployeeReferenceReq payload)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", payload.EmployeeId);
+                param.Add("@FullName", payload.FullName);
+                param.Add("@Occupation", payload.Occupation);
+                param.Add("@PeriodKnown", payload.PeriodKnown);
+                param.Add("@PhoneNumber", payload.PhoneNumber);
+                param.Add("@EmailAddress", payload.EmailAddress);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+
+                return await _dapper.Get<string>("sp_process_employee_reference", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"EmployeeRepository => ProcessEmployeeReference ===> {ex.Message}");
+                throw;
+            }
+        }
+        public async Task<string> ProcessEmployeeEduBackground(EmployeeEduBackgroundReq payload)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", payload.EmployeeId);
+                param.Add("@InstitutionName", payload.InstitutionName);
+                param.Add("@CertificateName", payload.CertificateName);
+                param.Add("@CertificateDoc", payload.CertificateDoc);
+                param.Add("@StartDate", payload.StartDate);
+                param.Add("@EndDate", payload.EndDate);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+
+                return await _dapper.Get<string>("sp_process_employee_edu_background", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"EmployeeRepository => ProcessEmployeeEduBackground ===> {ex.Message}");
+                throw;
+            }
+        }
+        public async Task<string> ProcessEmployeeBankDetails(EmployeeBankDetailsReq payload)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", payload.EmployeeId);
+                param.Add("@BankName", payload.BankName);
+                param.Add("@BVN", payload.BVN);
+                param.Add("@AccountName", payload.AccountName);
+                param.Add("@AccountNumber", payload.AccountNumber);
+                param.Add("@PensionAdministrator", payload.PensionAdministrator);
+                param.Add("@PensionPinNumber", payload.PensionPinNumber);
+                param.Add("@TaxNumber", payload.TaxNumber);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+
+                return await _dapper.Get<string>("sp_process_employee_bank_details", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"EmployeeRepository => ProcessEmployeeBankDetails ===> {ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<string> ApproveEmployee(long Id, long CreatedByUserId)
         {
             try
