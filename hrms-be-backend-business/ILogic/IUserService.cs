@@ -7,7 +7,7 @@ namespace hrms_be_backend_business.ILogic
 {
     public interface IUserService
     {
-        Task<ExecutedResult<string>> CreateCompanyUser(CreateUserDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        //Task<ExecutedResult<string>> CreateCompanyUser(CreateUserDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<ExecutedResult<string>> CreateBackOfficeUser(CreateUserDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<ExecutedResult<string>> UpdateBackOfficeUser(UpdateUserDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<ExecutedResult<string>> ApproveUserByBackOffice(long UserId, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);

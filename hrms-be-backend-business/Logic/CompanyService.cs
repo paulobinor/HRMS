@@ -10,6 +10,7 @@ using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -656,6 +657,12 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<CompanyFullVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
 
                 }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.View_Company_Details, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new ExecutedResult<CompanyFullVm>() { responseMessage =ResponseCode.NoPrivilege.ToString(), responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
                 var returnData = await _companyrepository.GetCompanyById(Id);
                 if (returnData == null)
                 {
@@ -666,6 +673,29 @@ namespace hrms_be_backend_business.Logic
             catch (Exception ex)
             {
                 _logger.LogError($"CompanyService (GetCompanyById)=====>{ex}");
+                return new ExecutedResult<CompanyFullVm>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+        public async Task<ExecutedResult<CompanyFullVm>> GetCompanyByUser(string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<CompanyFullVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+
+                }                
+                var returnData = await _companyrepository.GetCompanyById(accessUser.data.CompanyId);
+                if (returnData == null)
+                {
+                    return new ExecutedResult<CompanyFullVm>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+                }
+                return new ExecutedResult<CompanyFullVm>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = returnData };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyService (GetCompanyByUser)=====>{ex}");
                 return new ExecutedResult<CompanyFullVm>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }

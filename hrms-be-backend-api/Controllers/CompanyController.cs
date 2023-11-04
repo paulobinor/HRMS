@@ -162,5 +162,18 @@ namespace hrms_be_backend_api.Controllers
             var route = Request.Path.Value;
             return this.CustomResponse(await _CompanyService.GetCompanyById(Id, accessToken, claim, RemoteIpAddress, RemotePort));
         }
+        [HttpGet("GetCompanyByUser")]
+        [ProducesResponseType(typeof(ExecutedResult<CompanyFullVm>), 200)]
+        public async Task<IActionResult> GetCompanyByUser()
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _CompanyService.GetCompanyByUser(accessToken, claim, RemoteIpAddress, RemotePort));
+        }
     }
 }

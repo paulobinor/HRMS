@@ -274,10 +274,9 @@ namespace hrms_be_backend_business.Logic
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Invalid password, password must contain more than {_passwordConfig.MustContainNumber} number character", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
                 }
-              
-               
-                string decryptedToken= EncryptDecrypt.DecryptResult(payload.token); 
-                string userId = decryptedToken.Substring(20);              
+                             
+               // string decryptedToken= EncryptDecrypt.DecryptResult(payload.token); 
+                string userId = payload.token.Substring(20);              
                 var userDetails =await _accountRepository.GetUserById(Convert.ToInt64(userId));
                 var repoResponse = await _accountRepository.ChangePassword(userDetails.UserId,payload.NewPassword,userDetails.UserId);
                 if (!repoResponse.Contains("Success"))

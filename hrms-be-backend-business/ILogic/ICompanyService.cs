@@ -18,6 +18,7 @@ namespace hrms_be_backend_business.ILogic
         Task<PagedExcutedResult<IEnumerable<CompanyVm>>> GetCompaniesPublicSector(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<PagedExcutedResult<IEnumerable<CompanyVm>>> GetCompaniesPrivateSector(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<ExecutedResult<CompanyFullVm>> GetCompanyById(long Id, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<CompanyFullVm>> GetCompanyByUser(string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
     }
 
    

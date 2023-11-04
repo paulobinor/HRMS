@@ -9,7 +9,7 @@ namespace hrms_be_backend_data.Repository
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-        private string _connectionString;
+       
         private readonly ILogger<EmployeeRepository> _logger;
         private readonly IDapperGenericRepository _dapper;
 
@@ -387,6 +387,31 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 _logger.LogError($"EmployeeRepository -> GetEmployeesDeleted => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<EmployeeWithTotalVm> GetEmployeesPending(int PageNumber, int RowsOfPage, long AccessByUserId)
+        {
+            var returnData = new EmployeeWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                param.Add("@AccessByUserId", AccessByUserId);
+                var result = await _dapper.GetMultiple("sp_get_employees_pending", param, gr => gr.Read<long>(), gr => gr.Read<EmployeeVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<EmployeeVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeRepository -> GetEmployeesPending => {ex}");
                 return returnData;
             }
 
