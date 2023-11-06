@@ -15,7 +15,7 @@
         public long BranchId { get; set;}
         public long EmployeeTypeId { get; set;}
         public long DepartmentId { get; set; }
-        public long ResumptionDate { get; set; }
+        public DateTime ResumptionDate { get; set; }
         public long JobRoleId { get; set; }
         public long UnitId { get; set; }
         public long CreatedByUserId { get; set; }

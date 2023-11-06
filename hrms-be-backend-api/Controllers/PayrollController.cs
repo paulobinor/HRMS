@@ -54,9 +54,33 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _payrollService.DeletePayroll(PayrollId, Comments, accessToken, claim, RemoteIpAddress, RemotePort));
         }
+        [HttpPost("RunPayroll")]
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> RunPayroll(RunPayrollDto Payload, string Comments)
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _payrollService.RunPayroll(Payload, accessToken, claim, RemoteIpAddress, RemotePort));
+        }
+        [HttpPost("GetPayrollRunnedSummary")]
+        [ProducesResponseType(typeof(ExecutedResult<PayrollRunnedSummaryVm>), 200)]
+        public async Task<IActionResult> GetPayrollRunnedSummary(long PayrollRunnedId, string Comments)
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _payrollService.GetPayrollRunnedSummary(PayrollRunnedId, accessToken, claim, RemoteIpAddress, RemotePort));
+        }
 
         [HttpGet("GetPayrolls")]
-        [ProducesResponseType(typeof(ExecutedResult<IEnumerable<PayrollAllView>>), 200)]
+        [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<PayrollAllView>>), 200)]
         public async Task<IActionResult> GetPayrolls([FromQuery] PaginationFilter filter)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -95,6 +119,19 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             var route = Request.Path.Value;
             return this.CustomResponse(await _payrollService.GetPayrollCycles(accessToken, claim, RemoteIpAddress, RemotePort));
+        }
+        [HttpGet("GetPayrollRunnedDetails")]
+        [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<PayrollRunnedDetailsVm>>), 200)]
+        public async Task<IActionResult> GetPayrollRunnedDetails([FromQuery] PaginationFilter filter, long PayrollRunnedId)
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _payrollService.GetPayrollRunnedDetails(filter, PayrollRunnedId, route, accessToken, claim, RemoteIpAddress, RemotePort));
         }
     }
 }

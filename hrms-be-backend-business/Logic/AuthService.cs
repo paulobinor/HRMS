@@ -278,7 +278,7 @@ namespace hrms_be_backend_business.Logic
                // string decryptedToken= EncryptDecrypt.DecryptResult(payload.token); 
                 string userId = payload.token.Substring(20);              
                 var userDetails =await _accountRepository.GetUserById(Convert.ToInt64(userId));
-                var repoResponse = await _accountRepository.ChangePassword(userDetails.UserId,payload.NewPassword,userDetails.UserId);
+                var repoResponse = await _accountRepository.ChangePassword(userDetails.UserId, password, userDetails.UserId);
                 if (!repoResponse.Contains("Success"))
                 {
                     return new ExecutedResult<string>() { responseMessage = repoResponse, responseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), data = null };

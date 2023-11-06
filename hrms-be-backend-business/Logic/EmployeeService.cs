@@ -1283,7 +1283,7 @@ namespace hrms_be_backend_business.Logic
                 string userRepoResponse = await _accountRepository.CreateCompanyUser(repoPayload);
                 var UserId = userRepoResponse.Replace("Success", "");
                 var userDetails = await _accountRepository.GetUserById(Convert.ToInt64(UserId));
-                string token = $"{RandomGenerator.GetNumber(20)}{password}";
+                string token = $"{RandomGenerator.GetNumber(20)}{userDetails.UserId}";
 
                 _mailService.SendEmailApproveUser(userDetails.OfficialMail, $"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", password, "Xpress HRMS User Creation", EncryptDecrypt.EncryptResult(token));
                 var auditLog = new AuditLogDto

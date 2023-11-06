@@ -6,13 +6,14 @@ namespace hrms_be_backend_data.IRepository
     public interface IPayrollRepository
     {
         Task<string> ProcessPayroll(PayrollReq payload);
+        Task<string> RunPayroll(RunPayrollReq payload);
         Task<string> DeletePayroll(PayrollDeleteReq payload);
         Task<PayrollWithTotalVm> GetPayroll(long CompanyId, int PageNumber, int RowsOfPage);
         Task<PayrollVm> GetPayrollById(long Id);
-
+        Task<PayrollRunnedSummaryVm> GetPayrollRunnedSummary(long PayrollRunnedId);
+        Task<PayrollRunnedDetailsWithTotalVm> GetPayrollRunnedDetails(long PayrollRunnedId, int PageNumber, int RowsOfPage);
 
         Task<List<PayrollCyclesVm>> GetPayrollCycles();
-
         Task<string> ProcessPayrollEarnings(PayrollEarningsReq payload);
         Task<string> DeletePayrollEarnings(PayrollEarningsDeleteReq payload);
         Task<List<PayrollEarningsVm>> GetPayrollEarnings(long PayrollId);

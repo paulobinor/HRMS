@@ -21,6 +21,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
+                string pwd = BCrypt.Net.BCrypt.HashPassword(payload.AdminPasswordHash, BCrypt.Net.BCrypt.GenerateSalt());
                 var param = new DynamicParameters();
 
                 param.Add("@CompanyId", payload.CompanyId);
@@ -37,7 +38,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@AdminLastName", payload.AdminLastName);
                 param.Add("@AdminOfficialMail", payload.AdminOfficialMail);
                 param.Add("@AdminPhoneNumber", payload.AdminPhoneNumber);
-                param.Add("@AdminPasswordHash", payload.AdminPasswordHash);
+                param.Add("@AdminPasswordHash", pwd);
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
                 param.Add("@DateCreated", payload.DateCreated);
                 param.Add("@IsModifield", payload.IsModifield);

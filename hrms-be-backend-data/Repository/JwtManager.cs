@@ -37,7 +37,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
             var tokenHandler = new JwtSecurityTokenHandler();
 
             SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(Key));
-            SigningCredentials credentials = new(securityKey, SecurityAlgorithms.HmacSha256);
+            SigningCredentials credentials = new(securityKey, SecurityAlgorithms.Sha512Digest);
 
             List<Claim> claims = new()
             {

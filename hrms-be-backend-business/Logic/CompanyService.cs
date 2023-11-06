@@ -143,44 +143,11 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 var UserId = repoResponse.Replace("Success", "");
-                //var appModules = await _appModulesRepository.GetAppModules();
-                //var departmentPayload = new ProcessDepartmentReq
-                //{
-                //    CreatedByUserId = Convert.ToInt64(UserId),
-                //    DateCreated = DateTime.Now,
-                //    DepartmentName = "Default Department",
-                //    IsHr = true,
-                //    IsModifield = false,
-                //};
-                //var deptResponse = await _departmentRepository.ProcessDepartment(departmentPayload);
-                //var departmentId = deptResponse.Replace("Success", "");
-                //foreach (var appModule in appModules)
-                //{
-                //    var departmentalModulesDTO = new DepartmentalModulesReq
-                //    {
-                //        AppModuleId = appModule.AppModuleId,
-                //        DepartmentId = Convert.ToInt64(departmentId),
-                //        CreatedByUserId = Convert.ToInt64(UserId),
-                //        DateCreated = DateTime.Now,
-                //    };
-                //    await _departmentalModulesRepository.CreateDepartmentalAppModule(departmentalModulesDTO);
-                //    var appModulePrivileges = await _privilegeRepository.GetAppModulePrivilegeByModuleID(appModule.AppModuleId);
-                //    foreach (var appModulePrivilege in appModulePrivileges)
-                //    {
-                //        var userAppModulePrivilegesReq = new UserAppModulePrivilegesReq
-                //        {
-                //            AppModulePrivilegeId = appModulePrivilege.AppModulePrivilegeID,
-                //            CreatedByUserId = Convert.ToInt64(UserId),
-                //            UserId = Convert.ToInt64(UserId),
-                //            DateCreated = DateTime.Now
-                //        };
-                //        await _privilegeRepository.CreateUserAppModulePrivileges(userAppModulePrivilegesReq);
-                //    }
-                //}
+               
                 var userDetails = await _accountRepository.GetUserById(Convert.ToInt64(UserId));
-                string token = $"{RandomGenerator.GetNumber(20)}{defaultPassword}";
+                string token = $"{RandomGenerator.GetNumber(20)}{userDetails.UserId}";
 
-                _mailService.SendEmailApproveUser(userDetails.OfficialMail, $"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", defaultPassword, "Xpress HRMS User Creation", EncryptDecrypt.EncryptResult(token));
+                _mailService.SendEmailApproveUser(userDetails.OfficialMail, $"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", defaultPassword, "Xpress HRMS User Creation", token);
 
                 var auditLog = new AuditLogDto
                 {
@@ -397,7 +364,7 @@ namespace hrms_be_backend_business.Logic
                 };
                 await _audit.LogActivity(auditLog);
 
-                return new ExecutedResult<string>() { responseMessage = "Deleted Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                return new ExecutedResult<string>() { responseMessage = "Approved Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
 
 
             }

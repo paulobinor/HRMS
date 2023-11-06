@@ -90,5 +90,33 @@
         public decimal PaymentAmount { get; set; }
     }
 
+    public class PayrollRunnedSummaryVm
+    {
+        public decimal TotalNet { get; set; }
+        public decimal TotalDeduction { get; set; }
+        public decimal TotalLoan { get; set; }
+        public decimal TotalAmount { get; set; }
+    }
+
+    public class PayrollRunnedDetailsWithTotalVm
+    {
+        public long totalRecords { get; set; }
+        public List<PayrollRunnedDetailsVm> data { get; set; }
+    }
+    public class PayrollRunnedDetailsVm
+    {
+        public long PayrollRunnedDetailsId { get; set; }
+        public long EmployeeId { get; set; }
+        public string EmployeeName { get; set; }
+        public string PayPeriod { get; set; }
+        public decimal NetPay { get; set;}
+        public int CurrencyId { get; set;}
+        public string CurrencyName { get; set; }
+        public decimal Deduction { get; set; }
+        public decimal LoanRepayment { get;set; }
+        public bool IsDisbursed { get; set;}
+        public long DisburseByUserId { get; set; }
+        public DateTime DateDisbursed { get; set; }
+    }
 }
 

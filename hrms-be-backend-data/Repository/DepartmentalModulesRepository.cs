@@ -198,26 +198,7 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-        public async Task<string> CreateDepartmentalAppModule(DepartmentalModulesReq departmentalAppModule)
-        {
-            try
-            {                
-                var param = new DynamicParameters();
-                param.Add("DepartmentId", departmentalAppModule.DepartmentId);
-                param.Add("AppModuleId", departmentalAppModule.AppModuleId);
-                param.Add("DateCreated", departmentalAppModule.DateCreated);              
-                param.Add("CreatedByUserId", departmentalAppModule.CreatedByUserId);
-                var resp = await _repository.Get<string>("sp_create_department_app_module", param, commandType: CommandType.StoredProcedure);
-
-                return resp;
-
-            }
-            catch (Exception ex)
-            {               
-                _logger.LogError($"MethodName: CreateDepartmentalAppModule => {ex}");
-                throw;
-            }
-        }
+       
         public async Task<long> CreateDepartmentalAppModule(DepartmentalModulesDTO departmentalAppModule)
         {
             try
