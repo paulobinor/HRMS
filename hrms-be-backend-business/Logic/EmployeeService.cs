@@ -1260,29 +1260,15 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
 
                 }
+                var password = Utils.GenerateDefaultPassword(6);
 
-
-                string repoResponse = await _EmployeeRepository.ApproveEmployee(EmployeeId, accessUser.data.UserId);
+                string repoResponse = await _EmployeeRepository.ApproveEmployee(EmployeeId, password, accessUser.data.UserId);
                 if (!repoResponse.Contains("Success"))
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
-                var employeeDetails=await _EmployeeRepository.GetEmployeeById(EmployeeId);
-                var password = Utils.GenerateDefaultPassword(6);
-                var repoPayload = new CreateCompanyUserReq
-                {
-                    CreatedByUserId = accessUser.data.UserId,
-                    DateCreated = DateTime.Now,
-                    FirstName = employeeDetails.FirstName,
-                    LastName = employeeDetails.LastName,
-                    MiddleName = employeeDetails.MiddleName,
-                    OfficialMail = employeeDetails.OfficialMail,
-                    PasswordHash = password,
-                    PhoneNumber = employeeDetails.PhoneNumber,
-                    //IsModifield = false,
-                };
-                string userRepoResponse = await _accountRepository.CreateCompanyUser(repoPayload);
-                var UserId = userRepoResponse.Replace("Success", "");
+                
+                var UserId = repoResponse.Replace("Success", "");
                 var userDetails = await _accountRepository.GetUserById(Convert.ToInt64(UserId));
                 string token = $"{RandomGenerator.GetNumber(20)}{userDetails.UserId}";
 

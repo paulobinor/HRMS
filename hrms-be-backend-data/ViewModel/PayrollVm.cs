@@ -90,6 +90,25 @@
         public decimal PaymentAmount { get; set; }
     }
 
+    public class PayrollRunnedWithTotalVm
+    {
+        public long totalRecords { get; set; }
+        public List<PayrollRunnedVm> data { get; set; }
+    }
+    public class PayrollRunnedVm
+    {
+        public long PayrollRunnedId { get; set; }       
+        public string Title { get; set; }
+        public long PayrollId { get; set; }
+        public DateTime PayDate { get; set; }
+        public int Employees { get; set; }
+        public bool IsPaid { get; set; }
+        public decimal TotalPayment { get; set; }
+        public DateTime DateApproved { get; set; }
+        public bool IsApproved { get; set; }
+        public bool IsDisapproved { get; set; }
+    }
+
     public class PayrollRunnedSummaryVm
     {
         public decimal TotalNet { get; set; }
@@ -118,5 +137,6 @@
         public long DisburseByUserId { get; set; }
         public DateTime DateDisbursed { get; set; }
     }
+
 }
 

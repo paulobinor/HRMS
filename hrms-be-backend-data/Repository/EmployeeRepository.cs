@@ -235,12 +235,14 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<string> ApproveEmployee(long Id, long CreatedByUserId)
+        public async Task<string> ApproveEmployee(long EmployeeId, string PasswordHash, long CreatedByUserId)
         {
             try
             {
+                string pwd = BCrypt.Net.BCrypt.HashPassword(PasswordHash, BCrypt.Net.BCrypt.GenerateSalt());
                 var param = new DynamicParameters();
-                param.Add("@Id", Id);
+                param.Add("@EmployeeId", EmployeeId);
+                param.Add("@PasswordHash", pwd);
                 param.Add("@CreatedByUserId", CreatedByUserId);
                 param.Add("@DateCreated", DateTime.Now);
 

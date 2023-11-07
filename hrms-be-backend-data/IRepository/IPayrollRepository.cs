@@ -12,6 +12,7 @@ namespace hrms_be_backend_data.IRepository
         Task<PayrollVm> GetPayrollById(long Id);
         Task<PayrollRunnedSummaryVm> GetPayrollRunnedSummary(long PayrollRunnedId);
         Task<PayrollRunnedDetailsWithTotalVm> GetPayrollRunnedDetails(long PayrollRunnedId, int PageNumber, int RowsOfPage);
+        Task<PayrollRunnedWithTotalVm> GetPayrollRunned(long AccessByUserId, int PageNumber, int RowsOfPage);
 
         Task<List<PayrollCyclesVm>> GetPayrollCycles();
         Task<string> ProcessPayrollEarnings(PayrollEarningsReq payload);

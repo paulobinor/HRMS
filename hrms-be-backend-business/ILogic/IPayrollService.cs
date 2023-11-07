@@ -15,6 +15,8 @@ namespace hrms_be_backend_business.ILogic
         Task<PagedExcutedResult<IEnumerable<PayrollAllView>>> GetPayrolls(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<ExecutedResult<PayrollSingleView>> GetPayrollById(long Id, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<ExecutedResult<IEnumerable<PayrollCyclesVm>>> GetPayrollCycles(string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+
+        Task<PagedExcutedResult<IEnumerable<PayrollRunnedVm>>> GetPayrollRunned(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<ExecutedResult<PayrollRunnedSummaryVm>> GetPayrollRunnedSummary(long PayrollRunnedId, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<PagedExcutedResult<IEnumerable<PayrollRunnedDetailsVm>>> GetPayrollRunnedDetails(PaginationFilter filter, long PayrollRunnedId, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
     }

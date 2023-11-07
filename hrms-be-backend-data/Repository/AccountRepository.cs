@@ -49,31 +49,31 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-        public async Task<string> CreateCompanyUser(CreateCompanyUserReq payload)
-        {
-            try
-            {
-                string pwd = BCrypt.Net.BCrypt.HashPassword(payload.PasswordHash, BCrypt.Net.BCrypt.GenerateSalt());
-                var param = new DynamicParameters();
-                param.Add("@CompanyId ", payload.CompanyId);
-                param.Add("@FirstName", payload.FirstName);
-                param.Add("@MiddleName", payload.MiddleName);
-                param.Add("@LastName", payload.LastName);
-                param.Add("@OfficialMail", payload.OfficialMail);
-                param.Add("@PhoneNumber", payload.PhoneNumber);
-                param.Add("@PasswordHash", pwd);               
-                param.Add("@CreatedByUserId", payload.CreatedByUserId);
-                param.Add("@DateCreated", payload.DateCreated);              
+        //public async Task<string> CreateCompanyUser(CreateCompanyUserReq payload)
+        //{
+        //    try
+        //    {
+        //        string pwd = BCrypt.Net.BCrypt.HashPassword(payload.PasswordHash, BCrypt.Net.BCrypt.GenerateSalt());
+        //        var param = new DynamicParameters();
+        //        param.Add("@CompanyId ", payload.CompanyId);
+        //        param.Add("@FirstName", payload.FirstName);
+        //        param.Add("@MiddleName", payload.MiddleName);
+        //        param.Add("@LastName", payload.LastName);
+        //        param.Add("@OfficialMail", payload.OfficialMail);
+        //        param.Add("@PhoneNumber", payload.PhoneNumber);
+        //        param.Add("@PasswordHash", pwd);               
+        //        param.Add("@CreatedByUserId", payload.CreatedByUserId);
+        //        param.Add("@DateCreated", payload.DateCreated);              
 
-                return await _dapper.Get<string>("sp_create_company_user", param, commandType: CommandType.StoredProcedure);
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"AccountRepository => CreateCompanyUser ===> {ex.Message}");
-                throw;
-            }
-        }
+        //        return await _dapper.Get<string>("sp_create_company_user", param, commandType: CommandType.StoredProcedure);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var err = ex.Message;
+        //        _logger.LogError($"AccountRepository => CreateCompanyUser ===> {ex.Message}");
+        //        throw;
+        //    }
+        //}
         public async Task<string> UpdateRefreshToken(string RefreshToken, long UserId)
         {
             try
