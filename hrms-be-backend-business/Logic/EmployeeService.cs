@@ -15,6 +15,7 @@ using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Data;
 using System.Globalization;
@@ -81,7 +82,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Create_Onboarding_Basis, accessUser.data.UserId);
@@ -195,6 +196,78 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
+        public async Task<ExecutedResult<string>> UpdateEmployeeCompensation(UpdateEmployeeCompensationDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Update_Employee_Compensation, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (payload.BaseSalary<1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Base salary is required";
+                }
+               
+                if (payload.PayrollId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Payroll is required";
+                }
+                
+
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new EmployeeCompensationReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                   BaseSalary=payload.BaseSalary,
+                   EmployeeId=payload.EmployeeId,
+                   PayrollId=payload.PayrollId,
+                   SalaryEffectiveFrom=payload.SalaryEffectiveFrom,
+                };
+                string repoResponse = await _EmployeeRepository.ProcessEmployeeCompensation(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "UpdateEmployeeCompensation",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeService (UpdateEmployeeCompensation)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
         public async Task<ExecutedResult<string>> UpdateEmployeePersonalInfo(UpdateEmployeePersonalInfoDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
 
@@ -203,7 +276,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 if (accessUser.data.EmployeeId != payload.EmployeeId)
@@ -317,7 +390,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 if (accessUser.data.EmployeeId != payload.EmployeeId)
@@ -465,7 +538,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 if (accessUser.data.EmployeeId != payload.EmployeeId)
@@ -541,7 +614,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 if (accessUser.data.EmployeeId != payload.EmployeeId)
@@ -617,7 +690,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 if (accessUser.data.EmployeeId != payload.EmployeeId)
@@ -703,7 +776,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 if (accessUser.data.EmployeeId != payload.EmployeeId)
@@ -794,7 +867,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-
+         
         public async Task<BaseResponse> CreateEmployeeBulkUpload(IFormFile payload, long companyID, RequesterInfo requester)
         {
             //check if us
@@ -1129,7 +1202,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Update_Onboarding_Basis, accessUser.data.UserId);
@@ -1251,7 +1324,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Approve_Onboarding, accessUser.data.UserId);
@@ -1272,7 +1345,7 @@ namespace hrms_be_backend_business.Logic
                 var userDetails = await _accountRepository.GetUserById(Convert.ToInt64(UserId));
                 string token = $"{RandomGenerator.GetNumber(20)}{userDetails.UserId}";
 
-                _mailService.SendEmailApproveUser(userDetails.OfficialMail, $"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", password, "Xpress HRMS User Creation", EncryptDecrypt.EncryptResult(token));
+                _mailService.SendEmailApproveUser(userDetails.OfficialMail, $"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", password, "Xpress HRMS User Creation", token);
                 var auditLog = new AuditLogDto
                 {
                     userId = accessUser.data.UserId,
@@ -1300,7 +1373,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Disapprove_Employee, accessUser.data.UserId);
@@ -1357,7 +1430,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Delete_Employee, accessUser.data.UserId);
@@ -1588,7 +1661,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<EmployeeFullVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<EmployeeFullVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }              
 

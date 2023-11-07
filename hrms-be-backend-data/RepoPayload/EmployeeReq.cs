@@ -120,4 +120,13 @@
         public long CreatedByUserId { get; set; }
         public DateTime DateCreated { get; set; }
     }
+    public class EmployeeCompensationReq
+    {
+        public long EmployeeId { get; set; }
+        public long PayrollId { get; set; }
+        public decimal BaseSalary { get; set; }
+        public DateTime SalaryEffectiveFrom { get; set; }       
+        public long CreatedByUserId { get; set; }
+        public DateTime DateCreated { get; set; }
+    }
 }

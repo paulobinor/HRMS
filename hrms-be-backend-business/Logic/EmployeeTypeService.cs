@@ -54,7 +54,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(EmployeeTypeModulePrivilegeConstant.Create_Employee_Type, accessUser.data.UserId);
@@ -117,7 +117,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(EmployeeTypeModulePrivilegeConstant.Update_Employee_Type, accessUser.data.UserId);
@@ -180,7 +180,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(EmployeeTypeModulePrivilegeConstant.Delete_Employee_Type, accessUser.data.UserId);
@@ -321,7 +321,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<EmployeeTypeVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<EmployeeTypeVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var returnData = await _employeeTypeRepository.GetEmployeeTypeById(Id);
@@ -344,7 +344,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<EmployeeTypeVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<EmployeeTypeVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var returnData = await _employeeTypeRepository.GetEmployeeTypeByName(EmployeeTypeName, accessUser.data.CompanyId);

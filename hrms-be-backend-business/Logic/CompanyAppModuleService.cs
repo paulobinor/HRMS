@@ -53,7 +53,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.NotAuthenticated).ToString(), Data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyAppModuleConstant.View_CompanyAppModule, accessUser.data.UserId);
@@ -98,7 +98,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.NotAuthenticated).ToString(), Data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyAppModuleConstant.View_CompanyAppModule, accessUser.data.UserId);
@@ -151,7 +151,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.NotAuthenticated).ToString(), Data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyAppModuleConstant.View_CompanyAppModule, accessUser.data.UserId);
@@ -187,7 +187,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.NotAuthenticated).ToString(), Data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyAppModuleConstant.View_CompanyAppModule, accessUser.data.UserId);
@@ -254,7 +254,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.NotAuthenticated).ToString(), Data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyAppModuleConstant.Create_CompanyAppModule, accessUser.data.UserId);
@@ -386,7 +386,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.NotAuthenticated).ToString(), Data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyAppModuleConstant.Approve_CompanyAppModule, accessUser.data.UserId);
@@ -457,7 +457,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.NotAuthenticated).ToString(), Data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyAppModuleConstant.Approve_CompanyAppModule, accessUser.data.UserId);
@@ -530,7 +530,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.NotAuthenticated).ToString(), Data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyAppModuleConstant.Update_CompanyAppModule, accessUser.data.UserId);
@@ -587,7 +587,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.NotAuthenticated).ToString(), Data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyAppModuleConstant.Delete_CompanyAppModule, accessUser.data.UserId);

@@ -184,7 +184,7 @@ namespace hrms_be_backend_business.Logic
                 if (userData == null)
                 {
                     _logger.LogError($"AuthService || (GetUserById)  Unable to get user details =====>");
-                    return new ExecutedResult<UserFullView>() { responseMessage = ResponseCode.AuthorizationError.ToString(), responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<UserFullView>() { responseMessage = ResponseCode.AuthorizationError.ToString(), responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
                 }
 
                 return new ExecutedResult<UserFullView>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = userData };
@@ -310,7 +310,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 bool isModelStateValidate = true;

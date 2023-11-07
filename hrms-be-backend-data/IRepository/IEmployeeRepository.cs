@@ -14,6 +14,7 @@ namespace hrms_be_backend_data.IRepository
         Task<string> ProcessEmployeeReference(EmployeeReferenceReq payload);
         Task<string> ProcessEmployeeEduBackground(EmployeeEduBackgroundReq payload);
         Task<string> ProcessEmployeeBankDetails(EmployeeBankDetailsReq payload);
+        Task<string> ProcessEmployeeCompensation(EmployeeCompensationReq payload);
 
         Task<string> ApproveEmployee(long EmployeeId, string PasswordHash, long CreatedByUserId);
         Task<string> DisapproveEmployee(long Id, string Comment, long CreatedByUserId);

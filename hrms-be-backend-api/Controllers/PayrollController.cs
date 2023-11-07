@@ -56,7 +56,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpPost("RunPayroll")]
         [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
-        public async Task<IActionResult> RunPayroll(RunPayrollDto Payload, string Comments)
+        public async Task<IActionResult> RunPayroll(RunPayrollDto Payload)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();

@@ -1,4 +1,6 @@
-﻿namespace hrms_be_backend_data.AppConstants
+﻿using hrms_be_backend_data.ViewModel;
+
+namespace hrms_be_backend_data.AppConstants
 {
     public class UserModulePrivilegeConstant
     {
@@ -6,6 +8,7 @@
         public static string Update_Onboarding_Basis = "004";
         public static string Approve_Onboarding  = "005";
         public static string Disapprove_Employee = "006";
-        public static string Delete_Employee = "007";       
+        public static string Delete_Employee = "007";
+        public static string Update_Employee_Compensation = "048";
     }
 }

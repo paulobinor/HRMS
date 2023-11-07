@@ -19,6 +19,13 @@
         public long JobRoleId { get; set; }
         public long UnitId { get; set; }
     }
+    public class UpdateEmployeeCompensationDto
+    {
+        public long EmployeeId { get; set; }
+        public long PayrollId { get; set; }
+        public decimal BaseSalary { get; set; }
+        public DateTime SalaryEffectiveFrom { get; set; }
+    }
     public class UpdateEmployeeBasisDto
     {
         public long EmployeeId { get; set; }

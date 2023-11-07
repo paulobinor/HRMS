@@ -9,7 +9,7 @@ namespace hrms_be_backend_data.Repository
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-       
+
         private readonly ILogger<EmployeeRepository> _logger;
         private readonly IDapperGenericRepository _dapper;
 
@@ -66,9 +66,9 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@MaidenName", payload.MaidenName);
                 param.Add("@MaritalStatusId", payload.MaritalStatusId);
                 param.Add("@SpouseName", payload.SpouseName);
-                param.Add("@NoOfChildren", payload.NoOfChildren);               
+                param.Add("@NoOfChildren", payload.NoOfChildren);
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
-                param.Add("@DateCreated", payload.DateCreated);              
+                param.Add("@DateCreated", payload.DateCreated);
 
                 return await _dapper.Get<string>("sp_process_employee_personal_info", param, commandType: CommandType.StoredProcedure);
             }
@@ -84,11 +84,11 @@ namespace hrms_be_backend_data.Repository
             try
             {
                 var param = new DynamicParameters();
-                param.Add("@EmployeeId", payload.EmployeeId); 
+                param.Add("@EmployeeId", payload.EmployeeId);
                 param.Add("@IdentificationTypeId", payload.IdentificationTypeId);
                 param.Add("@IdentificationNumber", payload.IdentificationNumber);
                 param.Add("@CountryIdentificationIssuedId", payload.CountryIdentificationIssuedId);
-                param.Add("@IdentificationDocument", payload.IdentificationDocument);              
+                param.Add("@IdentificationDocument", payload.IdentificationDocument);
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
                 param.Add("@DateCreated", payload.DateCreated);
 
@@ -127,7 +127,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@NextOfKinName", payload.NextOfKinName);
                 param.Add("@NextOfKinRelationship", payload.NextOfKinRelationship);
                 param.Add("@NextOfKinPhoneNumber", payload.NextOfKinPhoneNumber);
-                param.Add("@NextOfKinEmailAddress", payload.NextOfKinEmailAddress);               
+                param.Add("@NextOfKinEmailAddress", payload.NextOfKinEmailAddress);
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
                 param.Add("@DateCreated", payload.DateCreated);
 
@@ -150,7 +150,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@PositionHead", payload.PositionHead);
                 param.Add("@StartDate", payload.StartDate);
                 param.Add("@EndDate", payload.EndDate);
-                param.Add("@ContactEmail", payload.ContactEmail);               
+                param.Add("@ContactEmail", payload.ContactEmail);
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
                 param.Add("@DateCreated", payload.DateCreated);
 
@@ -226,6 +226,27 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@DateCreated", payload.DateCreated);
 
                 return await _dapper.Get<string>("sp_process_employee_bank_details", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"EmployeeRepository => ProcessEmployeeBankDetails ===> {ex.Message}");
+                throw;
+            }
+        }
+        public async Task<string> ProcessEmployeeCompensation(EmployeeCompensationReq payload)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", payload.EmployeeId);
+                param.Add("@PayrollId", payload.PayrollId);
+                param.Add("@BaseSalary", payload.BaseSalary);
+                param.Add("@SalaryEffectiveFrom", payload.SalaryEffectiveFrom);
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);
+
+                return await _dapper.Get<string>("sp_process_employee_compensation", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {

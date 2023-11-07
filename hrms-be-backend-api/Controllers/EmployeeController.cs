@@ -35,6 +35,18 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _EmployeeService.CreateEmployeeBasis(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
+        [HttpPost("UpdateEmployeeCompensation")]
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> UpdateEmployeeCompensation(UpdateEmployeeCompensationDto payload)
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _EmployeeService.UpdateEmployeeCompensation(payload, accessToken, claim, RemoteIpAddress, RemotePort));
+        }
         [HttpPost("UpdateEmployeePersonalInfo")]
         [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
         public async Task<IActionResult> UpdateEmployeePersonalInfo(UpdateEmployeePersonalInfoDto payload)
