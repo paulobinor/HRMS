@@ -38,7 +38,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<TaxView>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<TaxView>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
               
@@ -61,7 +61,15 @@ namespace hrms_be_backend_business.Logic
                     {
                         operatorSign = "<br/> + <br/>";
                     }
-                    taxPayable.Append($" Step {tax.StepNumber} - {tax.PayableAmount} of taxable income * {tax.PayablePercentage}%");
+                    if (tax.IsLast)
+                    {
+                        taxPayable.Append($" Step {tax.StepNumber} - {tax.PayableAmount.ToString("0,00")} of taxable income * {tax.PayablePercentage}% <hr/>");
+                    }
+                    else
+                    {
+                        taxPayable.Append($" Step {tax.StepNumber} - over {tax.PayableAmount.ToString("0,00")} of taxable income * {tax.PayablePercentage}% <hr/>");
+                    }
+                  
                     count++;
                 }
                 var taxView = new TaxView

@@ -42,4 +42,9 @@
         public bool IsPercentage { get; set; }
         public decimal DeductionPercentageAmount { get; set; }
     }
+    public class RunPayrollDto
+    {
+        public long PayrollId { get; set; }
+        public string Title { get; set; }
+    }
 }

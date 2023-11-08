@@ -1,11 +1,11 @@
 ﻿namespace hrms_be_backend_data.ViewModel
 {
+
     public class EmployeeFullVm
     {
         public long EmployeeID { get; set; }
         public string StaffID { get; set; }
         public string ProfileImage { get; set; }
-        public string FullName { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
@@ -21,161 +21,84 @@
         public string UnitName { get; set; }
         public long UnitHeadEmployeeId { get; set; }
         public string UnitHeadName { get; set; }
-        public long GradeID { get; set; }
+        public string GradeID { get; set; }
         public string GradeName { get; set; }
-        public long EmployeeTypeID { get; set; }
+        public string EmployeeTypeID { get; set; }
         public string EmployeeTypeName { get; set; }
         public string DOB { get; set; }
         public long BranchID { get; set; }
-        public string BranchName { get; set; }
-        public long EmploymentStatusID { get; set; }
+        public string EmploymentStatusID { get; set; }
         public string EmploymentStatusName { get; set; }
-        public long GroupID { get; set; }
-        public string GroupName { get; set; }
-        public long JobDescriptionID { get; set; }
+        public string JobDescriptionID { get; set; }
         public string JobDescriptionName { get; set; }
-        public string Nationality { get; set; }
-        public string StateOfOrigin { get; set; }
-        public string LGA { get; set; }
-        public string Town { get; set; }
+        public string BirthPlace { get; set; }
+        public int NationalityId { get; set; }
+        public int StateOfOriginId { get; set; }
+        public int LGAOfOriginId { get; set; }
+        public string TownOfOrigin { get; set; }
         public string MaidenName { get; set; }
-        public string Sex { get; set; }
-        public string MaritalStatus { get; set; }
+        public int SexId { get; set; }
+        public int MaritalStatusId { get; set; }
+        public string SpouseName { get; set; }
+        public string NoOfChildren { get; set; }
         public string SpouseContactAddress { get; set; }
         public string SpouseMobile { get; set; }
-        public string ResidentialAddress { get; set; }
         public long PositionId { get; set; }
         public string PositionName { get; set; }
-        public string ResumptionDate { get; set; }
-        public string HomeAddress { get; set; }
-        public string MailingAddress { get; set; }
-        public string NOFName { get; set; }
-        public string NOFContactAddress { get; set; }
-        public string NOFMobile { get; set; }
-        public string NOFRelationship { get; set; }
-        public string HighestQualification { get; set; }
-        public string HighestQualificationYear { get; set; }
-        public string HighestQualificationSchoolAttended { get; set; }
-        public string Discipline { get; set; }
-        public string ContactPersonName { get; set; }
-        public string ContactPersonAddress { get; set; }
-        public string ContactPersonPhone { get; set; }
-        public string ContactPersonRelationship { get; set; }
-        public string FirstDegree { get; set; }
-        public string FirstDegreeSchoolAttended { get; set; }
-        public string GradeObtained { get; set; }
-        public string FirstDegreeYear { get; set; }
-        public string SecondaryEducation { get; set; }
-        public string SchoolAttended { get; set; }
-        public string SecondaryEducationStartDate { get; set; }
-        public string SecondaryEducationYearComleted { get; set; }
-        public string SecondaryEducationCertificateObtained { get; set; }
-        public string MRECompanyName { get; set; }
-        public string MREContactAddress { get; set; }
-        public string MREPositionHeld { get; set; }
-        public string Responsibilities { get; set; }
-        public string GrossSalaryPerAnnum { get; set; }
-        public string YourPresentPensionFundAdminstrator { get; set; }
-        public string YourPensionPinNumber { get; set; }
+        public DateTime ResumptionDate { get; set; }
+        public long PayrollId { get; set; }
+        public string BaseSalary { get; set; }
+        public string SalaryEffectiveFrom { get; set; }
+        public string PensionFundAdminstrator { get; set; }
+        public string PensionNumber { get; set; }
         public string TaxPayerIdentificationNumber { get; set; }
         public string BankAccountName { get; set; }
         public string AccountNumber { get; set; }
         public string BankName { get; set; }
         public string BVN { get; set; }
-        public string FirstReferenceName { get; set; }
-        public string FirstReferenceAddress { get; set; }
-        public string FirstReferenceOccupation { get; set; }
-        public string FirstReferencePeriodKnown { get; set; }
-        public string FirstReferenceMobile { get; set; }
-        public string FirstReferenceEmail { get; set; }
-        public string SecondReferenceName { get; set; }
-        public string SecondReferenceAddress { get; set; }
-        public string SecondReferenceOccupation { get; set; }
-        public string SecondReferencePeriodKnown { get; set; }
-        public string SecondReferenceMobile { get; set; }
-        public string SecondReferenceEmail { get; set; }
-        public string FirstDegreeNameAndLocation { get; set; }
-        public string FirstDegreeEntranceYear { get; set; }
-        public string FirstDegreeExitYear { get; set; }
-        public string FirstDegreeCertificateAndDegreeObtained { get; set; }
-        public string FirstDegreeMatricNo { get; set; }
-        public string SecondDegreeNameAndLocation { get; set; }
-        public string SecondDegreeEntranceYear { get; set; }
-        public string SecondDegreeExitYear { get; set; }
-        public string SecondDegreeCertificateAndDegreeObtained { get; set; }
-        public string SecondDegreeMatricNo { get; set; }
-        public string SecondrayEducationNameAndLocation { get; set; }
-        public string SecondrayEducationEntranceYear { get; set; }
-        public string SecondrayEducationExitYear { get; set; }
-        public string SecondrayEducationCertificateAndDegreeObtained { get; set; }
-        public string SecondrayEducationExamNo { get; set; }
-        public string NameOfProfessionalBody { get; set; }
-        public string MembershipNo { get; set; }
-        public string MemberStatus { get; set; }
-        public string NameOfLastEmployer { get; set; }
-        public string EmployerTypeOfBusiness { get; set; }
-        public string AddressOfLsatEmployer { get; set; }
-        public string LocationOrBranch { get; set; }
-        public string EmployerStartingDesignation { get; set; }
-        public string EmployerLastDesignation { get; set; }
-        public string LastEmployerDateEmployed { get; set; }
-        public string ReasonForLeaving { get; set; }
-        public string HRmail { get; set; }
-        public string OfficeTelephoneNo { get; set; }
-        public string SupervisorFullName { get; set; }
-        public string SecondedBy { get; set; }
-        public string NameOfAgency { get; set; }
-        public string AddressOfAgency { get; set; }
-        public string NameOfPreviousEmployer { get; set; }
-        public string TypeOfBusiness { get; set; }
-        public string AddressOfPreviousEmployer { get; set; }
-        public string LocationAndBranch { get; set; }
-        public string StartingDesignation { get; set; }
-        public string LastDesignation { get; set; }
-        public string DateEmployed { get; set; }
-        public string ReasonForLeavingPreviousEmployer { get; set; }
-        public string PreviousEmployerHRmail { get; set; }
-        public string PreviousEmployerOfficePhone { get; set; }
-        public string PreviousEmployerSupervisorFullName { get; set; }
-        public string PreviousEmployerSecondedBy { get; set; }
-        public string PreviousEmployerNameOfAgency { get; set; }
-        public string PreviousEmployerAddressOfAgency { get; set; }
-        public string DoYouHaveAnyPendingIssuesWithAformerEmployer { get; set; }
-        public string IdentificationCountryOfIssue { get; set; }
-        public string IdentificationType { get; set; }
-        public string IdentificationNumber { get; set; }
-        public string IdentificationDocument { get; set; }
         public string Signature { get; set; }
-        public string StampedResignationLetterfromPreviousEmployer { get; set; }
-        public string DegreeCertificate { get; set; }
-        public string NYSCCertificate { get; set; }
-        public string SSCEorWAECCertificate { get; set; }
         public string BirthCertificate { get; set; }
-        public string AdditionalQualification { get; set; }
+        public int CurrentAddressStateId { get; set; }
+        public int CurrentAddressLGAId { get; set; }
+        public string CurrentAddressCity { get; set; }
+        public string CurrentAddressOne { get; set; }
+        public string CurrentAddressTwo { get; set; }
+        public int MailingAddressStateId { get; set; }
+        public int MailingAddressLGAId { get; set; }
+        public string MailingAddressCity { get; set; }
+        public string MailingAddressOne { get; set; }
+        public string MailingAddressTwo { get; set; }
+        public int SpouseAddressStateId { get; set; }
+        public int SpouseAddressLGAId { get; set; }
+        public string SpouseAddressCity { get; set; }
+        public string SpouseAddressOne { get; set; }
+        public string SpouseAddressTwo { get; set; }
+        public string NextOfKinName { get; set; }
+        public string NextOfKinPhoneNumber { get; set; }
+        public string NextOfKinRelationship { get; set; }
+        public string NextOfKinEmailAddress { get; set; }
         public long CompanyID { get; set; }
         public long CreatedByUserId { get; set; }
-        public string DateCreated { get; set; }
-        public string IsUpdated { get; set; }
+        public DateTime DateCreated { get; set; }
         public long LastUpdatedByUserId { get; set; }
-        public string DateLastUpdated { get; set; }
-        public string IsDeleted { get; set; }
+        public DateTime DateLastUpdated { get; set; }
+        public bool IsDeleted { get; set; }
         public long DeletedByUserId { get; set; }
-        public string DateDeleted { get; set; }
+        public DateTime DateDeleted { get; set; }
         public string DeletedComment { get; set; }
-        public string IsApproved { get; set; }
+        public bool IsApproved { get; set; }
         public long ApprovedByUserId { get; set; }
-        public string DateApproved { get; set; }
-        public string IsDisapproved { get; set; }
+        public DateTime DateApproved { get; set; }
+        public bool IsDisapproved { get; set; }
         public string DisapprovedComment { get; set; }
         public long DisapprovedByUserId { get; set; }
-        public string DateDisapproved { get; set; }
-        public string IsReactivated { get; set; }
-        public long ReactivatedByUserId { get; set; }
-        public string IsUpdateSession1 { get; set; }
-        public string IsUpdateSession2 { get; set; }
-        public string IsUpdateSession3 { get; set; }
-        public string IsUpdateSession4 { get; set; }
-        public string IsUpdateSession5 { get; set; }
+        public DateTime DateDisapproved { get; set; }
+        public bool IsFirstEmployee { get; set; }
+        public bool HasCompletedBankDetails { get; set; }
+        public bool HasCompletedContactDetails { get; set; }
+        public bool HasCompletedEduBackGround { get; set; }
+        public bool HasCompletedPersonalInfo { get; set; }
+        public bool HasCompletedProfBackground { get; set; }
     }
 
     public class EmployeeVm
@@ -183,7 +106,6 @@
         public long EmployeeID { get; set; }
         public string StaffID { get; set; }
         public string ProfileImage { get; set; }
-        public string FullName { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
@@ -199,143 +121,79 @@
         public string UnitName { get; set; }
         public long UnitHeadEmployeeId { get; set; }
         public string UnitHeadName { get; set; }
-        public long GradeID { get; set; }
+        public string GradeID { get; set; }
         public string GradeName { get; set; }
-        public long EmployeeTypeID { get; set; }
+        public string EmployeeTypeID { get; set; }
         public string EmployeeTypeName { get; set; }
         public string DOB { get; set; }
         public long BranchID { get; set; }
-        public string BranchName { get; set; }
-        public long EmploymentStatusID { get; set; }
+        public string EmploymentStatusID { get; set; }
         public string EmploymentStatusName { get; set; }
-        public long GroupID { get; set; }
-        public string GroupName { get; set; }
-        public long JobDescriptionID { get; set; }
+        public string JobDescriptionID { get; set; }
         public string JobDescriptionName { get; set; }
-        public string Nationality { get; set; }
-        public string StateOfOrigin { get; set; }
-        public string LGA { get; set; }
-        public string Town { get; set; }
+        public string BirthPlace { get; set; }
+        public int NationalityId { get; set; }
+        public int StateOfOriginId { get; set; }
+        public int LGAOfOriginId { get; set; }
+        public string TownOfOrigin { get; set; }
         public string MaidenName { get; set; }
-        public string Sex { get; set; }
-        public string MaritalStatus { get; set; }
+        public int SexId { get; set; }
+        public int MaritalStatusId { get; set; }
+        public string SpouseName { get; set; }
+        public string NoOfChildren { get; set; }
         public string SpouseContactAddress { get; set; }
         public string SpouseMobile { get; set; }
-        public string ResidentialAddress { get; set; }
         public long PositionId { get; set; }
         public string PositionName { get; set; }
-        public string ResumptionDate { get; set; }
-        public string HomeAddress { get; set; }
-        public string MailingAddress { get; set; }
-        public string NOFName { get; set; }
-        public string NOFContactAddress { get; set; }
-        public string NOFMobile { get; set; }
-        public string NOFRelationship { get; set; }
-        public string HighestQualification { get; set; }
-        public string HighestQualificationYear { get; set; }
-        public string HighestQualificationSchoolAttended { get; set; }
-        public string Discipline { get; set; }
-        public string ContactPersonName { get; set; }
-        public string ContactPersonAddress { get; set; }
-        public string ContactPersonPhone { get; set; }
-        public string ContactPersonRelationship { get; set; }
-        public string FirstDegree { get; set; }
-        public string FirstDegreeSchoolAttended { get; set; }
-        public string GradeObtained { get; set; }
-        public string FirstDegreeYear { get; set; }
-        public string SecondaryEducation { get; set; }
-        public string SchoolAttended { get; set; }
-        public string SecondaryEducationStartDate { get; set; }
-        public string SecondaryEducationYearComleted { get; set; }
-        public string SecondaryEducationCertificateObtained { get; set; }
-        public string MRECompanyName { get; set; }
-        public string MREContactAddress { get; set; }
-        public string MREPositionHeld { get; set; }
-        public string Responsibilities { get; set; }
-        public string GrossSalaryPerAnnum { get; set; }
-        public string YourPresentPensionFundAdminstrator { get; set; }
-        public string YourPensionPinNumber { get; set; }
+        public DateTime ResumptionDate { get; set; }
+        public long PayrollId { get; set; }
+        public string BaseSalary { get; set; }
+        public string SalaryEffectiveFrom { get; set; }
+        public string PensionFundAdminstrator { get; set; }
+        public string PensionNumber { get; set; }
         public string TaxPayerIdentificationNumber { get; set; }
         public string BankAccountName { get; set; }
         public string AccountNumber { get; set; }
         public string BankName { get; set; }
         public string BVN { get; set; }
-        public string FirstReferenceName { get; set; }
-        public string FirstReferenceAddress { get; set; }
-        public string FirstReferenceOccupation { get; set; }
-        public string FirstReferencePeriodKnown { get; set; }
-        public string FirstReferenceMobile { get; set; }
-        public string FirstReferenceEmail { get; set; }
-        public string SecondReferenceName { get; set; }
-        public string SecondReferenceAddress { get; set; }
-        public string SecondReferenceOccupation { get; set; }
-        public string SecondReferencePeriodKnown { get; set; }
-        public string SecondReferenceMobile { get; set; }
-        public string SecondReferenceEmail { get; set; }
-        public string FirstDegreeNameAndLocation { get; set; }
-        public string FirstDegreeEntranceYear { get; set; }
-        public string FirstDegreeExitYear { get; set; }
-        public string FirstDegreeCertificateAndDegreeObtained { get; set; }
-        public string FirstDegreeMatricNo { get; set; }
-        public string SecondDegreeNameAndLocation { get; set; }
-        public string SecondDegreeEntranceYear { get; set; }
-        public string SecondDegreeExitYear { get; set; }
-        public string SecondDegreeCertificateAndDegreeObtained { get; set; }
-        public string SecondDegreeMatricNo { get; set; }
-        public string SecondrayEducationNameAndLocation { get; set; }
-        public string SecondrayEducationEntranceYear { get; set; }
-        public string SecondrayEducationExitYear { get; set; }
-        public string SecondrayEducationCertificateAndDegreeObtained { get; set; }
-        public string SecondrayEducationExamNo { get; set; }
-        public string NameOfProfessionalBody { get; set; }
-        public string MembershipNo { get; set; }
-        public string MemberStatus { get; set; }
-        public string NameOfLastEmployer { get; set; }
-        public string EmployerTypeOfBusiness { get; set; }
-        public string AddressOfLsatEmployer { get; set; }
-        public string LocationOrBranch { get; set; }
-        public string EmployerStartingDesignation { get; set; }
-        public string EmployerLastDesignation { get; set; }
-        public string LastEmployerDateEmployed { get; set; }
-        public string ReasonForLeaving { get; set; }
-        public string HRmail { get; set; }
-        public string OfficeTelephoneNo { get; set; }
-        public string SupervisorFullName { get; set; }
-        public string SecondedBy { get; set; }
-        public string NameOfAgency { get; set; }
-        public string AddressOfAgency { get; set; }
-        public string NameOfPreviousEmployer { get; set; }
-        public string TypeOfBusiness { get; set; }
-        public string AddressOfPreviousEmployer { get; set; }
-        public string LocationAndBranch { get; set; }
-        public string StartingDesignation { get; set; }
-        public string LastDesignation { get; set; }
-        public string DateEmployed { get; set; }
-        public string ReasonForLeavingPreviousEmployer { get; set; }
-        public string PreviousEmployerHRmail { get; set; }
-        public string PreviousEmployerOfficePhone { get; set; }
-        public string PreviousEmployerSupervisorFullName { get; set; }
-        public string PreviousEmployerSecondedBy { get; set; }
-        public string PreviousEmployerNameOfAgency { get; set; }
-        public string PreviousEmployerAddressOfAgency { get; set; }
-        public string DoYouHaveAnyPendingIssuesWithAformerEmployer { get; set; }
-        public string IdentificationCountryOfIssue { get; set; }
-        public string IdentificationType { get; set; }
-        public string IdentificationNumber { get; set; }
-        public string IdentificationDocument { get; set; }
         public string Signature { get; set; }
-        public string StampedResignationLetterfromPreviousEmployer { get; set; }
-        public string DegreeCertificate { get; set; }
-        public string NYSCCertificate { get; set; }
-        public string SSCEorWAECCertificate { get; set; }
         public string BirthCertificate { get; set; }
-        public string AdditionalQualification { get; set; }
-        public long CompanyID { get; set; }       
-        public string IsUpdateSession1 { get; set; }
-        public string IsUpdateSession2 { get; set; }
-        public string IsUpdateSession3 { get; set; }
-        public string IsUpdateSession4 { get; set; }
-        public string IsUpdateSession5 { get; set; }
+        public int CurrentAddressStateId { get; set; }
+        public int CurrentAddressLGAId { get; set; }
+        public string CurrentAddressCity { get; set; }
+        public string CurrentAddressOne { get; set; }
+        public string CurrentAddressTwo { get; set; }
+        public int MailingAddressStateId { get; set; }
+        public int MailingAddressLGAId { get; set; }
+        public string MailingAddressCity { get; set; }
+        public string MailingAddressOne { get; set; }
+        public string MailingAddressTwo { get; set; }
+        public int SpouseAddressStateId { get; set; }
+        public int SpouseAddressLGAId { get; set; }
+        public string SpouseAddressCity { get; set; }
+        public string SpouseAddressOne { get; set; }
+        public string SpouseAddressTwo { get; set; }
+        public string NextOfKinName { get; set; }
+        public string NextOfKinPhoneNumber { get; set; }
+        public string NextOfKinRelationship { get; set; }
+        public string NextOfKinEmailAddress { get; set; }
+        public long CompanyID { get; set; }
+        public long CreatedByUserId { get; set; }
+        public DateTime DateCreated { get; set; }
+        public long LastUpdatedByUserId { get; set; }
+        public DateTime DateLastUpdated { get; set; }
+        public bool IsDeleted { get; set; }
+        public long DeletedByUserId { get; set; }
+        public DateTime DateDeleted { get; set; }
+        public string DeletedComment { get; set; }
+        public bool IsApproved { get; set; }
+        public long ApprovedByUserId { get; set; }
+        public DateTime DateApproved { get; set; }
+        public bool IsDisapproved { get; set; }
+        public string DisapprovedComment { get; set; }
+        public long DisapprovedByUserId { get; set; }
+        public DateTime DateDisapproved { get; set; }
+
     }
     public class EmployeeWithTotalVm
     {

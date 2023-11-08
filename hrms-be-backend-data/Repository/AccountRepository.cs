@@ -26,6 +26,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
+                string pwd = BCrypt.Net.BCrypt.HashPassword(payload.PasswordHash, BCrypt.Net.BCrypt.GenerateSalt());
                 var param = new DynamicParameters();
                 param.Add("@UserId", payload.UserId);
                 param.Add("@FirstName", payload.FirstName);
@@ -33,7 +34,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@LastName", payload.LastName);
                 param.Add("@OfficialMail", payload.OfficialMail);
                 param.Add("@PhoneNumber", payload.PhoneNumber);
-                param.Add("@PasswordHash", BCrypt.Net.BCrypt.HashPassword(payload.PasswordHash, BCrypt.Net.BCrypt.GenerateSalt()));
+                param.Add("@PasswordHash",pwd);
                 param.Add("@UserStatusCode", payload.UserStatusCode);
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
                 param.Add("@DateCreated", payload.DateCreated);
@@ -48,30 +49,31 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-        public async Task<string> CreateCompanyUser(CreateCompanyUserReq payload)
-        {
-            try
-            {
-                var param = new DynamicParameters();
-                param.Add("@CompanyId ", payload.CompanyId);
-                param.Add("@FirstName", payload.FirstName);
-                param.Add("@MiddleName", payload.MiddleName);
-                param.Add("@LastName", payload.LastName);
-                param.Add("@OfficialMail", payload.OfficialMail);
-                param.Add("@PhoneNumber", payload.PhoneNumber);
-                param.Add("@PasswordHash", BCrypt.Net.BCrypt.HashPassword(payload.PasswordHash, BCrypt.Net.BCrypt.GenerateSalt()));               
-                param.Add("@CreatedByUserId", payload.CreatedByUserId);
-                param.Add("@DateCreated", payload.DateCreated);              
+        //public async Task<string> CreateCompanyUser(CreateCompanyUserReq payload)
+        //{
+        //    try
+        //    {
+        //        string pwd = BCrypt.Net.BCrypt.HashPassword(payload.PasswordHash, BCrypt.Net.BCrypt.GenerateSalt());
+        //        var param = new DynamicParameters();
+        //        param.Add("@CompanyId ", payload.CompanyId);
+        //        param.Add("@FirstName", payload.FirstName);
+        //        param.Add("@MiddleName", payload.MiddleName);
+        //        param.Add("@LastName", payload.LastName);
+        //        param.Add("@OfficialMail", payload.OfficialMail);
+        //        param.Add("@PhoneNumber", payload.PhoneNumber);
+        //        param.Add("@PasswordHash", pwd);               
+        //        param.Add("@CreatedByUserId", payload.CreatedByUserId);
+        //        param.Add("@DateCreated", payload.DateCreated);              
 
-                return await _dapper.Get<string>("sp_create_company_user", param, commandType: CommandType.StoredProcedure);
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"AccountRepository => CreateCompanyUser ===> {ex.Message}");
-                throw;
-            }
-        }
+        //        return await _dapper.Get<string>("sp_create_company_user", param, commandType: CommandType.StoredProcedure);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var err = ex.Message;
+        //        _logger.LogError($"AccountRepository => CreateCompanyUser ===> {ex.Message}");
+        //        throw;
+        //    }
+        //}
         public async Task<string> UpdateRefreshToken(string RefreshToken, long UserId)
         {
             try
@@ -270,9 +272,10 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
+                string pwd = BCrypt.Net.BCrypt.HashPassword(defaultPassword, BCrypt.Net.BCrypt.GenerateSalt());
                 var param = new DynamicParameters();
                 param.Add("@UserId", UserId);
-                param.Add("@PasswordHashed", BCrypt.Net.BCrypt.HashPassword(defaultPassword, BCrypt.Net.BCrypt.GenerateSalt()));
+                param.Add("@PasswordHashed", pwd);
                 param.Add("@CreatedByUserId", CreatedByUserId);
                 param.Add("@DateCreated", DateTime.Now);
 

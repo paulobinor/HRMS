@@ -10,6 +10,7 @@ using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -57,7 +58,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.Create_Company, accessUser.data.UserId);
@@ -142,44 +143,11 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 var UserId = repoResponse.Replace("Success", "");
-                //var appModules = await _appModulesRepository.GetAppModules();
-                //var departmentPayload = new ProcessDepartmentReq
-                //{
-                //    CreatedByUserId = Convert.ToInt64(UserId),
-                //    DateCreated = DateTime.Now,
-                //    DepartmentName = "Default Department",
-                //    IsHr = true,
-                //    IsModifield = false,
-                //};
-                //var deptResponse = await _departmentRepository.ProcessDepartment(departmentPayload);
-                //var departmentId = deptResponse.Replace("Success", "");
-                //foreach (var appModule in appModules)
-                //{
-                //    var departmentalModulesDTO = new DepartmentalModulesReq
-                //    {
-                //        AppModuleId = appModule.AppModuleId,
-                //        DepartmentId = Convert.ToInt64(departmentId),
-                //        CreatedByUserId = Convert.ToInt64(UserId),
-                //        DateCreated = DateTime.Now,
-                //    };
-                //    await _departmentalModulesRepository.CreateDepartmentalAppModule(departmentalModulesDTO);
-                //    var appModulePrivileges = await _privilegeRepository.GetAppModulePrivilegeByModuleID(appModule.AppModuleId);
-                //    foreach (var appModulePrivilege in appModulePrivileges)
-                //    {
-                //        var userAppModulePrivilegesReq = new UserAppModulePrivilegesReq
-                //        {
-                //            AppModulePrivilegeId = appModulePrivilege.AppModulePrivilegeID,
-                //            CreatedByUserId = Convert.ToInt64(UserId),
-                //            UserId = Convert.ToInt64(UserId),
-                //            DateCreated = DateTime.Now
-                //        };
-                //        await _privilegeRepository.CreateUserAppModulePrivileges(userAppModulePrivilegesReq);
-                //    }
-                //}
+               
                 var userDetails = await _accountRepository.GetUserById(Convert.ToInt64(UserId));
-                string token = $"{RandomGenerator.GetNumber(20)}{defaultPassword}";
+                string token = $"{RandomGenerator.GetNumber(20)}{userDetails.UserId}";
 
-                _mailService.SendEmailApproveUser(userDetails.OfficialMail, $"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", defaultPassword, "Xpress HRMS User Creation", EncryptDecrypt.EncryptResult(token));
+                _mailService.SendEmailApproveUser(userDetails.OfficialMail, $"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", defaultPassword, "Xpress HRMS User Creation", token);
 
                 var auditLog = new AuditLogDto
                 {
@@ -212,7 +180,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.Update_Company, accessUser.data.UserId);
@@ -299,7 +267,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.Delete_Company, accessUser.data.UserId);
@@ -364,7 +332,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.Approve_Company, accessUser.data.UserId);
@@ -396,7 +364,7 @@ namespace hrms_be_backend_business.Logic
                 };
                 await _audit.LogActivity(auditLog);
 
-                return new ExecutedResult<string>() { responseMessage = "Deleted Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                return new ExecutedResult<string>() { responseMessage = "Approved Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
 
 
             }
@@ -653,7 +621,13 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<CompanyFullVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<CompanyFullVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkCompanyModulePrivilegeConstant.View_Company_Details, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new ExecutedResult<CompanyFullVm>() { responseMessage =ResponseCode.NoPrivilege.ToString(), responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
 
                 }
                 var returnData = await _companyrepository.GetCompanyById(Id);
@@ -666,6 +640,29 @@ namespace hrms_be_backend_business.Logic
             catch (Exception ex)
             {
                 _logger.LogError($"CompanyService (GetCompanyById)=====>{ex}");
+                return new ExecutedResult<CompanyFullVm>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+        public async Task<ExecutedResult<CompanyFullVm>> GetCompanyByUser(string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<CompanyFullVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }                
+                var returnData = await _companyrepository.GetCompanyById(accessUser.data.CompanyId);
+                if (returnData == null)
+                {
+                    return new ExecutedResult<CompanyFullVm>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+                }
+                return new ExecutedResult<CompanyFullVm>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = returnData };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CompanyService (GetCompanyByUser)=====>{ex}");
                 return new ExecutedResult<CompanyFullVm>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }

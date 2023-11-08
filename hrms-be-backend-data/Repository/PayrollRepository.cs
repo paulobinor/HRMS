@@ -48,6 +48,91 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
+        public async Task<string> RunPayroll(RunPayrollReq payload)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+
+                param.Add("@PayrollId", payload.PayrollId);
+                param.Add("@Title", payload.Title);               
+                param.Add("@CreatedByUserId", payload.CreatedByUserId);
+                param.Add("@DateCreated", payload.DateCreated);             
+                return await _dapper.Get<string>("sp_run_payroll", param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollRepository -> RunPayroll => {ex}");
+                return "Unable to submit this detail, kindly contact support";
+            }
+
+        }
+        public async Task<PayrollRunnedSummaryVm> GetPayrollRunnedSummary(long PayrollRunnedId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+
+                param.Add("@PayrollRunnedId", PayrollRunnedId);               
+                return await _dapper.Get<PayrollRunnedSummaryVm>("sp_get_payroll_runned_summary", param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollRepository -> GetPayrollRunnedSummary => {ex}");
+                return null;
+            }
+
+        }
+        public async Task<PayrollRunnedDetailsWithTotalVm> GetPayrollRunnedDetails(long PayrollRunnedId, int PageNumber, int RowsOfPage)
+        {
+            var returnData = new PayrollRunnedDetailsWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@PayrollRunnedId", PayrollRunnedId);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                var result = await _dapper.GetMultiple("sp_get_payroll_runned_details", param, gr => gr.Read<long>(), gr => gr.Read<PayrollRunnedDetailsVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<PayrollRunnedDetailsVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollRepository -> GetPayrollRunnedDetails => {ex}");
+                return returnData;
+            }
+
+        }
+        public async Task<PayrollRunnedWithTotalVm> GetPayrollRunned(long AccessByUserId, int PageNumber, int RowsOfPage)
+        {
+            var returnData = new PayrollRunnedWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@AccessByUserId", AccessByUserId);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                var result = await _dapper.GetMultiple("sp_get_payroll_runned", param, gr => gr.Read<long>(), gr => gr.Read<PayrollRunnedVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<PayrollRunnedVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollRepository -> GetPayrollRunned => {ex}");
+                return returnData;
+            }
+
+        }
 
         public async Task<string> DeletePayroll(PayrollDeleteReq payload)
         {
@@ -239,9 +324,7 @@ namespace hrms_be_backend_data.Repository
                 return new List<PayrollCyclesVm>();
             }
 
-        }
-
-       
+        }       
     }
 
 }

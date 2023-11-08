@@ -293,7 +293,7 @@ namespace hrms_be_backend_business.AppCode
             templatePath = $"{_hostEnvironment.ContentRootPath}/EmailHandler/SignUp.html";
             qryStr = $"?k={token}";
             message = $"Dear {recipientName}," +
-                      $"<p>You have been created Xpress HRMS. Please click on the link below to activate your account or copy this link <b> {clientUrl}{qryStr} </b> and paste on your web browser url</p>";
+                      $"<p>You have been created on Xpress HRMS. Please click on the link below to activate your account</p>";
 
             using (StreamReader reader = new StreamReader(Path.Combine(templatePath)))
             {

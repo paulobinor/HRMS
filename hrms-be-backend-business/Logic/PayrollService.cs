@@ -3,9 +3,11 @@ using hrms_be_backend_business.ILogic;
 using hrms_be_backend_common.Communication;
 using hrms_be_backend_common.Configuration;
 using hrms_be_backend_common.DTO;
+using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -46,7 +48,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 bool isModelStateValidate = true;
@@ -97,12 +99,14 @@ namespace hrms_be_backend_business.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || One of the deduction contain invalid data, deductionId must be greater than 0";
                 }
-                if (payload.Deductions.Any(p => p.IsFixed) && payload.Deductions.Any(p => p.DeductionFixedAmount < 1))
+                var checkDeductionFixed = payload.Deductions.Where(p => p.IsFixed && p.DeductionFixedAmount < 1).ToList();
+                if (checkDeductionFixed.Count() > 0)
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || One of the deduction contain invalid data, DeductionFixedAmount must be greater than 0";
                 }
-                if (payload.Deductions.Any(p => p.IsPercentage) && payload.Deductions.Any(p => p.DeductionPercentageAmount < 1))
+                var checkDeductionPercentage = payload.Deductions.Where(p => p.IsPercentage && p.DeductionPercentageAmount < 1).ToList();
+                if (checkDeductionPercentage.Count() > 0)
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || One of the deduction contain invalid data, DeductionPercentageAmount must be greater than 0";
@@ -148,8 +152,8 @@ namespace hrms_be_backend_business.Logic
                 var payrollEarnings = await _payrollRepository.GetPayrollEarnings(payrollId);
                 foreach (var item in payrollEarnings)
                 {
-                    var checkEaningItem = payload.Earnings.Where(p => p.EarningsItemId != item.EarningItemsId).ToList();
-                    if (checkEaningItem.Count()>0)
+                    var checkEaningItem = payload.Earnings.Where(p => p.EarningsItemId == item.EarningItemsId).ToList();
+                    if (checkEaningItem.Count() < 1)
                     {
                         var payrollEarningsDeleteReq = new PayrollEarningsDeleteReq
                         {
@@ -179,8 +183,8 @@ namespace hrms_be_backend_business.Logic
                 var payrollDeductions = await _payrollRepository.GetPayrollDeductions(payrollId);
                 foreach (var item in payrollDeductions)
                 {
-                    var checkDeduction = payload.Deductions.Where(p => p.DeductionId != item.DeductionId).ToList();
-                    if (checkDeduction.Count()>0)
+                    var checkDeduction = payload.Deductions.Where(p => p.DeductionId == item.DeductionId).ToList();
+                    if (checkDeduction.Count() < 1)
                     {
                         var payrollDeductionDeleteReq = new PayrollDeductionDeleteReq
                         {
@@ -221,12 +225,12 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 bool isModelStateValidate = true;
                 string validationMessage = "";
-                if (payload.PayrollId<1)
+                if (payload.PayrollId < 1)
                 {
                     isModelStateValidate = false;
                     validationMessage += "  PayrollId is required";
@@ -393,7 +397,7 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-       
+
         public async Task<ExecutedResult<string>> DeletePayroll(long PayrollId, string Comments, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
 
@@ -402,7 +406,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
 
@@ -458,6 +462,138 @@ namespace hrms_be_backend_business.Logic
             {
                 _logger.LogError($"PayrollService (DeletePayroll)=====>{ex}");
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+
+        public async Task<ExecutedResult<string>> RunPayroll(RunPayrollDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+                if (payload.PayrollId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  PayrollId is required";
+                }
+                if (string.IsNullOrEmpty(payload.Title))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  Title is required";
+                }
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new RunPayrollReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    Title = payload.Title,
+                    PayrollId = payload.PayrollId,
+                };
+                string repoResponse = await _payrollRepository.RunPayroll(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "RunPayroll",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Run Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollService (RunPayroll)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+      
+        public async Task<PagedExcutedResult<IEnumerable<PayrollRunnedVm>>> GetPayrollRunned(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                var result = await _payrollRepository.GetPayrollRunned(accessUser.data.UserId, filter.PageNumber, filter.PageSize);
+                if (result == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (result.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+
+                totalRecords = result.totalRecords;
+
+                var pagedReponse = PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(result.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
+
+                return pagedReponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollService (GetPayrollRunned)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
+            }
+        }
+        public async Task<PagedExcutedResult<IEnumerable<PayrollRunnedDetailsVm>>> GetPayrollRunnedDetails(PaginationFilter filter, long PayrollRunnedId, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<PayrollRunnedDetailsVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                var result = await _payrollRepository.GetPayrollRunnedDetails(PayrollRunnedId, filter.PageNumber, filter.PageSize);
+                if (result == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<PayrollRunnedDetailsVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (result.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<PayrollRunnedDetailsVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+
+                totalRecords = result.totalRecords;
+
+                var pagedReponse = PaginationHelper.CreatePagedReponse<PayrollRunnedDetailsVm>(result.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
+
+                return pagedReponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollService (GetPayrollRunnedDetails)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<PayrollRunnedDetailsVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
             }
         }
 
@@ -522,7 +658,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<PayrollSingleView>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<PayrollSingleView>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var payroll = await _payrollRepository.GetPayrollById(Id);
@@ -542,7 +678,7 @@ namespace hrms_be_backend_business.Logic
                 returnData.ProrationPolicy = payroll.ProrationPolicy;
                 returnData.CurrencyId = payroll.CurrencyId;
                 returnData.CurrencyName = payroll.CurrencyName;
-                returnData.CurrencyCode=payroll.CurrencyCode; 
+                returnData.CurrencyCode = payroll.CurrencyCode;
                 returnData.PayrollCycleId = payroll.PayrollCycleId;
                 returnData.PayrollCycleName = payroll.PayrollCycleName;
                 returnData.PaydayCustomDayOfTheCycle = payroll.PaydayCustomDayOfTheCycle;
@@ -572,7 +708,7 @@ namespace hrms_be_backend_business.Logic
                     returnData.EarningsItems = payrollEarnings;
                 }
                 returnData.TotalEarningAmount = totalEarningsAmount;
-               
+
                 var payrollPayments = new List<PayrollPayments>();
                 payrollPayments.Add(new PayrollPayments
                 {
@@ -631,7 +767,7 @@ namespace hrms_be_backend_business.Logic
                             IsPercentage = item.IsPercentage,
                         });
                     }
-                    returnData.PayrollDeductions= payrollDeduction;
+                    returnData.PayrollDeductions = payrollDeduction;
                 }
                 returnData.DeductionTotalAmount = deductionTotalAmount;
                 decimal restatedAmount = totalEarningsAmount - deductionTotalAmount;
@@ -672,7 +808,7 @@ namespace hrms_be_backend_business.Logic
 
                 var taxPayable = await _taxRepository.GetTaxPayable(accessUser.data.CompanyId);
                 decimal taxPayableAmount = 0, taxIncomeRemained = taxIncome;
-                if (taxPayable.Count>0)
+                if (taxPayable.Count > 0)
                 {
                     taxPayable.OrderBy(p => p.StepNumber);
                     foreach (var item in taxPayable)
@@ -733,7 +869,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<IEnumerable<PayrollCyclesVm>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<IEnumerable<PayrollCyclesVm>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var returnData = await _payrollRepository.GetPayrollCycles();
@@ -749,5 +885,34 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<IEnumerable<PayrollCyclesVm>>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
+        public async Task<ExecutedResult<PayrollRunnedSummaryVm>> GetPayrollRunnedSummary(long PayrollRunnedId, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<PayrollRunnedSummaryVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
+
+                var repoResponse = await _payrollRepository.GetPayrollRunnedSummary(PayrollRunnedId);
+                if (repoResponse == null)
+                {
+                    return new ExecutedResult<PayrollRunnedSummaryVm>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+                }
+
+                return new ExecutedResult<PayrollRunnedSummaryVm>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = repoResponse };
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollService (GetPayrollRunnedSummary)=====>{ex}");
+                return new ExecutedResult<PayrollRunnedSummaryVm>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+       
     }
 }

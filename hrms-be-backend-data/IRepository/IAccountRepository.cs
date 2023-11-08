@@ -7,7 +7,7 @@ namespace hrms_be_backend_data.IRepository
     {
 
         Task<string> ProcessUser(CreateUserReq payload);
-        Task<string> CreateCompanyUser(CreateCompanyUserReq payload);
+        //Task<string> CreateCompanyUser(CreateCompanyUserReq payload);
         Task<string> AuthenticateUser(string EmailAddress, int MaximumLoginAttempt, DateTime DateCreated);
         Task<string> VerifyUser(string Token, string LoggedInWithIPAddress, DateTime DateCreated);
         Task<string> ApproveUser(long Id, string defaultPassword, long CreatedByUserId, DateTime DateCreated);

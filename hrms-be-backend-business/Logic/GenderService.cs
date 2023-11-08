@@ -1,8 +1,11 @@
 ﻿using hrms_be_backend_business.ILogic;
+using hrms_be_backend_common.Communication;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
+using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 
 namespace hrms_be_backend_business.Logic
 {
@@ -11,13 +14,13 @@ namespace hrms_be_backend_business.Logic
         private readonly IAuditLog _audit;
 
         private readonly ILogger<GenderService> _logger;
-
+        private readonly IAuthService _authService;
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
         private readonly IGenderRepository _GenderRepository;
 
         public GenderService(IAccountRepository accountRepository, ILogger<GenderService> logger,
-            IGenderRepository GenderRepository, IAuditLog audit, ICompanyRepository companyrepository)
+            IGenderRepository GenderRepository, IAuditLog audit, ICompanyRepository companyrepository, IAuthService authService)
         {
             _audit = audit;
 
@@ -26,66 +29,26 @@ namespace hrms_be_backend_business.Logic
             _accountRepository = accountRepository;
             _GenderRepository = GenderRepository;
             _companyrepository = companyrepository;
+            _authService = authService;
         }
 
-        public async Task<BaseResponse> GetAllGender(RequesterInfo requester)
-        {
-            BaseResponse response = new BaseResponse();
-
+        public async Task<ExecutedResult<IEnumerable<GenderDTO>>> GetAllGender(string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {           
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
+                    return new ExecutedResult<IEnumerable<GenderDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
                 }
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 3)
-                    {
-                        if (Convert.ToInt32(RoleId) != 4)
-                        {
-                            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                            response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                            return response;
-                        }
-
-                    }
-                }
-
-                //update action performed into audit log here
-
-                var Gender = await _GenderRepository.GetAllGender();
-
-                if (Gender.Any())
-                {
-                    response.Data = Gender;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Gender fetched successfully.";
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No Gender found.";
-                response.Data = null;
-                return response;
+                var repoResponse = await _GenderRepository.GetAllGender();
+                return new ExecutedResult<IEnumerable<GenderDTO>>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = repoResponse };
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Exception Occured: GetAllGender() ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllGender() ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                return new ExecutedResult<IEnumerable<GenderDTO>>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
     }

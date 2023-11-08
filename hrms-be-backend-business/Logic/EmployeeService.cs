@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ExcelDataReader;
+using hrms_be_backend_business.AppCode;
 using hrms_be_backend_business.Helpers;
 using hrms_be_backend_business.ILogic;
 using hrms_be_backend_common.Communication;
@@ -14,6 +15,7 @@ using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Data;
 using System.Globalization;
@@ -80,7 +82,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Create_Onboarding_Basis, accessUser.data.UserId);
@@ -148,7 +150,7 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
                 }
-                var repoPayload = new ProcessEmployeeBasisReq
+                var repoPayload = new EmployeeBasisReq
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
@@ -167,6 +169,7 @@ namespace hrms_be_backend_business.Logic
                     ResumptionDate = payload.ResumptionDate,
                     UnitId = payload.UnitId,
                     IsModifield = false,
+                    StaffId=payload.StaffId,
                 };
                 string repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
                 if (!repoResponse.Contains("Success"))
@@ -193,6 +196,78 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
+        public async Task<ExecutedResult<string>> UpdateEmployeeCompensation(UpdateEmployeeCompensationDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Update_Employee_Compensation, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (payload.BaseSalary<1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Base salary is required";
+                }
+               
+                if (payload.PayrollId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Payroll is required";
+                }
+                
+
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new EmployeeCompensationReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                   BaseSalary=payload.BaseSalary,
+                   EmployeeId=payload.EmployeeId,
+                   PayrollId=payload.PayrollId,
+                   SalaryEffectiveFrom=payload.SalaryEffectiveFrom,
+                };
+                string repoResponse = await _EmployeeRepository.ProcessEmployeeCompensation(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "UpdateEmployeeCompensation",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeService (UpdateEmployeeCompensation)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
         public async Task<ExecutedResult<string>> UpdateEmployeePersonalInfo(UpdateEmployeePersonalInfoDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
 
@@ -201,10 +276,10 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
-                }               
-                if (accessUser.data.EmployeeId!=payload.EmployeeId)
+                }
+                if (accessUser.data.EmployeeId != payload.EmployeeId)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"This information is to be completed by the employee", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
 
@@ -254,20 +329,20 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
                 }
-                var repoPayload = new ProcessEmployeePersonalInfoReq
+                var repoPayload = new EmployeePersonalInfoReq
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
-                    LGAOfOriginId=payload.LGAOfOriginId,
-                    BirthPlace=payload.BirthPlace,
-                    EmployeeId=payload.EmployeeId,
-                    MaidenName=payload.MaidenName,
-                    MaritalStatusId=payload.MaritalStatusId,
-                    NationalityId=payload.NationalityId,
-                    NoOfChildren=payload.NoOfChildren,
-                    SpouseName=payload.SpouseName,
-                    StateOfOriginId=payload.StateOfOriginId,
-                    TownOfOrigin=payload.TownOfOrigin                
+                    LGAOfOriginId = payload.LGAOfOriginId,
+                    BirthPlace = payload.BirthPlace,
+                    EmployeeId = payload.EmployeeId,
+                    MaidenName = payload.MaidenName,
+                    MaritalStatusId = payload.MaritalStatusId,
+                    NationalityId = payload.NationalityId,
+                    NoOfChildren = payload.NoOfChildren,
+                    SpouseName = payload.SpouseName,
+                    StateOfOriginId = payload.StateOfOriginId,
+                    TownOfOrigin = payload.TownOfOrigin
                 };
                 string repoResponse = await _EmployeeRepository.ProcessEmployeePersonalInfo(repoPayload);
                 if (!repoResponse.Contains("Success"))
@@ -276,15 +351,15 @@ namespace hrms_be_backend_business.Logic
                 }
                 foreach (var dat in payload.Identifications)
                 {
-                    var employeeIdentificationDto = new ProcessEmployeeIdentificationReq
+                    var employeeIdentificationDto = new EmployeeIdentificationReq
                     {
                         CountryIdentificationIssuedId = dat.CountryIdentificationIssuedId,
-                        IdentificationDocument=dat.IdentificationDocument,
-                        IdentificationNumber=dat.IdentificationNumber,
-                        IdentificationTypeId=dat.IdentificationTypeId,
-                        CreatedByUserId=accessUser.data.UserId,
-                        DateCreated=DateTime.Now,
-                        EmployeeId=payload.EmployeeId
+                        IdentificationDocument = dat.IdentificationDocument,
+                        IdentificationNumber = dat.IdentificationNumber,
+                        IdentificationTypeId = dat.IdentificationTypeId,
+                        CreatedByUserId = accessUser.data.UserId,
+                        DateCreated = DateTime.Now,
+                        EmployeeId = payload.EmployeeId
                     };
                     var employeeIdentification = await _EmployeeRepository.ProcessEmployeeIdentification(employeeIdentificationDto);
                 }
@@ -315,7 +390,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 if (accessUser.data.EmployeeId != payload.EmployeeId)
@@ -376,7 +451,7 @@ namespace hrms_be_backend_business.Logic
                     isModelStateValidate = false;
                     validationMessage += "Current Address One is required";
                 }
-               
+
                 if (!string.IsNullOrEmpty(payload.NextOfKinName))
                 {
                     isModelStateValidate = false;
@@ -403,39 +478,39 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
                 }
-                var repoPayload = new ProcessEmployeeContactDetailsReq
+                var repoPayload = new EmployeeContactDetailsReq
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
-                   CurrentAddressCity=payload.CurrentAddressCity,
-                   NextOfKinEmailAddress=payload.NextOfKinEmailAddress,
-                   CurrentAddressLGAId=payload.CurrentAddressLGAId,
-                   CurrentAddressStateId=payload.CurrentAddressStateId,
-                   CurrentAddressOne=payload.CurrentAddressOne,
-                   CurrentAddressTwo=payload.CurrentAddressTwo,
-                   MailingAddressCity=payload.MailingAddressCity,
-                   MailingAddressLGAId = payload.MailingAddressLGAId,
-                   MailingAddressOne=payload.MailingAddressOne,
-                   MailingAddressStateId=payload.MailingAddressStateId,
-                   MailingAddressTwo=payload.MailingAddressTwo,
-                   SpouseAddressCity=payload.SpouseAddressCity,
-                   SpouseAddressLGAId= payload.SpouseAddressLGAId,
-                   SpouseAddressOne=payload.SpouseAddressOne,
-                   SpouseAddressStateId=payload.SpouseAddressStateId,
-                   SpouseAddressTwo=payload.SpouseAddressTwo,
-                   EmployeeId=payload.EmployeeId,
-                   NextOfKinName=payload.NextOfKinName,
-                   NextOfKinPhoneNumber=payload.NextOfKinPhoneNumber,
-                   NextOfKinRelationship=payload.NextOfKinRelationship,
-                   PersonalEmail=payload.PersonalEmail,
-                   PhoneNumber=payload.PhoneNumber,
+                    CurrentAddressCity = payload.CurrentAddressCity,
+                    NextOfKinEmailAddress = payload.NextOfKinEmailAddress,
+                    CurrentAddressLGAId = payload.CurrentAddressLGAId,
+                    CurrentAddressStateId = payload.CurrentAddressStateId,
+                    CurrentAddressOne = payload.CurrentAddressOne,
+                    CurrentAddressTwo = payload.CurrentAddressTwo,
+                    MailingAddressCity = payload.MailingAddressCity,
+                    MailingAddressLGAId = payload.MailingAddressLGAId,
+                    MailingAddressOne = payload.MailingAddressOne,
+                    MailingAddressStateId = payload.MailingAddressStateId,
+                    MailingAddressTwo = payload.MailingAddressTwo,
+                    SpouseAddressCity = payload.SpouseAddressCity,
+                    SpouseAddressLGAId = payload.SpouseAddressLGAId,
+                    SpouseAddressOne = payload.SpouseAddressOne,
+                    SpouseAddressStateId = payload.SpouseAddressStateId,
+                    SpouseAddressTwo = payload.SpouseAddressTwo,
+                    EmployeeId = payload.EmployeeId,
+                    NextOfKinName = payload.NextOfKinName,
+                    NextOfKinPhoneNumber = payload.NextOfKinPhoneNumber,
+                    NextOfKinRelationship = payload.NextOfKinRelationship,
+                    PersonalEmail = payload.PersonalEmail,
+                    PhoneNumber = payload.PhoneNumber,
                 };
                 string repoResponse = await _EmployeeRepository.ProcessEmployeeContactDetails(repoPayload);
                 if (!repoResponse.Contains("Success"))
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
-               
+
                 var auditLog = new AuditLogDto
                 {
                     userId = accessUser.data.UserId,
@@ -455,7 +530,344 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
+        public async Task<ExecutedResult<string>> UpdateEmployeeProfesionalBackground(UpdateEmployeeProfesionalBackgroundDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
 
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
+                if (accessUser.data.EmployeeId != payload.EmployeeId)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"This information is to be completed by the employee", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.CompanyName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Company Name is required";
+                }
+                if (string.IsNullOrEmpty(payload.PositionHead))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += " || Position Head is required";
+                }
+
+                if (string.IsNullOrEmpty(payload.ContactEmail))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += " || Contact Email One is required";
+                }
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new EmployeeProfesionalBackgroundReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    CompanyName = payload.CompanyName,
+                    PositionHead = payload.PositionHead,
+                    ContactEmail = payload.ContactEmail,
+                    EmployeeId = payload.EmployeeId,
+                    EndDate = DateTime.Now,
+                    StartDate = DateTime.Now,
+                };
+                string repoResponse = await _EmployeeRepository.ProcessEmployeeProfesionalBackground(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "UpdateEmployeeProfesionalBackground",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeService (UpdateEmployeeProfesionalBackground)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+        public async Task<ExecutedResult<string>> UpdateEmployeeEduBackground(UpdateEmployeeEduBackgroundDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
+                if (accessUser.data.EmployeeId != payload.EmployeeId)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"This information is to be completed by the employee", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.InstitutionName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Institution Name is required";
+                }
+                if (string.IsNullOrEmpty(payload.CertificateName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += " || Certificate Name is required";
+                }
+
+                if (string.IsNullOrEmpty(payload.CertificateDoc))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += " || CertificateDoc is required";
+                }
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new EmployeeEduBackgroundReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    CertificateDoc = payload.CertificateDoc,
+                    CertificateName = payload.CertificateName,
+                    InstitutionName = payload.InstitutionName,
+                    EmployeeId = payload.EmployeeId,
+                    EndDate = DateTime.Now,
+                    StartDate = DateTime.Now,
+                };
+                string repoResponse = await _EmployeeRepository.ProcessEmployeeEduBackground(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "UpdateEmployeeEduBackground",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeService (UpdateEmployeeEduBackground)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+        public async Task<ExecutedResult<string>> UpdateEmployeeReference(UpdateEmployeeReferenceDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
+                if (accessUser.data.EmployeeId != payload.EmployeeId)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"This information is to be completed by the employee", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.FullName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Full Name is required";
+                }
+                if (string.IsNullOrEmpty(payload.Occupation))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "|| Occupation is required";
+                }
+
+                if (string.IsNullOrEmpty(payload.PeriodKnown))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += " || Period Known is required";
+                }
+                if (string.IsNullOrEmpty(payload.PhoneNumber))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += " || Phone Number is required";
+                }
+                if (string.IsNullOrEmpty(payload.EmailAddress))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += " || Email Address is required";
+                }
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new EmployeeReferenceReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    EmailAddress = payload.EmailAddress,
+                    EmployeeId = payload.EmployeeId,
+                    FullName = payload.FullName,
+                    Occupation = payload.Occupation,
+                    PeriodKnown = payload.PeriodKnown,
+                    PhoneNumber = payload.PhoneNumber,
+                };
+                string repoResponse = await _EmployeeRepository.ProcessEmployeeReference(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "UpdateEmployeeReference",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeService (UpdateEmployeeReference)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+        public async Task<ExecutedResult<string>> UpdateEmployeeBankDetails(UpdateEmployeeBankDetailsDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
+                if (accessUser.data.EmployeeId != payload.EmployeeId)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"This information is to be completed by the employee", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.BankName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Bank Name is required";
+                }
+                if (string.IsNullOrEmpty(payload.BVN))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "|| BVN is required";
+                }
+
+                if (string.IsNullOrEmpty(payload.AccountName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += " || Account Name is required";
+                }
+                if (string.IsNullOrEmpty(payload.AccountNumber))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += " || Account Number is required";
+                }
+                if (string.IsNullOrEmpty(payload.PensionAdministrator))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += " || Pension Administrator is required";
+                }
+                if (string.IsNullOrEmpty(payload.PensionPinNumber))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += " || Pension Pin Number is required";
+                }
+                if (string.IsNullOrEmpty(payload.TaxNumber))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += " || Tax Number is required";
+                }
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new EmployeeBankDetailsReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,                   
+                    EmployeeId = payload.EmployeeId,
+                  AccountName = payload.AccountName,
+                  AccountNumber = payload.AccountNumber,
+                  PensionAdministrator = payload.PensionAdministrator,
+                  BankName = payload.BankName,
+                  BVN=payload.BVN,
+                  PensionPinNumber = payload.PensionPinNumber,
+                  TaxNumber = payload.TaxNumber,
+                };
+                string repoResponse = await _EmployeeRepository.ProcessEmployeeBankDetails(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "UpdateEmployeeBankDetails",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeService (UpdateEmployeeBankDetails)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+
+         
         public async Task<BaseResponse> CreateEmployeeBulkUpload(IFormFile payload, long companyID, RequesterInfo requester)
         {
             //check if us
@@ -683,7 +1095,7 @@ namespace hrms_be_backend_business.Logic
                                 {
                                     var role = roles.FirstOrDefault(m => m.RoleName == roleName.Trim());
 
-                                    if(role != null)
+                                    if (role != null)
                                         roleID = role.RoleId;
 
                                     //if (role == null)
@@ -798,7 +1210,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Update_Onboarding_Basis, accessUser.data.UserId);
@@ -866,7 +1278,7 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
                 }
-                var repoPayload = new ProcessEmployeeBasisReq
+                var repoPayload = new EmployeeBasisReq
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
@@ -920,7 +1332,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Approve_Onboarding, accessUser.data.UserId);
@@ -929,14 +1341,19 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
 
                 }
+                var password = Utils.GenerateDefaultPassword(6);
 
-
-                string repoResponse = await _EmployeeRepository.ApproveEmployee(EmployeeId, accessUser.data.UserId);
+                string repoResponse = await _EmployeeRepository.ApproveEmployee(EmployeeId, password, accessUser.data.UserId);
                 if (!repoResponse.Contains("Success"))
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
+                
+                var UserId = repoResponse.Replace("Success", "");
+                var userDetails = await _accountRepository.GetUserById(Convert.ToInt64(UserId));
+                string token = $"{RandomGenerator.GetNumber(20)}{userDetails.UserId}";
 
+                _mailService.SendEmailApproveUser(userDetails.OfficialMail, $"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", password, "Xpress HRMS User Creation", token);
                 var auditLog = new AuditLogDto
                 {
                     userId = accessUser.data.UserId,
@@ -964,7 +1381,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Disapprove_Employee, accessUser.data.UserId);
@@ -1021,7 +1438,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Delete_Employee, accessUser.data.UserId);
@@ -1082,18 +1499,15 @@ namespace hrms_be_backend_business.Logic
                     return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
-                if (accessUser.data.UserStatusCode != UserStatusConstant.Back_Office_User)
-                {
-                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
-                }
+               
                 var returnData = await _EmployeeRepository.GetEmployees(filter.PageNumber, filter.PageSize, accessUser.data.UserId);
                 if (returnData == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
                 if (returnData.data == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
 
                 totalRecords = returnData.totalRecords;
@@ -1105,6 +1519,41 @@ namespace hrms_be_backend_business.Logic
             catch (Exception ex)
             {
                 _logger.LogError($"EmployeeService (GetEmployees)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
+            }
+        }
+        public async Task<PagedExcutedResult<IEnumerable<EmployeeVm>>> GetEmployeesPending(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+
+                var returnData = await _EmployeeRepository.GetEmployeesPending(filter.PageNumber, filter.PageSize, accessUser.data.UserId);
+                if (returnData == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
+                }
+                if (returnData.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
+                }
+
+                totalRecords = returnData.totalRecords;
+
+                var pagedReponse = PaginationHelper.CreatePagedReponse<EmployeeVm>(returnData.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
+
+                return pagedReponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeService (GetEmployeesPending)=====>{ex}");
                 return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
             }
         }
@@ -1120,18 +1569,15 @@ namespace hrms_be_backend_business.Logic
                     return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
-                if (accessUser.data.UserStatusCode != UserStatusConstant.Back_Office_User)
-                {
-                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
-                }
+              
                 var returnData = await _EmployeeRepository.GetEmployeesApproved(filter.PageNumber, filter.PageSize, accessUser.data.UserId);
                 if (returnData == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
                 if (returnData.data == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
 
                 totalRecords = returnData.totalRecords;
@@ -1158,18 +1604,15 @@ namespace hrms_be_backend_business.Logic
                     return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
-                if (accessUser.data.UserStatusCode != UserStatusConstant.Back_Office_User)
-                {
-                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
-                }
+               
                 var returnData = await _EmployeeRepository.GetEmployeesDisapproved(filter.PageNumber, filter.PageSize, accessUser.data.UserId);
                 if (returnData == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
                 if (returnData.data == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
 
                 totalRecords = returnData.totalRecords;
@@ -1195,19 +1638,15 @@ namespace hrms_be_backend_business.Logic
                 {
                     return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
-                }
-                if (accessUser.data.UserStatusCode != UserStatusConstant.Back_Office_User)
-                {
-                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
-                }
+                }               
                 var returnData = await _EmployeeRepository.GetEmployeesDeleted(filter.PageNumber, filter.PageSize, accessUser.data.UserId);
                 if (returnData == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
                 if (returnData.data == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
 
                 totalRecords = returnData.totalRecords;
@@ -1230,15 +1669,9 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<EmployeeFullVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<EmployeeFullVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
-                }
-                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Delete_Employee, accessUser.data.UserId);
-                if (!checkPrivilege.Contains("Success"))
-                {
-                    return new ExecutedResult<EmployeeFullVm>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
-
-                }
+                }              
 
                 var repoResponse = await _EmployeeRepository.GetEmployeeById(EmployeeId);
                 if (repoResponse == null)

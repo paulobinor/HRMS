@@ -14,7 +14,7 @@ namespace hrms_be_backend_api.Controllers
             switch (myStatus)
             {               
                 case ResponseCode.NotAuthenticated:
-                    return Unauthorized(result);               
+                    return Unauthorized(result);              
                 default:
                     return Ok(result);
             }

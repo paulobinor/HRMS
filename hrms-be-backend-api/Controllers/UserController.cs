@@ -30,20 +30,7 @@ namespace hrms_be_backend_api.Controllers
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();            
             return this.CustomResponse(await _userService.CreateBackOfficeUser(payload, accessToken, claim, RemoteIpAddress, RemotePort));
-        }
-        [HttpGet("GetUsers")]
-        [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<UserVm>>), 200)]
-        public async Task<IActionResult> GetUsers(PaginationFilter filter)
-        {
-            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claim = identity.Claims;
-            var accessToken = Request.Headers["Authorization"];
-            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
-            var route = Request.Path.Value;
-            return this.CustomResponse(await _userService.GetUsers(filter, route, accessToken, claim, RemoteIpAddress, RemotePort));
-        }
+        }      
         [HttpPost("ApproveUserByBackOffice")]
         [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
         public async Task<IActionResult> ApproveUserByBackOffice(long UserId)
@@ -79,6 +66,19 @@ namespace hrms_be_backend_api.Controllers
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _userService.DisapproveUserBackOffice(payload, accessToken, claim, RemoteIpAddress, RemotePort));
+        }
+        [HttpGet("GetUsers")]
+        [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<UserVm>>), 200)]
+        public async Task<IActionResult> GetUsers([FromQuery] PaginationFilter filter)
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _userService.GetUsers(filter, route, accessToken, claim, RemoteIpAddress, RemotePort));
         }
         [HttpGet("GetUsersBackOffice")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<UserVm>>), 200)]

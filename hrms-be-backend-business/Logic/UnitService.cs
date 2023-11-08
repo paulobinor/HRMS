@@ -56,7 +56,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UnitModulePrivilegeConstant.Create_Unit, accessUser.data.UserId);
@@ -161,24 +161,13 @@ namespace hrms_be_backend_business.Logic
 
                                 string unitName = serviceDetails.Rows[row][0].ToString();
                                 string unitHeadEmail = serviceDetails.Rows[row][1].ToString();
-                                var employee = await _employeeRepository.GetEmployeeByEmail(unitHeadEmail);
-
-                                if (employee == null)
-                                {
-                                    errorOutput.Append($"| Row {row} failed due to Invalid unit head email {unitHeadEmail}");
-                                    continue;
-                                }
-                                if (employee.DepartmentId == 0)
-                                {
-                                    errorOutput.Append($"| Row {row} Unit head with email {unitHeadEmail} doesn't have a department");
-                                    continue;
-                                }
-                                //var company = serviceDetails.Rows[row][2].ToString();
+                               
+                               
 
                                 var departmentrequest = new CreateUnitDto
                                 {
-                                    DepartmentId = employee.DepartmentId,
-                                    UnitHeadEmployeeId = employee.EmployeeID,
+                                    DepartmentId = 1,
+                                    UnitHeadEmployeeId = 1,
                                     UnitName = unitName
 
                                 };
@@ -227,7 +216,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UnitModulePrivilegeConstant.Update_Unit, accessUser.data.UserId);
@@ -292,7 +281,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UnitModulePrivilegeConstant.Delete_Unit, accessUser.data.UserId);
@@ -433,7 +422,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<UnitVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<UnitVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var returnData = await _unitRepository.GetUnitById(Id);
@@ -456,7 +445,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<UnitVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<UnitVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var returnData = await _unitRepository.GetUnitByName(UnitName, accessUser.data.CompanyId);

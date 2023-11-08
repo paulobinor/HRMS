@@ -36,9 +36,19 @@
         public bool IsApproved { get; set; }
         public bool IsDisapproved { get; set; }
         public bool IsDeactivated { get; set; }
+        public EmployeeDetailsVm EmployeeDetails { get; set; }
         public List<UserModulesVm> Modules { get; set; }
     }
-
+    public class EmployeeDetailsVm
+    {
+        public long EmployeeID { get; set; }
+        public bool IsFirstEmployee { get; set; }
+        public bool HasCompletedBankDetails { get; set; }
+        public bool HasCompletedContactDetails { get; set; }
+        public bool HasCompletedEduBackGround { get; set; }
+        public bool HasCompletedPersonalInfo { get; set; }
+        public bool HasCompletedProfBackground { get; set; }
+    }
     public class UserModulesVm
     {
         public string ModuleName { get; set; }

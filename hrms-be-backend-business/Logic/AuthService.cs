@@ -30,13 +30,14 @@ namespace hrms_be_backend_business.Logic
         private readonly IAuditLog _audit;
         private readonly IHostingEnvironment _hostEnvironment;
         private readonly ICompanyRepository _companyrepository;
+        private readonly IEmployeeRepository _employeerepository;
         private readonly IMailService _mailService;
         private readonly PassowordConfig _passwordConfig;
         private readonly JwtConfig _jwt;
 
         public AuthService(ITokenRefresher tokenRefresher, IUnitOfWork unitOfWork, IOptions<PassowordConfig> passwordConfig, IOptions<JwtConfig> jwt,
              IAuditLog audit, IMapper mapper, IJwtManager jwtManager, IHostingEnvironment hostEnvironment,
-             IAccountRepository accountRepository, ILogger<AuthService> logger, ICompanyRepository companyRepository, IMailService mailService)
+             IAccountRepository accountRepository, ILogger<AuthService> logger, ICompanyRepository companyRepository, IMailService mailService, IEmployeeRepository employeerepository)
         {
             _passwordConfig = passwordConfig.Value;
             _jwt = jwt.Value;
@@ -50,6 +51,7 @@ namespace hrms_be_backend_business.Logic
             _hostEnvironment = hostEnvironment;
             _companyrepository = companyRepository;
             _mailService = mailService;
+            _employeerepository = employeerepository;
         }
 
         public async Task<ExecutedResult<LoginResponse>> Login(LoginModel login, string ipAddress, string port)
@@ -91,21 +93,33 @@ namespace hrms_be_backend_business.Logic
 
                 }
                 var modules = await _accountRepository.GetAppModulesAssigned(Convert.ToInt64(userId));
-                var accessUserVm = new AccessUserVm
+                var accessUserVm = new AccessUserVm();
+                var employeeDetailsVm=new EmployeeDetailsVm();
+                if (user.EmployeeId>0)
                 {
-                    CompanyName = user.CompanyName,
-                    FirstName = user.FirstName,
-                    FullName = user.LastName,
-                    LastName = user.LastName,
-                    MiddleName = user.MiddleName,
-                    OfficialMail = user.OfficialMail,
-                    PhoneNumber = user.PhoneNumber,
-                    UserId = user.UserId,
-                    UserStatusName = user.UserStatusName,
-                    UserStatusCode = user.UserStatusCode,
-                    Modules = modules,
-                    CompanyId=user.CompanyId,
-                };
+                    var employeeDetails = await _employeerepository.GetEmployeeById(user.EmployeeId);
+                    employeeDetailsVm.EmployeeID = employeeDetails.EmployeeID;
+                    employeeDetailsVm.IsFirstEmployee = employeeDetails.IsFirstEmployee;
+                    employeeDetailsVm.HasCompletedBankDetails = employeeDetails.HasCompletedBankDetails;
+                    employeeDetailsVm.HasCompletedContactDetails = employeeDetails.HasCompletedContactDetails;
+                    employeeDetailsVm.HasCompletedEduBackGround = employeeDetails.HasCompletedEduBackGround;
+                    employeeDetailsVm.HasCompletedPersonalInfo = employeeDetails.HasCompletedPersonalInfo;
+                    employeeDetailsVm.HasCompletedProfBackground = employeeDetails.HasCompletedProfBackground;
+                  
+                }
+                accessUserVm.CompanyName = user.CompanyName;
+                accessUserVm.FirstName = user.FirstName;
+                accessUserVm.FullName = user.LastName;
+                accessUserVm.LastName = user.LastName;
+                accessUserVm.MiddleName = user.MiddleName;
+                accessUserVm.OfficialMail = user.OfficialMail;
+                accessUserVm.PhoneNumber = user.PhoneNumber;
+                accessUserVm.UserId = user.UserId;
+                accessUserVm.UserStatusName = user.UserStatusName;
+                accessUserVm.UserStatusCode = user.UserStatusCode;
+                accessUserVm.Modules = modules;
+                accessUserVm.CompanyId = user.CompanyId;
+                accessUserVm.EmployeeDetails = employeeDetailsVm;
 
 
                 var authResponse = await _jwtManager.GenerateJsonWebToken(accessUserVm);
@@ -184,7 +198,7 @@ namespace hrms_be_backend_business.Logic
                 if (userData == null)
                 {
                     _logger.LogError($"AuthService || (GetUserById)  Unable to get user details =====>");
-                    return new ExecutedResult<UserFullView>() { responseMessage = ResponseCode.AuthorizationError.ToString(), responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<UserFullView>() { responseMessage = ResponseCode.AuthorizationError.ToString(), responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
                 }
 
                 return new ExecutedResult<UserFullView>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = userData };
@@ -274,12 +288,11 @@ namespace hrms_be_backend_business.Logic
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Invalid password, password must contain more than {_passwordConfig.MustContainNumber} number character", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
                 }
-              
-               
-                string decryptedToken= EncryptDecrypt.DecryptResult(payload.token); 
-                string userId = decryptedToken.Substring(20);              
+                             
+               // string decryptedToken= EncryptDecrypt.DecryptResult(payload.token); 
+                string userId = payload.token.Substring(20);              
                 var userDetails =await _accountRepository.GetUserById(Convert.ToInt64(userId));
-                var repoResponse = await _accountRepository.ChangePassword(userDetails.UserId,payload.NewPassword,userDetails.UserId);
+                var repoResponse = await _accountRepository.ChangePassword(userDetails.UserId, password, userDetails.UserId);
                 if (!repoResponse.Contains("Success"))
                 {
                     return new ExecutedResult<string>() { responseMessage = repoResponse, responseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), data = null };
@@ -311,7 +324,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 bool isModelStateValidate = true;

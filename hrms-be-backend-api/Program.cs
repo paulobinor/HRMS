@@ -140,6 +140,7 @@ builder.Services.AddScoped<IInstitutionsRepository, InstitutionsRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmpLocationRepository, EmpLocationRepository>();
 builder.Services.AddScoped<IEmploymentStatusRepository, EmploymentStatusRepository>();
+builder.Services.AddScoped<IIdentificationTypeRepository, IdentificationTypeRepository>();
 
 builder.Services.AddScoped<IHMORepository, HMORepository>();
 builder.Services.AddScoped<IHospitalProvidersRepository, HospitalProvidersRepository>();
@@ -163,6 +164,7 @@ builder.Services.AddScoped<IEarningsService, EarningsService>();
 builder.Services.AddScoped<IDeductionsService, DeductionsService>();
 builder.Services.AddScoped<ITaxService, TaxService>();
 builder.Services.AddScoped<IPayrollService, PayrollService>();
+builder.Services.AddScoped<IIdentificationTypeService, IdentificationTypeService>();
 builder.Services.AddSingleton<IUriService>(o =>
 {
     var accessor = o.GetRequiredService<IHttpContextAccessor>();

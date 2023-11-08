@@ -41,96 +41,7 @@ namespace hrms_be_backend_business.Logic
             _mailService = mailService;
             _privilegeRepository = privilegeRepository;
         }
-        public async Task<ExecutedResult<string>> CreateCompanyUser(CreateUserDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
-        {
-
-            try
-            {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-                if (accessUser.data == null)
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
-
-                }
-                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkUserModulePrivilegeConstant.Create_User, accessUser.data.UserId);
-                if (!checkPrivilege.Contains("Success"))
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
-
-                }
-                bool isModelStateValidate = true;
-                string validationMessage = "";
-
-                if (string.IsNullOrEmpty(payload.FirstName))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "First name is required";
-                }
-                if (payload.LastName == null)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Last name is required";
-                }
-                if (payload.OfficialMail == null)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Official email is required";
-                }
-                if (payload.PhoneNumber == null)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Phone number is required";
-                }
-
-                if (!isModelStateValidate)
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
-
-                }
-                var password = Utils.GenerateDefaultPassword(6);
-                var repoPayload = new CreateCompanyUserReq
-                {
-                    CreatedByUserId = accessUser.data.UserId,
-                    DateCreated = DateTime.Now,
-                    FirstName = payload.FirstName,
-                    LastName = payload.LastName,
-                    MiddleName = payload.MiddleName,
-                    OfficialMail = payload.OfficialMail,
-                    PasswordHash = password,
-                    PhoneNumber = payload.PhoneNumber,                   
-                    //IsModifield = false,
-                };
-                string repoResponse = await _accountRepository.CreateCompanyUser(repoPayload);
-                if (!repoResponse.Contains("Success"))
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
-                }
-
-                var auditLog = new AuditLogDto
-                {
-                    userId = accessUser.data.UserId,
-                    actionPerformed = "CreateCompanyUser",
-                    payload = JsonConvert.SerializeObject(payload),
-                    response = null,
-                    actionStatus = $"Successful",
-                    ipAddress = RemoteIpAddress
-                };
-                await _audit.LogActivity(auditLog);
-
-                var UserId = repoResponse.Replace("Success", "");
-                var userDetails = await _accountRepository.GetUserById(Convert.ToInt64(UserId));
-                string token = $"{RandomGenerator.GetNumber(20)}{password}";
-
-                _mailService.SendEmailApproveUser(userDetails.OfficialMail, $"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", password, "Xpress HRMS User Creation", EncryptDecrypt.EncryptResult(token));
-
-                return new ExecutedResult<string>() { responseMessage = "Created Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"UserService (CreateBackOfficeUser)=====>{ex}");
-                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
-            }
-        }
+ 
         public async Task<ExecutedResult<string>> CreateBackOfficeUser(CreateUserDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
            
@@ -139,7 +50,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkUserModulePrivilegeConstant.Create_User, accessUser.data.UserId);
@@ -207,21 +118,7 @@ namespace hrms_be_backend_business.Logic
                     ipAddress = RemoteIpAddress
                 };
                 await _audit.LogActivity(auditLog);
-                //StringBuilder mailBody = new StringBuilder();
-
-                //mailBody.Append($"Dear {payload.FirstName} {payload.LastName} {payload.MiddleName} <br/> <br/>");
-                //mailBody.Append($"You have been created on Xpress HRMS <br/> <br/>");
-                //mailBody.Append($"<b>URL : <b/> {_frontendConfig.FrontendUrl}");
-                //mailBody.Append($"<b>Username : <b/> {payload.OfficialMail}");
-                //mailBody.Append($"<b>Password : <b/> {password}");
-
-                //var mailPayload = new MailRequest
-                //{
-                //    Body = mailBody.ToString(),
-                //    Subject = "Leave Request",
-                //    ToEmail = payload.OfficialMail,
-                //};
-                //_mailService.SendEmailAsync(mailPayload, null);
+              
                 return new ExecutedResult<string>() { responseMessage = "Created Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
@@ -238,7 +135,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkUserModulePrivilegeConstant.Update_User, accessUser.data.UserId);
@@ -338,7 +235,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkUserModulePrivilegeConstant.Approve_User_Details, accessUser.data.UserId);
@@ -366,9 +263,9 @@ namespace hrms_be_backend_business.Logic
                 await _audit.LogActivity(auditLog);
 
                 var userDetails = await _accountRepository.GetUserById(UserId);
-                string token = $"{RandomGenerator.GetNumber(20)}{defaultPassword}";
+                string token = $"{RandomGenerator.GetNumber(20)}{userDetails.UserId}";
 
-                _mailService.SendEmailApproveUser(userDetails.OfficialMail,$"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", defaultPassword, "Xpress HRMS User Creation",EncryptDecrypt.EncryptResult(token));
+                _mailService.SendEmailApproveUser(userDetails.OfficialMail,$"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", defaultPassword, "Xpress HRMS User Creation", token);
                 
                 return new ExecutedResult<string>() { responseMessage = "Approved Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
@@ -385,7 +282,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkUserModulePrivilegeConstant.Deactivate_User_Details, accessUser.data.UserId);
@@ -441,7 +338,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkUserModulePrivilegeConstant.Disapprove_User, accessUser.data.UserId);
@@ -504,16 +401,16 @@ namespace hrms_be_backend_business.Logic
                 }
                 if (accessUser.data.UserStatusCode != UserStatusConstant.Back_Office_User)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.NoPrivilege.ToString());
                 }
                 var returnData = await _accountRepository.GetUsers(filter.PageNumber, filter.PageSize);
                 if (returnData == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
                 if (returnData.data == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }             
 
                 totalRecords = returnData.totalRecords;
@@ -540,20 +437,20 @@ namespace hrms_be_backend_business.Logic
                     return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
-                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkUserModulePrivilegeConstant.Update_User, accessUser.data.UserId);
-                if (!checkPrivilege.Contains("Success"))
+            
+                if (accessUser.data.UserStatusCode!=UserStatusConstant.Back_Office_User)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.NoPrivilege.ToString());
 
                 }
                 var returnData = await _accountRepository.GetUsersBackOffice(filter.PageNumber, filter.PageSize);
                 if (returnData == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
                 if (returnData.data == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
 
                 totalRecords = returnData.totalRecords;
@@ -580,20 +477,19 @@ namespace hrms_be_backend_business.Logic
                     return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
-                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkUserModulePrivilegeConstant.Update_User, accessUser.data.UserId);
-                if (!checkPrivilege.Contains("Success"))
+                if (accessUser.data.UserStatusCode != UserStatusConstant.Back_Office_User)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.NoPrivilege.ToString());
 
                 }
                 var returnData = await _accountRepository.GetUsersApprovedBackOffice(filter.PageNumber, filter.PageSize);
                 if (returnData == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
                 if (returnData.data == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
 
                 totalRecords = returnData.totalRecords;
@@ -620,20 +516,19 @@ namespace hrms_be_backend_business.Logic
                     return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
-                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkUserModulePrivilegeConstant.Update_User, accessUser.data.UserId);
-                if (!checkPrivilege.Contains("Success"))
+                if (accessUser.data.UserStatusCode != UserStatusConstant.Back_Office_User)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.NoPrivilege.ToString());
 
                 }
                 var returnData = await _accountRepository.GetUsersDisapprovedBackOffice(filter.PageNumber, filter.PageSize);
                 if (returnData == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
                 if (returnData.data == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
 
                 totalRecords = returnData.totalRecords;
@@ -660,20 +555,19 @@ namespace hrms_be_backend_business.Logic
                     return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
-                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(BkUserModulePrivilegeConstant.Update_User, accessUser.data.UserId);
-                if (!checkPrivilege.Contains("Success"))
+                if (accessUser.data.UserStatusCode != UserStatusConstant.Back_Office_User)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), ResponseCode.NoPrivilege.ToString());
 
                 }
                 var returnData = await _accountRepository.GetUsersDeapctivatedBackOffice(filter.PageNumber, filter.PageSize);
                 if (returnData == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
                 if (returnData.data == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
 
                 totalRecords = returnData.totalRecords;
@@ -703,11 +597,11 @@ namespace hrms_be_backend_business.Logic
                 var returnData = await _accountRepository.GetUsersByCompany(accessUser.data.CompanyId, filter.PageNumber, filter.PageSize);
                 if (returnData == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
                 if (returnData.data == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
 
                 totalRecords = returnData.totalRecords;
@@ -737,11 +631,11 @@ namespace hrms_be_backend_business.Logic
                 var returnData = await _accountRepository.GetUsersApprovedByCompany(accessUser.data.CompanyId, filter.PageNumber, filter.PageSize);
                 if (returnData == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
                 if (returnData.data == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
 
                 totalRecords = returnData.totalRecords;
@@ -771,11 +665,11 @@ namespace hrms_be_backend_business.Logic
                 var returnData = await _accountRepository.GetUsersDisapprovedByCompany(accessUser.data.CompanyId, filter.PageNumber, filter.PageSize);
                 if (returnData == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
                 if (returnData.data == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
 
                 totalRecords = returnData.totalRecords;
@@ -805,11 +699,11 @@ namespace hrms_be_backend_business.Logic
                 var returnData = await _accountRepository.GetUsersDeactivatedByCompany(accessUser.data.CompanyId, filter.PageNumber, filter.PageSize);
                 if (returnData == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
                 if (returnData.data == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<UserVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
 
                 totalRecords = returnData.totalRecords;
@@ -831,7 +725,7 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<UserVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.AuthorizationError).ToString(), data = null };
+                    return new ExecutedResult<UserVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var returnData = await _accountRepository.GetUserById(UserId);

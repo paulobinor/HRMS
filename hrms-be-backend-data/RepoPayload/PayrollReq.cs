@@ -16,4 +16,11 @@
         public DateTime DateCreated { get; set; }
         public bool IsModification { get; set; }
     }
+    public class RunPayrollReq
+    {
+        public long PayrollId { get; set; }
+        public string Title { get; set; }      
+        public long CreatedByUserId { get; set; }
+        public DateTime DateCreated { get; set; }       
+    }
 }

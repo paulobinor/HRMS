@@ -12,7 +12,7 @@
         public bool IsPublicSector { get; set; }
 
         public string AdminFirstName { get; set; }
-        public string AdminMiddleName { get; set; }
+        public string? AdminMiddleName { get; set; }
         public string AdminLastName { get; set; }
         public string AdminOfficialMail { get; set; }
         public string AdminPhoneNumber { get; set; }
