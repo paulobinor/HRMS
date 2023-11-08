@@ -46,12 +46,12 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                 new Claim(ClaimTypes.SerialNumber, request.UserId.ToString()),
                 new Claim(ClaimTypes.Name, request.FullName),
                 new Claim(ClaimTypes.Sid, request.UserId.ToString()),
-                new Claim(ClaimTypes.Role, request.UserStatusCode),               
+                new Claim(ClaimTypes.Role, request.UserStatusCode),
                 new Claim(ClaimTypes.GivenName, request.FirstName),
                 new Claim(ClaimTypes.Surname, request.LastName),
-              
-                new Claim(ClaimTypes.GroupSid, (request.CompanyId!=null)?request.CompanyId.ToString():""),               
+                new Claim(ClaimTypes.GroupSid, (request.CompanyId!=null)?request.CompanyId.ToString():""),
                 new Claim(ClaimTypes.Actor, request.UserStatusName),
+                 new Claim(ClaimTypes.NameIdentifier, JsonConvert.SerializeObject(request.EmployeeDetails)),
                 new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(request.Modules)),
             };
 

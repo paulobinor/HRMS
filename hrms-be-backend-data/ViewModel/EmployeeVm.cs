@@ -93,6 +93,12 @@
         public string DisapprovedComment { get; set; }
         public long DisapprovedByUserId { get; set; }
         public DateTime DateDisapproved { get; set; }
+        public bool IsFirstEmployee { get; set; }
+        public bool HasCompletedBankDetails { get; set; }
+        public bool HasCompletedContactDetails { get; set; }
+        public bool HasCompletedEduBackGround { get; set; }
+        public bool HasCompletedPersonalInfo { get; set; }
+        public bool HasCompletedProfBackground { get; set; }
     }
 
     public class EmployeeVm
