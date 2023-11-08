@@ -465,7 +465,7 @@ namespace hrms_be_backend_data.Repository
                     CurrentStaffCount = currentStaffCount,
                     Count = listCount,
                     CompanyID = companyID,
-                    Users = dataTable.AsTableValuedParameter("UserType"),
+                    Users = dataTable.AsTableValuedParameter("EmployeeType"),
                 };
                 var resp = await _dapper.BulkInsert<int>(param, "sp_CreateEmployeeBulk");
                 return resp;

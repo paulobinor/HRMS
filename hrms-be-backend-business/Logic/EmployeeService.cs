@@ -868,7 +868,7 @@ namespace hrms_be_backend_business.Logic
         }
 
          
-        public async Task<BaseResponse> CreateEmployeeBulkUpload(IFormFile payload, long companyID, RequesterInfo requester)
+        public async Task<BaseResponse> CreateEmployeeBulkUpload(IFormFile payload, RequesterInfo requester)
         {
             //check if us
             StringBuilder errorOutput = new StringBuilder();
@@ -951,7 +951,7 @@ namespace hrms_be_backend_business.Logic
                         }
                         else
                         {
-                            var company = await _companyrepository.GetCompanyById(companyID);
+                            var company = await _companyrepository.GetCompanyById(accessUser.data.CompanyId);
                             if (company == null || company.IsDeleted)
                             {
                                 response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
@@ -959,13 +959,13 @@ namespace hrms_be_backend_business.Logic
                                 return response;
                             }
 
-                            var departmentsTask = _departmentrepository.GetDepartmentes(companyID);
-                            var unitsTask = _unitRepository.GetUnites(companyID);
-                            var gradsTask = _GradeRepository.GetGrades(companyID);
-                            var employeTypesTask = _EmployeeTypeRepository.GetEmployeeTypes(companyID);
-                            var employeStatusTask = _EmploymentStatusRepository.GetEmploymentStatus(companyID);
+                            var departmentsTask = _departmentrepository.GetDepartmentes(accessUser.data.CompanyId);
+                            var unitsTask = _unitRepository.GetUnites(accessUser.data.CompanyId);
+                            var gradsTask = _GradeRepository.GetGrades(accessUser.data.CompanyId);
+                            var employeTypesTask = _EmployeeTypeRepository.GetEmployeeTypes(accessUser.data.CompanyId);
+                            var employeStatusTask = _EmploymentStatusRepository.GetEmploymentStatus(accessUser.data.CompanyId);
                             var rolesTask = _rolesRepo.GetAllRoles();
-                            var branchesTask = _branchRepository.GetBranches(companyID);
+                            var branchesTask = _branchRepository.GetBranches(accessUser.data.CompanyId);
 
                             await Task.WhenAll(departmentsTask, unitsTask, gradsTask,
                             employeTypesTask, employeStatusTask, rolesTask, branchesTask);
@@ -986,13 +986,13 @@ namespace hrms_be_backend_business.Logic
                                 DateOnly date = new DateOnly();
                                 bool isDobConverted = false;
 
-                                long unitID = 0;
-                                long gradeID = 0;
-                                long employeeTypeID = 0;
-                                long branchID = 0;
-                                long employmentStatusID = 0;
-                                long roleID = 0;
-                                long departmentID = 0;
+                                long? unitID = null;
+                                long? gradeID = null;
+                                long? employeeTypeID = null;
+                                long? branchID = null;
+                                long? employmentStatusID = null;
+                                long? roleID = null;
+                                long? departmentID = null;
 
                                 string rowError = string.Empty;
                                 string firstName = serviceDetails.Rows[row][0].ToString();
@@ -1142,23 +1142,23 @@ namespace hrms_be_backend_business.Logic
                                     //ResumptionDate = Convert.ToDateTime(resumptionDate),
                                     OfficialEmail = officialMaildata,
                                     PhoneNumber = phoneNumber,
-                                    UnitId = unitID,
-                                    GradeId = gradeID,
-                                    EmployeeTypeId = employeeTypeID,
-                                    BranchId = branchID,
-                                    EmploymentStatusId = employmentStatusID,
-                                    JobRoleId = roleID,
-                                    DepartmentId = departmentID,
+                                    UnitId = unitID == null ? 0 : Convert.ToInt64(unitID),
+                                    GradeId = gradeID == null ? 0 : Convert.ToInt64(gradeID),
+                                    EmployeeTypeId = employeeTypeID == null ? 0 : Convert.ToInt64(employeeTypeID),
+                                    BranchId = branchID == null ? 0 : Convert.ToInt64(branchID),
+                                    EmploymentStatusId = employmentStatusID == null ? 0 : Convert.ToInt64(employmentStatusID),
+                                    JobRoleId = roleID == null ? 0 : Convert.ToInt64(roleID),
+                                    DepartmentId = departmentID == null ? 0 : Convert.ToInt64(departmentID),
 
 
                                 };
 
                                 createEmployeeList.Add(userrequest);
-                                dataTable.Rows.Add(new object[] { userrequest.FirstName.Trim(), staffID.Trim(), userrequest.MiddleName.Trim(), userrequest.LastName.Trim(), userrequest.PersonalEmail.Trim(), date, resumptionDatenew, userrequest.OfficialEmail.Trim(), userrequest.PhoneNumber.Trim(), userrequest.UnitId, gradeID, userrequest.EmployeeTypeId, userrequest.BranchId, userrequest.EmploymentStatusId, userrequest.JobRoleId, userrequest.DepartmentId, companyID });
+                                dataTable.Rows.Add(new object[] { userrequest.FirstName.Trim(), staffID.Trim(), userrequest.MiddleName.Trim(), userrequest.LastName.Trim(), userrequest.PersonalEmail.Trim(), date, resumptionDatenew, userrequest.OfficialEmail.Trim(), userrequest.PhoneNumber.Trim(), unitID, gradeID, employeeTypeID, branchID, employmentStatusID, roleID, departmentID, accessUser.data.CompanyId });
 
                             }
 
-                            var resp = await _EmployeeRepository.AddEmployeeBulk(dataTable, requester, company.LastStaffNumber, createEmployeeList.Count, companyID);
+                            var resp = await _EmployeeRepository.AddEmployeeBulk(dataTable, requester, company.LastStaffNumber, createEmployeeList.Count, accessUser.data.CompanyId);
 
 
                             var auditLog = new AuditLogDto
