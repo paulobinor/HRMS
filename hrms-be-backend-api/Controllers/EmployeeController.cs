@@ -120,22 +120,22 @@ namespace hrms_be_backend_api.Controllers
             return this.CustomResponse(await _EmployeeService.UpdateEmployeeBankDetails(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
 
-        [HttpPost("CreateEmployeeBulkUpload/{companyID}")]
+        [HttpPost("CreateEmployeeBulkUpload")]
         //[Authorize]
-        public async Task<IActionResult> CreateEmployeeBulkUpload(IFormFile payload, long companyID)
+        public async Task<IActionResult> CreateEmployeeBulkUpload(IFormFile payload)
         {
             var response = new BaseResponse();
             try
             {
+                var accessToken = Request.Headers["Authorization"];
                 var requester = new RequesterInfo
                 {
-                     Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+                    Port = Request.HttpContext.Connection.RemotePort.ToString(),
+                    AccessToken = accessToken.ToString().Replace("bearer", "").Trim(),
+            };
 
-                return Ok(await _EmployeeService.CreateEmployeeBulkUpload(payload, companyID, requester));
+                return Ok(await _EmployeeService.CreateEmployeeBulkUpload(payload, requester));
             }
             catch (Exception ex)
             {
