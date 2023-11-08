@@ -463,7 +463,13 @@ namespace hrms_be_backend_business.Logic
             var response = new BaseResponse();
             try
             {
-                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Update_Onboarding_Basis, requester.UserId);
+                var accessUser = await _authService.CheckUserAccess(requester.AccessToken, requester.IpAddress);
+                if (accessUser.data == null)
+                {
+                    return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.AuthorizationError).ToString(), Data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Update_Onboarding_Basis, accessUser.data.UserId);
                 if (!checkPrivilege.ToLower().Contains("success"))
                 {
                     return new BaseResponse() { ResponseMessage = $"{checkPrivilege}", ResponseCode = ((int)ResponseCode.NoPrivilege).ToString(), Data = null };
@@ -483,6 +489,8 @@ namespace hrms_be_backend_business.Logic
                 }
                 else
                 {
+                    requester.UserId = accessUser.data.UserId;
+                    requester.Username = accessUser.data.OfficialMail;
                     var stream = new MemoryStream();
                     await payload.CopyToAsync(stream);
 
@@ -772,7 +780,7 @@ namespace hrms_be_backend_business.Logic
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured ==> {ex.Message}");
+                _logger.LogError($"Exception Occured ==> {ex.ToString()}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = "Exception occured";
                 response.Data = null;

@@ -67,13 +67,13 @@ namespace hrms_be_backend_api.Controllers
             var response = new BaseResponse();
             try
             {
+                var accessToken = Request.Headers["Authorization"];
                 var requester = new RequesterInfo
                 {
-                     Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+                    Port = Request.HttpContext.Connection.RemotePort.ToString(),
+                    AccessToken = accessToken.ToString().Replace("bearer", "").Trim(),
+            };
 
                 return Ok(await _EmployeeService.CreateEmployeeBulkUpload(payload, companyID, requester));
             }
