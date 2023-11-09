@@ -35,9 +35,7 @@
         public string CompanyName { get; set; }
         public bool IsApproved { get; set; }
         public bool IsDisapproved { get; set; }
-        public bool IsDeactivated { get; set; }
-        public EmployeeDetailsVm EmployeeDetails { get; set; }
-        public List<UserModulesVm> Modules { get; set; }
+        public bool IsDeactivated { get; set; }      
     }
     public class EmployeeDetailsVm
     {
