@@ -7,6 +7,7 @@ using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -24,26 +25,32 @@ namespace hrms_be_backend_business.Logic
 
         private readonly ILogger<BranchService> _logger;
         private readonly IConfiguration _configuration;
-        private readonly IAccountRepository _accountRepository;      
-        private readonly IBranchRepository _branchRepository;        
+        private readonly IAccountRepository _accountRepository;
+        private readonly IBranchRepository _branchRepository;
         private readonly IUserAppModulePrivilegeRepository _privilegeRepository;
         private readonly IAuthService _authService;
         private readonly IMailService _mailService;
         private readonly IUriService _uriService;
+        private readonly ILgaRepository _lgaRepository;
+        private readonly IStateRepository _stateRepository;
+        private readonly ICountryRepository _countryRepository;
 
         public BranchService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<BranchService> logger,
-            IBranchRepository branchRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IUriService uriService, IUserAppModulePrivilegeRepository privilegeRepository)
+            IBranchRepository branchRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IUriService uriService, IUserAppModulePrivilegeRepository privilegeRepository, ILgaRepository lgaRepository, IStateRepository stateRepository, ICountryRepository countryRepository)
         {
             _audit = audit;
 
             _logger = logger;
             _configuration = configuration;
             _accountRepository = accountRepository;
-            _branchRepository = branchRepository;          
+            _branchRepository = branchRepository;
             _authService = authService;
             _mailService = mailService;
             _uriService = uriService;
             _privilegeRepository = privilegeRepository;
+            _lgaRepository = lgaRepository;
+            _stateRepository = stateRepository;
+            _countryRepository = countryRepository;
         }
 
         public async Task<ExecutedResult<string>> CreateBranch(CreateBranchDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
@@ -76,11 +83,11 @@ namespace hrms_be_backend_business.Logic
                     isModelStateValidate = false;
                     validationMessage += "  Address is required";
                 }
-                if (payload.LgaId<1)
+                if (payload.LgaId < 1)
                 {
                     isModelStateValidate = false;
                     validationMessage += "  Local Gorvernment is required";
-                }                
+                }
                 if (!isModelStateValidate)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
@@ -93,7 +100,7 @@ namespace hrms_be_backend_business.Logic
                     Address = payload.Address,
                     BranchName = payload.BranchName,
                     IsHeadQuater = payload.IsHeadQuater,
-                    LgaId = payload.LgaId,                    
+                    LgaId = payload.LgaId,
                     IsModifield = false,
                 };
                 string repoResponse = await _branchRepository.ProcessBranch(repoPayload);
@@ -121,6 +128,156 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
+
+
+
+        public async Task<ExecutedResult<string>> CreateBranchBulkUpload(IFormFile payload, string AccessKey, IEnumerable<Claim> claim, RequesterInfo requester)
+        {
+            //check if us
+            StringBuilder errorOutput = new StringBuilder();
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, requester.IpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
+
+                if (payload == null || payload.Length <= 0)
+                    return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ValidationError).ToString(), responseMessage = "No file attached" };
+                else if (!Path.GetExtension(payload.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                    return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ValidationError).ToString(), responseMessage = "File not an Excel Format" };
+                else
+                {
+                    var stream = new MemoryStream();
+                    await payload.CopyToAsync(stream);
+
+                    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                    var reader = ExcelReaderFactory.CreateReader(stream);
+                    DataSet ds = new DataSet();
+                    ds = reader.AsDataSet();
+                    reader.Close();
+
+                    int rowCount = ds.Tables[0].Rows.Count;
+                    DataTable serviceDetails = ds.Tables[0];
+
+                    int k = 0;
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+
+                        string BranchName = serviceDetails.Rows[0][0].ToString();
+                        string Address = serviceDetails.Rows[0][1].ToString();
+                        string Country = serviceDetails.Rows[0][2].ToString();
+                        string State = serviceDetails.Rows[0][3].ToString();
+                        string LgaName = serviceDetails.Rows[0][4].ToString();
+                        string CompanyName = serviceDetails.Rows[0][5].ToString();
+
+
+                        if (BranchName != "BranchName" || Address != "Address" || Country != "Country" || State != "State" || LgaName != "LgaName" || CompanyName != "CompanyName")
+                            return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ValidationError).ToString(), responseMessage = "File header not in the Right format" };
+                        else
+                        {
+
+                            var countryList = await _countryRepository.GetAllCountries();
+                            var LgaList = await _lgaRepository.GetAllLgas();
+                            string prevCountry = string.Empty;
+                            List<StateVm> stateList = new List<StateVm>();
+                            for (int row = 1; row < serviceDetails.Rows.Count; row++)
+                            {
+                                int countryID = 0;
+                                int stateID = 0;
+                                int lgaID = 0;
+
+
+
+
+                                string branchName = serviceDetails.Rows[row][0].ToString();
+                                string address = serviceDetails.Rows[row][1].ToString();
+                                string country = serviceDetails.Rows[row][2].ToString();
+                                string state = serviceDetails.Rows[row][3].ToString();
+                                string lgaName = serviceDetails.Rows[row][4].ToString();
+                                string companyName = serviceDetails.Rows[row][5].ToString();
+
+                                if (countryList.Count > 0)
+                                {
+                                    var selectedCountry = countryList.FirstOrDefault(m => m.CountryName == country.Trim());
+
+                                    if (selectedCountry == null)
+                                    {
+                                        errorOutput.Append($"| Row {row} failed due to invalid Country {country}");
+                                        continue;
+                                    }
+                                    countryID = Convert.ToInt32(selectedCountry.CountryID);
+                                    prevCountry = country;
+                                }
+
+                                if (prevCountry != country || stateList.Count == 0)
+                                    stateList = await _stateRepository.GetStates(countryID);
+
+                                if (stateList.Count > 0)
+                                {
+                                    var selectedState = stateList.FirstOrDefault(m => m.StateName == state.Trim());
+                                    if (selectedState == null)
+                                    {
+                                        errorOutput.Append($"| Row {row} failed due to invalid state {state}");
+                                        continue;
+                                    }
+
+                                    stateID = selectedState.StateID;
+                                }
+
+
+                                var lga = LgaList.FirstOrDefault(m => m.StateID == stateID && m.LGA_Name == lgaName.Trim());
+                                if (lga == null)
+                                {
+
+                                    errorOutput.Append($"| Row {row} failed due to invalid LGA {lgaName} in State {state}");
+                                    continue;
+                                }
+                                var request = new CreateBranchDto
+                                {
+                                    Address = address,
+                                    BranchName = branchName,
+                                    LgaId = lga.LGAID
+
+                                };
+
+                                var resp = await CreateBranch(request, AccessKey, claim, requester.IpAddress, requester.Port);
+
+
+                                if (resp.responseCode == "0")
+                                {
+                                    k++;
+                                }
+                                else
+                                {
+                                    errorOutput.Append($"| Row {row} failed due to {resp.responseMessage}");
+                                }
+                            }
+                        }
+
+                    }
+
+
+
+                    if (k == rowCount - 1)
+                    {
+                        return new ExecutedResult<string> { responseCode = ((int)ResponseCode.Ok).ToString(), responseMessage = "All record inserted successfully" };
+                    }
+                    else
+                    {
+                        return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ProcessingError).ToString(), responseMessage = errorOutput.ToString().TrimStart('|') };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured ==> {ex.ToString()}");
+                return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ProcessingError).ToString(), responseMessage = "Exception occured creating unit" };
+            }
+        }
+
         public async Task<ExecutedResult<string>> UpdateBranch(UpdateBranchDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
 
@@ -170,7 +327,7 @@ namespace hrms_be_backend_business.Logic
                     IsHeadQuater = payload.IsHeadQuater,
                     LgaId = payload.LgaId,
                     IsModifield = true,
-                    BranchId= payload.BranchId,
+                    BranchId = payload.BranchId,
                 };
                 string repoResponse = await _branchRepository.ProcessBranch(repoPayload);
                 if (!repoResponse.Contains("Success"))
@@ -221,7 +378,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     isModelStateValidate = false;
                     validationMessage += "Comment is required";
-                }              
+                }
                 if (!isModelStateValidate)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
@@ -231,7 +388,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
-                    Comment = payload.Comment,                   
+                    Comment = payload.Comment,
                     BranchId = payload.BranchId,
                 };
                 string repoResponse = await _branchRepository.DeleteBranch(repoPayload);

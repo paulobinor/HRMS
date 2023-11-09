@@ -34,6 +34,24 @@ namespace hrms_be_backend_data.Repository
                 _logger.LogError($"CountryRepository -> GetCountries => {ex}");
                 return new List<CountryVm>();
             }
-        }        
+        }
+
+
+
+
+        public async Task<List<CountryVm>> GetAllCountries()
+        {
+            try
+            {
+                string query = "Select * from Countries where IsActive = 1";
+                var param = new DynamicParameters();
+                return await _dapper.GetAll<CountryVm>(query, param, commandType: CommandType.Text);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CountryRepository -> GetAllCountries => {ex.ToString()}");
+                return new List<CountryVm>();
+            }
+        }
     }
 }
