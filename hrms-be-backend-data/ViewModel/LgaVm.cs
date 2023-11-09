@@ -2,6 +2,7 @@
 {
     public class LgaVm
     {
+        public int StateID { get; set; }
         public int LGAID { get; set; }
         public string LGAName { get; set;}
     }
