@@ -125,6 +125,13 @@ namespace hrms_be_backend_business.Logic
             StringBuilder errorOutput = new StringBuilder();
             try
             {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, requester.IpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
+
                 if (payload == null || payload.Length <= 0)
                     return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ValidationError).ToString(), responseMessage = "No file attached" };
                 else if (!Path.GetExtension(payload.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
@@ -161,13 +168,20 @@ namespace hrms_be_backend_business.Logic
 
                                 string unitName = serviceDetails.Rows[row][0].ToString();
                                 string unitHeadEmail = serviceDetails.Rows[row][1].ToString();
-                               
-                               
+
+
+                                var employee = await _employeeRepository.GetEmployeeByEmail(unitHeadEmail , accessUser.data.CompanyId);
+
+                                if(employee == null)
+                                {
+                                    errorOutput.Append($"| Row {row} failed due to invalid UnitHead Email {unitHeadEmail}");
+                                    continue;
+                                }
 
                                 var departmentrequest = new CreateUnitDto
                                 {
-                                    DepartmentId = 1,
-                                    UnitHeadEmployeeId = 1,
+                                    DepartmentId = employee.DepartmentId,
+                                    UnitHeadEmployeeId = employee.EmployeeID,
                                     UnitName = unitName
 
                                 };

@@ -10,6 +10,7 @@ namespace hrms_be_backend_business.ILogic
     public interface IBranchService
     {
         Task<ExecutedResult<string>> CreateBranch(CreateBranchDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<string>> CreateBranchBulkUpload(IFormFile payload, string AccessKey, IEnumerable<Claim> claim, RequesterInfo requester);
         Task<ExecutedResult<string>> UpdateBranch(UpdateBranchDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<ExecutedResult<string>> DeleteBranch(DeleteBranchDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<PagedExcutedResult<IEnumerable<BranchVm>>> GetBranches(PaginationFilter filter, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
