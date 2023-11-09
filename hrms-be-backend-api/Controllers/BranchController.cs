@@ -1,4 +1,5 @@
 ﻿using hrms_be_backend_business.ILogic;
+using hrms_be_backend_business.Logic;
 using hrms_be_backend_common.Communication;
 using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.ViewModel;
@@ -35,6 +36,24 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _branchService.CreateBranch(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
+
+        [HttpPost("CreateBranchBulk")]
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> CreateUnitBulk(IFormFile payload)
+        {
+            var requester = new RequesterInfo
+            {
+                IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                Port = Request.HttpContext.Connection.RemotePort.ToString()
+            };
+
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _branchService.CreateBranchBulkUpload(payload, accessToken, claim, requester));
+        }
+
         [HttpPost("UpdateBranch")]
         [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
         public async Task<IActionResult> UpdateBranch(UpdateBranchDto payload)

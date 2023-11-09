@@ -38,5 +38,24 @@ namespace hrms_be_backend_data.Repository
                 return new List<LgaVm>();
             }
         }
+
+
+
+        public async Task<List<Lga>> GetAllLgas()
+        {
+            try
+            {
+
+                var query = "select * from LGA where IsActive = @IsActive";
+                var param = new DynamicParameters();
+                param.Add("IsActive", true);
+                return await _dapper.GetAll<Lga>(query, param, commandType: CommandType.Text);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"LgaRepository -> GetLgas => {ex}");
+                return new List<Lga>();
+            }
+        }
     }
 }

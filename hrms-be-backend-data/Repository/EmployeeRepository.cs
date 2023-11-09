@@ -465,7 +465,7 @@ namespace hrms_be_backend_data.Repository
                     CurrentStaffCount = currentStaffCount,
                     Count = listCount,
                     CompanyID = companyID,
-                    Users = dataTable.AsTableValuedParameter("UserType"),
+                    Users = dataTable.AsTableValuedParameter("EmployeeType"),
                 };
                 var resp = await _dapper.BulkInsert<int>(param, "sp_CreateEmployeeBulk");
                 return resp;
@@ -492,13 +492,14 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<EmployeeFullVm> GetEmployeeByEmail(string email)
+        public async Task<EmployeeFullVm> GetEmployeeByEmail(string email , long companyID)
         {
-            string query = @"select * from Employee where OfficialMail = @Email and IsDeleted = @IsDeleted and IsApproved = @IsApproved";
+            string query = @"select * from Employee where OfficialMail = @Email and IsDeleted = @IsDeleted and IsApproved = @IsApproved and CompanyID = @CompanyID";
             var param = new DynamicParameters();
             param.Add("Email", email);
             param.Add("IsDeleted", false);
             param.Add("IsApproved", true);
+            param.Add("CompanyID", companyID);
             return await _dapper.Get<EmployeeFullVm>(query, param, commandType: CommandType.Text);
 
         }

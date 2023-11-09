@@ -92,7 +92,7 @@ namespace hrms_be_backend_data.Repository
             var param = new DynamicParameters();
             param.Add("CompanyId", CompanyId);
             param.Add("IsDeleted", false);
-            return await _dapper.GetAll<GradeVm>("sp_get_grades", param, commandType: CommandType.StoredProcedure);
+            return await _dapper.GetAll<GradeVm>(query, param, commandType: CommandType.Text);
         }
         public async Task<GradeWithTotalVm> GetGradesDeleted(long CompanyId, int PageNumber, int RowsOfPage)
         {
