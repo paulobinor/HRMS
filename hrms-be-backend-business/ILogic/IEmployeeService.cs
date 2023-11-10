@@ -16,7 +16,7 @@ namespace hrms_be_backend_business.ILogic
 
         Task<ExecutedResult<string>> UpdateEmployeeBasis(UpdateEmployeeBasisDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<ExecutedResult<string>> UpdateEmployeeEduBackground(UpdateEmployeeEduBackgroundDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
-        Task<ExecutedResult<string>> UpdateEmployeeProfesionalBackground(UpdateEmployeeProfesionalBackgroundDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<ExecutedResult<string>> UpdateEmployeeProfesionalBackground(UpdateEmployeeProfBackgroundDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<ExecutedResult<string>> UpdateEmployeeReference(UpdateEmployeeReferenceDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<ExecutedResult<string>> UpdateEmployeeBankDetails(UpdateEmployeeBankDetailsDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
 

@@ -169,7 +169,7 @@ namespace hrms_be_backend_business.Logic
                     ResumptionDate = payload.ResumptionDate,
                     UnitId = payload.UnitId,
                     IsModifield = false,
-                    StaffId=payload.StaffId,
+                    StaffId = payload.StaffId,
                 };
                 string repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
                 if (!repoResponse.Contains("Success"))
@@ -216,18 +216,18 @@ namespace hrms_be_backend_business.Logic
                 bool isModelStateValidate = true;
                 string validationMessage = "";
 
-                if (payload.BaseSalary<1)
+                if (payload.BaseSalary < 1)
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || Base salary is required";
                 }
-               
+
                 if (payload.PayrollId < 1)
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || Payroll is required";
                 }
-                
+
 
                 if (!isModelStateValidate)
                 {
@@ -238,10 +238,10 @@ namespace hrms_be_backend_business.Logic
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
-                   BaseSalary=payload.BaseSalary,
-                   EmployeeId=payload.EmployeeId,
-                   PayrollId=payload.PayrollId,
-                   SalaryEffectiveFrom=payload.SalaryEffectiveFrom,
+                    BaseSalary = payload.BaseSalary,
+                    EmployeeId = payload.EmployeeId,
+                    PayrollId = payload.PayrollId,
+                    SalaryEffectiveFrom = payload.SalaryEffectiveFrom,
                 };
                 string repoResponse = await _EmployeeRepository.ProcessEmployeeCompensation(repoPayload);
                 if (!repoResponse.Contains("Success"))
@@ -307,12 +307,12 @@ namespace hrms_be_backend_business.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || LGA of origin is required";
                 }
-                if (!string.IsNullOrEmpty(payload.TownOfOrigin))
+                if (string.IsNullOrEmpty(payload.TownOfOrigin))
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || Town of origin is required";
                 }
-                if (!string.IsNullOrEmpty(payload.MaidenName))
+                if (string.IsNullOrEmpty(payload.MaidenName))
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || Maiden name is required";
@@ -452,28 +452,28 @@ namespace hrms_be_backend_business.Logic
                     validationMessage += "Current Address One is required";
                 }
 
-                if (!string.IsNullOrEmpty(payload.NextOfKinName))
+                if (string.IsNullOrEmpty(payload.NextOfKinName))
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || Next Of Kin Name of origin is required";
                 }
-                if (!string.IsNullOrEmpty(payload.NextOfKinPhoneNumber))
+                if (string.IsNullOrEmpty(payload.NextOfKinPhoneNumber))
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || Next Of Kin Phone Number is required";
                 }
-                if (!string.IsNullOrEmpty(payload.NextOfKinEmailAddress))
+                if (string.IsNullOrEmpty(payload.NextOfKinEmailAddress))
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || Next Of Kin Email Address is required";
                 }
-                if (!string.IsNullOrEmpty(payload.NextOfKinRelationship))
+                if (string.IsNullOrEmpty(payload.NextOfKinRelationship))
                 {
                     isModelStateValidate = false;
                     validationMessage += "  || Next Of Kin Relationship is required";
                 }
 
-                if (!isModelStateValidate)
+                if (isModelStateValidate)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
@@ -530,7 +530,7 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
-        public async Task<ExecutedResult<string>> UpdateEmployeeProfesionalBackground(UpdateEmployeeProfesionalBackgroundDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        public async Task<ExecutedResult<string>> UpdateEmployeeProfesionalBackground(UpdateEmployeeProfBackgroundDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
 
             try
@@ -546,45 +546,33 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"This information is to be completed by the employee", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
 
                 }
-                bool isModelStateValidate = true;
-                string validationMessage = "";
+                bool allSubmitted = true;
+                foreach (var dat in payload.ProfBackgroundDetails)
+                {
+                    if (!string.IsNullOrEmpty(dat.CompanyName) && !string.IsNullOrEmpty(dat.PositionHead) && !string.IsNullOrEmpty(dat.ContactEmail))
+                    {
+                        var repoPayload = new EmployeeProfesionalBackgroundReq
+                        {
+                            CreatedByUserId = accessUser.data.UserId,
+                            DateCreated = DateTime.Now,
+                            CompanyName = dat.CompanyName,
+                            PositionHead = dat.PositionHead,
+                            ContactEmail = dat.ContactEmail,
+                            EmployeeId = payload.EmployeeId,
+                            EndDate = dat.StartDate,
+                            StartDate = dat.EndDate,
+                        };
+                        var response = await _EmployeeRepository.ProcessEmployeeProfesionalBackground(repoPayload);
+                        if (!response.Contains("Success"))
+                        {
+                            allSubmitted = false;
+                        }
+                    }
+                    else
+                    {
+                        allSubmitted = false;
+                    }
 
-                if (string.IsNullOrEmpty(payload.CompanyName))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "Company Name is required";
-                }
-                if (string.IsNullOrEmpty(payload.PositionHead))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += " || Position Head is required";
-                }
-
-                if (string.IsNullOrEmpty(payload.ContactEmail))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += " || Contact Email One is required";
-                }
-                if (!isModelStateValidate)
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
-
-                }
-                var repoPayload = new EmployeeProfesionalBackgroundReq
-                {
-                    CreatedByUserId = accessUser.data.UserId,
-                    DateCreated = DateTime.Now,
-                    CompanyName = payload.CompanyName,
-                    PositionHead = payload.PositionHead,
-                    ContactEmail = payload.ContactEmail,
-                    EmployeeId = payload.EmployeeId,
-                    EndDate = DateTime.Now,
-                    StartDate = DateTime.Now,
-                };
-                string repoResponse = await _EmployeeRepository.ProcessEmployeeProfesionalBackground(repoPayload);
-                if (!repoResponse.Contains("Success"))
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
 
                 var auditLog = new AuditLogDto
@@ -598,7 +586,8 @@ namespace hrms_be_backend_business.Logic
                 };
                 await _audit.LogActivity(auditLog);
 
-                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                string responseMsg = (allSubmitted == true) ? "Updated Successfully" : "One or more information did not submit because probably the there might be some detail missing";
+                return new ExecutedResult<string>() { responseMessage = responseMsg, responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
@@ -622,47 +611,34 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"This information is to be completed by the employee", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
 
                 }
-                bool isModelStateValidate = true;
-                string validationMessage = "";
+                bool allSubmitted = true;
+                foreach (var dat in payload.EmployeeEduBackground)
+                {
+                    if (!string.IsNullOrEmpty(dat.CertificateDoc) && !string.IsNullOrEmpty(dat.CertificateName) && !string.IsNullOrEmpty(dat.InstitutionName))
+                    {
+                        var repoPayload = new EmployeeEduBackgroundReq
+                        {
+                            CreatedByUserId = accessUser.data.UserId,
+                            DateCreated = DateTime.Now,
+                            CertificateDoc = dat.CertificateDoc,
+                            CertificateName = dat.CertificateName,
+                            InstitutionName = dat.InstitutionName,
+                            EmployeeId = payload.EmployeeId,
+                            EndDate = dat.EndDate,
+                            StartDate = dat.StartDate,
+                        };
+                        string repoResponse = await _EmployeeRepository.ProcessEmployeeEduBackground(repoPayload);
+                        if (!repoResponse.Contains("Success"))
+                        {
+                            allSubmitted = false;
+                        }
+                    }
+                    else
+                    {
+                        allSubmitted = false;
+                    }
 
-                if (string.IsNullOrEmpty(payload.InstitutionName))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "Institution Name is required";
                 }
-                if (string.IsNullOrEmpty(payload.CertificateName))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += " || Certificate Name is required";
-                }
-
-                if (string.IsNullOrEmpty(payload.CertificateDoc))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += " || CertificateDoc is required";
-                }
-                if (!isModelStateValidate)
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
-
-                }
-                var repoPayload = new EmployeeEduBackgroundReq
-                {
-                    CreatedByUserId = accessUser.data.UserId,
-                    DateCreated = DateTime.Now,
-                    CertificateDoc = payload.CertificateDoc,
-                    CertificateName = payload.CertificateName,
-                    InstitutionName = payload.InstitutionName,
-                    EmployeeId = payload.EmployeeId,
-                    EndDate = DateTime.Now,
-                    StartDate = DateTime.Now,
-                };
-                string repoResponse = await _EmployeeRepository.ProcessEmployeeEduBackground(repoPayload);
-                if (!repoResponse.Contains("Success"))
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
-                }
-
                 var auditLog = new AuditLogDto
                 {
                     userId = accessUser.data.UserId,
@@ -674,7 +650,8 @@ namespace hrms_be_backend_business.Logic
                 };
                 await _audit.LogActivity(auditLog);
 
-                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                string responseMsg = (allSubmitted == true) ? "Updated Successfully" : "One or more information did not submit because probably the there might be some detail missing";
+                return new ExecutedResult<string>() { responseMessage = responseMsg, responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
@@ -698,57 +675,33 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"This information is to be completed by the employee", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
 
                 }
-                bool isModelStateValidate = true;
-                string validationMessage = "";
-
-                if (string.IsNullOrEmpty(payload.FullName))
+                bool allSubmitted = true;
+                foreach (var dat in payload.EmployeeReferences)
                 {
-                    isModelStateValidate = false;
-                    validationMessage += "Full Name is required";
+                    if (!string.IsNullOrEmpty(dat.FullName) && !string.IsNullOrEmpty(dat.EmailAddress) && !string.IsNullOrEmpty(dat.Occupation) && !string.IsNullOrEmpty(dat.PeriodKnown) && !string.IsNullOrEmpty(dat.PhoneNumber))
+                    {
+                        var repoPayload = new EmployeeReferenceReq
+                        {
+                            CreatedByUserId = accessUser.data.UserId,
+                            DateCreated = DateTime.Now,
+                            EmailAddress = dat.EmailAddress,
+                            EmployeeId = payload.EmployeeId,
+                            FullName = dat.FullName,
+                            Occupation = dat.Occupation,
+                            PeriodKnown = dat.PeriodKnown,
+                            PhoneNumber = dat.PhoneNumber,
+                        };
+                        var repoResponse = await _EmployeeRepository.ProcessEmployeeReference(repoPayload);
+                        if (!repoResponse.Contains("Success"))
+                        {
+                            allSubmitted = false;
+                        }
+                    }
+                    else
+                    {
+                        allSubmitted = false;
+                    }
                 }
-                if (string.IsNullOrEmpty(payload.Occupation))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "|| Occupation is required";
-                }
-
-                if (string.IsNullOrEmpty(payload.PeriodKnown))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += " || Period Known is required";
-                }
-                if (string.IsNullOrEmpty(payload.PhoneNumber))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += " || Phone Number is required";
-                }
-                if (string.IsNullOrEmpty(payload.EmailAddress))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += " || Email Address is required";
-                }
-                if (!isModelStateValidate)
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
-
-                }
-                var repoPayload = new EmployeeReferenceReq
-                {
-                    CreatedByUserId = accessUser.data.UserId,
-                    DateCreated = DateTime.Now,
-                    EmailAddress = payload.EmailAddress,
-                    EmployeeId = payload.EmployeeId,
-                    FullName = payload.FullName,
-                    Occupation = payload.Occupation,
-                    PeriodKnown = payload.PeriodKnown,
-                    PhoneNumber = payload.PhoneNumber,
-                };
-                string repoResponse = await _EmployeeRepository.ProcessEmployeeReference(repoPayload);
-                if (!repoResponse.Contains("Success"))
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
-                }
-
                 var auditLog = new AuditLogDto
                 {
                     userId = accessUser.data.UserId,
@@ -759,8 +712,8 @@ namespace hrms_be_backend_business.Logic
                     ipAddress = RemoteIpAddress
                 };
                 await _audit.LogActivity(auditLog);
-
-                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                string responseMsg = (allSubmitted == true) ? "Updated Successfully" : "One or more information did not submit because probably the there might be some detail missing";
+                return new ExecutedResult<string>() { responseMessage = responseMsg, responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
@@ -831,15 +784,15 @@ namespace hrms_be_backend_business.Logic
                 var repoPayload = new EmployeeBankDetailsReq
                 {
                     CreatedByUserId = accessUser.data.UserId,
-                    DateCreated = DateTime.Now,                   
+                    DateCreated = DateTime.Now,
                     EmployeeId = payload.EmployeeId,
-                  AccountName = payload.AccountName,
-                  AccountNumber = payload.AccountNumber,
-                  PensionAdministrator = payload.PensionAdministrator,
-                  BankName = payload.BankName,
-                  BVN=payload.BVN,
-                  PensionPinNumber = payload.PensionPinNumber,
-                  TaxNumber = payload.TaxNumber,
+                    AccountName = payload.AccountName,
+                    AccountNumber = payload.AccountNumber,
+                    PensionAdministrator = payload.PensionAdministrator,
+                    BankName = payload.BankName,
+                    BVN = payload.BVN,
+                    PensionPinNumber = payload.PensionPinNumber,
+                    TaxNumber = payload.TaxNumber,
                 };
                 string repoResponse = await _EmployeeRepository.ProcessEmployeeBankDetails(repoPayload);
                 if (!repoResponse.Contains("Success"))
@@ -867,7 +820,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-         
+
         public async Task<BaseResponse> CreateEmployeeBulkUpload(IFormFile payload, RequesterInfo requester)
         {
             //check if us
@@ -1348,7 +1301,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
-                
+
                 var UserId = repoResponse.Replace("Success", "");
                 var userDetails = await _accountRepository.GetUserById(Convert.ToInt64(UserId));
                 string token = $"{RandomGenerator.GetNumber(20)}{userDetails.UserId}";
@@ -1499,7 +1452,7 @@ namespace hrms_be_backend_business.Logic
                     return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
-               
+
                 var returnData = await _EmployeeRepository.GetEmployees(filter.PageNumber, filter.PageSize, accessUser.data.UserId);
                 if (returnData == null)
                 {
@@ -1569,7 +1522,7 @@ namespace hrms_be_backend_business.Logic
                     return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
-              
+
                 var returnData = await _EmployeeRepository.GetEmployeesApproved(filter.PageNumber, filter.PageSize, accessUser.data.UserId);
                 if (returnData == null)
                 {
@@ -1604,7 +1557,7 @@ namespace hrms_be_backend_business.Logic
                     return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
-               
+
                 var returnData = await _EmployeeRepository.GetEmployeesDisapproved(filter.PageNumber, filter.PageSize, accessUser.data.UserId);
                 if (returnData == null)
                 {
@@ -1638,7 +1591,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
-                }               
+                }
                 var returnData = await _EmployeeRepository.GetEmployeesDeleted(filter.PageNumber, filter.PageSize, accessUser.data.UserId);
                 if (returnData == null)
                 {
@@ -1671,7 +1624,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     return new ExecutedResult<EmployeeFullVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
-                }              
+                }
 
                 var repoResponse = await _EmployeeRepository.GetEmployeeById(EmployeeId);
                 if (repoResponse == null)
