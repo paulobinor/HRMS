@@ -89,6 +89,7 @@
     {
         public long EmployeeId { get; set; }
         public string FullName { get; set; }
+        public string ContactAddress { get; set; }
         public string Occupation { get; set; }
         public string PeriodKnown { get; set; }
         public string PhoneNumber { get; set; }

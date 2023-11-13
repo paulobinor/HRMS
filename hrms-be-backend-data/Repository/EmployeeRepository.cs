@@ -170,6 +170,7 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
                 param.Add("@EmployeeId", payload.EmployeeId);
                 param.Add("@FullName", payload.FullName);
+                param.Add("@ContactAddress", payload.ContactAddress);
                 param.Add("@Occupation", payload.Occupation);
                 param.Add("@PeriodKnown", payload.PeriodKnown);
                 param.Add("@PhoneNumber", payload.PhoneNumber);

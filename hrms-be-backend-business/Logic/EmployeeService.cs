@@ -473,7 +473,7 @@ namespace hrms_be_backend_business.Logic
                     validationMessage += "  || Next Of Kin Relationship is required";
                 }
 
-                if (isModelStateValidate)
+                if (!isModelStateValidate)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
@@ -678,7 +678,7 @@ namespace hrms_be_backend_business.Logic
                 bool allSubmitted = true;
                 foreach (var dat in payload.EmployeeReferences)
                 {
-                    if (!string.IsNullOrEmpty(dat.FullName) && !string.IsNullOrEmpty(dat.EmailAddress) && !string.IsNullOrEmpty(dat.Occupation) && !string.IsNullOrEmpty(dat.PeriodKnown) && !string.IsNullOrEmpty(dat.PhoneNumber))
+                    if (!string.IsNullOrEmpty(dat.FullName) && !string.IsNullOrEmpty(dat.ContactAddress) && !string.IsNullOrEmpty(dat.EmailAddress) && !string.IsNullOrEmpty(dat.Occupation) && !string.IsNullOrEmpty(dat.PeriodKnown) && !string.IsNullOrEmpty(dat.PhoneNumber))
                     {
                         var repoPayload = new EmployeeReferenceReq
                         {
@@ -690,6 +690,7 @@ namespace hrms_be_backend_business.Logic
                             Occupation = dat.Occupation,
                             PeriodKnown = dat.PeriodKnown,
                             PhoneNumber = dat.PhoneNumber,
+                            ContactAddress = dat.ContactAddress,
                         };
                         var repoResponse = await _EmployeeRepository.ProcessEmployeeReference(repoPayload);
                         if (!repoResponse.Contains("Success"))
