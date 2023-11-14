@@ -39,7 +39,7 @@ namespace hrms_be_backend_api.Controllers
 
         [HttpPost("CreateBranchBulk")]
         [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
-        public async Task<IActionResult> CreateUnitBulk(IFormFile payload)
+        public async Task<IActionResult> CreateBranchBulk(IFormFile payload)
         {
             var requester = new RequesterInfo
             {
