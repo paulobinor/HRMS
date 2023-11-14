@@ -179,7 +179,7 @@ namespace hrms_be_backend_business.Logic
                         else
                         {
 
-                            var countryList = await _countryRepository.GetCountries();
+                            var countryList = await _countryRepository.GetAllCountries();
                             var LgaList = await _lgaRepository.GetAllLgas();
                             string prevCountry = string.Empty;
                             List<StateVm> stateList = new List<StateVm>();
