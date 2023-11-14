@@ -117,9 +117,9 @@ namespace hrms_be_backend_business.Logic
                 accessUserVm.UserId = user.UserId;
                 accessUserVm.UserStatusName = user.UserStatusName;
                 accessUserVm.UserStatusCode = user.UserStatusCode;
-                accessUserVm.Modules = modules;
+              
                 accessUserVm.CompanyId = user.CompanyId;
-                accessUserVm.EmployeeDetails = employeeDetailsVm;
+              
 
 
                 var authResponse = await _jwtManager.GenerateJsonWebToken(accessUserVm);
@@ -130,6 +130,9 @@ namespace hrms_be_backend_business.Logic
                 {
                     JwtToken = authResponse.JwtToken,
                     RefreshToken = authResponse.RefreshToken,
+                    EmployeeDetails= employeeDetailsVm,
+                    Modules=modules
+
                 };
 
                 var auditLog = new AuditLogDto

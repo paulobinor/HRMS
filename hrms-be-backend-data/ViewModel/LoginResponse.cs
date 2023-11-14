@@ -3,7 +3,9 @@
     public class LoginResponse
     {       
         public string JwtToken { get; set; }
-        public string RefreshToken { get; set; }     
+        public string RefreshToken { get; set; }
+        public EmployeeDetailsVm EmployeeDetails { get; set; }
+        public List<UserModulesVm> Modules { get; set; }
     }
 
     public class RefreshTokenResponse

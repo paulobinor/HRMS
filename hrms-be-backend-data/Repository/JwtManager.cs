@@ -51,8 +51,8 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
                 new Claim(ClaimTypes.Surname, request.LastName),
                 new Claim(ClaimTypes.GroupSid, (request.CompanyId!=null)?request.CompanyId.ToString():""),
                 new Claim(ClaimTypes.Actor, request.UserStatusName),
-                 new Claim(ClaimTypes.NameIdentifier, JsonConvert.SerializeObject(request.EmployeeDetails)),
-                new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(request.Modules)),
+                // new Claim(ClaimTypes.NameIdentifier, JsonConvert.SerializeObject(request.EmployeeDetails)),
+                //new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(request.Modules)),
             };
 
             JwtSecurityToken token = new(
