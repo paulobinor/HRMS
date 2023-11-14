@@ -91,9 +91,13 @@
         public string NextOfKinPhoneNumber { get; set; }
         public string NextOfKinEmailAddress { get; set; }
     }
-    public class UpdateEmployeeProfesionalBackgroundDto
+    public class UpdateEmployeeProfBackgroundDto
     {
         public long EmployeeId { get; set; }
+        public List<EmployeeProfBackgroundDetailsDto> ProfBackgroundDetails { get; set; }      
+    }
+    public class EmployeeProfBackgroundDetailsDto
+    {      
         public string CompanyName { get; set; }
         public string PositionHead { get; set; }
         public DateTime StartDate { get; set; }
@@ -103,18 +107,25 @@
     public class UpdateEmployeeEduBackgroundDto
     {
         public long EmployeeId { get; set; }
+        public List<EmployeeEduBackgroundDto> EmployeeEduBackground { get; set; }
+    }
+    public class EmployeeEduBackgroundDto
+    {       
         public string InstitutionName { get; set; }
         public string CertificateName { get; set; }
         public string CertificateDoc { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public long CreatedByUserId { get; set; }
-        public DateTime DateCreated { get; set; }
+        public DateTime EndDate { get; set; }       
     }
     public class UpdateEmployeeReferenceDto
     {
         public long EmployeeId { get; set; }
+        public List<EmployeeReferenceDto> EmployeeReferences { get; set; }       
+    }
+    public class EmployeeReferenceDto
+    {       
         public string FullName { get; set; }
+        public string ContactAddress { get; set; }
         public string Occupation { get; set; }
         public string PeriodKnown { get; set; }
         public string PhoneNumber { get; set; }

@@ -85,7 +85,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpPost("UpdateEmployeeProfesionalBackground")]
         [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
-        public async Task<IActionResult> UpdateEmployeeProfesionalBackground(UpdateEmployeeProfesionalBackgroundDto payload)
+        public async Task<IActionResult> UpdateEmployeeProfesionalBackground(UpdateEmployeeProfBackgroundDto payload)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
