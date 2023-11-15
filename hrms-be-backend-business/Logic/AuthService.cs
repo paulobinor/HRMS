@@ -105,7 +105,9 @@ namespace hrms_be_backend_business.Logic
                     employeeDetailsVm.HasCompletedEduBackGround = employeeDetails.HasCompletedEduBackGround;
                     employeeDetailsVm.HasCompletedPersonalInfo = employeeDetails.HasCompletedPersonalInfo;
                     employeeDetailsVm.HasCompletedProfBackground = employeeDetails.HasCompletedProfBackground;
-                  
+                    employeeDetails.IsFirstEmployee=employeeDetails.IsFirstEmployee;
+
+
                 }
                 accessUserVm.CompanyName = user.CompanyName;
                 accessUserVm.FirstName = user.FirstName;
