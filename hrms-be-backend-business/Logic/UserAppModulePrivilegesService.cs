@@ -369,12 +369,12 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-                if (request.CreatedByUserId == accessUser.data.UserId)
-                {
-                    response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Auhorization error. Same user can't act as maker and checker";
-                    return response;
-                }
+                ////if (request.CreatedByUserId == accessUser.data.UserId)
+                ////{
+                ////    response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
+                ////    response.ResponseMessage = $"Auhorization error. Same user can't act as maker and checker";
+                ////    return response;
+                ////}
 
                 request.IsApproved = true;
                 request.DateApproved = DateTime.Now;

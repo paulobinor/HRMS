@@ -12,7 +12,7 @@ namespace hrms_be_backend_api.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+   // [Authorize]
     public class BranchController : BaseController
     {
         private readonly ILogger<BranchController> _logger;
