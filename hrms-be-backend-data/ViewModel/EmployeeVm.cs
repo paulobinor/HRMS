@@ -99,6 +99,7 @@
         public bool HasCompletedEduBackGround { get; set; }
         public bool HasCompletedPersonalInfo { get; set; }
         public bool HasCompletedProfBackground { get; set; }
+        public bool HasCompletedReferenceDetails { get; set; }
     }
 
     public class EmployeeVm
@@ -177,21 +178,16 @@
         public string NextOfKinPhoneNumber { get; set; }
         public string NextOfKinRelationship { get; set; }
         public string NextOfKinEmailAddress { get; set; }
-        public long CompanyID { get; set; }
-        public long CreatedByUserId { get; set; }
-        public DateTime DateCreated { get; set; }
-        public long LastUpdatedByUserId { get; set; }
+        public long CompanyID { get; set; }      
+        public DateTime DateCreated { get; set; }      
         public DateTime DateLastUpdated { get; set; }
-        public bool IsDeleted { get; set; }
-        public long DeletedByUserId { get; set; }
+        public bool IsDeleted { get; set; }      
         public DateTime DateDeleted { get; set; }
         public string DeletedComment { get; set; }
-        public bool IsApproved { get; set; }
-        public long ApprovedByUserId { get; set; }
+        public bool IsApproved { get; set; }      
         public DateTime DateApproved { get; set; }
         public bool IsDisapproved { get; set; }
-        public string DisapprovedComment { get; set; }
-        public long DisapprovedByUserId { get; set; }
+        public string DisapprovedComment { get; set; }       
         public DateTime DateDisapproved { get; set; }
 
     }
