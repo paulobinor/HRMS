@@ -988,7 +988,7 @@ namespace hrms_be_backend_business.Logic
 
                                 if (!string.IsNullOrEmpty(unitName))
                                 {
-                                    var unit = units.FirstOrDefault(m => m.UnitName == unitName.Trim());
+                                    var unit = units.FirstOrDefault(m => m.UnitName.ToLower() == (unitName.ToLower()).Trim());
 
                                     if (unit == null)
                                         rowError = $"{rowError} Unit {unitName} doesn't exist.";
@@ -999,7 +999,7 @@ namespace hrms_be_backend_business.Logic
 
                                 if (!string.IsNullOrEmpty(gradeName))
                                 {
-                                    var grade = grades.FirstOrDefault(m => m.GradeName == gradeName.Trim());
+                                    var grade = grades.FirstOrDefault(m => m.GradeName.ToLower() == (gradeName.ToLower()).Trim());
                                     if (grade == null)
                                         rowError = $"{rowError} Grade {gradeName} doesn't exist.";
                                     else
@@ -1008,7 +1008,7 @@ namespace hrms_be_backend_business.Logic
 
                                 if (!string.IsNullOrEmpty(employeeTypeName))
                                 {
-                                    var employeeType = employeeTypes.FirstOrDefault(m => m.EmployeeTypeName == employeeTypeName.Trim());
+                                    var employeeType = employeeTypes.FirstOrDefault(m => m.EmployeeTypeName.ToLower() == (employeeTypeName.ToLower()).Trim());
                                     if (employeeType == null)
                                         rowError = $"{rowError} employee Type {employeeTypeName} doesn't exist.";
                                     else
@@ -1018,7 +1018,7 @@ namespace hrms_be_backend_business.Logic
 
                                 if (!string.IsNullOrEmpty(branchName))
                                 {
-                                    var branch = branches.FirstOrDefault(m => m.BranchName == branchName.Trim());
+                                    var branch = branches.FirstOrDefault(m => m.BranchName.ToLower() == (branchName.ToLower()).Trim());
                                     if (branch == null)
                                         rowError = $"{rowError} branch {branchName} doesn't exist.";
                                     else
@@ -1027,7 +1027,7 @@ namespace hrms_be_backend_business.Logic
 
                                 if (!string.IsNullOrEmpty(employmentStatusName))
                                 {
-                                    var employeeStatus = employmentStatuses.FirstOrDefault(m => m.EmploymentStatusName == employmentStatusName.Trim());
+                                    var employeeStatus = employmentStatuses.FirstOrDefault(m => m.EmploymentStatusName.ToLower() == (employmentStatusName.ToLower()).Trim());
                                     if (employeeStatus == null)
                                         rowError = $"{rowError} employee status name {employmentStatusName} doesn't exist.";
                                     else
@@ -1037,7 +1037,7 @@ namespace hrms_be_backend_business.Logic
 
                                 if (!string.IsNullOrEmpty(departmentName))
                                 {
-                                    var department = departments.FirstOrDefault(m => m.DepartmentName == departmentName.Trim());
+                                    var department = departments.FirstOrDefault(m => m.DepartmentName.ToLower() == (departmentName.ToLower()).Trim());
                                     if (department == null)
                                         rowError = $"{rowError} department {departmentName} doesn't exist.";
                                     else
@@ -1047,7 +1047,7 @@ namespace hrms_be_backend_business.Logic
 
                                 if (!string.IsNullOrEmpty(roleName))
                                 {
-                                    var role = roles.FirstOrDefault(m => m.RoleName == roleName.Trim());
+                                    var role = roles.FirstOrDefault(m => m.RoleName.ToLower() == (roleName.ToLower()).Trim());
 
                                     if (role != null)
                                         roleID = role.RoleId;
