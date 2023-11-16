@@ -172,10 +172,10 @@ namespace hrms_be_backend_business.Logic
                         string Country = serviceDetails.Rows[0][2].ToString();
                         string State = serviceDetails.Rows[0][3].ToString();
                         string LgaName = serviceDetails.Rows[0][4].ToString();
-                        string CompanyName = serviceDetails.Rows[0][5].ToString();
+                        //string CompanyName = serviceDetails.Rows[0][5].ToString();
 
 
-                        if (BranchName != "BranchName" || Address != "Address" || Country != "Country" || State != "State" || LgaName != "LgaName" || CompanyName != "CompanyName")
+                        if (BranchName != "BranchName" || Address != "Address" || Country != "Country" || State != "State" || LgaName != "LgaName" /*|| CompanyName != "CompanyName"*/)
                             return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ValidationError).ToString(), responseMessage = "File header not in the Right format" };
                         else
                         {
@@ -198,7 +198,7 @@ namespace hrms_be_backend_business.Logic
                                 string country = serviceDetails.Rows[row][2].ToString();
                                 string state = serviceDetails.Rows[row][3].ToString();
                                 string lgaName = serviceDetails.Rows[row][4].ToString();
-                                string companyName = serviceDetails.Rows[row][5].ToString();
+                                //string companyName = serviceDetails.Rows[row][5].ToString();
 
                                 if (countryList.Count > 0)
                                 {
