@@ -166,15 +166,16 @@ namespace hrms_be_backend_business.Logic
                     if (ds != null && ds.Tables.Count > 0)
                     {
 
+                        
                         string BranchName = serviceDetails.Rows[0][0].ToString();
                         string Address = serviceDetails.Rows[0][1].ToString();
                         string Country = serviceDetails.Rows[0][2].ToString();
                         string State = serviceDetails.Rows[0][3].ToString();
                         string LgaName = serviceDetails.Rows[0][4].ToString();
-                        string CompanyName = serviceDetails.Rows[0][5].ToString();
+                        //string CompanyName = serviceDetails.Rows[0][5].ToString();
 
 
-                        if (BranchName != "BranchName" || Address != "Address" || Country != "Country" || State != "State" || LgaName != "LgaName" || CompanyName != "CompanyName")
+                        if (BranchName != "BranchName" || Address != "Address" || Country != "Country" || State != "State" || LgaName != "LgaName" /*|| CompanyName != "CompanyName"*/)
                             return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ValidationError).ToString(), responseMessage = "File header not in the Right format" };
                         else
                         {
@@ -197,11 +198,11 @@ namespace hrms_be_backend_business.Logic
                                 string country = serviceDetails.Rows[row][2].ToString();
                                 string state = serviceDetails.Rows[row][3].ToString();
                                 string lgaName = serviceDetails.Rows[row][4].ToString();
-                                string companyName = serviceDetails.Rows[row][5].ToString();
+                                //string companyName = serviceDetails.Rows[row][5].ToString();
 
                                 if (countryList.Count > 0)
                                 {
-                                    var selectedCountry = countryList.FirstOrDefault(m => m.CountryName == country.Trim());
+                                    var selectedCountry = countryList.FirstOrDefault(m => m.CountryName.ToLower() == (country.ToLower()).Trim());
 
                                     if (selectedCountry == null)
                                     {
@@ -217,7 +218,7 @@ namespace hrms_be_backend_business.Logic
 
                                 if (stateList.Count > 0)
                                 {
-                                    var selectedState = stateList.FirstOrDefault(m => m.StateName == state.Trim());
+                                    var selectedState = stateList.FirstOrDefault(m => m.StateName.ToLower() == (state.ToLower()).Trim());
                                     if (selectedState == null)
                                     {
                                         errorOutput.Append($"| Row {row} failed due to invalid state {state}");
@@ -228,7 +229,7 @@ namespace hrms_be_backend_business.Logic
                                 }
 
 
-                                var lga = LgaList.FirstOrDefault(m => m.StateID == stateID && m.LGA_Name == lgaName.Trim());
+                                var lga = LgaList.FirstOrDefault(m => m.StateID == stateID && m.LGA_Name.ToLower() == (lgaName.ToLower()).Trim());
                                 if (lga == null)
                                 {
 
@@ -249,6 +250,7 @@ namespace hrms_be_backend_business.Logic
                                 if (resp.responseCode == "0")
                                 {
                                     k++;
+                                    errorOutput.Append($"| Row {row} with branch name - {branchName} Created succussfully");
                                 }
                                 else
                                 {

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <History>True|2023-11-14T05:19:09.4192160Z;False|2023-11-14T06:14:00.5585657+01:00;False|2023-11-14T06:13:03.0555599+01:00;False|2023-11-14T06:12:29.4580671+01:00;</History>
+    <LastFailureDetails />
+    <_PublishTargetUrl>C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-api\bin\Release\net7.0\publish\</_PublishTargetUrl>
+  </PropertyGroup>
+</Project>
