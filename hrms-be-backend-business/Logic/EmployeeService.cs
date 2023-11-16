@@ -890,14 +890,14 @@ namespace hrms_be_backend_business.Logic
                         string EmploymentStatusName = serviceDetails.Rows[0][13].ToString();
                         string RoleName = serviceDetails.Rows[0][14].ToString();
                         string DepartmentName = serviceDetails.Rows[0][15].ToString();
-                        string CompanyName = serviceDetails.Rows[0][16].ToString();
+                        //string CompanyName = serviceDetails.Rows[0][16].ToString();
 
 
                         if (FirstName != "FirstName" || MiddleName != "MiddleName"
                         || LastName != "LastName" || Email != "Email" || DOB != "DOB" || ResumptionDate != "ResumptionDate"
                         || OfficialMail != "OfficialMail" || PhoneNumber != "PhoneNumber" || StaffID != "StaffID" || UnitName != "UnitName" || GradeName != "GradeName" || EmployeeTypeName != "EmployeeTypeName"
                         || BranchName != "BranchName" || EmploymentStatusName != "EmploymentStatusName"
-                        || RoleName != "RoleName" || DepartmentName != "DepartmentName" || CompanyName != "CompanyName")
+                        || RoleName != "RoleName" || DepartmentName != "DepartmentName" /*|| CompanyName != "CompanyName"*/)
                         {
                             response.ResponseCode = "08";
                             response.ResponseMessage = "File header not in the Right format";
@@ -965,7 +965,7 @@ namespace hrms_be_backend_business.Logic
                                 var employmentStatusName = serviceDetails.Rows[row][13].ToString();
                                 var roleName = serviceDetails.Rows[row][14].ToString();
                                 var departmentName = serviceDetails.Rows[row][15].ToString();
-                                var companyName = serviceDetails.Rows[row][16].ToString();
+                                //var companyName = serviceDetails.Rows[row][16].ToString();
 
                                 if (string.IsNullOrEmpty(firstName))
                                     rowError = $"{rowError} First name is required.";
@@ -983,8 +983,8 @@ namespace hrms_be_backend_business.Logic
                                     rowError = $"{rowError} Employee type is required.";
                                 else if (string.IsNullOrEmpty(departmentName))
                                     rowError = $"{rowError} Department name is required.";
-                                else if (string.IsNullOrEmpty(companyName))
-                                    rowError = $"{rowError} Company name is required.";
+                                //else if (string.IsNullOrEmpty(companyName))
+                                //    rowError = $"{rowError} Company name is required.";
 
                                 if (!string.IsNullOrEmpty(unitName))
                                 {
@@ -1058,8 +1058,8 @@ namespace hrms_be_backend_business.Logic
                                     //    roleID = role.RoleId;
                                 }
 
-                                if (companyName.ToUpper().Trim() != company.CompanyName.ToUpper().Trim())
-                                    rowError = $"{rowError} Company name {companyName} is different from the selected company.";
+                                //if (companyName.ToUpper().Trim() != company.CompanyName.ToUpper().Trim())
+                                //    rowError = $"{rowError} Company name {companyName} is different from the selected company.";
 
                                 try
                                 {
