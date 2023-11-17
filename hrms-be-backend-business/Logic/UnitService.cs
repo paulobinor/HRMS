@@ -88,7 +88,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
-                    UnitName = payload.UnitName,   
+                    UnitName = payload.UnitName.Trim(),   
                     DepartmentId = payload.DepartmentId,
                     UnitHeadEmployeeId = payload.UnitHeadEmployeeId,
                     IsModifield = false,
@@ -170,7 +170,7 @@ namespace hrms_be_backend_business.Logic
                                 string unitHeadEmail = serviceDetails.Rows[row][1].ToString();
 
 
-                                var employee = await _employeeRepository.GetEmployeeByEmail(unitHeadEmail , accessUser.data.CompanyId);
+                                var employee = await _employeeRepository.GetEmployeeByEmail(unitHeadEmail.Trim() , accessUser.data.CompanyId);
 
                                 if(employee == null)
                                 {
@@ -182,7 +182,7 @@ namespace hrms_be_backend_business.Logic
                                 {
                                     DepartmentId = employee.DepartmentId,
                                     UnitHeadEmployeeId = employee.EmployeeID,
-                                    UnitName = unitName
+                                    UnitName = unitName.Trim()
 
                                 };
 
@@ -256,7 +256,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
-                    UnitName = payload.UnitName,   
+                    UnitName = payload.UnitName.Trim(),   
                     DepartmentId = payload.DepartmentId,
                     UnitHeadEmployeeId = payload.UnitHeadEmployeeId,
                     IsModifield = true,

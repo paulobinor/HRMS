@@ -81,7 +81,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
-                    EmploymentStatusName = payload.EmploymentStatusName,
+                    EmploymentStatusName = payload.EmploymentStatusName.Trim(),
                     IsModifield = false,
                 };
                 string repoResponse = await _employmentStatusRepository.ProcessEmploymentStatus(repoPayload);
@@ -143,7 +143,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
-                    EmploymentStatusName = payload.EmploymentStatusName,
+                    EmploymentStatusName = payload.EmploymentStatusName.Trim(),
                     IsModifield = true,
                     EmploymentStatusId = payload.EmploymentStatusId,
                 };
@@ -206,7 +206,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
-                    Comment = payload.Comment,
+                    Comment = payload.Comment.Trim(),
                     EmploymentStatusId = payload.EmploymentStatusId,
                 };
                 string repoResponse = await _employmentStatusRepository.DeleteEmploymentStatus(repoPayload);
