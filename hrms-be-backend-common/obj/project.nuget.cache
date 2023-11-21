@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "CUtLLlxawV1MnsUK90H3u2BrXic+ujHBMZMnNRMCPLeEG5f5oqlxfrojCCYEUu0Mwr4+zR03ddTrJ/HXOaF3uw==",
+  "dgSpecHash": "r5ut/vR0QPo4BR7AmlBS/viMGCx6oetpC2+Z0bQ3iJkivWZ2imtvT4OTORXFOUuGD/WJ2GEdkhLXusvPuvwSRQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\peter.omolayo\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.14\\microsoft.windowsdesktop.app.ref.7.0.14.nupkg.sha512",
+    "C:\\Users\\peter.omolayo\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.14\\microsoft.netcore.app.ref.7.0.14.nupkg.sha512",
+    "C:\\Users\\peter.omolayo\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.14\\microsoft.aspnetcore.app.ref.7.0.14.nupkg.sha512"
+  ],
   "logs": []
 }

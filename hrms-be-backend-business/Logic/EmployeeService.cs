@@ -351,17 +351,20 @@ namespace hrms_be_backend_business.Logic
                 }
                 foreach (var dat in payload.Identifications)
                 {
-                    var employeeIdentificationDto = new EmployeeIdentificationReq
+                    if (dat.IdentificationTypeId > 0)
                     {
-                        CountryIdentificationIssuedId = dat.CountryIdentificationIssuedId,
-                        IdentificationDocument = dat.IdentificationDocument,
-                        IdentificationNumber = dat.IdentificationNumber,
-                        IdentificationTypeId = dat.IdentificationTypeId,
-                        CreatedByUserId = accessUser.data.UserId,
-                        DateCreated = DateTime.Now,
-                        EmployeeId = payload.EmployeeId
-                    };
-                    var employeeIdentification = await _EmployeeRepository.ProcessEmployeeIdentification(employeeIdentificationDto);
+                        var employeeIdentificationDto = new EmployeeIdentificationReq
+                        {
+                            CountryIdentificationIssuedId = dat.CountryIdentificationIssuedId,
+                            IdentificationDocument = dat.IdentificationDocument,
+                            IdentificationNumber = dat.IdentificationNumber,
+                            IdentificationTypeId = dat.IdentificationTypeId,
+                            CreatedByUserId = accessUser.data.UserId,
+                            DateCreated = DateTime.Now,
+                            EmployeeId = payload.EmployeeId
+                        };
+                        var employeeIdentification = await _EmployeeRepository.ProcessEmployeeIdentification(employeeIdentificationDto);
+                    }                    
                 }
                 var auditLog = new AuditLogDto
                 {

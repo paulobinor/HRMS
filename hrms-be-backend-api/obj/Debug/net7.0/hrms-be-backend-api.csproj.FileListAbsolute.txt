@@ -176,3 +176,4 @@ C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-api\obj\
 C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\hrms-be-backend-api.pdb
 C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\hrms-be-backend-api.genruntimeconfig.cache
 C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\ref\hrms-be-backend-api.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\hrms-be-backend-api.sourcelink.json

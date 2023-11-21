@@ -32,3 +32,4 @@ C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-business
 C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-business\obj\Debug\net7.0\refint\hrms-be-backend-business.dll
 C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-business\obj\Debug\net7.0\hrms-be-backend-business.pdb
 C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-business\obj\Debug\net7.0\ref\hrms-be-backend-business.dll
+C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-business\obj\Debug\net7.0\hrms-be-backend-business.sourcelink.json
