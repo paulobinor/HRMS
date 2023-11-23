@@ -782,23 +782,31 @@ namespace hrms_be_backend_business.Logic
                     taxPayable.OrderBy(p => p.StepNumber);
                     foreach (var item in taxPayable)
                     {
-                        if (!item.IsLast)
-                        {
-                            if (item.PayableAmount >= taxIncomeRemained)
-                            {
-                                decimal percentage = decimal.Divide(item.PayablePercentage, 100);
-                                decimal amt = decimal.Multiply(item.PayableAmount, percentage);
-                                taxIncomeRemained -= item.PayableAmount;
-                                taxPayableAmount += amt;
-                            }
-                        }
-                        else
+                        if (item.PayableAmount >= taxIncomeRemained)
                         {
                             decimal percentage = decimal.Divide(item.PayablePercentage, 100);
-                            decimal amt = decimal.Multiply(taxIncomeRemained, percentage);
+                            decimal amt = decimal.Multiply(item.PayableAmount, percentage);
+                            taxIncomeRemained -= item.PayableAmount;
                             taxPayableAmount += amt;
-                            break;
                         }
+                        //if (!item.IsLast)
+                        //{
+                        //    if (item.PayableAmount >= taxIncomeRemained)
+                        //    {
+                        //        decimal percentage = decimal.Divide(item.PayablePercentage, 100);
+                        //        decimal amt = decimal.Multiply(item.PayableAmount, percentage);
+                        //        taxIncomeRemained -= item.PayableAmount;
+                        //        taxPayableAmount += amt;
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    decimal percentage = decimal.Divide(item.PayablePercentage, 100);
+                        //    decimal amt = decimal.Multiply(item.PayableAmount, percentage);
+                        //    taxIncomeRemained -= item.PayableAmount;
+                        //    taxPayableAmount += amt;
+                        //    break;
+                        //}
 
                     }
                 }

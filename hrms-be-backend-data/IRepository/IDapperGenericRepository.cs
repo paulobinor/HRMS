@@ -29,5 +29,21 @@ namespace hrms_be_backend_data.IRepository
                                         Func<GridReader, IEnumerable<T3>> func3,
                                          Func<GridReader, IEnumerable<T4>> func4,
                                         CommandType commandType = CommandType.StoredProcedure);
+        Task<Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>>> GetMultiple<T1, T2, T3, T4, T5>(string sql, DynamicParameters parameters,
+                                     Func<GridReader, IEnumerable<T1>> func1,
+                                     Func<GridReader, IEnumerable<T2>> func2,
+                                     Func<GridReader, IEnumerable<T3>> func3,
+                                      Func<GridReader, IEnumerable<T4>> func4,
+                                      Func<GridReader, IEnumerable<T5>> func5,
+                                     CommandType commandType = CommandType.StoredProcedure);
+
+        Task<Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>, IEnumerable<T6>>> GetMultiple<T1, T2, T3, T4, T5, T6>(string sql, DynamicParameters parameters,
+                                     Func<GridReader, IEnumerable<T1>> func1,
+                                     Func<GridReader, IEnumerable<T2>> func2,
+                                     Func<GridReader, IEnumerable<T3>> func3,
+                                      Func<GridReader, IEnumerable<T4>> func4,
+                                      Func<GridReader, IEnumerable<T5>> func5,
+                                        Func<GridReader, IEnumerable<T6>> func6,
+                                     CommandType commandType = CommandType.StoredProcedure);
     }
 }

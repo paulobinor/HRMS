@@ -196,6 +196,18 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _EmployeeService.DeleteEmployee(EmployeeId, Comment, accessToken, claim, RemoteIpAddress, RemotePort));
         }
+        [HttpPost("CheckEmployeeStaffId")]
+        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        public async Task<IActionResult> CheckEmployeeStaffId(string StaffId)
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            return this.CustomResponse(await _EmployeeService.CheckEmployeeStaffId(StaffId, accessToken, claim, RemoteIpAddress, RemotePort));
+        }
         [HttpGet("GetEmployees")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<EmployeeVm>>), 200)]
         public async Task<IActionResult> GetEmployees([FromQuery] PaginationFilter filter)
@@ -262,7 +274,7 @@ namespace hrms_be_backend_api.Controllers
             return this.CustomResponse(await _EmployeeService.GetEmployeesDeleted(filter, route, accessToken, claim, RemoteIpAddress, RemotePort));
         }
         [HttpGet("GetEmployeeById")]
-        [ProducesResponseType(typeof(ExecutedResult<EmployeeFullVm>), 200)]
+        [ProducesResponseType(typeof(ExecutedResult<EmployeeSindgleVm>), 200)]
         public async Task<IActionResult> GetEmployeeById([FromQuery] long EmployeeId)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();

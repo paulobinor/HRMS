@@ -192,9 +192,9 @@ namespace hrms_be_backend_business.Logic
                 if (userDetails.UnitHeadEmployeeId == null)
                 {
                     //Mail to Hod
-                    var HodDetails = await _employeeRepository.GetEmployeeById(userDetails.HodEmployeeId);
+                    var HodDetails = await _employeeRepository.GetEmployeeById(userDetails.HodEmployeeId, userDetails.CompanyID);
                     StringBuilder HodmailBody = new StringBuilder();
-                    mailBody.Append($"Dear {HodDetails.FirstName} {HodDetails.LastName} {HodDetails.MiddleName} <br/> <br/>");
+                    mailBody.Append($"Dear {HodDetails.Employee.FirstName} {HodDetails.Employee.LastName} {HodDetails.Employee.MiddleName} <br/> <br/>");
                     mailBody.Append($"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} have been Scheduled for training <br/> <br/>");
 
                     mailBody.Append($"<b> Training Organizer : <b/> {TrainingOrganizer} <br/> ");
@@ -208,7 +208,7 @@ namespace hrms_be_backend_business.Logic
                     {
                         Body = mailBody.ToString(),
                         Subject = "Training Schedule",
-                        ToEmail = HodDetails.OfficialMail,
+                        ToEmail = HodDetails.Employee.OfficialMail,
                     };
                     SendEmailAsync(HodmailPayload, null);
 
@@ -216,9 +216,9 @@ namespace hrms_be_backend_business.Logic
                 else
                 {
                     //Mail to UnitHead
-                    var unitHeadDetails = await _employeeRepository.GetEmployeeById(userDetails.UnitHeadEmployeeId);
+                    var unitHeadDetails = await _employeeRepository.GetEmployeeById(userDetails.UnitHeadEmployeeId, userDetails.CompanyID);
                     StringBuilder UnitHeadmailBody = new StringBuilder();
-                    mailBody.Append($"Dear {unitHeadDetails.FirstName} {unitHeadDetails.LastName} {unitHeadDetails.MiddleName} <br/> <br/>");
+                    mailBody.Append($"Dear {unitHeadDetails.Employee.FirstName} {unitHeadDetails.Employee.LastName} {unitHeadDetails.Employee.MiddleName} <br/> <br/>");
                     mailBody.Append($"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} have been Scheduled for training <br/> <br/>");
 
                     mailBody.Append($"<b> Training Organizer : <b/> {TrainingOrganizer} <br/> ");
@@ -232,7 +232,7 @@ namespace hrms_be_backend_business.Logic
                     {
                         Body = mailBody.ToString(),
                         Subject = "Training Schedule",
-                        ToEmail = unitHeadDetails.OfficialMail,
+                        ToEmail = unitHeadDetails.Employee.OfficialMail,
                     };
                     SendEmailAsync(UnitHeadmailPayload, null);
                 }

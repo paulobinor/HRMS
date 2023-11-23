@@ -9,6 +9,7 @@ using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -322,6 +323,12 @@ namespace hrms_be_backend_business.Logic
                 if (accessUser.data == null)
                 {
                     return new ExecutedResult<EmploymentStatusVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(EmploymentStatusModulePrivilegeConstant.View_Employment_Status, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new ExecutedResult<EmploymentStatusVm>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
 
                 }
                 var returnData = await _employmentStatusRepository.GetEmploymentStatusById(Id);

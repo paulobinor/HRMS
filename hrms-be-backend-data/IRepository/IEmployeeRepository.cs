@@ -20,13 +20,20 @@ namespace hrms_be_backend_data.IRepository
         Task<string> ApproveEmployee(long EmployeeId, string PasswordHash, long CreatedByUserId);
         Task<string> DisapproveEmployee(long Id, string Comment, long CreatedByUserId);
         Task<string> DeleteEmployee(long Id, string Comment, long CreatedByUserId);
+        Task<string> CheckEmployeeStaffId(string StaffId, long CompanyId);
+
         Task<EmployeeWithTotalVm> GetEmployees(int PageNumber, int RowsOfPage, long AccessByUserId);
         Task<EmployeeWithTotalVm> GetEmployeesApproved(int PageNumber, int RowsOfPage, long AccessByUserId);
         Task<EmployeeWithTotalVm> GetEmployeesDisapproved(int PageNumber, int RowsOfPage, long AccessByUserId);
         Task<EmployeeWithTotalVm> GetEmployeesDeleted(int PageNumber, int RowsOfPage, long AccessByUserId);
         Task<EmployeeWithTotalVm> GetEmployeesPending(int PageNumber, int RowsOfPage, long AccessByUserId);
-        Task<EmployeeFullVm> GetEmployeeById(long Id);
+        Task<EmployeeSindgleVm> GetEmployeeById(long EmployeeId, long CompanyId);
         Task<EmployeeFullVm> GetEmployeeByUserId(long UserId);
+        Task<List<EmployeeCertificationVm>> GetEmployeeCertification(long EmployeeId, long CompanyId);
+        Task<List<EmployeeEduBackgroundVm>> GetEmployeeEduBackground(long EmployeeId, long CompanyId);
+        Task<List<EmployeeIdentificationVm>> GetEmployeeIdentification(long EmployeeId, long CompanyId);
+        Task<List<EmployeeProfBackgroundVm>> GetEmployeeProfBackground(long EmployeeId, long CompanyId);
+        Task<List<EmployeeRefereeVm>> GetEmployeeReferee(long EmployeeId, long CompanyId);
         Task<int> AddEmployeeBulk(DataTable dataTable, RequesterInfo requester, long currentStaffCount, int listCount, long companyID);
     }
 }

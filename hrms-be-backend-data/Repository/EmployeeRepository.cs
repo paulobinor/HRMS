@@ -3,6 +3,7 @@ using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.Design;
 using System.Data;
 
 namespace hrms_be_backend_data.Repository
@@ -315,6 +316,24 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+        public async Task<string> CheckEmployeeStaffId(string StaffId, long CompanyId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@StaffId", StaffId);
+                param.Add("@CompanyId", CompanyId);               
+                param.Add("@DateCreated", DateTime.Now);
+
+                return await _dapper.Get<string>("sp_check_employee_staff_id", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"EmployeeRepository => CheckEmployeeStaffId ===> {ex.Message}");
+                throw;
+            }
+        }
         public async Task<EmployeeWithTotalVm> GetEmployees(int PageNumber, int RowsOfPage, long AccessByUserId)
         {
             var returnData = new EmployeeWithTotalVm();
@@ -440,18 +459,37 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
-        public async Task<EmployeeFullVm> GetEmployeeById(long Id)
+        public async Task<EmployeeSindgleVm> GetEmployeeById(long EmployeeId, long CompanyId)
         {
             try
             {
+                var returnData = new EmployeeSindgleVm();
                 var param = new DynamicParameters();
-                param.Add("@Id", Id);
-                return await _dapper.Get<EmployeeFullVm>("sp_get_employee_by_id", param, commandType: CommandType.StoredProcedure);
+                param.Add("@EmployeeId", EmployeeId);
+                param.Add("@CompanyId", CompanyId);
+                var result = await _dapper.GetMultiple("sp_get_employee_by_id", param, gr => gr.Read<EmployeeFullVm>(), gr => gr.Read<EmployeeCertificationVm>(), gr => gr.Read<EmployeeEduBackgroundVm>(), gr => gr.Read<EmployeeIdentificationVm>(), gr => gr.Read<EmployeeProfBackgroundVm>(), gr => gr.Read<EmployeeRefereeVm>(), commandType: CommandType.StoredProcedure);
+                var employeeFullVm = result.Item1.SingleOrDefault<EmployeeFullVm>();
+                var employeeCertificationVm = result.Item2.ToList<EmployeeCertificationVm>();
+                var employeeEduBackgroundVm = result.Item3.ToList<EmployeeEduBackgroundVm>();
+                var employeeIdentificationVm = result.Item4.ToList<EmployeeIdentificationVm>();
+                var employeeProfBackgroundVm = result.Item5.ToList<EmployeeProfBackgroundVm>();
+                var employeeRefereeVm = result.Item6.ToList<EmployeeRefereeVm>();
+                returnData.Employee = employeeFullVm;
+                returnData.EmployeeCertifications = employeeCertificationVm;
+                returnData.EmployeeEduBackground = employeeEduBackgroundVm;
+                returnData.EmployeeIdentifications = employeeIdentificationVm;
+                returnData.EmployeeProfBackground = employeeProfBackgroundVm;
+                returnData.EmployeeReferees = employeeRefereeVm;
+
+                return returnData;
+
+               
+                return await _dapper.Get<EmployeeSindgleVm>("sp_get_employee_by_id", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"EmployeeRepository => GetEmployeeById || {ex}");
-                return new EmployeeFullVm();
+                return null;
             }
         }
         public async Task<int> AddEmployeeBulk(DataTable dataTable, RequesterInfo requester, long currentStaffCount, int listCount, long companyID)
@@ -504,6 +542,80 @@ namespace hrms_be_backend_data.Repository
             return await _dapper.Get<EmployeeFullVm>(query, param, commandType: CommandType.Text);
 
         }
-
+        public async Task<List<EmployeeCertificationVm>> GetEmployeeCertification(long EmployeeId,long CompanyId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", EmployeeId);
+                param.Add("@CompanyId", CompanyId);
+                return await _dapper.GetAll<EmployeeCertificationVm>("sp_get_employee_certifications", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeRepository => GetEmployeeCertification || {ex}");
+                return null;
+            }
+        }
+        public async Task<List<EmployeeEduBackgroundVm>> GetEmployeeEduBackground(long EmployeeId, long CompanyId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", EmployeeId);
+                param.Add("@CompanyId", CompanyId);
+                return await _dapper.GetAll<EmployeeEduBackgroundVm>("sp_get_employee_edu_background", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeRepository => GetEmployeeEduBackground || {ex}");
+                return null;
+            }
+        }
+        public async Task<List<EmployeeIdentificationVm>> GetEmployeeIdentification(long EmployeeId, long CompanyId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", EmployeeId);
+                param.Add("@CompanyId", CompanyId);
+                return await _dapper.GetAll<EmployeeIdentificationVm>("sp_get_employee_identification", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeRepository => GetEmployeeIdentification || {ex}");
+                return null;
+            }
+        }
+        public async Task<List<EmployeeProfBackgroundVm>> GetEmployeeProfBackground(long EmployeeId, long CompanyId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", EmployeeId);
+                param.Add("@CompanyId", CompanyId);
+                return await _dapper.GetAll<EmployeeProfBackgroundVm>("sp_get_employee_identification", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeRepository => GetEmployeeProfBackground || {ex}");
+                return null;
+            }
+        }
+        public async Task<List<EmployeeRefereeVm>> GetEmployeeReferee(long EmployeeId, long CompanyId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", EmployeeId);
+                param.Add("@CompanyId", CompanyId);
+                return await _dapper.GetAll<EmployeeRefereeVm>("sp_get_employee_reference", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeRepository => GetEmployeeReferee || {ex}");
+                return null;
+            }
+        }
     }
 }

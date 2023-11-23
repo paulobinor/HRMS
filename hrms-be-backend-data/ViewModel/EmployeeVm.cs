@@ -100,6 +100,17 @@
         public bool HasCompletedPersonalInfo { get; set; }
         public bool HasCompletedProfBackground { get; set; }
         public bool HasCompletedReferenceDetails { get; set; }
+       
+    }
+
+    public class EmployeeSindgleVm
+    {
+        public EmployeeFullVm Employee { get; set; }
+        public IEnumerable<EmployeeCertificationVm> EmployeeCertifications { get; set; }
+        public IEnumerable<EmployeeEduBackgroundVm> EmployeeEduBackground { get; set; }
+        public IEnumerable<EmployeeIdentificationVm> EmployeeIdentifications { get; set; }
+        public IEnumerable<EmployeeProfBackgroundVm> EmployeeProfBackground { get; set; }
+        public IEnumerable<EmployeeRefereeVm> EmployeeReferees { get; set; }
     }
 
     public class EmployeeVm
@@ -178,22 +189,96 @@
         public string NextOfKinPhoneNumber { get; set; }
         public string NextOfKinRelationship { get; set; }
         public string NextOfKinEmailAddress { get; set; }
-        public long CompanyID { get; set; }      
-        public DateTime DateCreated { get; set; }      
+        public long CompanyID { get; set; }
+        public DateTime DateCreated { get; set; }
         public DateTime DateLastUpdated { get; set; }
-        public bool IsDeleted { get; set; }      
+        public bool IsDeleted { get; set; }
         public DateTime DateDeleted { get; set; }
         public string DeletedComment { get; set; }
-        public bool IsApproved { get; set; }      
+        public bool IsApproved { get; set; }
         public DateTime DateApproved { get; set; }
         public bool IsDisapproved { get; set; }
-        public string DisapprovedComment { get; set; }       
+        public string DisapprovedComment { get; set; }
         public DateTime DateDisapproved { get; set; }
+       
 
     }
     public class EmployeeWithTotalVm
     {
         public long totalRecords { get; set; }
         public List<EmployeeVm> data { get; set; }
+    }
+  
+
+    public class EmployeeCertificationVm
+    {
+        public long EmployeeCertificationId { get; set; }
+        public string EmployeeCertificationName { get; set; }
+        public int YearObtained { get; set; }
+        public int ExpiredYear { get; set; }
+        public long CreatedByUserId { get; set; }
+        public DateTime DateCreated { get; set; }
+        public bool IsVerified { get; set; }
+        public long VerifiedByUserId { get; set; }
+        public DateTime DateVerified { get; set; }
+    }
+    public class EmployeeEduBackgroundVm
+    {
+        public long EmployeeeEduBackgroundId { get; set; }
+        public string InstitutionName { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string CertificateName { get; set; }
+        public string CertificateDoc { get; set; }
+        public long CreatedByUserId { get; set; }
+        public DateTime DateCreated { get; set; }
+        public bool IsVerified { get; set; }
+        public long VerifiedByUserId { get; set; }
+        public DateTime DateVerified { get; set; }
+    }
+    public class EmployeeIdentificationVm
+    {
+        public long EmployeeIdentificationId { get; set; }
+        public long IdentificationTypeId { get; set; }
+        public string IdentificationTypeName { get; set; }
+        public string IdentificationNumber { get; set; }
+        public int CountryIdentificationIssuedId { get; set; }
+        public string CountryName { get; set; }
+        public string IdentificationDocument { get; set; }
+        public long CreatedByUserId { get; set; }
+        public DateTime DateCreated { get; set; }
+        public bool IsVerified { get; set; }
+        public long VerifiedByUserId { get; set; }
+        public DateTime DateVerified { get; set; }
+    }
+    public class EmployeeProfBackgroundVm
+    {
+        public long EmployeeProfesionalBackgroudId { get; set; }
+        public string CompanyName { get; set; }
+        public string PositionHead { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string ContactEmail { get; set; }       
+        public long CreatedByUserId { get; set; }
+        public DateTime DateCreated { get; set; }
+        public bool IsVerified { get; set; }
+        public long VerifiedByUserId { get; set; }
+        public DateTime DateVerified { get; set; }
+    }
+    public class EmployeeRefereeVm
+    {
+        public long EmployeeReferenceId { get; set; }
+        public string FullName { get; set; }
+        public string ContactAddress { get; set; }
+        public string Occupation { get; set; }
+        public string PeriodKnown { get; set; }
+        public string ContactEmail { get; set; }
+        public string PhoneNumber { get; set; }
+        public string EmailAddress { get; set; }
+        public long CreatedByUserId { get; set; }
+        public DateTime DateCreated { get; set; }
+        public bool IsVerified { get; set; }
+        public long VerifiedByUserId { get; set; }
+        public DateTime DateVerified { get; set; }
     }
 }
