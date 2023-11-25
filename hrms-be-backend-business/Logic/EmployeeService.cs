@@ -998,12 +998,11 @@ namespace hrms_be_backend_business.Logic
                                     rowError = $"{rowError} Phone number is required.";
                                 else if (string.IsNullOrEmpty(staffID))
                                     rowError = $"{rowError} StaffID is required.";
-                                else if (string.IsNullOrEmpty(employeeTypeName))
-                                    rowError = $"{rowError} Employee type is required.";
-                                else if (string.IsNullOrEmpty(departmentName))
-                                    rowError = $"{rowError} Department name is required.";
-                                //else if (string.IsNullOrEmpty(companyName))
-                                //    rowError = $"{rowError} Company name is required.";
+                                //else if (string.IsNullOrEmpty(employeeTypeName))
+                                //    rowError = $"{rowError} Employee type is required.";
+                                //else if (string.IsNullOrEmpty(departmentName))
+                                //    rowError = $"{rowError} Department name is required.";
+
 
                                 if (!string.IsNullOrEmpty(unitName))
                                 {

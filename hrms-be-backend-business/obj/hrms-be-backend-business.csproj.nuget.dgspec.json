@@ -1,24 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-business\\hrms-be-backend-business.csproj": {}
+    "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-business\\hrms-be-backend-business.csproj": {}
   },
   "projects": {
-    "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-business\\hrms-be-backend-business.csproj": {
+    "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-business\\hrms-be-backend-business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-business\\hrms-be-backend-business.csproj",
+        "projectUniqueName": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-business\\hrms-be-backend-business.csproj",
         "projectName": "hrms-be-backend-business",
-        "projectPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-business\\hrms-be-backend-business.csproj",
-        "packagesPath": "C:\\Users\\peter.omolayo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-business\\obj\\",
+        "projectPath": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-business\\hrms-be-backend-business.csproj",
+        "packagesPath": "C:\\Users\\abiola.olatunji\\.nuget\\packages\\",
+        "outputPath": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-business\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\peter.omolayo\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\abiola.olatunji\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,18 +25,17 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {
-                "projectPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj"
+              "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {
+                "projectPath": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj"
               },
-              "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj": {
-                "projectPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj"
+              "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj": {
+                "projectPath": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj"
               }
             }
           }
@@ -121,21 +119,20 @@
         }
       }
     },
-    "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {
+    "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
+        "projectUniqueName": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
         "projectName": "hrms-be-backend-common",
-        "projectPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
-        "packagesPath": "C:\\Users\\peter.omolayo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\obj\\",
+        "projectPath": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
+        "packagesPath": "C:\\Users\\abiola.olatunji\\.nuget\\packages\\",
+        "outputPath": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-common\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\peter.omolayo\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\abiola.olatunji\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -143,7 +140,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -198,21 +194,20 @@
         }
       }
     },
-    "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj": {
+    "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj",
+        "projectUniqueName": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj",
         "projectName": "hrms-be-backend-data",
-        "projectPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj",
-        "packagesPath": "C:\\Users\\peter.omolayo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-data\\obj\\",
+        "projectPath": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj",
+        "packagesPath": "C:\\Users\\abiola.olatunji\\.nuget\\packages\\",
+        "outputPath": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\peter.omolayo\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\abiola.olatunji\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -220,15 +215,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {
-                "projectPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj"
+              "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {
+                "projectPath": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj"
               }
             }
           }

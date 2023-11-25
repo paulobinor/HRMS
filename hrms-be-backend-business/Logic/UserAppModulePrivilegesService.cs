@@ -336,67 +336,71 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> ApproveUserAppModulePrivilege(long userAppModulePrivilegeID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse> ApproveUserAppModulePrivilege(ApproveUserAppModulePrivilege request, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             var response = new BaseResponse();
+            var listOfResponse = new List<Response>();
             try
             {
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
                     return new BaseResponse() { ResponseMessage = $"Unathorized User", ResponseCode = ((int)ResponseCode.NotAuthenticated).ToString(), Data = null };
-
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserAppmodulePrivilegesConstant.Approve_UserAppModule, accessUser.data.UserId);
                 if (!checkPrivilege.Contains("Success"))
                 {
                     return new BaseResponse() { ResponseMessage = $"{checkPrivilege}", ResponseCode = ((int)ResponseCode.NoPrivilege).ToString(), Data = null };
-
                 }
-                var request = await _userAppModulePrivilegeRepository.GetUserAppModulePrivilegeByID(userAppModulePrivilegeID);
 
-                if (request == null)
+                foreach (var userAppModulePrivilegeID in request.UserAppModulePrivilegeID)
                 {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"User App Module privilege not found";
-                    return response;
+                    var data = await _userAppModulePrivilegeRepository.GetUserAppModulePrivilegeByID(userAppModulePrivilegeID);
+
+                    if (data == null)
+                    {
+                        listOfResponse.Add(new Response { ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'), ResponseMessage = $"User App Module with ID {userAppModulePrivilegeID} privilege not found" });
+                        continue;
+                    }
+
+                    if (data.IsApproved == true || data.IsDisapproved == true)
+                    {
+                        listOfResponse.Add(new Response { ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'), ResponseMessage = $"Record  with ID {userAppModulePrivilegeID}  already approved" });
+                        continue;
+                    }
+
+                    ////if (data.CreatedByUserId == accessUser.data.UserId)
+                    ////{
+                   //// listOfResponse.Add(new Response { ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), ResponseMessage = $"Auhorization error. Same user can't act as maker and checker" });
+                    ////continue;
+                    ////}
+
+                    data.IsApproved = true;
+                    data.DateApproved = DateTime.Now;
+                    data.IsActive = true;
+                    data.ApprovedByUserId = accessUser.data.UserId;
+
+                    var resp = await _userAppModulePrivilegeRepository.ApproveUserAppModulePrivileges(data);
+
+                    listOfResponse.Add(new Response { ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'), ResponseMessage = $"User privillege {data.AppModulePrivilegeName} approved successfully" });
+                    continue;
                 }
-
-                if (request.IsApproved == true || request.IsDisapproved == true)
-                {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Record already approved";
-                    return response;
-                }
-
-                ////if (request.CreatedByUserId == accessUser.data.UserId)
-                ////{
-                ////    response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
-                ////    response.ResponseMessage = $"Auhorization error. Same user can't act as maker and checker";
-                ////    return response;
-                ////}
-
-                request.IsApproved = true;
-                request.DateApproved = DateTime.Now;
-                request.IsActive = true;
-                request.ApprovedByUserId = accessUser.data.UserId;
-
-                var resp = await _userAppModulePrivilegeRepository.ApproveUserAppModulePrivileges(request);
+                
                 var auditLog = new AuditLogDto
                 {
                     userId = accessUser.data.UserId,
                     actionPerformed = "UserAppModulePrivilegeApproval",
-                    payload = JsonConvert.SerializeObject(new { UserAppModulePrivilegeID = userAppModulePrivilegeID }),
-                    response = JsonConvert.SerializeObject(request),
+                    payload = JsonConvert.SerializeObject(request),
+                    response = JsonConvert.SerializeObject(listOfResponse),
                     actionStatus = response.ResponseMessage,
                     ipAddress = RemoteIpAddress
                 };
                 await _audit.LogActivity(auditLog);
 
 
-                response.Data = request;
+                response.Data = listOfResponse;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"User app module privilege approved successfully";
+                response.ResponseMessage = $"User app module privilege proccessed successfully";
                 return response;
             }
             catch (Exception ex)
