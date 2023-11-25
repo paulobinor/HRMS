@@ -119,7 +119,7 @@ namespace hrms_be_backend_api.Controllers
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-            return this.CustomResponse(await _userAppModulePrivilegeService.ApproveUserAppModulePrivilege(userAppModulePrivilegeID, accessToken, claim, RemoteIpAddress, RemotePort));
+            return this.CustomResponse(await _userAppModulePrivilegeService.ApproveUserAppModulePrivilege(request, accessToken, claim, RemoteIpAddress, RemotePort));
            
         }
 
