@@ -351,17 +351,20 @@ namespace hrms_be_backend_business.Logic
                 }
                 foreach (var dat in payload.Identifications)
                 {
-                    var employeeIdentificationDto = new EmployeeIdentificationReq
+                    if (dat.IdentificationTypeId > 0)
                     {
-                        CountryIdentificationIssuedId = dat.CountryIdentificationIssuedId,
-                        IdentificationDocument = dat.IdentificationDocument,
-                        IdentificationNumber = dat.IdentificationNumber,
-                        IdentificationTypeId = dat.IdentificationTypeId,
-                        CreatedByUserId = accessUser.data.UserId,
-                        DateCreated = DateTime.Now,
-                        EmployeeId = payload.EmployeeId
-                    };
-                    var employeeIdentification = await _EmployeeRepository.ProcessEmployeeIdentification(employeeIdentificationDto);
+                        var employeeIdentificationDto = new EmployeeIdentificationReq
+                        {
+                            CountryIdentificationIssuedId = dat.CountryIdentificationIssuedId,
+                            IdentificationDocument = dat.IdentificationDocument,
+                            IdentificationNumber = dat.IdentificationNumber,
+                            IdentificationTypeId = dat.IdentificationTypeId,
+                            CreatedByUserId = accessUser.data.UserId,
+                            DateCreated = DateTime.Now,
+                            EmployeeId = payload.EmployeeId
+                        };
+                        var employeeIdentification = await _EmployeeRepository.ProcessEmployeeIdentification(employeeIdentificationDto);
+                    }                    
                 }
                 var auditLog = new AuditLogDto
                 {
@@ -761,17 +764,8 @@ namespace hrms_be_backend_business.Logic
                 {
                     isModelStateValidate = false;
                     validationMessage += " || Account Number is required";
-                }
-                if (string.IsNullOrEmpty(payload.PensionAdministrator))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += " || Pension Administrator is required";
-                }
-                if (string.IsNullOrEmpty(payload.PensionPinNumber))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += " || Pension Pin Number is required";
-                }
+                }               
+                
                 if (string.IsNullOrEmpty(payload.TaxNumber))
                 {
                     isModelStateValidate = false;
@@ -817,6 +811,31 @@ namespace hrms_be_backend_business.Logic
             catch (Exception ex)
             {
                 _logger.LogError($"EmployeeService (UpdateEmployeeBankDetails)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+        public async Task<ExecutedResult<string>> CheckEmployeeStaffId(string StaffId, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
+               
+                string repoResponse = await _EmployeeRepository.CheckEmployeeStaffId(StaffId,accessUser.data.CompanyId);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }               
+                return new ExecutedResult<string>() { responseMessage = EnumHelper.GetEnumDescription(ResponseCode.Ok), responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeService (CheckEmployeeStaffId)=====>{ex}");
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
@@ -1618,7 +1637,7 @@ namespace hrms_be_backend_business.Logic
                 return PaginationHelper.CreatePagedReponse<EmployeeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
             }
         }
-        public async Task<ExecutedResult<EmployeeFullVm>> GetEmployeeById(long EmployeeId, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        public async Task<ExecutedResult<EmployeeSindgleVm>> GetEmployeeById(long EmployeeId, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
 
             try
@@ -1626,22 +1645,22 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<EmployeeFullVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+                    return new ExecutedResult<EmployeeSindgleVm>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
 
-                var repoResponse = await _EmployeeRepository.GetEmployeeById(EmployeeId);
+                var repoResponse = await _EmployeeRepository.GetEmployeeById(EmployeeId,accessUser.data.CompanyId);
                 if (repoResponse == null)
                 {
-                    return new ExecutedResult<EmployeeFullVm>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+                    return new ExecutedResult<EmployeeSindgleVm>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
                 }
-
-                return new ExecutedResult<EmployeeFullVm>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = repoResponse };
+               
+                return new ExecutedResult<EmployeeSindgleVm>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = repoResponse };
             }
             catch (Exception ex)
             {
                 _logger.LogError($"EmployeeService (GetEmployeeById)=====>{ex}");
-                return new ExecutedResult<EmployeeFullVm>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+                return new ExecutedResult<EmployeeSindgleVm>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
 

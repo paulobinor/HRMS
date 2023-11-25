@@ -57,19 +57,19 @@ namespace hrms_be_backend_business.Logic
                     response.ResponseMessage = repoResponse;
                     return response;
                 }
-                var userDetails = await _employeeRepository.GetEmployeeById(payload.EmployeeId);
+                var userDetails = await _employeeRepository.GetEmployeeById(payload.EmployeeId,payload.CompanyID);
 
                 //Send mail to reliever
                 _mailService.SendLeaveMailToReliever(payload.ReliverUserID, payload.EmployeeId, payload.StartDate, payload.EndDate);
 
                 //Send mail to approval
-                if (userDetails.UnitHeadEmployeeId == null)
+                if (userDetails.Employee.UnitHeadEmployeeId == null)
                 {
-                    _mailService.SendLeaveApproveMailToApprover(userDetails.HodEmployeeId, payload.EmployeeId, payload.StartDate, payload.EndDate);
+                    _mailService.SendLeaveApproveMailToApprover(userDetails.Employee.HodEmployeeId, payload.EmployeeId, payload.StartDate, payload.EndDate);
                 }
                 else
                 {
-                    _mailService.SendLeaveApproveMailToApprover(userDetails.UnitHeadEmployeeId, payload.EmployeeId, payload.StartDate, payload.EndDate);
+                    _mailService.SendLeaveApproveMailToApprover(userDetails.Employee.UnitHeadEmployeeId, payload.EmployeeId, payload.StartDate, payload.EndDate);
                 }
 
 
@@ -145,19 +145,19 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                var userDetails = await _employeeRepository.GetEmployeeById(updateDto.EmployeeId);
+                var userDetails = await _employeeRepository.GetEmployeeById(updateDto.EmployeeId, updateDto.CompanyID);
 
                 //Send mail to reliever
                 _mailService.SendLeaveMailToReliever(updateDto.ReliverUserID, updateDto.EmployeeId, updateDto.StartDate, updateDto.EndDate);
 
                 //Send mail to approval
-                if (userDetails.UnitHeadEmployeeId == null)
+                if (userDetails.Employee.UnitHeadEmployeeId == null)
                 {
-                    _mailService.SendLeaveApproveMailToApprover(userDetails.HodEmployeeId, updateDto.EmployeeId, updateDto.StartDate, updateDto.EndDate);
+                    _mailService.SendLeaveApproveMailToApprover(userDetails.Employee.HodEmployeeId, updateDto.EmployeeId, updateDto.StartDate, updateDto.EndDate);
                 }
                 else
                 {
-                    _mailService.SendLeaveApproveMailToApprover(userDetails.UnitHeadEmployeeId, userDetails.EmployeeID, updateDto.StartDate, updateDto.EndDate);
+                    _mailService.SendLeaveApproveMailToApprover(userDetails.Employee.UnitHeadEmployeeId, userDetails.Employee.EmployeeID, updateDto.StartDate, updateDto.EndDate);
                 }
 
                 response.Data = updateDto;

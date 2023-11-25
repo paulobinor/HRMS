@@ -97,16 +97,15 @@ namespace hrms_be_backend_business.Logic
                 var employeeDetailsVm=new EmployeeDetailsVm();
                 if (user.EmployeeId>0)
                 {
-                    var employeeDetails = await _employeerepository.GetEmployeeById(user.EmployeeId);
-                    employeeDetailsVm.EmployeeID = employeeDetails.EmployeeID;
-                    employeeDetailsVm.IsFirstEmployee = employeeDetails.IsFirstEmployee;
-                    employeeDetailsVm.HasCompletedBankDetails = employeeDetails.HasCompletedBankDetails;
-                    employeeDetailsVm.HasCompletedContactDetails = employeeDetails.HasCompletedContactDetails;
-                    employeeDetailsVm.HasCompletedEduBackGround = employeeDetails.HasCompletedEduBackGround;
-                    employeeDetailsVm.HasCompletedPersonalInfo = employeeDetails.HasCompletedPersonalInfo;
-                    employeeDetailsVm.HasCompletedProfBackground = employeeDetails.HasCompletedProfBackground;
-                    employeeDetails.IsFirstEmployee=employeeDetails.IsFirstEmployee;
-
+                    var employeeDetails = await _employeerepository.GetEmployeeById(user.EmployeeId, user.CompanyId);
+                    employeeDetailsVm.EmployeeID = employeeDetails.Employee.EmployeeID;
+                    employeeDetailsVm.IsFirstEmployee = employeeDetails.Employee.IsFirstEmployee;
+                    employeeDetailsVm.HasCompletedBankDetails = employeeDetails.Employee.HasCompletedBankDetails;
+                    employeeDetailsVm.HasCompletedContactDetails = employeeDetails.Employee.HasCompletedContactDetails;
+                    employeeDetailsVm.HasCompletedEduBackGround = employeeDetails.Employee.HasCompletedEduBackGround;
+                    employeeDetailsVm.HasCompletedPersonalInfo = employeeDetails.Employee.HasCompletedPersonalInfo;
+                    employeeDetailsVm.HasCompletedProfBackground = employeeDetails.Employee.HasCompletedProfBackground;
+                    employeeDetailsVm.IsFirstEmployee=employeeDetails.Employee.IsFirstEmployee;
 
                 }
                 accessUserVm.CompanyName = user.CompanyName;

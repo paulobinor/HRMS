@@ -148,23 +148,7 @@ namespace hrms_be_backend_business.Logic
                         PayrollId = payrollId
                     };
                     await _payrollRepository.ProcessPayrollEarnings(payrollEarningsReq);
-                }
-                var payrollEarnings = await _payrollRepository.GetPayrollEarnings(payrollId);
-                foreach (var item in payrollEarnings)
-                {
-                    var checkEaningItem = payload.Earnings.Where(p => p.EarningsItemId == item.EarningItemsId).ToList();
-                    if (checkEaningItem.Count() < 1)
-                    {
-                        var payrollEarningsDeleteReq = new PayrollEarningsDeleteReq
-                        {
-                            CreatedByUserId = accessUser.data.UserId,
-                            DateCreated = DateTime.Now,
-                            EarningsItemId = item.EarningsId,
-                            PayrollId = payrollId
-                        };
-                        await _payrollRepository.DeletePayrollEarnings(payrollEarningsDeleteReq);
-                    }
-                }
+                }               
                 foreach (var item in payload.Deductions)
                 {
                     var payrollDeductionReq = new PayrollDeductionReq
@@ -180,22 +164,7 @@ namespace hrms_be_backend_business.Logic
                     };
                     await _payrollRepository.ProcessPayrollDeduction(payrollDeductionReq);
                 }
-                var payrollDeductions = await _payrollRepository.GetPayrollDeductions(payrollId);
-                foreach (var item in payrollDeductions)
-                {
-                    var checkDeduction = payload.Deductions.Where(p => p.DeductionId == item.DeductionId).ToList();
-                    if (checkDeduction.Count() < 1)
-                    {
-                        var payrollDeductionDeleteReq = new PayrollDeductionDeleteReq
-                        {
-                            CreatedByUserId = accessUser.data.UserId,
-                            DateCreated = DateTime.Now,
-                            DeductionId = item.DeductionId,
-                            PayrollId = payrollId
-                        };
-                        await _payrollRepository.DeletePayrollDeduction(payrollDeductionDeleteReq);
-                    }
-                }
+               
                 var auditLog = new AuditLogDto
                 {
                     userId = accessUser.data.UserId,
@@ -332,8 +301,8 @@ namespace hrms_be_backend_business.Logic
                 var payrollEarnings = await _payrollRepository.GetPayrollEarnings(payrollId);
                 foreach (var item in payrollEarnings)
                 {
-                    var checkEaningItem = payload.Earnings.Where(p => p.EarningsItemId != item.EarningItemsId).ToList();
-                    if (checkEaningItem.Count() > 0)
+                    var checkEaningItem = payload.Earnings.Where(p => p.EarningsItemId == item.EarningItemsId).ToList();
+                    if (checkEaningItem.Count() < 1)
                     {
                         var payrollEarningsDeleteReq = new PayrollEarningsDeleteReq
                         {
@@ -363,8 +332,8 @@ namespace hrms_be_backend_business.Logic
                 var payrollDeductions = await _payrollRepository.GetPayrollDeductions(payrollId);
                 foreach (var item in payrollDeductions)
                 {
-                    var checkDeduction = payload.Deductions.Where(p => p.DeductionId != item.DeductionId).ToList();
-                    if (checkDeduction.Count() > 0)
+                    var checkDeduction = payload.Deductions.Where(p => p.DeductionId == item.DeductionId).ToList();
+                    if (checkDeduction.Count() < 1)
                     {
                         var payrollDeductionDeleteReq = new PayrollDeductionDeleteReq
                         {
@@ -813,23 +782,31 @@ namespace hrms_be_backend_business.Logic
                     taxPayable.OrderBy(p => p.StepNumber);
                     foreach (var item in taxPayable)
                     {
-                        if (!item.IsLast)
-                        {
-                            if (item.PayableAmount >= taxIncomeRemained)
-                            {
-                                decimal percentage = decimal.Divide(item.PayablePercentage, 100);
-                                decimal amt = decimal.Multiply(item.PayableAmount, percentage);
-                                taxIncomeRemained -= item.PayableAmount;
-                                taxPayableAmount += amt;
-                            }
-                        }
-                        else
+                        if (item.PayableAmount >= taxIncomeRemained)
                         {
                             decimal percentage = decimal.Divide(item.PayablePercentage, 100);
-                            decimal amt = decimal.Multiply(taxIncomeRemained, percentage);
+                            decimal amt = decimal.Multiply(item.PayableAmount, percentage);
+                            taxIncomeRemained -= item.PayableAmount;
                             taxPayableAmount += amt;
-                            break;
                         }
+                        //if (!item.IsLast)
+                        //{
+                        //    if (item.PayableAmount >= taxIncomeRemained)
+                        //    {
+                        //        decimal percentage = decimal.Divide(item.PayablePercentage, 100);
+                        //        decimal amt = decimal.Multiply(item.PayableAmount, percentage);
+                        //        taxIncomeRemained -= item.PayableAmount;
+                        //        taxPayableAmount += amt;
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    decimal percentage = decimal.Divide(item.PayablePercentage, 100);
+                        //    decimal amt = decimal.Multiply(item.PayableAmount, percentage);
+                        //    taxIncomeRemained -= item.PayableAmount;
+                        //    taxPayableAmount += amt;
+                        //    break;
+                        //}
 
                     }
                 }

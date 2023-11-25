@@ -246,12 +246,12 @@ namespace hrms_be_backend_business.Logic
                     return PaginationHelper.CreatePagedReponse<EmployeeTypeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
-                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(EmployeeTypeModulePrivilegeConstant.View_Employee_Type, accessUser.data.UserId);
-                if (!checkPrivilege.Contains("Success"))
-                {
-                    return PaginationHelper.CreatePagedReponse<EmployeeTypeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), checkPrivilege);
+                //var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(EmployeeTypeModulePrivilegeConstant.View_Employee_Type, accessUser.data.UserId);
+                //if (!checkPrivilege.Contains("Success"))
+                //{
+                //    return PaginationHelper.CreatePagedReponse<EmployeeTypeVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NoPrivilege).ToString(), checkPrivilege);
 
-                }
+                //}
                 var returnData = await _employeeTypeRepository.GetEmployeeTypes(accessUser.data.CompanyId, filter.PageNumber, filter.PageSize);
                 if (returnData == null)
                 {
