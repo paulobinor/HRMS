@@ -7,6 +7,12 @@
         public object Data { get; set; }
     }
 
+    public class Response
+    {
+        public string ResponseCode { get; set; }
+        public string ResponseMessage { get; set; }
+    }
+
     public class RequesterInfo
     {
         public string Username { get; set; }

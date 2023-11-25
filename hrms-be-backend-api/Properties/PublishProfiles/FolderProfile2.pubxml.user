@@ -4,7 +4,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project>
   <PropertyGroup>
-    <History>True|2023-11-14T05:19:09.4192160Z;False|2023-11-14T06:14:00.5585657+01:00;False|2023-11-14T06:13:03.0555599+01:00;False|2023-11-14T06:12:29.4580671+01:00;</History>
+    <History>True|2023-11-17T12:59:36.3585393Z;True|2023-11-17T13:22:31.7510629+01:00;True|2023-11-17T12:51:55.6308141+01:00;True|2023-11-17T11:52:40.0932562+01:00;True|2023-11-17T11:29:25.5349456+01:00;True|2023-11-16T16:48:34.9517696+01:00;True|2023-11-16T10:12:29.9771085+01:00;True|2023-11-16T00:57:43.5794224+01:00;True|2023-11-14T06:19:09.4192160+01:00;False|2023-11-14T06:14:00.5585657+01:00;False|2023-11-14T06:13:03.0555599+01:00;False|2023-11-14T06:12:29.4580671+01:00;</History>
     <LastFailureDetails />
     <_PublishTargetUrl>C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-api\bin\Release\net7.0\publish\</_PublishTargetUrl>
   </PropertyGroup>

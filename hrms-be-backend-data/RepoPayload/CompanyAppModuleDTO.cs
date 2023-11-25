@@ -9,6 +9,7 @@ namespace hrms_be_backend_data.RepoPayload
     public class CompanyAppModuleDTO
     {
         public long CompanyAppModuleId { get; set; }
+        public string AppModuleName { get; set; }
         public long CompanyId { get; set; }
         public int AppModuleId { get; set; }
         public DateTime DateCreated { get; set; }

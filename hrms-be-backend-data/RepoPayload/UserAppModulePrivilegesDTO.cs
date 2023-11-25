@@ -10,6 +10,7 @@ namespace hrms_be_backend_data.RepoPayload
     {
         public long UserAppModulePrivilegeID { get; set; }
         public long AppModulePrivilegeID { get; set; }
+        public string? AppModulePrivilegeName { get; set; } 
         public long UserID { get; set; }
         public DateTime DateCreated { get; set; }
         public bool IsActive { get; set; }

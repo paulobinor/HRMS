@@ -108,8 +108,8 @@ namespace hrms_be_backend_api.Controllers
            
         }
 
-        [HttpGet("ApproveUserAppModulePrivileges/{userAppModulePrivilegeID}")]
-        public async Task<IActionResult> ApproveUserAppModulePrivileges(long userAppModulePrivilegeID)
+        [HttpPost("ApproveUserAppModulePrivileges")]
+        public async Task<IActionResult> ApproveUserAppModulePrivileges(ApproveUserAppModulePrivilege request)
         {
 
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();

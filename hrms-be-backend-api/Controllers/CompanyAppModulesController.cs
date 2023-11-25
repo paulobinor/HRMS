@@ -113,8 +113,8 @@ namespace hrms_be_backend_api.Controllers
 
         }
 
-        [HttpGet("ApproveCompanyAppModule/{companyAppModuleID}")]
-        public async Task<IActionResult> ApproveCompanyAppModule(long companyAppModuleID)
+        [HttpPost("ApproveCompanyAppModule")]
+        public async Task<IActionResult> ApproveCompanyAppModule(ApproveCompanyAppModulesRequest request)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -123,7 +123,7 @@ namespace hrms_be_backend_api.Controllers
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-            return this.CustomResponse(await _companyAppModuleService.ApproveCompanyAppModule(companyAppModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
+            return this.CustomResponse(await _companyAppModuleService.ApproveCompanyAppModule(request, accessToken, claim, RemoteIpAddress, RemotePort));
 
         }
 
