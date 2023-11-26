@@ -26,7 +26,7 @@ namespace hrms_be_backend_business.Logic
         private readonly IUserAppModulePrivilegeRepository _privilegeRepository;
         private readonly IAuthService _authService;
         public DepartmentalModulesService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<DepartmentalModulesService> logger,
-            IDepartmentalModulesRepository departmentalModulesRepository, IDepartmentRepository departmentRepository, IAuditLog audit, IMapper mapper, ICompanyAppModuleRepository companyAppModuleRepository, IUserAppModulePrivilegeRepository privilegeRepository , IAuthService authService)
+            IDepartmentalModulesRepository departmentalModulesRepository, IDepartmentRepository departmentRepository, IAuditLog audit, IMapper mapper, ICompanyAppModuleRepository companyAppModuleRepository, IUserAppModulePrivilegeRepository privilegeRepository, IAuthService authService)
         {
             _audit = audit;
             _mapper = mapper;
@@ -147,7 +147,7 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                
+
 
 
                 var data = await _departmentalModulesRepository.GetPendingDepartmentalAppModule(accessUser.data.CompanyId);
@@ -305,9 +305,9 @@ namespace hrms_be_backend_business.Logic
                     {
                         failedModules = $"{failedModules}, {appModuleDetails.AppModuleName} failed";
                     }
-                    
+
                 }
-                if(failedModules.Length == 0)
+                if (failedModules.Length == 0)
                 {
                     response.Data = createDepartmentalAppModule;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
@@ -350,7 +350,7 @@ namespace hrms_be_backend_business.Logic
                     return new BaseResponse() { ResponseMessage = $"{checkPrivilege}", ResponseCode = ((int)ResponseCode.NoPrivilege).ToString(), Data = null };
                 }
 
-                foreach(var departmentAppModuleID in request.DepartmentAppModuleID)
+                foreach (var departmentAppModuleID in request.DepartmentAppModuleID)
                 {
                     var data = await _departmentalModulesRepository.GetDepartmentalAppModuleByID(departmentAppModuleID);
 
@@ -382,7 +382,7 @@ namespace hrms_be_backend_business.Logic
                     listOfResponse.Add(new Response { ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'), ResponseMessage = $"Departmental app module {data.AppModuleName} approved successfully" });
                     continue;
                 }
-                
+
                 var auditLog = new AuditLogDto
                 {
                     userId = accessUser.data.UserId,
@@ -409,9 +409,10 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }
-        public async Task<BaseResponse> DisapproveDepartmentalAppModule(long departmentAppModuleID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        public async Task<BaseResponse> DisapproveDepartmentalAppModule(ApproveDepartmentalModules request, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             var response = new BaseResponse();
+            var listOfResponse = new List<Response>();
             try
             {
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
@@ -426,52 +427,63 @@ namespace hrms_be_backend_business.Logic
                     return new BaseResponse() { ResponseMessage = $"{checkPrivilege}", ResponseCode = ((int)ResponseCode.NoPrivilege).ToString(), Data = null };
 
                 }
-                var request = await _departmentalModulesRepository.GetDepartmentalAppModuleByID(departmentAppModuleID);
 
-                if (request == null)
+                foreach (var departmentAppModuleID in request.DepartmentAppModuleID)
                 {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Department App Module not found";
+                    var data = await _departmentalModulesRepository.GetDepartmentalAppModuleByID(departmentAppModuleID);
+
+                    if (data == null)
+                    {
+                        //response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = $"Department App Module not found";
+                        //return response;
+
+                        listOfResponse.Add(new Response { ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'), ResponseMessage = $"Departmental App Module with ID {departmentAppModuleID} not found" });
+                        continue;
+                    }
+
+                    if (data.IsApproved == true)
+                    {
+                        //response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
+                        //response.ResponseMessage = $"Record already approved";
+                        //return response;
+
+                        listOfResponse.Add(new Response { ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0'), ResponseMessage = $"Record  with ID {departmentAppModuleID}  already approved" });
+                        continue;
+                    }
+
+                    if (data.CreatedByUserId == accessUser.data.UserId)
+                    {
+                        listOfResponse.Add(new Response { ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), ResponseMessage = $"Auhorization error. Same user can't act as maker and checker" });
+                        continue;
+                    }
+
+                    data.IsDisapproved = true;
+                    data.DateApproved = DateTime.Now;
+                    data.IsActive = false;
+                    data.DisapprovedByUserId = accessUser.data.UserId;
+
+                    var resp = await _departmentalModulesRepository.DisapproveDepartmentalAppModule(data);
+                    listOfResponse.Add(new Response { ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0'), ResponseMessage = $"Departmental app module {data.AppModuleName} dissapproved successfully" });
+                    continue;
+                }
+                    var auditLog = new AuditLogDto
+                    {
+                        userId = accessUser.data.UserId,
+                        actionPerformed = "DepartmentalAppModuleDisapproval",
+                        payload = JsonConvert.SerializeObject(request),
+                        response = JsonConvert.SerializeObject(listOfResponse),
+                        actionStatus = response.ResponseMessage,
+                        ipAddress = RemoteIpAddress
+                    };
+                    await _audit.LogActivity(auditLog);
+
+
+                    response.Data = request;
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Departmental app module disapproval processed successfully";
                     return response;
                 }
-
-                if (request.IsApproved == true)
-                {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Record already approved";
-                    return response;
-                }
-
-                if (request.CreatedByUserId == accessUser.data.UserId)
-                {
-                    response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Auhorization error. Same user can't act as maker and checker";
-                    return response;
-                }
-
-                request.IsDisapproved = true;
-                request.DateApproved = DateTime.Now;
-                request.IsActive = false;
-                request.DisapprovedByUserId = accessUser.data.UserId;
-
-                var resp = await _departmentalModulesRepository.DisapproveDepartmentalAppModule(request);
-                var auditLog = new AuditLogDto
-                {
-                    userId = accessUser.data.UserId,
-                    actionPerformed = "DepartmentalAppModuleDisapproval",
-                    payload = JsonConvert.SerializeObject(new { DepartmentalAppModuleID = departmentAppModuleID }),
-                    response = JsonConvert.SerializeObject(request),
-                    actionStatus = response.ResponseMessage,
-                    ipAddress = RemoteIpAddress
-                };
-                await _audit.LogActivity(auditLog);
-
-
-                response.Data = request;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Departmental app module disapproved successfully";
-                return response;
-            }
             catch (Exception ex)
             {
                 _logger.LogError($"Exception Occured: DisapproveDepartmentalAppModule ==> {ex.Message}");

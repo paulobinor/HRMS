@@ -123,8 +123,8 @@ namespace hrms_be_backend_api.Controllers
            
         }
 
-        [HttpGet("DisapproveUserAppModulePrivileges/{userAppModulePrivilegeID}")]
-        public async Task<IActionResult> DisapproveUserAppModulePrivileges(long userAppModulePrivilegeID)
+        [HttpPost("DisapproveUserAppModulePrivileges")]
+        public async Task<IActionResult> DisapproveUserAppModulePrivileges(ApproveUserAppModulePrivilege request)
         {
 
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -134,7 +134,7 @@ namespace hrms_be_backend_api.Controllers
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-            return this.CustomResponse(await _userAppModulePrivilegeService.DisapproveUserAppModulePrivilage(userAppModulePrivilegeID, accessToken, claim, RemoteIpAddress, RemotePort));
+            return this.CustomResponse(await _userAppModulePrivilegeService.DisapproveUserAppModulePrivilage(request, accessToken, claim, RemoteIpAddress, RemotePort));
            
         }
 

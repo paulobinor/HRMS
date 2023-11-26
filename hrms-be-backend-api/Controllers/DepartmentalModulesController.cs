@@ -114,8 +114,8 @@ namespace hrms_be_backend_api.Controllers
             
         }
 
-        [HttpGet("DisapproveDepartmentalAppModule/{departmentAppModuleID}")]
-        public async Task<IActionResult> DisapproveDepartmentalAppModule(long departmentAppModuleID)
+        [HttpPost("DisapproveDepartmentalAppModule")]
+        public async Task<IActionResult> DisapproveDepartmentalAppModule(ApproveDepartmentalModules request)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -124,7 +124,7 @@ namespace hrms_be_backend_api.Controllers
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().ToLower().Replace("bearer", "").Trim();
 
-            return this.CustomResponse(await _departmentalModulesService.DisapproveDepartmentalAppModule(departmentAppModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
+            return this.CustomResponse(await _departmentalModulesService.DisapproveDepartmentalAppModule(request, accessToken, claim, RemoteIpAddress, RemotePort));
            
         }
 
