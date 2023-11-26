@@ -19,7 +19,7 @@ namespace hrms_be_backend_business.ILogic
         Task<BaseResponse> GetUserAppModulePrivilegesByUserID(long userID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<BaseResponse> CreateUserAppModulePrivileges(CreateUserAppModulePrivilegesDTO createUserAppModulePrivileges, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<BaseResponse> ApproveUserAppModulePrivilege(ApproveUserAppModulePrivilege request, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
-        Task<BaseResponse> DisapproveUserAppModulePrivilage(long userAppModulePrivilegeID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<BaseResponse> DisapproveUserAppModulePrivilage(ApproveUserAppModulePrivilege request, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<BaseResponse> UserAppModulePrivilegeActivationSwitch(long userAppModulePrivilegeID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<BaseResponse> DeleteUserAppModulePrivilege(long userAppModulePrivilegeID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
     }
