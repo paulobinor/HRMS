@@ -157,19 +157,30 @@ namespace hrms_be_backend_business.Logic
 
                                 string departmentName = serviceDetails.Rows[row][0].ToString();
                                 string hodEmail = serviceDetails.Rows[row][1].ToString();
-                                var user = await _accountRepository.FindUser(hodEmail);
+                                long? employeeID = null; 
 
-                                if(user == null)
+                                if (!string.IsNullOrWhiteSpace(hodEmail))
                                 {
-                                    errorOutput.Append($"Row {row} failed due to Invalid HOD email {hodEmail}" + "\n");
-                                    continue;
+                                    var user = await _accountRepository.FindUser(hodEmail);
+
+                                    if (user == null)
+                                    {
+                                        errorOutput.Append($"Row {row} failed due to Invalid HOD email {hodEmail}" + "\n");
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        employeeID = user.EmployeeId;
+                                    }
+                                    
                                 }
+                               
                                 //var company = serviceDetails.Rows[row][2].ToString();
 
                                 var departmentrequest = new CreateDepartmentDto
                                 {
                                     DepartmentName = departmentName,
-                                    HodEmployeeId = user.EmployeeId
+                                    HodEmployeeId = employeeID
                                 };
 
                                 var resp = await CreateDepartment(departmentrequest, AccessKey, claim, requester.IpAddress, requester.Port);
