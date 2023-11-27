@@ -172,14 +172,22 @@ namespace hrms_be_backend_business.Logic
                                 string unitName = serviceDetails.Rows[row][0].ToString();
                                 string unitHeadEmail = serviceDetails.Rows[row][1].ToString();
                                 string departmentName = serviceDetails.Rows[row][2].ToString();
-
-                                var employee = await _employeeRepository.GetEmployeeByEmail(unitHeadEmail.Trim() , accessUser.data.CompanyId);
-
-                                if(employee == null)
+                                long? employeeID = null;
+                                 if (!string.IsNullOrEmpty(unitHeadEmail))
                                 {
-                                    errorOutput.Append($"| Row {row} failed due to invalid UnitHead Email {unitHeadEmail}");
-                                    continue;
+                                    var employee = await _employeeRepository.GetEmployeeByEmail(unitHeadEmail.Trim(), accessUser.data.CompanyId);
+
+                                    if (employee == null)
+                                    {
+                                        errorOutput.Append($"| Row {row} failed due to invalid UnitHead Email {unitHeadEmail}");
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        employeeID = employee.EmployeeID;
+                                    }
                                 }
+                                
 
 
                                 var department = departmentList.FirstOrDefault(m => m.DepartmentName.ToLower() == (departmentName.Trim()).ToLower());
@@ -193,7 +201,7 @@ namespace hrms_be_backend_business.Logic
                                 var departmentrequest = new CreateUnitDto
                                 {
                                     DepartmentId = department.DepartmentID,
-                                    UnitHeadEmployeeId = employee.EmployeeID,
+                                    UnitHeadEmployeeId = employeeID,
                                     UnitName = unitName.Trim()
 
                                 };
