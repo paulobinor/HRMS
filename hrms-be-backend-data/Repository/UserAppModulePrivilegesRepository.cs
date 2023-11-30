@@ -94,7 +94,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string query = @"Select am.AppModuleName , am.AppModuleCode , uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId  where uamp.IsDeleted = @IsDeleted and uamp.IsDisapproved = @IsDisapproved and uamp.UserAppModulePrivilegeID = @UserAppModulePrivilegeID";
+                string query = @"Select am.AppModuleName , am.AppModuleCode ,amp.AppModulePrivilegeName, uamp.* from UserAppModulePrivileges uamp join AppModulePrivilege amp on uamp.AppModulePrivilegeID = amp.AppModulePrivilegeID join AppModules am on amp.AppModuleID = am.AppModuleId  where uamp.IsDeleted = @IsDeleted and uamp.IsDisapproved = @IsDisapproved and uamp.UserAppModulePrivilegeID = @UserAppModulePrivilegeID";
                 var param = new DynamicParameters();
                 param.Add("IsDisapproved", false);
                 param.Add("IsDeleted", false);

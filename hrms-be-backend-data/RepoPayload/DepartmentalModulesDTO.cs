@@ -11,6 +11,7 @@ namespace hrms_be_backend_data.RepoPayload
         public long DepartmentalModuleId { get; set; }
         public long DepartmentId { get; set; }
         public int AppModuleId { get; set; }
+        public string? AppModuleName { get; set; }
         public DateTime DateCreated { get; set; }
         public bool IsActive { get; set; }
         public long CreatedByUserId { get; set; }

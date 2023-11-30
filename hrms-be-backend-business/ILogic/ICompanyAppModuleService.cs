@@ -18,8 +18,8 @@ namespace hrms_be_backend_business.ILogic
         Task<BaseResponse> GetPendingCompanyAppModule(string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<BaseResponse> GetCompanyAppModuleByCompanyID(long companyID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<BaseResponse> CreateCompanyAppModule(CreateCompanyAppModuleDTO createAppModule, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
-        Task<BaseResponse> ApproveCompanyAppModule(long companyAppModuleID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
-        Task<BaseResponse> DisapproveCompanyAppModule(long companyAppModuleID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<BaseResponse> ApproveCompanyAppModule(ApproveCompanyAppModulesRequest request, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
+        Task<BaseResponse> DisapproveCompanyAppModule(ApproveCompanyAppModulesRequest request, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<BaseResponse> CompanyAppModuleActivationSwitch(long companyAppModuleID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
         Task<BaseResponse> DeleteCompanyAppModule(long companyAppModuleID, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort);
     }

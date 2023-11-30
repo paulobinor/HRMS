@@ -1,8 +1,14 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "VPnA6TZoF5WJ86dh4gGAigqv5/qswGFu47kAr5trs8LzunEMDc9VFLBjhSHgn9gtILYR9FgQXnJyiHYe3ucguQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
+=======
+  "dgSpecHash": "2PpYdtRcUKbwgDFnlAhGr4Ltoexj0SBxuzN+Of8pxQVnEpdKXcwCUQWamXwRWRFJbaiSd8DoFEi+zT4zG6AzOw==",
+  "success": true,
+  "projectFilePath": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
+>>>>>>> 1c97266697875a68104cf765861224ecf8e23855
   "expectedPackageFiles": [],
   "logs": []
 }

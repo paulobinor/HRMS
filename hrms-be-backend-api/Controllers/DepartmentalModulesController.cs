@@ -101,8 +101,8 @@ namespace hrms_be_backend_api.Controllers
            
         }
 
-        [HttpGet("ApproveDepartmentAppModule/{departmentAppModuleID}")]
-        public async Task<IActionResult> ApproveDepartmentAppModule(long departmentAppModuleID)
+        [HttpPost("ApproveDepartmentAppModule")]
+        public async Task<IActionResult> ApproveDepartmentAppModule(ApproveDepartmentalModules request)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -110,12 +110,12 @@ namespace hrms_be_backend_api.Controllers
             IEnumerable<Claim> claim = identity.Claims;
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().ToLower().Replace("bearer", "").Trim();
-            return this.CustomResponse(await _departmentalModulesService.ApproveDepartmentalAppModule(departmentAppModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
+            return this.CustomResponse(await _departmentalModulesService.ApproveDepartmentalAppModule(request, accessToken, claim, RemoteIpAddress, RemotePort));
             
         }
 
-        [HttpGet("DisapproveDepartmentalAppModule/{departmentAppModuleID}")]
-        public async Task<IActionResult> DisapproveDepartmentalAppModule(long departmentAppModuleID)
+        [HttpPost("DisapproveDepartmentalAppModule")]
+        public async Task<IActionResult> DisapproveDepartmentalAppModule(ApproveDepartmentalModules request)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -124,7 +124,7 @@ namespace hrms_be_backend_api.Controllers
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().ToLower().Replace("bearer", "").Trim();
 
-            return this.CustomResponse(await _departmentalModulesService.DisapproveDepartmentalAppModule(departmentAppModuleID, accessToken, claim, RemoteIpAddress, RemotePort));
+            return this.CustomResponse(await _departmentalModulesService.DisapproveDepartmentalAppModule(request, accessToken, claim, RemoteIpAddress, RemotePort));
            
         }
 

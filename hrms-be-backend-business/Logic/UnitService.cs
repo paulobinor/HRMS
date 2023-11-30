@@ -27,13 +27,14 @@ namespace hrms_be_backend_business.Logic
         private readonly IAccountRepository _accountRepository;
         private readonly IUnitRepository _unitRepository;
         private readonly IUserAppModulePrivilegeRepository _privilegeRepository;
+        private readonly IDepartmentRepository _departmentRepository;
         private readonly IAuthService _authService;
         private readonly IMailService _mailService;
         private readonly IUriService _uriService;
         private readonly IEmployeeRepository _employeeRepository;
 
         public UnitService(IConfiguration configuration, IAccountRepository accountRepository, ILogger<UnitService> logger,
-            IUnitRepository unitRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IUriService uriService, IUserAppModulePrivilegeRepository privilegeRepository, IEmployeeRepository employeeRepository)
+            IUnitRepository unitRepository, IAuditLog audit, IAuthService authService, IMailService mailService, IDepartmentRepository departmentRepository,IUriService uriService, IUserAppModulePrivilegeRepository privilegeRepository, IEmployeeRepository employeeRepository)
         {
             _audit = audit;
 
@@ -46,6 +47,7 @@ namespace hrms_be_backend_business.Logic
             _uriService = uriService;
             _privilegeRepository = privilegeRepository;
             _employeeRepository = employeeRepository;
+            _departmentRepository = departmentRepository;
         }
 
         public async Task<ExecutedResult<string>> CreateUnit(CreateUnitDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
@@ -156,32 +158,50 @@ namespace hrms_be_backend_business.Logic
 
                         string UnitName = serviceDetails.Rows[0][0].ToString();
                         string UnitHeadEmail = serviceDetails.Rows[0][1].ToString();
-                        //string CompanyName = serviceDetails.Rows[0][2].ToString();
+                        string DepartmentName = serviceDetails.Rows[0][2].ToString();
 
 
-                        if (UnitName != "UnitName" || UnitHeadEmail != "UnitHeadEmail")
+                        if (UnitName != "UnitName" || UnitHeadEmail != "UnitHeadEmail" || DepartmentName != "DepartmentName")
                             return new ExecutedResult<string> { responseCode = ((int)ResponseCode.ValidationError).ToString(), responseMessage = "File header not in the Right format" };
                         else
                         {
+                            var departmentList = await _departmentRepository.GetDepartmentes(accessUser.data.CompanyId);
                             for (int row = 1; row < serviceDetails.Rows.Count; row++)
                             {
 
                                 string unitName = serviceDetails.Rows[row][0].ToString();
                                 string unitHeadEmail = serviceDetails.Rows[row][1].ToString();
-
-
-                                var employee = await _employeeRepository.GetEmployeeByEmail(unitHeadEmail.Trim() , accessUser.data.CompanyId);
-
-                                if(employee == null)
+                                string departmentName = serviceDetails.Rows[row][2].ToString();
+                                long? employeeID = null;
+                                 if (!string.IsNullOrEmpty(unitHeadEmail))
                                 {
-                                    errorOutput.Append($"| Row {row} failed due to invalid UnitHead Email {unitHeadEmail}");
+                                    var employee = await _employeeRepository.GetEmployeeByEmail(unitHeadEmail.Trim(), accessUser.data.CompanyId);
+
+                                    if (employee == null)
+                                    {
+                                        errorOutput.Append($"| Row {row} failed due to invalid UnitHead Email {unitHeadEmail}");
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        employeeID = employee.EmployeeID;
+                                    }
+                                }
+                                
+
+
+                                var department = departmentList.FirstOrDefault(m => m.DepartmentName.ToLower() == (departmentName.Trim()).ToLower());
+
+
+                                if (department == null)
+                                {
+                                    errorOutput.Append($"| Row {row} failed due to invalid department name {departmentName}");
                                     continue;
                                 }
-
                                 var departmentrequest = new CreateUnitDto
                                 {
-                                    DepartmentId = employee.DepartmentId,
-                                    UnitHeadEmployeeId = employee.EmployeeID,
+                                    DepartmentId = department.DepartmentID,
+                                    UnitHeadEmployeeId = employeeID,
                                     UnitName = unitName.Trim()
 
                                 };
