@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "M3H0udIo525TUBfnmqxegsix2qdy1QP5PlilMkP7dCjsIqvBcBa/JJhWqIkrx4DOqGkky1rxqdkptw/Kwmb/uQ==",
+  "dgSpecHash": "fz3w37X0pnOPWxYU1GF3fU3UY52YOo+pkLjuISAl5X6HxPyBKfFWeogMy4UhJiI4VJFQ+HG8B5aYTaUpnbnrHQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-business\\hrms-be-backend-business.csproj",
   "expectedPackageFiles": [
@@ -119,10 +119,7 @@
     "C:\\Users\\peter.omolayo\\.nuget\\packages\\system.threading.thread\\4.3.0\\system.threading.thread.4.3.0.nupkg.sha512",
     "C:\\Users\\peter.omolayo\\.nuget\\packages\\system.threading.threadpool\\4.3.0\\system.threading.threadpool.4.3.0.nupkg.sha512",
     "C:\\Users\\peter.omolayo\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
-    "C:\\Users\\peter.omolayo\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\peter.omolayo\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.14\\microsoft.windowsdesktop.app.ref.7.0.14.nupkg.sha512",
-    "C:\\Users\\peter.omolayo\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.14\\microsoft.netcore.app.ref.7.0.14.nupkg.sha512",
-    "C:\\Users\\peter.omolayo\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.14\\microsoft.aspnetcore.app.ref.7.0.14.nupkg.sha512"
+    "C:\\Users\\peter.omolayo\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512"
   ],
   "logs": []
 }

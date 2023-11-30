@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "8ZSq8u0w/u5ZQy+ylg3DOxdN/4nJfxsBG3zPgl8TxA3sK7sPYcIiwRrdp4wOz/5jknSDCDljhmqyoCBjXo3UGA==",
+  "dgSpecHash": "6qZbjnGqnI8sRGvbrQt3jD6cYiLheMBT4mtjztXJUPdFm7DrC98RRF6Uw9556uPxiRKqjKGoK90Z6+CJt61WBw==",
   "success": true,
   "projectFilePath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj",
   "expectedPackageFiles": [
@@ -39,10 +39,7 @@
     "C:\\Users\\peter.omolayo\\.nuget\\packages\\system.text.encoding\\4.3.0\\system.text.encoding.4.3.0.nupkg.sha512",
     "C:\\Users\\peter.omolayo\\.nuget\\packages\\system.text.encoding.codepages\\7.0.0\\system.text.encoding.codepages.7.0.0.nupkg.sha512",
     "C:\\Users\\peter.omolayo\\.nuget\\packages\\system.text.encodings.web\\4.7.2\\system.text.encodings.web.4.7.2.nupkg.sha512",
-    "C:\\Users\\peter.omolayo\\.nuget\\packages\\system.text.json\\4.7.2\\system.text.json.4.7.2.nupkg.sha512",
-    "C:\\Users\\peter.omolayo\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.14\\microsoft.windowsdesktop.app.ref.7.0.14.nupkg.sha512",
-    "C:\\Users\\peter.omolayo\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.14\\microsoft.netcore.app.ref.7.0.14.nupkg.sha512",
-    "C:\\Users\\peter.omolayo\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.14\\microsoft.aspnetcore.app.ref.7.0.14.nupkg.sha512"
+    "C:\\Users\\peter.omolayo\\.nuget\\packages\\system.text.json\\4.7.2\\system.text.json.4.7.2.nupkg.sha512"
   ],
   "logs": []
 }

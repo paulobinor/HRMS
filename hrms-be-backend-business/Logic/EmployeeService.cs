@@ -1274,7 +1274,8 @@ namespace hrms_be_backend_business.Logic
                     ResumptionDate = payload.ResumptionDate,
                     UnitId = payload.UnitId,
                     EmployeeId = payload.EmployeeId,
-                    IsModifield = false,
+                    IsModifield = true,
+                    StaffId = payload.StaffId,
                 };
                 string repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
                 if (!repoResponse.Contains("Success"))

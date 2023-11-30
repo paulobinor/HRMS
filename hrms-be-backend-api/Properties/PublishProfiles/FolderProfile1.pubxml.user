@@ -4,8 +4,8 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project>
   <PropertyGroup>
-    <_PublishTargetUrl>C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-api\bin\Release\net7.0\publish\</_PublishTargetUrl>
-    <History>True|2023-11-09T12:22:14.4281944Z;True|2023-11-09T02:10:24.0128933+01:00;True|2023-11-09T00:40:49.9422650+01:00;True|2023-11-08T23:41:27.7109892+01:00;True|2023-11-01T13:42:42.8057681+01:00;True|2023-11-01T13:14:55.5422961+01:00;True|2023-11-01T08:08:18.0596152+01:00;True|2023-11-01T07:45:52.7326625+01:00;True|2023-11-01T07:12:54.2300041+01:00;True|2023-11-01T07:01:15.3299359+01:00;True|2023-11-01T05:32:56.0796201+01:00;True|2023-10-31T13:13:43.1000675+01:00;</History>
+    <_PublishTargetUrl>C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-api\bin\Release\net7.0\publish\</_PublishTargetUrl>
+    <History>True|2023-11-24T08:38:09.4372607Z;True|2023-11-23T08:22:02.0720676+00:00;True|2023-11-09T12:22:14.4281944+00:00;True|2023-11-09T01:10:24.0128933+00:00;True|2023-11-08T23:40:49.9422650+00:00;True|2023-11-08T22:41:27.7109892+00:00;True|2023-11-01T12:42:42.8057681+00:00;True|2023-11-01T12:14:55.5422961+00:00;True|2023-11-01T07:08:18.0596152+00:00;True|2023-11-01T06:45:52.7326625+00:00;True|2023-11-01T06:12:54.2300041+00:00;True|2023-11-01T06:01:15.3299359+00:00;True|2023-11-01T04:32:56.0796201+00:00;True|2023-10-31T12:13:43.1000675+00:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>
