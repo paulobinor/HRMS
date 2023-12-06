@@ -764,13 +764,8 @@ namespace hrms_be_backend_business.Logic
                 {
                     isModelStateValidate = false;
                     validationMessage += " || Account Number is required";
-                }               
-                
-                if (string.IsNullOrEmpty(payload.TaxNumber))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += " || Tax Number is required";
-                }
+                }                 
+              
                 if (!isModelStateValidate)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
