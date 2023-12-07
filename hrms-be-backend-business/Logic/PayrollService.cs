@@ -782,7 +782,7 @@ namespace hrms_be_backend_business.Logic
                     taxPayable.OrderBy(p => p.StepNumber);
                     foreach (var item in taxPayable)
                     {
-                        if (item.PayableAmount >= taxIncomeRemained)
+                        if (item.PayableAmount <= taxIncomeRemained)
                         {
                             decimal percentage = decimal.Divide(item.PayablePercentage, 100);
                             decimal amt = decimal.Multiply(item.PayableAmount, percentage);
