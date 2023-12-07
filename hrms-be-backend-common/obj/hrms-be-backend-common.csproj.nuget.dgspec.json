@@ -1,23 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {}
+    "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {}
   },
   "projects": {
-    "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {
+    "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
+        "projectUniqueName": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
         "projectName": "hrms-be-backend-common",
-        "projectPath": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
-        "packagesPath": "C:\\Users\\abiola.olatunji\\.nuget\\packages\\",
-        "outputPath": "C:\\XpressPaymentBox\\HRMS-UserManagement\\hrms-be-backend\\hrms-be-backend-common\\obj\\",
+        "projectPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
+        "packagesPath": "C:\\Users\\peter.omolayo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\peter.omolayo\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\abiola.olatunji\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\peter.omolayo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -25,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -37,9 +39,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "default"
         }
       },
       "frameworks": {
@@ -56,20 +55,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[7.0.14, 7.0.14]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[7.0.14, 7.0.14]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[7.0.14, 7.0.14]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
