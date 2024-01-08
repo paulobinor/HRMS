@@ -33,6 +33,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@Email", payload.Email);
                 param.Add("@ContactPhone", payload.ContactPhone);
                 param.Add("@IsPublicSector", payload.IsPublicSector);
+                param.Add("@AdminStaffId", payload.AdminStaffId);
                 param.Add("@AdminFirstName", payload.AdminFirstName);
                 param.Add("@AdminMiddleName", payload.AdminMiddleName);
                 param.Add("@AdminLastName", payload.AdminLastName);

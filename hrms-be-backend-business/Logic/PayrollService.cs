@@ -3,11 +3,9 @@ using hrms_be_backend_business.ILogic;
 using hrms_be_backend_common.Communication;
 using hrms_be_backend_common.Configuration;
 using hrms_be_backend_common.DTO;
-using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
-using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -782,32 +780,13 @@ namespace hrms_be_backend_business.Logic
                     taxPayable.OrderBy(p => p.StepNumber);
                     foreach (var item in taxPayable)
                     {
-                        if (item.PayableAmount <= taxIncomeRemained)
+                        if (taxIncomeRemained > 0)
                         {
                             decimal percentage = decimal.Divide(item.PayablePercentage, 100);
                             decimal amt = decimal.Multiply(item.PayableAmount, percentage);
                             taxIncomeRemained -= item.PayableAmount;
                             taxPayableAmount += amt;
-                        }
-                        //if (!item.IsLast)
-                        //{
-                        //    if (item.PayableAmount >= taxIncomeRemained)
-                        //    {
-                        //        decimal percentage = decimal.Divide(item.PayablePercentage, 100);
-                        //        decimal amt = decimal.Multiply(item.PayableAmount, percentage);
-                        //        taxIncomeRemained -= item.PayableAmount;
-                        //        taxPayableAmount += amt;
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    decimal percentage = decimal.Divide(item.PayablePercentage, 100);
-                        //    decimal amt = decimal.Multiply(item.PayableAmount, percentage);
-                        //    taxIncomeRemained -= item.PayableAmount;
-                        //    taxPayableAmount += amt;
-                        //    break;
-                        //}
-
+                        }                                           
                     }
                 }
                 returnData.TaxPayableAmount = taxPayableAmount;

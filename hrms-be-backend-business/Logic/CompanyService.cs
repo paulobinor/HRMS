@@ -90,6 +90,11 @@ namespace hrms_be_backend_business.Logic
                     isModelStateValidate = false;
                     validationMessage += " Contact Phone is required";
                 }
+                if (string.IsNullOrEmpty(payload.AdminStaffId))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "Admin staff id is required";
+                }
                 if (string.IsNullOrEmpty(payload.AdminFirstName))
                 {
                     isModelStateValidate = false;
@@ -128,6 +133,7 @@ namespace hrms_be_backend_business.Logic
                     Email = payload.Email,
                     IsPublicSector = payload.IsPublicSector,
                     Website = payload.Website,
+                    AdminStaffId = payload.AdminStaffId,
                     AdminFirstName = payload.AdminFirstName,
                     AdminLastName = payload.AdminLastName,
                     AdminMiddleName = payload.AdminMiddleName,
