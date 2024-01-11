@@ -700,10 +700,11 @@ namespace hrms_be_backend_business.Logic
                         }
                         if (item.IsPercentage)
                         {
-                            var deductionComputations = await _deductionsRepository.GetDeductionComputation(item.DeductionId);
-                            foreach (var deductionItem in deductionComputations)
+                            var deduction = await _payrollRepository.GetPayrollDeductionComputation(item.DeductionId);
+                           
+                            foreach (var deductionItem in deduction)
                             {
-                                decimal deductionItemAmount = earnings.Where(p => p.EarningItemsId == deductionItem.EarningsItemId).Select(p => p.EarningItemAmount).FirstOrDefault();
+                                decimal deductionItemAmount = deductionItem.EarningItemAmount;
                                 if (deductionItemAmount > 0)
                                 {
                                     if (item.DeductionPercentageAmount > 0)

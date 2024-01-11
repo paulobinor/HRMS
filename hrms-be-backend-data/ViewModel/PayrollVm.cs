@@ -132,11 +132,22 @@
         public int CurrencyId { get; set;}
         public string CurrencyName { get; set; }
         public decimal Deduction { get; set; }
+        public decimal GrossPay { get; set; }
+        public decimal RestatedAmount { get; set; }
+        public decimal CRA { get; set; }
+        public decimal TAX { get; set; }
         public decimal LoanRepayment { get;set; }
         public bool IsDisbursed { get; set;}
         public long DisburseByUserId { get; set; }
         public DateTime DateDisbursed { get; set; }
     }
-
+    public class PayrollDeductionComputationVm
+    {
+        public long EarningsItemId { get; set; }
+        public string EarningItemName { get; set; }
+        public string DeductionName { get; set; }
+        public long DeductionId { get; set; }
+        public decimal EarningItemAmount { get; set; }      
+    }
 }
 

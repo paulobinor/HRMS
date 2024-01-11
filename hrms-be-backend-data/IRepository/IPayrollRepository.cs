@@ -22,5 +22,6 @@ namespace hrms_be_backend_data.IRepository
         Task<string> ProcessPayrollDeduction(PayrollDeductionReq payload);
         Task<string> DeletePayrollDeduction(PayrollDeductionDeleteReq payload);       
         Task<List<PayrollDeductionsVm>> GetPayrollDeductions(long PayrollId);
+        Task<List<PayrollDeductionComputationVm>> GetPayrollDeductionComputation(long DeductionId);
     }
 }

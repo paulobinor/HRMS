@@ -324,7 +324,22 @@ namespace hrms_be_backend_data.Repository
                 return new List<PayrollCyclesVm>();
             }
 
-        }       
+        }
+        public async Task<List<PayrollDeductionComputationVm>> GetPayrollDeductionComputation(long DeductionId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@DeductionId", DeductionId);
+                return await _dapper.GetAll<PayrollDeductionComputationVm>("sp_get_payroll_deduction_computations", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollRepository -> GetPayrollDeductionComputation => {ex}");
+                return null;
+            }
+
+        }
     }
 
 }
