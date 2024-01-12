@@ -154,7 +154,7 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
-        public async Task<PayrollWithTotalVm> GetPayroll(long CompanyId, int PageNumber, int RowsOfPage)
+        public async Task<PayrollWithTotalVm> GetPayroll(long CompanyId, int PageNumber, int RowsOfPage, string SearchVal)
         {
             var returnData = new PayrollWithTotalVm();
             try
@@ -163,6 +163,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@CompanyId", CompanyId);
                 param.Add("@PageNumber", PageNumber);
                 param.Add("@RowsOfPage", RowsOfPage);
+                param.Add("@SearchVal", SearchVal.ToLower());
                 var result = await _dapper.GetMultiple("sp_get_payrolls", param, gr => gr.Read<long>(), gr => gr.Read<PayrollVm>(), commandType: CommandType.StoredProcedure);
                 var totalData = result.Item1.SingleOrDefault<long>();
                 var data = result.Item2.ToList<PayrollVm>();
@@ -325,12 +326,13 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
-        public async Task<List<PayrollDeductionComputationVm>> GetPayrollDeductionComputation(long DeductionId)
+        public async Task<List<PayrollDeductionComputationVm>> GetPayrollDeductionComputation(long DeductionId,long PayrollId)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("@DeductionId", DeductionId);
+                param.Add("@PayrollId", PayrollId);
                 return await _dapper.GetAll<PayrollDeductionComputationVm>("sp_get_payroll_deduction_computations", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)

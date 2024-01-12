@@ -574,13 +574,13 @@ namespace hrms_be_backend_business.Logic
                 if (accessUser.data == null)
                 {
                     return PaginationHelper.CreatePagedReponse<PayrollAllView>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
-
                 }
-                var result = await _payrollRepository.GetPayroll(accessUser.data.CompanyId, filter.PageNumber, filter.PageSize);
+                var result = await _payrollRepository.GetPayroll(accessUser.data.CompanyId, filter.PageNumber, filter.PageSize,filter.SearchValue);
                 if (result == null)
                 {
                     return PaginationHelper.CreatePagedReponse<PayrollAllView>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
                 }
+               
                 if (result.data == null)
                 {
                     return PaginationHelper.CreatePagedReponse<PayrollAllView>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
@@ -588,7 +588,7 @@ namespace hrms_be_backend_business.Logic
                 var returnData = new List<PayrollAllView>();
                 foreach (var item in result.data)
                 {
-                    var deductions = await _payrollRepository.GetPayrollDeductions(item.PayrollId);
+                    var deductions = await _payrollRepository.GetPayrollDeductions(item.PayrollId);                  
                     var decutionList = new List<string>();
                     foreach (var dec in deductions)
                     {
@@ -700,23 +700,24 @@ namespace hrms_be_backend_business.Logic
                         }
                         if (item.IsPercentage)
                         {
-                            var deduction = await _payrollRepository.GetPayrollDeductionComputation(item.DeductionId);
-                           
-                            foreach (var deductionItem in deduction)
+                            var deduction = await _payrollRepository.GetPayrollDeductionComputation(item.DeductionId,Id);
+                            if (deduction != null)
                             {
-                                decimal deductionItemAmount = deductionItem.EarningItemAmount;
-                                if (deductionItemAmount > 0)
+                                foreach (var deductionItem in deduction)
                                 {
-                                    if (item.DeductionPercentageAmount > 0)
+                                    decimal deductionItemAmount = deductionItem.EarningItemAmount;
+                                    if (deductionItemAmount > 0)
                                     {
-                                        decimal percentage = decimal.Divide(item.DeductionPercentageAmount, 100);
-                                        decimal amt = decimal.Multiply(percentage, deductionItemAmount);
-                                        deductionTotalAmount += amt;
-                                        deductionAmount = amt;
+                                        if (item.DeductionPercentageAmount > 0)
+                                        {
+                                            decimal percentage = decimal.Divide(item.DeductionPercentageAmount, 100);
+                                            decimal amt = decimal.Multiply(percentage, deductionItemAmount);
+                                            deductionTotalAmount += amt;
+                                            deductionAmount = amt;
+                                        }
                                     }
                                 }
                             }
-
                         }
 
                         payrollPayments.Add(new PayrollPayments

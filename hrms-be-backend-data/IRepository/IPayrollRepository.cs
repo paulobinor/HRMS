@@ -8,7 +8,7 @@ namespace hrms_be_backend_data.IRepository
         Task<string> ProcessPayroll(PayrollReq payload);
         Task<string> RunPayroll(RunPayrollReq payload);
         Task<string> DeletePayroll(PayrollDeleteReq payload);
-        Task<PayrollWithTotalVm> GetPayroll(long CompanyId, int PageNumber, int RowsOfPage);
+        Task<PayrollWithTotalVm> GetPayroll(long CompanyId, int PageNumber, int RowsOfPage, string SearchVal);
         Task<PayrollVm> GetPayrollById(long Id);
         Task<PayrollRunnedSummaryVm> GetPayrollRunnedSummary(long PayrollRunnedId);
         Task<PayrollRunnedDetailsWithTotalVm> GetPayrollRunnedDetails(long PayrollRunnedId, int PageNumber, int RowsOfPage);
@@ -22,6 +22,6 @@ namespace hrms_be_backend_data.IRepository
         Task<string> ProcessPayrollDeduction(PayrollDeductionReq payload);
         Task<string> DeletePayrollDeduction(PayrollDeductionDeleteReq payload);       
         Task<List<PayrollDeductionsVm>> GetPayrollDeductions(long PayrollId);
-        Task<List<PayrollDeductionComputationVm>> GetPayrollDeductionComputation(long DeductionId);
+        Task<List<PayrollDeductionComputationVm>> GetPayrollDeductionComputation(long DeductionId, long PayrollId);
     }
 }

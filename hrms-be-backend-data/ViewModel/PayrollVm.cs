@@ -143,10 +143,8 @@
     }
     public class PayrollDeductionComputationVm
     {
-        public long EarningsItemId { get; set; }
-        public string EarningItemName { get; set; }
-        public string DeductionName { get; set; }
         public long DeductionId { get; set; }
+        public string DeductionName { get; set; }       
         public decimal EarningItemAmount { get; set; }      
     }
 }
