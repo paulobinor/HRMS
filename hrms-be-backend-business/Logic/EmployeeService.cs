@@ -18,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Data;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Security.Claims;
 using System.Text;
@@ -1159,6 +1160,38 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
+
+            }
+            catch (SqlException sqlEx)
+            {
+                if (sqlEx.Number == 2627)
+                {
+                    if (sqlEx.Message.Contains("UC_StaffID_CompanyID"))
+                    {
+                        var output = String.Join(";", Regex.Matches(sqlEx.Message, @"\((.+?)\)")
+                        .Cast<Match>()
+                        .Select(m => m.Groups[1].Value));
+                        var outputArray = output.Split(",");
+
+                        _logger.LogError($"Exception Occured ==> {sqlEx.ToString()}");
+                        response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Upladed employee files contains duplicate StaffID - {outputArray[1]}";
+
+                        return response;
+                       
+                    }
+
+                    _logger.LogError($"Exception Occured ==> {sqlEx.ToString()}");
+                    response.ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"Processing error. Kindly reach out to support.";
+                    return response;
+                }
+
+
+                _logger.LogError($"Exception Occured ==> {sqlEx.ToString()}");
+                response.ResponseCode = ResponseCode.ProcessingError.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Processing error. Kindly reach out to support.";
+                return response;
 
             }
             catch (Exception ex)
