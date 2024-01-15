@@ -785,9 +785,20 @@ namespace hrms_be_backend_business.Logic
                         if (taxIncomeRemained > 0)
                         {
                             decimal percentage = decimal.Divide(item.PayablePercentage, 100);
-                            decimal amt = decimal.Multiply(item.PayableAmount, percentage);
-                            taxIncomeRemained -= item.PayableAmount;
-                            taxPayableAmount += amt;
+                            if (item.IsLast)
+                            {
+                                decimal amt = decimal.Multiply(taxIncomeRemained, percentage);
+                                taxIncomeRemained -= item.PayableAmount;
+                                taxPayableAmount += amt;
+                            }
+                            else
+                            {
+                                decimal amt = decimal.Multiply(item.PayableAmount, percentage);
+                                taxIncomeRemained -= item.PayableAmount;
+                                taxPayableAmount += amt;
+                            }
+                          
+                          
                         }                                           
                     }
                 }
