@@ -47,6 +47,7 @@
         public string PositionName { get; set; }
         public DateTime ResumptionDate { get; set; }
         public long PayrollId { get; set; }
+        public string PayrollCircleName { get; set; }
         public string BaseSalary { get; set; }
         public string SalaryEffectiveFrom { get; set; }
         public string PensionFundAdminstrator { get; set; }
@@ -159,6 +160,7 @@
         public string PositionName { get; set; }
         public DateTime ResumptionDate { get; set; }
         public long PayrollId { get; set; }
+        public string PayrollCircleName { get; set; }
         public string BaseSalary { get; set; }
         public string SalaryEffectiveFrom { get; set; }
         public string PensionFundAdminstrator { get; set; }
