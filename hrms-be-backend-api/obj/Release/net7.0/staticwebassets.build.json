@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "LXOMyvGWkjPwZdrlwzmxrveM8S45+8y9m/5ILQ/+fLk=",
+  "Source": "hrms-be-backend-api",
+  "BasePath": "_content/hrms-be-backend-api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
