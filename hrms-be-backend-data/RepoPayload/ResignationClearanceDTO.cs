@@ -3,6 +3,7 @@
     public class ResignationClearanceDTO
     {
         public long ResignationClearanceID { get; set; }
+        public long ResignationID { get; set; }
         public long EmployeeID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

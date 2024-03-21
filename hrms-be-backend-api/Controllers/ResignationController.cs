@@ -74,7 +74,6 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
         }
 
 
-        //[Authorize]
         [HttpGet]
         [Route("GetResignationByID/{resignationID}")]
         [Authorize]
@@ -112,7 +111,6 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
            
         }
 
-        //[Authorize]
         [HttpGet]
         [Route("GetResignationByCompanyID/{companyId}/{isApproved}")]
         [Authorize]

@@ -93,7 +93,7 @@ namespace hrms_be_backend_business.Logic
                     ExitDate = payload.Date,
                     CompanyID = payload.CompanyID,
                     DateCreated = DateTime.Now,
-                    CreatedByUserId = accessUser.data.EmployeeId,
+                    CreatedByUserId = accessUser.data.UserId,
                     LastDayOfWork = payload.LastDayOfWork,
                     EmployeeId = payload.EmployeeId,
                     ReasonForResignation = payload.ReasonForResignation,
@@ -245,8 +245,6 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<ResignationDTO>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
 
                 }
-
-                //update action performed into audit log here
 
                 _logger.LogInformation("Resignation fetched successfully.");
                 return new ExecutedResult<ResignationDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = resignation };

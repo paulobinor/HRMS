@@ -114,7 +114,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     Date = payload.Date,
                     DateCreated = DateTime.Now,
-                    CreatedByUserId = accessUser.data.EmployeeId,
+                    CreatedByUserId = accessUser.data.UserId,
                     ExitDate = payload.ExitDate,
                     EmployeeId = payload.EmployeeId,
                     ResignationId = payload.ResignationId,
