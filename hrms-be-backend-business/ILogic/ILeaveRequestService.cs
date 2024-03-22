@@ -6,7 +6,9 @@ namespace hrms_be_backend_business.ILogic
     public interface ILeaveRequestService
     {
         Task<BaseResponse> CreateLeaveRequest(LeaveRequestCreate payload, RequesterInfo requester);
+        Task<BaseResponse> CreateLeaveRequest(LeaveRequestLineItem leaveRequestLineItem);
         Task<BaseResponse> RescheduleLeaveRequest(RescheduleLeaveRequest updateDto, RequesterInfo requester);
+        Task<BaseResponse> RescheduleLeaveRequest(LeaveRequestLineItem leaveRequestLineItem);
         Task<BaseResponse> ApproveLeaveRequest(long LeaveRequestID, RequesterInfo requester);
         Task<BaseResponse> DisaproveLeaveRequest(LeaveRequestDisapproved payload, RequesterInfo requester);
         Task<BaseResponse> GetAllLeaveRquest(RequesterInfo requester);

@@ -4,6 +4,7 @@ using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace hrms_be_backend_api.LeaveModuleController.Controller
 {
@@ -19,9 +20,9 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             _logger = logger;
             _leaveRequestService = leaveRequestService;
         }
-        [HttpPost("CreateLeaveRequest")]
         [Authorize]
-        public async Task<IActionResult> CreateLeaveRequest([FromBody] LeaveRequestCreate CreateDto)
+        [HttpPost("CreateLeaveRequestOld")]
+        public async Task<IActionResult> CreateLeaveRequestOld([FromBody] LeaveRequestCreate CreateDto)
         {
             var response = new BaseResponse();
             var requester = new RequesterInfo
@@ -36,9 +37,27 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             return Ok(await _leaveRequestService.CreateLeaveRequest(CreateDto, requester));
         }
 
-        [HttpPost("RescheduleLeaveRequest")]
+        //[Authorize]
+        [HttpPost("CreateLeaveRequest")]
+        public async Task<IActionResult> CreateLeaveRequest([FromBody] LeaveRequestLineItem leaveRequestLineItem)
+        {
+            _logger.LogInformation($"Received CreateleaveRequest request. Payload: {leaveRequestLineItem}");
+            //var response = new BaseResponse();
+            //var requester = new RequesterInfo
+            //{
+            //    Username = this.User.Claims.ToList()[2].Value,
+            //    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+            //    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+            //    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+            //    Port = Request.HttpContext.Connection.RemotePort.ToString()
+            //};
+            var res = await _leaveRequestService.CreateLeaveRequest(leaveRequestLineItem);
+            return Ok(res);
+        }
+
+        [HttpPost("RescheduleLeaveRequestOld")]
         [Authorize]
-        public async Task<IActionResult> RescheduleLeaveRequest([FromBody] RescheduleLeaveRequest updateDto)
+        public async Task<IActionResult> RescheduleLeaveRequestOld([FromBody] RescheduleLeaveRequest updateDto)
         {
             var response = new BaseResponse();
             try
@@ -48,11 +67,11 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
-
-                return Ok(await _leaveRequestService.RescheduleLeaveRequest(updateDto, requester));
+                var res = await _leaveRequestService.RescheduleLeaveRequest(updateDto, requester);
+                return Ok(res);
             }
             catch (Exception ex)
             {
@@ -63,9 +82,38 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 return Ok(response);
             }
         }
+
+        [HttpPost("RescheduleLeaveRequest")]
+        // [Authorize]
+        public async Task<IActionResult> RescheduleLeaveRequest([FromBody] LeaveRequestLineItem leaveRequestLineItem)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                //var requester = new RequesterInfo
+                //{
+                //    Username = this.User.Claims.ToList()[2].Value,
+                //    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                //    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                //    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                //    Port = Request.HttpContext.Connection.RemotePort.ToString()
+                //};
+                var res = await _leaveRequestService.RescheduleLeaveRequest(leaveRequestLineItem);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: ControllerMethod : RescheduleLeaveRequest ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : RescheduleLeaveRequest ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+        }
+
         [HttpPost("ApproveLeaveRequest")]
         [Authorize]
-        public async Task<IActionResult> ApproveLeaveRequest( long LeaveRequestID)
+        public async Task<IActionResult> ApproveLeaveRequest(long LeaveRequestID)
         {
             var response = new BaseResponse();
             var requester = new RequesterInfo
@@ -116,7 +164,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetAllLeaveRequest ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: Controller Method : GetAllLeaveRequest ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllLeaveRequest ==> {ex.Message}";
                 response.Data = null;

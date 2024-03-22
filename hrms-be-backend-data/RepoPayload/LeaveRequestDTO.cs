@@ -1,20 +1,67 @@
-﻿namespace hrms_be_backend_data.RepoPayload
+﻿using System.Numerics;
+
+namespace hrms_be_backend_data.RepoPayload
 {
+    public class LeaveApprovalLineItem    
+    {
+        public long ApprovalItemId { get; set; }
+        public long LeaveRequestLineItemId { get; set; }
+        public bool IsApproved { get; set; }
+        public string? Comments { get; set; }
+        public string ApprovalPosition { get; set; }
+        public DateTime EntryDate { get; set; }
+
+    }
+
+    public class LeaveApproval
+    {
+        public long LeaveApprovalId { get; set; }
+        public long LeaveRequestLineItemId { get; set; }
+        public int RequiredApprovalCount { get; set; }
+        public int CurrentApprovalCount { get; set; }
+        public string? Comments { get; set; }
+        public DateTime EntryDate { get; set; }
+        public DateTime CompletedDate { get; set; }
+        public string ApprovalStatus { get; set; }
+    }
+
+    public class LeaveRequest
+    {
+        public long EmployeeId { get; set; }
+        public long LeaveRequestID { get; set; }
+        public long CompanyID { get; set; } = 0;
+        public int CurrentlSplitCount { get; set; }
+        public int MaxSplitCount { get; set; }
+        public int TotalDays { get; set; }
+        public string LeavePeriod { get; set; }
+
+
+        public byte IsMDDeclined { get; set; } = 0;
+        public byte IsMDApproved { get; set; } = 0;
+        public byte IsUnitHeadDeclined { get; set; } = (byte)0;
+        public byte? IsHrDeclined { get; set; } = 0;
+
+
+        public bool IsUnitHeadApproved { get; set; } = false;
+        public DateTime? UnitHeadDateApproved { get; set; }
+        public DateTime? UnitHeadDateDisapproved { get; set; }
+
+    }
     public class LeaveRequestDTO
     {
         public long LeaveRequestID { get; set; }
-        public long UserId { get; set; }
-        public  string RequestYear { get; set; }
+        public long UserId { get; set; } = 0;
+        public string LeavePeriod { get; set; }
         public long LeaveTypeId { get; set; }
-        public long NoOfDays { get; set; }
+        public long NoOfDays { get; set; } = 0;
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime EndDate { get; set; } 
         public long ReliverUserID { get; set; }
         public string LeaveEvidence { get; set; }
         public string Notes { get; set; }
-        public long UnitHeadUserID { get; set; }
-        public long HodUserID { get; set; }
-        public long HRUserId { get; set; }
+        public long UnitHeadUserID { get; set; } = 0;
+        public long HodUserID { get; set; } = 0;
+        public long HRUserId { get; set; } = 0;
  
         public  string ReasonForRescheduling { get; set; }
         public long CompanyID { get; set; }
@@ -26,43 +73,67 @@
         public DateTime DateCreated { get; set; }
         public string Created_By_User_Email { get; set; }
 
-        public bool IsUpdated { get; set; }
+        public bool IsUpdated { get; set; } = false;
         public DateTime? Updated_Date { get; set; }
         public string Updated_By_User_Email { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
         public DateTime? Deleted_Date { get; set; }
         public string Deleted_By_User_Email { get; set; }
         public string Reasons_For_Delete { get; set; }
-        public bool IsUnitHeadApproved { get; set; }
+
+        public bool IsUnitHeadApproved { get; set; } = false;
         public DateTime? UnitHeadDateApproved { get; set; }
-        public bool IsUnitHeadDeclined { get; set; }
+        public bool IsUnitHeadDeclined { get; set; } = false;
         public DateTime? UnitHeadDateDisapproved { get; set; }
         public string UnitHeadDisapprovedComment { get; set; }
-        public bool IsHodApproved { get; set; }
+
+        public bool IsHodApproved { get; set; } = false;
         public DateTime? HodDateApproved { get; set; }
-        public bool IsHodDeclined { get; set; }
+        public bool IsHodDeclined { get; set; } = false;
         public string HodDisapprovedComment { get; set; }
         public DateTime? HodDateDisapproved { get; set; }
-        public bool IsHrApproved { get; set; }
+        public bool IsHrApproved { get; set; } = false;
         public DateTime? HrDateApproved { get; set; }
-        public bool IsHrDeclined { get; set; }
+        public bool IsHrDeclined { get; set; } = false;
         public string HrDisapprovedComment { get; set; }
         public DateTime? HrDateDisapproved { get; set; }
+        public long EmployeeId { get; set; }
+    }
 
-
+    public class LeaveRequestLineItem
+    {
+        public long? LeaveRequestLineItemId { get; set; }
+        public long LeaveRequestId { get; set; }
+        public long RelieverUserId { get; set; }
+        public int LeaveLength { get; set; }
+        public DateTime startDate { get; set; }
+        public DateTime endDate { get; set; }
+        public DateTime? ResumptionDate { get; set; }
+        public string RescheduleReason { get; set; } = string.Empty;
+        public bool IsRescheduled { get; set; } = false;
+        public string HandoverNotes { get; set; } = string.Empty;
+        public long EmployeeId { get; set; }
+        public long LeaveTypeId { get; set; }
+        public long CompanyId { get; set; }
     }
 
     public class LeaveRequestCreate
     {
-
+        public long LeaveRequestId { get; set; }
         public long EmployeeId { get; set; }
+        public long GradeLevelId { get; set; }
+        public int TotalDays { get; set; }
+        public int MaximumSplitCount { get; set; }
+        public int CurrentSplitCount { get; set; }
+        public int RemainingDays { get; set; }
+       // public DateTime LeavePeriod { get; set; }
         public int RequestYear { get; set; }
         public long LeaveTypeId { get; set; }
         public long NoOfDays { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public long ReliverUserID { get; set; }
+        public long RelieverUserID { get; set; }
         public string LeaveEvidence { get; set; }
         public string Notes { get; set; }
    
@@ -86,7 +157,6 @@
         public string Notes { get; set; }
         public string ReasonForRescheduling { get; set; }
         public long CompanyID { get; set; }
-
        
     }
 

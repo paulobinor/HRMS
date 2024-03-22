@@ -1,5 +1,6 @@
 ﻿using hrms_be_backend_business.AppCode;
 using hrms_be_backend_business.ILogic;
+using hrms_be_backend_common.Models;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
@@ -12,7 +13,6 @@ namespace hrms_be_backend_business.Logic
     public class LeaveRequestService : ILeaveRequestService
     {
         private readonly IAuditLog _audit;
-
         private readonly ILogger<LeaveRequestService> _logger;
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
@@ -30,50 +30,71 @@ namespace hrms_be_backend_business.Logic
             _leaveRequestRepository = leaveRequestRepository;
             _companyrepository = companyrepository;
         }
-        public async Task<BaseResponse> CreateLeaveRequest(LeaveRequestCreate payload, RequesterInfo requester)
+
+        public async Task<BaseResponse> CreateLeaveRequest(LeaveRequestLineItem leaveRequestLineItem)
         {
             //check if us
+            _logger.LogInformation($"About to create leave for EmployeId: {leaveRequestLineItem.EmployeeId} and CompanyId: {leaveRequestLineItem.CompanyId}");
             StringBuilder errorOutput = new StringBuilder();
             var response = new BaseResponse();
+            EmpLeaveRequestInfo empLeaveRequestInfo = null;
             try
             {
-                if (string.IsNullOrEmpty(payload.Notes))
+                //if (string.IsNullOrEmpty(leaveRequestLineItem.HandoverNotes))
+                //{
+                //    response.ResponseCode = "08";
+                //    response.ResponseMessage = "Note is required"; return response;
+                //}
+                //if (leaveRequestLineItem.RequestYear < 1)
+                //{
+                //    response.ResponseCode = "08";
+                //    response.ResponseMessage = "Request Year is required";
+                //    return response;
+                //}
+                empLeaveRequestInfo = await _leaveRequestRepository.GetEmpLeaveInfo(leaveRequestLineItem.EmployeeId, "Active");
+                if (empLeaveRequestInfo == null)
                 {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Note is required";
-                    return response;
-                }
-                if (payload.RequestYear < 1)
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = "Request Year is required";
-                    return response;
+                    empLeaveRequestInfo = await _leaveRequestRepository.CreateEmpLeaveInfo(leaveRequestLineItem.EmployeeId);
+                    if (empLeaveRequestInfo == null)
+                    {
+                        throw new Exception("Could not create leave request");
+                    }
                 }
 
-                var repoResponse = await _leaveRequestRepository.CreateLeaveRequest(payload);
-                if (!repoResponse.Contains("Success"))
-                {
-                    response.ResponseCode = "08";
-                    response.ResponseMessage = repoResponse;
-                    return response;
-                }
-                var userDetails = await _employeeRepository.GetEmployeeById(payload.EmployeeId,payload.CompanyID);
+
+                //Check maximum split count
+
+                //Check number of days left
+
+                //check if any pending leave approvals
+
+                leaveRequestLineItem.LeaveRequestId = empLeaveRequestInfo.LeaveRequestId;
+                var res = await _leaveRequestRepository.CreateLeaveRequestLineItem(leaveRequestLineItem);
+
+                //var repoResponse = await _leaveRequestRepository.CreateLeaveRequest(payload);
+                //if (!repoResponse.Contains("Success"))
+                //{
+                //    response.ResponseCode = "08";
+                //    response.ResponseMessage = repoResponse;
+                //    return response;
+                //}
+                //  var userDetails = await _employeeRepository.GetEmployeeById(leaveRequestLineItem.EmployeeId, leaveRequestLineItem.CompanyId);
 
                 //Send mail to reliever
-                _mailService.SendLeaveMailToReliever(payload.ReliverUserID, payload.EmployeeId, payload.StartDate, payload.EndDate);
+               // _mailService.SendLeaveMailToReliever(leaveRequestLineItem.RelieverUserId, leaveRequestLineItem.EmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
 
                 //Send mail to approval
-                if (userDetails.Employee.UnitHeadEmployeeId == null)
-                {
-                    _mailService.SendLeaveApproveMailToApprover(userDetails.Employee.HodEmployeeId, payload.EmployeeId, payload.StartDate, payload.EndDate);
-                }
-                else
-                {
-                    _mailService.SendLeaveApproveMailToApprover(userDetails.Employee.UnitHeadEmployeeId, payload.EmployeeId, payload.StartDate, payload.EndDate);
-                }
+                //if (userDetails.Employee.UnitHeadEmployeeId == null)
+                //{
+                //    _mailService.SendLeaveApproveMailToApprover(userDetails.Employee.HodEmployeeId, leaveRequestLineItem.EmployeeId, leaveRequestLineItem.StartDate, payload.EndDate);
+                //}
+                //else
+                //{
+                //    _mailService.SendLeaveApproveMailToApprover(userDetails.Employee.UnitHeadEmployeeId, payload.EmployeeId, payload.StartDate, payload.EndDate);
+                //}
 
 
-                response.Data = payload;
+                response.Data = res;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = "leaveRequest created successfully.";
                 return response;
@@ -163,6 +184,40 @@ namespace hrms_be_backend_business.Logic
                 response.Data = updateDto;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = "Reschedule Leave Request created successfully.";
+                return response;
+
+                //response.ResponseCode = ResponseCode.Exception.ToString();
+                //response.ResponseMessage = "An error occurred while updating Reschedule Leave Request.";
+                //response.Data = null;
+                //return response;
+            }
+
+
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: RescheduleLeaveRequest ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: RescheduleLeaveRequest ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+        }
+
+        public async Task<BaseResponse> RescheduleLeaveRequest(LeaveRequestLineItem leaveRequestLineItem)
+        {
+            var response = new BaseResponse();
+            try
+            {
+
+                var empLeaveRequestInfo = await _leaveRequestRepository.GetEmpLeaveInfo(leaveRequestLineItem.EmployeeId, "Active");
+                if (empLeaveRequestInfo == null)
+                {
+                    return new BaseResponse { ResponseCode = "404", ResponseMessage = "No record found" };
+                }
+                var lineItem = await _leaveRequestRepository.RescheduleLeaveRequest(leaveRequestLineItem);
+                response.Data = lineItem;
+                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Reschedule Leave was successful.";
                 return response;
 
                 //response.ResponseCode = ResponseCode.Exception.ToString();
@@ -419,8 +474,8 @@ namespace hrms_be_backend_business.Logic
                 string requesterUserId = requester.UserId.ToString();
                 string RoleId = requester.RoleId.ToString();
 
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
+               // var ipAddress = requester.IpAddress;
+               // var port = requester.Port.ToString();
 
                 var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
                 if (null == requesterInfo)
@@ -550,6 +605,67 @@ namespace hrms_be_backend_business.Logic
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Exception Occured: GetLeaveRequestPendingApproval() ==> {ex.Message}";
                 response.Data = null;
+                return response;
+            }
+        }
+        public async Task<BaseResponse> CreateLeaveRequest(LeaveRequestCreate payload, RequesterInfo requester)
+        {
+            //check if us
+
+            StringBuilder errorOutput = new StringBuilder();
+            var response = new BaseResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(payload.Notes))
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "Note is required"; return response;
+                }
+                if (payload.RequestYear < 1)
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "Request Year is required";
+                    return response;
+                }
+
+                var repoResponse = await _leaveRequestRepository.CreateLeaveRequest(payload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = repoResponse;
+                    return response;
+                }
+                var userDetails = await _employeeRepository.GetEmployeeById(payload.EmployeeId, payload.CompanyID);
+
+                //Send mail to reliever
+                _mailService.SendLeaveMailToReliever(payload.RelieverUserID, payload.EmployeeId, payload.StartDate, payload.EndDate);
+
+                //Send mail to approval
+                if (userDetails.Employee.UnitHeadEmployeeId == null)
+                {
+                    _mailService.SendLeaveApproveMailToApprover(userDetails.Employee.HodEmployeeId, payload.EmployeeId, payload.StartDate, payload.EndDate);
+                }
+                else
+                {
+                    _mailService.SendLeaveApproveMailToApprover(userDetails.Employee.UnitHeadEmployeeId, payload.EmployeeId, payload.StartDate, payload.EndDate);
+                }
+
+
+                response.Data = payload;
+                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "leaveRequest created successfully.";
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Exception occured Contact Admin";
+                response.Data = null;
+
+
+
                 return response;
             }
         }

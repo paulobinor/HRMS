@@ -1,12 +1,15 @@
 ﻿using Dapper;
+using hrms_be_backend_common.Models;
 using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Data;
 using System.Data.SqlClient;
+using System.Numerics;
 
 namespace hrms_be_backend_data.Repository
 {
@@ -25,30 +28,25 @@ namespace hrms_be_backend_data.Repository
             _dapperGeneric = dapperGeneric;
         }
 
-        public async Task<string> CreateLeaveRequest(LeaveRequestCreate Leave)
+        public async Task<LeaveRequestLineItem> CreateLeaveRequestLineItem(LeaveRequestLineItem leaveRequestLineItem)
         {
             try
             {
                 var param = new DynamicParameters();
-                param.Add("@Status", LeaveRequestEnum.CREATE);
-                param.Add("@EmployeeId", Leave.EmployeeId);
-                param.Add("@RequestYear", Leave.RequestYear);
-                param.Add("@LeaveTypeId", Leave.LeaveTypeId);
-                param.Add("@NoOfDays", Leave.NoOfDays);
-                param.Add("@StartDate", Leave.StartDate);
-                param.Add("@EndDate", Leave.EndDate);
-                param.Add("@ReliverUserID", Leave.ReliverUserID);
-                param.Add("@LeaveEvidence", Leave.LeaveEvidence.Trim());
-                param.Add("@Notes", Leave.Notes.Trim());
-                param.Add("@ReasonForRescheduling", Leave.ReasonForRescheduling.Trim());
-                param.Add("@CompanyID", Leave.CompanyID);
+                param.Add("@EmployeeId", leaveRequestLineItem.EmployeeId);
+                param.Add("@LeaveTypeId", leaveRequestLineItem.LeaveTypeId);
+                param.Add("@endDate", leaveRequestLineItem.endDate);
+                param.Add("@HandoverNotes", leaveRequestLineItem.HandoverNotes);
+                param.Add("@LeaveLength", leaveRequestLineItem.LeaveLength);
+                param.Add("@LeaveRequestId", leaveRequestLineItem.LeaveRequestId);
+                param.Add("@RelieverUserId", leaveRequestLineItem.RelieverUserId);
+                param.Add("@RelieverUserID", leaveRequestLineItem.RescheduleReason);
+                param.Add("@startDate", leaveRequestLineItem.startDate);
+                param.Add("@IsRescheduled", "0");
+                param.Add("@ResumptionDate", leaveRequestLineItem.ResumptionDate);
 
-                param.Add("@Created_By_User_Email", Leave.Created_By_User_Email.Trim());
-
-                return await _dapperGeneric.Get<string>(ApplicationConstant.Sp_LeaveRequest, param, commandType: CommandType.StoredProcedure);
-
-
-
+                var res = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_CreateEmpLeaveRequestLineItem, param, commandType: CommandType.StoredProcedure);
+                return res;
             }
             catch (Exception ex)
             {
@@ -56,8 +54,6 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-
-
         public async Task<dynamic> RescheduleLeaveRequest(RescheduleLeaveRequest update, string requesterUserEmail)
         {
             try
@@ -84,6 +80,37 @@ namespace hrms_be_backend_data.Repository
                     dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: RescheduleLeaveRequest(RescheduleLeaveRequest update) ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<LeaveRequestLineItem> RescheduleLeaveRequest(LeaveRequestLineItem leaveRequestLineItem)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    //  param.Add("@Status", LeaveRequestEnum.UPDATE);
+                    param.Add("@LeaveRequestLineItemId", leaveRequestLineItem.LeaveRequestLineItemId);
+                    param.Add("@startDate", leaveRequestLineItem.startDate);
+                    param.Add("@endDate", leaveRequestLineItem.endDate);
+                    param.Add("@HandoverNotes", leaveRequestLineItem.HandoverNotes);
+                    param.Add("@RescheduleReason", leaveRequestLineItem.RescheduleReason);
+                    param.Add("@ResumptionDate", leaveRequestLineItem.ResumptionDate);
+                    param.Add("@RelieverUserId", leaveRequestLineItem.RelieverUserId);
+                    param.Add("@LeaveLength", leaveRequestLineItem.LeaveLength);
+                    param.Add("@IsRescheduled", leaveRequestLineItem.IsRescheduled);
+
+                    var res = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_RescheduleLeaveRequestLineItem, param, commandType: CommandType.StoredProcedure);
+
+                    return res;
                 }
             }
             catch (Exception ex)
@@ -131,7 +158,6 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-
         public async Task<dynamic> DeleteLeaveRequest(LeaveRequestDelete delete, string deletedbyUserEmail)
         {
             try
@@ -178,6 +204,26 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
+        public async Task<List<EmpLeaveRequestInfo>> GetEmpLeaveInfoHistory(BigInteger employeeId, BigInteger companyId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", LeaveRequestEnum.GETALL);
+
+                    var LeaveDetails = (await _dapper.QueryAsync<EmpLeaveRequestInfo>(ApplicationConstant.Sp_GetEmpLeaveInfoHistory, param: param, commandType: CommandType.StoredProcedure)).AsList();
+
+                    return LeaveDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: GetAllLeaveRequest() ===>{ex.Message}");
+                throw;
+            }
+        }
 
         public async Task<LeaveRequestDTO> GetLeaveRequestById(long LeaveRequestID)
         {
@@ -229,7 +275,6 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-
         public async Task<LeaveRequestDTO> GetLeaveRequestByYear(string RequestYear, long CompanyId)
         {
             try
@@ -253,7 +298,6 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-
         public async Task<IEnumerable<LeaveRequestDTO>> GetLeaveRequestByCompany(string RequestYear, long companyId)
         {
             try
@@ -298,6 +342,129 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+        public async Task<LeaveRequestDTO> GetEmpLeaveRequest(long employeeId, string leavePeriod, string companyId = null)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@EmployeeId", employeeId);
+                    param.Add("@CompanyId", companyId);
+                    param.Add("@LeavePeriod", leavePeriod);
+
+                    var userDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveRequestDTO>(ApplicationConstant.sp_GetLeaveRequest, param: param, commandType: CommandType.StoredProcedure);
+
+                    return userDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: GetLeaveRequestPendingApproval() ===>{ex.Message}");
+                throw;
+            }
+        }
+        public async Task<EmpLeaveRequestInfo> GetEmpLeaveInfo(long employeeId, string LeaveStatus, string companyId = null)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", employeeId);
+                param.Add("@LeaveStatus", LeaveStatus);
+                //param.Add("@LeavePeriod", LeavePeriod);
+
+                var res = await _dapperGeneric.Get<EmpLeaveRequestInfo>(ApplicationConstant.Sp_GetEmpLeaveInfo, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    return res;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+        }
+
+        public async Task<EmpLeaveRequestInfo> CreateEmpLeaveInfo(long employeeId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", employeeId);
+                param.Add("@LeaveStatus", "Active");
+                //param.Add("@LeavePeriod", LeavePeriod);
+
+                var res = await _dapperGeneric.Get<EmpLeaveRequestInfo>(ApplicationConstant.Sp_CreateEmpLeaveInfo, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    return res;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+        }
+
+        public async Task<string> CreateLeaveRequest(LeaveRequestCreate Leave)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@Status", LeaveRequestEnum.CREATE);
+                param.Add("@EmployeeId", Leave.EmployeeId);
+                param.Add("@RequestYear", Leave.RequestYear);
+                param.Add("@LeaveTypeId", Leave.LeaveTypeId);
+                param.Add("@NoOfDays", Leave.NoOfDays);
+                param.Add("@StartDate", Leave.StartDate);
+                param.Add("@EndDate", Leave.EndDate);
+                param.Add("@RelieverUserID", Leave.RelieverUserID);
+                param.Add("@LeaveEvidence", Leave.LeaveEvidence.Trim());
+                param.Add("@Notes", Leave.Notes.Trim());
+                param.Add("@ReasonForRescheduling", Leave.ReasonForRescheduling.Trim());
+                param.Add("@CompanyID", Leave.CompanyID);
+
+                param.Add("@Created_By_User_Email", Leave.Created_By_User_Email.Trim());
+
+                return await _dapperGeneric.Get<string>(ApplicationConstant.Sp_LeaveRequest, param, commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex}");
+                throw;
+            }
+        }
+
+        public async Task<LeaveRequestLineItem> GetLeaveRequestLineItem(long leaveRequestLineItemId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@leaveRequestLineItemId", leaveRequestLineItemId);
+                //param.Add("@LeavePeriod", LeavePeriod);
+
+                var res = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_GetLeaveRequestLineItem, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    return res;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+        }
+
 
         //public async Task<IEnumerable<LeaveRequestDTO>> GetUnitedHeadPendingApproval()
         //{

@@ -48,6 +48,15 @@
         public static string Sp_LeaveType = "Sp_LeaveType";
         public static string Sp_LeaveRequest = "Sp_LeaveRequest";
         public static string Sp_RescheduleLeave = "Sp_RescheduleLeave";
+        public static string sp_GetLeaveRequest = "Sp_GetLeaveRequest";
+
+
+        public static string Sp_CreateEmpLeaveRequestLineItem = "Sp_CreateEmpLeaveRequestLineItem";
+        public static string Sp_CreateEmpLeaveInfo { get; set; } = "Sp_CreateEmpLeaveInfo";
+        public static string Sp_RescheduleLeaveRequestLineItem { get; internal set; } = "Sp_RescheduleLeaveRequestLineItem";
+        public static string Sp_GetEmpLeaveInfoHistory { get; internal set; } = "Sp_GetEmpLeaveInfoHistory";
+        public static string Sp_GetEmpLeaveInfo { get; internal set; } = "Sp_GetEmpLeaveInfo";
+        public static string Sp_GetLeaveRequestLineItem { get; internal set; } = "Sp_GetLeaveRequestLineItem";
 
 
         //System Default
@@ -67,6 +76,5 @@
         public static string Sp_TrainingSchedule = "Sp_TrainingSchedule";
         public static string Sp_TrainingInduction = "Sp_TrainingInduction";
         public static string Sp_TrainingFeedbackForm = "Sp_TrainingFeedbackForm";
-
     }
 }
