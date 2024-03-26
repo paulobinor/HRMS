@@ -1,0 +1,5 @@
+[2024-03-25 13:44:53.188 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-25 13:44:53.837 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-25 13:44:53.838 +01:00  INF]  Hosting environment: Development
+[2024-03-25 13:44:53.838 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-25 13:44:53.979 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44392/swagger - -

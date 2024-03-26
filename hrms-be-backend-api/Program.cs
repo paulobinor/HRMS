@@ -183,6 +183,7 @@ builder.Services.AddScoped<IRescheduleLeaveRepository, RescheduleLeaveRepository
 builder.Services.AddScoped<IResignationRepository, ResignationRepository>();
 builder.Services.AddScoped<IResignationInterviewRepository, ResignationInterviewRepository>();
 builder.Services.AddScoped<IResignationClearanceRepository, ResignationClearanceRepository>();
+builder.Services.AddScoped<IExitClearanceSetupRepository, ExitClearanceSetupRepository>();
 
 //OnboardingModule
 builder.Services.AddScoped<ICompanyService, CompanyService>();
@@ -229,6 +230,7 @@ builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
 builder.Services.AddScoped<IResignationService, ResignationService>();
 builder.Services.AddScoped<IResignationInterviewService, ResignationInterviewService>();
 builder.Services.AddScoped<IResignationClearanceService, ResignationClearanceService>();
+builder.Services.AddScoped<IExitClearanceSetupService, ExitClearanceSetupService>();
 
 
 //Mail Service
