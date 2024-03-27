@@ -18,9 +18,14 @@ namespace hrms_be_backend_data.IRepository
         Task<LeaveRequestDTO> GetLeaveRequestByYear(string RequestYear, long CompanyId);
         Task<IEnumerable<LeaveRequestDTO>> GetLeaveRequestByCompany(string RequestYear, long companyId);
         Task<IEnumerable<LeaveRequestDTO>> GetLeaveRequestPendingApproval(long UserIdGet);
-        Task<EmpLeaveRequestInfo> GetEmpLeaveInfo(long employeeId, string LeaveStatus, string companyId = null);
+        Task<List<EmpLeaveRequestInfo>> GetEmpLeaveInfo(long employeeId, string LeaveStatus = null, string companyId = null);
         Task<EmpLeaveRequestInfo> CreateEmpLeaveInfo(long employeeId);
         Task<LeaveRequestLineItem> GetLeaveRequestLineItem(long leaveRequestLineItemId);
+        Task<LeaveApprovalInfo> GetLeaveApprovalInfo(long leaveApprovalId);
+        Task<LeaveApprovalInfo> GetLeaveApprovalInfoByRequestLineItem(long leaveRequestLineitemId);
+        Task<LeaveApprovalLineItem> GetLeaveApprovalLineItem(long leaveApprovalLineItemId, int approvalStep);
+        Task<LeaveApprovalInfo> UpdateLeaveApprovalInfo(LeaveApprovalInfo leaveApproval);
+        Task<LeaveApprovalLineItem> UpdateLeaveApprovalLineItem(LeaveApprovalLineItem leaveApprovalLineItem);
     }
 }
 

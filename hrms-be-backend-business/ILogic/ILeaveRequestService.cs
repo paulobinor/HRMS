@@ -1,20 +1,34 @@
-﻿using hrms_be_backend_data.RepoPayload;
+﻿using Dapper;
+using hrms_be_backend_common.Models;
+using hrms_be_backend_data.AppConstants;
+using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
+using System.Data;
 
 namespace hrms_be_backend_business.ILogic
 {
     public interface ILeaveRequestService
     {
-        Task<BaseResponse> CreateLeaveRequest(LeaveRequestCreate payload, RequesterInfo requester);
         Task<BaseResponse> CreateLeaveRequest(LeaveRequestLineItem leaveRequestLineItem);
         Task<BaseResponse> RescheduleLeaveRequest(RescheduleLeaveRequest updateDto, RequesterInfo requester);
         Task<BaseResponse> RescheduleLeaveRequest(LeaveRequestLineItem leaveRequestLineItem);
-        Task<BaseResponse> ApproveLeaveRequest(long LeaveRequestID, RequesterInfo requester);
-        Task<BaseResponse> DisaproveLeaveRequest(LeaveRequestDisapproved payload, RequesterInfo requester);
-        Task<BaseResponse> GetAllLeaveRquest(RequesterInfo requester);
-        Task<BaseResponse> GetLeaveRequsetById(long LeaveRequestID, RequesterInfo requester);
-        Task<BaseResponse> GetLeaveRequsetByUerId(long UserId, long CompanyId,  RequesterInfo requester);
-        Task<BaseResponse> GetLeaveRquestbyCompanyId(string RequestYear, long companyId, RequesterInfo requester);
-        Task<BaseResponse> GetLeaveRequestPendingApproval(  RequesterInfo requester );
+        Task<BaseResponse> ApproveLeaveRequest(LeaveApprovalLineItem leaveApprovalLineItem);
+        Task<LeaveRequestLineItem> GetLeaveRequestLineItem(long leaveRequestLineItemId);
+        Task<LeaveApprovalInfo> GetLeaveApprovalInfo(long leaveApprovalId, long leaveReqestLineItemId);
+        Task<List<EmpLeaveRequestInfo>> GetEmpLeaveInfo(long employeeId, string LeaveStatus, string companyId = null);
+        Task<LeaveApprovalInfo> UpdateLeaveApprovalInfo(LeaveApprovalInfo leaveApproval);
+        Task<LeaveApprovalLineItem> GetLeaveApprovalLineItem(long leaveApprovalLineItemId, int approvalStep = 0);
+        Task<LeaveApprovalInfo> GetLeaveApprovalInfoByRequestLineItem(long leaveRequestLineItemId);
+        #region Depricated
+        //Task<BaseResponse> GetAllLeaveRquest(RequesterInfo requester);
+        //Task<BaseResponse> GetLeaveRequsetById(long LeaveRequestID, RequesterInfo requester);
+        //Task<BaseResponse> GetLeaveRequsetByUerId(long UserId, long CompanyId, RequesterInfo requester);
+        //Task<BaseResponse> GetLeaveRquestbyCompanyId(string RequestYear, long companyId, RequesterInfo requester);
+        //Task<BaseResponse> GetLeaveRequestPendingApproval(RequesterInfo requester);
+        //Task<BaseResponse> CreateLeaveRequest(LeaveRequestCreate payload, RequesterInfo requester);
+        //Task<BaseResponse> ApproveLeaveRequest(long LeaveRequestID, RequesterInfo requester);
+        //Task<BaseResponse> DisaproveLeaveRequest(LeaveRequestDisapproved payload, RequesterInfo requester); 
+        #endregion
+
     }
 }

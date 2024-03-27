@@ -1,4 +1,5 @@
 ﻿using hrms_be_backend_business.ILogic;
+using hrms_be_backend_common.Models;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
@@ -20,25 +21,9 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             _logger = logger;
             _leaveRequestService = leaveRequestService;
         }
-        [Authorize]
-        [HttpPost("CreateLeaveRequestOld")]
-        public async Task<IActionResult> CreateLeaveRequestOld([FromBody] LeaveRequestCreate CreateDto)
-        {
-            var response = new BaseResponse();
-            var requester = new RequesterInfo
-            {
-                Username = this.User.Claims.ToList()[2].Value,
-                UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                Port = Request.HttpContext.Connection.RemotePort.ToString()
-            };
-
-            return Ok(await _leaveRequestService.CreateLeaveRequest(CreateDto, requester));
-        }
 
         //[Authorize]
-        [HttpPost("CreateLeaveRequest")]
+        [HttpPost("Create")]
         public async Task<IActionResult> CreateLeaveRequest([FromBody] LeaveRequestLineItem leaveRequestLineItem)
         {
             _logger.LogInformation($"Received CreateleaveRequest request. Payload: {leaveRequestLineItem}");
@@ -55,35 +40,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             return Ok(res);
         }
 
-        [HttpPost("RescheduleLeaveRequestOld")]
-        [Authorize]
-        public async Task<IActionResult> RescheduleLeaveRequestOld([FromBody] RescheduleLeaveRequest updateDto)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
-                var res = await _leaveRequestService.RescheduleLeaveRequest(updateDto, requester);
-                return Ok(res);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : RescheduleLeaveRequest ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : RescheduleLeaveRequest ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-        }
 
-        [HttpPost("RescheduleLeaveRequest")]
+        [HttpPost("Reschedule")]
         // [Authorize]
         public async Task<IActionResult> RescheduleLeaveRequest([FromBody] LeaveRequestLineItem leaveRequestLineItem)
         {
@@ -111,22 +69,67 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             }
         }
 
-        [HttpPost("ApproveLeaveRequest")]
-        [Authorize]
-        public async Task<IActionResult> ApproveLeaveRequest(long LeaveRequestID)
+
+        [HttpGet("Get/{LeaveRequestId}")]
+        //[Authorize]
+        public async Task<IActionResult> GetLeaveRequestLineItem(long LeaveRequestID)
         {
             var response = new BaseResponse();
-            var requester = new RequesterInfo
+            try
             {
-                Username = this.User.Claims.ToList()[2].Value,
-                UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                Port = Request.HttpContext.Connection.RemotePort.ToString()
-            };
+                var requester = new RequesterInfo
+                {
+                    Username = this.User.Claims.ToList()[2].Value,
+                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
+                };
 
-            return Ok(await _leaveRequestService.ApproveLeaveRequest(LeaveRequestID, requester));
+                return Ok(await _leaveRequestService.GetLeaveRequestLineItem(LeaveRequestID));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: ControllerMethod : GetLeaveRequestbyId ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetLeaveRequestbyId ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+
         }
+
+        [HttpGet("Info")]
+        //[Authorize]
+        public async Task<IActionResult> GetEmpLeaveInfo([FromQuery] long EmployeeId, string infoStatus)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var requester = new RequesterInfo
+                {
+                    Username = this.User.Claims.ToList()[2].Value,
+                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
+                };
+
+                return Ok(await _leaveRequestService.GetEmpLeaveInfo(EmployeeId, infoStatus));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: ControllerMethod : GetLeaveRequestbyId ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetLeaveRequestbyId ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+
+        }
+
+
+        #region Depricated
         [HttpPost("DisaproveLeaveRequest")]
         [Authorize]
         public async Task<IActionResult> DisaproveLeaveRequest([FromBody] LeaveRequestDisapproved payload)
@@ -137,7 +140,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 Username = this.User.Claims.ToList()[2].Value,
                 UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                 RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
                 Port = Request.HttpContext.Connection.RemotePort.ToString()
             };
 
@@ -156,7 +159,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
@@ -184,11 +187,11 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
-                return Ok(await _leaveRequestService.GetLeaveRequsetById(LeaveRequestID,  requester));
+                return Ok(await _leaveRequestService.GetLeaveRequsetById(LeaveRequestID, requester));
             }
             catch (Exception ex)
             {
@@ -213,7 +216,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
@@ -242,11 +245,11 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
-                return Ok(await _leaveRequestService.GetLeaveRquestbyCompanyId(RequestYear,CompanyID, requester));
+                return Ok(await _leaveRequestService.GetLeaveRquestbyCompanyId(RequestYear, CompanyID, requester));
             }
             catch (Exception ex)
             {
@@ -270,7 +273,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
@@ -285,5 +288,68 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 return Ok(response);
             }
         }
+
+
+        [Authorize]
+        [HttpPost("CreateLeaveRequestOld")]
+        public async Task<IActionResult> CreateLeaveRequestOld([FromBody] LeaveRequestCreate CreateDto)
+        {
+            var response = new BaseResponse();
+            var requester = new RequesterInfo
+            {
+                Username = this.User.Claims.ToList()[2].Value,
+                UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                Port = Request.HttpContext.Connection.RemotePort.ToString()
+            };
+
+            return Ok(await _leaveRequestService.CreateLeaveRequest(CreateDto, requester));
+        }
+        [HttpPost("RescheduleLeaveRequestOld")]
+        [Authorize]
+        public async Task<IActionResult> RescheduleLeaveRequestOld([FromBody] RescheduleLeaveRequest updateDto)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var requester = new RequesterInfo
+                {
+                    Username = this.User.Claims.ToList()[2].Value,
+                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
+                };
+                var res = await _leaveRequestService.RescheduleLeaveRequest(updateDto, requester);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: ControllerMethod : RescheduleLeaveRequest ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : RescheduleLeaveRequest ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+        }
+
+        [HttpPost("ApproveLeaveRequestOld")]
+        [Authorize]
+        public async Task<IActionResult> ApproveLeaveRequestOld(long LeaveRequestID)
+        {
+            var response = new BaseResponse();
+            var requester = new RequesterInfo
+            {
+                Username = this.User.Claims.ToList()[2].Value,
+                UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                Port = Request.HttpContext.Connection.RemotePort.ToString()
+            };
+
+            return Ok(await _leaveRequestService.ApproveLeaveRequest(LeaveRequestID, requester));
+        } 
+        #endregion
     }
 }

@@ -121,7 +121,7 @@ namespace hrms_be_backend_business.AppCode
                 mailBody.Append($"You leave has been approved by {ApprovedByUserDetails.FirstName} {ApprovedByUserDetails.LastName} {ApprovedByUserDetails.MiddleName} <br/> <br/>");
 
                 mailBody.Append($"<b> Your leave start from : <b/> {startDate} <br/> ");
-                mailBody.Append($"<b>and end on : <b/> {endDate} <br/> ");
+                mailBody.Append($"<b>and ends on : <b/> {endDate} <br/> ");
 
                 var mailPayload = new MailRequest
                 {
