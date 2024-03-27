@@ -73,7 +73,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             
         } 
         [HttpGet]
-        [Route("GetResignationInterviewDetails/{InterviewID}")]
+        [Route("GetAllResignationInterviewsByCompany/{InterviewID}")]
         [Authorize]
         public async Task<IActionResult> GetAllResignationInterviewsByCompany(long CompanyID, [FromQuery] PaginationFilter filter)
         {

@@ -561,12 +561,12 @@ namespace hrms_be_backend_business.AppCode
             return body;
         }
 
-        public async Task SendResignationApproveMailToApprover(long ApproverEmployeeId, long leaveRequetedByEmployeeId, DateTime exitDate)
+        public async Task SendResignationApproveMailToApprover(long ApproverEmployeeId, long ResigationByEmployeeId, DateTime exitDate)
         {
             try
             {
                 var userDetails = await _accountRepository.GetUserByEmployeeId(ApproverEmployeeId);
-                var resignationBy = await _accountRepository.GetUserByEmployeeId(leaveRequetedByEmployeeId);
+                var resignationBy = await _accountRepository.GetUserByEmployeeId(ResigationByEmployeeId);
                 StringBuilder mailBody = new StringBuilder();
                 mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
                 mailBody.Append($"Kindly login to approve a resignation request by {resignationBy.FirstName} {resignationBy.LastName} {resignationBy.MiddleName} <br/> <br/>");

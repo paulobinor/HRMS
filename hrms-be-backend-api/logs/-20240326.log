@@ -1,0 +1,332 @@
+[2024-03-26 16:55:05.582 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-26 16:55:06.252 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-26 16:55:06.253 +01:00  INF]  Hosting environment: Development
+[2024-03-26 16:55:06.253 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-26 16:55:06.469 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44392/swagger - -
+[2024-03-26 16:55:07.162 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44392/swagger - - - 404 - - 691.7051ms
+[2024-03-26 16:55:11.944 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44392/swagger - -
+[2024-03-26 16:55:11.965 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44392/swagger - - - 404 - - 19.9141ms
+[2024-03-26 16:55:12.976 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44392/swagger - -
+[2024-03-26 16:55:12.981 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44392/swagger - - - 404 - - 5.0680ms
+[2024-03-26 16:55:14.009 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44392/swagger - -
+[2024-03-26 16:55:14.011 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44392/swagger - - - 404 - - 1.7842ms
+[2024-03-26 16:55:43.699 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-26 16:55:43.941 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-26 16:55:43.942 +01:00  INF]  Hosting environment: Development
+[2024-03-26 16:55:43.943 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-26 16:55:44.007 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44392/swagger - -
+[2024-03-26 16:55:44.336 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44392/swagger - - - 404 - - 332.0033ms
+[2024-03-26 16:56:04.165 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-26 16:56:04.526 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-03-26 16:56:04.530 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-26 16:56:04.531 +01:00  INF]  Hosting environment: Development
+[2024-03-26 16:56:04.532 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-26 16:56:05.499 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-03-26 16:56:06.209 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger-ui.css - -
+[2024-03-26 16:56:06.223 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger-ui-bundle.js - -
+[2024-03-26 16:56:06.229 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-03-26 16:56:06.229 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-03-26 16:56:06.230 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 729.9531ms
+[2024-03-26 16:56:06.241 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 11.7095ms
+[2024-03-26 16:56:06.249 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger-ui-standalone-preset.js - -
+[2024-03-26 16:56:06.316 +01:00  INF]  Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+[2024-03-26 16:56:06.316 +01:00  INF]  Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+[2024-03-26 16:56:06.318 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger-ui.css - - - 200 144929 text/css 109.4451ms
+[2024-03-26 16:56:06.316 +01:00  INF]  Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+[2024-03-26 16:56:06.320 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger-ui-standalone-preset.js - - - 200 312163 text/javascript 70.7809ms
+[2024-03-26 16:56:06.323 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger-ui-bundle.js - - - 200 1061536 text/javascript 99.6997ms
+[2024-03-26 16:56:06.342 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 113.7100ms
+[2024-03-26 16:56:06.560 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-03-26 16:56:06.592 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/favicon-32x32.png - -
+[2024-03-26 16:56:06.594 +01:00  INF]  Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+[2024-03-26 16:56:06.602 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/favicon-32x32.png - - - 200 628 image/png 9.7426ms
+[2024-03-26 16:56:06.906 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/ResignationInterview/GetResignationInterviewDetails/{InterviewID}" for actions - hrms_be_backend_api.ExitModuleController.Controller.ResignationInterviewController.GetResignationInterviewDetails (hrms-be-backend-api),hrms_be_backend_api.ExitModuleController.Controller.ResignationInterviewController.GetAllResignationInterviewsByCompany (hrms-be-backend-api). Actions require a unique method/path combination for Swagger/OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerDocumentWithoutFilters(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_12>d.MoveNext() in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\Program.cs:line 282
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+[2024-03-26 16:56:06.941 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 500 - text/plain;+charset=utf-8 381.0224ms
+[2024-03-26 16:56:23.203 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-26 16:56:23.588 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-03-26 16:56:23.593 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-26 16:56:23.594 +01:00  INF]  Hosting environment: Development
+[2024-03-26 16:56:23.595 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-26 16:56:24.618 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-03-26 16:56:25.248 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 635.0825ms
+[2024-03-26 16:56:25.266 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-03-26 16:56:25.269 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-03-26 16:56:25.302 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 33.4538ms
+[2024-03-26 16:56:25.340 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 74.1899ms
+[2024-03-26 16:56:25.742 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-03-26 16:56:26.275 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/ResignationInterview/GetResignationInterviewDetails/{InterviewID}" for actions - hrms_be_backend_api.ExitModuleController.Controller.ResignationInterviewController.GetResignationInterviewDetails (hrms-be-backend-api),hrms_be_backend_api.ExitModuleController.Controller.ResignationInterviewController.GetAllResignationInterviewsByCompany (hrms-be-backend-api). Actions require a unique method/path combination for Swagger/OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerDocumentWithoutFilters(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_12>d.MoveNext() in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\Program.cs:line 282
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+[2024-03-26 16:56:26.308 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 500 - text/plain;+charset=utf-8 565.9279ms
+[2024-03-26 16:57:02.299 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-26 16:57:02.590 +01:00  WRN]  The ASP.NET Core developer certificate is not trusted. For information about trusting the ASP.NET Core developer certificate, see https://aka.ms/aspnet/https-trust-dev-cert.
+[2024-03-26 16:57:02.689 +01:00  INF]  Now listening on: https://localhost:7090
+[2024-03-26 16:57:02.690 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-03-26 16:57:02.695 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-26 16:57:02.696 +01:00  INF]  Hosting environment: Development
+[2024-03-26 16:57:02.697 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-26 16:57:09.791 +01:00  INF]  Request starting HTTP/2 GET https://localhost:7090/index.html - -
+[2024-03-26 16:57:10.239 +01:00  INF]  Request finished HTTP/2 GET https://localhost:7090/index.html - - - 200 - text/html;charset=utf-8 450.4624ms
+[2024-03-26 16:57:10.258 +01:00  INF]  Request starting HTTP/2 GET https://localhost:7090/swagger-ui.css - -
+[2024-03-26 16:57:10.264 +01:00  INF]  Request starting HTTP/2 GET https://localhost:7090/swagger-ui-bundle.js - -
+[2024-03-26 16:57:10.277 +01:00  INF]  Request starting HTTP/2 GET https://localhost:7090/swagger-ui-standalone-preset.js - -
+[2024-03-26 16:57:10.297 +01:00  INF]  Request starting HTTP/2 GET https://localhost:7090/_framework/aspnetcore-browser-refresh.js - -
+[2024-03-26 16:57:10.308 +01:00  INF]  Request starting HTTP/2 GET https://localhost:7090/_vs/browserLink - -
+[2024-03-26 16:57:10.325 +01:00  INF]  Request finished HTTP/2 GET https://localhost:7090/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 27.5831ms
+[2024-03-26 16:57:10.354 +01:00  INF]  Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+[2024-03-26 16:57:10.354 +01:00  INF]  Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+[2024-03-26 16:57:10.371 +01:00  INF]  Request finished HTTP/2 GET https://localhost:7090/swagger-ui-standalone-preset.js - - - 200 312163 text/javascript 93.7840ms
+[2024-03-26 16:57:10.386 +01:00  INF]  Request finished HTTP/2 GET https://localhost:7090/swagger-ui.css - - - 200 144929 text/css 127.4661ms
+[2024-03-26 16:57:10.404 +01:00  INF]  Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+[2024-03-26 16:57:10.416 +01:00  INF]  Request finished HTTP/2 GET https://localhost:7090/swagger-ui-bundle.js - - - 200 1061536 text/javascript 152.4668ms
+[2024-03-26 16:57:10.449 +01:00  INF]  Request finished HTTP/2 GET https://localhost:7090/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 141.0122ms
+[2024-03-26 16:57:10.677 +01:00  INF]  Request starting HTTP/2 GET https://localhost:7090/swagger/v1/swagger.json - -
+[2024-03-26 16:57:10.706 +01:00  INF]  Request starting HTTP/2 GET https://localhost:7090/favicon-32x32.png - -
+[2024-03-26 16:57:10.707 +01:00  INF]  Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+[2024-03-26 16:57:10.710 +01:00  INF]  Request finished HTTP/2 GET https://localhost:7090/favicon-32x32.png - - - 200 628 image/png 3.7718ms
+[2024-03-26 16:57:11.071 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/ResignationInterview/GetResignationInterviewDetails/{InterviewID}" for actions - hrms_be_backend_api.ExitModuleController.Controller.ResignationInterviewController.GetResignationInterviewDetails (hrms-be-backend-api),hrms_be_backend_api.ExitModuleController.Controller.ResignationInterviewController.GetAllResignationInterviewsByCompany (hrms-be-backend-api). Actions require a unique method/path combination for Swagger/OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerDocumentWithoutFilters(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_12>d.MoveNext() in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\Program.cs:line 282
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+[2024-03-26 16:57:11.095 +01:00  INF]  Request finished HTTP/2 GET https://localhost:7090/swagger/v1/swagger.json - - - 500 - text/plain;+charset=utf-8 418.7053ms
+[2024-03-26 16:57:35.793 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-26 16:57:36.117 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-26 16:57:36.118 +01:00  INF]  Hosting environment: Development
+[2024-03-26 16:57:36.118 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-26 16:57:36.181 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44392/swagger - -
+[2024-03-26 16:57:36.570 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44392/swagger - - - 404 - - 390.8329ms
+[2024-03-26 16:58:48.145 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-26 16:58:48.398 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-26 16:58:48.400 +01:00  INF]  Hosting environment: Development
+[2024-03-26 16:58:48.400 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-26 16:58:48.478 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44392/swagger - -
+[2024-03-26 16:58:48.889 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44392/swagger - - - 404 - - 413.9492ms
+[2024-03-26 16:59:38.833 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-26 16:59:39.137 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-26 16:59:39.138 +01:00  INF]  Hosting environment: Development
+[2024-03-26 16:59:39.138 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-26 16:59:39.218 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44392/swagger - -
+[2024-03-26 16:59:39.643 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44392/swagger - - - 404 - - 428.8163ms
+[2024-03-26 17:05:22.583 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-26 17:05:23.171 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-26 17:05:23.172 +01:00  INF]  Hosting environment: Development
+[2024-03-26 17:05:23.172 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-26 17:05:23.336 +01:00  INF]  Request starting HTTP/2 GET https://localhost:44392/swagger - -
+[2024-03-26 17:05:23.995 +01:00  INF]  Request finished HTTP/2 GET https://localhost:44392/swagger - - - 404 - - 662.6696ms
+[2024-03-26 17:05:46.225 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-26 17:05:46.647 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-03-26 17:05:46.653 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-26 17:05:46.655 +01:00  INF]  Hosting environment: Development
+[2024-03-26 17:05:46.657 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-26 17:05:49.995 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-03-26 17:05:50.888 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 896.7511ms
+[2024-03-26 17:05:50.910 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-03-26 17:05:50.918 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-03-26 17:05:50.924 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 14.1877ms
+[2024-03-26 17:05:50.997 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 79.3003ms
+[2024-03-26 17:05:51.135 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-03-26 17:05:51.668 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/ResignationInterview/GetResignationInterviewDetails/{InterviewID}" for actions - hrms_be_backend_api.ExitModuleController.Controller.ResignationInterviewController.GetResignationInterviewDetails (hrms-be-backend-api),hrms_be_backend_api.ExitModuleController.Controller.ResignationInterviewController.GetAllResignationInterviewsByCompany (hrms-be-backend-api). Actions require a unique method/path combination for Swagger/OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerDocumentWithoutFilters(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_12>d.MoveNext() in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\Program.cs:line 282
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+[2024-03-26 17:05:51.776 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 500 - text/plain;+charset=utf-8 641.0333ms
+[2024-03-26 17:06:52.182 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-03-26 17:06:52.369 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/ResignationInterview/GetResignationInterviewDetails/{InterviewID}" for actions - hrms_be_backend_api.ExitModuleController.Controller.ResignationInterviewController.GetResignationInterviewDetails (hrms-be-backend-api),hrms_be_backend_api.ExitModuleController.Controller.ResignationInterviewController.GetAllResignationInterviewsByCompany (hrms-be-backend-api). Actions require a unique method/path combination for Swagger/OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerDocumentWithoutFilters(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_12>d.MoveNext() in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\Program.cs:line 282
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+[2024-03-26 17:06:52.415 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 500 - text/html;+charset=utf-8 233.8370ms
+[2024-03-26 17:06:52.438 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-03-26 17:06:52.438 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-03-26 17:06:52.441 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 3.2671ms
+[2024-03-26 17:06:52.458 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 19.3246ms
+[2024-03-26 17:06:52.567 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/favicon.ico - -
+[2024-03-26 17:06:52.573 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-03-26 17:06:52.753 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/favicon.ico - - - 404 0 - 186.6041ms
+[2024-03-26 17:08:03.401 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-03-26 17:08:03.444 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 43.1467ms
+[2024-03-26 17:09:23.836 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-26 17:09:24.188 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-03-26 17:09:24.193 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-26 17:09:24.195 +01:00  INF]  Hosting environment: Development
+[2024-03-26 17:09:24.196 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-26 17:09:27.849 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-03-26 17:09:28.554 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 706.3414ms
+[2024-03-26 17:09:28.587 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-03-26 17:09:28.607 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-03-26 17:09:28.660 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 52.4316ms
+[2024-03-26 17:09:28.689 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 102.4641ms
+[2024-03-26 17:09:28.837 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-03-26 17:09:29.750 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 913.2189ms
+[2024-03-26 17:14:50.047 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-26 17:14:50.376 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-03-26 17:14:50.387 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-26 17:14:50.388 +01:00  INF]  Hosting environment: Development
+[2024-03-26 17:14:50.389 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-26 17:14:53.746 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-03-26 17:14:54.452 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 710.5644ms
+[2024-03-26 17:14:54.478 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-03-26 17:14:54.478 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-03-26 17:14:54.496 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 17.0588ms
+[2024-03-26 17:14:54.546 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 68.0032ms
+[2024-03-26 17:14:54.752 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-03-26 17:14:55.477 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 724.5936ms
+[2024-03-26 17:16:03.210 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation application/json 212
+[2024-03-26 17:16:03.231 +01:00  INF]  CORS policy execution successful.
+[2024-03-26 17:16:03.240 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-03-26 17:16:04.061 +01:00  INF]  Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '26/03/2024 15:49:57', Current time (UTC): '26/03/2024 16:16:04'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateJWS(String token, TokenValidationParameters validationParameters, BaseConfiguration currentConfiguration, SecurityToken& signatureValidatedToken, ExceptionDispatchInfo& exceptionThrown)
+--- End of stack trace from previous location ---
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, JwtSecurityToken outerToken, TokenValidationParameters validationParameters, SecurityToken& signatureValidatedToken)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+[2024-03-26 17:16:04.109 +01:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '26/03/2024 15:49:57', Current time (UTC): '26/03/2024 16:16:04'.
+[2024-03-26 17:16:04.124 +01:00  INF]  Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+[2024-03-26 17:16:04.138 +01:00  INF]  AuthenticationScheme: Bearer was challenged.
+[2024-03-26 17:16:04.142 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Resignation application/json 212 - 401 0 - 934.4412ms
+[2024-03-26 17:19:23.880 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 75
+[2024-03-26 17:19:23.913 +01:00  INF]  CORS policy execution successful.
+[2024-03-26 17:19:23.927 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2024-03-26 17:19:23.987 +01:00  INF]  Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(hrms_be_backend_data.ViewModel.LoginModel) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2024-03-26 17:19:24.367 +01:00  ERR]  Exception || UsersServices (Login)=====>System.FormatException: The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.
+   at System.Convert.FromBase64CharPtr(Char* inputPtr, Int32 inputLength)
+   at System.Convert.FromBase64String(String s)
+   at hrms_be_backend_business.Logic.AuthService.Login(LoginModel login, String ipAddress, String port) in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\Logic\AuthService.cs:line 63
+[2024-03-26 17:19:24.385 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[hrms_be_backend_data.ViewModel.LoginResponse, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[2024-03-26 17:19:24.401 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api) in 402.5634ms
+[2024-03-26 17:19:24.406 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.AuthController.Login (hrms-be-backend-api)'
+[2024-03-26 17:19:24.409 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Auth/Login application/json 75 - 200 - application/json;+charset=utf-8 530.6224ms
+[2024-03-26 17:20:39.149 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Auth/Logout application/json 45
+[2024-03-26 17:20:39.169 +01:00  INF]  CORS policy execution successful.
+[2024-03-26 17:20:39.173 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.AuthController.Logout (hrms-be-backend-api)'
+[2024-03-26 17:20:39.189 +01:00  INF]  Route matched with {action = "Logout", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Logout(hrms_be_backend_data.RepoPayload.LogoutDto) on controller hrms_be_backend_api.Controllers.AuthController (hrms-be-backend-api).
+[2024-03-26 17:20:39.304 +01:00  ERR]  Exception Occured: Logout ==> The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.
+[2024-03-26 17:20:39.309 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_data.ViewModel.BaseResponse'.
+[2024-03-26 17:20:39.316 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.AuthController.Logout (hrms-be-backend-api) in 122.611ms
+[2024-03-26 17:20:39.319 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.AuthController.Logout (hrms-be-backend-api)'
+[2024-03-26 17:20:39.322 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Auth/Logout application/json 45 - 200 - application/json;+charset=utf-8 172.3028ms
+[2024-03-26 17:33:50.994 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-26 17:33:51.400 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-03-26 17:33:51.404 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-26 17:33:51.405 +01:00  INF]  Hosting environment: Development
+[2024-03-26 17:33:51.407 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-26 17:33:54.967 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-03-26 17:33:55.789 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 824.2782ms
+[2024-03-26 17:33:55.808 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-03-26 17:33:55.812 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-03-26 17:33:55.822 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 9.3993ms
+[2024-03-26 17:33:55.851 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 43.2291ms
+[2024-03-26 17:33:56.053 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-03-26 17:33:56.692 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 638.4015ms
+[2024-03-26 17:34:42.347 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation application/json 212
+[2024-03-26 17:34:42.401 +01:00  INF]  CORS policy execution successful.
+[2024-03-26 17:34:42.410 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-03-26 17:34:42.829 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-03-26 17:34:42.890 +01:00  INF]  Route matched with {action = "SubmitResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignation(Com.XpressPayments.Common.ViewModels.ResignationRequestVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-03-26 17:35:30.323 +01:00  ERR]  AccountRepository -> VerifyUser => System.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: TCP Provider, error: 0 - A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.)
+ ---> System.ComponentModel.Win32Exception (10060): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+   at System.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken)
+   at System.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at System.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at System.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at System.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   at System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   at System.Data.SqlClient.SqlConnection.Open()
+   at hrms_be_backend_data.Repository.DapperGenericRepository.Get[T](String sp, DynamicParameters parms, CommandType commandType) in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-data\Repository\DapperGenericRepository.cs:line 68
+   at hrms_be_backend_data.Repository.AccountRepository.VerifyUser(String Token, String LoggedInWithIPAddress, DateTime DateCreated) in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-data\Repository\AccountRepository.cs:line 100
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number:10060,State:0,Class:20
+[2024-03-26 17:35:30.327 +01:00  ERR]  AuthService || (VerifyUser)  Unable to verify access =====>Unable to submit this detail, kindly contact support
+[2024-03-26 17:38:45.219 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-26 17:38:45.553 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-03-26 17:38:45.559 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-26 17:38:45.561 +01:00  INF]  Hosting environment: Development
+[2024-03-26 17:38:45.562 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-26 17:38:49.247 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-03-26 17:38:50.202 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 958.8398ms
+[2024-03-26 17:38:50.222 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-03-26 17:38:50.223 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-03-26 17:38:50.230 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 6.7932ms
+[2024-03-26 17:38:50.269 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 46.3792ms
+[2024-03-26 17:38:50.437 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-03-26 17:38:51.333 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 895.3809ms
+[2024-03-26 17:39:43.437 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation application/json 212
+[2024-03-26 17:39:43.458 +01:00  INF]  CORS policy execution successful.
+[2024-03-26 17:39:43.466 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-03-26 17:39:43.727 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-03-26 17:39:43.810 +01:00  INF]  Route matched with {action = "SubmitResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignation(Com.XpressPayments.Common.ViewModels.ResignationRequestVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-03-26 17:40:00.952 +01:00  INF]  IncomingRequest TraceID --- 0dfe0436-9e6f-4040-9029-9f98ab1fc1e5 Body ---- {"StaffName":"Noble","EmployeeId":101,"Date":"2024-03-26T16:39:19.305Z","ReasonForResignation":"vacation","LastDayOfWork":"2024-03-29T16:39:19.305Z","fileName":"string","CompanyID":2}
+[2024-03-26 17:41:57.210 +01:00  ERR]  MethodName: CreateResignation(ResignationDTO resignation) => A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: TCP Provider, error: 0 - A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.)
+[2024-03-26 17:41:57.273 +01:00  ERR]  Error Submitting resignation
+[2024-03-26 17:41:57.282 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-03-26 17:41:57.290 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api) in 133472.7148ms
+[2024-03-26 17:41:57.295 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-03-26 17:41:57.296 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Resignation application/json 212 - 200 - application/json;+charset=utf-8 133858.6261ms
+[2024-03-26 17:42:01.313 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation application/json 212
+[2024-03-26 17:42:01.328 +01:00  INF]  CORS policy execution successful.
+[2024-03-26 17:42:01.333 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-03-26 17:42:01.359 +01:00  INF]  Route matched with {action = "SubmitResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignation(Com.XpressPayments.Common.ViewModels.ResignationRequestVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-03-26 17:42:11.847 +01:00  INF]  IncomingRequest TraceID --- 827a1966-fccb-4690-9b54-bbbbfa50f834 Body ---- {"StaffName":"Noble","EmployeeId":101,"Date":"2024-03-26T16:39:19.305Z","ReasonForResignation":"vacation","LastDayOfWork":"2024-03-29T16:39:19.305Z","fileName":"string","CompanyID":2}
+[2024-03-26 17:46:08.816 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-26 17:46:09.124 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-03-26 17:46:09.128 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-26 17:46:09.129 +01:00  INF]  Hosting environment: Development
+[2024-03-26 17:46:09.130 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-26 17:46:12.363 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-03-26 17:46:12.706 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 344.1800ms
+[2024-03-26 17:46:12.731 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-03-26 17:46:12.735 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-03-26 17:46:12.755 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 27.9752ms
+[2024-03-26 17:46:12.788 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 52.6889ms
+[2024-03-26 17:46:12.902 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-03-26 17:46:13.339 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 435.7302ms
+[2024-03-26 17:46:50.277 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation application/json 232
+[2024-03-26 17:46:50.289 +01:00  INF]  CORS policy execution successful.
+[2024-03-26 17:46:50.291 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-03-26 17:46:50.401 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-03-26 17:46:50.431 +01:00  INF]  Route matched with {action = "SubmitResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignation(Com.XpressPayments.Common.ViewModels.ResignationRequestVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-03-26 17:46:54.165 +01:00  INF]  IncomingRequest TraceID --- e9326793-4687-4e1d-a3e5-5d880d0a2847 Body ---- {"StaffName":"noble","EmployeeId":101,"StaffId":"101","Date":"2024-03-26T16:46:28.682Z","ReasonForResignation":"vacation","LastDayOfWork":"2024-03-29T16:46:28.682Z","fileName":"string","CompanyID":2}

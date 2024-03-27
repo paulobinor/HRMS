@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace hrms_be_backend_business.Logic
 {
@@ -85,7 +86,7 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
 
-                payload.EmployeeId = accessUser.data.EmployeeId;
+                payload.EmployeeId = accessUser.data.UserId;
 
                 var resignation = new ResignationDTO
                 {
@@ -94,10 +95,12 @@ namespace hrms_be_backend_business.Logic
                     CompanyID = payload.CompanyID,
                     DateCreated = DateTime.Now,
                     CreatedByUserId = accessUser.data.UserId,
+                    ResumptionDate  = payload.ResumptionDate,
                     LastDayOfWork = payload.LastDayOfWork,
                     EmployeeId = payload.EmployeeId,
                     ReasonForResignation = payload.ReasonForResignation,
-                    SignedResignationLetter = payload.fileName
+                    SignedResignationLetter = payload.fileName,
+                    StaffID = payload.StaffId
                 };
 
 
@@ -108,10 +111,10 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                var submittedresignation = _resignationRepository.GetResignationByID(resp);
+                var submittedresignation = await _resignationRepository.GetResignationByID(resp);
 
                 //Send mail to Hod/UnitHead
-                if(submittedresignation.UnitHeadEmployeeID == null)
+                if (submittedresignation.UnitHeadEmployeeID <= 0)
                 {
                     _mailService.SendResignationApproveMailToApprover(submittedresignation.HodEmployeeID, submittedresignation.EmployeeId, submittedresignation.ExitDate);
                 }
@@ -228,7 +231,7 @@ namespace hrms_be_backend_business.Logic
 
         public async Task<ExecutedResult<ResignationDTO>> GetResignationByID(long ID, string AccessKey, string RemoteIpAddress)
         {
-       
+
             var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
             if (accessUser.data == null)
             {

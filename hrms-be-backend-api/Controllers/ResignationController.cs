@@ -12,7 +12,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+   // [Authorize]
     public class ResignationController : ControllerBase
     {
         private readonly ILogger<ResignationController> _logger;
@@ -24,6 +24,8 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             _resignationService = resignationService;
         }
         [HttpPost]
+        [Route("SubmitResignation")]
+        [Authorize]
         public async Task<IActionResult> SubmitResignation(ResignationRequestVM request)
         {
           

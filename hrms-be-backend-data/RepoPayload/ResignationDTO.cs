@@ -11,6 +11,7 @@ namespace Com.XpressPayments.Common.ViewModels
         public long ResignationID { get; set; }
         public long EmployeeId { get; set; }
         public string StaffName { get; set; }
+        public DateTime ResumptionDate { get; set; }
         public string StaffID { get; set; }
         public DateTime ExitDate { get; set; }
         public string ReasonForResignation { get; set; }
