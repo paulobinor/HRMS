@@ -262,7 +262,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<ExecutedResult<ResignationDTO>> GetResignationByUserID(long UserID, string AccessKey, string RemoteIpAddress)
+        public async Task<ExecutedResult<ResignationDTO>> GetResignationByEmployeeID(long EmployeeId, string AccessKey, string RemoteIpAddress)
         {
             var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
             if (accessUser.data == null)
@@ -273,7 +273,7 @@ namespace hrms_be_backend_business.Logic
             try
             {
 
-                var resignation = await _resignationRepository.GetResignationByUserID(UserID);
+                var resignation = await _resignationRepository.GetResignationByEmployeeID(EmployeeId);
 
                 if (resignation == null)
                 {
@@ -408,13 +408,13 @@ namespace hrms_be_backend_business.Logic
         //    }
         //}
 
-        public async Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetPendingResignationByUserID(long userID, string AccessKey, string RemoteIpAddress)
+        public async Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetPendingResignationByEmployeeID(long EmployeeId, string AccessKey, string RemoteIpAddress)
         {
 
             try
             {
 
-                var PendingResignation = await _resignationRepository.GetPendingResignationByUserID(userID);
+                var PendingResignation = await _resignationRepository.GetPendingResignationByEmployeeID(EmployeeId);
 
                 if (PendingResignation == null)
                 {

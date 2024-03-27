@@ -8,12 +8,12 @@ namespace hrms_be_backend_data.IRepository
         Task<dynamic> CreateResignation(ResignationDTO request);
         Task<dynamic> UpdateResignation(UpdateResignationDTO resignation);
         Task<ResignationDTO> GetResignationByID(long ID);
-        Task<ResignationDTO> GetResignationByUserID(long UserID);
+        Task<ResignationDTO> GetResignationByEmployeeID(long UserID);
         Task<IEnumerable<ResignationDTO>> GetResignationByCompanyID(long companyID, int PageNumber, int RowsOfPage, string SearchVal);
        // Task<IEnumerable<ResignationDTO>> GetAllResignations();
 
         //Task<dynamic> DeleteResignation(long ID, string deletedBy, string deleteReason);
-        Task<IEnumerable<ResignationDTO>> GetPendingResignationByUserID(long userID);
+        Task<IEnumerable<ResignationDTO>> GetPendingResignationByEmployeeID(long userID);
         Task<string> ApprovePendingResignation(long userID, long ResignationId);
         Task<string> DisapprovePendingResignation(long userID, long ResignationId, string reason);
         

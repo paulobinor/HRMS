@@ -100,12 +100,12 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<ResignationDTO> GetResignationByUserID(long UserID)
+        public async Task<ResignationDTO> GetResignationByEmployeeID(long employeeID)
         {
             try
             {
                 var param = new DynamicParameters();
-                param.Add("UserID", UserID);
+                param.Add("employeeID", employeeID);
 
                 var response = await _dapper.Get<ResignationDTO>("Sp_get_resignation_by_user", param, commandType: CommandType.StoredProcedure);
 
@@ -113,7 +113,7 @@ namespace hrms_be_backend_data.Repository
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error Getting Resignation by UserID - {UserID}", ex);
+                _logger.LogError($"Error Getting Resignation by UserID - {employeeID}", ex);
                 throw;
             }
         }
@@ -185,12 +185,12 @@ namespace hrms_be_backend_data.Repository
         //}
 
 
-        public async Task<IEnumerable<ResignationDTO>> GetPendingResignationByUserID(long userID)
+        public async Task<IEnumerable<ResignationDTO>> GetPendingResignationByEmployeeID(long employeeID)
         {
             try
             {
                 var param = new DynamicParameters();
-                param.Add("UserID", userID);
+                param.Add("employeeID", employeeID);
 
                 var response = await _dapper.GetAll<ResignationDTO>("Sp_GetPendingResignationByUserID", param, commandType: CommandType.StoredProcedure);
 

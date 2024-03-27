@@ -96,9 +96,9 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
 
         [HttpGet]
-        [Route("GetResignationByUserID/{userID}")]
+        [Route("GetResignationByEmployeeID/{EmployeeID}")]
         [Authorize]
-        public async Task<IActionResult> GetResignationByUserID(long userID)
+        public async Task<IActionResult> GetResignationByEmployeeID(long EmployeeID)
         {
            
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -108,7 +108,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-            return Ok(await _resignationService.GetResignationByUserID(userID, accessToken, RemoteIpAddress));
+            return Ok(await _resignationService.GetResignationByEmployeeID(EmployeeID, accessToken, RemoteIpAddress));
             
            
         }
@@ -169,9 +169,9 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
         //}
 
         [HttpGet]
-        [Route("GetPendingResignationByUserID/{userID}")]
+        [Route("GetPendingResignationByEmployeeID/{employeeID}")]
         [Authorize]
-        public async Task<IActionResult> GetPendingResignationByUserID(long userID)
+        public async Task<IActionResult> GetPendingResignationByEmployeeID(long employeeID)
         {
            
                 var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -181,7 +181,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
                 var accessToken = Request.Headers["Authorization"];
                 accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _resignationService.GetPendingResignationByUserID(userID, accessToken, RemoteIpAddress));
+                return Ok(await _resignationService.GetPendingResignationByEmployeeID(employeeID, accessToken, RemoteIpAddress));
             
 
         }
