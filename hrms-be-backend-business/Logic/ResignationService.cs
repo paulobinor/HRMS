@@ -70,11 +70,6 @@ namespace hrms_be_backend_business.Logic
                     isModelStateValidate = false;
                     validationMessage += "  Resignation reason is required";
                 }
-                if (string.IsNullOrWhiteSpace(payload.StaffName))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  Staff name is required";
-                }
 
                 if (string.IsNullOrEmpty(payload.fileName))
                 {
@@ -90,7 +85,6 @@ namespace hrms_be_backend_business.Logic
 
                 var resignation = new ResignationDTO
                 {
-                    StaffName = payload.StaffName,
                     ExitDate = payload.Date,
                     CompanyID = payload.CompanyID,
                     DateCreated = DateTime.Now,
@@ -100,7 +94,7 @@ namespace hrms_be_backend_business.Logic
                     EmployeeId = payload.EmployeeId,
                     ReasonForResignation = payload.ReasonForResignation,
                     SignedResignationLetter = payload.fileName,
-                    StaffID = payload.StaffId
+                    //StaffID = payload.StaffId
                 };
 
 

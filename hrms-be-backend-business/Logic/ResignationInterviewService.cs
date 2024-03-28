@@ -120,11 +120,7 @@ namespace hrms_be_backend_business.Logic
                     ResignationId = payload.ResignationId,
                     ReasonForResignation = payload.ReasonForResignation,
                     OtherRemarks = payload.OtherRemarks,
-                    OfficialEmail = payload.OfficialEmail,
-                    FirstName = payload.FirstName,  
-                    MiddleName = payload.MiddleName,
-                    LastName = payload.LastName,
-                    HrEmployeeId = payload.HrEmployeeId,
+                   // OfficialEmail = payload.OfficialEmail,
                     Signature = payload.Signature,
                     
                 };
@@ -245,6 +241,40 @@ namespace hrms_be_backend_business.Logic
                 response.ResponseMessage = $"Exception Occured: GetResignationInterviewDetails(long SRFID) ==> {ex.Message}";
                 response.Data = null;
                 return response;
+            }
+        }
+
+        public async Task<ExecutedResult<ResignationInterviewDTO>> GetResignationInterviewByEmployeeID(long EmployeeId, string AccessKey, string RemoteIpAddress)
+        {
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+            }
+            try
+            {
+
+                var resignation = await _resignationInterviewRepository.GetResignationInterviewByEmployeeID(EmployeeId);
+
+                if (resignation == null)
+                {
+                    return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+
+                }
+
+                //update action performed into audit log here
+
+                _logger.LogInformation("Resignation fetched successfully.");
+                return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = resignation };
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetResignationByUserID(long UserID) ==> {ex.Message}");
+                return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+
             }
         }
 

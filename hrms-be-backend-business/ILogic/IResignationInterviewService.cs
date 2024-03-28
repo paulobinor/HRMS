@@ -9,6 +9,7 @@ namespace hrms_be_backend_business.ILogic
     {
         Task<ExecutedResult<string>> SubmitResignationInterview( ResignationInterviewVM payload, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<ResignationInterviewDTO>> GetResignationInterviewById(long ResignationInterviewId, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<ResignationInterviewDTO>> GetResignationInterviewByEmployeeID(long EmployeeId, string AccessKey, string RemoteIpAddress);
         Task<BaseResponse> GetResignationInterviewDetails(long InterviewID, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<IEnumerable<ResignationInterviewDTO>>> GetAllResignationInterviewsByCompany(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress);
 

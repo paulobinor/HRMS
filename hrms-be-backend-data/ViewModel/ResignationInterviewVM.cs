@@ -13,17 +13,11 @@ namespace Com.XpressPayments.Common.ViewModels
 
         public long EmployeeId { get; set; }
         public int ResignationId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string MiddleName { get; set; }
-        public string OfficialEmail { get; set; }
-        public DateTime DateCreated { get; set; }
-        public long CreatedByUserId { get; set; }
+        //public string OfficialEmail { get; set; }
         public string ReasonForResignation { get; set; }
         public DateTime ExitDate { get; set; }
         public string OtherRemarks { get; set; }
         public string Signature { get; set; }
-        public long HrEmployeeId { get; set; }
         public DateTime Date { get; set; }
         public string WhatDidYouLikeMostAboutTheCompanyAndYourJob { get; set; }
         public string WhatDidYouLeastLikeAboutTheCompanyAndYourJob { get; set; }

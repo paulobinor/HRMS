@@ -27,10 +27,10 @@ namespace hrms_be_backend_data.Repository
             {
                 var param = new DynamicParameters();
                 param.Add("EmployeeID", resignation.EmployeeID);
-                param.Add("FirstName", resignation.FirstName);
-                param.Add("LastName", resignation.LastName);
-                param.Add("MiddleName", resignation.MiddleName);
-                param.Add("PreferredName", resignation.PreferredName);
+                //param.Add("FirstName", resignation.FirstName);
+                //param.Add("LastName", resignation.LastName);
+                //param.Add("MiddleName", resignation.MiddleName);
+                //param.Add("PreferredName", resignation.PreferredName);
                 param.Add("ResignationID", resignation.ResignationID);
                 param.Add("CompanyID", resignation.CompanyID);
                 param.Add("ItemsReturnedToDepartment", resignation.ItemsReturnedToDepartment);
@@ -77,7 +77,7 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-        public async Task<ResignationClearanceDTO> GetResignationClearanceByUserID(long UserID)
+        public async Task<ResignationClearanceDTO> GetResignationClearanceByEmployeeID(long EmployeeId)
         {
             try
             {
@@ -85,16 +85,16 @@ namespace hrms_be_backend_data.Repository
                 {
 
                     var param = new DynamicParameters();
-                    param.Add("EmployeeID", UserID);
+                    param.Add("EmployeeID", EmployeeId);
 
-                    var response = (await _dapper.QueryAsync<ResignationClearanceDTO>("Sp_get_resignation_clearance_by_user_id", param: param, commandType: CommandType.Text)).FirstOrDefault();
+                    var response = (await _dapper.QueryAsync<ResignationClearanceDTO>("Sp_get_resignation_clearance_by_employee_id", param: param, commandType: CommandType.Text)).FirstOrDefault();
 
                     return response;
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error Getting Resignation Clearance by UserID - {UserID}", ex);
+                _logger.LogError($"Error Getting Resignation Clearance by UserID - {EmployeeId}", ex);
                 throw;
             }
         }

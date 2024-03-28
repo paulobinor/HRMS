@@ -1,5 +1,6 @@
 ﻿using Com.XpressPayments.Common.ViewModels;
 using hrms_be_backend_business.ILogic;
+using hrms_be_backend_business.Logic;
 using hrms_be_backend_common.Communication;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.RepoPayload;
@@ -88,6 +89,23 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             
         }
 
+        [HttpGet]
+        [Route("GetResignationInterviewByEmployeeID/{EmployeeID}")]
+        [Authorize]
+        public async Task<IActionResult> GetResignationInterviewByEmployeeID(long EmployeeID)
+        {
+
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return Ok(await _resignationInterviewService.GetResignationInterviewByEmployeeID(EmployeeID, accessToken, RemoteIpAddress));
+
+
+        }
 
         //[HttpGet]
         //public async Task<IActionResult> GetInterviewScaleDetails()

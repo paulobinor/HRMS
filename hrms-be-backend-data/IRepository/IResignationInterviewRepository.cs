@@ -13,6 +13,7 @@ namespace hrms_be_backend_data.IRepository
     {
         Task<dynamic> CreateResignationInterview(ResignationInterviewDTO resignation, DataTable sectionOne, DataTable sectionTwo);
         Task<ResignationInterviewDTO> GetResignationInterviewById(long ResignationInterviewId);
+        Task<ResignationInterviewDTO> GetResignationInterviewByEmployeeID(long EmployeeId);
         Task<List<InterviewScaleValue>> GetResignationInterviewDetails(long InterviewID);
         Task<IEnumerable<ResignationInterviewDTO>> GetAllResignationInterviewsByCompany(long companyID, int PageNumber, int RowsOfPage, string SearchVal);
 

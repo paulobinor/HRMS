@@ -376,3 +376,16 @@ DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
 [2024-03-27 12:07:31.344 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationController.GetResignationByEmployeeID (hrms-be-backend-api) in 549.3722ms
 [2024-03-27 12:07:31.347 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.GetResignationByEmployeeID (hrms-be-backend-api)'
 [2024-03-27 12:07:31.349 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/api/Resignation/GetResignationByEmployeeID/101 - - - 200 - application/json;+charset=utf-8 576.4424ms
+[2024-03-27 17:42:34.765 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-03-27 17:42:35.641 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-03-27 17:42:35.647 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-03-27 17:42:35.649 +01:00  INF]  Hosting environment: Development
+[2024-03-27 17:42:35.650 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-03-27 17:42:36.994 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-03-27 17:42:37.954 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 962.4188ms
+[2024-03-27 17:42:37.969 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-03-27 17:42:38.048 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-03-27 17:42:38.049 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 79.5543ms
+[2024-03-27 17:42:38.147 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 97.4242ms
+[2024-03-27 17:42:38.259 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-03-27 17:42:38.880 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 620.4894ms

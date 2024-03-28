@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using Com.XpressPayments.Common.ViewModels;
+using Dapper;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using Microsoft.Extensions.Configuration;
@@ -10,13 +11,13 @@ namespace hrms_be_backend_data.Repository
     public class ResignationInterviewRepository : IResignationInterviewRepository
     {
         private string _connectionString;
-        private readonly IDapperGenericRepository _repository;
+        private readonly IDapperGenericRepository _dapper;
         private readonly ILogger<ResignationInterviewRepository> _logger;
         private readonly IConfiguration _configuration;
         public ResignationInterviewRepository(ILogger<ResignationInterviewRepository> logger, IConfiguration configuration, IDapperGenericRepository repository)
         {
             _logger = logger;
-            _repository = repository;
+            _dapper = repository;
             _configuration = configuration;
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
@@ -28,9 +29,6 @@ namespace hrms_be_backend_data.Repository
                 param.Add("EmployeeID", resignation.EmployeeId);
                 param.Add("CompanyID", resignation.CompanyId);
                 param.Add("@ResignationID", resignation.ResignationId);
-                param.Add("FirstName", resignation.FirstName);
-                param.Add("MiddleName", resignation.MiddleName);
-                param.Add("LastName", resignation.LastName);
                 param.Add("DateCreated", resignation.DateCreated);
                 param.Add("ExitDate", resignation.ExitDate);
                 param.Add("CreatedByUserId", resignation.CreatedByUserId);
@@ -48,7 +46,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("SectionOne", sectionOne.AsTableValuedParameter("InterviewDetailsSectionType"));
                 param.Add("SectionTwo", sectionTwo.AsTableValuedParameter("InterviewDetailsSectionType"));
 
-                var resp = await _repository.BulkInsert<dynamic>(param, "Sp_SubmitResignationInterview");
+                var resp = await _dapper.BulkInsert<dynamic>(param, "Sp_SubmitResignationInterview");
 
                 return resp;
 
@@ -68,7 +66,7 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
                 param.Add("ResignationInterviewID", ResignationInterviewID);
 
-                var response = (await _repository.Get<ResignationInterviewDTO>("Sp_get_resignation_interview", param, commandType: CommandType.Text));
+                var response = (await _dapper.Get<ResignationInterviewDTO>("Sp_get_resignation_interview", param, commandType: CommandType.Text));
 
                 return response;
 
@@ -87,7 +85,7 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
                 param.Add("InterviewID", InterviewID);
 
-                var response = (await _repository.GetAll<InterviewScaleValue>("Sp_get_resignation_interview_details", param, commandType: CommandType.Text));
+                var response = (await _dapper.GetAll<InterviewScaleValue>("Sp_get_resignation_interview_details", param, commandType: CommandType.Text));
 
                 return response;
 
@@ -111,7 +109,7 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@PageNumber", PageNumber);
                     param.Add("@RowsOfPage", RowsOfPage);
                     param.Add("@SearchVal", SearchVal.ToLower());
-                    var response = (await _repository.GetAll<ResignationInterviewDTO>("Sp_get_all_resignation_interview", param, commandType: CommandType.Text)).ToList();
+                    var response = (await _dapper.GetAll<ResignationInterviewDTO>("Sp_get_all_resignation_interview", param, commandType: CommandType.Text)).ToList();
 
                     return response;
                 }
@@ -122,6 +120,25 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+
+        public async Task<ResignationInterviewDTO> GetResignationInterviewByEmployeeID(long employeeID)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("employeeID", employeeID);
+
+                var response = await _dapper.Get<ResignationInterviewDTO>("Sp_get_resignation_interview_by_user", param, commandType: CommandType.StoredProcedure);
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error Getting Resignation by UserID - {employeeID}", ex);
+                throw;
+            }
+        }
+
 
         //public async Task<List<InterviewScaleDetailsDTO>> GetInterviewScaleDetails()
         //{

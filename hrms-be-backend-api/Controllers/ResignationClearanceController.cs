@@ -60,9 +60,9 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         }
         [HttpGet]
-        [Route("GetResignationByUserID/{userID}")]
+        [Route("GetResignationClearanceByEmployeeId/{EmployeeId}")]
         [Authorize]
-        public async Task<IActionResult> GetResignationClearanceByUserID(long userID)
+        public async Task<IActionResult> GetResignationClearanceByEmployeeId(long EmployeeId)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -71,7 +71,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-            return Ok(await _resignationClearanceService.GetResignationClearanceByUserID(userID, accessToken, RemoteIpAddress));
+            return Ok(await _resignationClearanceService.GetResignationClearanceByEmployeeID(EmployeeId, accessToken, RemoteIpAddress));
 
         }
 

@@ -65,10 +65,10 @@ namespace hrms_be_backend_business.Logic
                 {
                     EmployeeID = accessUser.data.EmployeeId,
                     CompanyID = payload.CompanyID,
-                    FirstName = payload.FirstName,
-                    LastName = payload.LastName,
-                    MiddleName = payload.MiddleName,
-                    PreferredName = payload.PreferredName,
+                    //FirstName = payload.FirstName,
+                    //LastName = payload.LastName,
+                    //MiddleName = payload.MiddleName,
+                    //PreferredName = payload.PreferredName,
                     Signature = payload.Signature,
                     ReasonForExit = payload.ReasonForExit,
                     ResignationID = payload.ResignationID,
@@ -131,7 +131,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<ExecutedResult<ResignationClearanceDTO>> GetResignationClearanceByUserID(long UserID, string AccessKey, string RemoteIpAddress)
+        public async Task<ExecutedResult<ResignationClearanceDTO>> GetResignationClearanceByEmployeeID(long EmployeeId, string AccessKey, string RemoteIpAddress)
         {
             var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
             if (accessUser.data == null)
@@ -141,7 +141,7 @@ namespace hrms_be_backend_business.Logic
             try
             {
 
-                var resignation = await _resignationClearanceRepository.GetResignationClearanceByUserID(UserID);
+                var resignation = await _resignationClearanceRepository.GetResignationClearanceByEmployeeID(EmployeeId);
 
                 if (resignation == null)
                 {
