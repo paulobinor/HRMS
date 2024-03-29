@@ -67,10 +67,39 @@ namespace hrms_be_backend_business.Logic
 
 
                 //Check maximum split count
+                var leaveRequestLineItems = await _leaveRequestRepository.GetLeaveRequestLineItems(empLeaveRequestInfo.LeaveRequestId);
+                if (leaveRequestLineItems.Count > 0)
+                {
+                    var gradeLeave = await _leaveRequestRepository.GradeLeave(leaveRequestLineItem.EmployeeId);
 
-                //Check number of days left
+                    //Check number of days left
+                    var noOfDaysTaken = leaveRequestLineItems.Sum(x => x.LeaveLength);
 
+                    if (gradeLeave.NumbersOfDays <= (noOfDaysTaken + leaveRequestLineItem.LeaveLength)) 
+                    {
+                        response.ResponseCode = "08";
+                        response.ResponseMessage = "Leave length exceeded";
+                        return response;
+
+                    }
+
+                    if (gradeLeave.NumberOfVacationSplit < (leaveRequestLineItems.Count + 1)) //include proposed leave
+                    {
+                        response.ResponseCode = "08";
+                        response.ResponseMessage = "vacation split count exceeded";
+                        return response;
+                    }
+                }
+
+                var leaveAproval = await _leaveRequestRepository.GetLeaveApprovalInfoByEmployeeId(leaveRequestLineItem.EmployeeId);
                 //check if any pending leave approvals
+                if (leaveAproval != null)
+                {
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "pending leave detected";
+                    response.Data = leaveAproval;
+                    return response;
+                }
 
                 leaveRequestLineItem.LeaveRequestId = empLeaveRequestInfo.LeaveRequestId;
                 var res = await _leaveRequestRepository.CreateLeaveRequestLineItem(leaveRequestLineItem);

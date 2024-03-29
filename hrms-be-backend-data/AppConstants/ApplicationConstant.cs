@@ -62,6 +62,9 @@
         public static string Sp_GetLeaveApprovalByRequestItem = "Sp_GetLeaveApprovalByRequestItem";
         public static string Sp_GetLeaveApprovalLineItem = "Sp_GetLeaveApprovalLineItem";
         public static string Sp_UpdateLeaveApproval = "Sp_UpdateLeaveApproval";
+        public static string Sp_GetLeaveRequestLineItems { get; set; } = "Sp_GetLeaveRequestLineItems";
+        public static string Sp_GetGradeLeave { get;  set; } = "Sp_GetGradeLeave";
+        public static string Sp_GetLeaveApprovalByEmployeeId { get; set; } = "Sp_GetLeaveApprovalByEmployeeId";
 
 
         //System Default
@@ -81,5 +84,6 @@
         public static string Sp_TrainingSchedule = "Sp_TrainingSchedule";
         public static string Sp_TrainingInduction = "Sp_TrainingInduction";
         public static string Sp_TrainingFeedbackForm = "Sp_TrainingFeedbackForm";
+
     }
 }
