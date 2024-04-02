@@ -36,7 +36,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             //    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
             //    Port = Request.HttpContext.Connection.RemotePort.ToString()
             //};
-            var res = await _leaveRequestService.CreateLeaveRequest(leaveRequestLineItem);
+            var res = await _leaveRequestService.CreateLeaveRequestLineItem(leaveRequestLineItem);
             return Ok(res);
         }
 
@@ -130,182 +130,182 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
 
         #region Depricated
-        [HttpPost("DisaproveLeaveRequest")]
-        [Authorize]
-        public async Task<IActionResult> DisaproveLeaveRequest([FromBody] LeaveRequestDisapproved payload)
-        {
-            var response = new BaseResponse();
-            var requester = new RequesterInfo
-            {
-                Username = this.User.Claims.ToList()[2].Value,
-                UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                Port = Request.HttpContext.Connection.RemotePort.ToString()
-            };
+        //[HttpPost("DisaproveLeaveRequest")]
+        //[Authorize]
+        //public async Task<IActionResult> DisaproveLeaveRequest([FromBody] LeaveRequestDisapproved payload)
+        //{
+        //    var response = new BaseResponse();
+        //    var requester = new RequesterInfo
+        //    {
+        //        Username = this.User.Claims.ToList()[2].Value,
+        //        UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+        //        RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+        //        IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+        //        Port = Request.HttpContext.Connection.RemotePort.ToString()
+        //    };
 
-            return Ok(await _leaveRequestService.DisaproveLeaveRequest(payload, requester));
-        }
+        //    return Ok(await _leaveRequestService.DisaproveLeaveRequest(payload, requester));
+        //}
 
-        [Authorize]
-        [HttpGet("GetAllLeaveRequest")]
-        public async Task<IActionResult> GetAllLeaveRequest()
-        {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+        //[Authorize]
+        //[HttpGet("GetAllLeaveRequest")]
+        //public async Task<IActionResult> GetAllLeaveRequest()
+        //{
+        //    var response = new BaseResponse();
+        //    try
+        //    {
+        //        var requester = new RequesterInfo
+        //        {
+        //            Username = this.User.Claims.ToList()[2].Value,
+        //            UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+        //            RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+        //            IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+        //            Port = Request.HttpContext.Connection.RemotePort.ToString()
+        //        };
 
-                return Ok(await _leaveRequestService.GetAllLeaveRquest(requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: Controller Method : GetAllLeaveRequest ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllLeaveRequest ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-        }
+        //        return Ok(await _leaveRequestService.GetAllLeaveRquest(requester));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Exception Occured: Controller Method : GetAllLeaveRequest ==> {ex.Message}");
+        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+        //        response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllLeaveRequest ==> {ex.Message}";
+        //        response.Data = null;
+        //        return Ok(response);
+        //    }
+        //}
 
-        [Authorize]
-        [HttpGet("GetLeaveRequestbyId")]
-        public async Task<IActionResult> GetLeaveRequestbyId(long LeaveRequestID)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+        //[Authorize]
+        //[HttpGet("GetLeaveRequestbyId")]
+        //public async Task<IActionResult> GetLeaveRequestbyId(long LeaveRequestID)
+        //{
+        //    var response = new BaseResponse();
+        //    try
+        //    {
+        //        var requester = new RequesterInfo
+        //        {
+        //            Username = this.User.Claims.ToList()[2].Value,
+        //            UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+        //            RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+        //            IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+        //            Port = Request.HttpContext.Connection.RemotePort.ToString()
+        //        };
 
-                return Ok(await _leaveRequestService.GetLeaveRequsetById(LeaveRequestID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetLeaveRequestbyId ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetLeaveRequestbyId ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+        //        return Ok(await _leaveRequestService.GetLeaveRequsetById(LeaveRequestID, requester));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Exception Occured: ControllerMethod : GetLeaveRequestbyId ==> {ex.Message}");
+        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+        //        response.ResponseMessage = $"Exception Occured: ControllerMethod : GetLeaveRequestbyId ==> {ex.Message}";
+        //        response.Data = null;
+        //        return Ok(response);
+        //    }
 
-        }
+        //}
 
-        [Authorize]
-        [HttpGet("GetLeaveRequestbyUserId")]
-        public async Task<IActionResult> GetLeaveRequestbyUserId(long UserId, long CompanyId)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+        //[Authorize]
+        //[HttpGet("GetLeaveRequestbyUserId")]
+        //public async Task<IActionResult> GetLeaveRequestbyUserId(long UserId, long CompanyId)
+        //{
+        //    var response = new BaseResponse();
+        //    try
+        //    {
+        //        var requester = new RequesterInfo
+        //        {
+        //            Username = this.User.Claims.ToList()[2].Value,
+        //            UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+        //            RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+        //            IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+        //            Port = Request.HttpContext.Connection.RemotePort.ToString()
+        //        };
 
-                return Ok(await _leaveRequestService.GetLeaveRequsetByUerId(UserId, CompanyId, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetLeaveRequsetByUerId ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetLeaveRequsetByUerId ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+        //        return Ok(await _leaveRequestService.GetLeaveRequsetByUerId(UserId, CompanyId, requester));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Exception Occured: ControllerMethod : GetLeaveRequsetByUerId ==> {ex.Message}");
+        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+        //        response.ResponseMessage = $"Exception Occured: ControllerMethod : GetLeaveRequsetByUerId ==> {ex.Message}";
+        //        response.Data = null;
+        //        return Ok(response);
+        //    }
 
-        }
+        //}
 
-        [Authorize]
-        [HttpGet("GetLeaveRequestbyCompanyId")]
-        public async Task<IActionResult> GetLeaveRequestbyCompanyId(string RequestYear, long CompanyID)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+        //[Authorize]
+        //[HttpGet("GetLeaveRequestbyCompanyId")]
+        //public async Task<IActionResult> GetLeaveRequestbyCompanyId(string RequestYear, long CompanyID)
+        //{
+        //    var response = new BaseResponse();
+        //    try
+        //    {
+        //        var requester = new RequesterInfo
+        //        {
+        //            Username = this.User.Claims.ToList()[2].Value,
+        //            UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+        //            RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+        //            IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+        //            Port = Request.HttpContext.Connection.RemotePort.ToString()
+        //        };
 
-                return Ok(await _leaveRequestService.GetLeaveRquestbyCompanyId(RequestYear, CompanyID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetLeaveTypebyCompanyId ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetLeaveTypebyCompanyId ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+        //        return Ok(await _leaveRequestService.GetLeaveRquestbyCompanyId(RequestYear, CompanyID, requester));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Exception Occured: ControllerMethod : GetLeaveTypebyCompanyId ==> {ex.Message}");
+        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+        //        response.ResponseMessage = $"Exception Occured: ControllerMethod : GetLeaveTypebyCompanyId ==> {ex.Message}";
+        //        response.Data = null;
+        //        return Ok(response);
+        //    }
 
-        }
-        [Authorize]
-        [HttpGet("GetLeaveRequestPendingApproval")]
-        public async Task<IActionResult> GetLeaveRequestPendingApproval()
-        {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+        //}
+        //[Authorize]
+        //[HttpGet("GetLeaveRequestPendingApproval")]
+        //public async Task<IActionResult> GetLeaveRequestPendingApproval()
+        //{
+        //    var response = new BaseResponse();
+        //    try
+        //    {
+        //        var requester = new RequesterInfo
+        //        {
+        //            Username = this.User.Claims.ToList()[2].Value,
+        //            UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+        //            RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+        //            IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+        //            Port = Request.HttpContext.Connection.RemotePort.ToString()
+        //        };
 
-                return Ok(await _leaveRequestService.GetLeaveRequestPendingApproval(requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetAllLeaveRequest ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetLeaveRequestPendingApproval ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-        }
+        //        return Ok(await _leaveRequestService.getl.GetLeaveRequestPendingApproval(requester));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Exception Occured: ControllerMethod : GetAllLeaveRequest ==> {ex.Message}");
+        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+        //        response.ResponseMessage = $"Exception Occured: ControllerMethod : GetLeaveRequestPendingApproval ==> {ex.Message}";
+        //        response.Data = null;
+        //        return Ok(response);
+        //    }
+        //}
 
 
-        [Authorize]
-        [HttpPost("CreateLeaveRequestOld")]
-        public async Task<IActionResult> CreateLeaveRequestOld([FromBody] LeaveRequestCreate CreateDto)
-        {
-            var response = new BaseResponse();
-            var requester = new RequesterInfo
-            {
-                Username = this.User.Claims.ToList()[2].Value,
-                UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                Port = Request.HttpContext.Connection.RemotePort.ToString()
-            };
+        //[Authorize]
+        //[HttpPost("CreateLeaveRequestOld")]
+        //public async Task<IActionResult> CreateLeaveRequestOld([FromBody] LeaveRequestCreate CreateDto)
+        //{
+        //    var response = new BaseResponse();
+        //    var requester = new RequesterInfo
+        //    {
+        //        Username = this.User.Claims.ToList()[2].Value,
+        //        UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+        //        RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+        //        IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+        //        Port = Request.HttpContext.Connection.RemotePort.ToString()
+        //    };
 
-            return Ok(await _leaveRequestService.CreateLeaveRequest(CreateDto, requester));
-        }
+        //    return Ok(await _leaveRequestService.CreateLeaveRequest(CreateDto, requester));
+        //}
         [HttpPost("RescheduleLeaveRequestOld")]
         [Authorize]
         public async Task<IActionResult> RescheduleLeaveRequestOld([FromBody] RescheduleLeaveRequest updateDto)
@@ -334,22 +334,22 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             }
         }
 
-        [HttpPost("ApproveLeaveRequestOld")]
-        [Authorize]
-        public async Task<IActionResult> ApproveLeaveRequestOld(long LeaveRequestID)
-        {
-            var response = new BaseResponse();
-            var requester = new RequesterInfo
-            {
-                Username = this.User.Claims.ToList()[2].Value,
-                UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                Port = Request.HttpContext.Connection.RemotePort.ToString()
-            };
+        //[HttpPost("ApproveLeaveRequestOld")]
+        //[Authorize]
+        //public async Task<IActionResult> ApproveLeaveRequestOld(long LeaveRequestID)
+        //{
+        //    var response = new BaseResponse();
+        //    var requester = new RequesterInfo
+        //    {
+        //        Username = this.User.Claims.ToList()[2].Value,
+        //        UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+        //        RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+        //        IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+        //        Port = Request.HttpContext.Connection.RemotePort.ToString()
+        //    };
 
-            return Ok(await _leaveRequestService.ApproveLeaveRequest(LeaveRequestID, requester));
-        } 
+        //    return Ok(await _leaveRequestService.ApproveLeaveRequest(LeaveRequestID, requester));
+        //} 
         #endregion
     }
 }

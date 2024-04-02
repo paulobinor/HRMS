@@ -9,10 +9,10 @@ namespace hrms_be_backend_business.ILogic
 {
     public interface ILeaveRequestService
     {
-        Task<BaseResponse> CreateLeaveRequest(LeaveRequestLineItem leaveRequestLineItem);
+        Task<BaseResponse> CreateLeaveRequestLineItem(LeaveRequestLineItem leaveRequestLineItem);
         Task<BaseResponse> RescheduleLeaveRequest(RescheduleLeaveRequest updateDto, RequesterInfo requester);
         Task<BaseResponse> RescheduleLeaveRequest(LeaveRequestLineItem leaveRequestLineItem);
-        Task<BaseResponse> ApproveLeaveRequest(LeaveApprovalLineItem leaveApprovalLineItem);
+        Task<BaseResponse> UpdateLeaveApproveLineItem(LeaveApprovalLineItem leaveApprovalLineItem);
         Task<LeaveRequestLineItem> GetLeaveRequestLineItem(long leaveRequestLineItemId);
         Task<LeaveApprovalInfo> GetLeaveApprovalInfo(long leaveApprovalId, long leaveReqestLineItemId);
         Task<List<EmpLeaveRequestInfo>> GetEmpLeaveInfo(long employeeId, string LeaveStatus, string companyId = null);

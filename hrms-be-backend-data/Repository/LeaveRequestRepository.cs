@@ -7,6 +7,8 @@ using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Data.SqlClient;
 using System.Numerics;
@@ -90,13 +92,18 @@ namespace hrms_be_backend_data.Repository
             {
                 var param = new DynamicParameters();
                 param.Add("@LeaveApprovalLineItemId", leaveApprovalLineItem.LeaveApprovalLineItemId);
-                param.Add("@LeaveApprovalId", leaveApprovalLineItem.LeaveApprovalId);
+                //param.Add("@LeaveApprovalId", leaveApprovalLineItem.LeaveApprovalId);
                 param.Add("@IsApproved", leaveApprovalLineItem.IsApproved);
                 param.Add("@ApprovalEmployeeId", leaveApprovalLineItem.ApprovalEmployeeId);
                 param.Add("@Comments", leaveApprovalLineItem.Comments);
                 param.Add("@EntryDate", leaveApprovalLineItem.EntryDate);
-                return await _dapperGeneric.Get<LeaveApprovalLineItem>(ApplicationConstant.Sp_UpdateLeaveApprovalLineItem, param, commandType: CommandType.StoredProcedure);
 
+                var res = await _dapperGeneric.Get<LeaveApprovalLineItem>(ApplicationConstant.Sp_UpdateLeaveApprovalLineItem, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    return res;
+                }
+                return null;
             }
             catch (Exception ex)
             {
@@ -199,7 +206,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@employeeId", employeeId);
                 //param.Add("@LeavePeriod", LeavePeriod);
 
-                var res = await _dapperGeneric.Get<GradeLeave>(ApplicationConstant.Sp_GetGradeLeave, param, commandType: CommandType.StoredProcedure);
+                var res = await _dapperGeneric.Get<GradeLeave>(ApplicationConstant.Sp_GetEmployeeGradeLeave, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
                     return res;
@@ -327,7 +334,6 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-
         public async Task<LeaveApprovalInfo> UpdateLeaveApprovalInfo(LeaveApprovalInfo leaveApproval)
         {
             try
@@ -336,7 +342,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@ApprovalStatus", leaveApproval.ApprovalStatus);
                 param.Add("@Comments", leaveApproval.Comments);
                 param.Add("@CurrentApprovalCount", leaveApproval.CurrentApprovalCount);
-                //param.Add("@LeavePeriod", LeavePeriod);
+                param.Add("@LeaveApprovalId", leaveApproval.LeaveApprovalId);
 
                 var res = await _dapperGeneric.Get<LeaveApprovalInfo>(ApplicationConstant.Sp_UpdateLeaveApproval, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
@@ -378,7 +384,6 @@ namespace hrms_be_backend_data.Repository
                 return default;
             }
         }
-
 
         public async Task<string> ApproveLeaveRequest(long LeaveRequestID, long ApprovedByUserId)
         {
@@ -662,6 +667,33 @@ namespace hrms_be_backend_data.Repository
             {
                 _logger.LogError($"MethodName: GetLeaveRequestPendingApproval() ===>{ex.Message}");
                 throw;
+            }
+        }
+
+        public async Task<EmpLeaveRequestInfo> UpdateLeaveRequestInfoStatus(EmpLeaveRequestInfo empLeaveRequestInfo)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@LeaveRequestId", empLeaveRequestInfo.LeaveRequestId);
+                param.Add("@LeaveStatus", empLeaveRequestInfo.LeaveStatus);
+                //param.Add("@LeavePeriod", LeavePeriod);
+
+                var res = await _dapperGeneric.Get<EmpLeaveRequestInfo>(ApplicationConstant.Sp_UpdateLeaveRequestInfoStatus, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    _logger.LogInformation($"Successfully update LeaveRequest status. Response: {JsonConvert.SerializeObject(res)}");
+                    return res;
+                }
+
+                _logger.LogError($"Could not update leaverequest status");
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: UpdateLeaveRequestInfoStatus ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
             }
         }
 

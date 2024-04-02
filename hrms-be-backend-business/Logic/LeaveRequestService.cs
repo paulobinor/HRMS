@@ -35,12 +35,14 @@ namespace hrms_be_backend_business.Logic
             _companyrepository = companyrepository;
         }
 
-        public async Task<BaseResponse> CreateLeaveRequest(LeaveRequestLineItem leaveRequestLineItem)
+        public async Task<BaseResponse> CreateLeaveRequestLineItem(LeaveRequestLineItem leaveRequestLineItem)
         {
             //check if us
             _logger.LogInformation($"About to create leave for EmployeId: {leaveRequestLineItem.EmployeeId} and CompanyId: {leaveRequestLineItem.CompanyId}");
             StringBuilder errorOutput = new StringBuilder();
             var response = new BaseResponse();
+            GradeLeave gradeLeave = null;
+            int noOfDaysTaken = 0;
             EmpLeaveRequestInfo empLeaveRequestInfo = null;
             try
             {
@@ -62,34 +64,39 @@ namespace hrms_be_backend_business.Logic
                     if (empLeaveRequestInfo == null)
                     {
                         throw new Exception("Could not create leave request");
-                    }
+                    }    
                 }
 
-
+               // int leaveRequestCount = 0;
                 //Check maximum split count
                 var leaveRequestLineItems = await _leaveRequestRepository.GetLeaveRequestLineItems(empLeaveRequestInfo.LeaveRequestId);
-                if (leaveRequestLineItems.Count > 0)
+                if (leaveRequestLineItems != null)
                 {
-                    var gradeLeave = await _leaveRequestRepository.GradeLeave(leaveRequestLineItem.EmployeeId);
-
-                    //Check number of days left
-                    var noOfDaysTaken = leaveRequestLineItems.Sum(x => x.LeaveLength);
-
-                    if (gradeLeave.NumbersOfDays <= (noOfDaysTaken + leaveRequestLineItem.LeaveLength)) 
+                    if (leaveRequestLineItems.Count > 0)
                     {
-                        response.ResponseCode = "08";
-                        response.ResponseMessage = "Leave length exceeded";
-                        return response;
+                        gradeLeave = await _leaveRequestRepository.GradeLeave(leaveRequestLineItem.EmployeeId);
 
-                    }
+                        //Check number of days left
+                        noOfDaysTaken = leaveRequestLineItems.Sum(x => x.LeaveLength);
 
-                    if (gradeLeave.NumberOfVacationSplit < (leaveRequestLineItems.Count + 1)) //include proposed leave
-                    {
-                        response.ResponseCode = "08";
-                        response.ResponseMessage = "vacation split count exceeded";
-                        return response;
+                        if (gradeLeave.NumbersOfDays <= (noOfDaysTaken + leaveRequestLineItem.LeaveLength))
+                        {
+                            response.ResponseCode = "08";
+                            response.ResponseMessage = "Leave length exceeded";
+                            return response;
+
+                        }
+
+                        //Check split count
+                        if (gradeLeave.NumberOfVacationSplit < (leaveRequestLineItems.Count + 1)) //include proposed leave
+                        {
+                            response.ResponseCode = "08";
+                            response.ResponseMessage = "vacation split count exceeded";
+                            return response;
+                        }
                     }
                 }
+                
 
                 var leaveAproval = await _leaveRequestRepository.GetLeaveApprovalInfoByEmployeeId(leaveRequestLineItem.EmployeeId);
                 //check if any pending leave approvals
@@ -103,7 +110,18 @@ namespace hrms_be_backend_business.Logic
 
                 leaveRequestLineItem.LeaveRequestId = empLeaveRequestInfo.LeaveRequestId;
                 var res = await _leaveRequestRepository.CreateLeaveRequestLineItem(leaveRequestLineItem);
+                if (res != null)
+                {
+                    //Update active leave info for employee if maximum days or split count reached.
 
+                    if ((gradeLeave.NumbersOfDays == (noOfDaysTaken + leaveRequestLineItem.LeaveLength)) ||
+                        gradeLeave.NumberOfVacationSplit == (leaveRequestLineItems.Count + 1))
+                    {
+                        empLeaveRequestInfo.LeaveStatus = "Completed";
+                        _leaveRequestRepository.UpdateLeaveRequestInfoStatus(empLeaveRequestInfo);
+                    }
+                }
+               
                 //var repoResponse = await _leaveRequestRepository.CreateLeaveRequest(payload);
                 //if (!repoResponse.Contains("Success"))
                 //{
@@ -180,7 +198,6 @@ namespace hrms_be_backend_business.Logic
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -194,6 +211,12 @@ namespace hrms_be_backend_business.Logic
                 if (empLeaveRequestInfo == null)
                 {
                     return new BaseResponse { ResponseCode = "404", ResponseMessage = "No record found" };
+                }
+
+                //Check that leave start date is not in the past
+                if (leaveRequestLineItem.startDate.Date < DateTime.Today.Date)
+                {
+                    return new BaseResponse { ResponseCode = "400", ResponseMessage = "Leave start date cannot be in the past" };
                 }
                 var lineItem = await _leaveRequestRepository.RescheduleLeaveRequest(leaveRequestLineItem);
                 response.Data = lineItem;
@@ -217,9 +240,8 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }    
-        public async Task<BaseResponse> ApproveLeaveRequest(LeaveApprovalLineItem leaveApprovalLineItem)
+        public async Task<BaseResponse> UpdateLeaveApproveLineItem(LeaveApprovalLineItem leaveApprovalLineItem)
         {
-            //check if us
             StringBuilder errorOutput = new StringBuilder();
             bool sendMail = false;
             var response = new BaseResponse();
@@ -233,12 +255,7 @@ namespace hrms_be_backend_business.Logic
                     response.Data = repoResponse;
                     return response;
                 }
-                //var approvalStep = repoResponse.ApprovalStep += 1;
-
-                //if (nextApprovalLineItem == null)
-                //{
-
-                //}
+               
                 LeaveApprovalLineItem nextApprovalLineItem = null;
                 var currentLeaveApprovalInfo = await _leaveRequestRepository.GetLeaveApprovalInfo(repoResponse.LeaveApprovalId);
                 if (currentLeaveApprovalInfo == null)
@@ -259,7 +276,7 @@ namespace hrms_be_backend_business.Logic
                     if (currentLeaveApprovalInfo.RequiredApprovalCount < repoResponse.ApprovalStep)
                     {
                          repoResponse.ApprovalStep +=  1;
-                        currentLeaveApprovalInfo.ApprovalStatus = $"Pending on Approval level: {repoResponse.ApprovalStep}";
+                        currentLeaveApprovalInfo.ApprovalStatus = $"Pending on Approval count: {repoResponse.ApprovalStep}";
 
                         nextApprovalLineItem = await _leaveRequestRepository.GetLeaveApprovalLineItem(repoResponse.LeaveApprovalLineItemId, repoResponse.ApprovalStep);
                         sendMail = true;
@@ -276,10 +293,10 @@ namespace hrms_be_backend_business.Logic
                         _mailService.SendLeaveApproveMailToApprover(nextApprovalLineItem.ApprovalEmployeeId, leaveRequestLineItem.EmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
                     }
                 }
-                else if(!repoResponse.IsApproved)
+                else if(!repoResponse.IsApproved) // Leave approval is denied
                 {
                     currentLeaveApprovalInfo.ApprovalStatus = "Completed";
-                    currentLeaveApprovalInfo.ApprovalStatus = $"Denied on Approval level: {repoResponse.ApprovalStep}";
+                    currentLeaveApprovalInfo.ApprovalStatus = $"Denied on Approval count: {repoResponse.ApprovalStep}";
                     currentLeaveApprovalInfo.Comments = repoResponse.Comments;
 
 

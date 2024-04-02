@@ -63,8 +63,9 @@
         public static string Sp_GetLeaveApprovalLineItem = "Sp_GetLeaveApprovalLineItem";
         public static string Sp_UpdateLeaveApproval = "Sp_UpdateLeaveApproval";
         public static string Sp_GetLeaveRequestLineItems { get; set; } = "Sp_GetLeaveRequestLineItems";
-        public static string Sp_GetGradeLeave { get;  set; } = "Sp_GetGradeLeave";
+        public static string Sp_GetEmployeeGradeLeave { get;  set; } = "Sp_GetEmployeeGradeLeave";
         public static string Sp_GetLeaveApprovalByEmployeeId { get; set; } = "Sp_GetLeaveApprovalByEmployeeId";
+        public static string Sp_UpdateLeaveRequestInfoStatus { get; set; } = "Sp_UpdateLeaveRequestInfoStatus";
 
 
         //System Default
