@@ -30,7 +30,8 @@ namespace hrms_be_backend_data.Repository
             {
                 var param = new DynamicParameters();
                 param.Add("EmployeeID", resignation.EmployeeId);
-                //param.Add("StaffName", resignation.StaffName);
+                //param.Add("StaffID", resignation.StaffID);
+               // param.Add("StaffName", resignation.StaffName);
                 param.Add("SignedResignationLetter", resignation.SignedResignationLetter);
                 param.Add("CompanyID", resignation.CompanyID);
                 param.Add("ResumptionDate", resignation.ResumptionDate);

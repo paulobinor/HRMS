@@ -120,7 +120,7 @@ namespace hrms_be_backend_business.Logic
                     ResignationId = payload.ResignationId,
                     ReasonForResignation = payload.ReasonForResignation,
                     OtherRemarks = payload.OtherRemarks,
-                   // OfficialEmail = payload.OfficialEmail,
+                    ResumptionDate = payload.ResumptionDate,
                     Signature = payload.Signature,
                     
                 };

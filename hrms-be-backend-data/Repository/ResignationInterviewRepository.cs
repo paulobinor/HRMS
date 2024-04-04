@@ -30,6 +30,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("CompanyID", resignation.CompanyId);
                 param.Add("@ResignationID", resignation.ResignationId);
                 param.Add("DateCreated", resignation.DateCreated);
+                param.Add("ResumptionDate", resignation.ResumptionDate);
                 param.Add("ExitDate", resignation.ExitDate);
                 param.Add("CreatedByUserId", resignation.CreatedByUserId);
                 param.Add("ReasonForResignation", resignation.ReasonForResignation);

@@ -15,9 +15,12 @@ namespace hrms_be_backend_data.RepoPayload
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleName { get; set; }
+        public string SupervisorName { get; set; }
+        public string Department { get; set; }
         public string OfficialEmail { get; set; }
         public DateTime DateCreated { get; set; }
         public long CreatedByUserId { get; set; }
+        public DateTime ResumptionDate { get; set; }
         public string ReasonForResignation { get; set; }
         public DateTime ExitDate { get; set; }
         public string OtherRemarks { get; set; }

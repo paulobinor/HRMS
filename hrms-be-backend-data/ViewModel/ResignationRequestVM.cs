@@ -10,7 +10,8 @@ namespace Com.XpressPayments.Common.ViewModels
     public class ResignationRequestVM
     {
         public long EmployeeId { get; set; }
-       // public string StaffId { get; set; }
+        //public string StaffId { get; set; }
+        //public string StaffName { get; set; }
         public DateTime Date { get; set; }
         public DateTime ResumptionDate { get; set; }
         public string ReasonForResignation { get; set; }

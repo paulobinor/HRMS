@@ -8,7 +8,7 @@ namespace hrms_be_backend_data.RepoPayload
 {
     public class ApprovePendingResignationDTO
     {
-        public long userID { get; set; }
+        public long EmployeeID { get; set; }
         public long ResignationId { get; set; }
 
     }

@@ -34,6 +34,7 @@ namespace hrms_be_backend_business.Logic
             _mailService = mailService;
 
         }
+       
         public async Task<ExecutedResult<string>> SubmitResignation( ResignationRequestVM payload, string AccessKey, string RemoteIpAddress)
         {
             var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
@@ -87,6 +88,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     ExitDate = payload.Date,
                     CompanyID = payload.CompanyID,
+                    //StaffName = payload.StaffName,
                     DateCreated = DateTime.Now,
                     CreatedByUserId = accessUser.data.UserId,
                     ResumptionDate  = payload.ResumptionDate,
@@ -129,64 +131,54 @@ namespace hrms_be_backend_business.Logic
 
         public async Task<ExecutedResult<string>> UploadLetter(IFormFile signedResignationLetter, string AccessKey, string RemoteIpAddress)
         {
-            string fileName;
             try
             {
+                var uploadPath = _config["ResignationFileConfig:UploadFolderPath"];
+                var uploadBaseURL = _config["ResignationFileConfig:FileUploadBaseURL"];
+                var errorMessages = string.Empty;
 
-                var uploadPath = _config["Resignation:UploadFolderPath"];
-                var uploadBaseURL = _config["Resignation:FileUploadBaseURL"];
-                var errorMessages = String.Empty;
-
-                if (signedResignationLetter.Length < 0)
-                    errorMessages = errorMessages + "|Resignation letter is required";
-
-                if (errorMessages.Length > 0)
-                    return new ExecutedResult<string>() { responseMessage = $"{errorMessages}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
-
+                if (signedResignationLetter == null || signedResignationLetter.Length == 0)
+                    errorMessages += "|Resignation letter is required";
 
                 if (!Directory.Exists(uploadPath))
-                {
                     Directory.CreateDirectory(uploadPath);
-                }
 
-                if (signedResignationLetter.Length > 0)
+                if (string.IsNullOrEmpty(errorMessages))
                 {
-                    var fileExt = System.IO.Path.GetExtension(signedResignationLetter.FileName).Substring(1);
-                    fileName = Guid.NewGuid().ToString();//Path.GetFileName(formFile.FileName);
-                    fileName = fileName.Replace(" ", "");
-                    string filePath = Path.Combine(uploadPath, fileName.Trim() + "." + fileExt);
+                    var fileName = Guid.NewGuid().ToString().Replace(" ", "");
+                    var fileExt = Path.GetExtension(signedResignationLetter.FileName)?.TrimStart('.');
+
+                    if (string.IsNullOrEmpty(fileExt))
+                        return new ExecutedResult<string>() { responseMessage = "Invalid file extension", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+
+                    var filePath = Path.Combine(uploadPath, $"{fileName}.{fileExt}");
 
                     if (System.IO.File.Exists(filePath))
-                    {
                         System.IO.File.Delete(filePath);
-                    }
 
                     using (Stream stream = System.IO.File.Create(filePath))
                     {
                         await signedResignationLetter.CopyToAsync(stream);
-                        var data = new
-                        {
-                            fileName = $"{fileName}.{fileExt}",
-                            fileURL = $"{uploadBaseURL}{fileName}.{fileExt}",
-                            filePath = filePath,
-
-                        };
-                        return new ExecutedResult<string>() { responseMessage = "File uploaded Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
-
                     }
+
+                    var data = new
+                    {
+                        fileName = $"{fileName}.{fileExt}",
+                        fileURL = $"{uploadBaseURL}{fileName}.{fileExt}",
+                        filePath = filePath,
+                    };
+
+                    return new ExecutedResult<string>() { responseMessage = "File uploaded Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
                 }
                 else
                 {
-                    return new ExecutedResult<string>() { responseMessage = "Invalid file", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
-
+                    return new ExecutedResult<string>() { responseMessage = errorMessages, responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
-
-
             }
             catch (Exception ex)
             {
                 _logger.LogError("Error Submitting resignation", ex);
-                return new ExecutedResult<string>() { responseMessage = "An error occured", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                return new ExecutedResult<string>() { responseMessage = "An error occurred", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
             }
         }
 
@@ -446,7 +438,7 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
 
                 }
-                var approvedResignationResp = await _resignationRepository.ApprovePendingResignation(request.userID, request.ResignationId);
+                var approvedResignationResp = await _resignationRepository.ApprovePendingResignation(request.EmployeeID, request.ResignationId);
 
                 if (accessUser.data.EmployeeId == resignation.HodEmployeeID || accessUser.data.EmployeeId == resignation.UnitHeadEmployeeID)
                 {
@@ -489,7 +481,7 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
 
                 }
-                var DisapprovedResignation = await _resignationRepository.DisapprovePendingResignation(request.userID, request.ResignationID, request.reason);
+                var DisapprovedResignation = await _resignationRepository.DisapprovePendingResignation(request.EmployeeID, request.ResignationID, request.reason);
 
                 if (!DisapprovedResignation.Contains("Success"))
                 {
