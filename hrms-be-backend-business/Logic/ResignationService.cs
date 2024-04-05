@@ -184,7 +184,13 @@ namespace hrms_be_backend_business.Logic
 
         public async Task<ExecutedResult<string>> UpdateResignation(UpdateResignationDTO updateDTO, string AccessKey, string RemoteIpAddress)
         {
-     
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+            }
+
             try
             {
                 var resignation = await _resignationRepository.GetResignationByID(updateDTO.ResignationID);
@@ -236,7 +242,7 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 _logger.LogInformation("Resignation fetched successfully.");
-                return new ExecutedResult<ResignationDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = resignation };
+                return new ExecutedResult<ResignationDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = (00).ToString(), data = resignation };
 
             }
             catch (Exception ex)
@@ -270,7 +276,7 @@ namespace hrms_be_backend_business.Logic
                 //update action performed into audit log here
 
                 _logger.LogInformation("Resignation fetched successfully.");
-                return new ExecutedResult<ResignationDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = resignation };
+                return new ExecutedResult<ResignationDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = (00).ToString(), data = resignation };
 
 
             }
@@ -284,16 +290,16 @@ namespace hrms_be_backend_business.Logic
 
         public async Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetResignationByCompanyID(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress)
         {
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+            }
             var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
 
             try
-            {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-                if (accessUser.data == null)
-                {
-                    return new ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
-
-                }
+            {              
 
                 var resignation = await _resignationRepository.GetResignationByCompanyID(companyID, filter.PageNumber, filter.PageSize, filter.SearchValue);
 
@@ -303,10 +309,9 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                //update action performed into audit log here
 
                 _logger.LogInformation("Resignations fetched successfully.");
-                return new ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = resignation };
+                return new ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = (00).ToString(), data = resignation };
 
 
             }
@@ -396,7 +401,12 @@ namespace hrms_be_backend_business.Logic
 
         public async Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetPendingResignationByEmployeeID(long EmployeeId, string AccessKey, string RemoteIpAddress)
         {
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
+            }
             try
             {
 
@@ -408,10 +418,8 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                //update action performed into audit log here
-
                 _logger.LogInformation("Resignation fetched successfully.");
-                return new  ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = "Resignation fetched Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = PendingResignation };
+                return new  ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = "Resignation fetched Successfully", responseCode = (00).ToString(), data = PendingResignation };
 
 
             }
@@ -458,7 +466,7 @@ namespace hrms_be_backend_business.Logic
                 }
 
 
-                return new ExecutedResult<string>() { responseMessage = "Resignation approved successfully.", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                return new ExecutedResult<string>() { responseMessage = "Resignation approved successfully.", responseCode = (00).ToString(), data = null };
 
             }
 
@@ -490,7 +498,7 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                return new ExecutedResult<string>() { responseMessage = "Resignation disapproved successfully.", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                return new ExecutedResult<string>() { responseMessage = "Resignation disapproved successfully.", responseCode = (00).ToString(), data = null };
 
             }
 

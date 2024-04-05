@@ -26,8 +26,8 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpPost]
         [Route("/SubmitResignationClearance")]
-        [Authorize]
-        public async Task<IActionResult> SubmitResignationClearance(ResignationClearanceDTO request)
+        //[Authorize]
+        public async Task<IActionResult> SubmitResignationClearance(ResignationClearanceVM request)
         {
             
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -45,7 +45,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpGet]
         [Route("GetResignationClearanceByID/{ID}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetResignationClearanceByID(long ID)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -61,7 +61,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
         }
         [HttpGet]
         [Route("GetResignationClearanceByEmployeeId/{EmployeeId}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetResignationClearanceByEmployeeId(long EmployeeId)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -77,8 +77,8 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
 
         [HttpGet]
-        [Route("GetResignationByCompanyID/{companyId}/{isApproved}")]
-        [Authorize]
+        [Route("GetResignationByCompanyID/{companyId}")]
+        //[Authorize]
         public async Task<IActionResult> GetResignationClearanceByCompanyID(long companyId, [FromQuery] PaginationFilter filter)
         {
 

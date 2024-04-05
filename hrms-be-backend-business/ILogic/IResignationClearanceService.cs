@@ -8,7 +8,7 @@ namespace hrms_be_backend_business.ILogic
 {
     public interface IResignationClearanceService
     {
-        Task<ExecutedResult<string>> SubmitResignationClearance(ResignationClearanceDTO payload, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<string>> SubmitResignationClearance(ResignationClearanceVM payload, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<ResignationClearanceDTO>> GetResignationClearanceByID(long ID, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<ResignationClearanceDTO>> GetResignationClearanceByEmployeeID(long UserID, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<IEnumerable<ResignationClearanceDTO>>> GetAllResignationClearanceByCompany(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress);

@@ -37,13 +37,14 @@ namespace hrms_be_backend_data.Repository
                 param.Add("DateCreated", resignation.DateCreated);
                 param.Add("OtherRemarks", resignation.OtherRemarks);
                 param.Add("Date", resignation.Date);
+                param.Add("Signature", resignation.Signature);
                 param.Add("WhatDidYouLikeMostAboutTheCompanyAndYourJob", resignation.WhatDidYouLikeMostAboutTheCompanyAndYourJob);
                 param.Add("WhatDidYouLeastLikeAboutTheCompanyAndYourJob", resignation.WhatDidYouLeastLikeAboutTheCompanyAndYourJob);
                 param.Add("DoYouFeelYouWerePlacedInAPositionCompatibleWithYourSkillSet", resignation.DoYouFeelYouWerePlacedInAPositionCompatibleWithYourSkillSet);
                 param.Add("IfYouAreTakingAnotherJob_WhatKindOfJobWillYouBeTaking", resignation.IfYouAreTakingAnotherJob_WhatKindOfJobWillYouBeTaking);
                 param.Add("CouldOurCompanyHaveMadeAnyImprovementsThatMightHaveMadeYouStay", resignation.CouldOurCompanyHaveMadeAnyImprovementsThatMightHaveMadeYouStay);
-                param.Add("OfficialEmail", resignation.OfficialEmail);
-                param.Add("HrEmployeeId", resignation.HrEmployeeId);
+                //param.Add("OfficialEmail", resignation.OfficialEmail);
+                //param.Add("HrEmployeeId", resignation.HrEmployeeId);
                 param.Add("SectionOne", sectionOne.AsTableValuedParameter("InterviewDetailsSectionType"));
                 param.Add("SectionTwo", sectionTwo.AsTableValuedParameter("InterviewDetailsSectionType"));
 
@@ -67,7 +68,7 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
                 param.Add("ResignationInterviewID", ResignationInterviewID);
 
-                var response = (await _dapper.Get<ResignationInterviewDTO>("Sp_get_resignation_interview", param, commandType: CommandType.Text));
+                var response = await _dapper.Get<ResignationInterviewDTO>("Sp_get_resignation_interview", param, commandType: CommandType.StoredProcedure);
 
                 return response;
 
@@ -86,7 +87,7 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
                 param.Add("InterviewID", InterviewID);
 
-                var response = (await _dapper.GetAll<InterviewScaleValue>("Sp_get_resignation_interview_details", param, commandType: CommandType.Text));
+                var response = (await _dapper.GetAll<InterviewScaleValue>("Sp_get_resignation_interview_details", param, commandType: CommandType.StoredProcedure));
 
                 return response;
 
@@ -110,7 +111,8 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@PageNumber", PageNumber);
                     param.Add("@RowsOfPage", RowsOfPage);
                     param.Add("@SearchVal", SearchVal.ToLower());
-                    var response = (await _dapper.GetAll<ResignationInterviewDTO>("Sp_get_all_resignation_interview", param, commandType: CommandType.Text)).ToList();
+
+                    var response = await _dapper.GetAll<ResignationInterviewDTO>("Sp_get_all_resignation_interview", param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }

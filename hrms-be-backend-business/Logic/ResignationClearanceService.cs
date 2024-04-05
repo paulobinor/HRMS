@@ -21,19 +21,23 @@ namespace hrms_be_backend_business.Logic
         private readonly IAccountRepository _accountRepository;
         private readonly IResignationClearanceRepository _resignationClearanceRepository;
         private readonly IAuthService _authService;
+        private readonly IResignationRepository _resignationRepository;
 
 
-        public ResignationClearanceService(IConfiguration config, IResignationClearanceRepository resignationClearanceRepository, ILogger<ResignationClearanceService> logger, IAccountRepository accountRepository, IAuthService authService)
+
+        public ResignationClearanceService(IConfiguration config, IResignationClearanceRepository resignationClearanceRepository, ILogger<ResignationClearanceService> logger, IAccountRepository accountRepository, IAuthService authService, IResignationRepository resignationRepository)
         {
             _config = config;
             _logger = logger;
             _accountRepository = accountRepository;
             _resignationClearanceRepository = resignationClearanceRepository;
             _authService = authService;
+            _resignationRepository = resignationRepository;
+
         }
 
 
-        public async Task<ExecutedResult<string>> SubmitResignationClearance(ResignationClearanceDTO payload, string AccessKey, string RemoteIpAddress)
+        public async Task<ExecutedResult<string>> SubmitResignationClearance(ResignationClearanceVM payload, string AccessKey, string RemoteIpAddress)
         {
             var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
             if (accessUser.data == null)
@@ -47,8 +51,8 @@ namespace hrms_be_backend_business.Logic
                 var errorMessages = String.Empty;
                 StringBuilder errorBuilder = new StringBuilder();
 
-                if (payload.ExitDate > DateTime.Now)
-                    errorMessages = errorMessages + "|Invalid exit date";
+                //if (payload.ExitDate > DateTime.Now)
+                //    errorMessages = errorMessages + "|Invalid exit date";
                 if (string.IsNullOrWhiteSpace(payload.ItemsReturnedToAdmin))
                     errorMessages = errorMessages + "|Items returned is required";
                 if (string.IsNullOrWhiteSpace(payload.ItemsReturnedToDepartment))
@@ -60,24 +64,24 @@ namespace hrms_be_backend_business.Logic
                 if (errorMessages.Length > 0)
                     return new ExecutedResult<string>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
 
+                payload.EmployeeID = accessUser.data.EmployeeId;
+
+                var resignation = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeID);
 
                 var resignationClearance = new ResignationClearanceDTO
                 {
-                    EmployeeID = accessUser.data.EmployeeId,
+                    EmployeeID = payload.EmployeeID,
                     CompanyID = payload.CompanyID,
-                    //FirstName = payload.FirstName,
-                    //LastName = payload.LastName,
-                    //MiddleName = payload.MiddleName,
-                    //PreferredName = payload.PreferredName,
                     Signature = payload.Signature,
-                    ReasonForExit = payload.ReasonForExit,
-                    ResignationID = payload.ResignationID,
+                    ReasonForExit = resignation.ReasonForResignation,
+                    ResignationID = resignation.ResignationID,
                     ItemsReturnedToDepartment = payload.ItemsReturnedToDepartment,
                     ItemsReturnedToAdmin = payload.ItemsReturnedToAdmin,
                     CreatedByUserID = accessUser.data.UserId,
                     LoansOutstanding = payload.LoansOutstanding,
                     ItemsReturnedToHr = payload.ItemsReturnedToHr,
-                    ExitDate = payload.ExitDate,
+                    ExitDate = resignation.ExitDate,
+                    DateCreated = payload.DateCreated,
 
                 };
 
@@ -90,7 +94,7 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                return new ExecutedResult<string>() { responseMessage = "Resignation clearance submitted Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                return new ExecutedResult<string>() { responseMessage = "Resignation clearance submitted Successfully", responseCode = (00).ToString(), data = null };
             }
             catch (Exception ex)
             {
@@ -119,7 +123,7 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 _logger.LogInformation("Clearance fetched successfully.");
-                return new ExecutedResult<ResignationClearanceDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = resignation };
+                return new ExecutedResult<ResignationClearanceDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = (00).ToString(), data = resignation };
 
             }
             catch (Exception ex)
@@ -151,7 +155,7 @@ namespace hrms_be_backend_business.Logic
 
                 //update action performed into audit log here
                 _logger.LogInformation("Clearance fetched successfully.");
-                return new ExecutedResult<ResignationClearanceDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = resignation };
+                return new ExecutedResult<ResignationClearanceDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = (00).ToString(), data = resignation };
 
             }
             catch (Exception ex)
@@ -182,10 +186,10 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                //update action performed into audit log here
+                
 
                 _logger.LogInformation("clearances fetched successfully.");
-                return new ExecutedResult<IEnumerable<ResignationClearanceDTO>>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = resignation };
+                return new ExecutedResult<IEnumerable<ResignationClearanceDTO>>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = (00).ToString(), data = resignation };
 
 
             }

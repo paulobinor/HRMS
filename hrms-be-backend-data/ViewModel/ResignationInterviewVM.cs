@@ -12,10 +12,11 @@ namespace Com.XpressPayments.Common.ViewModels
     {
 
         public long EmployeeId { get; set; }
-        public int ResignationId { get; set; }
-        public DateTime ResumptionDate { get; set; }
-        public string ReasonForResignation { get; set; }
-        public DateTime ExitDate { get; set; }
+        public long CompanyId { get; set; }
+        //public int ResignationId { get; set; }
+        //public DateTime ResumptionDate { get; set; }
+        //public string ReasonForResignation { get; set; }
+        //public DateTime ExitDate { get; set; }
         public string OtherRemarks { get; set; }
         public string Signature { get; set; }
         public DateTime Date { get; set; }
@@ -34,7 +35,7 @@ namespace Com.XpressPayments.Common.ViewModels
     {
         public int ID { get; set; }
         public int Value { get; set; }
-        [JsonIgnore]
+        //[JsonIgnore]
         public string Scale { get; set; }
     }
 }

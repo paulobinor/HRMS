@@ -12,7 +12,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize]
+    [Authorize]
     public class ResignationController : ControllerBase
     {
         private readonly ILogger<ResignationController> _logger;
@@ -114,7 +114,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
         }
 
         [HttpGet]
-        [Route("GetResignationByCompanyID/{companyId}/{isApproved}")]
+        [Route("GetResignationByCompanyID/{companyId}")]
         [Authorize]
         public async Task<IActionResult> GetResignationByCompanyID(long companyId, [FromQuery] PaginationFilter filter)
         {
@@ -186,10 +186,10 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         [Route("ApprovePendingResignation")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> ApprovePendingResignation([FromBody] ApprovePendingResignationDTO request)
         {
             

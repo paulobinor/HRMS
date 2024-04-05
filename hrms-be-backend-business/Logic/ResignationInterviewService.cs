@@ -23,15 +23,18 @@ namespace hrms_be_backend_business.Logic
         private readonly IAccountRepository _accountRepository;
         private readonly IResignationInterviewRepository _resignationInterviewRepository;
         private readonly IAuthService _authService;
+        private readonly IResignationRepository _resignationRepository;
 
 
-        public ResignationInterviewService(IConfiguration config, IResignationInterviewRepository resignationInterviewRepository, ILogger<ResignationInterviewService> logger, IAccountRepository accountRepository, IAuthService authService)
+        public ResignationInterviewService(IConfiguration config, IResignationInterviewRepository resignationInterviewRepository, ILogger<ResignationInterviewService> logger, IAccountRepository accountRepository, IAuthService authService, IResignationRepository resignationRepository)
         {
             _config = config;
             _logger = logger;
             _accountRepository = accountRepository;
             _resignationInterviewRepository = resignationInterviewRepository;
             _authService = authService;
+            _resignationRepository = resignationRepository;
+
         }
 
 
@@ -51,10 +54,10 @@ namespace hrms_be_backend_business.Logic
                 var errorMessages = String.Empty;
                 StringBuilder errorBuilder = new StringBuilder();
 
-                if (payload.ExitDate < DateTime.Now)
-                    errorMessages = errorMessages + "|Invalid Last Day of work";
-                if (string.IsNullOrWhiteSpace(payload.ReasonForResignation))
-                    errorMessages = errorMessages + "|Resignation reason is required";
+                //if (payload.ExitDate < DateTime.Now)
+                //    errorMessages = errorMessages + "|Invalid Last Day of work";
+                //if (string.IsNullOrWhiteSpace(payload.ReasonForResignation))
+                //    errorMessages = errorMessages + "|Resignation reason is required";
                 if (string.IsNullOrWhiteSpace(payload.WhatDidYouLikeMostAboutTheCompanyAndYourJob))
                     errorMessages = errorMessages + "|What did you like most about the company and your job? Must be filled";
                 if (string.IsNullOrWhiteSpace(payload.WhatDidYouLeastLikeAboutTheCompanyAndYourJob))
@@ -68,6 +71,7 @@ namespace hrms_be_backend_business.Logic
 
                 if (errorMessages.Length > 0)
                     return new ExecutedResult<string>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+
 
                 if (payload.SectionOne.Count < ApplicationConstant.totalFormCountSectionOne)
                 {
@@ -110,18 +114,26 @@ namespace hrms_be_backend_business.Logic
 
                 payload.EmployeeId = accessUser.data.EmployeeId;
 
+                var resignation = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeId);
+
                 var resignationInterview = new ResignationInterviewDTO
                 {
+                    CompanyId = payload.CompanyId,
                     Date = payload.Date,
                     DateCreated = DateTime.Now,
                     CreatedByUserId = accessUser.data.UserId,
-                    ExitDate = payload.ExitDate,
+                    ExitDate = resignation.ExitDate,
                     EmployeeId = payload.EmployeeId,
-                    ResignationId = payload.ResignationId,
-                    ReasonForResignation = payload.ReasonForResignation,
+                    ResignationId = resignation.ResignationID,
+                    ReasonForResignation = resignation.ReasonForResignation,
                     OtherRemarks = payload.OtherRemarks,
-                    ResumptionDate = payload.ResumptionDate,
+                    ResumptionDate = resignation.ResumptionDate,
                     Signature = payload.Signature,
+                    WhatDidYouLeastLikeAboutTheCompanyAndYourJob = payload.WhatDidYouLeastLikeAboutTheCompanyAndYourJob,
+                    WhatDidYouLikeMostAboutTheCompanyAndYourJob = payload.WhatDidYouLikeMostAboutTheCompanyAndYourJob,
+                    DoYouFeelYouWerePlacedInAPositionCompatibleWithYourSkillSet = payload.DoYouFeelYouWerePlacedInAPositionCompatibleWithYourSkillSet,
+                    CouldOurCompanyHaveMadeAnyImprovementsThatMightHaveMadeYouStay = payload.CouldOurCompanyHaveMadeAnyImprovementsThatMightHaveMadeYouStay,
+                    IfYouAreTakingAnotherJob_WhatKindOfJobWillYouBeTaking = payload.IfYouAreTakingAnotherJob_WhatKindOfJobWillYouBeTaking,
                     
                 };
 
@@ -135,7 +147,7 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 _logger.LogInformation("Resignation Interview form Submitted successfully.");
-                return new ExecutedResult<string>() { responseMessage = "Resignation Interview form Submitted successfully.", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                return new ExecutedResult<string>() { responseMessage = "Resignation Interview form Submitted successfully.", responseCode = (200).ToString(), data = null };
             }
             catch (Exception ex)
             {
@@ -146,6 +158,11 @@ namespace hrms_be_backend_business.Logic
 
         public async Task<ExecutedResult<ResignationInterviewDTO>> GetResignationInterviewById(long ResignationInterviewId, string AccessKey, string RemoteIpAddress)
         {
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+            }
 
             try
             {
@@ -159,10 +176,8 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                //update action performed into audit log here
-
                 _logger.LogInformation("Resignation interview fetched successfully.");
-                return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = resignation };
+                return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = (00).ToString(), data = resignation };
 
 
             }
@@ -177,15 +192,16 @@ namespace hrms_be_backend_business.Logic
 
        public async Task<ExecutedResult<IEnumerable<ResignationInterviewDTO>>> GetAllResignationInterviewsByCompany(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress)
         {
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<IEnumerable<ResignationInterviewDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+            }
             var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
 
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-                if (accessUser.data == null)
-                {
-                    return new ExecutedResult<IEnumerable<ResignationInterviewDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
-                }
+
 
                 var resignation = await _resignationInterviewRepository.GetAllResignationInterviewsByCompany(companyID, filter.PageNumber, filter.PageSize, filter.SearchValue);
 
@@ -195,10 +211,8 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                //update action performed into audit log here
-
                 _logger.LogInformation("Resignations fetched successfully.");
-                return new ExecutedResult<IEnumerable<ResignationInterviewDTO>>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = resignation };
+                return new ExecutedResult<IEnumerable<ResignationInterviewDTO>>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = (00).ToString(), data = resignation };
 
 
             }
@@ -215,15 +229,31 @@ namespace hrms_be_backend_business.Logic
         {
             BaseResponse response = new BaseResponse();
 
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Unathorized User";
+                response.Data = null;
+                return response;
+            }
+
             try
             {
 
                 var resignation = await _resignationInterviewRepository.GetResignationInterviewDetails(InterviewID);
 
-                if (resignation == null)
+                if (resignation == null )
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = "Resignation Interview Details not found.";
+                    response.Data = null;
+                    return response;
+                }
+                if (resignation.Count == 0 )
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Resignation Interview Details does not exist";
                     response.Data = null;
                     return response;
                 }
@@ -263,10 +293,9 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                //update action performed into audit log here
-
+                
                 _logger.LogInformation("Resignation fetched successfully.");
-                return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = resignation };
+                return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = (00).ToString(), data = resignation };
 
 
             }

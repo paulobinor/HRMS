@@ -9,7 +9,7 @@
         public string LastName { get; set; }
         public string MiddleName { get; set; }
         public string Grade { get; set; }
-        public long Department { get; set; }
+        public string Department { get; set; }
         public long CompanyID { get; set; }
         public string ReasonForExit { get; set; }
         public string ItemsReturnedToDepartment { get; set; }

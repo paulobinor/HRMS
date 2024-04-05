@@ -70,7 +70,9 @@ namespace hrms_be_backend_data.Repository
                 param.Add("ReasonForResignation", resignation.ReasonForResignation);
                 param.Add("SignedResignationLetter", resignation.SignedResignationLetter);
 
-                return await _dapper.Get<string>("Sp_update_resignation", param, commandType: CommandType.StoredProcedure);
+                dynamic response =  await _dapper.Get<string>("Sp_update_resignation", param, commandType: CommandType.StoredProcedure);
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -124,10 +126,10 @@ namespace hrms_be_backend_data.Repository
             try
             {
                 var param = new DynamicParameters();
-                param.Add("CompanyID", companyID);
-                param.Add("@PageNumber", PageNumber);
-                param.Add("@RowsOfPage", RowsOfPage);
-                param.Add("@SearchVal", SearchVal.ToLower());
+                param.Add("CompanyId", companyID);
+                param.Add("PageNumber", PageNumber);
+                param.Add("RowsOfPage", RowsOfPage);
+                param.Add("SearchVal", SearchVal.ToLower());
 
                 var response = await _dapper.GetAll<ResignationDTO>("Sp_get_resignation_by_company", param, commandType: CommandType.StoredProcedure);
 

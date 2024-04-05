@@ -11,13 +11,13 @@ namespace hrms_be_backend_data.Repository
     public class ResignationClearanceRepository : IResignationClearanceRepository
     {
         private string _connectionString;
-        private readonly IDapperGenericRepository _repository;
+        private readonly IDapperGenericRepository _dapper;
         private readonly ILogger<IResignationClearanceRepository> _logger;
         private readonly IConfiguration _configuration;
         public ResignationClearanceRepository(ILogger<ResignationClearanceRepository> logger, IConfiguration configuration, IDapperGenericRepository repository)
         {
             _logger = logger;
-            _repository = repository;
+            _dapper = repository;
             _configuration = configuration;
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
@@ -27,10 +27,6 @@ namespace hrms_be_backend_data.Repository
             {
                 var param = new DynamicParameters();
                 param.Add("EmployeeID", resignation.EmployeeID);
-                //param.Add("FirstName", resignation.FirstName);
-                //param.Add("LastName", resignation.LastName);
-                //param.Add("MiddleName", resignation.MiddleName);
-                //param.Add("PreferredName", resignation.PreferredName);
                 param.Add("ResignationID", resignation.ResignationID);
                 param.Add("CompanyID", resignation.CompanyID);
                 param.Add("ItemsReturnedToDepartment", resignation.ItemsReturnedToDepartment);
@@ -41,9 +37,10 @@ namespace hrms_be_backend_data.Repository
                 param.Add("ExitDate", resignation.ExitDate);
                 param.Add("ReasonForExit", resignation.ReasonForExit);
                 param.Add("CreatedByUserID", resignation.CreatedByUserID);
+                param.Add("DateCreated", resignation.DateCreated);
                 param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                await _repository.Insert<int>("Sp_SubmitResignationClearance", param, commandType: CommandType.StoredProcedure);
+                await _dapper.Insert<int>("Sp_SubmitResignationClearance", param, commandType: CommandType.StoredProcedure);
 
                 int resp = param.Get<int>("Resp");
 
@@ -65,9 +62,9 @@ namespace hrms_be_backend_data.Repository
             try
             {
                 var param = new DynamicParameters();
-                param.Add("ResignationCleranceID", ID);
+                param.Add("ResignationClearanceID", ID);
 
-                var response = await _repository.Get<ResignationClearanceDTO>("Sp_get_resignation_clearance_by_id", param, commandType: CommandType.Text);
+                var response = await _dapper.Get<ResignationClearanceDTO>("Sp_get_resignation_clearance_by_id", param, commandType: CommandType.StoredProcedure);
 
                 return response;
             }
@@ -81,16 +78,14 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
+       
+                var param = new DynamicParameters();
+                param.Add("EmployeeID", EmployeeId);
 
-                    var param = new DynamicParameters();
-                    param.Add("EmployeeID", EmployeeId);
-
-                    var response = (await _dapper.QueryAsync<ResignationClearanceDTO>("Sp_get_resignation_clearance_by_employee_id", param: param, commandType: CommandType.Text)).FirstOrDefault();
-
-                    return response;
-                }
+                var response = await _dapper.Get<ResignationClearanceDTO>("Sp_get_resignation_clearance_by_employee_id", param, commandType: CommandType.StoredProcedure);
+                
+                return response;
+                
             }
             catch (Exception ex)
             {
@@ -110,7 +105,7 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@PageNumber", PageNumber);
                     param.Add("@RowsOfPage", RowsOfPage);
                     param.Add("@SearchVal", SearchVal.ToLower());
-                    var response = (await _repository.GetAll<ResignationClearanceDTO>("Sp_get_all_resignation_clearance_by_company", param, commandType: CommandType.Text)).ToList();
+                    var response = await _dapper.GetAll<ResignationClearanceDTO>("Sp_get_all_resignation_clearance_by_company", param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }
