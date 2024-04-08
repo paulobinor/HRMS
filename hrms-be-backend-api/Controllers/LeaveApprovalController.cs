@@ -20,9 +20,9 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
         //[Authorize]
         [HttpGet("Info")]
-        public async Task<IActionResult> GetLeaveApprovalInfo([FromQuery] long LeaveRequestId, [FromQuery] long leaveApprovalId)
+        public async Task<IActionResult> GetLeaveApprovalInfo([FromQuery] long LeaveRequestLineItemId, [FromQuery] long leaveApprovalId)
         {
-            _logger.LogInformation($"Received request to get Leave Approval info for LeaveRequestId: {LeaveRequestId}");
+            _logger.LogInformation($"Received request to get Leave Approval info for LeaveRequestId: {LeaveRequestLineItemId}");
             //var response = new BaseResponse();
             //var requester = new RequesterInfo
             //{
@@ -32,7 +32,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             //    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
             //    Port = Request.HttpContext.Connection.RemotePort.ToString()
             //};
-            var res = await _leaveRequestService.GetLeaveApprovalInfo(LeaveRequestId, leaveApprovalId); 
+            var res = await _leaveRequestService.GetLeaveApprovalInfo(leaveApprovalId, LeaveRequestLineItemId); 
             return Ok(res);
         }
 
@@ -54,4 +54,5 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         }
 
     }
+
 }

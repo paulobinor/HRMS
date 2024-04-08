@@ -15,10 +15,11 @@ namespace hrms_be_backend_business.ILogic
         Task<BaseResponse> UpdateLeaveApproveLineItem(LeaveApprovalLineItem leaveApprovalLineItem);
         Task<LeaveRequestLineItem> GetLeaveRequestLineItem(long leaveRequestLineItemId);
         Task<LeaveApprovalInfo> GetLeaveApprovalInfo(long leaveApprovalId, long leaveReqestLineItemId);
-        Task<List<EmpLeaveRequestInfo>> GetEmpLeaveInfo(long employeeId, string LeaveStatus, string companyId = null);
+        Task<EmpLeaveRequestInfo> GetEmpLeaveInfo(long employeeId, long companyId, string LeaveStatus = "Active");
         Task<LeaveApprovalInfo> UpdateLeaveApprovalInfo(LeaveApprovalInfo leaveApproval);
         Task<LeaveApprovalLineItem> GetLeaveApprovalLineItem(long leaveApprovalLineItemId, int approvalStep = 0);
         Task<LeaveApprovalInfo> GetLeaveApprovalInfoByRequestLineItem(long leaveRequestLineItemId);
+        Task<List<LeaveApprovalLineItem>>GetleaveApprovalLineItems(long leaveApprovalId);
         #region Depricated
         //Task<BaseResponse> GetAllLeaveRquest(RequesterInfo requester);
         //Task<BaseResponse> GetLeaveRequsetById(long LeaveRequestID, RequesterInfo requester);

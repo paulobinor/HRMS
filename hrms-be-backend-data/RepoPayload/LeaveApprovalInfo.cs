@@ -1,4 +1,6 @@
-﻿namespace hrms_be_backend_data.RepoPayload
+﻿using hrms_be_backend_common.Models;
+
+namespace hrms_be_backend_data.RepoPayload
 {
     public class LeaveApprovalInfo
     {
@@ -10,6 +12,7 @@
         public DateTime EntryDate { get; set; }
         public DateTime CompletedDate { get; set; }
         public string ApprovalStatus { get; set; }
+        public List<LeaveApprovalLineItem>? LeaveApprovalLineItems { get; set; }
     }
 
 }

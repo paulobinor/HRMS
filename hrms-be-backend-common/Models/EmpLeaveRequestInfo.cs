@@ -21,8 +21,9 @@ namespace hrms_be_backend_common.Models
         public DateTime DateCreated { get; set; }
         public int TotalDays { get; set; }
         public int NoOfDays { get; set; }
-        public int RemainingDays { get; set; }
-        public int RequestYear { get; set; }
+        public int RemainingDays { get { return NoOfDays; } }
+        public int NoOfDaysTaken { get { return (TotalDays - RemainingDays); } }
+        public int LeavePeriod { get; set; }
         public long RelieverUserID { get; set; }
         public long CreatedByUserId { get; set; }
         public byte IsHrDeclined { get; set; }

@@ -117,8 +117,8 @@ namespace hrms_be_backend_data.Repository
             {
                 var param = new DynamicParameters();
                 param.Add("@EmployeeId", employeeId);
-                param.Add("@LeaveStatus", "Active");
-                //param.Add("@LeavePeriod", LeavePeriod);
+               // param.Add("@CompanyId", CompanyId);
+                // param.Add("@LeaveStatus", LeaveStatus);
 
                 var res = await _dapperGeneric.Get<EmpLeaveRequestInfo>(ApplicationConstant.Sp_CreateEmpLeaveInfo, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
@@ -198,7 +198,7 @@ namespace hrms_be_backend_data.Repository
                 return default;
             }
         }
-        public async Task<GradeLeave> GradeLeave(long employeeId)
+        public async Task<GradeLeave> GetEmployeeGradeLeave(long employeeId)
         {
             try
             {
@@ -333,7 +333,28 @@ namespace hrms_be_backend_data.Repository
                 return default;
             }
         }
+        public async Task<List<LeaveApprovalLineItem>> GetLeaveApprovalLineItems(long leaveApprovalId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@leaveApprovalId", leaveApprovalId);
+                //param.Add("@LeavePeriod", LeavePeriod);
 
+                var res = await _dapperGeneric.GetAll<LeaveApprovalLineItem>(ApplicationConstant.Sp_GetLeaveApprovalLineItems, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    return res;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+        }
         public async Task<LeaveApprovalInfo> UpdateLeaveApprovalInfo(LeaveApprovalInfo leaveApproval)
         {
             try
@@ -358,21 +379,20 @@ namespace hrms_be_backend_data.Repository
                 return default;
             }
         }
-        public async Task<List<EmpLeaveRequestInfo>> GetEmpLeaveInfo(long employeeId, string LeaveStatus, string companyId = null)
+        public async Task<EmpLeaveRequestInfo> GetEmpLeaveInfo(long employeeId, long companyId, string LeaveStatus)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("@EmployeeId", employeeId);
-                if (!string.IsNullOrEmpty(LeaveStatus))
-                {
-                    param.Add("@LeaveStatus", LeaveStatus);
-                }
-                //param.Add("@LeavePeriod", LeavePeriod);
+                param.Add("@CompanyId", companyId);
+                param.Add("@LeaveStatus", LeaveStatus);
 
-                var res = await _dapperGeneric.GetAll<EmpLeaveRequestInfo>(ApplicationConstant.Sp_GetEmpLeaveInfo, param, commandType: CommandType.StoredProcedure);
+                var res = await _dapperGeneric.Get<EmpLeaveRequestInfo>(ApplicationConstant.Sp_GetEmpLeaveInfo, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
+                    res.leaveRequestLineItems = await GetLeaveRequestLineItems(res.LeaveRequestId);
+                    
                     return res;
                 }
                 return null;
@@ -455,13 +475,13 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                using (var con = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", LeaveRequestEnum.GETBYID);
                     param.Add("@LeaveRequestIDGet", LeaveRequestID);
 
-                    var LeaveDetails = await _dapper.QueryFirstAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveDetails = await con.QueryFirstAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveDetails;
                 }
@@ -477,7 +497,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", LeaveRequestEnum.DELETE);
@@ -485,7 +505,7 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
                     param.Add("@Reasons_For_Delete", delete.Reasons_For_Delete == null ? "" : delete.Reasons_For_Delete.ToString().Trim());
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
+                    dynamic response = await conn.ExecuteAsync(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }
@@ -502,7 +522,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", LeaveRequestEnum.UPDATE);
@@ -521,7 +541,7 @@ namespace hrms_be_backend_data.Repository
 
                     param.Add("@Updated_By_User_Email", requesterUserEmail.Trim());
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
+                    dynamic response = await conn.ExecuteAsync(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }
@@ -537,12 +557,12 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", LeaveRequestEnum.GETALL);
 
-                    var LeaveDetails = await _dapper.QueryAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveDetails = await conn.QueryAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveDetails;
                 }
@@ -557,7 +577,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
                     param.Add("@Status", LeaveRequestEnum.GETleaveRequestByUerId);
@@ -565,7 +585,7 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@CompanyIdGet", CompanyId);
 
 
-                    var LeaveDetails = await _dapper.QueryAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveDetails = await conn.QueryAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveDetails;
 
@@ -670,6 +690,7 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
+        
         public async Task<EmpLeaveRequestInfo> UpdateLeaveRequestInfoStatus(EmpLeaveRequestInfo empLeaveRequestInfo)
         {
             try

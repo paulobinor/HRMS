@@ -101,21 +101,21 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
         [HttpGet("Info")]
         //[Authorize]
-        public async Task<IActionResult> GetEmpLeaveInfo([FromQuery] long EmployeeId, string infoStatus)
+        public async Task<IActionResult> GetEmpLeaveInfo([FromQuery] long CompanyId, [FromQuery] long EmployeeId,[FromQuery] string LeaveStatus)
         {
             var response = new BaseResponse();
             try
             {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+                //var requester = new RequesterInfo
+                //{
+                //    Username = this.User.Claims.ToList()[2].Value,
+                //    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                //    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                //    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                //    Port = Request.HttpContext.Connection.RemotePort.ToString()
+                //};
 
-                return Ok(await _leaveRequestService.GetEmpLeaveInfo(EmployeeId, infoStatus));
+                return Ok(await _leaveRequestService.GetEmpLeaveInfo(EmployeeId, CompanyId, LeaveStatus));
             }
             catch (Exception ex)
             {

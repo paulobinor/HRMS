@@ -66,7 +66,7 @@
         public static string Sp_GetEmployeeGradeLeave { get;  set; } = "Sp_GetEmployeeGradeLeave";
         public static string Sp_GetLeaveApprovalByEmployeeId { get; set; } = "Sp_GetLeaveApprovalByEmployeeId";
         public static string Sp_UpdateLeaveRequestInfoStatus { get; set; } = "Sp_UpdateLeaveRequestInfoStatus";
-
+        public static string Sp_GetLeaveApprovalLineItems { get; set; } = "Sp_GetLeaveApprovalLineItemS";
 
         //System Default
         public static int DefaultDeptId = 1;
