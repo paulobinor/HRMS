@@ -1103,3 +1103,22 @@
 [2024-04-05 16:33:43.158 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.GetResignationClearanceByCompanyID (hrms-be-backend-api) in 3945.1136ms
 [2024-04-05 16:33:43.159 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.GetResignationClearanceByCompanyID (hrms-be-backend-api)'
 [2024-04-05 16:33:43.160 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/api/ResignationClearance/GetResignationByCompanyID/103 - - - 200 - application/json;+charset=utf-8 3999.7112ms
+[2024-04-05 16:48:05.166 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-05 16:48:05.515 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-05 16:48:05.518 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-05 16:48:05.519 +01:00  INF]  Hosting environment: Development
+[2024-04-05 16:48:05.520 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-05 16:48:06.526 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-05 16:48:07.174 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 651.9383ms
+[2024-04-05 16:48:07.182 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-05 16:48:07.193 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-05 16:48:07.217 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 24.3675ms
+[2024-04-05 16:48:07.238 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 55.7442ms
+[2024-04-05 16:48:07.336 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-05 16:48:08.351 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 1015.1594ms
+[2024-04-05 16:48:26.088 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/api/Resignation/GetResignationByID/1 - -
+[2024-04-05 16:48:26.097 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-05 16:48:26.306 +01:00  INF]  Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+[2024-04-05 16:48:26.314 +01:00  INF]  AuthenticationScheme: Bearer was challenged.
+[2024-04-05 16:48:26.315 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/api/Resignation/GetResignationByID/1 - - - 401 0 - 227.9291ms
