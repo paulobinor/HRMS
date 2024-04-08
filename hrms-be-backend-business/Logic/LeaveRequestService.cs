@@ -81,7 +81,7 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
 
-            if (!IsValidWeekeday(leaveRequestLineItem.startDate))
+            if (!IsValidWeekeday(leaveRequestLineItem.startDate) || !IsValidWeekeday(leaveRequestLineItem.endDate))
             {
                 _logger.LogWarning($"Invalid startdate specified. {leaveRequestLineItem.startDate.DayOfWeek} does not fall within a weekday");
                 response.ResponseCode = "08";
@@ -95,11 +95,40 @@ namespace hrms_be_backend_business.Logic
                 response.ResponseMessage = $"Invalid endDate specified. {leaveRequestLineItem.endDate.DayOfWeek} does not fall within a weekday";
                 return response;
             }
+
+            //startdate must be less than end date
+            if (leaveRequestLineItem.startDate > leaveRequestLineItem.endDate)
+            {
+                _logger.LogError("Invalid date range specified. start date must come before the the end date");
+                response.ResponseCode = "08";
+                response.ResponseMessage = "Invalid date range specified. start date must come before the the end date";
+                return response;
+            }
+
+            //You cannot select a date in the past
+            if ( DateTime.Now.Date > leaveRequestLineItem.startDate)
+            {
+                _logger.LogError("Invalid date range specified. You cannot select a date in the past");
+                response.ResponseCode = "08";
+                response.ResponseMessage = "Invalid date range specified. You cannot select a date in the past";
+                return response;
+            }
+
+            //resumption date must be greater or equal to end date
+            if (leaveRequestLineItem.ResumptionDate < leaveRequestLineItem.endDate)
+            {
+                _logger.LogError("Invalid resumption date specified.");
+                response.ResponseCode = "08";
+                response.ResponseMessage = "Invalid resumption specified.";
+                return response;
+            }
+
+            //Validate leave length
             int totaldays = CountWeekdays(leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
 
             if (totaldays != leaveRequestLineItem.LeaveLength)
             {
-                _logger.LogWarning($"Invalid leave length specified! The leave length is {leaveRequestLineItem.LeaveLength} but the total weekdays between {leaveRequestLineItem.startDate.ToShortDateString()} and {leaveRequestLineItem.endDate.ToShortDateString()} is {totaldays}");
+                _logger.LogError($"Invalid leave length specified! The leave length is {leaveRequestLineItem.LeaveLength} but the total weekdays between {leaveRequestLineItem.startDate.ToShortDateString()} and {leaveRequestLineItem.endDate.ToShortDateString()} is {totaldays}");
                 response.ResponseCode = "08";
                 response.ResponseMessage = $"Invalid leave length specified! The leave length is {leaveRequestLineItem.LeaveLength} but the total weekdays between {leaveRequestLineItem.startDate.ToShortDateString()} and {leaveRequestLineItem.endDate.ToShortDateString()} is {totaldays}";
                 return response;
@@ -114,12 +143,14 @@ namespace hrms_be_backend_business.Logic
                     empLeaveRequestInfo = await _leaveRequestRepository.CreateEmpLeaveInfo(leaveRequestLineItem.EmployeeId);
                     if (empLeaveRequestInfo == null)
                     {
-                        throw new Exception("Could not create leave request");
+                        _logger.LogError($"Could not create leave request in database.");
+                        response.ResponseCode = "08";
+                        response.ResponseMessage = $"Could not create leave request. Please try again later of contact support for assistance";
+                        return response;
+                        //throw new Exception("Could not create leave request");
                     }    
                 }
 
-               // int leaveRequestCount = 0;
-                //Check maximum split count
                 var leaveRequestLineItems = await _leaveRequestRepository.GetLeaveRequestLineItems(empLeaveRequestInfo.LeaveRequestId);
                 if (leaveRequestLineItems != null)
                 {
@@ -128,21 +159,24 @@ namespace hrms_be_backend_business.Logic
                         gradeLeave = await _leaveRequestRepository.GetEmployeeGradeLeave(leaveRequestLineItem.EmployeeId);
 
                         //Check number of days left
-                        noOfDaysTaken = leaveRequestLineItems.Sum(x => x.LeaveLength);
+                        //Only sum up the days of the items that were approved
+                        noOfDaysTaken = leaveRequestLineItems.Where(x => x.IsApproved == true).Sum(x => x.LeaveLength); 
 
                         if ((noOfDaysTaken + leaveRequestLineItem.LeaveLength) > gradeLeave.NumbersOfDays)
                         {
                             response.ResponseCode = "08";
                             response.ResponseMessage = "Leave length exceeded";
                             return response;
-
                         }
 
                         //Check split count
-                        if ((leaveRequestLineItems.Count + 1) > gradeLeave.NumberOfVacationSplit ) //include proposed leave
+                        //Only count the items that were approved
+                        //include proposed leave (+1)
+                        var noOfApprovedSplit = leaveRequestLineItems.Where(x => x.IsApproved == true).Count();
+                        if ((noOfApprovedSplit + 1) > gradeLeave.NumberOfVacationSplit ) 
                         {
                             response.ResponseCode = "08";
-                            response.ResponseMessage = "vacation split count exceeded";
+                            response.ResponseMessage = "Vacation split count exceeded";
                             return response;
                         }
                     }
@@ -329,6 +363,7 @@ namespace hrms_be_backend_business.Logic
                     {
                        
                         currentLeaveApprovalInfo.ApprovalStatus = "Completed";
+                        leaveRequestLineItem.IsApproved = true;
                         sendMailToReliever = true;
 
                         //Update active leave info for employee if maximum days or split count reached.
@@ -342,6 +377,9 @@ namespace hrms_be_backend_business.Logic
                             empLeaveRequestInfo.LeaveStatus = "Completed";
                             _leaveRequestRepository.UpdateLeaveRequestInfoStatus(empLeaveRequestInfo);
                         }
+
+                        //update Leaverequestlineitem
+                        _leaveRequestRepository.UpdateLeaveRequestLineItemApproval(leaveRequestLineItem);
                     }
 
                     if (currentLeaveApprovalInfo.RequiredApprovalCount > repoResponse.ApprovalStep)

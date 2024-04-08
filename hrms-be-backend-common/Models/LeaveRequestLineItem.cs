@@ -15,6 +15,7 @@
         public long EmployeeId { get; set; }
         public long LeaveTypeId { get; set; }
         public long CompanyId { get; set; }
+        public bool IsApproved { get; set; }
     }
 
 }
