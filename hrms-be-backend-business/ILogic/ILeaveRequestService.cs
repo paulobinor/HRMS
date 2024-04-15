@@ -1,5 +1,4 @@
-﻿using Dapper;
-using hrms_be_backend_common.Models;
+﻿using hrms_be_backend_common.Models;
 using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;

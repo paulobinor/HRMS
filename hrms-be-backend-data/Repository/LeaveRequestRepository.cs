@@ -43,7 +43,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@LeaveLength", leaveRequestLineItem.LeaveLength);
                 param.Add("@LeaveRequestId", leaveRequestLineItem.LeaveRequestId);
                 param.Add("@RelieverUserId", leaveRequestLineItem.RelieverUserId);
-                param.Add("@RelieverUserID", leaveRequestLineItem.RescheduleReason);
+              //  param.Add("@RelieverUserID", leaveRequestLineItem.RescheduleReason);
                 param.Add("@startDate", leaveRequestLineItem.startDate);
                 param.Add("@IsRescheduled", "0");
                 param.Add("@ResumptionDate", leaveRequestLineItem.ResumptionDate);

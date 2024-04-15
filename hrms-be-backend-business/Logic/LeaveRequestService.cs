@@ -1,5 +1,4 @@
-﻿using Dapper;
-using hrms_be_backend_business.AppCode;
+﻿using hrms_be_backend_business.AppCode;
 using hrms_be_backend_business.ILogic;
 using hrms_be_backend_common.Models;
 using hrms_be_backend_data.AppConstants;
@@ -9,7 +8,6 @@ using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.Ocsp;
 using System.Data;
 using System.Text;
 
@@ -70,6 +68,7 @@ namespace hrms_be_backend_business.Logic
             GradeLeave gradeLeave = null;
             int noOfDaysTaken = 0;
 
+            #region Validate Leave Request
             //check if any pending leave approvals
             var leaveAproval = await _leaveRequestRepository.GetLeaveApprovalInfoByEmployeeId(leaveRequestLineItem.EmployeeId);
             if (leaveAproval != null)
@@ -99,18 +98,18 @@ namespace hrms_be_backend_business.Logic
             //startdate must be less than end date
             if (leaveRequestLineItem.startDate > leaveRequestLineItem.endDate)
             {
-                _logger.LogError("Invalid date range specified. start date must come before the the end date");
+                _logger.LogError("Invalid date range specified. start date must come before the end date");
                 response.ResponseCode = "08";
                 response.ResponseMessage = "Invalid date range specified. start date must come before the the end date";
                 return response;
             }
 
             //You cannot select a date in the past
-            if ( DateTime.Now.Date > leaveRequestLineItem.startDate)
+            if (DateTime.Now.Date > leaveRequestLineItem.startDate)
             {
                 _logger.LogError("Invalid date range specified. You cannot select a date in the past");
                 response.ResponseCode = "08";
-                response.ResponseMessage = "Invalid date range specified. You cannot select a date in the past";
+                response.ResponseMessage = $"Invalid date range specified. You cannot select a date in the past. Selected date {leaveRequestLineItem.startDate}, Current date {DateTime.Now}";
                 return response;
             }
 
@@ -133,6 +132,9 @@ namespace hrms_be_backend_business.Logic
                 response.ResponseMessage = $"Invalid leave length specified! The leave length is {leaveRequestLineItem.LeaveLength} but the total weekdays between {leaveRequestLineItem.startDate.ToShortDateString()} and {leaveRequestLineItem.endDate.ToShortDateString()} is {totaldays}";
                 return response;
             }
+
+            #endregion
+
 
             EmpLeaveRequestInfo empLeaveRequestInfo = null;
             try
