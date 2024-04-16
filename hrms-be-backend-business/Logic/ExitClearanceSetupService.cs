@@ -5,6 +5,7 @@ using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.Repository;
+using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -36,7 +37,7 @@ namespace hrms_be_backend_business.Logic
             _mailService = mailService;
 
         }
-        public async Task<ExecutedResult<string>> CreateExitClearanceSetup(ExitClearanceSetupDTO request, string AccessKey, string RemoteIpAddress)
+        public async Task<ExecutedResult<string>> CreateExitClearanceSetup(CreateExitClearanceSetupVm request, string AccessKey, string RemoteIpAddress)
         {
             var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
             if (accessUser.data == null)
@@ -65,7 +66,7 @@ namespace hrms_be_backend_business.Logic
                     DateCreated = DateTime.Now,
                     CreatedByUserId = accessUser.data.EmployeeId,
                     IsFinalApproval = request.IsFinalApproval,
-                    IsDeleted = request.IsDeleted,
+                    DepartmentID = request.DepartmentID,
                 };
 
                 var resp = await _exitClearanceSetupRepository.CreateExitClearanceSetup(setup);
@@ -123,9 +124,9 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<ExecutedResult<IEnumerable<ExitClearanceSetupDTO>>> GetExitClearanceSetupByCompanyID(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress)
+
+        public async Task<ExecutedResult<IEnumerable<ExitClearanceSetupDTO>>> GetExitClearanceSetupByCompanyID(long companyID, string AccessKey, string RemoteIpAddress)
         {
-            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
 
             try
             {
@@ -136,7 +137,7 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                var setup = await _exitClearanceSetupRepository.GetAllExitClearanceSetupByCompanyID(companyID, filter.PageNumber, filter.PageSize, filter.SearchValue);
+                var setup = await _exitClearanceSetupRepository.GetAllExitClearanceSetupByCompanyID(companyID);
 
                 if (setup == null)
                 {
@@ -221,6 +222,108 @@ namespace hrms_be_backend_business.Logic
             {
                 _logger.LogError($"Exception Occurred: ExitClearanceSetupDTO ==> {ex.Message}");
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+
+            }
+        }
+
+        public async Task<ExecutedResult<IEnumerable<ExitClearanceSetupDTO>>> GetDepartmentsThatAreNotFinalApproval(long companyID, string AccessKey, string RemoteIpAddress)
+        {
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<IEnumerable<ExitClearanceSetupDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
+
+                var departments = await _exitClearanceSetupRepository.GetDepartmentsThatAreNotFinalApproval(companyID);
+
+                if (departments == null)
+                {
+                    return new ExecutedResult<IEnumerable<ExitClearanceSetupDTO>>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+
+                }
+
+                //update action performed into audit log here
+
+                _logger.LogInformation("departments fetched successfully.");
+                return new ExecutedResult<IEnumerable<ExitClearanceSetupDTO>>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = departments };
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetDepartmentsThatAreNotFinalApproval( long companyID, string AccessKey, string RemoteIpAddress) ==> {ex.Message}");
+                return new ExecutedResult<IEnumerable<ExitClearanceSetupDTO>>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+
+            }
+        }
+
+        public async Task<ExecutedResult<ExitClearanceSetupDTO>> GetDepartmentThatIsFinalApprroval(long companyID, string AccessKey, string RemoteIpAddress)
+        {
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<ExitClearanceSetupDTO>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+            }
+            try
+            {
+
+                var department = await _exitClearanceSetupRepository.GetDepartmentThatIsFinalApprroval(companyID);
+
+                if (department == null)
+                {
+                    return new ExecutedResult<ExitClearanceSetupDTO>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+
+                }
+
+                //update action performed into audit log here
+
+                _logger.LogInformation("department fetched successfully.");
+                return new ExecutedResult<ExitClearanceSetupDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = department };
+
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError($"Exception Occured: GetDepartmentThatIsFinalApprroval(long companyID, string AccessKey, string RemoteIpAddress) ==> {ex.Message}");
+                return new ExecutedResult<ExitClearanceSetupDTO>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+
+            }
+        }
+
+        public async Task<ExecutedResult<ExitClearanceSetupDTO>> GetExitClearanceSetupByHodEmployeeID(long HodEmployeeID, string AccessKey, string RemoteIpAddress)
+        {
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<ExitClearanceSetupDTO>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+            }
+            try
+            {
+
+                var setup = await _exitClearanceSetupRepository.GetExitClearanceSetupByHodEmployeeID(HodEmployeeID);
+
+                if (setup == null)
+                {
+                    return new ExecutedResult<ExitClearanceSetupDTO>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+
+                }
+
+                //update action performed into audit log here
+
+                _logger.LogInformation("setup fetched successfully.");
+                return new ExecutedResult<ExitClearanceSetupDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = setup };
+
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError($"Exception Occured: GetExitClearanceSetupByID(long exitClearanceSetupID, string AccessKey, string RemoteIpAddress) ==> {ex.Message}");
+                return new ExecutedResult<ExitClearanceSetupDTO>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
 
             }
         }

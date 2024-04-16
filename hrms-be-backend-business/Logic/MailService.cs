@@ -642,5 +642,85 @@ namespace hrms_be_backend_business.AppCode
                 throw;
             }
         }
+
+        public async Task SendResignationClearanceApproveMailToApprover(long ApproverEmployeeId, long ResigationByEmployeeId)
+        {
+            try
+            {
+                var userDetails = await _accountRepository.GetUserByEmployeeId(ApproverEmployeeId);
+                var resignationBy = await _accountRepository.GetUserByEmployeeId(ResigationByEmployeeId);
+                StringBuilder mailBody = new StringBuilder();
+                mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
+                mailBody.Append($"Kindly login to approve a resignation clearance by {resignationBy.FirstName} {resignationBy.LastName} {resignationBy.MiddleName} <br/> <br/>");
+
+                var mailPayload = new MailRequest
+                {
+                    Body = mailBody.ToString(),
+                    Subject = "Resignation Clearance",
+                    ToEmail = userDetails.OfficialMail,
+                };
+                SendEmailAsync(mailPayload, null);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: SendResignationClearanceApproveMailToApprover ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task SendResignationClearanceApproveConfirmationMail(long RequesterEmployeeId, long ApprovedByEmployeeId)
+        {
+            try
+            {
+                var userDetails = await _accountRepository.GetUserByEmployeeId(RequesterEmployeeId);
+                var ApprovedByUserDetails = await _accountRepository.GetUserByEmployeeId(ApprovedByEmployeeId);
+                StringBuilder mailBody = new StringBuilder();
+                mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
+                mailBody.Append($"Your resignation clearance has been approved by {ApprovedByUserDetails.FirstName} {ApprovedByUserDetails.LastName} {ApprovedByUserDetails.MiddleName} <br/> <br/>");
+
+                var mailPayload = new MailRequest
+                {
+                    Body = mailBody.ToString(),
+                    Subject = "Resignation Clearance",
+                    ToEmail = userDetails.OfficialMail,
+                };
+                SendEmailAsync(mailPayload, null);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: SendResignationClearanceApproveConfirmationMail ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task SendResignationClearanceDisapproveConfirmationMail(long RequesterEmployeeId, long DiapprovedByEmployeeId, string reason)
+        {
+            try
+            {
+                var userDetails = await _accountRepository.GetUserByEmployeeId(RequesterEmployeeId);
+                var ApprovedByUserDetails = await _accountRepository.GetUserByEmployeeId(DiapprovedByEmployeeId);
+                StringBuilder mailBody = new StringBuilder();
+                mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
+                mailBody.Append($"Your resignation Clearance has been disapproved by {ApprovedByUserDetails.FirstName} {ApprovedByUserDetails.LastName} {ApprovedByUserDetails.MiddleName} <br/> <br/>");
+                mailBody.Append($"Reason: {reason}<br/> <br/>");
+
+
+                var mailPayload = new MailRequest
+                {
+                    Body = mailBody.ToString(),
+                    Subject = "Resignation Clearance",
+                    ToEmail = userDetails.OfficialMail,
+                };
+                SendEmailAsync(mailPayload, null);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: SendResignationClearanceDisapproveConfirmationMail ===>{ex.Message}");
+                throw;
+            }
+        }
     }
 }

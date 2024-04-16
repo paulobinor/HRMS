@@ -3,6 +3,7 @@ using Dapper;
 using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Data;
@@ -252,9 +253,6 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-
-
-
 
     }
 }

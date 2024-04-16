@@ -34,6 +34,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("CompanyID", request.CompanyID);
                 param.Add("CreatedByUserId", request.CreatedByUserId);
                 param.Add("DateCreated", request.DateCreated);
+                param.Add("DepartmentID", request.DepartmentID);
 
                 return await _dapper.Get<string>("Sp_create_exit_clearance_setup", param, commandType: CommandType.StoredProcedure);
 
@@ -44,8 +45,8 @@ namespace hrms_be_backend_data.Repository
                 _logger.LogError($"MethodName: CreateExitClearanceSetup(ExitClearanceSetupDTO request) => {ex.Message}");
                 throw;
             }
-        }
-
+        } 
+        
         public async Task<dynamic> UpdateExitClearanceSetup(ExitClearanceSetupDTO request)
         {
             try
@@ -104,16 +105,33 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+        public async Task<ExitClearanceSetupDTO> GetExitClearanceSetupByHodEmployeeID(long HodEmployeeID)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("HodEmployeeID", HodEmployeeID);
 
-        public async Task<IEnumerable<ExitClearanceSetupDTO>> GetAllExitClearanceSetupByCompanyID(long companyID, int PageNumber, int RowsOfPage, string SearchVal)
+                return await _dapper.Get<ExitClearanceSetupDTO>("Sp_get_exit_clearance_setup_by_hod_employee_id", param, commandType: CommandType.StoredProcedure);
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error Getting Resignation by ID - {HodEmployeeID}", ex);
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<ExitClearanceSetupDTO>> GetAllExitClearanceSetupByCompanyID(long companyID)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("CompanyID", companyID);
-                param.Add("@PageNumber", PageNumber);
-                param.Add("@RowsOfPage", RowsOfPage);
-                param.Add("@SearchVal", SearchVal.ToLower());
+                //param.Add("@PageNumber", PageNumber);
+                //param.Add("@RowsOfPage", RowsOfPage);
+                //param.Add("@SearchVal", SearchVal.ToLower());
 
                 var response = await _dapper.GetAll<ExitClearanceSetupDTO>("Sp_get_all_exit_clearance_setup", param, commandType: CommandType.StoredProcedure);
 
@@ -126,6 +144,42 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
+        public async Task<ExitClearanceSetupDTO> GetDepartmentThatIsFinalApprroval(long companyID)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("CompanyID", companyID);
+
+                return await _dapper.Get<ExitClearanceSetupDTO>("Sp_get_exit_clearance_department_that_is_final_approval", param, commandType: CommandType.StoredProcedure);
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error occured - {companyID}", ex);
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<ExitClearanceSetupDTO>> GetDepartmentsThatAreNotFinalApproval(long companyID)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("CompanyID", companyID);
+
+
+                var response = await _dapper.GetAll<ExitClearanceSetupDTO>("Sp_get_exit_clearance_departments_that_are_not_final_approval", param, commandType: CommandType.StoredProcedure);
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error occured - {companyID}", ex);
+                throw;
+            }
+        }
 
     }
 }

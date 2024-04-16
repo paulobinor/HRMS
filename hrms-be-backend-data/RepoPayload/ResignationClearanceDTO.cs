@@ -20,6 +20,12 @@
         public string Signature { get; set; }
         public long CreatedByUserID { get; set; }
         public DateTime DateCreated { get; set; }
+        public bool IsApproved { get; set; }
+        public bool IsDisapproved { get; set; }
+        public DateTime DateApproved { get; set; }
+        public DateTime DateDisapproved { get; set; }
+        public long DisapproveByUserID { get; set; }
+        public string ReasonForDisapproval { get; set; }
 
 
     }

@@ -2217,6 +2217,7 @@
           "BCrypt.Net-Next": "4.0.3",
           "Dapper": "2.0.151",
           "MailKit": "4.2.0",
+          "Microsoft.AspNetCore.Http.Features": "5.0.17",
           "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "7.0.1",
           "Microsoft.Extensions.Options": "7.0.0",
@@ -6997,7 +6998,7 @@
       "projectName": "hrms-be-backend-api",
       "projectPath": "C:\\Users\\noble.nwabuike\\source\\repos\\hrms-be-backend\\hrms-be-backend-api\\hrms-be-backend-api.csproj",
       "packagesPath": "C:\\Users\\noble.nwabuike\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\noble.nwabuike\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-api\\obj\\",
+      "outputPath": "C:\\Users\\noble.nwabuike\\source\\repos\\hrms-be-backend\\hrms-be-backend-api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\noble.nwabuike\\AppData\\Roaming\\NuGet\\NuGet.Config",

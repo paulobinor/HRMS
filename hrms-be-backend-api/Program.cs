@@ -184,6 +184,8 @@ builder.Services.AddScoped<IResignationRepository, ResignationRepository>();
 builder.Services.AddScoped<IResignationInterviewRepository, ResignationInterviewRepository>();
 builder.Services.AddScoped<IResignationClearanceRepository, ResignationClearanceRepository>();
 builder.Services.AddScoped<IExitClearanceSetupRepository, ExitClearanceSetupRepository>();
+builder.Services.AddScoped<IResignationClearanceApprovalsRepository, ResignationClearanceApprovalsRepository>();
+
 
 //OnboardingModule
 builder.Services.AddScoped<ICompanyService, CompanyService>();

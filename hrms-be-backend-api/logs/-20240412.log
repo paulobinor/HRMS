@@ -1,0 +1,16 @@
+[2024-04-12 14:33:24.897 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-12 14:33:25.362 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-12 14:33:25.367 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-12 14:33:25.369 +01:00  INF]  Hosting environment: Development
+[2024-04-12 14:33:25.370 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-12 14:33:27.612 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-12 14:33:28.118 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 507.9687ms
+[2024-04-12 14:33:28.124 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-12 14:33:28.129 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-12 14:33:28.149 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 20.2599ms
+[2024-04-12 14:33:28.203 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 79.1674ms
+[2024-04-12 14:33:28.372 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-12 14:33:28.391 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/favicon-32x32.png - -
+[2024-04-12 14:33:28.405 +01:00  INF]  Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+[2024-04-12 14:33:28.407 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/favicon-32x32.png - - - 200 628 image/png 16.3143ms
+[2024-04-12 14:33:28.714 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 342.3099ms

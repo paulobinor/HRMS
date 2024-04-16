@@ -12,7 +12,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ResignationController : ControllerBase
     {
         private readonly ILogger<ResignationController> _logger;
@@ -60,7 +60,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpPost]
         [Route("UploadResignationLetter")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> UploadFile_(IFormFile letter)
         {
            

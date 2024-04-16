@@ -13,7 +13,10 @@ namespace hrms_be_backend_data.IRepository
         Task<dynamic> CreateExitClearanceSetup(ExitClearanceSetupDTO request);
         Task<dynamic> UpdateExitClearanceSetup(ExitClearanceSetupDTO request);
         Task<ExitClearanceSetupDTO> GetExitClearanceSetupByID(long ExitClearanceSetupID);
-        Task<IEnumerable<ExitClearanceSetupDTO>> GetAllExitClearanceSetupByCompanyID(long companyID, int PageNumber, int RowsOfPage, string SearchVal);
+        Task<ExitClearanceSetupDTO> GetExitClearanceSetupByHodEmployeeID(long HodEmployeeID);
+        Task<IEnumerable<ExitClearanceSetupDTO>> GetAllExitClearanceSetupByCompanyID(long companyID);
         Task<dynamic> DeleteExitClearanceSetup(long ExitClearanceSetupID, string deletedBy);
+        Task<ExitClearanceSetupDTO> GetDepartmentThatIsFinalApprroval(long companyID);
+        Task<IEnumerable<ExitClearanceSetupDTO>> GetDepartmentsThatAreNotFinalApproval(long companyID);
     }
 }

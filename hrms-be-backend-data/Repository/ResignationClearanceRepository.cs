@@ -137,54 +137,51 @@ namespace hrms_be_backend_data.Repository
         //    }
         //}
 
-        //public async Task<int> ApprovePendingResignationClearance(long userID, long ID)
-        //{
-        //    try
-        //    {
-        //        var param = new DynamicParameters();
-        //        param.Add("UserID", userID);
-        //        param.Add("ID", ID);
-        //        param.Add("DateApproved", DateTime.Now);
-        //        param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
+        public async Task<dynamic> ApprovePendingResignationClearance(long userID, long resignationClearanceId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("UserID", userID);
+                param.Add("resignationClearanceId", resignationClearanceId);
+                param.Add("DateApproved", DateTime.Now);
+                param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-        //        //Change storedProceedure
-        //        await _repository.Execute<int>("Sp_ApprovePendingResignationClearance", param, commandType: CommandType.StoredProcedure);
-        //        var response = param.Get<int>("Resp");
+                var response = await _dapper.Get<string>("Sp_ApprovePendingResignationClearance", param, commandType: CommandType.StoredProcedure);
 
-        //        return response;
+                return response;
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        var err = ex.Message;
-        //        _logger.LogError($"MethodName: ApprovePendingResignationClearance(long userID, long ID) => {ex.Message}");
-        //        throw;
-        //    }
-        //}
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: ApprovePendingResignationClearance(long userID, long resignationClearanceId) => {ex.Message}");
+                throw;
+            }
+        }
 
-        //public async Task<int> DisapprovePendingResignationClearance(long userID, long ID, string reason)
-        //{
-        //    try
-        //    {
-        //        var param = new DynamicParameters();
-        //        param.Add("UserID", userID);
-        //        param.Add("ID", ID);
-        //        param.Add("DateDisapproved", DateTime.Now);
-        //        param.Add("DisapprovedReason", reason);
-        //        param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
+        public async Task<dynamic> DisapprovePendingResignationClearance(long userID, long resignationClearanceId, string reason)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("UserID", userID);
+                param.Add("resignationClearanceId", resignationClearanceId);
+                param.Add("DateDisapproved", DateTime.Now);
+                param.Add("DisapprovedReason", reason);
+                param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-        //        //change storedProceedure
-        //        await _repository.Execute<int>("Sp_DisapprovePendingResignationClearance", param, commandType: CommandType.StoredProcedure);
-        //        var response = param.Get<int>("Resp");
-        //        return response;
+                var response = await _dapper.Get<string>("Sp_DisapprovePendingResignationClearance", param, commandType: CommandType.StoredProcedure);
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        var err = ex.Message;
-        //        _logger.LogError($"MethodName: DisapprovePendingResignationClearance(long userID, long SRFID, string reason) => {ex.Message}");
-        //        throw;
-        //    }
-        //}
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: DisapprovePendingResignationClearance(long userID, long resignationClearanceId, string reason) => {ex.Message}");
+                throw;
+            }
+        }
     }
 }

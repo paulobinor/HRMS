@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
+using System.Net;
 using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace hrms_be_backend_business.Logic
@@ -131,6 +132,12 @@ namespace hrms_be_backend_business.Logic
 
         public async Task<ExecutedResult<string>> UploadLetter(IFormFile signedResignationLetter, string AccessKey, string RemoteIpAddress)
         {
+            //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+            //}
+
             try
             {
                 var uploadPath = _config["ResignationFileConfig:UploadFolderPath"];
@@ -145,30 +152,35 @@ namespace hrms_be_backend_business.Logic
 
                 if (string.IsNullOrEmpty(errorMessages))
                 {
-                    var fileName = Guid.NewGuid().ToString().Replace(" ", "");
-                    var fileExt = Path.GetExtension(signedResignationLetter.FileName)?.TrimStart('.');
-
-                    if (string.IsNullOrEmpty(fileExt))
-                        return new ExecutedResult<string>() { responseMessage = "Invalid file extension", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
-
-                    var filePath = Path.Combine(uploadPath, $"{fileName}.{fileExt}");
-
-                    if (System.IO.File.Exists(filePath))
-                        System.IO.File.Delete(filePath);
-
-                    using (Stream stream = System.IO.File.Create(filePath))
+    
+                    using HttpClient httpClient = new HttpClient();
+                    FileUploadRequest request = new FileUploadRequest
                     {
-                        await signedResignationLetter.CopyToAsync(stream);
-                    }
-
-                    var data = new
-                    {
-                        fileName = $"{fileName}.{fileExt}",
-                        fileURL = $"{uploadBaseURL}{fileName}.{fileExt}",
-                        filePath = filePath,
+                        AppName = "HRMS",
+                        //UserId = accessUser.data.EmployeeId,
+                        UserId = "101",
+                        Image = signedResignationLetter
                     };
+                    MultipartFormDataContent formDataContent = new MultipartFormDataContent();
+                    formDataContent.Add(new StreamContent(request.Image.OpenReadStream()), "Image", request.Image.FileName);
+                    formDataContent.Add(new StringContent(request.AppName), "AppName");
+                    formDataContent.Add(new StringContent(request.UserId), "UserId");
+                    string url = uploadBaseURL + "UploadFile";
 
-                    return new ExecutedResult<string>() { responseMessage = "File uploaded Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                    HttpResponseMessage response = await httpClient.PostAsync(url, formDataContent);
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        await response.Content.ReadAsStringAsync();
+                        return new ExecutedResult<string>() { responseMessage = errorMessages, responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                    }
+                    var uploadResponse = JsonConvert.DeserializeObject<FileResponse>(await response.Content.ReadAsStringAsync());
+                    if (uploadResponse.ResponseCode != "00")
+                    {
+                        _logger.LogInformation("file upload failed");
+                        return new ExecutedResult<string>() { responseMessage = errorMessages, responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+
+                    }
+                    return new ExecutedResult<string>() { responseMessage = "File uploaded Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = uploadResponse.UploadUrl };
                 }
                 else
                 {
@@ -448,7 +460,7 @@ namespace hrms_be_backend_business.Logic
                 }
                 var approvedResignationResp = await _resignationRepository.ApprovePendingResignation(request.EmployeeID, request.ResignationId);
 
-                if (accessUser.data.EmployeeId == resignation.HodEmployeeID || accessUser.data.EmployeeId == resignation.UnitHeadEmployeeID)
+                if (accessUser.data.EmployeeId == resignation.HodEmployeeID)
                 {
                     _mailService.SendResignationApproveMailToApprover(resignation.HrEmployeeID, resignation.EmployeeId, resignation.ExitDate);
 
@@ -465,6 +477,7 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
+                _mailService.SendResignationApproveConfirmationMail(resignation.EmployeeId, accessUser.data.EmployeeId, resignation.ExitDate);
 
                 return new ExecutedResult<string>() { responseMessage = "Resignation approved successfully.", responseCode = (00).ToString(), data = null };
 
@@ -481,6 +494,11 @@ namespace hrms_be_backend_business.Logic
 
         public async Task<ExecutedResult<string>> DisapprovePendingResignation(DisapprovePendingResignation request, string AccessKey, string RemoteIpAddress)
         {
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+            }
             try
             {
                 var resignation = await _resignationRepository.GetResignationByID(request.ResignationID);
@@ -498,6 +516,8 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
+                _mailService.SendResignationDisapproveConfirmationMail(resignation.EmployeeId, accessUser.data.EmployeeId);
+
                 return new ExecutedResult<string>() { responseMessage = "Resignation disapproved successfully.", responseCode = (00).ToString(), data = null };
 
             }
@@ -510,9 +530,6 @@ namespace hrms_be_backend_business.Logic
 
             }
         }
-
-       
-
 
     }
 }

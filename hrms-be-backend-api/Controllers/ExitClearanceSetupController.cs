@@ -3,6 +3,7 @@ using hrms_be_backend_business.ILogic;
 using hrms_be_backend_business.Logic;
 using hrms_be_backend_common.Communication;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -22,7 +23,7 @@ namespace hrms_be_backend_api.Controllers
             _exitClearanceSetupService = exitClearanceSetupService;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateExitClearanceSetup(ExitClearanceSetupDTO request)
+        public async Task<IActionResult> CreateExitClearanceSetup(CreateExitClearanceSetupVm request)
         {
 
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -54,7 +55,6 @@ namespace hrms_be_backend_api.Controllers
 
         }
 
-        //[Authorize]
         [HttpGet]
         [Route("GetExitClearanceSetupByID/{exitClearanceSetupID}")]
         [Authorize]
@@ -73,7 +73,6 @@ namespace hrms_be_backend_api.Controllers
 
         }
 
-        //[Authorize]
         [HttpGet]
         [Route("GetExitClearanceSetupByCompanyID/{companyId}")]
         [Authorize]
@@ -87,12 +86,11 @@ namespace hrms_be_backend_api.Controllers
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-            return Ok(await _exitClearanceSetupService.GetExitClearanceSetupByCompanyID(filter, companyId, accessToken, RemoteIpAddress));
+            return Ok(await _exitClearanceSetupService.GetExitClearanceSetupByCompanyID(companyId, accessToken, RemoteIpAddress));
 
 
         }
 
-        [Authorize]
         [HttpPost]
         [Route("DeleteExitClearanceSetup")]
         [Authorize]
@@ -107,6 +105,58 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
             return Ok(await _exitClearanceSetupService.DeleteExitClearanceSetup(request, accessToken, RemoteIpAddress));
+
+        }
+
+        [HttpPost]
+        [Route("GetDepartmentsThatAreNotFinalApproval")]
+        [Authorize]
+        public async Task<IActionResult> GetDepartmentsThatAreNotFinalApproval(long companyID)
+        {
+
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return Ok(await _exitClearanceSetupService.GetDepartmentsThatAreNotFinalApproval(companyID, accessToken, RemoteIpAddress));
+
+        }
+
+        [HttpPost]
+        [Route("GetDepartmentThatIsFinalApprroval")]
+        [Authorize]
+        public async Task<IActionResult> GetDepartmentThatIsFinalApprroval(long companyID)
+        {
+
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return Ok(await _exitClearanceSetupService.GetDepartmentThatIsFinalApprroval(companyID, accessToken, RemoteIpAddress));
+
+        }
+
+
+        [HttpPost]
+        [Route("GetExitClearanceSetupByHodEmployeeID")]
+        [Authorize]
+        public async Task<IActionResult> GetExitClearanceSetupByHodEmployeeID(long HodEmployeeID)
+        {
+
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return Ok(await _exitClearanceSetupService.GetExitClearanceSetupByHodEmployeeID(HodEmployeeID, accessToken, RemoteIpAddress));
 
         }
     }

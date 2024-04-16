@@ -6,6 +6,7 @@ using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.Design;
 using System.Security.Claims;
 using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
@@ -96,91 +97,49 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
 
         //[HttpGet]
-        //[Route("GetPendingResignationClearanceByUserID/{userID}")]
-        //public async Task<IActionResult> GetPendingResignationClearanceByUserID(long userID)
+        //[Route("GetPendingResignationClearanceByEmployeeID/{EmployeeID}")]
+        //public async Task<IActionResult> GetPendingResignationClearanceByEmployeeID(long EmployeeID)
         //{
-        //    var response = new BaseResponse();
-        //    try
-        //    {
-        //        var requester = new RequesterInfo
-        //        {
-        //            Username = this.User.Claims.ToList()[2].Value,
-        //            UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-        //            RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-        //            IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-        //            Port =  Request.HttpContext.Connection.RemotePort.ToString()
-        //        };
+        //    var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //    var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+        //    var identity = HttpContext.User.Identity as ClaimsIdentity;
+        //    IEnumerable<Claim> claim = identity.Claims;
+        //    var accessToken = Request.Headers["Authorization"];
+        //    accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-        //        return Ok(await _resignationClearanceService.GetPendingResignationClearanceByUserID(requester, userID));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Exception Occured: ControllerMethod : GetPendingResignationClearanceByUserID ==> {ex.Message}");
-        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-        //        response.ResponseMessage = $"Exception Occured: ControllerMethod : GetPendingResignationClearanceByUserID ==> {ex.Message}";
-        //        response.Data = null;
-        //        return Ok(response);
-        //    }
+        //    return Ok(await _resignationClearanceService.GetPendingResignationClearanceByEmployeeID(EmployeeID, accessToken, RemoteIpAddress));
 
         //}
 
-        //[HttpPost]
-        //[Route("ApprovePendingResignation")]
-        //public async Task<IActionResult> ApprovePendingResignationClearance([FromBody] ApproveResignationClearanceDTO request)
-        //{
-        //    var response = new BaseResponse();
-        //    try
-        //    {
-        //        var requester = new RequesterInfo
-        //        {
-        //            Username = this.User.Claims.ToList()[2].Value,
-        //            UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-        //            RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-        //            IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-        //            Port =  Request.HttpContext.Connection.RemotePort.ToString()
-        //        };
+        [HttpPost]
+        [Route("ApprovePendingResignation")]
+        public async Task<IActionResult> ApprovePendingResignationClearance([FromBody] ApproveResignationClearanceDTO request)
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-        //        return Ok(await _resignationClearanceService.ApprovePendingResignationClearance(request, requester));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Exception Occured: ControllerMethod : ApprovePendingResignationClearance ==> {ex.Message}");
-        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-        //        response.ResponseMessage = $"Exception Occured: ControllerMethod : ApprovePendingResignationClearance ==> {ex.Message}";
-        //        response.Data = null;
-        //        return Ok(response);
-        //    }
+            return Ok(await _resignationClearanceService.ApprovePendingResignationClearance(request, accessToken, RemoteIpAddress));
 
-        //}
+        }
 
-        //[HttpPost]
-        //[Route("DisapprovePendingResignation")]
-        //public async Task<IActionResult> DisapprovePendingResignationClearance([FromBody] DisapprovePendingResignationClearanceDTO request)
-        //{
-        //    var response = new BaseResponse();
-        //    try
-        //    {
-        //        var requester = new RequesterInfo
-        //        {
-        //            Username = this.User.Claims.ToList()[2].Value,
-        //            UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-        //            RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-        //            IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-        //            Port =  Request.HttpContext.Connection.RemotePort.ToString()
-        //        };
+        [HttpPost]
+        [Route("DisapprovePendingResignation")]
+        public async Task<IActionResult> DisapprovePendingResignationClearance([FromBody] DisapprovePendingResignationClearanceDTO request)
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-        //        return Ok(await _resignationClearanceService.DisapprovePendingResignationClearance(request, requester));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Exception Occured: ControllerMethod : DisapprovePendingResignationClearance ==> {ex.Message}");
-        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-        //        response.ResponseMessage = $"Exception Occured: ControllerMethod : DisapprovePendingResignationClearance ==> {ex.Message}";
-        //        response.Data = null;
-        //        return Ok(response);
-        //    }
+            return Ok(await _resignationClearanceService.DisapprovePendingResignationClearance(request, accessToken, RemoteIpAddress));
 
-        //}
+        }
 
 
     }

@@ -2,8 +2,8 @@
 {
     public class DisapprovePendingResignationClearanceDTO
     {
-        public long userID { get; set; }
-        public long ID { get; set; }
+        public long employeeID { get; set; }
+        public long ResignationClearanceID { get; set; }
         public string reason { get; set; }
     }
 }
