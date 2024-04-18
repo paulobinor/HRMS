@@ -4,6 +4,9 @@ using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Org.BouncyCastle.Asn1.Ocsp;
+using System.ComponentModel.Design;
 
 namespace hrms_be_backend_business.Logic
 {
@@ -462,6 +465,7 @@ namespace hrms_be_backend_business.Logic
 
         public async Task<BaseResponse> GetLeavebyCompanyId(long companyId, RequesterInfo requester)
         {
+            _logger.LogInformation($"Received request to get leave type for CompanyId: {companyId} and Requester:{JsonConvert.SerializeObject(requester)}");
             BaseResponse response = new BaseResponse();
 
             try

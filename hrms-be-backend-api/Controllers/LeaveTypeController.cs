@@ -192,10 +192,15 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
         }
 
-        [Authorize]
+       // [Authorize]
         [HttpGet("GetLeaveTypebyCompanyId")]
-        public async Task<IActionResult> GetLeaveTypebyCompanyId(long CompanyID)
+        public async Task<IActionResult> GetLeaveTypebyCompanyId(long CompanyID, string RequestId)
         {
+            if (string.IsNullOrEmpty(RequestId))
+            {
+                RequestId = DateTime.Now.ToString("yyyyMMddHHmmss");  
+            }
+            _logger.LogInformation($"{RequestId} - Received request to get leave type for CompanyId: {CompanyID}");
             var response = new BaseResponse();
             try
             {
@@ -204,7 +209,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     Username = this.User.Claims.ToList()[2].Value,
                     UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
                     RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
