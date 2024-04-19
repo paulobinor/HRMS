@@ -1,4 +1,6 @@
 ﻿using hrms_be_backend_business.ILogic;
+using hrms_be_backend_business.Logic;
+using hrms_be_backend_common.Communication;
 using hrms_be_backend_common.Models;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.RepoPayload;
@@ -6,6 +8,7 @@ using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Asn1.Ocsp;
+using System.Security.Claims;
 
 namespace hrms_be_backend_api.LeaveModuleController.Controller
 {
@@ -15,27 +18,33 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
     {
         private readonly ILogger<LeaveRequestController> _logger;
         private readonly ILeaveRequestService _leaveRequestService;
+        private readonly IAuthService _authService;
 
-        public LeaveRequestController(ILogger<LeaveRequestController> logger, ILeaveRequestService leaveRequestService)
+        public LeaveRequestController(ILogger<LeaveRequestController> logger, ILeaveRequestService leaveRequestService, IAuthService authService)
         {
             _logger = logger;
             _leaveRequestService = leaveRequestService;
+            _authService = authService;
         }
 
         //[Authorize]
         [HttpPost("Create")]
         public async Task<IActionResult> CreateLeaveRequest([FromBody] LeaveRequestLineItem leaveRequestLineItem)
         {
-            _logger.LogInformation($"Received CreateleaveRequest request. Payload: {leaveRequestLineItem}");
-            //var response = new BaseResponse();
-            //var requester = new RequesterInfo
-            //{
-            //    Username = this.User.Claims.ToList()[2].Value,
-            //    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-            //    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-            //    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-            //    Port = Request.HttpContext.Connection.RemotePort.ToString()
-            //};
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            _logger.LogInformation($"Received CreateleaveRequest request. Payload: {leaveRequestLineItem} from remote address: {RemoteIpAddress}");
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return  Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+
+            }
             var res = await _leaveRequestService.CreateLeaveRequestLineItem(leaveRequestLineItem);
             return Ok(res);
         }

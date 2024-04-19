@@ -11,6 +11,6 @@ namespace hrms_be_backend_business.ILogic
         Task<BaseResponse> GetAllActiveLeaveType(RequesterInfo requester);
         Task<BaseResponse> GetAllLeaveType(RequesterInfo requester);
         Task<BaseResponse> GetLeaveTypeById(long LeaveTypeId, RequesterInfo requester);
-        Task<BaseResponse> GetLeavebyCompanyId(long companyId, RequesterInfo requester);
+        Task<BaseResponse> GetLeavebyCompanyId(long companyId, hrms_be_backend_data.ViewModel.UserFullView accessUser);
     }
 }

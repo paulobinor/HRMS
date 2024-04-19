@@ -1,9 +1,12 @@
 ﻿using hrms_be_backend_business.ILogic;
+using hrms_be_backend_business.Logic;
+using hrms_be_backend_common.Models;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace hrms_be_backend_api.LeaveModuleController.Controller
 {
@@ -14,11 +17,13 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
     {
         private readonly ILogger<LeaveTypeController> _logger;
         private readonly ILeaveTypeService _LeaveTypeService;
+        private readonly IAuthService _authService;
 
-        public LeaveTypeController(ILogger<LeaveTypeController> logger, ILeaveTypeService LeaveTypeService)
+        public LeaveTypeController(ILogger<LeaveTypeController> logger, ILeaveTypeService LeaveTypeService, IAuthService authService)
         {
             _logger = logger;
             _LeaveTypeService = LeaveTypeService;
+            _authService = authService;
         }
 
 
@@ -204,16 +209,23 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             var response = new BaseResponse();
             try
             {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+                
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+               
+                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IEnumerable<Claim> claim = identity.Claims;
+                var accessToken = Request.Headers["Authorization"];
+                accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _LeaveTypeService.GetLeavebyCompanyId(CompanyID, requester));
+                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+
+                }
+
+                return Ok(await _LeaveTypeService.GetLeavebyCompanyId(CompanyID, accessUser.data));
             }
             catch (Exception ex)
             {
