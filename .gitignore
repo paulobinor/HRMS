@@ -133,3 +133,5 @@
 /hrms-be-backend-api/obj/Debug/net7.0
 /hrms-be-backend-common/obj/Release/net7.0
 *.user
+/hrms-be-backend-data/obj/project.assets.json
+/hrms-be-backend-data/obj/project.nuget.cache
