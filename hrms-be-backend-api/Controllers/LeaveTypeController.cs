@@ -34,16 +34,21 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             var response = new BaseResponse();
             try
             {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IEnumerable<Claim> claim = identity.Claims;
+                var accessToken = Request.Headers["Authorization"];
+                accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _LeaveTypeService.CreateLeaveType(CreateDto, requester));
+                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return Unauthorized( new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString()});
+
+                }
+
+                return Ok(await _LeaveTypeService.CreateLeaveType(CreateDto, accessUser.data));
             }
             catch (Exception ex)
             {

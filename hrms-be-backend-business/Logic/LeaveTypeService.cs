@@ -32,17 +32,17 @@ namespace hrms_be_backend_business.Logic
             _companyrepository = companyrepository;
         }
 
-        public async Task<BaseResponse> CreateLeaveType(CreateLeaveTypeDTO creatDto, RequesterInfo requester)
+        public async Task<BaseResponse> CreateLeaveType(CreateLeaveTypeDTO creatDto, UserFullView userFullView)
         {
             var response = new BaseResponse();
             try
             {
-                string createdbyUserEmail = requester.Username;
-                string createdbyUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
+                string createdbyUserEmail = userFullView.OfficialMail;
+                string createdbyUserId = userFullView.UserId.ToString();
+               // string RoleId = userFullView.RoleId.ToString();
 
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
+              //  var ipAddress = userFullView.IpAddress.ToString();
+              //  var port = userFullView.Port.ToString();
 
                 var requesterInfo = await _accountRepository.FindUser(null,createdbyUserEmail,null);
                 if (null == requesterInfo)
@@ -53,17 +53,17 @@ namespace hrms_be_backend_business.Logic
                 }
 
 
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
+                //if (Convert.ToInt32(RoleId) != 2)
+                //{
+                //    if (Convert.ToInt32(RoleId) != 4)
+                //    {
+                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //        return response;
 
-                    }
+                //    }
 
-                }
+                //}
 
                 //validate JobDescription payload here 
                 if (String.IsNullOrEmpty(creatDto.LeaveTypeName) || creatDto.CompanyID <= 0 || creatDto.MaximumLeaveDurationDays <= 0 ||

@@ -1,6 +1,7 @@
 ﻿using hrms_be_backend_business.ILogic;
 using hrms_be_backend_common.Models;
 using hrms_be_backend_data.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace hrms_be_backend_api.LeaveModuleController.Controller
@@ -18,7 +19,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             _leaveRequestService = leaveRequestService;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("Info")]
         public async Task<IActionResult> GetLeaveApprovalInfo([FromQuery] long LeaveRequestLineItemId, [FromQuery] long leaveApprovalId)
         {
@@ -37,7 +38,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         }
 
         [HttpPost("Approve")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> ApproveLeaveRequestLineItem(LeaveApprovalLineItem leaveApprovalLineItem)
         {
             var response = new BaseResponse();
