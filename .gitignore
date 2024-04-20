@@ -135,3 +135,9 @@
 *.user
 /hrms-be-backend-data/obj/project.assets.json
 /hrms-be-backend-data/obj/project.nuget.cache
+*.pdb
+/.vs/hrms-be-backend/v17
+/hrms-be-backend-api/bin/Debug/net7.0/appsettings.json
+/hrms-be-backend-data/bin/Debug/net7.0/hrms-be-backend-data.deps.json
+/hrms-be-backend-data/Microsoft.AspNetCore.Http.dll
+/hrms-be-backend-api/bin/Debug/net7.0/hrms-be-backend-api.deps.json

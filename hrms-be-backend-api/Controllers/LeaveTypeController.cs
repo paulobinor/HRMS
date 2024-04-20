@@ -202,7 +202,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
         }
 
-       // [Authorize]
+        [Authorize]
         [HttpGet("GetLeaveTypebyCompanyId")]
         public async Task<IActionResult> GetLeaveTypebyCompanyId(long CompanyID, string RequestId)
         {
@@ -221,7 +221,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 var identity = HttpContext.User.Identity as ClaimsIdentity;
                 IEnumerable<Claim> claim = identity.Claims;
                 var accessToken = Request.Headers["Authorization"];
-                accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+                accessToken = accessToken.ToString().Replace("Bearer", "").Trim();
 
                 var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
                 if (accessUser.data == null)

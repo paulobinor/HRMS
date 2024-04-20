@@ -54,8 +54,8 @@
         public static string Sp_CreateEmpLeaveRequestLineItem = "Sp_CreateEmpLeaveRequestLineItem";
         public static string Sp_CreateEmpLeaveInfo = "Sp_CreateEmpLeaveInfo";
         public static string Sp_RescheduleLeaveRequestLineItem = "Sp_RescheduleLeaveRequestLineItem";
-        public static string Sp_GetEmpLeaveInfoHistory  = "Sp_GetEmpLeaveInfoHistory";
-        public static string Sp_GetEmpLeaveInfo  = "Sp_GetEmpLeaveInfo";
+        public static string Sp_GetEmpLeaveInfoHistory = "Sp_GetEmpLeaveInfoHistory";
+        public static string Sp_GetEmpLeaveInfo = "Sp_GetEmpLeaveInfo";
         public static string Sp_GetLeaveApproval = "Sp_GetLeaveApproval";
         public static string Sp_UpdateLeaveApprovalLineItem = "Sp_UpdateLeaveApprovalLineItem";
         public static string Sp_GetLeaveRequestLineItem = "Sp_GetLeaveRequestLineItem";
@@ -63,11 +63,12 @@
         public static string Sp_GetLeaveApprovalLineItem = "Sp_GetLeaveApprovalLineItem";
         public static string Sp_UpdateLeaveApproval = "Sp_UpdateLeaveApproval";
         public static string Sp_GetLeaveRequestLineItems { get; set; } = "Sp_GetLeaveRequestLineItems";
-        public static string Sp_GetEmployeeGradeLeave { get;  set; } = "Sp_GetEmployeeGradeLeave";
+        public static string Sp_GetEmployeeGradeLeave { get; set; } = "Sp_GetEmployeeGradeLeave";
         public static string Sp_GetLeaveApprovalByEmployeeId { get; set; } = "Sp_GetLeaveApprovalByEmployeeId";
         public static string Sp_UpdateLeaveRequestInfoStatus { get; set; } = "Sp_UpdateLeaveRequestInfoStatus";
         public static string Sp_GetLeaveApprovalLineItems { get; set; } = "Sp_GetLeaveApprovalLineItemS";
         public static string Sp_UpdateLeaveRequestLineItemApproval { get; internal set; } = "Sp_UpdateLeaveRequestLineItemApproval";
+        public static string Sp_GetLeaveType { get; set; } = "sp_GetLeaveType";
 
         //System Default
         public static int DefaultDeptId = 1;
