@@ -7,6 +7,7 @@ using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System.Security.Claims;
 
@@ -27,17 +28,17 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             _authService = authService;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost("Create")]
         public async Task<IActionResult> CreateLeaveRequest([FromBody] LeaveRequestLineItem leaveRequestLineItem)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            _logger.LogInformation($"Received CreateleaveRequest request. Payload: {leaveRequestLineItem} from remote address: {RemoteIpAddress}");
+            _logger.LogInformation($"Received Createleave request. Payload: {JsonConvert.SerializeObject(leaveRequestLineItem)} from remote address: {RemoteIpAddress}");
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claim = identity.Claims;
             var accessToken = Request.Headers["Authorization"];
-            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            accessToken = accessToken.ToString().Replace("Bearer", "").Trim();
 
             var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
             if (accessUser.data == null)
@@ -49,22 +50,27 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             return Ok(res);
         }
 
-
         [HttpPost("Reschedule")]
-        // [Authorize]
+        [Authorize]
         public async Task<IActionResult> RescheduleLeaveRequest([FromBody] LeaveRequestLineItem leaveRequestLineItem)
         {
             var response = new BaseResponse();
             try
             {
-                //var requester = new RequesterInfo
-                //{
-                //    Username = this.User.Claims.ToList()[2].Value,
-                //    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                //    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                //    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                //    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                //};
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                _logger.LogInformation($"Received RescheduleLeave request. Payload: {JsonConvert.SerializeObject(leaveRequestLineItem)} from remote address: {RemoteIpAddress}");
+                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IEnumerable<Claim> claim = identity.Claims;
+                var accessToken = Request.Headers["Authorization"];
+                accessToken = accessToken.ToString().Replace("Bearer", "").Trim();
+
+                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+
+                }
                 var res = await _leaveRequestService.RescheduleLeaveRequest(leaveRequestLineItem);
                 return Ok(res);
             }
@@ -79,23 +85,29 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         }
 
 
-        [HttpGet("Get/{LeaveRequestId}")]
-        //[Authorize]
-        public async Task<IActionResult> GetLeaveRequestLineItem(long LeaveRequestID)
+        [HttpGet("{Id}")]
+        [Authorize]
+        public async Task<IActionResult> GetLeaveRequestLineItem(long Id)
         {
             var response = new BaseResponse();
             try
             {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                _logger.LogInformation($"Received GetLeave request. Payload: {JsonConvert.SerializeObject(new { Id })} from remote address: {RemoteIpAddress}");
+                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IEnumerable<Claim> claim = identity.Claims;
+                var accessToken = Request.Headers["Authorization"];
+                accessToken = accessToken.ToString().Replace("Bearer", "").Trim();
 
-                return Ok(await _leaveRequestService.GetLeaveRequestLineItem(LeaveRequestID));
+                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+
+                }
+
+                return Ok(await _leaveRequestService.GetLeaveRequestLineItem(Id));
             }
             catch (Exception ex)
             {
@@ -109,20 +121,26 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         }
 
         [HttpGet("Info")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetEmpLeaveInfo([FromQuery] long CompanyId, [FromQuery] long EmployeeId,[FromQuery] string LeaveStatus)
         {
             var response = new BaseResponse();
             try
             {
-                //var requester = new RequesterInfo
-                //{
-                //    Username = this.User.Claims.ToList()[2].Value,
-                //    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                //    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                //    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                //    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                //};
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                _logger.LogInformation($"Received GetEmpLeaveInfo request. Payload: {JsonConvert.SerializeObject(new { CompanyId, EmployeeId, LeaveStatus }) } from remote address: {RemoteIpAddress}");
+                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IEnumerable<Claim> claim = identity.Claims;
+                var accessToken = Request.Headers["Authorization"];
+                accessToken = accessToken.ToString().Replace("Bearer", "").Trim();
+
+                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+
+                }
 
                 return Ok(await _leaveRequestService.GetEmpLeaveInfo(EmployeeId, CompanyId, LeaveStatus));
             }
