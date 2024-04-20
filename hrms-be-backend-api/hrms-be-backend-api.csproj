@@ -20,6 +20,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\hrms-be-backend-business\hrms-be-backend-business.csproj" />
+    <ProjectReference Include="..\hrms-be-backend-common\hrms-be-backend-common.csproj" />
+    <ProjectReference Include="..\hrms-be-backend-data\hrms-be-backend-data.csproj" />
   </ItemGroup>
 
   <ItemGroup>
