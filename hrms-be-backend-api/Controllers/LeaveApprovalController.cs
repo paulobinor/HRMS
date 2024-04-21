@@ -32,12 +32,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             _logger.LogInformation($"Received GetLeaveApprovalInfo request. Payload: {JsonConvert.SerializeObject(new { LeaveRequestLineItemId, leaveApprovalId })} from remote address: {RemoteIpAddress}");
 
-            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claim = identity.Claims;
-            var accessToken = Request.Headers["Authorization"];
-            accessToken = accessToken.ToString().Replace("Bearer", "").Trim();
-
+            var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
             var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
             if (accessUser.data == null)
             {
@@ -56,12 +51,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             _logger.LogInformation($"Received ApproveLeave request. Payload: {JsonConvert.SerializeObject(leaveApprovalLineItem)} from remote address: {RemoteIpAddress}");
 
-            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claim = identity.Claims;
-            var accessToken = Request.Headers["Authorization"];
-            accessToken = accessToken.ToString().Replace("Bearer", "").Trim();
-
+            var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
             var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
             if (accessUser.data == null)
             {

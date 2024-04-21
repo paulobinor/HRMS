@@ -32,25 +32,25 @@ namespace hrms_be_backend_business.Logic
             _companyrepository = companyrepository;
         }
 
-        public async Task<BaseResponse> CreateLeaveType(CreateLeaveTypeDTO creatDto, UserFullView userFullView)
+        public async Task<BaseResponse> CreateLeaveType(CreateLeaveTypeDTO creatDto, string email)
         {
             var response = new BaseResponse();
             try
             {
-                string createdbyUserEmail = userFullView.OfficialMail;
-                string createdbyUserId = userFullView.UserId.ToString();
+                string createdbyUserEmail = email;
+               // string createdbyUserId = userFullView.UserId.ToString();
                // string RoleId = userFullView.RoleId.ToString();
 
               //  var ipAddress = userFullView.IpAddress.ToString();
               //  var port = userFullView.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(null,createdbyUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
+                //var requesterInfo = await _accountRepository.FindUser(null,createdbyUserEmail,null);
+                //if (null == requesterInfo)
+                //{
+                //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = "Requester information cannot be found.";
+                //    return response;
+                //}
 
 
                 //if (Convert.ToInt32(RoleId) != 2)
@@ -127,37 +127,12 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> UpdateLeaveType(UpdateLeaveTypeDTO updateDto, RequesterInfo requester)
+        public async Task<BaseResponse> UpdateLeaveType(UpdateLeaveTypeDTO updateDto, string email)
         {
             var response = new BaseResponse();
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
-
-                }
+                
 
                 //validate DepartmentDto payload here 
                 if (String.IsNullOrEmpty(updateDto.LeaveTypeName) || updateDto.CompanyID <= 0)
@@ -176,7 +151,7 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-                dynamic resp = await _LeaveTypeRepository.UpdateLeaveType(updateDto, requesterUserEmail);
+                dynamic resp = await _LeaveTypeRepository.UpdateLeaveType(updateDto, email);
                 if (resp > 0)
                 {
                     //update action performed into audit log here
@@ -204,38 +179,11 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> DeleteLeaveType(DeleteLeaveTypeDTO deleteDto, RequesterInfo requester)
+        public async Task<BaseResponse> DeleteLeaveType(DeleteLeaveTypeDTO deleteDto, string email)
         {
             var response = new BaseResponse();
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
-
-                }
-
                 if (deleteDto.LeaveTypeId == 1)
                 {
                     response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
@@ -246,7 +194,7 @@ namespace hrms_be_backend_business.Logic
                 var LeaveType = await _LeaveTypeRepository.GetLeaveTypeById(deleteDto.LeaveTypeId);
                 if (null != LeaveType)
                 {
-                    dynamic resp = await _LeaveTypeRepository.DeleteLeaveType(deleteDto, requesterUserEmail);
+                    dynamic resp = await _LeaveTypeRepository.DeleteLeaveType(deleteDto, email);
                     if (resp > 0)
                     {
                         //update action performed into audit log here
@@ -280,39 +228,39 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> GetAllActiveLeaveType(RequesterInfo requester)
+        public async Task<BaseResponse> GetAllActiveLeaveType()
         {
             BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
+                //string requesterUserEmail = requester.Username;
+                //string requesterUserId = requester.UserId.ToString();
+                //string RoleId = requester.RoleId.ToString();
 
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
+                //var ipAddress = requester.IpAddress.ToString();
+                //var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
+                //var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
+                //if (null == requesterInfo)
+                //{
+                //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = "Requester information cannot be found.";
+                //    return response;
+                //}
 
 
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
+                //if (Convert.ToInt32(RoleId) != 2)
+                //{
+                //    if (Convert.ToInt32(RoleId) != 4)
+                //    {
+                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //        return response;
 
-                    }
+                //    }
 
-                }
+                //}
 
                 //update action performed into audit log here
 
@@ -341,38 +289,38 @@ namespace hrms_be_backend_business.Logic
         }
 
 
-        public async Task<BaseResponse> GetAllLeaveType(RequesterInfo requester)
+        public async Task<BaseResponse> GetAllLeaveType()
         {
             BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
+                //string requesterUserEmail = requester.Username;
+                //string requesterUserId = requester.UserId.ToString();
+                //string RoleId = requester.RoleId.ToString();
 
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
+                //var ipAddress = requester.IpAddress.ToString();
+                //var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
+                //var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
+                //if (null == requesterInfo)
+                //{
+                //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = "Requester information cannot be found.";
+                //    return response;
+                //}
 
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
+                //if (Convert.ToInt32(RoleId) != 2)
+                //{
+                //    if (Convert.ToInt32(RoleId) != 4)
+                //    {
+                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //        return response;
 
-                    }
+                //    }
 
-                }
+                //}
 
                 //update action performed into audit log here
 
@@ -401,39 +349,39 @@ namespace hrms_be_backend_business.Logic
         }
 
 
-        public async Task<BaseResponse> GetLeaveTypeById(long LeaveTypeId, RequesterInfo requester)
+        public async Task<BaseResponse> GetLeaveTypeById(long LeaveTypeId)
         {
             BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
+                //string requesterUserEmail = requester.Username;
+                //string requesterUserId = requester.UserId.ToString();
+                //string RoleId = requester.RoleId.ToString();
 
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
+                //var ipAddress = requester.IpAddress.ToString();
+                //var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
+                //var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
+                //if (null == requesterInfo)
+                //{
+                //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = "Requester information cannot be found.";
+                //    return response;
+                //}
 
 
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
+                //if (Convert.ToInt32(RoleId) != 2)
+                //{
+                //    if (Convert.ToInt32(RoleId) != 4)
+                //    {
+                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //        return response;
 
-                    }
+                //    }
 
-                }
+                //}
 
                 var LeaveType = await _LeaveTypeRepository.GetLeaveTypeById(LeaveTypeId);
 
@@ -463,16 +411,13 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> GetLeavebyCompanyId(long companyId, UserFullView  userFullView)
+        public async Task<BaseResponse> GetLeavebyCompanyId(long companyId)
         {
-            _logger.LogInformation($"Received request to get leave type for CompanyId: {companyId} and Requester:{JsonConvert.SerializeObject(userFullView)}");
+            _logger.LogInformation($"Received request to get leave type for CompanyId: {companyId}");
             BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = userFullView.OfficialMail;
-                string requesterUserId = userFullView.UserId.ToString();
-                             
                 var LeaveType = await _LeaveTypeRepository.GetAllLeaveTypeCompanyId(companyId);
 
                 if (LeaveType == null)

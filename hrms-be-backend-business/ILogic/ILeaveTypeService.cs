@@ -5,12 +5,12 @@ namespace hrms_be_backend_business.ILogic
 {
     public interface ILeaveTypeService
     {
-        Task<BaseResponse> CreateLeaveType(CreateLeaveTypeDTO creatDto, UserFullView userFullView);
-        Task<BaseResponse> UpdateLeaveType(UpdateLeaveTypeDTO updateDto, RequesterInfo requester);
-        Task<BaseResponse> DeleteLeaveType(DeleteLeaveTypeDTO deleteDto, RequesterInfo requester);
-        Task<BaseResponse> GetAllActiveLeaveType(RequesterInfo requester);
-        Task<BaseResponse> GetAllLeaveType(RequesterInfo requester);
-        Task<BaseResponse> GetLeaveTypeById(long LeaveTypeId, RequesterInfo requester);
-        Task<BaseResponse> GetLeavebyCompanyId(long companyId, hrms_be_backend_data.ViewModel.UserFullView accessUser);
+        Task<BaseResponse> CreateLeaveType(CreateLeaveTypeDTO creatDto, string email);
+        Task<BaseResponse> UpdateLeaveType(UpdateLeaveTypeDTO updateDto, string email);
+        Task<BaseResponse> DeleteLeaveType(DeleteLeaveTypeDTO deleteDto, string email);
+        Task<BaseResponse> GetAllActiveLeaveType();
+        Task<BaseResponse> GetAllLeaveType();
+        Task<BaseResponse> GetLeaveTypeById(long LeaveTypeId);
+        Task<BaseResponse> GetLeavebyCompanyId(long companyId);
     }
 }

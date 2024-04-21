@@ -34,8 +34,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             _logger.LogInformation($"Received Createleave request. Payload: {JsonConvert.SerializeObject(leaveRequestLineItem)} from remote address: {RemoteIpAddress}");
-            var accessToken = Request.Headers["Authorization"];
-            accessToken = accessToken.ToString().Replace("Bearer", "").Trim();
+            var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
 
             var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
             if (accessUser.data == null)
@@ -56,8 +55,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             {
                 var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
                 _logger.LogInformation($"Received RescheduleLeave request. Payload: {JsonConvert.SerializeObject(leaveRequestLineItem)} from remote address: {RemoteIpAddress}");
-                var accessToken = Request.Headers["Authorization"];
-                accessToken = accessToken.ToString().Replace("Bearer", "").Trim();
+
+                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
 
                 var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
                 if (accessUser.data == null)
@@ -88,10 +87,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             {
                 var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
                 _logger.LogInformation($"Received GetLeave request. Payload: {JsonConvert.SerializeObject(new { Id })} from remote address: {RemoteIpAddress}");
-               
-                var accessToken = Request.Headers["Authorization"];
-                accessToken = accessToken.ToString().Replace("Bearer", "").Trim();
 
+                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
                 var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
@@ -121,12 +118,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             {
                 var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
                 _logger.LogInformation($"Received GetEmpLeaveInfo request. Payload: {JsonConvert.SerializeObject(new { CompanyId, EmployeeId, LeaveStatus }) } from remote address: {RemoteIpAddress}");
-                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-                var identity = HttpContext.User.Identity as ClaimsIdentity;
-                IEnumerable<Claim> claim = identity.Claims;
-                var accessToken = Request.Headers["Authorization"];
-                accessToken = accessToken.ToString().Replace("Bearer", "").Trim();
-
+              
+                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
                 var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
