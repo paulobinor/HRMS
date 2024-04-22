@@ -51,6 +51,7 @@ namespace hrms_be_backend_business.AppCode
                     smtpClient.Credentials = Credentials;
                     smtpClient.EnableSsl = _smtpParameters.SSL;
                     await smtpClient.SendMailAsync(mail);
+
                 }
             }
             catch (Exception ex)
@@ -102,6 +103,8 @@ namespace hrms_be_backend_business.AppCode
                     Subject = "Leave Request",
                     ToEmail = userDetails.OfficialMail,
                 };
+
+                _logger.LogError($"Email payload to send: {mailPayload}.");
                 SendEmailAsync(mailPayload, null);
 
             }

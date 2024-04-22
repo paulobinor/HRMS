@@ -580,17 +580,24 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-        public async Task<IEnumerable<LeaveRequestDTO>> GetAllLeaveRequest()
+        public async Task<IEnumerable<EmpLeaveRequestInfo>> GetAllLeaveRequest(string CompanyId)
         {
             try
             {
                 using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", LeaveRequestEnum.GETALL);
+                    param.Add("@CompanyId", CompanyId);
 
-                    var LeaveDetails = await conn.QueryAsync<LeaveRequestDTO>(ApplicationConstant.Sp_LeaveRequest, param: param, commandType: CommandType.StoredProcedure);
-
+                    var LeaveDetails = await conn.QueryAsync<EmpLeaveRequestInfo>(ApplicationConstant.Sp_GetLeaveRequestByCompanyId, param: param, commandType: CommandType.StoredProcedure);
+                    if (LeaveDetails.Count() > 0)
+                    {
+                        foreach (var item in LeaveDetails)
+                        {
+                            item.leaveRequestLineItems = await GetLeaveRequestLineItems(item.LeaveRequestId);
+                        }
+                      
+                    }
                     return LeaveDetails;
                 }
             }
@@ -715,9 +722,7 @@ namespace hrms_be_backend_data.Repository
                 _logger.LogError($"MethodName: GetLeaveRequestPendingApproval() ===>{ex.Message}");
                 throw;
             }
-        }
-
-        
+        }      
         public async Task<EmpLeaveRequestInfo> UpdateLeaveRequestInfoStatus(EmpLeaveRequestInfo empLeaveRequestInfo)
         {
             try

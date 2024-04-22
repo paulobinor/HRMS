@@ -48,7 +48,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
                 }
 
-                return Ok(await _LeaveTypeService.CreateLeaveType(CreateDto, accessUser.data.OfficialMail));
+                return Ok(await _LeaveTypeService.CreateLeaveType(CreateDto, CreateDto.Created_By_User_Email));
             }
             catch (Exception ex)
             {

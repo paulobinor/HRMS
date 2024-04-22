@@ -12,7 +12,7 @@ namespace hrms_be_backend_data.IRepository
         Task<string> ApproveLeaveRequest(long LeaveRequestID, long ApprovedByUserId);
         Task<string> DisaproveLeaveRequest(long LeaveRequestID, long DisapprovedByUserId, string DisapprovedComment);
         Task<dynamic> DeleteLeaveRequest(LeaveRequestDelete delete, string deletedbyUserEmail);
-        Task<IEnumerable<LeaveRequestDTO>> GetAllLeaveRequest();
+        Task<IEnumerable<EmpLeaveRequestInfo>> GetAllLeaveRequest(string CompanyId);
         Task<LeaveRequestDTO> GetLeaveRequestById(long LeaveRequestID);
         Task<IEnumerable<LeaveRequestDTO>> GetLeaveRequestByUserId(long UserId, long CompanyId);
         Task<LeaveRequestDTO> GetLeaveRequestByYear(string RequestYear, long CompanyId);

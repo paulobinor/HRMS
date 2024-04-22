@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System.Security.Claims;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace hrms_be_backend_api.LeaveModuleController.Controller
 {
@@ -33,13 +34,17 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         public async Task<IActionResult> CreateLeaveRequest([FromBody] LeaveRequestLineItem leaveRequestLineItem)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            _logger.LogInformation($"Received Createleave request. Payload: {JsonConvert.SerializeObject(leaveRequestLineItem)} from remote address: {RemoteIpAddress}");
+            _logger.LogInformation($"Received Create leave request. Payload: {JsonConvert.SerializeObject(leaveRequestLineItem)} from remote address: {RemoteIpAddress}");
             var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
 
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                return BadRequest(new { responseMessage = $"Missing authorization header value", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+            }
             var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
             if (accessUser.data == null)
             {
-                return  Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
             }
             var res = await _leaveRequestService.CreateLeaveRequestLineItem(leaveRequestLineItem);
@@ -140,6 +145,35 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
         }
 
+        [Authorize]
+        [HttpGet("GetAllLeaveRequest")]
+        public async Task<IActionResult> GetAllLeaveRequest([FromQuery] string CompanyID)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                _logger.LogInformation($"Received GetAllLeaveRequest. Payload: {JsonConvert.SerializeObject(new { CompanyID })} from remote address: {RemoteIpAddress}");
+
+                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+
+                }
+
+                return Ok(await _leaveRequestService.GetAllLeaveRquest(CompanyID));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: Controller Method : GetAllLeaveRequest ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllLeaveRequest ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+        }
 
         #region Depricated
         //[HttpPost("DisaproveLeaveRequest")]
@@ -159,33 +193,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         //    return Ok(await _leaveRequestService.DisaproveLeaveRequest(payload, requester));
         //}
 
-        //[Authorize]
-        //[HttpGet("GetAllLeaveRequest")]
-        //public async Task<IActionResult> GetAllLeaveRequest()
-        //{
-        //    var response = new BaseResponse();
-        //    try
-        //    {
-        //        var requester = new RequesterInfo
-        //        {
-        //            Username = this.User.Claims.ToList()[2].Value,
-        //            UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-        //            RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-        //            IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-        //            Port = Request.HttpContext.Connection.RemotePort.ToString()
-        //        };
 
-        //        return Ok(await _leaveRequestService.GetAllLeaveRquest(requester));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Exception Occured: Controller Method : GetAllLeaveRequest ==> {ex.Message}");
-        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-        //        response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllLeaveRequest ==> {ex.Message}";
-        //        response.Data = null;
-        //        return Ok(response);
-        //    }
-        //}
 
         //[Authorize]
         //[HttpGet("GetLeaveRequestbyId")]

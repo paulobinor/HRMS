@@ -19,8 +19,8 @@ namespace hrms_be_backend_business.ILogic
         Task<LeaveApprovalLineItem> GetLeaveApprovalLineItem(long leaveApprovalLineItemId, int approvalStep = 0);
         Task<LeaveApprovalInfo> GetLeaveApprovalInfoByRequestLineItem(long leaveRequestLineItemId);
         Task<List<LeaveApprovalLineItem>>GetleaveApprovalLineItems(long leaveApprovalId);
+        Task<BaseResponse> GetAllLeaveRquest(string CompanyID);
         #region Depricated
-        //Task<BaseResponse> GetAllLeaveRquest(RequesterInfo requester);
         //Task<BaseResponse> GetLeaveRequsetById(long LeaveRequestID, RequesterInfo requester);
         //Task<BaseResponse> GetLeaveRequsetByUerId(long UserId, long CompanyId, RequesterInfo requester);
         //Task<BaseResponse> GetLeaveRquestbyCompanyId(string RequestYear, long companyId, RequesterInfo requester);

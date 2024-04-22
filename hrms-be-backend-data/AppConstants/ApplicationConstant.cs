@@ -70,6 +70,7 @@
         public static string Sp_UpdateLeaveRequestLineItemApproval { get; internal set; } = "Sp_UpdateLeaveRequestLineItemApproval";
         public static string Sp_GetLeaveType { get; set; } = "sp_GetLeaveType";
         public static string Sp_GetLeaveTypeById { get; set; } = "Sp_GetLeaveTypeById";
+        public static string Sp_GetLeaveRequestByCompanyId { get; set; } = "Sp_GetLeaveRequestByCompanyId";
 
         //System Default
         public static int DefaultDeptId = 1;
