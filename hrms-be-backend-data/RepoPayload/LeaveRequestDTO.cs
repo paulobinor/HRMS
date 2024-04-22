@@ -83,6 +83,7 @@ namespace hrms_be_backend_data.RepoPayload
         public long CompanyID { get; set; }
 
         public string Created_By_User_Email { get; set; }
+        public string RelieverUserID { get; internal set; }
     }
 
     public class RescheduleLeaveRequest
