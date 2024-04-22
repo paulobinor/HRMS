@@ -30,36 +30,17 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
         public async Task<IActionResult> SubmitResignationInterview(ResignationInterviewVM request)
         {
             var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port =  Request.HttpContext.Connection.RemotePort.ToString()
-                };
-            
-                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-                var identity = HttpContext.User.Identity as ClaimsIdentity;
-                IEnumerable<Claim> claim = identity.Claims;
-                var accessToken = Request.Headers["Authorization"];
-                accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _resignationInterviewService.SubmitResignationInterview(request, accessToken, RemoteIpAddress));
-          
-                return Ok(await _resignationInterviewService.GetInterviewScaleDetails(requester));
-        }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetInterviewScaleDetails() ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetInterviewScaleDetails() ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return Ok(await _resignationInterviewService.SubmitResignationInterview(request, accessToken, RemoteIpAddress));
+
         }
 
 
@@ -76,16 +57,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
             return Ok(await _resignationInterviewService.GetResignationInterviewById(ResignationInterviewId, accessToken, RemoteIpAddress));
-        
-        }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetInterviewDetails() ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetInterviewDetails() ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+
         }
 
         [HttpGet]
@@ -101,8 +73,8 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
             return Ok(await _resignationInterviewService.GetResignationInterviewDetails(InterviewID, accessToken, RemoteIpAddress));
-            
-        } 
+
+        }
         [HttpGet]
         [Route("GetAllResignationInterviewsByCompany/{CompanyID}")]
         [Authorize]
@@ -115,9 +87,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-            return Ok(await _resignationInterviewService.GetAllResignationInterviewsByCompany(filter,CompanyID, accessToken, RemoteIpAddress));
-            
-                return Ok(await _resignationInterviewService.ApprovePendingResignationInterview(request, requester));
+            return Ok(await _resignationInterviewService.GetAllResignationInterviewsByCompany(filter, CompanyID, accessToken, RemoteIpAddress));
         }
 
         [HttpGet]

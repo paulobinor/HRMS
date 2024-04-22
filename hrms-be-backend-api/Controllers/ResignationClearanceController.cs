@@ -51,7 +51,6 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
             return Ok(await _resignationClearanceService.SubmitResignationClearance(request, accessToken, RemoteIpAddress));
             
-                return Ok(await _resignationClearanceService.UploadItemsReturnedToDepartmant(file));
         }
             catch (Exception ex)
             {
@@ -113,16 +112,6 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
             return Ok(await _resignationClearanceService.GetAllResignationClearanceByCompany(filter, companyId, accessToken, RemoteIpAddress));
 
-
-                return Ok(await _resignationClearanceService.GetPendingResignationClearanceByUserID(requester, userID));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetPendingResignationClearanceByUserID ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetPendingResignationClearanceByUserID ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
         }
 
 
