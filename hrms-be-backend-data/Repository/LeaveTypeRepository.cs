@@ -157,10 +157,10 @@ namespace hrms_be_backend_data.Repository
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", LeaveTypeEnum.GETBYID);
-                    param.Add("@LeaveTypeIdGet", LeaveTypeId);
+                  //  param.Add("@Status", LeaveTypeEnum.GETBYID);
+                    param.Add("@LeaveTypeId", LeaveTypeId);
 
-                    var LeaveTypeDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveTypeDTO>(ApplicationConstant.Sp_LeaveType, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveTypeDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveTypeDTO>(ApplicationConstant.Sp_GetLeaveTypeById, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveTypeDetails;
                 }

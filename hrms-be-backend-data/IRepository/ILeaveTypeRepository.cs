@@ -10,7 +10,7 @@ namespace hrms_be_backend_data.IRepository
         Task<IEnumerable<LeaveTypeDTO>> GetAllActiveLeaveType();
         Task<IEnumerable<LeaveTypeDTO>> GetAllLeaveType();
         Task<LeaveTypeDTO> GetLeaveTypeById(long LeaveTypeId);
-        Task<LeaveTypeDTO> GetLeaveTypeByName(string LeaveTypeName);
+       // Task<LeaveTypeDTO> GetLeaveTypeByName(string LeaveTypeName);
         Task<LeaveTypeDTO> GetLeaveTypeByCompany(string LeaveTypeName, int companyId);
         Task<IEnumerable<LeaveTypeDTO>> GetAllLeaveTypeCompanyId(long CompanyId);
     }
