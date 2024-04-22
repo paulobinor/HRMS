@@ -104,7 +104,7 @@ namespace hrms_be_backend_business.Logic
                 response.ResponseMessage = "Invalid date range specified. start date must come before the the end date";
                 return response;
             }
-            var userDetails = await _employeeRepository.GetEmployeeById(payload.EmployeeId, payload.CompanyID);
+
 
             //You cannot select a date in the past
             if (DateTime.Now.Date > leaveRequestLineItem.startDate)
@@ -114,10 +114,10 @@ namespace hrms_be_backend_business.Logic
                 response.ResponseMessage = $"Invalid date range specified. You cannot select a date in the past. Selected date {leaveRequestLineItem.startDate}, Current date {DateTime.Now}";
                 return response;
             }
-            else
-            {
-                _mailService.SendLeaveApproveMailToApprover(userDetails.Employee.UnitHeadEmployeeId, payload.EmployeeId, payload.StartDate, payload.EndDate);
-            }
+            //else
+            //{
+            //    _mailService.SendLeaveApproveMailToApprover(userDetails.Employee.UnitHeadEmployeeId, payload.EmployeeId, payload.StartDate, payload.EndDate);
+            //}
 
             ////resumption date must be greater or equal to end date
             //if (leaveRequestLineItem.ResumptionDate < leaveRequestLineItem.endDate)
@@ -257,7 +257,6 @@ namespace hrms_be_backend_business.Logic
                 //    _mailService.SendLeaveApproveMailToApprover(userDetails.Employee.UnitHeadEmployeeId, payload.EmployeeId, payload.StartDate, payload.EndDate);
                 //}
 
-                var updatedLeaveType = await _leaveRequestRepository.GetLeaveRequestById(updateDto.LeaveRequestID);
 
                 response.Data = res;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
