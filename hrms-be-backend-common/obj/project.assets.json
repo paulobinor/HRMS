@@ -8,19 +8,24 @@
     "net7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\noble.nwabuike\\.nuget\\packages\\": {}
+    "C:\\Users\\ifeanyi.obinor\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\noble.nwabuike\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
+      "projectUniqueName": "C:\\Users\\ifeanyi.obinor\\Downloads\\hrms-be-backend (2)\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
       "projectName": "hrms-be-backend-common",
-      "projectPath": "C:\\Users\\noble.nwabuike\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
-      "packagesPath": "C:\\Users\\noble.nwabuike\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\noble.nwabuike\\Source\\Repos\\hrms-be-backend\\hrms-be-backend-common\\obj\\",
+      "projectPath": "C:\\Users\\ifeanyi.obinor\\Downloads\\hrms-be-backend (2)\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj",
+      "packagesPath": "C:\\Users\\ifeanyi.obinor\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ifeanyi.obinor\\Downloads\\hrms-be-backend (2)\\hrms-be-backend\\hrms-be-backend-common\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\noble.nwabuike\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ifeanyi.obinor\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -61,7 +66,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.200\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }
