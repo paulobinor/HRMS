@@ -209,15 +209,15 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<string> ApprovePendingResignation(long userID, long ResignationID)
+        public async Task<string> ApprovePendingResignation(long employeeID, long ResignationID)
         {
             try
             {
                 var param = new DynamicParameters();
-                param.Add("UserID", userID);
-                param.Add("ResignationId", ResignationID);
+                param.Add("EmployeeID", employeeID);
+                param.Add("ResignationID", ResignationID);
                 param.Add("DateApproved", DateTime.Now);
-                param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
+               // param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
                 var response = await _dapper.Get<string>("Sp_ApprovePendingResignation", param, commandType: CommandType.StoredProcedure);
 
@@ -227,17 +227,17 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: ApprovePendingResignationAsync(long userID, long ResignationID) => {ex.Message}");
+                _logger.LogError($"MethodName: ApprovePendingResignationAsync(long employeeID, long ResignationID) => {ex.Message}");
                 throw;
             }
         }
 
-        public async Task<string> DisapprovePendingResignation(long userID, long ResignationID, string reason)
+        public async Task<string> DisapprovePendingResignation(long employeeID, long ResignationID, string reason)
         {
             try
             {
                 var param = new DynamicParameters();
-                param.Add("UserID", userID);
+                param.Add("UserID", employeeID);
                 param.Add("ResignationID", ResignationID);
                 param.Add("DateDisapproved", DateTime.Now);
                 param.Add("DisapprovedReason", reason);
@@ -249,7 +249,7 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: DisapprovePendingResignationAsync(long userID, long ResignationID, string reason) => {ex.Message}");
+                _logger.LogError($"MethodName: DisapprovePendingResignationAsync(long employeeID, long ResignationID, string reason) => {ex.Message}");
                 throw;
             }
         }

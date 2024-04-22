@@ -186,7 +186,6 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         }
 
-        [Authorize]
         [HttpPost]
         [Route("ApprovePendingResignation")]
         [Authorize]
@@ -226,3 +225,4 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
  
     }
 }
+

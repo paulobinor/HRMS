@@ -96,3 +96,934 @@
    at System.Net.Mail.SmtpClient.SendMailCallback(IAsyncResult result)
 --- End of stack trace from previous location ---
    at hrms_be_backend_business.AppCode.MailService.SendEmailAsync(MailRequest mailRequest, String attarchDocument) in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\Logic\MailService.cs:line 53
+[2024-04-22 20:18:21.574 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 20:18:21.961 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 20:18:21.964 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 20:18:21.965 +01:00  INF]  Hosting environment: Development
+[2024-04-22 20:18:21.966 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 20:18:22.850 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 20:18:23.453 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 604.6045ms
+[2024-04-22 20:18:23.460 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 20:18:23.466 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 20:18:23.482 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 15.8030ms
+[2024-04-22 20:18:23.534 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 73.9968ms
+[2024-04-22 20:18:23.613 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 20:18:24.139 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 526.1923ms
+[2024-04-22 20:19:24.196 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/ApprovePendingResignation application/json 45
+[2024-04-22 20:19:24.246 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 20:19:24.251 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 20:19:24.492 +01:00  INF]  Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+[2024-04-22 20:19:24.498 +01:00  INF]  AuthenticationScheme: Bearer was challenged.
+[2024-04-22 20:19:24.500 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Resignation/ApprovePendingResignation application/json 45 - 401 0 - 303.5500ms
+[2024-04-22 20:20:20.658 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 20:20:20.912 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 20:20:20.916 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 20:20:20.917 +01:00  INF]  Hosting environment: Development
+[2024-04-22 20:20:20.918 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 20:20:21.424 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 20:20:21.988 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 567.8492ms
+[2024-04-22 20:20:21.992 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 20:20:21.997 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 20:20:22.006 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 8.2170ms
+[2024-04-22 20:20:22.037 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 44.9255ms
+[2024-04-22 20:20:22.132 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 20:20:22.459 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 326.7599ms
+[2024-04-22 20:20:53.568 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/ApprovePendingResignation application/json 45
+[2024-04-22 20:20:53.584 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 20:20:53.586 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 20:20:53.676 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.ApprovePendingResignation (hrms-be-backend-api)'
+[2024-04-22 20:20:53.707 +01:00  INF]  Route matched with {action = "ApprovePendingResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApprovePendingResignation(hrms_be_backend_data.RepoPayload.ApprovePendingResignationDTO) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-04-22 20:24:09.624 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 20:24:09.867 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 20:24:09.872 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 20:24:09.874 +01:00  INF]  Hosting environment: Development
+[2024-04-22 20:24:09.875 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 20:24:10.483 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 20:24:10.926 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 445.8579ms
+[2024-04-22 20:24:10.930 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 20:24:10.936 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 20:24:10.946 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 9.4039ms
+[2024-04-22 20:24:10.968 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 38.0410ms
+[2024-04-22 20:24:11.058 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 20:24:11.505 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 447.0586ms
+[2024-04-22 20:24:34.111 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/ApprovePendingResignation application/json 45
+[2024-04-22 20:24:34.128 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 20:24:34.130 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 20:24:34.227 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.ApprovePendingResignation (hrms-be-backend-api)'
+[2024-04-22 20:24:34.262 +01:00  INF]  Route matched with {action = "ApprovePendingResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApprovePendingResignation(hrms_be_backend_data.RepoPayload.ApprovePendingResignationDTO) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-04-22 20:25:49.985 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 20:25:50.293 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 20:25:50.298 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 20:25:50.299 +01:00  INF]  Hosting environment: Development
+[2024-04-22 20:25:50.300 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 20:25:50.885 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 20:25:51.323 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 439.6225ms
+[2024-04-22 20:25:51.326 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 20:25:51.330 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 20:25:51.341 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 10.5329ms
+[2024-04-22 20:25:51.367 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 41.6846ms
+[2024-04-22 20:25:51.506 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 20:25:51.920 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 414.3141ms
+[2024-04-22 20:26:12.795 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/ApprovePendingResignation application/json 45
+[2024-04-22 20:26:12.812 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 20:26:12.814 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 20:26:12.917 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.ApprovePendingResignation (hrms-be-backend-api)'
+[2024-04-22 20:26:12.948 +01:00  INF]  Route matched with {action = "ApprovePendingResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApprovePendingResignation(hrms_be_backend_data.RepoPayload.ApprovePendingResignationDTO) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-04-22 20:26:58.476 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 20:26:58.492 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationController.ApprovePendingResignation (hrms-be-backend-api) in 45537.7774ms
+[2024-04-22 20:26:58.496 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.ApprovePendingResignation (hrms-be-backend-api)'
+[2024-04-22 20:26:58.497 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Resignation/ApprovePendingResignation application/json 45 - 200 - application/json;+charset=utf-8 45703.1655ms
+[2024-04-22 20:27:04.625 +01:00  ERR]  System.Net.Mail.SmtpException: Error in processing. The server response was: 5.7.3 STARTTLS is required to send mail [MR1P264CA0010.FRAP264.PROD.OUTLOOK.COM 2024-04-22T19:27:04.480Z 08DC62EF4BFD9E87]
+   at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.EndSend(IAsyncResult result)
+   at System.Net.Mail.SendMailAsyncResult.SendMailFromCompleted(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at System.Net.Mail.SendMailAsyncResult.End(IAsyncResult result)
+   at System.Net.Mail.SmtpClient.SendMailCallback(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at hrms_be_backend_business.AppCode.MailService.SendEmailAsync(MailRequest mailRequest, String attarchDocument) in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\Logic\MailService.cs:line 53
+[2024-04-22 20:27:04.625 +01:00  ERR]  System.Net.Mail.SmtpException: Error in processing. The server response was: 5.7.3 STARTTLS is required to send mail [MR1P264CA0018.FRAP264.PROD.OUTLOOK.COM 2024-04-22T19:27:04.476Z 08DC61EF59C7B63C]
+   at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.EndSend(IAsyncResult result)
+   at System.Net.Mail.SendMailAsyncResult.SendMailFromCompleted(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at System.Net.Mail.SendMailAsyncResult.End(IAsyncResult result)
+   at System.Net.Mail.SmtpClient.SendMailCallback(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at hrms_be_backend_business.AppCode.MailService.SendEmailAsync(MailRequest mailRequest, String attarchDocument) in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\Logic\MailService.cs:line 53
+[2024-04-22 20:30:12.449 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/DisapprovePendingResignation application/json 70
+[2024-04-22 20:30:12.464 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 20:30:12.475 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.DisapprovePendingResignation (hrms-be-backend-api)'
+[2024-04-22 20:30:12.488 +01:00  INF]  Route matched with {action = "DisapprovePendingResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DisapprovePendingResignation(hrms_be_backend_data.RepoPayload.DisapprovePendingResignation) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-04-22 20:30:12.617 +01:00  ERR]  AuthService || (VerifyUser)  Unable to verify access =====>Unauthorized User
+[2024-04-22 20:30:12.623 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 20:30:12.626 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationController.DisapprovePendingResignation (hrms-be-backend-api) in 136.454ms
+[2024-04-22 20:30:12.631 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.DisapprovePendingResignation (hrms-be-backend-api)'
+[2024-04-22 20:30:12.634 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Resignation/DisapprovePendingResignation application/json 70 - 200 - application/json;+charset=utf-8 185.4854ms
+[2024-04-22 20:32:10.849 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 20:32:11.113 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 20:32:11.116 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 20:32:11.117 +01:00  INF]  Hosting environment: Development
+[2024-04-22 20:32:11.117 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 20:32:13.680 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 20:32:14.063 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 386.1917ms
+[2024-04-22 20:32:14.080 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 20:32:14.081 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 20:32:14.096 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 16.2485ms
+[2024-04-22 20:32:14.178 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 96.9806ms
+[2024-04-22 20:32:14.259 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 20:32:14.727 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 468.2866ms
+[2024-04-22 20:32:30.888 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/DisapprovePendingResignation application/json 70
+[2024-04-22 20:32:30.894 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 20:32:30.896 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 20:32:31.003 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.DisapprovePendingResignation (hrms-be-backend-api)'
+[2024-04-22 20:32:31.042 +01:00  INF]  Route matched with {action = "DisapprovePendingResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DisapprovePendingResignation(hrms_be_backend_data.RepoPayload.DisapprovePendingResignation) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-04-22 20:32:36.140 +01:00  ERR]  AuthService || (VerifyUser)  Unable to verify access =====>Unauthorized User
+[2024-04-22 20:32:36.160 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 20:32:36.179 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationController.DisapprovePendingResignation (hrms-be-backend-api) in 5126.3354ms
+[2024-04-22 20:32:36.189 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.DisapprovePendingResignation (hrms-be-backend-api)'
+[2024-04-22 20:32:36.192 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Resignation/DisapprovePendingResignation application/json 70 - 200 - application/json;+charset=utf-8 5304.2667ms
+[2024-04-22 20:34:58.054 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 20:34:58.281 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 20:34:58.287 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 20:34:58.292 +01:00  INF]  Hosting environment: Development
+[2024-04-22 20:34:58.300 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 20:35:01.284 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 20:35:01.708 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 426.9866ms
+[2024-04-22 20:35:01.725 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 20:35:01.735 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 20:35:01.742 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 5.7904ms
+[2024-04-22 20:35:01.768 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 42.3514ms
+[2024-04-22 20:35:01.896 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 20:35:02.235 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 338.7327ms
+[2024-04-22 20:35:20.345 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/DisapprovePendingResignation application/json 70
+[2024-04-22 20:35:20.355 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 20:35:20.359 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 20:35:20.486 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.DisapprovePendingResignation (hrms-be-backend-api)'
+[2024-04-22 20:35:20.519 +01:00  INF]  Route matched with {action = "DisapprovePendingResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DisapprovePendingResignation(hrms_be_backend_data.RepoPayload.DisapprovePendingResignation) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-04-22 20:35:40.490 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 20:35:40.499 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationController.DisapprovePendingResignation (hrms-be-backend-api) in 19974.6465ms
+[2024-04-22 20:35:40.502 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.DisapprovePendingResignation (hrms-be-backend-api)'
+[2024-04-22 20:35:40.504 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Resignation/DisapprovePendingResignation application/json 70 - 200 - application/json;+charset=utf-8 20158.7792ms
+[2024-04-22 20:35:46.880 +01:00  ERR]  System.Net.Mail.SmtpException: Error in processing. The server response was: 5.7.3 STARTTLS is required to send mail [MR1P264CA0120.FRAP264.PROD.OUTLOOK.COM 2024-04-22T19:35:46.769Z 08DC6300E75664A7]
+   at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.EndSend(IAsyncResult result)
+   at System.Net.Mail.SendMailAsyncResult.SendMailFromCompleted(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at System.Net.Mail.SendMailAsyncResult.End(IAsyncResult result)
+   at System.Net.Mail.SmtpClient.SendMailCallback(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at hrms_be_backend_business.AppCode.MailService.SendEmailAsync(MailRequest mailRequest, String attarchDocument) in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\Logic\MailService.cs:line 53
+[2024-04-22 20:44:36.251 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 20:44:36.609 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 20:44:36.614 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 20:44:36.614 +01:00  INF]  Hosting environment: Development
+[2024-04-22 20:44:36.615 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 20:44:39.601 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 20:44:40.197 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 599.0877ms
+[2024-04-22 20:44:40.201 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 20:44:40.204 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 20:44:40.214 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 10.1621ms
+[2024-04-22 20:44:40.236 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 35.2770ms
+[2024-04-22 20:44:40.335 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 20:44:40.689 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 353.9603ms
+[2024-04-22 20:45:47.255 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/SubmitResignation application/json 299
+[2024-04-22 20:45:47.293 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 20:45:47.296 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 20:45:47.497 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-04-22 20:45:47.528 +01:00  INF]  Route matched with {action = "SubmitResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignation(Com.XpressPayments.Common.ViewModels.ResignationRequestVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-04-22 20:45:48.493 +01:00  ERR]  AuthService || (VerifyUser)  Unable to verify access =====>Unauthorized User
+[2024-04-22 20:45:48.516 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 20:45:48.527 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api) in 992.3875ms
+[2024-04-22 20:45:48.531 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-04-22 20:45:48.533 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Resignation/SubmitResignation application/json 299 - 200 - application/json;+charset=utf-8 1278.5511ms
+[2024-04-22 20:47:28.619 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/SubmitResignation application/json 299
+[2024-04-22 20:47:28.635 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 20:47:28.646 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-04-22 20:47:28.652 +01:00  INF]  Route matched with {action = "SubmitResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignation(Com.XpressPayments.Common.ViewModels.ResignationRequestVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-04-22 20:47:28.772 +01:00  ERR]  AuthService || (VerifyUser)  Unable to verify access =====>Unauthorized User
+[2024-04-22 20:47:28.773 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 20:47:28.775 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api) in 121.7083ms
+[2024-04-22 20:47:28.777 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-04-22 20:47:28.778 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Resignation/SubmitResignation application/json 299 - 200 - application/json;+charset=utf-8 159.0066ms
+[2024-04-22 20:47:50.385 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 20:47:50.806 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 20:47:50.810 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 20:47:50.811 +01:00  INF]  Hosting environment: Development
+[2024-04-22 20:47:50.812 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 20:47:54.054 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 20:47:54.466 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 414.0645ms
+[2024-04-22 20:47:54.527 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 20:47:54.534 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 6.5909ms
+[2024-04-22 20:47:54.538 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 20:47:54.570 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 32.2297ms
+[2024-04-22 20:47:54.677 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 20:47:55.026 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 348.6826ms
+[2024-04-22 20:48:28.007 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/SubmitResignation application/json 291
+[2024-04-22 20:48:28.024 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 20:48:28.027 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 20:48:28.142 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-04-22 20:48:28.172 +01:00  INF]  Route matched with {action = "SubmitResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignation(Com.XpressPayments.Common.ViewModels.ResignationRequestVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-04-22 20:48:28.430 +01:00  INF]  IncomingRequest TraceID --- 0718215f-8b85-41b6-8cb3-ab546a06b26f Body ---- {"EmployeeId":101,"Date":"2024-04-24T00:00:00","ResumptionDate":"2024-04-29T08:06:51.881Z","ReasonForResignation":"Okay","LastDayOfWork":"2024-04-30T08:08:08.96Z","fileName":"https://myxpresspay.com:8891/HRMS/101/73627a98-ae2b-4549-b884-3cf93f380cacScreenshot 2024-03-11 190740.png","CompanyID":103}
+[2024-04-22 20:49:38.486 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 20:49:38.730 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 20:49:38.732 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 20:49:38.734 +01:00  INF]  Hosting environment: Development
+[2024-04-22 20:49:38.734 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 20:49:40.870 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 20:49:41.245 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 377.2348ms
+[2024-04-22 20:49:41.255 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 20:49:41.255 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 20:49:41.260 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 5.2690ms
+[2024-04-22 20:49:41.290 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 35.1369ms
+[2024-04-22 20:49:41.387 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 20:49:41.736 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 348.6937ms
+[2024-04-22 20:50:12.742 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/SubmitResignation application/json 291
+[2024-04-22 20:50:12.759 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 20:50:12.761 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 20:50:12.873 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-04-22 20:50:12.905 +01:00  INF]  Route matched with {action = "SubmitResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignation(Com.XpressPayments.Common.ViewModels.ResignationRequestVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-04-22 20:50:13.128 +01:00  INF]  IncomingRequest TraceID --- 9c3f4008-7f2f-4191-afb6-512966009cf6 Body ---- {"EmployeeId":101,"Date":"2024-04-24T00:00:00","ResumptionDate":"2024-04-29T08:06:51.881Z","ReasonForResignation":"Okay","LastDayOfWork":"2024-04-30T08:08:08.96Z","fileName":"https://myxpresspay.com:8891/HRMS/101/73627a98-ae2b-4549-b884-3cf93f380cacScreenshot 2024-03-11 190740.png","CompanyID":103}
+[2024-04-22 20:50:31.891 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 20:50:31.903 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api) in 18991.8717ms
+[2024-04-22 20:50:31.907 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-04-22 20:50:31.908 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Resignation/SubmitResignation application/json 291 - 200 - application/json;+charset=utf-8 19166.5793ms
+[2024-04-22 20:50:43.720 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/SubmitResignation application/json 291
+[2024-04-22 20:50:43.743 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 20:50:43.745 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-04-22 20:50:43.822 +01:00  INF]  Route matched with {action = "SubmitResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignation(Com.XpressPayments.Common.ViewModels.ResignationRequestVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-04-22 20:50:43.828 +01:00  INF]  IncomingRequest TraceID --- 55e51117-1d8a-40cf-9324-04b6b0693998 Body ---- {"EmployeeId":102,"Date":"2024-04-24T00:00:00","ResumptionDate":"2024-04-29T08:06:51.881Z","ReasonForResignation":"Okay","LastDayOfWork":"2024-04-30T08:08:08.96Z","fileName":"https://myxpresspay.com:8891/HRMS/101/73627a98-ae2b-4549-b884-3cf93f380cacScreenshot 2024-03-11 190740.png","CompanyID":103}
+[2024-04-22 20:51:25.122 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 20:51:25.509 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 20:51:25.521 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 20:51:25.522 +01:00  INF]  Hosting environment: Development
+[2024-04-22 20:51:25.523 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 20:51:27.658 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 20:51:28.032 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 376.5814ms
+[2024-04-22 20:51:28.039 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 20:51:28.042 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 20:51:28.050 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 7.9024ms
+[2024-04-22 20:51:28.071 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 31.4051ms
+[2024-04-22 20:51:28.161 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 20:51:28.512 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 350.9910ms
+[2024-04-22 20:51:41.613 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/SubmitResignation application/json 291
+[2024-04-22 20:51:41.620 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 20:51:41.622 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 20:51:41.747 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-04-22 20:51:41.789 +01:00  INF]  Route matched with {action = "SubmitResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignation(Com.XpressPayments.Common.ViewModels.ResignationRequestVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-04-22 20:51:42.006 +01:00  INF]  IncomingRequest TraceID --- 4ffe0dc5-2ae2-4187-9119-b57d461d9ea8 Body ---- {"EmployeeId":101,"Date":"2024-04-24T00:00:00","ResumptionDate":"2024-04-29T08:06:51.881Z","ReasonForResignation":"Okay","LastDayOfWork":"2024-04-30T08:08:08.96Z","fileName":"https://myxpresspay.com:8891/HRMS/101/73627a98-ae2b-4549-b884-3cf93f380cacScreenshot 2024-03-11 190740.png","CompanyID":103}
+[2024-04-22 20:51:52.181 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 20:51:52.192 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api) in 10396.2469ms
+[2024-04-22 20:51:52.196 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-04-22 20:51:52.198 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Resignation/SubmitResignation application/json 291 - 200 - application/json;+charset=utf-8 10585.4447ms
+[2024-04-22 20:52:00.739 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/SubmitResignation application/json 291
+[2024-04-22 20:52:00.750 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 20:52:00.753 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-04-22 20:52:00.754 +01:00  INF]  Route matched with {action = "SubmitResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignation(Com.XpressPayments.Common.ViewModels.ResignationRequestVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-04-22 20:52:00.759 +01:00  INF]  IncomingRequest TraceID --- 69d79a32-54d4-4f90-ac43-00a345424d4e Body ---- {"EmployeeId":103,"Date":"2024-04-24T00:00:00","ResumptionDate":"2024-04-29T08:06:51.881Z","ReasonForResignation":"Okay","LastDayOfWork":"2024-04-30T08:08:08.96Z","fileName":"https://myxpresspay.com:8891/HRMS/101/73627a98-ae2b-4549-b884-3cf93f380cacScreenshot 2024-03-11 190740.png","CompanyID":103}
+[2024-04-22 21:05:28.594 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 21:05:28.921 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 21:05:28.924 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 21:05:28.925 +01:00  INF]  Hosting environment: Development
+[2024-04-22 21:05:28.926 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 21:05:29.855 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 21:05:30.416 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 565.7101ms
+[2024-04-22 21:05:30.436 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 21:05:30.442 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 5.5572ms
+[2024-04-22 21:05:30.494 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 21:05:30.537 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 42.2599ms
+[2024-04-22 21:05:30.633 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 21:05:31.043 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 410.2904ms
+[2024-04-22 21:06:10.066 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/ApprovePendingResignation application/json 45
+[2024-04-22 21:06:10.079 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 21:06:10.082 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 21:06:10.196 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.ApprovePendingResignation (hrms-be-backend-api)'
+[2024-04-22 21:06:10.239 +01:00  INF]  Route matched with {action = "ApprovePendingResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApprovePendingResignation(hrms_be_backend_data.RepoPayload.ApprovePendingResignationDTO) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-04-22 21:06:19.754 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 21:06:19.764 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationController.ApprovePendingResignation (hrms-be-backend-api) in 9518.7408ms
+[2024-04-22 21:06:19.774 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.ApprovePendingResignation (hrms-be-backend-api)'
+[2024-04-22 21:06:19.776 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Resignation/ApprovePendingResignation application/json 45 - 200 - application/json;+charset=utf-8 9710.1950ms
+[2024-04-22 21:06:25.858 +01:00  ERR]  System.Net.Mail.SmtpException: Error in processing. The server response was: 5.7.3 STARTTLS is required to send mail [MR2P264CA0034.FRAP264.PROD.OUTLOOK.COM 2024-04-22T20:06:25.728Z 08DC623F3592FD5B]
+   at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.EndSend(IAsyncResult result)
+   at System.Net.Mail.SendMailAsyncResult.SendMailFromCompleted(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at System.Net.Mail.SendMailAsyncResult.End(IAsyncResult result)
+   at System.Net.Mail.SmtpClient.SendMailCallback(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at hrms_be_backend_business.AppCode.MailService.SendEmailAsync(MailRequest mailRequest, String attarchDocument) in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\Logic\MailService.cs:line 53
+[2024-04-22 21:06:26.025 +01:00  ERR]  System.Net.Mail.SmtpException: Error in processing. The server response was: 5.7.3 STARTTLS is required to send mail [MR2P264CA0045.FRAP264.PROD.OUTLOOK.COM 2024-04-22T20:06:25.925Z 08DC615501110C5D]
+   at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.EndSend(IAsyncResult result)
+   at System.Net.Mail.SendMailAsyncResult.SendMailFromCompleted(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at System.Net.Mail.SendMailAsyncResult.End(IAsyncResult result)
+   at System.Net.Mail.SmtpClient.SendMailCallback(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at hrms_be_backend_business.AppCode.MailService.SendEmailAsync(MailRequest mailRequest, String attarchDocument) in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\Logic\MailService.cs:line 53
+[2024-04-22 21:06:28.326 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/ApprovePendingResignation application/json 45
+[2024-04-22 21:06:28.339 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 21:06:28.342 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.ApprovePendingResignation (hrms-be-backend-api)'
+[2024-04-22 21:06:28.349 +01:00  INF]  Route matched with {action = "ApprovePendingResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApprovePendingResignation(hrms_be_backend_data.RepoPayload.ApprovePendingResignationDTO) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-04-22 21:06:35.229 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 21:06:35.231 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationController.ApprovePendingResignation (hrms-be-backend-api) in 6880.3992ms
+[2024-04-22 21:06:35.232 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.ApprovePendingResignation (hrms-be-backend-api)'
+[2024-04-22 21:06:35.233 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Resignation/ApprovePendingResignation application/json 45 - 200 - application/json;+charset=utf-8 6906.8787ms
+[2024-04-22 21:06:41.551 +01:00  ERR]  System.Net.Mail.SmtpException: Error in processing. The server response was: 5.7.3 STARTTLS is required to send mail [MR1P264CA0200.FRAP264.PROD.OUTLOOK.COM 2024-04-22T20:06:41.469Z 08DC621AE6662868]
+   at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.EndSend(IAsyncResult result)
+   at System.Net.Mail.SendMailAsyncResult.SendMailFromCompleted(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at System.Net.Mail.SendMailAsyncResult.End(IAsyncResult result)
+   at System.Net.Mail.SmtpClient.SendMailCallback(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at hrms_be_backend_business.AppCode.MailService.SendEmailAsync(MailRequest mailRequest, String attarchDocument) in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\Logic\MailService.cs:line 53
+[2024-04-22 21:20:28.155 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 21:20:28.435 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 21:20:28.439 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 21:20:28.440 +01:00  INF]  Hosting environment: Development
+[2024-04-22 21:20:28.441 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 21:20:29.472 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 21:20:29.944 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 476.0781ms
+[2024-04-22 21:20:29.953 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 21:20:29.956 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 21:20:29.968 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 12.4901ms
+[2024-04-22 21:20:29.988 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 35.1296ms
+[2024-04-22 21:20:30.083 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 21:20:30.504 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 420.9538ms
+[2024-04-22 21:22:56.716 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 21:22:57.132 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 21:22:57.136 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 21:22:57.137 +01:00  INF]  Hosting environment: Development
+[2024-04-22 21:22:57.138 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 21:22:58.169 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 21:22:58.868 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 703.0468ms
+[2024-04-22 21:22:58.879 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 21:22:58.883 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 21:22:58.884 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 4.9134ms
+[2024-04-22 21:22:58.924 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 41.2143ms
+[2024-04-22 21:22:59.009 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 21:22:59.265 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Ambiguous HTTP method for action - hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api). Actions require an explicit HttpMethod binding for Swagger/OpenAPI 3.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerDocumentWithoutFilters(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_12>d.MoveNext() in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\Program.cs:line 284
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+[2024-04-22 21:22:59.294 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 500 - text/plain;+charset=utf-8 285.0510ms
+[2024-04-22 21:23:13.586 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 21:23:13.930 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 21:23:13.935 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 21:23:13.938 +01:00  INF]  Hosting environment: Development
+[2024-04-22 21:23:13.939 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 21:23:14.768 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 21:23:15.256 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 492.0876ms
+[2024-04-22 21:23:15.260 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 21:23:15.265 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 21:23:15.283 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 17.7571ms
+[2024-04-22 21:23:15.305 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 44.6012ms
+[2024-04-22 21:23:15.421 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 21:23:15.734 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Ambiguous HTTP method for action - hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api). Actions require an explicit HttpMethod binding for Swagger/OpenAPI 3.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerDocumentWithoutFilters(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_12>d.MoveNext() in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\Program.cs:line 284
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+[2024-04-22 21:23:15.770 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 500 - text/plain;+charset=utf-8 349.1160ms
+[2024-04-22 21:23:51.614 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 21:23:51.855 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 21:23:51.859 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 21:23:51.860 +01:00  INF]  Hosting environment: Development
+[2024-04-22 21:23:51.861 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 21:23:52.658 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 21:23:53.160 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 504.3239ms
+[2024-04-22 21:23:53.174 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 21:23:53.176 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 21:23:53.188 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 10.3266ms
+[2024-04-22 21:23:53.231 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 56.9511ms
+[2024-04-22 21:23:53.357 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 21:23:53.642 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Ambiguous HTTP method for action - hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api). Actions require an explicit HttpMethod binding for Swagger/OpenAPI 3.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerDocumentWithoutFilters(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_12>d.MoveNext() in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\Program.cs:line 284
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+[2024-04-22 21:23:53.669 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 500 - text/plain;+charset=utf-8 312.5510ms
+[2024-04-22 21:25:55.109 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 21:25:55.432 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 21:25:55.437 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 21:25:55.438 +01:00  INF]  Hosting environment: Development
+[2024-04-22 21:25:55.439 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 21:25:56.819 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 21:25:58.330 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 1516.3300ms
+[2024-04-22 21:25:58.350 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 21:25:58.371 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 21:25:58.387 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 14.8171ms
+[2024-04-22 21:25:58.485 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 134.8733ms
+[2024-04-22 21:25:58.613 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 21:25:59.157 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Ambiguous HTTP method for action - hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api). Actions require an explicit HttpMethod binding for Swagger/OpenAPI 3.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerDocumentWithoutFilters(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_12>d.MoveNext() in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\Program.cs:line 284
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+[2024-04-22 21:25:59.193 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 500 - text/plain;+charset=utf-8 580.4121ms
+[2024-04-22 21:26:57.460 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 21:26:58.221 +01:00  INF]  Now listening on: https://localhost:7090
+[2024-04-22 21:26:58.225 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 21:26:58.248 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 21:26:58.250 +01:00  INF]  Hosting environment: Development
+[2024-04-22 21:26:58.251 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 21:27:00.666 +01:00  INF]  Request starting HTTP/2 GET https://localhost:7090/index.html - -
+[2024-04-22 21:27:04.765 +01:00  INF]  Request finished HTTP/2 GET https://localhost:7090/index.html - - - 200 - text/html;charset=utf-8 4102.1539ms
+[2024-04-22 21:27:04.778 +01:00  INF]  Request starting HTTP/2 GET https://localhost:7090/swagger-ui.css - -
+[2024-04-22 21:27:04.789 +01:00  INF]  Request starting HTTP/2 GET https://localhost:7090/swagger-ui-bundle.js - -
+[2024-04-22 21:27:04.811 +01:00  INF]  Request starting HTTP/2 GET https://localhost:7090/swagger-ui-standalone-preset.js - -
+[2024-04-22 21:27:04.834 +01:00  INF]  Request starting HTTP/2 GET https://localhost:7090/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 21:27:04.877 +01:00  INF]  Request finished HTTP/2 GET https://localhost:7090/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 43.9410ms
+[2024-04-22 21:27:04.878 +01:00  INF]  Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+[2024-04-22 21:27:04.878 +01:00  INF]  Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+[2024-04-22 21:27:04.887 +01:00  INF]  Request finished HTTP/2 GET https://localhost:7090/swagger-ui.css - - - 200 144929 text/css 108.8389ms
+[2024-04-22 21:27:04.892 +01:00  INF]  Request finished HTTP/2 GET https://localhost:7090/swagger-ui-standalone-preset.js - - - 200 312163 text/javascript 81.3519ms
+[2024-04-22 21:27:04.900 +01:00  INF]  Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+[2024-04-22 21:27:04.902 +01:00  INF]  Request finished HTTP/2 GET https://localhost:7090/swagger-ui-bundle.js - - - 200 1061536 text/javascript 113.3977ms
+[2024-04-22 21:27:04.915 +01:00  INF]  Request starting HTTP/2 GET https://localhost:7090/_vs/browserLink - -
+[2024-04-22 21:27:05.047 +01:00  INF]  Request finished HTTP/2 GET https://localhost:7090/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 131.8511ms
+[2024-04-22 21:27:05.297 +01:00  INF]  Request starting HTTP/2 GET https://localhost:7090/swagger/v1/swagger.json - -
+[2024-04-22 21:27:05.336 +01:00  INF]  Request starting HTTP/2 GET https://localhost:7090/favicon-32x32.png - -
+[2024-04-22 21:27:05.337 +01:00  INF]  Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+[2024-04-22 21:27:05.343 +01:00  INF]  Request finished HTTP/2 GET https://localhost:7090/favicon-32x32.png - - - 200 628 image/png 7.4299ms
+[2024-04-22 21:27:05.732 +01:00  ERR]  An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Ambiguous HTTP method for action - hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api). Actions require an explicit HttpMethod binding for Swagger/OpenAPI 3.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerDocumentWithoutFilters(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Program.<>c.<<<Main>$>b__0_12>d.MoveNext() in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\Program.cs:line 284
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+[2024-04-22 21:27:05.772 +01:00  INF]  Request finished HTTP/2 GET https://localhost:7090/swagger/v1/swagger.json - - - 500 - text/plain;+charset=utf-8 475.5212ms
+[2024-04-22 21:27:47.554 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 21:27:47.857 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 21:27:47.866 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 21:27:47.869 +01:00  INF]  Hosting environment: Development
+[2024-04-22 21:27:47.870 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 21:27:48.419 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 21:27:48.919 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 502.9961ms
+[2024-04-22 21:27:48.925 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 21:27:48.929 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 21:27:48.942 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 12.8450ms
+[2024-04-22 21:27:48.970 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 45.1599ms
+[2024-04-22 21:27:49.082 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 21:27:49.491 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 409.3849ms
+[2024-04-22 21:28:36.224 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ExitClearanceSetup/CreateExitClearanceSetup application/json 142
+[2024-04-22 21:28:36.242 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 21:28:36.246 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 21:28:36.471 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api)'
+[2024-04-22 21:28:36.503 +01:00  INF]  Route matched with {action = "CreateExitClearanceSetup", controller = "ExitClearanceSetup"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateExitClearanceSetup(hrms_be_backend_data.ViewModel.CreateExitClearanceSetupVm) on controller hrms_be_backend_api.Controllers.ExitClearanceSetupController (hrms-be-backend-api).
+[2024-04-22 21:30:32.920 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 21:30:33.165 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 21:30:33.169 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 21:30:33.172 +01:00  INF]  Hosting environment: Development
+[2024-04-22 21:30:33.172 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 21:30:34.095 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 21:30:34.502 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 409.0916ms
+[2024-04-22 21:30:34.505 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 21:30:34.508 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 21:30:34.513 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 4.9191ms
+[2024-04-22 21:30:34.534 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 29.0618ms
+[2024-04-22 21:30:34.624 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 21:30:34.957 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 332.3798ms
+[2024-04-22 21:31:01.704 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ExitClearanceSetup/CreateExitClearanceSetup application/json 142
+[2024-04-22 21:31:01.756 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 21:31:01.761 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 21:31:01.893 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api)'
+[2024-04-22 21:31:01.926 +01:00  INF]  Route matched with {action = "CreateExitClearanceSetup", controller = "ExitClearanceSetup"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateExitClearanceSetup(hrms_be_backend_data.ViewModel.CreateExitClearanceSetupVm) on controller hrms_be_backend_api.Controllers.ExitClearanceSetupController (hrms-be-backend-api).
+[2024-04-22 21:32:09.785 +01:00  ERR]  MethodName: CreateExitClearanceSetup(ExitClearanceSetupDTO request) => Procedure or function 'Sp_create_exit_clearance_setup' expects parameter '@ExitClearanceSetupId', which was not supplied.
+[2024-04-22 21:32:09.830 +01:00  ERR]  Error creating setup
+[2024-04-22 21:32:09.839 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 21:32:09.847 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api) in 67915.4633ms
+[2024-04-22 21:32:09.851 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api)'
+[2024-04-22 21:32:09.853 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/ExitClearanceSetup/CreateExitClearanceSetup application/json 142 - 200 - application/json;+charset=utf-8 68148.8753ms
+[2024-04-22 21:32:14.533 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ExitClearanceSetup/CreateExitClearanceSetup application/json 142
+[2024-04-22 21:32:14.547 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 21:32:14.555 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api)'
+[2024-04-22 21:32:14.562 +01:00  INF]  Route matched with {action = "CreateExitClearanceSetup", controller = "ExitClearanceSetup"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateExitClearanceSetup(hrms_be_backend_data.ViewModel.CreateExitClearanceSetupVm) on controller hrms_be_backend_api.Controllers.ExitClearanceSetupController (hrms-be-backend-api).
+[2024-04-22 21:33:01.455 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 21:33:01.711 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 21:33:01.717 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 21:33:01.717 +01:00  INF]  Hosting environment: Development
+[2024-04-22 21:33:01.719 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 21:33:02.455 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 21:33:02.882 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 430.3263ms
+[2024-04-22 21:33:02.888 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 21:33:02.891 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 21:33:02.895 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 4.1668ms
+[2024-04-22 21:33:02.928 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 39.8975ms
+[2024-04-22 21:33:03.017 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 21:33:03.332 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 314.2021ms
+[2024-04-22 21:33:34.104 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ExitClearanceSetup/CreateExitClearanceSetup application/json 142
+[2024-04-22 21:33:34.142 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 21:33:34.145 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 21:33:34.279 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api)'
+[2024-04-22 21:33:34.319 +01:00  INF]  Route matched with {action = "CreateExitClearanceSetup", controller = "ExitClearanceSetup"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateExitClearanceSetup(hrms_be_backend_data.ViewModel.CreateExitClearanceSetupVm) on controller hrms_be_backend_api.Controllers.ExitClearanceSetupController (hrms-be-backend-api).
+[2024-04-22 21:34:35.869 +01:00  ERR]  MethodName: CreateExitClearanceSetup(ExitClearanceSetupDTO request) => Invalid object name 'ExitClearanceSetup'.
+[2024-04-22 21:34:35.911 +01:00  ERR]  Error creating setup
+[2024-04-22 21:34:35.921 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 21:34:35.929 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api) in 61603.6885ms
+[2024-04-22 21:34:35.934 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api)'
+[2024-04-22 21:34:35.935 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/ExitClearanceSetup/CreateExitClearanceSetup application/json 142 - 200 - application/json;+charset=utf-8 61831.4666ms
+[2024-04-22 21:34:40.033 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ExitClearanceSetup/CreateExitClearanceSetup application/json 142
+[2024-04-22 21:34:40.044 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 21:34:40.053 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api)'
+[2024-04-22 21:34:40.059 +01:00  INF]  Route matched with {action = "CreateExitClearanceSetup", controller = "ExitClearanceSetup"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateExitClearanceSetup(hrms_be_backend_data.ViewModel.CreateExitClearanceSetupVm) on controller hrms_be_backend_api.Controllers.ExitClearanceSetupController (hrms-be-backend-api).
+[2024-04-22 21:34:53.484 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 21:34:53.486 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api) in 13425.7247ms
+[2024-04-22 21:34:53.488 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api)'
+[2024-04-22 21:34:53.489 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/ExitClearanceSetup/CreateExitClearanceSetup application/json 142 - 200 - application/json;+charset=utf-8 13456.3742ms
+[2024-04-22 21:35:28.932 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ExitClearanceSetup/CreateExitClearanceSetup application/json 142
+[2024-04-22 21:35:28.938 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 21:35:28.941 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api)'
+[2024-04-22 21:35:28.943 +01:00  INF]  Route matched with {action = "CreateExitClearanceSetup", controller = "ExitClearanceSetup"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateExitClearanceSetup(hrms_be_backend_data.ViewModel.CreateExitClearanceSetupVm) on controller hrms_be_backend_api.Controllers.ExitClearanceSetupController (hrms-be-backend-api).
+[2024-04-22 21:35:49.293 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 21:35:49.295 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api) in 20350.7209ms
+[2024-04-22 21:35:49.296 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api)'
+[2024-04-22 21:35:49.297 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/ExitClearanceSetup/CreateExitClearanceSetup application/json 142 - 200 - application/json;+charset=utf-8 20366.2737ms
+[2024-04-22 21:37:36.740 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ExitClearanceSetup/CreateExitClearanceSetup application/json 142
+[2024-04-22 21:37:36.748 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 21:37:36.749 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api)'
+[2024-04-22 21:37:36.750 +01:00  INF]  Route matched with {action = "CreateExitClearanceSetup", controller = "ExitClearanceSetup"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateExitClearanceSetup(hrms_be_backend_data.ViewModel.CreateExitClearanceSetupVm) on controller hrms_be_backend_api.Controllers.ExitClearanceSetupController (hrms-be-backend-api).
+[2024-04-22 21:39:13.270 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 21:39:13.278 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api) in 96525.6477ms
+[2024-04-22 21:39:13.280 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api)'
+[2024-04-22 21:39:13.281 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/ExitClearanceSetup/CreateExitClearanceSetup application/json 142 - 200 - application/json;+charset=utf-8 96542.1294ms
+[2024-04-22 21:39:22.976 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ExitClearanceSetup/CreateExitClearanceSetup application/json 142
+[2024-04-22 21:39:22.981 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 21:39:22.984 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api)'
+[2024-04-22 21:39:22.985 +01:00  INF]  Route matched with {action = "CreateExitClearanceSetup", controller = "ExitClearanceSetup"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateExitClearanceSetup(hrms_be_backend_data.ViewModel.CreateExitClearanceSetupVm) on controller hrms_be_backend_api.Controllers.ExitClearanceSetupController (hrms-be-backend-api).
+[2024-04-22 21:39:33.325 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 21:39:33.326 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api) in 10339.5183ms
+[2024-04-22 21:39:33.327 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.ExitClearanceSetupController.CreateExitClearanceSetup (hrms-be-backend-api)'
+[2024-04-22 21:39:33.328 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/ExitClearanceSetup/CreateExitClearanceSetup application/json 142 - 200 - application/json;+charset=utf-8 10352.2966ms
+[2024-04-22 21:39:44.926 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/api/ExitClearanceSetup/GetExitClearanceSetupByID/1 - -
+[2024-04-22 21:39:44.928 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.Controllers.ExitClearanceSetupController.GetExitClearanceSetupByID (hrms-be-backend-api)'
+[2024-04-22 21:39:44.952 +01:00  INF]  Route matched with {action = "GetExitClearanceSetupByID", controller = "ExitClearanceSetup"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetExitClearanceSetupByID(Int64) on controller hrms_be_backend_api.Controllers.ExitClearanceSetupController (hrms-be-backend-api).
+[2024-04-22 21:39:45.113 +01:00  ERR]  AuthService || (VerifyUser)  Unable to verify access =====>Unauthorized User
+[2024-04-22 21:39:45.117 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[hrms_be_backend_data.RepoPayload.ExitClearanceSetupDTO, hrms-be-backend-data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[2024-04-22 21:39:45.122 +01:00  INF]  Executed action hrms_be_backend_api.Controllers.ExitClearanceSetupController.GetExitClearanceSetupByID (hrms-be-backend-api) in 169.4881ms
+[2024-04-22 21:39:45.125 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.Controllers.ExitClearanceSetupController.GetExitClearanceSetupByID (hrms-be-backend-api)'
+[2024-04-22 21:39:45.128 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/api/ExitClearanceSetup/GetExitClearanceSetupByID/1 - - - 200 - application/json;+charset=utf-8 201.5521ms
+[2024-04-22 21:45:21.830 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 21:45:22.104 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 21:45:22.108 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 21:45:22.110 +01:00  INF]  Hosting environment: Development
+[2024-04-22 21:45:22.111 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 21:45:22.928 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 21:45:23.401 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 474.6438ms
+[2024-04-22 21:45:23.419 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 21:45:23.424 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 21:45:23.440 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 21.3337ms
+[2024-04-22 21:45:23.471 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 47.0021ms
+[2024-04-22 21:45:23.566 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 21:45:23.935 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 368.7991ms
+[2024-04-22 21:48:15.196 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 21:48:15.477 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 21:48:15.482 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 21:48:15.484 +01:00  INF]  Hosting environment: Development
+[2024-04-22 21:48:15.485 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 21:48:16.210 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 21:48:16.642 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 432.6475ms
+[2024-04-22 21:48:16.647 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 21:48:16.650 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 21:48:16.662 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 11.2980ms
+[2024-04-22 21:48:16.688 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 40.9628ms
+[2024-04-22 21:48:16.795 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 21:48:17.151 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 355.8847ms
+[2024-04-22 21:48:53.416 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281
+[2024-04-22 21:48:53.422 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 21:48:53.425 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 21:48:53.529 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 21:48:53.561 +01:00  INF]  Route matched with {action = "SubmitResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignationClearance(Com.XpressPayments.Common.ViewModels.ResignationClearanceVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 21:48:53.805 +01:00  INF]  IncomingRequest TraceID --- 91d909d1-8369-4100-a3fa-7772df7183c0 Body ---- {"EmployeeID":101,"CompanyID":103,"ItemsReturnedToDepartment":"string","ItemsReturnedToAdmin":"string","ItemsReturnedToHr":"string","LoansOutstanding":"string","CreatedByUserID":101,"DateCreated":"2024-04-22T20:48:27.397Z","Signature":"string"}
+[2024-04-22 21:49:56.415 +01:00  ERR]  Error Submitting resignation clearance
+[2024-04-22 21:49:56.435 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 21:49:56.445 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api) in 62877.4423ms
+[2024-04-22 21:49:56.448 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 21:49:56.450 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281 - 200 - application/json;+charset=utf-8 63034.4444ms
+[2024-04-22 21:51:59.742 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 21:51:59.995 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 21:51:59.999 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 21:52:00.000 +01:00  INF]  Hosting environment: Development
+[2024-04-22 21:52:00.001 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 21:52:00.505 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 21:52:00.922 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 419.6372ms
+[2024-04-22 21:52:00.937 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 21:52:00.940 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 21:52:00.946 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 5.3867ms
+[2024-04-22 21:52:00.964 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 26.9803ms
+[2024-04-22 21:52:01.046 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 21:52:01.434 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 387.8798ms
+[2024-04-22 21:52:33.754 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281
+[2024-04-22 21:52:33.759 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 21:52:33.761 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 21:52:33.869 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 21:52:33.902 +01:00  INF]  Route matched with {action = "SubmitResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignationClearance(Com.XpressPayments.Common.ViewModels.ResignationClearanceVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 21:52:34.116 +01:00  INF]  IncomingRequest TraceID --- 88d42f77-63a8-46e1-ab1d-717f6ea23e66 Body ---- {"EmployeeID":101,"CompanyID":103,"ItemsReturnedToDepartment":"string","ItemsReturnedToAdmin":"string","ItemsReturnedToHr":"string","LoansOutstanding":"string","CreatedByUserID":101,"DateCreated":"2024-04-22T20:52:18.917Z","Signature":"string"}
+[2024-04-22 21:52:35.111 +01:00  ERR]  MethodName: CreateResignationClearance(CreateResignationClearance resignation) => Error parsing column 0 (ReturnVal=The INSERT statement conflicted with the FOREIGN KEY constraint "FK_ResignationClearance_Resignation". The conflict occurred in database "HrmsDbNew", table "dbo.Resignation", column 'ResignationID'. - String)
+[2024-04-22 21:52:35.171 +01:00  ERR]  Error Submitting resignation clearance
+[2024-04-22 21:52:35.182 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 21:52:35.198 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api) in 1285.9415ms
+[2024-04-22 21:52:35.202 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 21:52:35.203 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281 - 200 - application/json;+charset=utf-8 1448.9259ms
+[2024-04-22 21:53:01.732 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281
+[2024-04-22 21:53:01.740 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 21:53:01.751 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 21:53:01.759 +01:00  INF]  Route matched with {action = "SubmitResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignationClearance(Com.XpressPayments.Common.ViewModels.ResignationClearanceVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 21:53:01.767 +01:00  INF]  IncomingRequest TraceID --- 56b5a75f-7794-472e-95fa-8eac2d53bafe Body ---- {"EmployeeID":101,"CompanyID":103,"ItemsReturnedToDepartment":"string","ItemsReturnedToAdmin":"string","ItemsReturnedToHr":"string","LoansOutstanding":"string","CreatedByUserID":101,"DateCreated":"2024-04-22T20:52:18.917Z","Signature":"string"}
+[2024-04-22 21:55:41.447 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 21:55:41.714 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 21:55:41.717 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 21:55:41.719 +01:00  INF]  Hosting environment: Development
+[2024-04-22 21:55:41.719 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 21:55:42.628 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 21:55:43.029 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 403.4495ms
+[2024-04-22 21:55:43.032 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 21:55:43.037 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 21:55:43.057 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 19.7935ms
+[2024-04-22 21:55:43.075 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 42.5122ms
+[2024-04-22 21:55:43.167 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 21:55:43.514 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 346.9487ms
+[2024-04-22 21:56:16.352 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/Resignation/SubmitResignation application/json 291
+[2024-04-22 21:56:16.369 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 21:56:16.372 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 21:56:16.480 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-04-22 21:56:16.512 +01:00  INF]  Route matched with {action = "SubmitResignation", controller = "Resignation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignation(Com.XpressPayments.Common.ViewModels.ResignationRequestVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationController (hrms-be-backend-api).
+[2024-04-22 21:56:16.820 +01:00  INF]  IncomingRequest TraceID --- d2387a97-1760-4fbd-812f-ba121c703655 Body ---- {"EmployeeId":101,"Date":"2024-04-24T00:00:00","ResumptionDate":"2024-04-29T08:06:51.881Z","ReasonForResignation":"Okay","LastDayOfWork":"2024-04-30T08:08:08.96Z","fileName":"https://myxpresspay.com:8891/HRMS/101/73627a98-ae2b-4549-b884-3cf93f380cacScreenshot 2024-03-11 190740.png","CompanyID":103}
+[2024-04-22 21:56:27.964 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 21:56:27.978 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api) in 11458.6895ms
+[2024-04-22 21:56:27.983 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationController.SubmitResignation (hrms-be-backend-api)'
+[2024-04-22 21:56:27.986 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/Resignation/SubmitResignation application/json 291 - 200 - application/json;+charset=utf-8 11633.9269ms
+[2024-04-22 21:56:34.344 +01:00  ERR]  System.Net.Mail.SmtpException: Error in processing. The server response was: 5.7.3 STARTTLS is required to send mail [MRXP264CA0024.FRAP264.PROD.OUTLOOK.COM 2024-04-22T20:56:34.246Z 08DC630C10AF2564]
+   at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.EndSend(IAsyncResult result)
+   at System.Net.Mail.SendMailAsyncResult.SendMailFromCompleted(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at System.Net.Mail.SendMailAsyncResult.End(IAsyncResult result)
+   at System.Net.Mail.SmtpClient.SendMailCallback(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at hrms_be_backend_business.AppCode.MailService.SendEmailAsync(MailRequest mailRequest, String attarchDocument) in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\Logic\MailService.cs:line 53
+[2024-04-22 21:58:16.961 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 21:58:17.221 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 21:58:17.225 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 21:58:17.226 +01:00  INF]  Hosting environment: Development
+[2024-04-22 21:58:17.227 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 21:58:18.171 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 21:58:18.557 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 387.7496ms
+[2024-04-22 21:58:18.559 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 21:58:18.562 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 21:58:18.573 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 10.2333ms
+[2024-04-22 21:58:18.597 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 37.0185ms
+[2024-04-22 21:58:18.715 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 21:58:19.052 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 337.5364ms
+[2024-04-22 21:58:59.527 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281
+[2024-04-22 21:58:59.532 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 21:58:59.534 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 21:58:59.641 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 21:58:59.672 +01:00  INF]  Route matched with {action = "SubmitResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignationClearance(Com.XpressPayments.Common.ViewModels.ResignationClearanceVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 21:58:59.888 +01:00  INF]  IncomingRequest TraceID --- 3c80f528-c366-4b39-b087-81579301399c Body ---- {"EmployeeID":101,"CompanyID":103,"ItemsReturnedToDepartment":"string","ItemsReturnedToAdmin":"string","ItemsReturnedToHr":"string","LoansOutstanding":"string","CreatedByUserID":101,"DateCreated":"2024-04-22T20:58:39.694Z","Signature":"string"}
+[2024-04-22 21:59:21.710 +01:00  ERR]  Error Submitting resignation clearance
+[2024-04-22 21:59:21.718 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 21:59:21.736 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api) in 22054.1223ms
+[2024-04-22 21:59:21.740 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 21:59:21.742 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281 - 200 - application/json;+charset=utf-8 22215.3843ms
+[2024-04-22 21:59:47.124 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281
+[2024-04-22 21:59:47.131 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 21:59:47.135 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 21:59:47.143 +01:00  INF]  Route matched with {action = "SubmitResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignationClearance(Com.XpressPayments.Common.ViewModels.ResignationClearanceVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 21:59:47.152 +01:00  INF]  IncomingRequest TraceID --- 4c988f82-d670-4253-a4c4-57aa12772aa7 Body ---- {"EmployeeID":101,"CompanyID":103,"ItemsReturnedToDepartment":"string","ItemsReturnedToAdmin":"string","ItemsReturnedToHr":"string","LoansOutstanding":"string","CreatedByUserID":101,"DateCreated":"2024-04-22T20:58:39.694Z","Signature":"string"}
+[2024-04-22 21:59:58.514 +01:00  ERR]  Error Submitting resignation clearance
+[2024-04-22 21:59:58.516 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 21:59:58.518 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api) in 11368.4101ms
+[2024-04-22 21:59:58.519 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 21:59:58.520 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281 - 200 - application/json;+charset=utf-8 11394.4064ms
+[2024-04-22 22:01:02.008 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281
+[2024-04-22 22:01:02.014 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:01:02.017 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:01:02.018 +01:00  INF]  Route matched with {action = "SubmitResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignationClearance(Com.XpressPayments.Common.ViewModels.ResignationClearanceVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:01:02.032 +01:00  INF]  IncomingRequest TraceID --- 76591b9e-2d5e-45de-96ac-6fce0d686d47 Body ---- {"EmployeeID":101,"CompanyID":103,"ItemsReturnedToDepartment":"string","ItemsReturnedToAdmin":"string","ItemsReturnedToHr":"string","LoansOutstanding":"string","CreatedByUserID":101,"DateCreated":"2024-04-22T20:58:39.694Z","Signature":"string"}
+[2024-04-22 22:01:11.649 +01:00  ERR]  Error Submitting resignation clearance
+[2024-04-22 22:01:11.650 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 22:01:11.651 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api) in 9630.215ms
+[2024-04-22 22:01:11.657 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:01:11.659 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281 - 200 - application/json;+charset=utf-8 9650.2573ms
+[2024-04-22 22:04:58.306 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 22:04:58.547 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 22:04:58.552 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 22:04:58.554 +01:00  INF]  Hosting environment: Development
+[2024-04-22 22:04:58.555 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 22:04:59.316 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 22:04:59.703 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 388.3162ms
+[2024-04-22 22:04:59.704 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 22:04:59.707 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 22:04:59.719 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 11.4661ms
+[2024-04-22 22:04:59.740 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 36.1879ms
+[2024-04-22 22:04:59.837 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 22:05:00.178 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 340.1512ms
+[2024-04-22 22:05:23.054 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281
+[2024-04-22 22:05:23.064 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:05:23.066 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 22:05:23.175 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:05:23.211 +01:00  INF]  Route matched with {action = "SubmitResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignationClearance(Com.XpressPayments.Common.ViewModels.ResignationClearanceVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:05:23.405 +01:00  INF]  IncomingRequest TraceID --- 2bb5cc87-bc2b-45f1-81ad-2db7a6963ca2 Body ---- {"EmployeeID":101,"CompanyID":103,"ItemsReturnedToDepartment":"string","ItemsReturnedToAdmin":"string","ItemsReturnedToHr":"string","LoansOutstanding":"string","CreatedByUserID":101,"DateCreated":"2024-04-22T20:58:39.694Z","Signature":"string"}
+[2024-04-22 22:05:46.106 +01:00  ERR]  Error Submitting resignation clearance
+[2024-04-22 22:05:46.114 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 22:05:46.155 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api) in 22911.7921ms
+[2024-04-22 22:05:46.158 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:05:46.160 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281 - 200 - application/json;+charset=utf-8 23105.9638ms
+[2024-04-22 22:05:59.591 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281
+[2024-04-22 22:05:59.593 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:05:59.596 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:05:59.604 +01:00  INF]  Route matched with {action = "SubmitResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignationClearance(Com.XpressPayments.Common.ViewModels.ResignationClearanceVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:05:59.611 +01:00  INF]  IncomingRequest TraceID --- 6c62906b-6cd0-4763-9ece-fba0cdf26416 Body ---- {"EmployeeID":101,"CompanyID":103,"ItemsReturnedToDepartment":"string","ItemsReturnedToAdmin":"string","ItemsReturnedToHr":"string","LoansOutstanding":"string","CreatedByUserID":101,"DateCreated":"2024-04-22T20:58:39.694Z","Signature":"string"}
+[2024-04-22 22:09:18.536 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 22:09:18.838 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 22:09:18.844 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 22:09:18.845 +01:00  INF]  Hosting environment: Development
+[2024-04-22 22:09:18.846 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 22:09:19.526 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 22:09:19.966 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 444.7024ms
+[2024-04-22 22:09:19.974 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 22:09:19.975 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 22:09:19.983 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 7.3495ms
+[2024-04-22 22:09:20.032 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 58.1188ms
+[2024-04-22 22:09:20.134 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 22:09:20.489 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 354.2301ms
+[2024-04-22 22:09:41.888 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281
+[2024-04-22 22:09:41.896 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:09:41.898 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 22:09:42.009 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:09:42.041 +01:00  INF]  Route matched with {action = "SubmitResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignationClearance(Com.XpressPayments.Common.ViewModels.ResignationClearanceVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:09:42.252 +01:00  INF]  IncomingRequest TraceID --- cd1118bd-329e-4cc8-9ede-40b8cabbe1ec Body ---- {"EmployeeID":101,"CompanyID":103,"ItemsReturnedToDepartment":"string","ItemsReturnedToAdmin":"string","ItemsReturnedToHr":"string","LoansOutstanding":"string","CreatedByUserID":101,"DateCreated":"2024-04-22T20:58:39.694Z","Signature":"string"}
+[2024-04-22 22:10:25.537 +01:00  ERR]  Error Submitting resignation clearance
+[2024-04-22 22:10:25.547 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 22:10:25.556 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api) in 43508.2048ms
+[2024-04-22 22:10:25.560 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:10:25.562 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281 - 200 - application/json;+charset=utf-8 43673.9809ms
+[2024-04-22 22:11:58.647 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281
+[2024-04-22 22:11:58.653 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:11:58.664 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:11:58.669 +01:00  INF]  Route matched with {action = "SubmitResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignationClearance(Com.XpressPayments.Common.ViewModels.ResignationClearanceVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:11:58.675 +01:00  INF]  IncomingRequest TraceID --- fe355d84-2521-42a9-b6ac-81a97781eecf Body ---- {"EmployeeID":101,"CompanyID":103,"ItemsReturnedToDepartment":"string","ItemsReturnedToAdmin":"string","ItemsReturnedToHr":"string","LoansOutstanding":"string","CreatedByUserID":101,"DateCreated":"2024-04-22T20:58:39.694Z","Signature":"string"}
+[2024-04-22 22:13:21.719 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 22:13:21.953 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 22:13:21.957 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 22:13:21.959 +01:00  INF]  Hosting environment: Development
+[2024-04-22 22:13:21.960 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 22:13:22.933 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 22:13:23.336 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 406.1177ms
+[2024-04-22 22:13:23.341 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 22:13:23.343 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 22:13:23.349 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 5.4405ms
+[2024-04-22 22:13:23.370 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 29.6680ms
+[2024-04-22 22:13:23.465 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 22:13:23.826 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 361.0059ms
+[2024-04-22 22:13:51.086 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281
+[2024-04-22 22:13:51.092 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:13:51.095 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 22:13:51.210 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:13:51.254 +01:00  INF]  Route matched with {action = "SubmitResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignationClearance(Com.XpressPayments.Common.ViewModels.ResignationClearanceVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:13:51.469 +01:00  INF]  IncomingRequest TraceID --- c0d74426-156e-49c0-bb4d-df6f7bde2a14 Body ---- {"EmployeeID":101,"CompanyID":103,"ItemsReturnedToDepartment":"string","ItemsReturnedToAdmin":"string","ItemsReturnedToHr":"string","LoansOutstanding":"string","CreatedByUserID":101,"DateCreated":"2024-04-22T20:58:39.694Z","Signature":"string"}
+[2024-04-22 22:14:31.373 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 22:14:31.591 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 22:14:31.595 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 22:14:31.596 +01:00  INF]  Hosting environment: Development
+[2024-04-22 22:14:31.597 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 22:14:32.480 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 22:14:32.879 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 400.1894ms
+[2024-04-22 22:14:32.884 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 22:14:32.888 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 22:14:32.901 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 13.4435ms
+[2024-04-22 22:14:32.925 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 40.5894ms
+[2024-04-22 22:14:33.019 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 22:14:33.319 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 299.6941ms
+[2024-04-22 22:14:48.114 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281
+[2024-04-22 22:14:48.120 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:14:48.124 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 22:14:48.244 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:14:48.275 +01:00  INF]  Route matched with {action = "SubmitResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignationClearance(Com.XpressPayments.Common.ViewModels.ResignationClearanceVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:14:48.497 +01:00  INF]  IncomingRequest TraceID --- c592ddce-7cf5-4993-8736-5f55d5efda6e Body ---- {"EmployeeID":101,"CompanyID":103,"ItemsReturnedToDepartment":"string","ItemsReturnedToAdmin":"string","ItemsReturnedToHr":"string","LoansOutstanding":"string","CreatedByUserID":101,"DateCreated":"2024-04-22T20:58:39.694Z","Signature":"string"}
+[2024-04-22 22:15:48.374 +01:00  INF]  User profile is available. Using 'C:\Users\noble.nwabuike\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-04-22 22:15:48.708 +01:00  INF]  Now listening on: http://localhost:5008
+[2024-04-22 22:15:48.712 +01:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-04-22 22:15:48.713 +01:00  INF]  Hosting environment: Development
+[2024-04-22 22:15:48.714 +01:00  INF]  Content root path: C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api
+[2024-04-22 22:15:49.341 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/index.html - -
+[2024-04-22 22:15:49.873 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/index.html - - - 200 - text/html;charset=utf-8 533.2091ms
+[2024-04-22 22:15:49.875 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_vs/browserLink - -
+[2024-04-22 22:15:49.879 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - -
+[2024-04-22 22:15:49.892 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_framework/aspnetcore-browser-refresh.js - - - 200 12008 application/javascript;+charset=utf-8 11.4118ms
+[2024-04-22 22:15:49.924 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 48.6882ms
+[2024-04-22 22:15:50.024 +01:00  INF]  Request starting HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - -
+[2024-04-22 22:15:50.395 +01:00  INF]  Request finished HTTP/1.1 GET http://localhost:5008/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 371.3813ms
+[2024-04-22 22:16:06.931 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281
+[2024-04-22 22:16:06.938 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:16:06.942 +01:00  WRN]  Failed to determine the https port for redirect.
+[2024-04-22 22:16:07.050 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:16:07.082 +01:00  INF]  Route matched with {action = "SubmitResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SubmitResignationClearance(Com.XpressPayments.Common.ViewModels.ResignationClearanceVM) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:16:07.298 +01:00  INF]  IncomingRequest TraceID --- fd53eafe-356c-4132-9768-03e605b2e648 Body ---- {"EmployeeID":101,"CompanyID":103,"ItemsReturnedToDepartment":"string","ItemsReturnedToAdmin":"string","ItemsReturnedToHr":"string","LoansOutstanding":"string","CreatedByUserID":101,"DateCreated":"2024-04-22T20:58:39.694Z","Signature":"string"}
+[2024-04-22 22:16:32.791 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 22:16:32.800 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api) in 25711.3028ms
+[2024-04-22 22:16:32.804 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.SubmitResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:16:32.806 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/SubmitResignationClearance application/json 281 - 200 - application/json;+charset=utf-8 25874.7050ms
+[2024-04-22 22:16:38.946 +01:00  ERR]  System.Net.Mail.SmtpException: Error in processing. The server response was: 5.7.3 STARTTLS is required to send mail [MR1P264CA0132.FRAP264.PROD.OUTLOOK.COM 2024-04-22T21:16:38.819Z 08DC61E14A79A6CA]
+   at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.EndSend(IAsyncResult result)
+   at System.Net.Mail.SendMailAsyncResult.SendMailFromCompleted(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at System.Net.Mail.SendMailAsyncResult.End(IAsyncResult result)
+   at System.Net.Mail.SmtpClient.SendMailCallback(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at hrms_be_backend_business.AppCode.MailService.SendEmailAsync(MailRequest mailRequest, String attarchDocument) in C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\Logic\MailService.cs:line 53
+[2024-04-22 22:18:38.488 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54
+[2024-04-22 22:18:38.528 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:18:38.538 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:18:38.549 +01:00  INF]  Route matched with {action = "ApprovePendingResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApprovePendingResignationClearance(hrms_be_backend_data.RepoPayload.ApproveResignationClearanceDTO) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:19:44.582 +01:00  ERR]  MethodName: CreateExitClearanceSetup(ExitClearanceSetupDTO request) => Implicit conversion from data type datetime to bigint is not allowed. Use the CONVERT function to run this query.
+[2024-04-22 22:19:44.633 +01:00  ERR]  Exception Occured: ApprovePendingResignationClearance ==> Implicit conversion from data type datetime to bigint is not allowed. Use the CONVERT function to run this query.
+[2024-04-22 22:19:44.638 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 22:19:44.641 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api) in 66090.4578ms
+[2024-04-22 22:19:44.643 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:19:44.644 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54 - 200 - application/json;+charset=utf-8 66155.4932ms
+[2024-04-22 22:19:50.095 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54
+[2024-04-22 22:19:50.098 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:19:50.108 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:19:50.111 +01:00  INF]  Route matched with {action = "ApprovePendingResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApprovePendingResignationClearance(hrms_be_backend_data.RepoPayload.ApproveResignationClearanceDTO) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:20:33.829 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 22:20:33.831 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api) in 43718.2234ms
+[2024-04-22 22:20:33.832 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:20:33.833 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54 - 200 - application/json;+charset=utf-8 43737.4200ms
+[2024-04-22 22:22:34.940 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54
+[2024-04-22 22:22:34.957 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:22:34.958 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:22:34.959 +01:00  INF]  Route matched with {action = "ApprovePendingResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApprovePendingResignationClearance(hrms_be_backend_data.RepoPayload.ApproveResignationClearanceDTO) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:22:50.195 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 22:22:50.196 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api) in 15235.8706ms
+[2024-04-22 22:22:50.198 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:22:50.199 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54 - 200 - application/json;+charset=utf-8 15259.0412ms
+[2024-04-22 22:22:55.067 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54
+[2024-04-22 22:22:55.068 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:22:55.070 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:22:55.075 +01:00  INF]  Route matched with {action = "ApprovePendingResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApprovePendingResignationClearance(hrms_be_backend_data.RepoPayload.ApproveResignationClearanceDTO) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:29:28.991 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 22:29:29.032 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api) in 393954.1961ms
+[2024-04-22 22:29:29.038 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:29:29.039 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54 - 200 - application/json;+charset=utf-8 393971.6720ms
+[2024-04-22 22:29:31.772 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54
+[2024-04-22 22:29:31.782 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:29:31.783 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:29:31.784 +01:00  INF]  Route matched with {action = "ApprovePendingResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApprovePendingResignationClearance(hrms_be_backend_data.RepoPayload.ApproveResignationClearanceDTO) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:31:34.859 +01:00  ERR]  MethodName: ApprovePendingResignationClearance(long userID, long resignationClearanceId) => Procedure or function Sp_ApprovePendingResignationClearance has too many arguments specified.
+[2024-04-22 22:31:34.908 +01:00  ERR]  Exception Occured: ApprovePendingResignationClearance ==> Procedure or function Sp_ApprovePendingResignationClearance has too many arguments specified.
+[2024-04-22 22:31:34.909 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 22:31:34.910 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api) in 123125.2682ms
+[2024-04-22 22:31:34.912 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:31:34.913 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54 - 200 - application/json;+charset=utf-8 123140.5301ms
+[2024-04-22 22:33:41.455 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54
+[2024-04-22 22:33:41.460 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:33:41.462 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:33:41.463 +01:00  INF]  Route matched with {action = "ApprovePendingResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApprovePendingResignationClearance(hrms_be_backend_data.RepoPayload.ApproveResignationClearanceDTO) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:34:28.439 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 22:34:28.443 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api) in 46977.8414ms
+[2024-04-22 22:34:28.444 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:34:28.445 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54 - 200 - application/json;+charset=utf-8 46989.8625ms
+[2024-04-22 22:50:15.528 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54
+[2024-04-22 22:50:15.532 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:50:15.541 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:50:15.546 +01:00  INF]  Route matched with {action = "ApprovePendingResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApprovePendingResignationClearance(hrms_be_backend_data.RepoPayload.ApproveResignationClearanceDTO) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:50:26.175 +01:00  ERR]  Exception Occured: ApprovePendingResignationClearance ==> Cannot perform runtime binding on a null reference
+[2024-04-22 22:50:26.185 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 22:50:30.743 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api) in 15195.6977ms
+[2024-04-22 22:50:30.744 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:50:30.745 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54 - 200 - application/json;+charset=utf-8 15220.3064ms
+[2024-04-22 22:51:36.427 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54
+[2024-04-22 22:51:36.433 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:51:36.435 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:51:36.444 +01:00  INF]  Route matched with {action = "ApprovePendingResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApprovePendingResignationClearance(hrms_be_backend_data.RepoPayload.ApproveResignationClearanceDTO) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:51:51.079 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 22:51:51.080 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api) in 14634.5634ms
+[2024-04-22 22:51:51.081 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:51:51.082 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54 - 200 - application/json;+charset=utf-8 14655.7294ms
+[2024-04-22 22:52:33.644 +01:00  INF]  Request starting HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54
+[2024-04-22 22:52:33.664 +01:00  INF]  CORS policy execution successful.
+[2024-04-22 22:52:33.665 +01:00  INF]  Executing endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:52:33.666 +01:00  INF]  Route matched with {action = "ApprovePendingResignationClearance", controller = "ResignationClearance"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ApprovePendingResignationClearance(hrms_be_backend_data.RepoPayload.ApproveResignationClearanceDTO) on controller hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController (hrms-be-backend-api).
+[2024-04-22 22:52:55.234 +01:00  INF]  Executing OkObjectResult, writing value of type 'hrms_be_backend_common.Communication.ExecutedResult`1[[System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[2024-04-22 22:52:55.241 +01:00  INF]  Executed action hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api) in 21574.6164ms
+[2024-04-22 22:52:55.243 +01:00  INF]  Executed endpoint 'hrms_be_backend_api.ExitModuleController.Controller.ResignationClearanceController.ApprovePendingResignationClearance (hrms-be-backend-api)'
+[2024-04-22 22:52:55.244 +01:00  INF]  Request finished HTTP/1.1 POST http://localhost:5008/api/ResignationClearance/ApprovePendingResignation application/json 54 - 200 - application/json;+charset=utf-8 21600.8284ms
+[2024-04-22 22:53:01.267 +01:00  ERR]  System.Net.Mail.SmtpException: Error in processing. The server response was: 5.7.3 STARTTLS is required to send mail [MR1P264CA0051.FRAP264.PROD.OUTLOOK.COM 2024-04-22T21:53:01.194Z 08DC6253AC37A2C3]
+   at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.EndSend(IAsyncResult result)
+   at System.Net.Mail.SendMailAsyncResult.SendMailFromCompleted(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at System.Net.Mail.SendMailAsyncResult.End(IAsyncResult result)
+   at System.Net.Mail.SmtpClient.SendMailCallback(IAsyncResult result)
+--- End of stack trace from previous location ---
+   at hrms_be_backend_business.AppCode.MailService.SendEmailAsync(MailRequest mailRequest, String attarchDocument)

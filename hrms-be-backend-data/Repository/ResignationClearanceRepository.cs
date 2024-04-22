@@ -40,7 +40,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("DateCreated", resignation.DateCreated);
                 param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                await _dapper.Insert<int>("Sp_SubmitResignationClearance", param, commandType: CommandType.StoredProcedure);
+                dynamic response = await _dapper.Insert<int>("Sp_SubmitResignationClearance", param, commandType: CommandType.StoredProcedure);
 
                 int resp = param.Get<int>("Resp");
 
@@ -145,7 +145,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("UserID", userID);
                 param.Add("resignationClearanceId", resignationClearanceId);
                 param.Add("DateApproved", DateTime.Now);
-                param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                //param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
                 var response = await _dapper.Get<string>("Sp_ApprovePendingResignationClearance", param, commandType: CommandType.StoredProcedure);
 

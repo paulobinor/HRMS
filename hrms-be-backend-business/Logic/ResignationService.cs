@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System.Net;
 using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace hrms_be_backend_business.Logic
 {
@@ -66,7 +67,11 @@ namespace hrms_be_backend_business.Logic
                     isModelStateValidate = false;
                     validationMessage += "  Invalid last day of work";
                 }
-
+                if (payload.ResumptionDate > DateTime.Now)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  Invalid resumption date";
+                } 
                 if (string.IsNullOrWhiteSpace(payload.ReasonForResignation))
                 {
                     isModelStateValidate = false;
@@ -82,8 +87,14 @@ namespace hrms_be_backend_business.Logic
                 if (!isModelStateValidate)
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
+                payload.EmployeeId = accessUser.data.EmployeeId;
 
-                payload.EmployeeId = accessUser.data.UserId;
+                var alreadyResigned = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeId);
+                if (alreadyResigned != null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Resignation form has previously been submitted by this user", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
 
                 var resignation = new ResignationDTO
                 {
@@ -450,6 +461,7 @@ namespace hrms_be_backend_business.Logic
             {
                 return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
             }
+
             try
             {
                 var resignation = await _resignationRepository.GetResignationByID(request.ResignationId);
@@ -473,7 +485,7 @@ namespace hrms_be_backend_business.Logic
 
                 if (!approvedResignationResp.Contains("Success"))
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"{resignation}", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"{approvedResignationResp}", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
 
                 }
 

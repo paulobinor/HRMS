@@ -37,11 +37,11 @@ namespace hrms_be_backend_data.Repository
                 param.Add("ExitClearanceSetupID", exitClearanceSetupID);
                 param.Add("IsApproved", true);
                 param.Add("DateApproved", DateTime.Now);
-                param.Add("ApprovedByUserId", DateTime.Now);
+                param.Add("ApprovedByUserId", UserID);
 
 
-                return await _dapper.Get<string>("Sp_create_resignation_clearance_approvals", param, commandType: CommandType.StoredProcedure);
-
+                dynamic response = await _dapper.Get<string>("Sp_create_resignation_clearance_approvals", param, commandType: CommandType.StoredProcedure);
+                return response;
             }
             catch (Exception ex)
             {

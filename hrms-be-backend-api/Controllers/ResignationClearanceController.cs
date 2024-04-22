@@ -113,6 +113,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpPost]
         [Route("ApprovePendingResignation")]
+        [Authorize]
         public async Task<IActionResult> ApprovePendingResignationClearance([FromBody] ApproveResignationClearanceDTO request)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -128,6 +129,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpPost]
         [Route("DisapprovePendingResignation")]
+        [Authorize]
         public async Task<IActionResult> DisapprovePendingResignationClearance([FromBody] DisapprovePendingResignationClearanceDTO request)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
