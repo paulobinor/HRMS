@@ -8,24 +8,30 @@ namespace hrms_be_backend_data.RepoPayload
 {
     public class ResignationInterviewDTO
     {
-        public long UserID { get; set; }
-        public int SRFID { get; set; }
+        public long ResignationInterviewID { get; set; }
+        public long EmployeeId { get; set; }
+        public long ResignationId { get; set; }
+        public long CompanyId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleName { get; set; }
+        public string SupervisorName { get; set; }
+        public string Department { get; set; }
+        public string OfficialEmail { get; set; }
         public DateTime DateCreated { get; set; }
-        public string Created_By_User_Email { get; set; }
+        public long CreatedByUserId { get; set; }
+        public DateTime ResumptionDate { get; set; }
         public string ReasonForResignation { get; set; }
-        public DateTime LastDayOfWork { get; set; }
-        public string QuestionOne { get; set; }
-        public string QuestionTwo { get; set; }
-        public string QuestionThree { get; set; }
-        public string QuestionFour { get; set; }
-        public string QuestionFive { get; set; }
-        public string Comment { get; set; }
+        public DateTime ExitDate { get; set; }
+        public string OtherRemarks { get; set; }
         public string Signature  { get; set; }
+        public long HrEmployeeId { get; set; }
         public DateTime Date { get; set; }
-        public bool IsApproved { get; set; }
-        public int ApprovedByUserID { get; set; }
+        public string WhatDidYouLikeMostAboutTheCompanyAndYourJob { get; set; }
+        public string WhatDidYouLeastLikeAboutTheCompanyAndYourJob { get; set; }
+        public string DoYouFeelYouWerePlacedInAPositionCompatibleWithYourSkillSet { get; set; }
+        public string IfYouAreTakingAnotherJob_WhatKindOfJobWillYouBeTaking { get; set; }
+        public string CouldOurCompanyHaveMadeAnyImprovementsThatMightHaveMadeYouStay { get; set; }
+
     }
 }

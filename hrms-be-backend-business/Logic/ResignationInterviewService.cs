@@ -1,14 +1,17 @@
 ﻿using Com.XpressPayments.Common.ViewModels;
 using hrms_be_backend_business.AppCode;
 using hrms_be_backend_business.ILogic;
+using hrms_be_backend_common.Communication;
 using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.Repository;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.ComponentModel.Design;
 using System.Text;
 
 namespace hrms_be_backend_business.Logic
@@ -19,19 +22,30 @@ namespace hrms_be_backend_business.Logic
         private readonly ILogger<ResignationInterviewService> _logger;
         private readonly IAccountRepository _accountRepository;
         private readonly IResignationInterviewRepository _resignationInterviewRepository;
+        private readonly IAuthService _authService;
+        private readonly IResignationRepository _resignationRepository;
 
-        public ResignationInterviewService(IConfiguration config, IResignationInterviewRepository resignationInterviewRepository, ILogger<ResignationInterviewService> logger, IAccountRepository accountRepository)
+
+        public ResignationInterviewService(IConfiguration config, IResignationInterviewRepository resignationInterviewRepository, ILogger<ResignationInterviewService> logger, IAccountRepository accountRepository, IAuthService authService, IResignationRepository resignationRepository)
         {
             _config = config;
             _logger = logger;
             _accountRepository = accountRepository;
             _resignationInterviewRepository = resignationInterviewRepository;
+            _authService = authService;
+            _resignationRepository = resignationRepository;
+
         }
 
 
 
-        public async Task<BaseResponse> SubmitResignationInterview(RequesterInfo requesterInfo, ResignationInterviewVM payload)
+        public async Task<ExecutedResult<string>> SubmitResignationInterview(ResignationInterviewVM payload, string AccessKey, string RemoteIpAddress)
         {
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+            }
             string traceID = Guid.NewGuid().ToString();
             try
             {
@@ -40,32 +54,33 @@ namespace hrms_be_backend_business.Logic
                 var errorMessages = String.Empty;
                 StringBuilder errorBuilder = new StringBuilder();
 
-                if (payload.LastDayOfWork < DateTime.Now)
-                    errorMessages = errorMessages + "|Invalid Last Day of work";
-                if (string.IsNullOrWhiteSpace(payload.ReasonForResignation))
-                    errorMessages = errorMessages + "|Resignation reason is required";
-                if (string.IsNullOrWhiteSpace(payload.QuestionOne))
-                    errorMessages = errorMessages + "|What did you like most about Xpress Payments and your job? Must be filled";
-                if (string.IsNullOrWhiteSpace(payload.QuestionTwo))
-                    errorMessages = errorMessages + "|What did you least like about Xpress Payments and your job? Must be filled";
-                if (string.IsNullOrWhiteSpace(payload.QuestionThree))
+                //if (payload.ExitDate < DateTime.Now)
+                //    errorMessages = errorMessages + "|Invalid Last Day of work";
+                //if (string.IsNullOrWhiteSpace(payload.ReasonForResignation))
+                //    errorMessages = errorMessages + "|Resignation reason is required";
+                if (string.IsNullOrWhiteSpace(payload.WhatDidYouLikeMostAboutTheCompanyAndYourJob))
+                    errorMessages = errorMessages + "|What did you like most about the company and your job? Must be filled";
+                if (string.IsNullOrWhiteSpace(payload.WhatDidYouLeastLikeAboutTheCompanyAndYourJob))
+                    errorMessages = errorMessages + "|What did you least like about the company and your job? Must be filled";
+                if (string.IsNullOrWhiteSpace(payload.DoYouFeelYouWerePlacedInAPositionCompatibleWithYourSkillSet))
                     errorMessages = errorMessages + "|Do you feel you were placed in a position compatible with your skillset? Must be filled";
-                if (string.IsNullOrWhiteSpace(payload.QuestionFour))
+                if (string.IsNullOrWhiteSpace(payload.IfYouAreTakingAnotherJob_WhatKindOfJobWillYouBeTaking))
                     errorMessages = errorMessages + "|If you are taking another job, what kind of work will you be taking? Must be filled";
-                if (string.IsNullOrWhiteSpace(payload.QuestionFive))
+                if (string.IsNullOrWhiteSpace(payload.CouldOurCompanyHaveMadeAnyImprovementsThatMightHaveMadeYouStay))
                     errorMessages = errorMessages + "|Could Xpress Payments have made any improvements that might have influenced you to stay on the job? Must be filled";
 
                 if (errorMessages.Length > 0)
-                    return new BaseResponse { ResponseCode = ((int)ResponseCode.ValidationError).ToString(), ResponseMessage = errorMessages.Remove(0, 1) };
+                    return new ExecutedResult<string>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+
 
                 if (payload.SectionOne.Count < ApplicationConstant.totalFormCountSectionOne)
                 {
-                    return new BaseResponse { ResponseCode = ((int)ResponseCode.ValidationError).ToString(), ResponseMessage = "Please kindly check all radio button on section one" };
+                    return new ExecutedResult<string>() { responseMessage = "Please kindly check all radio button on section one", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
                 }
 
                 if (payload.SectionTwo.Count < ApplicationConstant.totalFormCountSectionTwo)
                 {
-                    return new BaseResponse { ResponseCode = ((int)ResponseCode.ValidationError).ToString(), ResponseMessage = "Please kindly check all radio button on section two" };
+                    return new ExecutedResult<string>() { responseMessage = "Please kindly check all radio button on section two", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
                 }
 
                 payload?.SectionOne?.ForEach(x =>
@@ -79,7 +94,7 @@ namespace hrms_be_backend_business.Logic
                 for (int x = 0; payload.SectionOne.Count > x; x++)
                 {
                     if (payload.SectionOne[x].Value < 1)
-                        return new BaseResponse { ResponseCode = ((int)ResponseCode.ValidationError).ToString(), ResponseMessage = "Please kindly check all radio button on section one" };
+                        return new ExecutedResult<string>() { responseMessage = "Please kindly check all radio button on section one", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
 
                     payload.SectionOne[x].Scale = Enum.GetName(typeof(ExitInterviewScaleSectionOne), (ExitInterviewScaleSectionOne)payload.SectionOne[x].Value);
                 }
@@ -88,7 +103,7 @@ namespace hrms_be_backend_business.Logic
                 for (int x = 0; payload.SectionTwo.Count > x; x++)
                 {
                     if (payload.SectionTwo[x].Value < 1)
-                        return new BaseResponse { ResponseCode = ((int)ResponseCode.ValidationError).ToString(), ResponseMessage = "Please kindly check all radio button on section two" };
+                        return new ExecutedResult<string>() { responseMessage = "Please kindly check all radio button on section two", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
 
                     payload.SectionTwo[x].Scale = Enum.GetName(typeof(ExitInterviewScaleSectionTwo), (ExitInterviewScaleSectionOne)payload.SectionTwo[x].Value);
                 }
@@ -97,155 +112,151 @@ namespace hrms_be_backend_business.Logic
                 var sectionTwoDataTable = DatatableUtilities.ConvertSectionListToDataTable(payload.SectionTwo);
 
 
-                payload.UserID = requesterInfo.UserId;
+                payload.EmployeeId = accessUser.data.EmployeeId;
+
+                var resignation = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeId);
 
                 var resignationInterview = new ResignationInterviewDTO
                 {
+                    CompanyId = payload.CompanyId,
                     Date = payload.Date,
                     DateCreated = DateTime.Now,
-                    Created_By_User_Email = requesterInfo?.Username,
-                    LastDayOfWork = payload.LastDayOfWork,
-                    UserID = payload.UserID,
-                    SRFID = payload.SRFID,
-                    ReasonForResignation = payload.ReasonForResignation,
-                    QuestionOne = payload.QuestionOne,
-                    QuestionTwo = payload.QuestionTwo,
-                    QuestionThree = payload.QuestionThree,
-                    QuestionFour = payload.QuestionFour,
-                    QuestionFive = payload.QuestionFive,
-                    Comment = payload.Comment
+                    CreatedByUserId = accessUser.data.UserId,
+                    ExitDate = resignation.ExitDate,
+                    EmployeeId = payload.EmployeeId,
+                    ResignationId = resignation.ResignationID,
+                    ReasonForResignation = resignation.ReasonForResignation,
+                    OtherRemarks = payload.OtherRemarks,
+                    ResumptionDate = resignation.ResumptionDate,
+                    Signature = payload.Signature,
+                    WhatDidYouLeastLikeAboutTheCompanyAndYourJob = payload.WhatDidYouLeastLikeAboutTheCompanyAndYourJob,
+                    WhatDidYouLikeMostAboutTheCompanyAndYourJob = payload.WhatDidYouLikeMostAboutTheCompanyAndYourJob,
+                    DoYouFeelYouWerePlacedInAPositionCompatibleWithYourSkillSet = payload.DoYouFeelYouWerePlacedInAPositionCompatibleWithYourSkillSet,
+                    CouldOurCompanyHaveMadeAnyImprovementsThatMightHaveMadeYouStay = payload.CouldOurCompanyHaveMadeAnyImprovementsThatMightHaveMadeYouStay,
+                    IfYouAreTakingAnotherJob_WhatKindOfJobWillYouBeTaking = payload.IfYouAreTakingAnotherJob_WhatKindOfJobWillYouBeTaking,
+                    
                 };
 
 
                 var resp = await _resignationInterviewRepository.CreateResignationInterview(resignationInterview, sectionOneDataTable, sectionTwoDataTable);
 
-                if (resp < 1)
+                if (!resp.Contains("Success"))
                 {
-                    switch (resp)
-                    {
-                        case -1:
-                            return new BaseResponse { ResponseCode = ((int)ResponseCode.ValidationError).ToString(), ResponseMessage = "Interview Record already exist" };
+                    return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
 
-
-                        default:
-                            return new BaseResponse { ResponseCode = ((int)ResponseCode.ValidationError).ToString(), ResponseMessage = "Processing error" };
-                    }
                 }
 
-                return new BaseResponse { ResponseCode = ((int)ResponseCode.Ok).ToString(), ResponseMessage = "Resignation submitted successfully", Data = resignationInterview };
+                _logger.LogInformation("Resignation Interview form Submitted successfully.");
+                return new ExecutedResult<string>() { responseMessage = "Resignation Interview form Submitted successfully.", responseCode = (200).ToString(), data = null };
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error Submitting resignation Interview", ex);
-                return new BaseResponse { ResponseCode = ((int)ResponseCode.Exception).ToString(), ResponseMessage = "An error occured. We are currently looking into it." };
+                _logger.LogError("Error Submitting resignation interview form", ex);
+                return new ExecutedResult<string>() { responseMessage = "An error occured", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
         }
 
-        public async Task<BaseResponse> GetInterviewScaleDetails(RequesterInfo requester)
+        public async Task<ExecutedResult<ResignationInterviewDTO>> GetResignationInterviewById(long ResignationInterviewId, string AccessKey, string RemoteIpAddress)
         {
-            BaseResponse response = new BaseResponse();
-            try
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
             {
-                //string requesterUserEmail = requester.Username;
-                //string requesterUserId = requester.UserId.ToString();
-                //string RoleId = requester.RoleId.ToString();
-
-                //var ipAddress = requester.IpAddress.ToString();
-                //var port = requester.Port.ToString();
-
-                var InterviewScaleDetails = await _resignationInterviewRepository.GetInterviewScaleDetails();
-
-                if (InterviewScaleDetails == null || InterviewScaleDetails.Count == 0)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "InterviewScaleDetails not found.";
-                    response.Data = null;
-                    return response;
-                }
-
-                //update action performed into audit log here
-
-                response.Data = InterviewScaleDetails;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Resignation fetched successfully.";
-                return response;
-
+                return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
             }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: GetInterviewScaleDetails ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetInterviewScaleDetails ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> GetResignationInterview(long SRFID, RequesterInfo requester)
-        {
-            BaseResponse response = new BaseResponse();
 
             try
             {
-                //string requesterUserEmail = requester.Username;
-                //string requesterUserId = requester.UserId.ToString();
-                //string RoleId = requester.RoleId.ToString();
 
-                //var ipAddress = requester.IpAddress.ToString();
-                //var port = requester.Port.ToString();
 
-                var resignation = await _resignationInterviewRepository.GetResignationInterview(SRFID);
+                var resignation = await _resignationInterviewRepository.GetResignationInterviewById(ResignationInterviewId);
 
                 if (resignation == null)
                 {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "resignationInterview not found.";
-                    response.Data = null;
-                    return response;
+                    return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+
                 }
 
-                //update action performed into audit log here
+                _logger.LogInformation("Resignation interview fetched successfully.");
+                return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = (00).ToString(), data = resignation };
 
-                response.Data = resignation;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "resignationInterview fetched successfully.";
-                return response;
 
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetResignationInterview(long SRFID) ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetResignationInterview(long SRFID) ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                _logger.LogError($"Exception Occured: GetResignationInterviewById(long ResignationInterviewId) ==> {ex.Message}");
+                return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+
             }
         }
 
-        public async Task<BaseResponse> GetResignationInterviewDetails(long InterviewID, RequesterInfo requester)
+
+       public async Task<ExecutedResult<IEnumerable<ResignationInterviewDTO>>> GetAllResignationInterviewsByCompany(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress)
         {
-            BaseResponse response = new BaseResponse();
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<IEnumerable<ResignationInterviewDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+            }
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
 
             try
             {
-                //string requesterUserEmail = requester.Username;
-                //string requesterUserId = requester.UserId.ToString();
-                //string RoleId = requester.RoleId.ToString();
 
-                //var ipAddress = requester.IpAddress.ToString();
-                //var port = requester.Port.ToString();
+
+                var resignation = await _resignationInterviewRepository.GetAllResignationInterviewsByCompany(companyID, filter.PageNumber, filter.PageSize, filter.SearchValue);
+
+                if (resignation == null)
+                {
+                    return new ExecutedResult<IEnumerable<ResignationInterviewDTO>>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+
+                }
+
+                _logger.LogInformation("Resignations fetched successfully.");
+                return new ExecutedResult<IEnumerable<ResignationInterviewDTO>>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = (00).ToString(), data = resignation };
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetAllResignationInterviewsByCompany(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress) ==> {ex.Message}");
+                return new ExecutedResult<IEnumerable<ResignationInterviewDTO>>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+
+            }
+
+        }
+
+        public async Task<BaseResponse> GetResignationInterviewDetails(long InterviewID, string AccessKey, string RemoteIpAddress)
+        {
+            BaseResponse response = new BaseResponse();
+
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Unathorized User";
+                response.Data = null;
+                return response;
+            }
+
+            try
+            {
 
                 var resignation = await _resignationInterviewRepository.GetResignationInterviewDetails(InterviewID);
 
-                if (resignation == null)
+                if (resignation == null )
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = "Resignation Interview Details not found.";
                     response.Data = null;
                     return response;
                 }
-
-                //update action performed into audit log here
+                if (resignation.Count == 0 )
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Resignation Interview Details does not exist";
+                    response.Data = null;
+                    return response;
+                }
 
                 response.Data = resignation;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
@@ -263,201 +274,224 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> ApprovePendingResignationInterview(ApproveResignationInterviewDTO request, RequesterInfo requester)
+        public async Task<ExecutedResult<ResignationInterviewDTO>> GetResignationInterviewByEmployeeID(long EmployeeId, string AccessKey, string RemoteIpAddress)
         {
-            var response = new BaseResponse();
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+            }
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
 
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
+                var resignation = await _resignationInterviewRepository.GetResignationInterviewByEmployeeID(EmployeeId);
 
-
-
-
-                var resignation = await _resignationInterviewRepository.GetResignationInterview(request.ID);
                 if (resignation == null)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Resignation Details Cannot be Found.";
-                    return response;
+                    return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+
                 }
 
-                //if (Convert.ToInt32(RoleId) != 2)
-                //{
-                //    if (Convert.ToInt32(RoleId) != 4)
-                //    {
-                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                //        return response;
+                
+                _logger.LogInformation("Resignation fetched successfully.");
+                return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = (00).ToString(), data = resignation };
 
-                //    }
-
-                //}
-                var ApprovedResignation = await _resignationInterviewRepository.ApprovePendingResignationInterview(request.userID, request.ID, request.isApproved);
-                if (ApprovedResignation < 0)
-                {
-                    switch (ApprovedResignation)
-                    {
-                        case -1:
-                            response.ResponseMessage = "Resignation not found";
-                            response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                            break;
-                        case -2:
-                            response.ResponseMessage = "You don't have access to approve this Resignation";
-                            response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
-                            break;
-                        case -3:
-                            response.ResponseMessage = "Already Approved";
-                            response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                            break;
-                        default:
-                            return new BaseResponse { ResponseCode = ((int)ResponseCode.ValidationError).ToString(), ResponseMessage = "Processing error" };
-                    }
-                    return response;
-                }
-
-                response.Data = resignation;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Approved successfully.";
-                return response;
-            }
-
-
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ApprovePendingResignationInterview ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ApprovePendingResignationInterview ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> DisapprovePendingResignationInterview(DisapproveResignationInterviewDTO request, RequesterInfo requester)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-
-
-
-                var resignation = await _resignationInterviewRepository.GetResignationInterview(request.ID);
-                if (resignation == null)
-                {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Resignation Details Cannot be Found.";
-                    return response;
-                }
-
-                var DisapprovedResignation = await _resignationInterviewRepository.DisapprovePendingResignationInterview(request.userID, request.ID, request.IsDisapproved, request.DisapprovedComment);
-                if (DisapprovedResignation < 0)
-                {
-                    switch (DisapprovedResignation)
-                    {
-                        case -1:
-                            response.ResponseMessage = "Resignation not found";
-                            response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                            break;
-                        case -2:
-                            response.ResponseMessage = "UnAuthorize";
-                            response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
-                            break;
-                        case -3:
-                            response.ResponseMessage = "Record already disapproved";
-                            response.ResponseCode = ResponseCode.InvalidApprovalStatus.ToString("D").PadLeft(2, '0');
-                            break;
-                        case -4:
-                            response.ResponseMessage = "Record cannot be disapproved";
-                            response.ResponseCode = ResponseCode.InvalidApprovalStatus.ToString("D").PadLeft(2, '0');
-                            break;
-                        default:
-                            return new BaseResponse { ResponseCode = ((int)ResponseCode.ValidationError).ToString(), ResponseMessage = "Processing error" };
-                    }
-
-                    return response;
-                }
-
-
-                response.Data = resignation;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Disapproved successfully.";
-                return response;
-            }
-
-
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: DisapprovePendingResignationInterview ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: DisapprovePendingResignationInterview ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-        public async Task<BaseResponse> GetAllApprovedResignationInterview(long UserID, bool isApproved, RequesterInfo requester)
-        {
-            BaseResponse response = new BaseResponse();
-
-            try
-            {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-
-                if (requesterInfo == null)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-                var Resignation = await _resignationInterviewRepository.GetAllApprovedResignationInterview(UserID, isApproved);
-
-                if (Resignation == null)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Approved Resignation Interview not found.";
-                    response.Data = null;
-                    return response;
-                }
-
-                //update action performed into audit log here
-
-                response.Data = Resignation;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Resignation Interview fetched successfully.";
-                return response;
 
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: GetAllApprovedResignationInterview(long UserID) ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: GetAllApprovedResignationInterview(long UserID) ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
+                _logger.LogError($"Exception Occured: GetResignationByUserID(long UserID) ==> {ex.Message}");
+                return new ExecutedResult<ResignationInterviewDTO>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
 
+            }
         }
+
+
+        //public async Task<BaseResponse> GetInterviewScaleDetails(RequesterInfo requester)
+        //{
+        //    BaseResponse response = new BaseResponse();
+        //    try
+        //    {
+        //        //string requesterUserEmail = requester.Username;
+        //        //string requesterUserId = requester.UserId.ToString();
+        //        //string RoleId = requester.RoleId.ToString();
+
+        //        //var ipAddress = requester.IpAddress.ToString();
+        //        //var port = requester.Port.ToString();
+
+        //        var InterviewScaleDetails = await _resignationInterviewRepository.GetInterviewScaleDetails();
+
+        //        if (InterviewScaleDetails == null || InterviewScaleDetails.Count == 0)
+        //        {
+        //            response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+        //            response.ResponseMessage = "InterviewScaleDetails not found.";
+        //            response.Data = null;
+        //            return response;
+        //        }
+
+        //        //update action performed into audit log here
+
+        //        response.Data = InterviewScaleDetails;
+        //        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+        //        response.ResponseMessage = "Resignation fetched successfully.";
+        //        return response;
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Exception Occured: GetInterviewScaleDetails ==> {ex.Message}");
+        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+        //        response.ResponseMessage = $"Exception Occured: GetInterviewScaleDetails ==> {ex.Message}";
+        //        response.Data = null;
+        //        return response;
+        //    }
+        //}
+
+        //public async Task<BaseResponse> ApprovePendingResignationInterview(ApproveResignationInterviewDTO request, RequesterInfo requester)
+        //{
+        //    var response = new BaseResponse();
+        //    try
+        //    {
+        //        string requesterUserEmail = requester.Username;
+        //        string requesterUserId = requester.UserId.ToString();
+        //        string RoleId = requester.RoleId.ToString();
+
+        //        var ipAddress = requester.IpAddress.ToString();
+        //        var port = requester.Port.ToString();
+
+
+
+
+        //        var resignation = await _resignationInterviewRepository.GetResignationInterview(request.ID);
+        //        if (resignation == null)
+        //        {
+        //            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+        //            response.ResponseMessage = $"Resignation Details Cannot be Found.";
+        //            return response;
+        //        }
+
+        //        //if (Convert.ToInt32(RoleId) != 2)
+        //        //{
+        //        //    if (Convert.ToInt32(RoleId) != 4)
+        //        //    {
+        //        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+        //        //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+        //        //        return response;
+
+        //        //    }
+
+        //        //}
+        //        var ApprovedResignation = await _resignationInterviewRepository.ApprovePendingResignationInterview(request.EmployeeId, request.ID, request.isApproved);
+        //        if (ApprovedResignation < 0)
+        //        {
+        //            switch (ApprovedResignation)
+        //            {
+        //                case -1:
+        //                    response.ResponseMessage = "Resignation not found";
+        //                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+        //                    break;
+        //                case -2:
+        //                    response.ResponseMessage = "You don't have access to approve this Resignation";
+        //                    response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
+        //                    break;
+        //                case -3:
+        //                    response.ResponseMessage = "Already Approved";
+        //                    response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
+        //                    break;
+        //                default:
+        //                    return new BaseResponse { ResponseCode = ((int)ResponseCode.ValidationError).ToString(), ResponseMessage = "Processing error" };
+        //            }
+        //            return response;
+        //        }
+
+        //        response.Data = resignation;
+        //        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+        //        response.ResponseMessage = "Approved successfully.";
+        //        return response;
+        //    }
+
+
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Exception Occured: ApprovePendingResignationInterview ==> {ex.Message}");
+        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+        //        response.ResponseMessage = $"Exception Occured: ApprovePendingResignationInterview ==> {ex.Message}";
+        //        response.Data = null;
+        //        return response;
+        //    }
+        //}
+
+        //public async Task<BaseResponse> DisapprovePendingResignationInterview(DisapproveResignationInterviewDTO request, RequesterInfo requester)
+        //{
+        //    var response = new BaseResponse();
+        //    try
+        //    {
+        //        string requesterUserEmail = requester.Username;
+        //        string requesterUserId = requester.UserId.ToString();
+        //        string RoleId = requester.RoleId.ToString();
+
+        //        var ipAddress = requester.IpAddress.ToString();
+        //        var port = requester.Port.ToString();
+
+
+
+
+        //        var resignation = await _resignationInterviewRepository.GetResignationInterview(request.ID);
+        //        if (resignation == null)
+        //        {
+        //            response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+        //            response.ResponseMessage = $"Resignation Details Cannot be Found.";
+        //            return response;
+        //        }
+
+        //        var DisapprovedResignation = await _resignationInterviewRepository.DisapprovePendingResignationInterview(request.userID, request.ID, request.IsDisapproved, request.DisapprovedComment);
+        //        if (DisapprovedResignation < 0)
+        //        {
+        //            switch (DisapprovedResignation)
+        //            {
+        //                case -1:
+        //                    response.ResponseMessage = "Resignation not found";
+        //                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+        //                    break;
+        //                case -2:
+        //                    response.ResponseMessage = "UnAuthorize";
+        //                    response.ResponseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0');
+        //                    break;
+        //                case -3:
+        //                    response.ResponseMessage = "Record already disapproved";
+        //                    response.ResponseCode = ResponseCode.InvalidApprovalStatus.ToString("D").PadLeft(2, '0');
+        //                    break;
+        //                case -4:
+        //                    response.ResponseMessage = "Record cannot be disapproved";
+        //                    response.ResponseCode = ResponseCode.InvalidApprovalStatus.ToString("D").PadLeft(2, '0');
+        //                    break;
+        //                default:
+        //                    return new BaseResponse { ResponseCode = ((int)ResponseCode.ValidationError).ToString(), ResponseMessage = "Processing error" };
+        //            }
+
+        //            return response;
+        //        }
+
+
+        //        response.Data = resignation;
+        //        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+        //        response.ResponseMessage = "Disapproved successfully.";
+        //        return response;
+        //    }
+
+
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Exception Occured: DisapprovePendingResignationInterview ==> {ex.Message}");
+        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+        //        response.ResponseMessage = $"Exception Occured: DisapprovePendingResignationInterview ==> {ex.Message}";
+        //        response.Data = null;
+        //        return response;
+        //    }
+        //}
+
+
     }
 }
 

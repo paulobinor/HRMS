@@ -1,7 +1,9 @@
 ﻿using Com.XpressPayments.Common.ViewModels;
 using Dapper;
+using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Data;
@@ -13,36 +15,42 @@ namespace hrms_be_backend_data.Repository
     {
 
         private string _connectionString;
-        private readonly IDapperGenericRepository _repository;
+        private readonly IDapperGenericRepository _dapper;
         private readonly ILogger<ResignationRepository> _logger;
         private readonly IConfiguration _configuration;
-        public ResignationRepository(ILogger<ResignationRepository> logger, IConfiguration configuration, IDapperGenericRepository repository)
+        public ResignationRepository(ILogger<ResignationRepository> logger, IConfiguration configuration, IDapperGenericRepository dapper)
         {
             _logger = logger;
-            _repository = repository;
+            _dapper = dapper;
             _configuration = configuration;
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-        public async Task<int> CreateResignation(ResignationDTO resignation)
+        public async Task<dynamic> CreateResignation(ResignationDTO resignation)
         {
             try
             {
                 var param = new DynamicParameters();
-                param.Add("UserId", resignation.UserId);
+                param.Add("EmployeeID", resignation.EmployeeId);
+                //param.Add("StaffID", resignation.StaffID);
+               // param.Add("StaffName", resignation.StaffName);
                 param.Add("SignedResignationLetter", resignation.SignedResignationLetter);
                 param.Add("CompanyID", resignation.CompanyID);
-                param.Add("DateAdded", resignation.Date);
+                param.Add("ResumptionDate", resignation.ResumptionDate);
+                param.Add("ExitDate", resignation.ExitDate);
                 param.Add("LastDayOfWork", resignation.LastDayOfWork);
-                param.Add("Created_By_User_Email", resignation.Created_By_User_Email);
+                param.Add("CreatedByUserId", resignation.CreatedByUserId);
                 param.Add("ReasonForResignation", resignation.ReasonForResignation);
                 param.Add("DateCreated", resignation.DateCreated);
-                param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                await _repository.Insert<int>("Sp_SubmitResignation", param, commandType: CommandType.StoredProcedure);
+                // Add an output parameter to capture the ResignationID
+                param.Add("@ResignationIDOut", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                int resp = param.Get<int>("Resp");
+                dynamic response = await _dapper.Get<string>("Sp_SubmitResignation", param, commandType: CommandType.StoredProcedure);
 
-                return resp;
+                // Retrieve the ResignationID from the output parameter
+                int resignationID = param.Get<int>("@ResignationIDOut");
+
+                return resignationID;
 
             }
             catch (Exception ex)
@@ -52,20 +60,42 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+        public async Task<dynamic> UpdateResignation(UpdateResignationDTO resignation)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("ResignationId", resignation.ResignationID);
+                //param.Add("EmployeeId", resignation.EmployeeId);
+                param.Add("LastDayOfWork", resignation.LastDayOfWork);
+                param.Add("ReasonForResignation", resignation.ReasonForResignation);
+                param.Add("SignedResignationLetter", resignation.SignedResignationLetter);
+
+                dynamic response =  await _dapper.Get<string>("Sp_update_resignation", param, commandType: CommandType.StoredProcedure);
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: UpdateResignation(ResignationDTO resignation) ===>{ex.Message}");
+                throw;
+            }
+        }
 
 
         public async Task<ResignationDTO> GetResignationByID(long ID)
         {
             try
             {
-                string query = "select * from SubmitResignation where SRFID = @SRFID and IsDeleted = @IsDeleted";
                 var param = new DynamicParameters();
-                param.Add("SRFID", ID);
-                param.Add("IsDeleted", false);
+                param.Add("ResignationId", ID);
 
-                var response = await _repository.Get<ResignationDTO>(query, param, commandType: CommandType.Text);
+                var resignationDetails = await _dapper.Get<ResignationDTO>("Sp_get_resignation_by_id", param, commandType: CommandType.StoredProcedure);
 
-                return response;
+                return resignationDetails;
+                
+
             }
             catch (Exception ex)
             {
@@ -74,55 +104,37 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<ResignationFormDTO> GetResignationByUserID(long UserID)
+        public async Task<ResignationDTO> GetResignationByEmployeeID(long employeeID)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    //Verbatin string
-                    string query = @"select  u.LastName + ' ' + u.FirstName as 'Name', HU.LastName + ' ' + HU.FirstName as 'HodName',
-                                    C.CompanyName  as 'CompanyName', UU.LastName +' '+ UU.FirstName as 'UnitHeadName' , 
-                                    UN.UnitName as 'UnitName', D.DepartmentName as 'DepartmentName' ,SR.* 
-                                    from SubmitResignation SR JOIN Users u ON SR.UserId = u.UserId 
-                                    JOIN Company C ON SR.CompanyID = C.CompanyId
-                                    LEFT JOIN Users HU ON SR.HodUserID = HU.UserId 
-                                    LEFT JOIN Users UU ON SR.UnitHeadUserID = UU.UserId
-                                    LEFT JOIN Unit UN ON U.UnitID = UN.UnitID
-                                    LEFT JOIN Department D ON U.DeptId = D.DeptId
-                                    where SR.UserId = @UserID and SR.IsDeleted = @IsDeleted";
-                    var param = new DynamicParameters();
-                    param.Add("UserID", UserID);
-                    param.Add("IsDeleted", false);
+                var param = new DynamicParameters();
+                param.Add("employeeID", employeeID);
 
-                    var response = (await _dapper.QueryAsync<ResignationFormDTO>(query, param: param, commandType: CommandType.Text)).FirstOrDefault();
+                var response = await _dapper.Get<ResignationDTO>("Sp_get_resignation_by_user", param, commandType: CommandType.StoredProcedure);
 
-                    return response;
-                }
+                return response;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error Getting Resignation by UserID - {UserID}", ex);
+                _logger.LogError($"Error Getting Resignation by UserID - {employeeID}", ex);
                 throw;
             }
         }
 
-        public async Task<List<ResignationDTO>> GetResignationByCompanyID(long companyID, bool isApproved)
+        public async Task<IEnumerable<ResignationDTO>> GetResignationByCompanyID(long companyID, int PageNumber, int RowsOfPage, string SearchVal)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    string query = "select * from SubmitResignation where CompanyID = @CompanyID and ISApproved = @ISApproved and IsDeleted = @IsDeleted";
-                    var param = new DynamicParameters();
-                    param.Add("CompanyID", companyID);
-                    param.Add("ISApproved", isApproved);
-                    param.Add("IsDeleted", false);
+                var param = new DynamicParameters();
+                param.Add("CompanyId", companyID);
+                param.Add("PageNumber", PageNumber);
+                param.Add("RowsOfPage", RowsOfPage);
+                param.Add("SearchVal", SearchVal.ToLower());
 
-                    var response = (await _dapper.QueryAsync<ResignationDTO>(query, param: param, commandType: CommandType.Text)).ToList();
+                var response = await _dapper.GetAll<ResignationDTO>("Sp_get_resignation_by_company", param, commandType: CommandType.StoredProcedure);
 
-                    return response;
-                }
+                return response;
             }
             catch (Exception ex)
             {
@@ -131,44 +143,60 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
+        //public async Task<IEnumerable<ResignationDTO>> GetAllResignations()
+        //{
+        //    try
+        //    {
+        //        var param = new DynamicParameters();
+        //        var response = await _dapper.GetAll<ResignationDTO>("Sp_get_all_resignations", param, commandType: CommandType.StoredProcedure);
 
-        public async Task<int> DeleteResignation(long ID, string deletedBy, string deleteReason)
-        {
-            try
-            {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
-                    string query = "Update SubmitResignation set IsDeleted = @IsDeleted , Deleted_By_User_Email = @DeletedBy , Deleted_Date = @DateDeleted ,Reasons_For_Delete = @deleteReason where SRFID = @SRFID";
-                    var param = new DynamicParameters();
-                    param.Add("SRFID", ID);
-                    param.Add("DeletedBy", deletedBy);
-                    param.Add("IsDeleted", true);
-                    param.Add("deleteReason", deleteReason);
-                    param.Add("DateDeleted", DateTime.Now);
-
-
-                    int response = await _dapper.ExecuteAsync(query, param: param, commandType: CommandType.Text);
-
-                    return response;
-                }
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: CreateBranch(CreateBranchDTO branch, string createdbyUserEmail) ===>{ex.Message}");
-                throw;
-            }
-        }
+        //        return response;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Error Getting Resignations", ex);
+        //        throw;
+        //    }
+        //}
 
 
-        public async Task<List<PendingResignationDTO>> GetPendingResignationByUserID(long userID)
+        //public async Task<dynamic> DeleteResignation(long ID, string deletedBy, string deleteReason)
+        //{
+        //    try
+        //    {
+        //        using (SqlConnection _dapper = new SqlConnection(_connectionString))
+        //        {
+                    
+        //            var param = new DynamicParameters();
+        //            param.Add("ResignationId", ID);
+        //            param.Add("DeletedBy", deletedBy);
+        //            param.Add("IsDeleted", true);
+        //            param.Add("deleteReason", deleteReason);
+        //            param.Add("DateDeleted", DateTime.Now);
+
+
+        //            int response = await _dapper.ExecuteAsync("Sp_delete_resignation", param: param, commandType: CommandType.Text);
+
+        //            return response;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var err = ex.Message;
+        //        _logger.LogError($"MethodName: CreateBranch(CreateBranchDTO branch, string createdbyUserEmail) ===>{ex.Message}");
+        //        throw;
+        //    }
+        //}
+
+
+        public async Task<IEnumerable<ResignationDTO>> GetPendingResignationByEmployeeID(long employeeID)
         {
             try
             {
                 var param = new DynamicParameters();
-                param.Add("UserID", userID);
+                param.Add("employeeID", employeeID);
 
-                var response = await _repository.GetAll<PendingResignationDTO>("Sp_GetPendingResignationByUserID", param, commandType: CommandType.StoredProcedure);
+                var response = await _dapper.GetAll<ResignationDTO>("Sp_GetPendingResignationByUserID", param, commandType: CommandType.StoredProcedure);
 
                 return response;
 
@@ -181,18 +209,17 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<int> ApprovePendingResignation(long userID, long SRFID)
+        public async Task<string> ApprovePendingResignation(long userID, long ResignationID)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("UserID", userID);
-                param.Add("SRFID", SRFID);
+                param.Add("ResignationId", ResignationID);
                 param.Add("DateApproved", DateTime.Now);
                 param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                await _repository.Execute<int>("Sp_ApprovePendingResignation", param, commandType: CommandType.StoredProcedure);
-                var response = param.Get<int>("Resp");
+                var response = await _dapper.Get<string>("Sp_ApprovePendingResignation", param, commandType: CommandType.StoredProcedure);
 
                 return response;
 
@@ -200,58 +227,32 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: ApprovePendingResignationAsync(long userID, long SRFID) => {ex.Message}");
+                _logger.LogError($"MethodName: ApprovePendingResignationAsync(long userID, long ResignationID) => {ex.Message}");
                 throw;
             }
         }
 
-        public async Task<int> DisapprovePendingResignation(long userID, long SRFID, string reason)
+        public async Task<string> DisapprovePendingResignation(long userID, long ResignationID, string reason)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("UserID", userID);
-                param.Add("SRFID", SRFID);
+                param.Add("ResignationID", ResignationID);
                 param.Add("DateDisapproved", DateTime.Now);
                 param.Add("DisapprovedReason", reason);
-                param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                await _repository.Execute<int>("Sp_DisapprovePendingResignation", param, commandType: CommandType.StoredProcedure);
-                var response = param.Get<int>("Resp");
+                var response = await _dapper.Get<string>("Sp_DisapprovePendingResignation", param, commandType: CommandType.StoredProcedure);
                 return response;
 
             }
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"MethodName: DisapprovePendingResignationAsync(long userID, long SRFID, string reason) => {ex.Message}");
+                _logger.LogError($"MethodName: DisapprovePendingResignationAsync(long userID, long ResignationID, string reason) => {ex.Message}");
                 throw;
             }
         }
-
-
-        public async Task<int> UpdateResignation(ResignationDTO resignation)
-        {
-            try
-            {
-                string sql = @"Update SubmitResignation set ReasonForResignation = @ReasonForResignation , LastDayOfWork = @LastDayOfWork, SignedResignationLetter = @SignedResignationLetter where SRFID = @SRFID";
-                var param = new DynamicParameters();
-                param.Add("SRFID", resignation.SRFID);
-                param.Add("UserId", resignation.UserId);
-                param.Add("LastDayOfWork", resignation.LastDayOfWork);
-                param.Add("ReasonForResignation", resignation.ReasonForResignation);
-                param.Add("SignedResignationLetter", resignation.SignedResignationLetter);
-
-                return await _repository.Update<int>(sql, param, commandType: CommandType.Text);
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message;
-                _logger.LogError($"MethodName: UpdateResignation(ResignationDTO resignation) ===>{ex.Message}");
-                throw;
-            }
-        }
-
 
     }
 }

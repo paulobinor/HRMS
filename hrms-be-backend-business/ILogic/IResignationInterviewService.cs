@@ -1,4 +1,5 @@
 ﻿using Com.XpressPayments.Common.ViewModels;
+using hrms_be_backend_common.Communication;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 
@@ -6,12 +7,14 @@ namespace hrms_be_backend_business.ILogic
 {
     public interface IResignationInterviewService
     {
-        Task<BaseResponse> SubmitResignationInterview(RequesterInfo requesterInfo, ResignationInterviewVM payload);
-        Task<BaseResponse> GetInterviewScaleDetails(RequesterInfo requester);
-        Task<BaseResponse> GetResignationInterview(long SRFID, RequesterInfo requester);
-        Task<BaseResponse> GetResignationInterviewDetails(long InterviewID, RequesterInfo requester);
-        Task<BaseResponse> ApprovePendingResignationInterview(ApproveResignationInterviewDTO request, RequesterInfo requester);
-        Task<BaseResponse> DisapprovePendingResignationInterview(DisapproveResignationInterviewDTO request, RequesterInfo requester);
-        Task<BaseResponse> GetAllApprovedResignationInterview(long UserID, bool isApproved, RequesterInfo requester);
+        Task<ExecutedResult<string>> SubmitResignationInterview( ResignationInterviewVM payload, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<ResignationInterviewDTO>> GetResignationInterviewById(long ResignationInterviewId, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<ResignationInterviewDTO>> GetResignationInterviewByEmployeeID(long EmployeeId, string AccessKey, string RemoteIpAddress);
+        Task<BaseResponse> GetResignationInterviewDetails(long InterviewID, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<IEnumerable<ResignationInterviewDTO>>> GetAllResignationInterviewsByCompany(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress);
+
+        //Task<BaseResponse> GetInterviewScaleDetails(RequesterInfo requester);
+        //Task<BaseResponse> ApprovePendingResignationInterview(ApproveResignationInterviewDTO request, RequesterInfo requester);
+        //Task<BaseResponse> DisapprovePendingResignationInterview(DisapproveResignationInterviewDTO request, RequesterInfo requester);
     }
 }

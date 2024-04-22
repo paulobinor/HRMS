@@ -8,8 +8,8 @@ namespace hrms_be_backend_data.RepoPayload
 {
     public class DisapprovePendingResignation
     {
-        public long userID { get; set; }
-        public long SRFID { get; set; }
+        public long EmployeeID { get; set; }
+        public long ResignationID { get; set; }
         public string reason { get; set; }
     }
 }

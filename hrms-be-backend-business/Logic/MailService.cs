@@ -124,7 +124,7 @@ namespace hrms_be_backend_business.AppCode
                 mailBody.Append($"You leave has been approved by {ApprovedByUserDetails.FirstName} {ApprovedByUserDetails.LastName} {ApprovedByUserDetails.MiddleName} <br/> <br/>");
 
                 mailBody.Append($"<b> Your leave start from : <b/> {startDate} <br/> ");
-                mailBody.Append($"<b>and ends on : <b/> {endDate} <br/> ");
+                mailBody.Append($"<b>and end on : <b/> {endDate} <br/> ");
 
                 var mailPayload = new MailRequest
                 {
@@ -562,6 +562,168 @@ namespace hrms_be_backend_business.AppCode
 
             }
             return body;
+        }
+
+        public async Task SendResignationApproveMailToApprover(long ApproverEmployeeId, long ResigationByEmployeeId, DateTime exitDate)
+        {
+            try
+            {
+                var userDetails = await _accountRepository.GetUserByEmployeeId(ApproverEmployeeId);
+                var resignationBy = await _accountRepository.GetUserByEmployeeId(ResigationByEmployeeId);
+                StringBuilder mailBody = new StringBuilder();
+                mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
+                mailBody.Append($"Kindly login to approve a resignation request by {resignationBy.FirstName} {resignationBy.LastName} {resignationBy.MiddleName} <br/> <br/>");
+                mailBody.Append($"<b>Exit Date : <b/> {exitDate}  <br/> ");
+
+                var mailPayload = new MailRequest
+                {
+                    Body = mailBody.ToString(),
+                    Subject = "Resignation Request",
+                    ToEmail = userDetails.OfficialMail,
+                };
+                SendEmailAsync(mailPayload, null);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: SendResignationApproveMailToApprover ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task SendResignationApproveConfirmationMail(long RequesterEmployeeId, long ApprovedByEmployeeId, DateTime exitDate)
+        {
+            try
+            {
+                var userDetails = await _accountRepository.GetUserByEmployeeId(RequesterEmployeeId);
+                var ApprovedByUserDetails = await _accountRepository.GetUserByEmployeeId(ApprovedByEmployeeId);
+                StringBuilder mailBody = new StringBuilder();
+                mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
+                mailBody.Append($"Your resignation has been approved by {ApprovedByUserDetails.FirstName} {ApprovedByUserDetails.LastName} {ApprovedByUserDetails.MiddleName} <br/> <br/>");
+
+                mailBody.Append($"<b> Your exit date is on: <b/> {exitDate} <br/> ");
+
+                var mailPayload = new MailRequest
+                {
+                    Body = mailBody.ToString(),
+                    Subject = "Resignation Request",
+                    ToEmail = userDetails.OfficialMail,
+                };
+                SendEmailAsync(mailPayload, null);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: SendResignationApproveConfirmationMail ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task SendResignationDisapproveConfirmationMail(long RequesterEmployeeId, long DiapprovedByEmployeeId)
+        {
+            try
+            {
+                var userDetails = await _accountRepository.GetUserByEmployeeId(RequesterEmployeeId);
+                var ApprovedByUserDetails = await _accountRepository.GetUserByEmployeeId(DiapprovedByEmployeeId);
+                StringBuilder mailBody = new StringBuilder();
+                mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
+                mailBody.Append($"Your resignation has been disapproved by {ApprovedByUserDetails.FirstName} {ApprovedByUserDetails.LastName} {ApprovedByUserDetails.MiddleName} <br/> <br/>");
+
+
+                var mailPayload = new MailRequest
+                {
+                    Body = mailBody.ToString(),
+                    Subject = "Resignation Request",
+                    ToEmail = userDetails.OfficialMail,
+                };
+                SendEmailAsync(mailPayload, null);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: SendResignationApproveConfirmationMail ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task SendResignationClearanceApproveMailToApprover(long ApproverEmployeeId, long ResigationByEmployeeId)
+        {
+            try
+            {
+                var userDetails = await _accountRepository.GetUserByEmployeeId(ApproverEmployeeId);
+                var resignationBy = await _accountRepository.GetUserByEmployeeId(ResigationByEmployeeId);
+                StringBuilder mailBody = new StringBuilder();
+                mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
+                mailBody.Append($"Kindly login to approve a resignation clearance by {resignationBy.FirstName} {resignationBy.LastName} {resignationBy.MiddleName} <br/> <br/>");
+
+                var mailPayload = new MailRequest
+                {
+                    Body = mailBody.ToString(),
+                    Subject = "Resignation Clearance",
+                    ToEmail = userDetails.OfficialMail,
+                };
+                SendEmailAsync(mailPayload, null);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: SendResignationClearanceApproveMailToApprover ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task SendResignationClearanceApproveConfirmationMail(long RequesterEmployeeId, long ApprovedByEmployeeId)
+        {
+            try
+            {
+                var userDetails = await _accountRepository.GetUserByEmployeeId(RequesterEmployeeId);
+                var ApprovedByUserDetails = await _accountRepository.GetUserByEmployeeId(ApprovedByEmployeeId);
+                StringBuilder mailBody = new StringBuilder();
+                mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
+                mailBody.Append($"Your resignation clearance has been approved by {ApprovedByUserDetails.FirstName} {ApprovedByUserDetails.LastName} {ApprovedByUserDetails.MiddleName} <br/> <br/>");
+
+                var mailPayload = new MailRequest
+                {
+                    Body = mailBody.ToString(),
+                    Subject = "Resignation Clearance",
+                    ToEmail = userDetails.OfficialMail,
+                };
+                SendEmailAsync(mailPayload, null);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: SendResignationClearanceApproveConfirmationMail ===>{ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task SendResignationClearanceDisapproveConfirmationMail(long RequesterEmployeeId, long DiapprovedByEmployeeId, string reason)
+        {
+            try
+            {
+                var userDetails = await _accountRepository.GetUserByEmployeeId(RequesterEmployeeId);
+                var ApprovedByUserDetails = await _accountRepository.GetUserByEmployeeId(DiapprovedByEmployeeId);
+                StringBuilder mailBody = new StringBuilder();
+                mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
+                mailBody.Append($"Your resignation Clearance has been disapproved by {ApprovedByUserDetails.FirstName} {ApprovedByUserDetails.LastName} {ApprovedByUserDetails.MiddleName} <br/> <br/>");
+                mailBody.Append($"Reason: {reason}<br/> <br/>");
+
+
+                var mailPayload = new MailRequest
+                {
+                    Body = mailBody.ToString(),
+                    Subject = "Resignation Clearance",
+                    ToEmail = userDetails.OfficialMail,
+                };
+                SendEmailAsync(mailPayload, null);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: SendResignationClearanceDisapproveConfirmationMail ===>{ex.Message}");
+                throw;
+            }
         }
     }
 }

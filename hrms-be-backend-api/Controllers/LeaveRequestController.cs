@@ -46,7 +46,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             {
                 return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
-            }
+            return Ok(await _leaveRequestService.CreateLeaveRequest(CreateDto, requester));
+        }
             var res = await _leaveRequestService.CreateLeaveRequestLineItem(leaveRequestLineItem);
             return Ok(res);
         }
@@ -68,7 +69,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 {
                     return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
-                }
+                return Ok(await _leaveRequestService.RescheduleLeaveRequest(updateDto, requester));
+            }
                 var res = await _leaveRequestService.RescheduleLeaveRequest(leaveRequestLineItem);
                 return Ok(res);
             }
@@ -96,10 +98,11 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
                 var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
                 if (accessUser.data == null)
-                {
+        {
                     return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
-                }
+            return Ok(await _leaveRequestService.DisaproveLeaveRequest(payload, requester));
+        }
 
                 return Ok(await _leaveRequestService.GetLeaveRequestLineItem(Id));
             }
@@ -309,6 +312,21 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         //    }
         //}
 
+        [Authorize]
+        [HttpGet("GetLeaveRequestbyCompanyId")]
+        public async Task<IActionResult> GetLeaveRequestbyCompanyId(string RequestYear, long CompanyID)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var requester = new RequesterInfo
+                {
+                    Username = this.User.Claims.ToList()[2].Value,
+                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
+                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
+                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    Port = Request.HttpContext.Connection.RemotePort.ToString()
+                };
 
         //[Authorize]
         //[HttpPost("CreateLeaveRequestOld")]

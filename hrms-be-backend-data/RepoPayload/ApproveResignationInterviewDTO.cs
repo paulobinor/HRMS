@@ -2,7 +2,7 @@
 {
     public class ApproveResignationInterviewDTO
     {
-        public long userID { get; set; }
+        public long EmployeeId { get; set; }
         public bool isApproved { get; set; }
         public long ID { get; set; }
 

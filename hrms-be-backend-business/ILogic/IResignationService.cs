@@ -1,4 +1,5 @@
 ﻿using Com.XpressPayments.Common.ViewModels;
+using hrms_be_backend_common.Communication;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Http;
@@ -7,15 +8,18 @@ namespace hrms_be_backend_business.ILogic
 {
     public interface IResignationService
     {
-        Task<BaseResponse> SubmitResignation(RequesterInfo requesterInfo, ResignationRequestVM request);
-        Task<BaseResponse> UploadLetter(IFormFile signedResignationLetter);
-        Task<BaseResponse> GetResignationByID(long ID, RequesterInfo requester);
-        Task<BaseResponse> GetResignationByUserID(long UserID, RequesterInfo requester);
-        Task<BaseResponse> GetResignationByCompanyID(long companyID, bool isApproved, RequesterInfo requester);
-        Task<BaseResponse> DeleteResignation(DeleteResignationDTO request, RequesterInfo requester);
-        Task<BaseResponse> GetPendingResignationByUserID(RequesterInfo requester, long userID);
-        Task<BaseResponse> ApprovePendingResignation(ApprovePendingResignationDTO request, RequesterInfo requester);
-        Task<BaseResponse> DisapprovePendingResignation(DisapprovePendingResignation request, RequesterInfo requester);
-        Task<BaseResponse> UpdateResignation(UpdateResignationDTO updateDTO, RequesterInfo requester);
+        Task<ExecutedResult<string>> SubmitResignation(ResignationRequestVM request, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<string>> UploadLetter(IFormFile signedResignationLetter, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<string>> UpdateResignation(UpdateResignationDTO updateDTO, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<ResignationDTO>> GetResignationByID(long ID, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<ResignationDTO>> GetResignationByEmployeeID(long UserID, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetResignationByCompanyID(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress);
+
+        //Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetAllResignations(string AccessKey, string RemoteIpAddress);
+        //Task<ExecutedResult<string>> DeleteResignation(DeleteResignationDTO request, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetPendingResignationByEmployeeID(long userID, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<string>> ApprovePendingResignation(ApprovePendingResignationDTO request, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<string>> DisapprovePendingResignation(DisapprovePendingResignation request, string AccessKey, string RemoteIpAddress);
+        
     }
 }

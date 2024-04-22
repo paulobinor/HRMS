@@ -132,7 +132,32 @@ namespace hrms_be_backend_business.Logic
             var response = new BaseResponse();
             try
             {
-                
+                string requesterUserEmail = requester.Username;
+                string requesterUserId = requester.UserId.ToString();
+                string RoleId = requester.RoleId.ToString();
+
+                var ipAddress = requester.IpAddress.ToString();
+                var port = requester.Port.ToString();
+
+                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
+                if (null == requesterInfo)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Requester information cannot be found.";
+                    return response;
+                }
+
+                if (Convert.ToInt32(RoleId) != 2)
+                {
+                    if (Convert.ToInt32(RoleId) != 4)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                        return response;
+
+                    }
+
+                }
 
                 //validate DepartmentDto payload here 
                 if (String.IsNullOrEmpty(updateDto.LeaveTypeName) || updateDto.CompanyID <= 0)
@@ -186,10 +211,20 @@ namespace hrms_be_backend_business.Logic
             {
                 if (deleteDto.LeaveTypeId == 1)
                 {
-                    response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"System Default LeaveType cannot be deleted.";
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Requester information cannot be found.";
                     return response;
                 }
+
+                if (Convert.ToInt32(RoleId) != 2)
+                {
+                    if (Convert.ToInt32(RoleId) != 4)
+                    {
+                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = $"System Default LeaveType cannot be deleted.";
+                        return response;
+
+                    }
 
                 var LeaveType = await _LeaveTypeRepository.GetLeaveTypeById(deleteDto.LeaveTypeId);
                 if (null != LeaveType)
@@ -445,5 +480,7 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }
+
+
     }
 }

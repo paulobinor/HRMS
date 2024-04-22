@@ -1,10 +1,12 @@
 ﻿using Com.XpressPayments.Common.ViewModels;
 using hrms_be_backend_business.ILogic;
+using hrms_be_backend_common.Communication;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace hrms_be_backend_api.ExitModuleController.Controller
 {
@@ -22,6 +24,8 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             _resignationService = resignationService;
         }
         [HttpPost]
+        [Route("SubmitResignation")]
+        [Authorize]
         public async Task<IActionResult> SubmitResignation(ResignationRequestVM request)
         {
             var response = new BaseResponse();
@@ -35,19 +39,35 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
                     IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
+          
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IEnumerable<Claim> claim = identity.Claims;
+                var accessToken = Request.Headers["Authorization"];
+                accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _resignationService.SubmitResignation(requester, request));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : SubmitResignation ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : SubmitResignation ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+                return Ok(await _resignationService.SubmitResignation( request, accessToken, RemoteIpAddress));
+       
         }
 
+        [HttpPost]
+        [Route("UpdateResignation")]
+        [Authorize]
+        public async Task<IActionResult> UpdateResignation([FromBody] UpdateResignationDTO updateDTO)
+        {
+
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return Ok(await _resignationService.UpdateResignation(updateDTO, accessToken, RemoteIpAddress));
+
+
+        }
 
         [HttpPost]
         [Route("UploadResignationLetter")]
@@ -65,17 +85,16 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
                     IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
+           
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IEnumerable<Claim> claim = identity.Claims;
+                var accessToken = Request.Headers["Authorization"];
+                accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _resignationService.UploadLetter(letter));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : UploadFile_ ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : UploadFile_ ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+                return Ok(await _resignationService.UploadLetter(letter, accessToken, RemoteIpAddress));
+           
         }
 
 
@@ -96,25 +115,24 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
                     IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
+            
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IEnumerable<Claim> claim = identity.Claims;
+                var accessToken = Request.Headers["Authorization"];
+                accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _resignationService.GetResignationByID(resignationID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetResignationByID ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetResignationByID ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+                return Ok(await _resignationService.GetResignationByID(resignationID, accessToken, RemoteIpAddress));
+           
 
         }
 
 
         [HttpGet]
-        [Route("GetResignationByUserID/{userID}")]
+        [Route("GetResignationByEmployeeID/{EmployeeID}")]
         [Authorize]
-        public async Task<IActionResult> GetResignationByUserID(long userID)
+        public async Task<IActionResult> GetResignationByEmployeeID(long EmployeeID)
         {
             var response = new BaseResponse();
             try
@@ -127,38 +145,35 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
                     IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
+           
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _resignationService.GetResignationByUserID(userID, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetResignationByUserID ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetResignationByUserID ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-
+            return Ok(await _resignationService.GetResignationByEmployeeID(EmployeeID, accessToken, RemoteIpAddress));
+            
+           
         }
 
         //[Authorize]
         [HttpGet]
-        [Route("GetResignationByCompanyID/{companyId}/{isApproved}")]
+        [Route("GetResignationByCompanyID/{companyId}")]
         [Authorize]
-        public async Task<IActionResult> GetResignationByCompanyID(long companyId, bool isApproved)
+        public async Task<IActionResult> GetResignationByCompanyID(long companyId, [FromQuery] PaginationFilter filter)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+           
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
+            return Ok(await _resignationService.GetResignationByCompanyID(filter, companyId, accessToken, RemoteIpAddress));
+          
                 return Ok(await _resignationService.GetResignationByCompanyID(companyId, isApproved, requester));
             }
             catch (Exception ex)
@@ -172,54 +187,58 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         }
 
+        //[HttpGet]
+        //[Route("GetResignationByCompanyID/{companyId}/{isApproved}")]
+        //[Authorize]
+        //public async Task<IActionResult> GetAllResignations()
+        //{
+           
+        //    var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //    var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+        //    var identity = HttpContext.User.Identity as ClaimsIdentity;
+        //    IEnumerable<Claim> claim = identity.Claims;
+        //    var accessToken = Request.Headers["Authorization"];
+        //    accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+        //    return Ok(await _resignationService.GetAllResignations(accessToken, RemoteIpAddress));
+          
+
+        //}
+
 
         //[Authorize]
-        [HttpPost]
-        [Route("DeleteResignation")]
-        [Authorize]
-        public async Task<IActionResult> DeleteResignation([FromBody] DeleteResignationDTO request)
-        {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+        //[HttpPost]
+        //[Route("DeleteResignation")]
+        //[Authorize]
+        //public async Task<IActionResult> DeleteResignation([FromBody] DeleteResignationDTO request)
+        //{
+            
+        //        var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //        var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+        //        var identity = HttpContext.User.Identity as ClaimsIdentity;
+        //        IEnumerable<Claim> claim = identity.Claims;
+        //        var accessToken = Request.Headers["Authorization"];
+        //        accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _resignationService.DeleteResignation(request, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : DeleteResignation ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : DeleteResignation ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-        }
+        //        return Ok(await _resignationService.DeleteResignation(request, accessToken, RemoteIpAddress));
+           
+        //}
 
         [HttpGet]
-        [Route("GetPendingResignationByUserID/{userID}")]
+        [Route("GetPendingResignationByEmployeeID/{employeeID}")]
         [Authorize]
-        public async Task<IActionResult> GetPendingResignationByUserID(long userID)
+        public async Task<IActionResult> GetPendingResignationByEmployeeID(long employeeID)
         {
-            var response = new BaseResponse();
-            try
-            {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+           
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IEnumerable<Claim> claim = identity.Claims;
+                var accessToken = Request.Headers["Authorization"];
+                accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
+                return Ok(await _resignationService.GetPendingResignationByEmployeeID(employeeID, accessToken, RemoteIpAddress));
+            
                 return Ok(await _resignationService.GetPendingResignationByUserID(requester, userID));
             }
             catch (Exception ex)
@@ -233,10 +252,10 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         [Route("ApprovePendingResignation")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> ApprovePendingResignation([FromBody] ApprovePendingResignationDTO request)
         {
             var response = new BaseResponse();
@@ -250,17 +269,16 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
                     IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
+            
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IEnumerable<Claim> claim = identity.Claims;
+                var accessToken = Request.Headers["Authorization"];
+                accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _resignationService.ApprovePendingResignation(request, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : ApprovePendingResignation ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : ApprovePendingResignation ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
+                return Ok(await _resignationService.ApprovePendingResignation(request, accessToken, RemoteIpAddress));
+           
 
         }
 
@@ -280,20 +298,16 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
                     IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
+            
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IEnumerable<Claim> claim = identity.Claims;
+                var accessToken = Request.Headers["Authorization"];
+                accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-                return Ok(await _resignationService.DisapprovePendingResignation(request, requester));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: ControllerMethod : DisapprovePendingResignation ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: ControllerMethod : DisapprovePendingResignation ==> {ex.Message}";
-                response.Data = null;
-                return Ok(response);
-            }
-
-        }
-
+                return Ok(await _resignationService.DisapprovePendingResignation(request, accessToken, RemoteIpAddress));
+           
         [HttpPost]
         [Route("UpdateResignation")]
         [Authorize]
@@ -320,8 +334,9 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
                 response.ResponseMessage = $"Exception Occured: ControllerMethod : UpdateResignation ==> {ex.Message}";
                 response.Data = null;
                 return Ok(response);
-            }
-
         }
+
+ 
     }
+}
 }
