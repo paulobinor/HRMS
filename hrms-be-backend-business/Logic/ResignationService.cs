@@ -126,7 +126,7 @@ namespace hrms_be_backend_business.Logic
             catch (Exception ex)
             {
                 _logger.LogError("Error Submitting resignation", ex);
-                return new ExecutedResult<string>() { responseMessage = "An error occured", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                return new ExecutedResult<string>() { responseMessage = "An error occured", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
 
