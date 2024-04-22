@@ -484,7 +484,6 @@ namespace hrms_be_backend_data.Repository
                 return returnData;
 
                
-                //return await _dapper.Get<EmployeeSindgleVm>("sp_get_employee_by_id", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {

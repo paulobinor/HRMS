@@ -28,18 +28,12 @@ namespace hrms_be_backend_data.RepoPayload
     public class LeaveRequestDTO
     {
         public long LeaveRequestID { get; set; }
-        public long UserId { get; set; } = 0;
-        public string LeavePeriod { get; set; }
         public long LeaveTypeId { get; set; }
-        public long NoOfDays { get; set; } = 0;
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; } 
+        public DateTime EndDate { get; set; }
         public long ReliverUserID { get; set; }
         public string LeaveEvidence { get; set; }
         public string Notes { get; set; }
-        public long UnitHeadUserID { get; set; } = 0;
-        public long HodUserID { get; set; } = 0;
-        public long HRUserId { get; set; } = 0;
  
         public  string ReasonForRescheduling { get; set; }
         public long CompanyID { get; set; }
@@ -51,37 +45,25 @@ namespace hrms_be_backend_data.RepoPayload
         public DateTime DateCreated { get; set; }
         public string Created_By_User_Email { get; set; }
 
-        public bool IsUpdated { get; set; } = false;
         public DateTime? Updated_Date { get; set; }
         public string Updated_By_User_Email { get; set; }
 
-        public bool IsDeleted { get; set; } = false;
         public DateTime? Deleted_Date { get; set; }
         public string Deleted_By_User_Email { get; set; }
         public string Reasons_For_Delete { get; set; }
-
-        public bool IsUnitHeadApproved { get; set; } = false;
         public DateTime? UnitHeadDateApproved { get; set; }
-        public bool IsUnitHeadDeclined { get; set; } = false;
         public DateTime? UnitHeadDateDisapproved { get; set; }
         public string UnitHeadDisapprovedComment { get; set; }
-
-        public bool IsHodApproved { get; set; } = false;
         public DateTime? HodDateApproved { get; set; }
-        public bool IsHodDeclined { get; set; } = false;
         public string HodDisapprovedComment { get; set; }
         public DateTime? HodDateDisapproved { get; set; }
-        public bool IsHrApproved { get; set; } = false;
         public DateTime? HrDateApproved { get; set; }
-        public bool IsHrDeclined { get; set; } = false;
         public string HrDisapprovedComment { get; set; }
         public DateTime? HrDateDisapproved { get; set; }
-        public long EmployeeId { get; set; }
     }
 
     public class LeaveRequestCreate
     {
-        public long LeaveRequestId { get; set; }
         public long EmployeeId { get; set; }
         public long GradeLevelId { get; set; }
         public int TotalDays { get; set; }
@@ -94,7 +76,6 @@ namespace hrms_be_backend_data.RepoPayload
         public long NoOfDays { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public long RelieverUserID { get; set; }
         public string LeaveEvidence { get; set; }
         public string Notes { get; set; }
    
@@ -118,6 +99,7 @@ namespace hrms_be_backend_data.RepoPayload
         public string Notes { get; set; }
         public string ReasonForRescheduling { get; set; }
         public long CompanyID { get; set; }
+
        
     }
 

@@ -48,7 +48,6 @@ namespace hrms_be_backend_business.Logic
             _jwtManager = jwtManager;
             _logger = logger;
             _accountRepository = accountRepository;
-          //  _hostEnvironment = hostEnvironment;
             _companyrepository = companyRepository;
             _mailService = mailService;
             _employeerepository = employeerepository;
