@@ -1,6 +1,8 @@
-﻿using Dapper;
+﻿using Com.XpressPayments.Common.ViewModels;
+using Dapper;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Data;
@@ -40,7 +42,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("DateCreated", resignation.DateCreated);
                 param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                await _dapper.Insert<int>("Sp_SubmitResignationClearance", param, commandType: CommandType.StoredProcedure);
+                dynamic response = await _dapper.Insert<int>("Sp_SubmitResignationClearance", param, commandType: CommandType.StoredProcedure);
 
                 int resp = param.Get<int>("Resp");
 
@@ -117,25 +119,43 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        //public async Task<List<ResignationClearanceDTO>> GetPendingResignationClearanceByUserID(long userID)
-        //{
-        //    try
-        //    {
-        //        var param = new DynamicParameters();
-        //        param.Add("UserID", userID);
-        //        //change stored proceedure
-        //        var response = await _repository.GetAll<ResignationClearanceDTO>("Sp_GetPendingResignationClearanceByUserID", param, commandType: CommandType.StoredProcedure);
+        public async Task<IEnumerable<ResignationClearanceDTO>> GetPendingResignationClearanceByEmployeeID(long employeeID)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("employeeID", employeeID);
 
-        //        return response;
+                var response = await _dapper.GetAll<ResignationClearanceDTO>("Sp_GetPendingResignationClearanceByUserID", param, commandType: CommandType.StoredProcedure);
+                return response;
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        var err = ex.Message;
-        //        _logger.LogError($"MethodName: GetPendingResignationClearanceByUserID(long userID) => {ex.Message}");
-        //        throw;
-        //    }
-        //}
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetPendingResignationByUserID(long userID) => {ex.Message}");
+                throw;
+            }
+        }
+        public async Task<IEnumerable<ResignationClearanceDTO>> GetPendingResignationClearanceByCompnayID(long companyID)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("Company", companyID);
+
+                var response = await _dapper.GetAll<ResignationClearanceDTO>("Sp_GetPendingResignationClearanceByCompanyID", param, commandType: CommandType.StoredProcedure);
+
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetPendingResignationByUserID(long userID) => {ex.Message}");
+                throw;
+            }
+        }
 
         public async Task<dynamic> ApprovePendingResignationClearance(long userID, long resignationClearanceId)
         {
@@ -145,7 +165,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("UserID", userID);
                 param.Add("resignationClearanceId", resignationClearanceId);
                 param.Add("DateApproved", DateTime.Now);
-                param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                //param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
                 var response = await _dapper.Get<string>("Sp_ApprovePendingResignationClearance", param, commandType: CommandType.StoredProcedure);
 
@@ -183,5 +203,7 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+
+       
     }
 }

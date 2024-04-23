@@ -185,7 +185,25 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         }
 
+        [HttpGet]
+        [Route("GetPendingResignationByEmployeeID/{employeeID}")]
         [Authorize]
+        public async Task<IActionResult> GetPendingResignationByCompanyID(long companyID)
+        {
+
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return Ok(await _resignationService.GetPendingResignationByCompanyID(companyID, accessToken, RemoteIpAddress));
+
+
+        }
+
+
         [HttpPost]
         [Route("ApprovePendingResignation")]
         [Authorize]
@@ -225,3 +243,4 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
     }
 }
+

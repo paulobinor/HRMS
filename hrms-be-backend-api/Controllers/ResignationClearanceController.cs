@@ -96,23 +96,40 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
         }
 
 
-        //[HttpGet]
-        //[Route("GetPendingResignationClearanceByEmployeeID/{EmployeeID}")]
-        //public async Task<IActionResult> GetPendingResignationClearanceByEmployeeID(long EmployeeID)
-        //{
-        //    var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-        //    var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-        //    var identity = HttpContext.User.Identity as ClaimsIdentity;
-        //    IEnumerable<Claim> claim = identity.Claims;
-        //    var accessToken = Request.Headers["Authorization"];
-        //    accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+        [HttpGet]
+        [Route("GetPendingResignationClearanceByEmployeeID/{EmployeeID}")]
+        [Authorize]
+        public async Task<IActionResult> GetPendingResignationClearanceByEmployeeID(long EmployeeID)
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-        //    return Ok(await _resignationClearanceService.GetPendingResignationClearanceByEmployeeID(EmployeeID, accessToken, RemoteIpAddress));
+            return Ok(await _resignationClearanceService.GetPendingResignationClearanceByEmployeeID(EmployeeID, accessToken, RemoteIpAddress));
 
-        //}
+        }
+        [HttpGet]
+        [Route("GetPendingResignationClearanceByCompanyID/{CompanyID}")]
+        [Authorize]
+        public async Task<IActionResult> GetPendingResignationClearanceByCompanyID(long CompanyID)
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return Ok(await _resignationClearanceService.GetPendingResignationClearanceByCompanyID(CompanyID, accessToken, RemoteIpAddress));
+
+        }
 
         [HttpPost]
         [Route("ApprovePendingResignation")]
+        [Authorize]
         public async Task<IActionResult> ApprovePendingResignationClearance([FromBody] ApproveResignationClearanceDTO request)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -128,6 +145,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpPost]
         [Route("DisapprovePendingResignation")]
+        [Authorize]
         public async Task<IActionResult> DisapprovePendingResignationClearance([FromBody] DisapprovePendingResignationClearanceDTO request)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();

@@ -23,6 +23,8 @@ namespace hrms_be_backend_api.Controllers
             _exitClearanceSetupService = exitClearanceSetupService;
         }
         [HttpPost]
+        [Route("CreateExitClearanceSetup")]
+        [Authorize]
         public async Task<IActionResult> CreateExitClearanceSetup(CreateExitClearanceSetupVm request)
         {
 
