@@ -277,7 +277,7 @@ namespace hrms_be_backend_business.Logic
                 var ClearanceSetup = await _exitClearanceSetupRepository.GetExitClearanceSetupByHodEmployeeID(accessUser.data.EmployeeId);
 
                 //Save approval in resignation clearance approvals table
-                var saveApproval = await _resignationClearanceApprovalsRepository.CreateResignationClearanceApprovals(resignation.CompanyID, resignation.ResignationClearanceID, ClearanceSetup.ExitClearanceSetupID, accessUser.data.UserId);
+                var saveApproval = await _resignationClearanceApprovalsRepository.CreateResignationClearanceApprovals(resignation.CompanyID, resignation.ResignationClearanceID, ClearanceSetup.ExitClearanceSetupID, accessUser.data.EmployeeId);
                 if (!saveApproval.Contains("Success"))
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{resignation}", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };

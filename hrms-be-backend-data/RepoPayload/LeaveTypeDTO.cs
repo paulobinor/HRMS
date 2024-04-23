@@ -4,9 +4,9 @@
     {
         public long LeaveTypeId { get; set; }
         public string LeaveTypeName { get; set; }
-        public long MaximumLeaveDurationDays { get; set; }
-        public string Gender { get; set; }
-        public bool IsPaidLeave { get; set; } 
+       // public long MaximumLeaveDurationDays { get; set; }
+      //  public string Gender { get; set; }
+      //  public bool IsPaidLeave { get; set; } 
         public long CompanyID { get; set; }
 
        // public DateTime Created_Date { get; set; }
@@ -26,11 +26,11 @@
     {
 
         public string LeaveTypeName { get; set; }
-        public long MaximumLeaveDurationDays { get; set; }
-        public string Gender { get; set; }
+      //  public long MaximumLeaveDurationDays { get; set; }
+      //  public string Gender { get; set; }
         //public bool IsPaidLeave { get; set; } 
         public long CompanyID { get; set; }
-        public string Created_By_User_Email { get; set; }
+        public string UserId { get; set; }
     }
 
     public class UpdateLeaveTypeDTO

@@ -32,12 +32,12 @@ namespace hrms_be_backend_business.Logic
             _companyrepository = companyrepository;
         }
 
-        public async Task<BaseResponse> CreateLeaveType(CreateLeaveTypeDTO creatDto, string email)
+        public async Task<BaseResponse> CreateLeaveType(CreateLeaveTypeDTO creatDto)
         {
             var response = new BaseResponse();
             try
             {
-                string createdbyUserEmail = email;
+                //string createdbyUserEmail = email;
                // string createdbyUserId = userFullView.UserId.ToString();
                // string RoleId = userFullView.RoleId.ToString();
 
@@ -66,34 +66,34 @@ namespace hrms_be_backend_business.Logic
                 //}
 
                 //validate JobDescription payload here 
-                if (String.IsNullOrEmpty(creatDto.LeaveTypeName) || creatDto.CompanyID <= 0 || creatDto.MaximumLeaveDurationDays <= 0 ||
-                    String.IsNullOrEmpty(creatDto.Gender))
-                {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Please ensure all required fields are entered.";
-                    return response;
-                }
+                //if (String.IsNullOrEmpty(creatDto.LeaveTypeName) || creatDto.CompanyID <= 0 || creatDto.MaximumLeaveDurationDays <= 0 ||
+                //    String.IsNullOrEmpty(creatDto.Gender))
+                //{
+                //    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"Please ensure all required fields are entered.";
+                //    return response;
+                //}
 
-                var isExistsComp = await _companyrepository.GetCompanyById(creatDto.CompanyID);
-                if (null == isExistsComp)
-                {
-                    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = $"Invalid Company suplied.";
-                    return response;
-                }
-                else
-                {
-                    if (isExistsComp.IsDeleted)
-                    {
-                        response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"The Company suplied is already deleted, JobDescription cannot be created under it.";
-                        return response;
-                    }
-                }
+                //var isExistsComp = await _companyrepository.GetCompanyById(creatDto.CompanyID);
+                //if (null == isExistsComp)
+                //{
+                //    response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = $"Invalid Company suplied.";
+                //    return response;
+                //}
+                //else
+                //{
+                //    if (isExistsComp.IsDeleted)
+                //    {
+                //        response.ResponseCode = ResponseCode.ValidationError.ToString("D").PadLeft(2, '0');
+                //        response.ResponseMessage = $"The Company suplied is already deleted, JobDescription cannot be created under it.";
+                //        return response;
+                //    }
+                //}
 
                 //creatDto.GradeName = $"{creatDto.GradeName} ({isExistsComp.CompanyName})";
 
-                var isExists = await _LeaveTypeRepository.GetLeaveTypeByCompany(creatDto.LeaveTypeName, (int)creatDto.CompanyID);
+                var isExists = await _LeaveTypeRepository.GetLeaveTypeByCompany(creatDto.LeaveTypeName, creatDto.CompanyID);
                 if (null != isExists)
                 {
                     response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
@@ -101,14 +101,14 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-                dynamic resp = await _LeaveTypeRepository.CreateLeaveType(creatDto, createdbyUserEmail);
-                if (resp > 0)
+                dynamic resp = await _LeaveTypeRepository.CreateLeaveType(creatDto);
+                if (resp != null)
                 {
                     //update action performed into audit log here
 
-                    var LeaveType = await _LeaveTypeRepository.GetLeaveTypeByName(creatDto.LeaveTypeName);
+                    //var LeaveType = await _LeaveTypeRepository.GetLeaveTypeByName(creatDto.LeaveTypeName);
 
-                    response.Data = LeaveType;
+                    response.Data = resp;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = "LeaveType created successfully.";
                     return response;

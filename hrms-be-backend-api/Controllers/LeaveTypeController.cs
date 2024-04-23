@@ -6,6 +6,8 @@ using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.ComponentModel.Design;
 using System.Security.Claims;
 
 namespace hrms_be_backend_api.LeaveModuleController.Controller
@@ -35,20 +37,17 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             try
             {
                 var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-                var identity = HttpContext.User.Identity as ClaimsIdentity;
-                IEnumerable<Claim> claim = identity.Claims;
-                var accessToken = Request.Headers["Authorization"];
-                accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+                _logger.LogInformation($"Received GetAllLeaveRequest. Payload: {JsonConvert.SerializeObject(new { CreateDto.CompanyID })} from remote address: {RemoteIpAddress}");
 
+                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
                 var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return Unauthorized( new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString()});
+                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
                 }
 
-                return Ok(await _LeaveTypeService.CreateLeaveType(CreateDto, CreateDto.Created_By_User_Email));
+                return Ok(await _LeaveTypeService.CreateLeaveType(CreateDto));
             }
             catch (Exception ex)
             {

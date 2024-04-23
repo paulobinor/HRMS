@@ -83,7 +83,7 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
 
-                payload.EmployeeId = accessUser.data.UserId;
+                payload.EmployeeId = accessUser.data.EmployeeId;
 
                 var resignation = new ResignationDTO
                 {

@@ -1,8 +1,10 @@
 ﻿using Dapper;
+using hrms_be_backend_common.Models;
 using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Data;
@@ -14,34 +16,32 @@ namespace hrms_be_backend_data.Repository
     {
         private string _connectionString;
         private readonly ILogger<LeaveTypeRepository> _logger;
+        private readonly IDapperGenericRepository _dapperGeneric;
         private readonly IConfiguration _configuration;
 
-        public LeaveTypeRepository(IConfiguration configuration, ILogger<LeaveTypeRepository> logger)
+        public LeaveTypeRepository(IConfiguration configuration, ILogger<LeaveTypeRepository> logger, IDapperGenericRepository dapperGeneric)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
             _logger = logger;
             _configuration = configuration;
+            _dapperGeneric = dapperGeneric;
         }
 
-        public async Task<dynamic> CreateLeaveType(CreateLeaveTypeDTO create, string Created_By_User_Email)
+        public async Task<CreateLeaveTypeDTO> CreateLeaveType(CreateLeaveTypeDTO create)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                var param = new DynamicParameters();
+                param.Add("@LeaveTypeName", create.LeaveTypeName.Trim());
+                param.Add("@CompanyID", create.CompanyID);
+                param.Add("@CreatedByUserId", create.UserId);
+
+                var res = await _dapperGeneric.Get<CreateLeaveTypeDTO>(ApplicationConstant.Sp_CreateLeaveType, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
                 {
-                    var param = new DynamicParameters();
-                    param.Add("@Status", LeaveTypeEnum.CREATE);
-                    param.Add("@LeaveTypeName", create.LeaveTypeName.Trim());
-                    param.Add("@MaximumLeaveDurationDays", create.MaximumLeaveDurationDays);
-                    param.Add("@Gender", create.Gender.Trim());
-                    //param.Add("@IsPaidLeave", create.IsPaidLeave);
-                    param.Add("@CompanyID", create.CompanyID);
-                    param.Add("@Created_By_User_Email", Created_By_User_Email.Trim());
-
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_LeaveType, param: param, commandType: CommandType.StoredProcedure);
-
-                    return response;
+                    return res;
                 }
+                return default;
             }
             catch (Exception ex)
             {
@@ -196,18 +196,18 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<LeaveTypeDTO> GetLeaveTypeByCompany(string LeaveTypeName, int companyId)
+        public async Task<LeaveTypeDTO> GetLeaveTypeByCompany(string LeaveTypeName, long companyId)
         {
             try
             {
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", LeaveTypeEnum.GETBYCOMPANY);
-                    param.Add("@LeaveTypeNameGet", LeaveTypeName);
-                    param.Add("@CompanyIdGet", companyId);
+                   // param.Add("@Status", LeaveTypeEnum.GETBYCOMPANY);
+                    param.Add("@LeaveTypeName", LeaveTypeName);
+                    param.Add("@CompanyID", companyId);
 
-                    var LeaveTypeDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveTypeDTO>(ApplicationConstant.Sp_LeaveType, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveTypeDetails = await _dapper.QueryFirstOrDefaultAsync<LeaveTypeDTO>(ApplicationConstant.Sp_GetLeaveTypeByName, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveTypeDetails;
                 }

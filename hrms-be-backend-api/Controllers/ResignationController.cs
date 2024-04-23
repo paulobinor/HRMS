@@ -33,8 +33,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claim = identity.Claims;
-            var accessToken = Request.Headers["Authorization"];
-            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
 
             return Ok(await _resignationService.SubmitResignation(request, accessToken, RemoteIpAddress));
 
