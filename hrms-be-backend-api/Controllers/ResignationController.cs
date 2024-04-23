@@ -187,7 +187,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
         }
 
         [HttpGet]
-        [Route("GetPendingResignationByEmployeeID/{employeeID}")]
+        [Route("GetPendingResignationByCompanyID/{companyID}")]
         [Authorize]
         public async Task<IActionResult> GetPendingResignationByCompanyID(long companyID)
         {
