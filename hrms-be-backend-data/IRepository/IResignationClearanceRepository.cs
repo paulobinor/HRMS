@@ -1,4 +1,5 @@
-﻿using hrms_be_backend_data.RepoPayload;
+﻿using Com.XpressPayments.Common.ViewModels;
+using hrms_be_backend_data.RepoPayload;
 
 namespace hrms_be_backend_data.IRepository
 {
@@ -9,7 +10,8 @@ namespace hrms_be_backend_data.IRepository
         Task<ResignationClearanceDTO> GetResignationClearanceByEmployeeID(long UserID);
         Task<IEnumerable<ResignationClearanceDTO>> GetAllResignationClearanceByCompany(long companyID, int PageNumber, int RowsOfPage, string SearchVal);
 
-        //Task<List<ResignationClearanceDTO>> GetPendingResignationClearanceByUserID(long userID);
+        Task<IEnumerable<ResignationClearanceDTO>> GetPendingResignationClearanceByEmployeeID(long employeeID);
+        Task<IEnumerable<ResignationClearanceDTO>> GetPendingResignationClearanceByCompnayID(long companyID);
         Task<dynamic> ApprovePendingResignationClearance(long userID, long ID);
         Task<dynamic> DisapprovePendingResignationClearance(long userID, long ID, string reason);
     }
