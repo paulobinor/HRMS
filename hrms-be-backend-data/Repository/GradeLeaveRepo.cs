@@ -15,33 +15,34 @@ namespace hrms_be_backend_data.Repository
         private string _connectionString;
         private readonly ILogger<GradeLeaveRepo> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IDapperGenericRepository _dapper;
 
-        public GradeLeaveRepo(IConfiguration configuration, ILogger<GradeLeaveRepo> logger)
+        public GradeLeaveRepo(IConfiguration configuration, ILogger<GradeLeaveRepo> logger, IDapperGenericRepository dapper)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
             _logger = logger;
             _configuration = configuration;
+            _dapper = dapper;
         }
 
-        public async Task<dynamic> CreateGradeLeave(CreateGradeLeaveDTO create, string Created_By_User_Email)
+        public async Task<string> CreateGradeLeave(CreateGradeLeaveDTO create)
         {
             try
             {
-                using (SqlConnection _dapper = new SqlConnection(_connectionString))
-                {
                     var param = new DynamicParameters();
-                    param.Add("@Status", GradeLeaveEnum.CREATE);
                     param.Add("@LeaveTypeId", create.LeaveTypeId);
                     param.Add("@GradeID", create.GradeID);
                     param.Add("@NumbersOfDays", create.NumbersOfDays);
                     param.Add("@NumberOfVacationSplit", create.NumberOfVacationSplit);
                     param.Add("@CompanyID", create.CompanyID);
-                    param.Add("@Created_By_User_Email", Created_By_User_Email.Trim());
+                    param.Add("@CreatedByUserID", create.CreatedByUserID);
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_GradeLeave, param: param, commandType: CommandType.StoredProcedure);
+                    dynamic response = await _dapper.Get<string>("Sp_create_grade_leave", param, commandType: CommandType.StoredProcedure);
+
+                    //dynamic response = await _dapper.ExecuteAsync("Sp_create_grade_leave", param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
-                }
+                
             }
             catch (Exception ex)
             {
@@ -134,9 +135,7 @@ namespace hrms_be_backend_data.Repository
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", GradeLeaveEnum.GETALL);
-
-                    var LeaveTypeDetails = await _dapper.QueryAsync<GradeLeaveDTO>(ApplicationConstant.Sp_GradeLeave, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveTypeDetails = await _dapper.QueryAsync<GradeLeaveDTO>("Sp_get_all_grade_leave", param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveTypeDetails;
                 }
@@ -179,10 +178,9 @@ namespace hrms_be_backend_data.Repository
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", GradeLeaveEnum.GETBYCOMPANYID);
-                    param.Add("@CompanyIdGet", CompanyId);
+                    param.Add("@CompanyId", CompanyId);
 
-                    var LeaveTypeDetails = await _dapper.QueryAsync<GradeLeaveDTO>(ApplicationConstant.Sp_GradeLeave, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveTypeDetails = await _dapper.QueryAsync<GradeLeaveDTO>("Sp_get_all_grade_leave_by_compnay", param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveTypeDetails;
                 }

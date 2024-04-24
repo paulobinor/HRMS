@@ -4,7 +4,7 @@ namespace hrms_be_backend_data.IRepository
 {
     public  interface IGradeLeaveRepo
     {
-        Task<dynamic> CreateGradeLeave(CreateGradeLeaveDTO create, string Created_By_User_Email);
+        Task<string> CreateGradeLeave(CreateGradeLeaveDTO create);
         Task<dynamic> UpdateGradeLeave(UpdateGradeLeaveDTO update, string updatedbyUserEmail);
         Task<dynamic> DeleteGradeLeave(DeleteGradeLeaveDTO delete, string deletedbyUserEmail);
         Task<IEnumerable<GradeLeaveDTO>> GetAllActiveGradeLeave();

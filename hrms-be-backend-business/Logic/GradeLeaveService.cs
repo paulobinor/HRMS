@@ -1,4 +1,5 @@
 ﻿using hrms_be_backend_business.ILogic;
+using hrms_be_backend_common.Communication;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
@@ -16,9 +17,11 @@ namespace hrms_be_backend_business.Logic
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
         private readonly IGradeLeaveRepo _GradeLeaveRepo;
+        private readonly IAuthService _authService;
+
 
         public GradeLeaveService(/*IConfiguration configuration*/ IAccountRepository accountRepository, ILogger<GradeLeaveService> logger,
-            IGradeLeaveRepo GradeLeaveRepo, IAuditLog audit, ICompanyRepository companyrepository)
+            IGradeLeaveRepo GradeLeaveRepo, IAuditLog audit, ICompanyRepository companyrepository, IAuthService authService)
         {
             _audit = audit;
 
@@ -27,41 +30,24 @@ namespace hrms_be_backend_business.Logic
             _accountRepository = accountRepository;
             _GradeLeaveRepo = GradeLeaveRepo;
             _companyrepository = companyrepository;
+            _authService = authService;
         }
 
-        public async Task<BaseResponse> CreateGradeLeave(CreateGradeLeaveDTO creatDto, RequesterInfo requester)
+        public async Task<BaseResponse> CreateGradeLeave(CreateGradeLeaveDTO creatDto, string AccessKey, string RemoteIpAddress)
         {
+
             var response = new BaseResponse();
+            //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+
+            //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+            //    response.ResponseMessage = "User information cannot be found.";
+            //    return response;
+
+            //}
             try
             {
-                string createdbyUserEmail = requester.Username;
-                string createdbyUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,createdbyUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
-
-                }
-
                 //validate JobDescription payload here 
                 if (creatDto.LeaveTypeId <= 0 || creatDto.CompanyID <= 0 || creatDto.GradeID <= 0)
 
@@ -87,19 +73,11 @@ namespace hrms_be_backend_business.Logic
                         return response;
                     }
                 }
+                //creatDto.CreatedByUserID = accessUser.data.UserId;
+                creatDto.CreatedByUserID = 263;
+                dynamic resp = await _GradeLeaveRepo.CreateGradeLeave(creatDto);
 
-                //creatDto.GradeName = $"{creatDto.GradeName} ({isExistsComp.CompanyName})";
-
-                //var isExists = await _GradeLeaveRepo.GetAllGradeLeaveCompanyId( (int)creatDto.CompanyID);
-                //if (null != isExists)
-                //{
-                //    response.ResponseCode = ResponseCode.DuplicateError.ToString("D").PadLeft(2, '0');
-                //    response.ResponseMessage = $"Grade Leave with name already exists for this Company.";
-                //    return response;
-                //}
-
-                dynamic resp = await _GradeLeaveRepo.CreateGradeLeave(creatDto, createdbyUserEmail);
-                if (resp > 0)
+                if (resp.Contains("Success"))
                 {
                     //update action performed into audit log here
 
@@ -337,38 +315,22 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> GetAllGradeLeave(RequesterInfo requester)
+        public async Task<BaseResponse> GetAllGradeLeave( string AccessKey, string RemoteIpAddress)
         {
             BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
+                //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                //if (accessUser.data == null)
+                //{
 
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
+                //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = "User information cannot be found.";
+                //    return response;
 
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
+                //}
 
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
-
-                    }
-
-                }
 
                 //update action performed into audit log here
 
@@ -458,39 +420,22 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> GetGradeLeavebyCompanyId(long companyId, RequesterInfo requester)
+        public async Task<BaseResponse> GetGradeLeavebyCompanyId(long companyId, string AccessKey, string RemoteIpAddress)
         {
             BaseResponse response = new BaseResponse();
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
-
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
-
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
-
-
-                //if (Convert.ToInt32(RoleId) != 2)
+                //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                //if (accessUser.data == null)
                 //{
-                //    if (Convert.ToInt32(RoleId) != 4)
-                //    {
-                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                //        return response;
 
-                //    }
+                //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = "User information cannot be found.";
+                //    return response;
 
                 //}
+
 
                 var LeaveType = await _GradeLeaveRepo.GetAllGradeLeaveCompanyId(companyId);
 

@@ -1,11 +1,14 @@
 ﻿using hrms_be_backend_business.ILogic;
 using hrms_be_backend_business.Logic;
 using hrms_be_backend_common.Communication;
+using hrms_be_backend_common.Models;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Security.Claims;
 
 namespace hrms_be_backend_api.LeaveModuleController.Controller
@@ -16,30 +19,37 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
     {
         private readonly ILogger<GradeLeaveController> _logger;
         private readonly IGradeLeaveService _GradeLeaveService;
+        private readonly IAuthService _authService;
 
-        public GradeLeaveController(ILogger<GradeLeaveController> logger, IGradeLeaveService GradeLeaveService)
+        public GradeLeaveController(ILogger<GradeLeaveController> logger, IGradeLeaveService GradeLeaveService, IAuthService authService)
         {
             _logger = logger;
             _GradeLeaveService = GradeLeaveService;
+            _authService = authService;
         }
 
         [HttpPost("CreateGradeLeave")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> CreateGradeLeave([FromBody] CreateGradeLeaveDTO CreateDto)
         {
             var response = new BaseResponse();
             try
             {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                _logger.LogInformation($"Received Create grade leave request. Payload: {JsonConvert.SerializeObject(CreateDto)} from remote address: {RemoteIpAddress}");
+                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
 
-                return Ok(await _GradeLeaveService.CreateGradeLeave(CreateDto, requester));
+                //if (string.IsNullOrEmpty(accessToken))
+                //{
+                //    return BadRequest(new { responseMessage = $"Missing authorization header value", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                //}
+                //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                //if (accessUser.data == null)
+                //{
+                //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                //}
+
+                return Ok(await _GradeLeaveService.CreateGradeLeave(CreateDto, accessToken, RemoteIpAddress));
             }
             catch (Exception ex)
             {
@@ -160,16 +170,21 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             var response = new BaseResponse();
             try
             {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                _logger.LogInformation($"Received get all leave request. Payload: {JsonConvert.SerializeObject("")} from remote address: {RemoteIpAddress}");
+                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
 
-                return Ok(await _GradeLeaveService.GetAllGradeLeave(requester));
+                if (string.IsNullOrEmpty(accessToken))
+                {
+                    return BadRequest(new { responseMessage = $"Missing authorization header value", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                }
+                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                }
+
+                return Ok(await _GradeLeaveService.GetAllGradeLeave(accessToken,RemoteIpAddress));
             }
             catch (Exception ex)
             {
@@ -210,23 +225,28 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("GetGradeLeavebyCompanyId")]
         public async Task<IActionResult> GetGradeLeavebyCompanyId(long CompanyID)
         {
             var response = new BaseResponse();
             try
             {
-                var requester = new RequesterInfo
-                {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                _logger.LogInformation($"Received get grade leave by company id request. Payload: {JsonConvert.SerializeObject(CompanyID)} from remote address: {RemoteIpAddress}");
+                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
 
-                return Ok(await _GradeLeaveService.GetGradeLeavebyCompanyId(CompanyID, requester));
+                //if (string.IsNullOrEmpty(accessToken))
+                //{
+                //    return BadRequest(new { responseMessage = $"Missing authorization header value", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                //}
+                //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                //if (accessUser.data == null)
+                //{
+                //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                //}
+
+                return Ok(await _GradeLeaveService.GetGradeLeavebyCompanyId(CompanyID, accessToken,RemoteIpAddress));
             }
             catch (Exception ex)
             {
