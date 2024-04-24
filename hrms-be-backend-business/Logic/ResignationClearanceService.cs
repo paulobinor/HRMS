@@ -73,6 +73,12 @@ namespace hrms_be_backend_business.Logic
 
                 payload.EmployeeID = accessUser.data.EmployeeId;
 
+                var alreadyCleared = await _resignationClearanceRepository.GetResignationClearanceByEmployeeID(payload.EmployeeID);
+                if (alreadyCleared != null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Resignation clearance has previously been submitted by this user", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
                 var resignation = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeID);
 
                 var resignationClearance = new ResignationClearanceDTO
@@ -100,13 +106,22 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{resp}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
 
                 }
-                var createdClearance = _resignationClearanceRepository.GetResignationClearanceByID(resp);
-                var notFinalApprovalDepartments = await _exitClearanceSetupRepository.GetDepartmentsThatAreNotFinalApproval(resignation.CompanyID);
-                foreach (var item in notFinalApprovalDepartments)
-                {
-                    _mailService.SendResignationClearanceApproveMailToApprover(item.HodEmployeeID, createdClearance.EmployeeID);
+                var createdClearance = await _resignationClearanceRepository.GetResignationClearanceByID(resp);
 
+                var notFinalApprovalDepartments = await _exitClearanceSetupRepository.GetDepartmentsThatAreNotFinalApproval(createdClearance.CompanyID);
+                if (notFinalApprovalDepartments.Count == 0 )
+                {
+                    var FinalApprovalDepartment = await _exitClearanceSetupRepository.GetDepartmentThatIsFinalApprroval(createdClearance.CompanyID);
+                    _mailService.SendResignationClearanceApproveMailToApprover(FinalApprovalDepartment.HodEmployeeID, createdClearance.EmployeeID);
                 }
+                else
+                {
+                    foreach (var item in notFinalApprovalDepartments)
+                    {
+                        _mailService.SendResignationClearanceApproveMailToApprover(item.HodEmployeeID, createdClearance.EmployeeID);
+
+                    }
+                }         
 
                 return new ExecutedResult<string>() { responseMessage = "Resignation clearance submitted Successfully", responseCode = (00).ToString(), data = null };
             }
@@ -216,46 +231,70 @@ namespace hrms_be_backend_business.Logic
 
         }
 
-        //public async Task<ExecutedResult<ResignationClearanceDTO>> GetPendingResignationClearanceByEmployeeID(long EmployeeID, string AccessKey, string RemoteIpAddress)
-        //{
-        //    BaseResponse response = new BaseResponse();
+        public async Task<ExecutedResult<IEnumerable<ResignationClearanceDTO>>> GetPendingResignationClearanceByEmployeeID(long EmployeeID, string AccessKey, string RemoteIpAddress)
+        {
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<IEnumerable<ResignationClearanceDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
-        //    try
-        //    {
-        //        string requesterUserEmail = requester.Username;
-        //        string requesterUserId = requester.UserId.ToString();
-        //        string RoleId = requester.RoleId.ToString();
+            }
+            try
+            {
 
-        //        var ipAddress = requester.IpAddress.ToString();
-        //        var port = requester.Port.ToString();
+                var PendingResignation = await _resignationClearanceRepository.GetPendingResignationClearanceByEmployeeID(EmployeeID);
 
-        //        var PendingResignation = await _resignationClearanceRepository.GetPendingResignationClearanceByUserID(userID);
+                if (PendingResignation == null)
+                {
+                    return new ExecutedResult<IEnumerable<ResignationClearanceDTO>>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
 
-        //        if (PendingResignation == null)
-        //        {
-        //            response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-        //            response.ResponseMessage = "PendingResignation not found.";
-        //            response.Data = null;
-        //            return response;
-        //        }
+                }
 
-        //        //update action performed into audit log here
+                _logger.LogInformation("Resignation fetched successfully.");
+                return new ExecutedResult<IEnumerable<ResignationClearanceDTO>>() { responseMessage = "Resignation fetched Successfully", responseCode = (00).ToString(), data = PendingResignation };
 
-        //        response.Data = PendingResignation;
-        //        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-        //        response.ResponseMessage = "PendingResignation fetched successfully.";
-        //        return response;
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Exception Occured: GetPendingResignationClearanceByUserID(long userID) ==> {ex.Message}");
-        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-        //        response.ResponseMessage = $"Exception Occured: GetPendingResignationClearanceByUserID(long userID) ==> {ex.Message}";
-        //        response.Data = null;
-        //        return response;
-        //    }
-        //}
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetPendingResignationClearanceByEmployeeID(long EmployeeID) ==> {ex.Message}");
+                return new ExecutedResult<IEnumerable<ResignationClearanceDTO>>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+
+            }
+        }
+
+        public async Task<ExecutedResult<IEnumerable<ResignationClearanceDTO>>> GetPendingResignationClearanceByCompanyID(long CompanyID, string AccessKey, string RemoteIpAddress)
+        {
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<IEnumerable<ResignationClearanceDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+            }
+            try
+            {
+
+                var PendingResignation = await _resignationClearanceRepository.GetPendingResignationClearanceByCompnayID(CompanyID);
+
+                if (PendingResignation == null)
+                {
+                    return new ExecutedResult<IEnumerable<ResignationClearanceDTO>>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+
+                }
+
+                _logger.LogInformation("Resignation fetched successfully.");
+                return new ExecutedResult<IEnumerable<ResignationClearanceDTO>>() { responseMessage = "Resignation fetched Successfully", responseCode = (00).ToString(), data = PendingResignation };
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetPendingResignationClearanceByCompanyID(long CompanyID) ==> {ex.Message}");
+                return new ExecutedResult<IEnumerable<ResignationClearanceDTO>>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+
+            }
+        }
+
 
         public async Task<ExecutedResult<string>> ApprovePendingResignationClearance(ApproveResignationClearanceDTO request, string AccessKey, string RemoteIpAddress)
         {
@@ -280,7 +319,7 @@ namespace hrms_be_backend_business.Logic
                 var saveApproval = await _resignationClearanceApprovalsRepository.CreateResignationClearanceApprovals(resignation.CompanyID, resignation.ResignationClearanceID, ClearanceSetup.ExitClearanceSetupID, accessUser.data.EmployeeId);
                 if (!saveApproval.Contains("Success"))
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"{resignation}", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"{saveApproval}", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
 
                 }
 
@@ -307,7 +346,7 @@ namespace hrms_be_backend_business.Logic
 
                     if (!approvedResignationClearanceResp.Contains("Success"))
                     {
-                        return new ExecutedResult<string>() { responseMessage = $"{resignation}", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+                        return new ExecutedResult<string>() { responseMessage = $"{approvedResignationClearanceResp}", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
 
                     }
                 }

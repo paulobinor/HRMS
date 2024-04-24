@@ -35,9 +35,10 @@ namespace hrms_be_backend_data.Repository
                 param.Add("CreatedByUserId", request.CreatedByUserId);
                 param.Add("DateCreated", request.DateCreated);
                 param.Add("DepartmentID", request.DepartmentID);
+                param.Add("IsFinalApproval", request.IsFinalApproval);
 
-                return await _dapper.Get<string>("Sp_create_exit_clearance_setup", param, commandType: CommandType.StoredProcedure);
-
+                var response =  await _dapper.Get<string>("Sp_create_exit_clearance_setup", param, commandType: CommandType.StoredProcedure);
+                return response;
             }
             catch (Exception ex)
             {
@@ -151,8 +152,8 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
                 param.Add("CompanyID", companyID);
 
-                return await _dapper.Get<ExitClearanceSetupDTO>("Sp_get_exit_clearance_department_that_is_final_approval", param, commandType: CommandType.StoredProcedure);
-
+                dynamic response =  await _dapper.Get<ExitClearanceSetupDTO>("Sp_get_exit_clearance_department_that_is_final_approval", param, commandType: CommandType.StoredProcedure);
+                return response;
 
             }
             catch (Exception ex)

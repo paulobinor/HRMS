@@ -13,7 +13,8 @@ namespace hrms_be_backend_business.ILogic
         Task<ExecutedResult<ResignationClearanceDTO>> GetResignationClearanceByEmployeeID(long UserID, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<IEnumerable<ResignationClearanceDTO>>> GetAllResignationClearanceByCompany(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress);
 
-        //Task<ExecutedResult<ResignationClearanceDTO>> GetPendingResignationClearanceByEmployeeID(long EmployeeID, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<IEnumerable<ResignationClearanceDTO>>> GetPendingResignationClearanceByEmployeeID(long EmployeeID, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<IEnumerable<ResignationClearanceDTO>>> GetPendingResignationClearanceByCompanyID(long EmployeeID, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<string>> ApprovePendingResignationClearance(ApproveResignationClearanceDTO request, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<string>> DisapprovePendingResignationClearance(DisapprovePendingResignationClearanceDTO request, string AccessKey, string RemoteIpAddress);
 
