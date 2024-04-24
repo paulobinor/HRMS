@@ -112,16 +112,24 @@ namespace hrms_be_backend_business.Logic
                 };
 
 
+                //var resp = await _resignationRepository.CreateResignation(resignation);
+                //int resignationID = resp.ResignationID;
+                //string returnVal = resp.ReturnVal;
+                //if (resignationID < 0)
+                //{
+                //    return new ExecutedResult<string>() { responseMessage = $"{returnVal}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+
+                //}
+                //var submittedresignation = await _resignationRepository.GetResignationByID(resignationID);
+
                 var resp = await _resignationRepository.CreateResignation(resignation);
-                int resignationID = resp.ResignationID;
-                string returnVal = resp.ReturnVal;
-                if (resignationID < 0)
+                if (resp < 0)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"{returnVal}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"{resp}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
 
                 }
 
-                var submittedresignation = await _resignationRepository.GetResignationByID(resignationID);
+                var submittedresignation = await _resignationRepository.GetResignationByID(resp);
 
                 //Send mail to Hod/UnitHead
                 if (submittedresignation.UnitHeadEmployeeID <= 0)
