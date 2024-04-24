@@ -288,7 +288,7 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<LeaveApprovalInfo> GetLeaveApprovalInfoByRequestLineItem(long leaveRequestLineItemId)
+        public async Task<LeaveApprovalInfo> GetLeaveApprovalInfoByRequestLineItemId(long leaveRequestLineItemId)
         {
             try
             {

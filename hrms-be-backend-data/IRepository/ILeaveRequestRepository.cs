@@ -22,7 +22,7 @@ namespace hrms_be_backend_data.IRepository
         Task<EmpLeaveRequestInfo> CreateEmpLeaveInfo(long employeeId);
         Task<LeaveRequestLineItem> GetLeaveRequestLineItem(long leaveRequestLineItemId);
         Task<LeaveApprovalInfo> GetLeaveApprovalInfo(long leaveApprovalId);
-        Task<LeaveApprovalInfo> GetLeaveApprovalInfoByRequestLineItem(long leaveRequestLineitemId);
+        Task<LeaveApprovalInfo> GetLeaveApprovalInfoByRequestLineItemId(long leaveRequestLineitemId);
         Task<LeaveApprovalLineItem> GetLeaveApprovalLineItem(long leaveApprovalLineItemId, int approvalStep);
         Task<LeaveApprovalInfo> UpdateLeaveApprovalInfo(LeaveApprovalInfo leaveApproval);
         Task<LeaveApprovalLineItem> UpdateLeaveApprovalLineItem(LeaveApprovalLineItem leaveApprovalLineItem);

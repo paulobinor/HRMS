@@ -470,7 +470,7 @@ namespace hrms_be_backend_business.Logic
                 }
                 else if (leaveReqestLineItemId > 0)
                 {
-                    leaveApproval = await _leaveRequestRepository.GetLeaveApprovalInfoByRequestLineItem(leaveReqestLineItemId);
+                    leaveApproval = await _leaveRequestRepository.GetLeaveApprovalInfoByRequestLineItemId(leaveReqestLineItemId);
                 }
                 if (leaveApproval != null)
                 {
@@ -503,7 +503,7 @@ namespace hrms_be_backend_business.Logic
         {
             try
             {
-                var leaveApproval = await _leaveRequestRepository.GetLeaveApprovalInfoByRequestLineItem(leaveRequestLineitemId);
+                var leaveApproval = await _leaveRequestRepository.GetLeaveApprovalInfoByRequestLineItemId(leaveRequestLineitemId);
                 return leaveApproval;
             }
             catch (Exception)
@@ -523,6 +523,7 @@ namespace hrms_be_backend_business.Logic
                 throw;
             }
         }
+
         public async Task<LeaveApprovalLineItem> GetLeaveApprovalLineItem(long leaveApprovalLineItemId, int approvalStep = 0)
         {
             try
@@ -535,11 +536,11 @@ namespace hrms_be_backend_business.Logic
                 throw;
             }
         }
-        public async Task<LeaveApprovalInfo> GetLeaveApprovalInfoByRequestLineItem(long leaveRequestLineItemId)
+        public async Task<LeaveApprovalInfo> GetLeaveApprovalInfoByRequestLineItemId(long leaveRequestLineItemId)
         {
             try
             {
-                var LeaveApprovalInfo = await _leaveRequestRepository.GetLeaveApprovalInfoByRequestLineItem(leaveRequestLineItemId);
+                var LeaveApprovalInfo = await _leaveRequestRepository.GetLeaveApprovalInfoByRequestLineItemId(leaveRequestLineItemId);
                 return LeaveApprovalInfo;
             }
             catch (Exception)

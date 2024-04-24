@@ -46,7 +46,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
                 }
-
+                CreateDto.UserId = accessUser.data.UserId.ToString();
                 return Ok(await _LeaveTypeService.CreateLeaveType(CreateDto));
             }
             catch (Exception ex)
