@@ -32,7 +32,7 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
                 param.Add("EmployeeID", resignation.EmployeeId);
                 //param.Add("StaffID", resignation.StaffID);
-               // param.Add("StaffName", resignation.StaffName);
+                // param.Add("StaffName", resignation.StaffName);
                 param.Add("SignedResignationLetter", resignation.SignedResignationLetter);
                 param.Add("CompanyID", resignation.CompanyID);
                 param.Add("ResumptionDate", resignation.ResumptionDate);
@@ -42,16 +42,21 @@ namespace hrms_be_backend_data.Repository
                 param.Add("ReasonForResignation", resignation.ReasonForResignation);
                 param.Add("DateCreated", resignation.DateCreated);
 
-                // Add an output parameter to capture the ResignationID
+                // Add output parameters to capture both ResignationID and ReturnVal
                 param.Add("@ResignationIDOut", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                param.Add("@ReturnVal", dbType: DbType.String, direction: ParameterDirection.Output, size: 500);
 
                 dynamic response = await _dapper.Get<string>("Sp_SubmitResignation", param, commandType: CommandType.StoredProcedure);
 
                 // Retrieve the ResignationID from the output parameter
                 int resignationID = param.Get<int>("@ResignationIDOut");
 
-                return resignationID;
+                // Retrieve the ReturnVal from the output parameter
+                string returnVal = param.Get<string>("@ReturnVal");
 
+                var result = new { ResignationID = resignationID, ReturnVal = returnVal };
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -60,6 +65,7 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+
         public async Task<dynamic> UpdateResignation(UpdateResignationDTO resignation)
         {
             try

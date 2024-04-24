@@ -153,7 +153,7 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 _logger.LogInformation("Resignation Interview form Submitted successfully.");
-                return new ExecutedResult<string>() { responseMessage = "Resignation Interview form Submitted successfully.", responseCode = (200).ToString(), data = null };
+                return new ExecutedResult<string>() { responseMessage = "Resignation Interview form Submitted successfully.", responseCode = (00).ToString(), data = null };
             }
             catch (Exception ex)
             {

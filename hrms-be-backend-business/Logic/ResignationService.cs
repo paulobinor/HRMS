@@ -113,13 +113,15 @@ namespace hrms_be_backend_business.Logic
 
 
                 var resp = await _resignationRepository.CreateResignation(resignation);
-                if (resp < 0)
+                int resignationID = resp.ResignationID;
+                string returnVal = resp.ReturnVal;
+                if (resignationID < 0)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"{resp}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"{returnVal}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
 
                 }
 
-                var submittedresignation = await _resignationRepository.GetResignationByID(resp);
+                var submittedresignation = await _resignationRepository.GetResignationByID(resignationID);
 
                 //Send mail to Hod/UnitHead
                 if (submittedresignation.UnitHeadEmployeeID <= 0)
@@ -132,7 +134,7 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                return new ExecutedResult<string>() { responseMessage = "Resignation submitted Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                return new ExecutedResult<string>() { responseMessage = "Resignation submitted Successfully", responseCode = 00.ToString(), data = null };
             }
             catch (Exception ex)
             {
@@ -191,7 +193,7 @@ namespace hrms_be_backend_business.Logic
                         return new ExecutedResult<string>() { responseMessage = errorMessages, responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
 
                     }
-                    return new ExecutedResult<string>() { responseMessage = "File uploaded Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = uploadResponse.UploadUrl };
+                    return new ExecutedResult<string>() { responseMessage = "File uploaded Successfully", responseCode = 00.ToString(), data = uploadResponse.UploadUrl };
                 }
                 else
                 {
@@ -233,7 +235,7 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 _logger.LogInformation("Resignation updated successfully.");
-                return new ExecutedResult<string>() { responseMessage = "Resignation updated successfully.", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                return new ExecutedResult<string>() { responseMessage = "Resignation updated successfully.", responseCode = 00.ToString(), data = null };
 
             }
             catch (Exception ex)
