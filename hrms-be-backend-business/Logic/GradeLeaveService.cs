@@ -37,15 +37,15 @@ namespace hrms_be_backend_business.Logic
         {
 
             var response = new BaseResponse();
-            //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-            //if (accessUser.data == null)
-            //{
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
 
-            //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-            //    response.ResponseMessage = "User information cannot be found.";
-            //    return response;
+                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "User information cannot be found.";
+                return response;
 
-            //}
+            }
             try
             {
                 //validate JobDescription payload here 
@@ -73,8 +73,7 @@ namespace hrms_be_backend_business.Logic
                         return response;
                     }
                 }
-                //creatDto.CreatedByUserID = accessUser.data.UserId;
-                creatDto.CreatedByUserID = 263;
+                creatDto.CreatedByUserID = accessUser.data.UserId;
                 dynamic resp = await _GradeLeaveRepo.CreateGradeLeave(creatDto);
 
                 if (resp.Contains("Success"))
@@ -321,15 +320,15 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-                //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-                //if (accessUser.data == null)
-                //{
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
 
-                //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                //    response.ResponseMessage = "User information cannot be found.";
-                //    return response;
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "User information cannot be found.";
+                    return response;
 
-                //}
+                }
 
 
                 //update action performed into audit log here
@@ -426,15 +425,15 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-                //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-                //if (accessUser.data == null)
-                //{
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
 
-                //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                //    response.ResponseMessage = "User information cannot be found.";
-                //    return response;
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "User information cannot be found.";
+                    return response;
 
-                //}
+                }
 
 
                 var LeaveType = await _GradeLeaveRepo.GetAllGradeLeaveCompanyId(companyId);

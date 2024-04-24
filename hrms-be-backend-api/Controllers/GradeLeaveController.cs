@@ -29,7 +29,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         }
 
         [HttpPost("CreateGradeLeave")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> CreateGradeLeave([FromBody] CreateGradeLeaveDTO CreateDto)
         {
             var response = new BaseResponse();
@@ -39,15 +39,15 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 _logger.LogInformation($"Received Create grade leave request. Payload: {JsonConvert.SerializeObject(CreateDto)} from remote address: {RemoteIpAddress}");
                 var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
 
-                //if (string.IsNullOrEmpty(accessToken))
-                //{
-                //    return BadRequest(new { responseMessage = $"Missing authorization header value", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-                //}
-                //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-                //if (accessUser.data == null)
-                //{
-                //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-                //}
+                if (string.IsNullOrEmpty(accessToken))
+                {
+                    return BadRequest(new { responseMessage = $"Missing authorization header value", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                }
+                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                }
 
                 return Ok(await _GradeLeaveService.CreateGradeLeave(CreateDto, accessToken, RemoteIpAddress));
             }
@@ -225,7 +225,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetGradeLeavebyCompanyId")]
         public async Task<IActionResult> GetGradeLeavebyCompanyId(long CompanyID)
         {
@@ -236,15 +236,15 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 _logger.LogInformation($"Received get grade leave by company id request. Payload: {JsonConvert.SerializeObject(CompanyID)} from remote address: {RemoteIpAddress}");
                 var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
 
-                //if (string.IsNullOrEmpty(accessToken))
-                //{
-                //    return BadRequest(new { responseMessage = $"Missing authorization header value", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-                //}
-                //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-                //if (accessUser.data == null)
-                //{
-                //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-                //}
+                if (string.IsNullOrEmpty(accessToken))
+                {
+                    return BadRequest(new { responseMessage = $"Missing authorization header value", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                }
+                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                }
 
                 return Ok(await _GradeLeaveService.GetGradeLeavebyCompanyId(CompanyID, accessToken,RemoteIpAddress));
             }
