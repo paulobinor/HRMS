@@ -67,7 +67,6 @@
         public bool PaydayLastDayOfTheCycle { get; set; }
         public bool ProrationPolicy { get; set; }
     }
-
     public class PayrollEarnings
     {
         public long EarningsItemId { get; set; }
@@ -89,7 +88,6 @@
         public string PaymentSubTitle { get; set; }
         public decimal PaymentAmount { get; set; }
     }
-
     public class PayrollRunnedWithTotalVm
     {
         public long totalRecords { get; set; }
@@ -107,16 +105,15 @@
         public DateTime DateApproved { get; set; }
         public bool IsApproved { get; set; }
         public bool IsDisapproved { get; set; }
+        public long CompanyId { get; set; }
     }
-
     public class PayrollRunnedSummaryVm
     {
         public decimal TotalNet { get; set; }
         public decimal TotalDeduction { get; set; }
-        public decimal TotalLoan { get; set; }
+        public decimal TotalLoan { get; set; } 
         public decimal TotalAmount { get; set; }
     }
-
     public class PayrollRunnedDetailsWithTotalVm
     {
         public long totalRecords { get; set; }
@@ -146,6 +143,36 @@
         public long DeductionId { get; set; }
         public string DeductionName { get; set; }       
         public decimal EarningItemAmount { get; set; }      
+    }
+    public class PayrollRunnedReportVm
+    {
+        public string StaffID { get; set; }
+        public string EmployeeName { get; set; }
+        public string GradeName { get; set; }
+        public DateTime ResumptionDate { get; set; }
+        public string DepartmentName { get; set; }
+        public string BranchName { get; set; }
+        public string EmploymentStatusName { get; set; }
+        public decimal NetPay { get; set; }
+        public decimal TotalDeduction { get; set; }
+        public decimal GrossPay { get; set; }
+        public decimal RestatedAmount { get; set; }
+        public decimal CRA { get; set; }
+        public decimal TAX { get; set; }
+        public decimal LoanRepayment { get; set; }
+        public long CompanyID { get; set; }
+    }
+    public class PayrollEarningForReportVm
+    {
+        public long EarningItemId { get; set; }
+        public string EarningItemName { get; set; }
+        public decimal Amount { get; set; }       
+    }
+    public class PayrollDeductionForReportVm
+    {
+        public long DeductionId { get; set; }
+        public string DeductionName { get; set; }
+        public decimal Amount { get; set; }
     }
 }
 

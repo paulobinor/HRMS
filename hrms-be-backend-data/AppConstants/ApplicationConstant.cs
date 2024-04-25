@@ -73,6 +73,7 @@
         public static string Sp_GetLeaveRequestByCompanyId { get; set; } = "Sp_GetLeaveRequestByCompanyId";
         public static string Sp_GetLeaveTypeByName { get; set; } = "Sp_GetLeaveTypeByName";
         public static string Sp_CreateLeaveType { get;  set; } = "Sp_CreateLeaveType";
+        public static string Sp_GetGradeLeaveById { get; set; } = "Sp_GetGradeLeaveById";
 
         //System Default
         public static int DefaultDeptId = 1;

@@ -7,6 +7,8 @@
         public long GradeID { get; set; }
         public long NumbersOfDays { get; set; }
         public long NumberOfVacationSplit { get; set; }
+        public int MaximumNumberOfLeaveDays { get; set; }
+        
         public string GradeName { get; set; }
         public string LeaveTypeName { get; set; }
         public long CompanyID { get; set; }

@@ -107,31 +107,31 @@ namespace hrms_be_backend_business.Logic
             try
             {
                 string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
+                //string requesterUserId = requester.UserId.ToString();
+                //string RoleId = requester.RoleId.ToString();
 
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
+                //var ipAddress = requester.IpAddress.ToString();
+                //var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
+                //var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
+                //if (null == requesterInfo)
+                //{
+                //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = "Requester information cannot be found.";
+                //    return response;
+                //}
 
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
+                //if (Convert.ToInt32(RoleId) != 2)
+                //{
+                //    if (Convert.ToInt32(RoleId) != 4)
+                //    {
+                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //        return response;
 
-                    }
+                //    }
 
-                }
+                //}
 
                 //validate DepartmentDto payload here 
                 if (updateDto.CompanyID <= 0)
@@ -260,33 +260,33 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
+                //string requesterUserEmail = requester.Username;
+                //string requesterUserId = requester.UserId.ToString();
+                //string RoleId = requester.RoleId.ToString();
 
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
+                //var ipAddress = requester.IpAddress.ToString();
+                //var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
+                //var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
+                //if (null == requesterInfo)
+                //{
+                //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = "Requester information cannot be found.";
+                //    return response;
+                //}
 
 
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
+                //if (Convert.ToInt32(RoleId) != 2)
+                //{
+                //    if (Convert.ToInt32(RoleId) != 4)
+                //    {
+                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //        return response;
 
-                    }
+                //    }
 
-                }
+                //}
 
                 //update action performed into audit log here
 
@@ -314,7 +314,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> GetAllGradeLeave( string AccessKey, string RemoteIpAddress)
+        public async Task<BaseResponse> GetAllGradeLeave(string AccessKey, string RemoteIpAddress)
         {
             BaseResponse response = new BaseResponse();
 
@@ -364,32 +364,32 @@ namespace hrms_be_backend_business.Logic
             try
             {
                 string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
+                //string requesterUserId = requester.UserId.ToString();
+                //string RoleId = requester.RoleId.ToString();
 
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
+                //var ipAddress = requester.IpAddress.ToString();
+                //var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
+                //var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
+                //if (null == requesterInfo)
+                //{
+                //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = "Requester information cannot be found.";
+                //    return response;
+                //}
 
 
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
+                //if (Convert.ToInt32(RoleId) != 2)
+                //{
+                //    if (Convert.ToInt32(RoleId) != 4)
+                //    {
+                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //        return response;
 
-                    }
+                //    }
 
-                }
+                //}
 
                 var LeaveType = await _GradeLeaveRepo.GetGradeLeaveById(GradeLeaveID);
 

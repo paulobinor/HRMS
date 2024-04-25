@@ -133,6 +133,23 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
+        public async Task<PayrollRunnedVm> GetPayrollRunnedById(long PayrollRunnedId)
+        {
+           
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@PayrollRunnedId", PayrollRunnedId);
+              
+                return await _dapper.Get<PayrollRunnedVm>("sp_get_payroll_runned_by_id", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollRepository ==> GetPayrollRunnedById => {ex}");
+                return null;
+            }
+
+        }
 
         public async Task<string> DeletePayroll(PayrollDeleteReq payload)
         {
@@ -338,6 +355,21 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 _logger.LogError($"PayrollRepository -> GetPayrollDeductionComputation => {ex}");
+                return null;
+            }
+
+        }
+        public async Task<List<PayrollRunnedReportVm>> GetPayrollRunnedReport(long PayRollRunnedId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@PayRollRunnedId", PayRollRunnedId);               
+                return await _dapper.GetAll<PayrollRunnedReportVm>("sp_get_payroll_runned_report", param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollRepository -> GetPayrollRunnedReport => {ex}");
                 return null;
             }
 
