@@ -317,14 +317,14 @@ namespace hrms_be_backend_business.Logic
         public async Task<BaseResponse> GetInterviewScaleDetails (string AccessKey, string RemoteIpAddress)
         {
             BaseResponse response = new BaseResponse();
-           // var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-            //if (accessUser.data == null)
-            //{
-            //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-            //    response.ResponseMessage = "Unathorized User";
-            //    response.Data = null;
-            //    return response;
-            //}
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Unathorized User";
+                response.Data = null;
+                return response;
+            }
             try { 
           
                 var InterviewScaleDetails = await _resignationInterviewRepository.GetInterviewScaleDetails();

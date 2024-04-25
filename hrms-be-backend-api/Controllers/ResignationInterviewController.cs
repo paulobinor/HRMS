@@ -110,7 +110,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpGet]
         [Route("GetInterviewScaleDetails")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetInterviewScaleDetails()
         {
 
