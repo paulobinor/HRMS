@@ -314,45 +314,46 @@ namespace hrms_be_backend_business.Logic
         }
 
 
-        //public async Task<BaseResponse> GetInterviewScaleDetails(RequesterInfo requester)
-        //{
-        //    BaseResponse response = new BaseResponse();
-        //    try
-        //    {
-        //        //string requesterUserEmail = requester.Username;
-        //        //string requesterUserId = requester.UserId.ToString();
-        //        //string RoleId = requester.RoleId.ToString();
+        public async Task<BaseResponse> GetInterviewScaleDetails (string AccessKey, string RemoteIpAddress)
+        {
+            BaseResponse response = new BaseResponse();
+           // var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+            //    response.ResponseMessage = "Unathorized User";
+            //    response.Data = null;
+            //    return response;
+            //}
+            try { 
+          
+                var InterviewScaleDetails = await _resignationInterviewRepository.GetInterviewScaleDetails();
 
-        //        //var ipAddress = requester.IpAddress.ToString();
-        //        //var port = requester.Port.ToString();
+                if (InterviewScaleDetails == null || InterviewScaleDetails.Count() == 0)
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "InterviewScaleDetails not found.";
+                    response.Data = null;
+                    return response;
+                }
 
-        //        var InterviewScaleDetails = await _resignationInterviewRepository.GetInterviewScaleDetails();
+                //update action performed into audit log here
 
-        //        if (InterviewScaleDetails == null || InterviewScaleDetails.Count == 0)
-        //        {
-        //            response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-        //            response.ResponseMessage = "InterviewScaleDetails not found.";
-        //            response.Data = null;
-        //            return response;
-        //        }
+                response.Data = InterviewScaleDetails;
+                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "InterviewScaleDetails fetched successfully.";
+                return response;
 
-        //        //update action performed into audit log here
-
-        //        response.Data = InterviewScaleDetails;
-        //        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-        //        response.ResponseMessage = "Resignation fetched successfully.";
-        //        return response;
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Exception Occured: GetInterviewScaleDetails ==> {ex.Message}");
-        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-        //        response.ResponseMessage = $"Exception Occured: GetInterviewScaleDetails ==> {ex.Message}";
-        //        response.Data = null;
-        //        return response;
-        //    }
-        //}
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetInterviewScaleDetails ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: GetInterviewScaleDetails ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+        }
 
         //public async Task<BaseResponse> ApprovePendingResignationInterview(ApproveResignationInterviewDTO request, RequesterInfo requester)
         //{
