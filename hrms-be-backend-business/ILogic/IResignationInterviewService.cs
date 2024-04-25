@@ -12,8 +12,7 @@ namespace hrms_be_backend_business.ILogic
         Task<ExecutedResult<ResignationInterviewDTO>> GetResignationInterviewByEmployeeID(long EmployeeId, string AccessKey, string RemoteIpAddress);
         Task<BaseResponse> GetResignationInterviewDetails(long InterviewID, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<IEnumerable<ResignationInterviewDTO>>> GetAllResignationInterviewsByCompany(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress);
-
-        //Task<BaseResponse> GetInterviewScaleDetails(RequesterInfo requester);
+        Task<BaseResponse> GetInterviewScaleDetails(string AccessKey, string RemoteIpAddress);
         //Task<BaseResponse> ApprovePendingResignationInterview(ApproveResignationInterviewDTO request, RequesterInfo requester);
         //Task<BaseResponse> DisapprovePendingResignationInterview(DisapproveResignationInterviewDTO request, RequesterInfo requester);
     }

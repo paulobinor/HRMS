@@ -29,16 +29,16 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
         [Authorize]
         public async Task<IActionResult> SubmitResignationInterview(ResignationInterviewVM request)
         {
+            
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IEnumerable<Claim> claim = identity.Claims;
+                var accessToken = Request.Headers["Authorization"];
+                accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claim = identity.Claims;
-            var accessToken = Request.Headers["Authorization"];
-            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
-
-            return Ok(await _resignationInterviewService.SubmitResignationInterview(request, accessToken, RemoteIpAddress));
-
+                return Ok(await _resignationInterviewService.SubmitResignationInterview(request, accessToken, RemoteIpAddress));
+          
         }
 
 
@@ -55,7 +55,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
             return Ok(await _resignationInterviewService.GetResignationInterviewById(ResignationInterviewId, accessToken, RemoteIpAddress));
-
+        
         }
 
         [HttpGet]
@@ -71,8 +71,9 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
             return Ok(await _resignationInterviewService.GetResignationInterviewDetails(InterviewID, accessToken, RemoteIpAddress));
+            
+        } 
 
-        }
         [HttpGet]
         [Route("GetAllResignationInterviewsByCompany/{CompanyID}")]
         [Authorize]
@@ -85,8 +86,8 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-            return Ok(await _resignationInterviewService.GetAllResignationInterviewsByCompany(filter, CompanyID, accessToken, RemoteIpAddress));
-
+            return Ok(await _resignationInterviewService.GetAllResignationInterviewsByCompany(filter,CompanyID, accessToken, RemoteIpAddress));
+            
         }
 
         [HttpGet]
@@ -107,20 +108,22 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetInterviewScaleDetails()
-        //{
+        [HttpGet]
+        [Route("GetInterviewScaleDetails")]
+        [Authorize]
+        public async Task<IActionResult> GetInterviewScaleDetails()
+        {
 
-        //    var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-        //    var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
-        //    var identity = HttpContext.User.Identity as ClaimsIdentity;
-        //    IEnumerable<Claim> claim = identity.Claims;
-        //    var accessToken = Request.Headers["Authorization"];
-        //    accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-        //    return Ok(await _resignationInterviewService.GetInterviewScaleDetails(accessToken, RemoteIpAddress));
+            return Ok(await _resignationInterviewService.GetInterviewScaleDetails(accessToken, RemoteIpAddress));
 
-        //}
+        }
 
         //[HttpPost]
         //[Route("ApprovePendingResignationInterview")]
