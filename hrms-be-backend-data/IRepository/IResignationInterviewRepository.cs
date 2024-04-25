@@ -18,7 +18,7 @@ namespace hrms_be_backend_data.IRepository
         Task<IEnumerable<ResignationInterviewDTO>> GetAllResignationInterviewsByCompany(long companyID, int PageNumber, int RowsOfPage, string SearchVal);
 
 
-        //Task<List<InterviewScaleDetailsDTO>> GetInterviewScaleDetails();
+        Task<IEnumerable<InterviewScaleDetailsDTO>> GetInterviewScaleDetails();
         //Task<dynamic> ApprovePendingResignationInterview(long userID, long InterviewID, bool isApproved);
         //Task<dynamic> DisapprovePendingResignationInterview(long userID, long InterviewID, bool isDisapproved, string DisapprovedComment);
     }

@@ -143,19 +143,19 @@ namespace hrms_be_backend_data.Repository
         }
 
 
-        //public async Task<List<InterviewScaleDetailsDTO>> GetInterviewScaleDetails()
-        //{
-        //    try
-        //    {
-        //        var resp = await _repository.GetAll<InterviewScaleDetailsDTO>("Sp_get_resignation_interview_rate_scale_details", null, CommandType.Text);
-        //        return resp;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Error Getting ResignationInterview", ex);
-        //        throw;
-        //    }
-        //}
+        public async Task<IEnumerable<InterviewScaleDetailsDTO>> GetInterviewScaleDetails()
+        {
+            try
+            {
+                var resp = await _dapper.GetAll<InterviewScaleDetailsDTO>("Sp_get_resignation_interview_rate_scale_details", null, CommandType.Text);
+                return resp;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error Getting ResignationInterview", ex);
+                throw;
+            }
+        }
 
         //public async Task<dynamic> ApprovePendingResignationInterview(long userID, long ID, bool isApproved)
         //{
