@@ -60,6 +60,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
 
         }
+
         [HttpGet]
         [Route("GetResignationClearanceByEmployeeId/{EmployeeId}")]
         [Authorize]
@@ -78,7 +79,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
 
         [HttpGet]
-        [Route("GetResignationByCompanyID/{companyId}")]
+        [Route("GetResignationClearanceByCompanyID/{companyId}")]
         [Authorize]
         public async Task<IActionResult> GetResignationClearanceByCompanyID(long companyId, [FromQuery] PaginationFilter filter)
         {
@@ -111,6 +112,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             return Ok(await _resignationClearanceService.GetPendingResignationClearanceByEmployeeID(EmployeeID, accessToken, RemoteIpAddress));
 
         }
+
         [HttpGet]
         [Route("GetPendingResignationClearanceByCompanyID/{CompanyID}")]
         [Authorize]
