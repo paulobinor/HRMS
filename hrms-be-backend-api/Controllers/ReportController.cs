@@ -30,6 +30,8 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _payrollService.GetPayrollRunnedReport(PayrollRunnedId, accessToken, claim, RemoteIpAddress, RemotePort));
         }
+
+        [HttpGet("DownloadPayrollRunnedReport")]
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> DownloadPayrollRunnedReport(long PayRollRunnedId)
