@@ -23,23 +23,27 @@ namespace Com.XpressPayments.Common.ViewModels
         public DateTime DateCreated { get; set; }
         public long CreatedByUserId { get; set; }
         public long UnitHeadEmployeeID { get; set; }
+        public string UnitHeadEmployeeName { get; set; }
         public bool IsUnitHeadApproved { get; set; }
         public DateTime UnitHeadDateApproved { get; set; }
         public bool IsUnitHeadDisapproved { get; set; }
         public DateTime UnitHeadDateDisapproved { get; set; }
         public string UnitHeadDisapprovedComment { get; set; }
         public long HodEmployeeID { get; set; }
+        public string HodEmployeeName { get; set; }
         public bool IsHodApproved { get; set; }
         public DateTime HodDateApproved { get; set; }
         public bool IsHodDisapproved { get; set; }
         public string HodDisapprovedComment { get; set; }
         public DateTime HodDateDisapproved { get; set; }
         public long HrEmployeeID { get; set; }
+        public string HrEmployeeName { get; set; }
         public bool IsHrApproved { get; set; }    
         public DateTime HrDateApproved { get; set; }
         public bool IsHrDisapproved { get; set; }
         public string HrDisapprovedComment { get; set; }
         public DateTime HrDateDisapproved { get; set; }
+
 
     }
    
