@@ -274,7 +274,7 @@ namespace hrms_be_backend_business.Logic
 
                 //update action performed into audit log here
 
-                var LeaveType = await _LeaveTypeRepository.GetAllLeaveType();
+                var LeaveType = await _LeaveTypeRepository.GetAllActiveLeaveType();
 
                 if (LeaveType.Any())
                 {

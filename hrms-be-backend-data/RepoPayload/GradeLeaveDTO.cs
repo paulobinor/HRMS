@@ -59,6 +59,7 @@
         public long NumberOfVacationSplit { get; set; }
         public long CompanyID { get; set; }
         public long UserId { get; set; }
+        public int MaximumNumberOfLeaveDays { get; set; }
     }
 
     public class DeleteGradeLeaveDTO

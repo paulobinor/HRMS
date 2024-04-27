@@ -67,17 +67,19 @@
         public static string Sp_GetLeaveApprovalByEmployeeId { get; set; } = "Sp_GetLeaveApprovalByEmployeeId";
         public static string Sp_UpdateLeaveRequestInfoStatus { get; set; } = "Sp_UpdateLeaveRequestInfoStatus";
         public static string Sp_GetLeaveApprovalLineItems { get; set; } = "Sp_GetLeaveApprovalLineItemS";
-        public static string Sp_UpdateLeaveRequestLineItemApproval { get; internal set; } = "Sp_UpdateLeaveRequestLineItemApproval";
+        public static string Sp_UpdateLeaveRequestLineItemApproval { get; set; } = "Sp_UpdateLeaveRequestLineItemApproval";
         public static string Sp_GetLeaveType { get; set; } = "sp_GetLeaveType";
         public static string Sp_GetLeaveTypeById { get; set; } = "Sp_GetLeaveTypeById";
         public static string Sp_GetLeaveRequestByCompanyId { get; set; } = "Sp_GetLeaveRequestByCompanyId";
         public static string Sp_GetLeaveTypeByName { get; set; } = "Sp_GetLeaveTypeByName";
         public static string Sp_CreateLeaveType { get;  set; } = "Sp_CreateLeaveType";
         public static string Sp_GetGradeLeaveById { get; set; } = "Sp_GetGradeLeaveById";
-        public static string Sp_UpdateLeaveTypeById { get; internal set; } = "Sp_UpdateLeaveTypeById";
-        public static string Sp_DeleteLeaveTypeById { get; internal set; } = "Sp_DeleteLeaveTypeById";
-        public static string Sp_UpdateGradeLeave { get; internal set; } = "Sp_UpdateGradeLeave";
-        public static string Sp_DeleteGradeLeave { get; internal set; } = "Sp_DeleteGradeLeave";
+        public static string Sp_UpdateLeaveTypeById { get; set; } = "Sp_UpdateLeaveTypeById";
+        public static string Sp_DeleteLeaveTypeById { get; set; } = "Sp_DeleteLeaveTypeById";
+        public static string Sp_UpdateGradeLeave { get; set; } = "Sp_UpdateGradeLeave";
+        public static string Sp_DeleteGradeLeave { get; set; } = "Sp_DeleteGradeLeave";
+        public static string Sp_GetActiveLeaveTypes { get; set; } = "Sp_GetActiveLeaveTypes";
+        public static string Sp_GetAllActiveGradeLeave { get; set; } = "Sp_GetAllActiveGradeLeave";
 
         //System Default
         public static int DefaultDeptId = 1;

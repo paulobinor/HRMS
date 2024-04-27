@@ -87,7 +87,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         }
 
         [HttpPost("DeleteLeaveType")]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> DeleteLeaveType([FromBody] DeleteLeaveTypeDTO deleteDto)
         {
             var response = new BaseResponse();

@@ -66,9 +66,10 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@GradeID", update.GradeID);
                     param.Add("@NumbersOfDays", update.NumbersOfDays);
                     param.Add("@NumberOfVacationSplit", update.NumberOfVacationSplit);
+                    param.Add("@MaximumNumberOfLeaveDays", update.MaximumNumberOfLeaveDays);
                     param.Add("@LastUpdatedByUserId", update.UserId);
 
-                    var response = await _dapper.QueryFirstAsync<GradeLeaveDTO>(ApplicationConstant.Sp_UpdateGradeLeave, param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapper.QueryFirstOrDefaultAsync<GradeLeaveDTO>(ApplicationConstant.Sp_UpdateGradeLeave, param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }
@@ -93,7 +94,7 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@DeletedByUserId", delete.UserID);
                     param.Add("@DeletedComment", delete.Reasons_For_Delete);
 
-                    var response = await _dapper.QueryFirstAsync<GradeLeaveDTO>(ApplicationConstant.Sp_DeleteGradeLeave, param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapper.QueryFirstOrDefaultAsync<GradeLeaveDTO>(ApplicationConstant.Sp_DeleteGradeLeave, param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }
@@ -113,9 +114,9 @@ namespace hrms_be_backend_data.Repository
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", GradeLeaveEnum.GETALLACTIVE);
+                    //param.Add("@Status", GradeLeaveEnum.GETALLACTIVE);
 
-                    var LeaveTypeDetails = await _dapper.QueryAsync<GradeLeaveDTO>(ApplicationConstant.Sp_GradeLeave, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveTypeDetails = await _dapper.QueryAsync<GradeLeaveDTO>(ApplicationConstant.Sp_GetAllActiveGradeLeave, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveTypeDetails;
                 }

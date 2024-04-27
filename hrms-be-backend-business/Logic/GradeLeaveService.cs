@@ -290,7 +290,7 @@ namespace hrms_be_backend_business.Logic
 
                 //update action performed into audit log here
 
-                var LeaveType = await _GradeLeaveRepo.GetAllGradeLeave();
+                var LeaveType = await _GradeLeaveRepo.GetAllActiveGradeLeave();
 
                 if (LeaveType.Any())
                 {

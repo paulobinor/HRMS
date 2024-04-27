@@ -118,14 +118,20 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             var response = new BaseResponse();
             try
             {
-                var requester = new RequesterInfo
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                _logger.LogInformation($"Received DeleteGradeLeave request. Payload: {JsonConvert.SerializeObject(deleteDto)} from remote address: {RemoteIpAddress}");
+                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+
+                if (string.IsNullOrEmpty(accessToken))
                 {
-                    Username = this.User.Claims.ToList()[2].Value,
-                    UserId = Convert.ToInt64(this.User.Claims.ToList()[3].Value),
-                    RoleId = Convert.ToInt64(this.User.Claims.ToList()[4].Value),
-                    IpAddress =  Request.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    Port = Request.HttpContext.Connection.RemotePort.ToString()
-                };
+                    return BadRequest(new { responseMessage = $"Missing authorization header value", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                }
+                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                }
+                deleteDto.UserID = accessUser.data.UserId;
 
                 return Ok(await _GradeLeaveService.DeleteGradeLeave(deleteDto));
             }

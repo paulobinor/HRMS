@@ -65,9 +65,9 @@ namespace hrms_be_backend_data.Repository
                   //  param.Add("@GenderUpd", update.Gender.Trim());
                     //param.Add("@IsPaidLeaveUpd", update.IsPaidLeave);
                     param.Add("@CompanyId", update.CompanyID);
-                    param.Add("@@LastUpdatedUserId", update.LastUpdatedUserId);
+                    param.Add("@LastUpdatedUserId", update.LastUpdatedUserId);
 
-                    var response = await _dapper.QueryFirstAsync<LeaveTypeDTO>(ApplicationConstant.Sp_UpdateLeaveTypeById, param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapper.QueryFirstOrDefaultAsync<LeaveTypeDTO>(ApplicationConstant.Sp_UpdateLeaveTypeById, param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }
@@ -92,7 +92,7 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@DeletedByUserId", delete.DeletedByUserId);
                     param.Add("@Reasons_For_Delete", delete.Reasons_For_Delete);
 
-                    var response = await _dapper.QueryFirstAsync<LeaveTypeDTO>(ApplicationConstant.Sp_DeleteLeaveTypeById, param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapper.QueryFirstOrDefaultAsync<LeaveTypeDTO>(ApplicationConstant.Sp_DeleteLeaveTypeById, param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }
@@ -112,9 +112,9 @@ namespace hrms_be_backend_data.Repository
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", LeaveTypeEnum.GETALLACTIVE);
+                   // param.Add("@Status", LeaveTypeEnum.GETALLACTIVE);
 
-                    var LeaveTypeDetails = await _dapper.QueryAsync<LeaveTypeDTO>(ApplicationConstant.Sp_LeaveType, param: param, commandType: CommandType.StoredProcedure);
+                    var LeaveTypeDetails = await _dapper.QueryAsync<LeaveTypeDTO>(ApplicationConstant.Sp_GetActiveLeaveTypes, param: param, commandType: CommandType.StoredProcedure);
 
                     return LeaveTypeDetails;
                 }
