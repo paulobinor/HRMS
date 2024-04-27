@@ -302,12 +302,12 @@ namespace hrms_be_backend_business.Logic
                 return default;
             }
         }
-        public async Task<LeaveRequestLineItem> GetLeaveRequestLineItem(long leaveRequestLineItemId)
+        public async Task<BaseResponse> GetLeaveRequestLineItem(long leaveRequestLineItemId)
         {
             try
             {
                 var leaveRequestLineItem = await _leaveRequestRepository.GetLeaveRequestLineItem(leaveRequestLineItemId);
-                return leaveRequestLineItem;
+                return new BaseResponse { Data = leaveRequestLineItem, ResponseCode = "00", ResponseMessage = "LeaveRequestLineItem fetched successfully" };
             }
             catch (Exception)
             {

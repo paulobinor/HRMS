@@ -2,6 +2,7 @@
 using hrms_be_backend_common.Communication;
 using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.Enums;
+using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -149,7 +150,7 @@ namespace hrms_be_backend_api.Controllers
 
 
         [HttpPost("UpdateEmployeeBasis")]
-        [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
+        [ProducesResponseType(typeof(ExecutedResult<EmployeeBasisReq>), 200)]
         public async Task<IActionResult> UpdateEmployeeBasis(UpdateEmployeeBasisDto payload)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();

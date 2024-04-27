@@ -173,8 +173,8 @@ namespace hrms_be_backend_business.Logic
                     IsModifield = false,
                     StaffId = payload.StaffId,
                 };
-                string repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
-                if (!repoResponse.Contains("Success"))
+                var repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
+                if (repoResponse == null)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
@@ -1207,7 +1207,7 @@ namespace hrms_be_backend_business.Logic
         }
 
 
-        public async Task<ExecutedResult<string>> UpdateEmployeeBasis(UpdateEmployeeBasisDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        public async Task<ExecutedResult<EmployeeBasisReq>> UpdateEmployeeBasis(UpdateEmployeeBasisDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
 
             try
@@ -1215,13 +1215,13 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+                    return new ExecutedResult<EmployeeBasisReq>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Update_Onboarding_Basis, accessUser.data.UserId);
                 if (!checkPrivilege.Contains("Success"))
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+                    return new ExecutedResult<EmployeeBasisReq>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
 
                 }
                 bool isModelStateValidate = true;
@@ -1280,7 +1280,7 @@ namespace hrms_be_backend_business.Logic
 
                 if (!isModelStateValidate)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+                    return new ExecutedResult<EmployeeBasisReq>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
                 }
                 var repoPayload = new EmployeeBasisReq
@@ -1306,10 +1306,10 @@ namespace hrms_be_backend_business.Logic
                     IsModifield = true,
                     StaffId = payload.StaffId,
                 };
-                string repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
-                if (!repoResponse.Contains("Success"))
+                var repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
+                if (repoResponse == null)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                    return new ExecutedResult<EmployeeBasisReq>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
 
                 var auditLog = new AuditLogDto
@@ -1323,12 +1323,12 @@ namespace hrms_be_backend_business.Logic
                 };
                 await _audit.LogActivity(auditLog);
 
-                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                return new ExecutedResult<EmployeeBasisReq>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = repoResponse };
             }
             catch (Exception ex)
             {
                 _logger.LogError($"EmployeeService (UpdateEmployeeBasis)=====>{ex}");
-                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+                return new ExecutedResult<EmployeeBasisReq>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
         public async Task<ExecutedResult<string>> ApproveEmployee(long EmployeeId, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)

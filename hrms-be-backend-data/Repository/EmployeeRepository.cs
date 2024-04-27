@@ -3,8 +3,10 @@ using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System.ComponentModel.Design;
 using System.Data;
+using System.Text.Json.Nodes;
 
 namespace hrms_be_backend_data.Repository
 {
@@ -19,7 +21,7 @@ namespace hrms_be_backend_data.Repository
             _logger = logger;
             _dapper = dapper;
         }
-        public async Task<string> ProcessEmployeeBasis(EmployeeBasisReq payload)
+        public async Task<EmployeeBasisReq> ProcessEmployeeBasis(EmployeeBasisReq payload)
         {
             try
             {
@@ -45,7 +47,9 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@IsModifield", payload.IsModifield);
                 param.Add("@GradeId", payload.GradeId);
 
-                return await _dapper.Get<string>("sp_process_employee_basis", param, commandType: CommandType.StoredProcedure);
+                var resp = await _dapper.Get<EmployeeBasisReq>("sp_process_employee_basis", param, commandType: CommandType.StoredProcedure);
+                _logger.LogInformation($"Response: {JsonConvert.SerializeObject(resp)}");
+                return resp;
             }
             catch (Exception ex)
             {

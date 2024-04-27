@@ -129,8 +129,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
                 }
-
-                return Ok(await _leaveRequestService.GetEmpLeaveInfo(EmployeeId, CompanyId, LeaveStatus));
+                var res = await _leaveRequestService.GetEmpLeaveInfo(EmployeeId, CompanyId, LeaveStatus);
+                return Ok(new BaseResponse { Data = res, ResponseCode = "00", ResponseMessage = "Success"});
             }
             catch (Exception ex)
             {

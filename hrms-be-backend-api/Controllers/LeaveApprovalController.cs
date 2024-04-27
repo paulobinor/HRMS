@@ -39,8 +39,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
             }
-            var res = await _leaveRequestService.GetLeaveApprovalInfo(leaveApprovalId, LeaveRequestLineItemId); 
-            return Ok(res);
+            var res = await _leaveRequestService.GetLeaveApprovalInfo(leaveApprovalId, LeaveRequestLineItemId);
+            return Ok(new BaseResponse { Data = res, ResponseCode = "00", ResponseMessage = "Success" });
         }
 
         [HttpPost("Approve")]

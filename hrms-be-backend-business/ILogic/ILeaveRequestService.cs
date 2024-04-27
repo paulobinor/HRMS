@@ -12,7 +12,7 @@ namespace hrms_be_backend_business.ILogic
        // Task<BaseResponse> RescheduleLeaveRequest(RescheduleLeaveRequest updateDto, RequesterInfo requester);
         Task<BaseResponse> RescheduleLeaveRequest(LeaveRequestLineItem leaveRequestLineItem);
         Task<BaseResponse> UpdateLeaveApproveLineItem(LeaveApprovalLineItem leaveApprovalLineItem);
-        Task<LeaveRequestLineItem> GetLeaveRequestLineItem(long leaveRequestLineItemId);
+        Task<BaseResponse> GetLeaveRequestLineItem(long leaveRequestLineItemId);
         Task<LeaveApprovalInfo> GetLeaveApprovalInfo(long leaveApprovalId, long leaveReqestLineItemId);
         Task<EmpLeaveRequestInfo> GetEmpLeaveInfo(long employeeId, long companyId, string LeaveStatus = "Active");
         Task<LeaveApprovalInfo> UpdateLeaveApprovalInfo(LeaveApprovalInfo leaveApproval);
