@@ -142,7 +142,7 @@ namespace hrms_be_backend_data.Repository
             try
             {
                 var param = new DynamicParameters();
-                param.Add("Company", companyID);
+                param.Add("CompanyID", companyID);
 
                 var response = await _dapper.GetAll<ResignationClearanceDTO>("Sp_GetPendingResignationClearanceByCompanyID", param, commandType: CommandType.StoredProcedure);
 
