@@ -24,7 +24,8 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             _resignationInterviewService = resignationInterviewService;
         }
 
-        [HttpPost("SubmitResignationInterview")]
+        [HttpPost]
+        [Route("SubmitResignationInterview")]
         [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
         [Authorize]
         public async Task<IActionResult> SubmitResignationInterview(ResignationInterviewVM request)

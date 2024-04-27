@@ -62,6 +62,16 @@ namespace hrms_be_backend_business.Logic
                 //    errorMessages = errorMessages + "|Invalid Last Day of work";
                 //if (string.IsNullOrWhiteSpace(payload.ReasonForResignation))
                 //    errorMessages = errorMessages + "|Resignation reason is required";
+                if (payload.EmployeeId <= 0)
+                {
+                    errorMessages = errorMessages + "|Invalid employeeID";
+
+                }
+                if (payload.CompanyId <= 0)
+                {
+                    errorMessages = errorMessages + "|Invalid CompanyId";
+
+                }
                 if (string.IsNullOrWhiteSpace(payload.WhatDidYouLikeMostAboutTheCompanyAndYourJob))
                     errorMessages = errorMessages + "|What did you like most about the company and your job? Must be filled";
                 if (string.IsNullOrWhiteSpace(payload.WhatDidYouLeastLikeAboutTheCompanyAndYourJob))

@@ -78,7 +78,7 @@ namespace hrms_be_backend_api.Controllers
         [HttpGet]
         [Route("GetExitClearanceSetupByCompanyID/{companyId}")]
         [Authorize]
-        public async Task<IActionResult> GetExitClearanceSetupByCompanyID(long companyId, [FromQuery] PaginationFilter filter)
+        public async Task<IActionResult> GetExitClearanceSetupByCompanyID(long companyId)
         {
 
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
