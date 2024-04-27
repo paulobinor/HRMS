@@ -42,7 +42,7 @@ namespace hrms_be_backend_api.Controllers
         [HttpPost]
         [Route("UpdateExitClearanceSetup")]
         [Authorize]
-        public async Task<IActionResult> UpdateExitClearanceSetup([FromBody] ExitClearanceSetupDTO updateDTO)
+        public async Task<IActionResult> UpdateExitClearanceSetup([FromBody] UpdateExitClearanceSetupDTO updateDTO)
         {
 
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -96,7 +96,7 @@ namespace hrms_be_backend_api.Controllers
         [HttpPost]
         [Route("DeleteExitClearanceSetup")]
         [Authorize]
-        public async Task<IActionResult> DeleteExitClearanceSetup([FromBody] ExitClearanceSetupDTO request)
+        public async Task<IActionResult> DeleteExitClearanceSetup(long exitClearanceSetupID)
         {
 
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -106,7 +106,7 @@ namespace hrms_be_backend_api.Controllers
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-            return Ok(await _exitClearanceSetupService.DeleteExitClearanceSetup(request, accessToken, RemoteIpAddress));
+            return Ok(await _exitClearanceSetupService.DeleteExitClearanceSetup(exitClearanceSetupID, accessToken, RemoteIpAddress));
 
         }
 

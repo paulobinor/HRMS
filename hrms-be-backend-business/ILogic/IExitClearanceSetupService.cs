@@ -14,8 +14,8 @@ namespace hrms_be_backend_business.ILogic
     public interface IExitClearanceSetupService
     {
         Task<ExecutedResult<string>> CreateExitClearanceSetup(CreateExitClearanceSetupVm request, string AccessKey, string RemoteIpAddress);
-        Task<ExecutedResult<string>> UpdateExitClearanceSetup(ExitClearanceSetupDTO updateDTO, string AccessKey, string RemoteIpAddress);
-        Task<ExecutedResult<string>> DeleteExitClearanceSetup(ExitClearanceSetupDTO request, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<string>> UpdateExitClearanceSetup(UpdateExitClearanceSetupDTO updateDTO, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<string>> DeleteExitClearanceSetup(long exitClearanceSetupID, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<ExitClearanceSetupDTO>> GetExitClearanceSetupByID(long exitClearanceSetupID, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<IEnumerable<ExitClearanceSetupDTO>>> GetExitClearanceSetupByCompanyID(long companyID, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<ExitClearanceSetupDTO>> GetExitClearanceSetupByHodEmployeeID(long HodEmployeeID, string AccessKey, string RemoteIpAddress);
