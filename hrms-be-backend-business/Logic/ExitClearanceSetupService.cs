@@ -39,11 +39,11 @@ namespace hrms_be_backend_business.Logic
         }
         public async Task<ExecutedResult<string>> CreateExitClearanceSetup(CreateExitClearanceSetupVm request, string AccessKey, string RemoteIpAddress)
         {
-            //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-            //if (accessUser.data == null)
-            //{
-            //    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
-            //}
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+            }
             bool isModelStateValidate = true;
             string validationMessage = "";
 
@@ -77,8 +77,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     CompanyID = request.CompanyID,
                     DateCreated = DateTime.Now,
-                    //CreatedByUserId = accessUser.data.EmployeeId,
-                    CreatedByUserId = 256,
+                    CreatedByUserId = accessUser.data.EmployeeId,
                     IsFinalApproval = request.IsFinalApproval,
                     DepartmentID = request.DepartmentID,
                 };
