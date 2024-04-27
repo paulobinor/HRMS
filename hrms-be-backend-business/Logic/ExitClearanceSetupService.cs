@@ -39,14 +39,27 @@ namespace hrms_be_backend_business.Logic
         }
         public async Task<ExecutedResult<string>> CreateExitClearanceSetup(CreateExitClearanceSetupVm request, string AccessKey, string RemoteIpAddress)
         {
-            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-            if (accessUser.data == null)
-            {
-                return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
-            }
+            //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+            //}
             bool isModelStateValidate = true;
             string validationMessage = "";
 
+            var alreadyCreated = await _exitClearanceSetupRepository.GetExitClearanceSetupByDepartmentID(request.DepartmentID);
+            if (alreadyCreated != null)
+            {
+                return new ExecutedResult<string>() { responseMessage = "department setup already exist", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+            }
+            var finalApprover = await _exitClearanceSetupRepository.GetDepartmentThatIsFinalApprroval(request.CompanyID);
+
+            if (finalApprover != null)
+            {
+                return new ExecutedResult<string>() { responseMessage = "final approval already exist", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+            }
             try
             {
 
@@ -64,7 +77,8 @@ namespace hrms_be_backend_business.Logic
                 {
                     CompanyID = request.CompanyID,
                     DateCreated = DateTime.Now,
-                    CreatedByUserId = accessUser.data.EmployeeId,
+                    //CreatedByUserId = accessUser.data.EmployeeId,
+                    CreatedByUserId = 256,
                     IsFinalApproval = request.IsFinalApproval,
                     DepartmentID = request.DepartmentID,
                 };
@@ -85,7 +99,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<ExecutedResult<string>> DeleteExitClearanceSetup(ExitClearanceSetupDTO request, string AccessKey, string RemoteIpAddress)
+        public async Task<ExecutedResult<string>> DeleteExitClearanceSetup(long exitClearanceSetupID, string AccessKey, string RemoteIpAddress)
         {
             var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
             if (accessUser.data == null)
@@ -96,14 +110,7 @@ namespace hrms_be_backend_business.Logic
             try
             {
 
-                var setup = await _exitClearanceSetupRepository.GetExitClearanceSetupByID(request.ExitClearanceSetupID);
-                if (setup == null)
-                {
-                    return new ExecutedResult<string>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
-
-                }
-
-                var repoResponse = await _exitClearanceSetupRepository.DeleteExitClearanceSetup(request.ExitClearanceSetupID, accessUser.data.OfficialMail);
+                var repoResponse = await _exitClearanceSetupRepository.DeleteExitClearanceSetup(exitClearanceSetupID, accessUser.data.UserId);
 
                 if (!repoResponse.Contains("Success"))
                 {
@@ -194,7 +201,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<ExecutedResult<string>> UpdateExitClearanceSetup(ExitClearanceSetupDTO updateDTO, string AccessKey, string RemoteIpAddress)
+        public async Task<ExecutedResult<string>> UpdateExitClearanceSetup(UpdateExitClearanceSetupDTO updateDTO, string AccessKey, string RemoteIpAddress)
         {
             try
             {

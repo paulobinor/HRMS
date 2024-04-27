@@ -48,16 +48,17 @@ namespace hrms_be_backend_data.Repository
             }
         } 
         
-        public async Task<dynamic> UpdateExitClearanceSetup(ExitClearanceSetupDTO request)
+        public async Task<dynamic> UpdateExitClearanceSetup(UpdateExitClearanceSetupDTO request)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("ExitClearanceSetupID", request.ExitClearanceSetupID);
-                param.Add("DeletedByUserId", request.DeletedByUserId);
                 param.Add("IsFinalApproval", request.IsFinalApproval);
 
-                return await _dapper.Get<string>("Sp_update_exit_clearance_setup", param, commandType: CommandType.StoredProcedure);
+                var response =  await _dapper.Get<string>("Sp_update_exit_clearance_setup", param, commandType: CommandType.StoredProcedure);
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -67,7 +68,7 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<dynamic> DeleteExitClearanceSetup(long ExitClearanceSetupID, string deletedBy)
+        public async Task<dynamic> DeleteExitClearanceSetup(long ExitClearanceSetupID, long deletedBy)
         {
             try
             {
@@ -78,8 +79,9 @@ namespace hrms_be_backend_data.Repository
                 param.Add("DateDeleted", DateTime.Now);
 
 
-                return await _dapper.Get<string>("Sp_delete_exit_clearance_setup", param, commandType: CommandType.StoredProcedure);
-                
+                var response =  await _dapper.Get<string>("Sp_delete_exit_clearance_setup", param, commandType: CommandType.StoredProcedure);
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -120,6 +122,23 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 _logger.LogError($"Error Getting Resignation by ID - {HodEmployeeID}", ex);
+                throw;
+            }
+        } 
+        public async Task<ExitClearanceSetupDTO> GetExitClearanceSetupByDepartmentID(long departmentID)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("departmentID", departmentID);
+
+                return await _dapper.Get<ExitClearanceSetupDTO>("Sp_get_exit_clearance_setup_by_department_id", param, commandType: CommandType.StoredProcedure);
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error Getting Resignation by ID - {departmentID}", ex);
                 throw;
             }
         }
