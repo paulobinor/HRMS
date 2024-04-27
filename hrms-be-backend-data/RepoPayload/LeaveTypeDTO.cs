@@ -46,6 +46,6 @@
     {
         public long LeaveTypeId { get; set; }
         public string Reasons_For_Delete { get; set; }
-        public long DeletedByUserId { get; internal set; }
+        public long DeletedByUserId { get; set; }
     }
 }
