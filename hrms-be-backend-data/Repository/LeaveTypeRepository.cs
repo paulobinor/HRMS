@@ -58,17 +58,16 @@ namespace hrms_be_backend_data.Repository
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", LeaveTypeEnum.UPDATE);
-                    param.Add("@LeaveTypeIdUpd", update.LeaveTypeId);
-                    param.Add("@LeaveTypeNameUpd", update.LeaveTypeName);
-                    param.Add("@MaximumLeaveDurationDaysUpd", update.MaximumLeaveDurationDays);
-                    param.Add("@GenderUpd", update.Gender.Trim());
+                   // param.Add("@Status", LeaveTypeEnum.UPDATE);
+                    param.Add("@LeaveTypeId", update.LeaveTypeId);
+                    param.Add("@LeaveTypeName", update.LeaveTypeName);
+                  //  param.Add("@MaximumLeaveDurationDaysUpd", update.MaximumLeaveDurationDays);
+                  //  param.Add("@GenderUpd", update.Gender.Trim());
                     //param.Add("@IsPaidLeaveUpd", update.IsPaidLeave);
-                    param.Add("@CompanyIdUpd", update.CompanyID);
+                    param.Add("@CompanyId", update.CompanyID);
+                    param.Add("@@LastUpdatedUserId", update.LastUpdatedUserId);
 
-                    param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
-
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_LeaveType, param: param, commandType: CommandType.StoredProcedure);
+                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UpdateLeaveTypeById, param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }
@@ -88,12 +87,12 @@ namespace hrms_be_backend_data.Repository
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", LeaveTypeEnum.DELETE);
-                    param.Add("@LeaveTypeIdDelete", Convert.ToInt32(delete.LeaveTypeId));
-                    param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
-                    param.Add("@Reasons_For_Deleting", delete.Reasons_For_Delete == null ? "" : delete.Reasons_For_Delete.ToString().Trim());
+                  //  param.Add("@Status", LeaveTypeEnum.DELETE);
+                    param.Add("@LeaveTypeId", delete.LeaveTypeId);
+                    param.Add("@DeletedByUserId", delete.DeletedByUserId);
+                    param.Add("@Reasons_For_Delete", delete.Reasons_For_Delete);
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_LeaveType, param: param, commandType: CommandType.StoredProcedure);
+                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_DeleteLeaveTypeById, param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }

@@ -169,6 +169,7 @@ namespace hrms_be_backend_business.Logic
                     PersonalEmail = payload.PersonalEmail,
                     ResumptionDate = payload.ResumptionDate,
                     UnitId = payload.UnitId,
+                    GradeId = payload.GradeId,
                     IsModifield = false,
                     StaffId = payload.StaffId,
                 };
@@ -365,7 +366,7 @@ namespace hrms_be_backend_business.Logic
                             EmployeeId = payload.EmployeeId
                         };
                         var employeeIdentification = await _EmployeeRepository.ProcessEmployeeIdentification(employeeIdentificationDto);
-                    }                    
+                    }
                 }
                 var auditLog = new AuditLogDto
                 {
@@ -765,8 +766,8 @@ namespace hrms_be_backend_business.Logic
                 {
                     isModelStateValidate = false;
                     validationMessage += " || Account Number is required";
-                }                 
-              
+                }
+
                 if (!isModelStateValidate)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
@@ -821,12 +822,12 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
-               
-                string repoResponse = await _EmployeeRepository.CheckEmployeeStaffId(StaffId,accessUser.data.CompanyId);
+
+                string repoResponse = await _EmployeeRepository.CheckEmployeeStaffId(StaffId, accessUser.data.CompanyId);
                 if (!repoResponse.Contains("Success"))
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
-                }               
+                }
                 return new ExecutedResult<string>() { responseMessage = EnumHelper.GetEnumDescription(ResponseCode.Ok), responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
@@ -1178,7 +1179,7 @@ namespace hrms_be_backend_business.Logic
                         response.ResponseMessage = $"Upladed employee files contains duplicate StaffID - {outputArray[1]}";
 
                         return response;
-                       
+
                     }
 
                     _logger.LogError($"Exception Occured ==> {sqlEx.ToString()}");
@@ -1300,6 +1301,7 @@ namespace hrms_be_backend_business.Logic
                     PersonalEmail = payload.PersonalEmail,
                     ResumptionDate = payload.ResumptionDate,
                     UnitId = payload.UnitId,
+                    GradeId = payload.GradeId,
                     EmployeeId = payload.EmployeeId,
                     IsModifield = true,
                     StaffId = payload.StaffId,
@@ -1678,12 +1680,12 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                var repoResponse = await _EmployeeRepository.GetEmployeeById(EmployeeId,accessUser.data.CompanyId);
+                var repoResponse = await _EmployeeRepository.GetEmployeeById(EmployeeId, accessUser.data.CompanyId);
                 if (repoResponse == null)
                 {
                     return new ExecutedResult<EmployeeSindgleVm>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
                 }
-               
+
                 return new ExecutedResult<EmployeeSindgleVm>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = ((int)ResponseCode.Ok).ToString(), data = repoResponse };
             }
             catch (Exception ex)

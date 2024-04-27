@@ -21,6 +21,7 @@
         public long CreatedByUserId { get; set; }
         public DateTime DateCreated { get; set; }
         public bool IsModifield { get; set; }
+        public long GradeId { get; set; }
     }
     public class EmployeePersonalInfoReq
     {

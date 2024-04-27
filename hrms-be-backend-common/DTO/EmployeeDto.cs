@@ -9,7 +9,7 @@
         public DateTime DOB { get; set; }
         public string PersonalEmail { get; set; }
         public string OfficialEmail { get; set; }
-        public string PhoneNumber { get; set; } 
+        public string PhoneNumber { get; set; }
         public long GradeId { get; set; }
         public long EmploymentStatusId { get; set; }
         public long BranchId { get; set; }
@@ -44,6 +44,7 @@
         public DateTime ResumptionDate { get; set; }
         public long JobRoleId { get; set; }
         public long UnitId { get; set; }
+        public long GradeId { get; set; }
     }
     public class UpdateEmployeePersonalInfoDto
     {
@@ -94,10 +95,10 @@
     public class UpdateEmployeeProfBackgroundDto
     {
         public long EmployeeId { get; set; }
-        public List<EmployeeProfBackgroundDetailsDto> ProfBackgroundDetails { get; set; }      
+        public List<EmployeeProfBackgroundDetailsDto> ProfBackgroundDetails { get; set; }
     }
     public class EmployeeProfBackgroundDetailsDto
-    {      
+    {
         public string CompanyName { get; set; }
         public string PositionHead { get; set; }
         public DateTime StartDate { get; set; }
@@ -110,20 +111,20 @@
         public List<EmployeeEduBackgroundDto> EmployeeEduBackground { get; set; }
     }
     public class EmployeeEduBackgroundDto
-    {       
+    {
         public string InstitutionName { get; set; }
         public string CertificateName { get; set; }
         public string CertificateDoc { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }       
+        public DateTime EndDate { get; set; }
     }
     public class UpdateEmployeeReferenceDto
     {
         public long EmployeeId { get; set; }
-        public List<EmployeeReferenceDto> EmployeeReferences { get; set; }       
+        public List<EmployeeReferenceDto> EmployeeReferences { get; set; }
     }
     public class EmployeeReferenceDto
-    {       
+    {
         public string FullName { get; set; }
         public string ContactAddress { get; set; }
         public string Occupation { get; set; }

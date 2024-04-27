@@ -38,9 +38,7 @@
 
         public long LeaveTypeId { get; set; }
         public string LeaveTypeName { get; set; }
-        public long MaximumLeaveDurationDays { get; set; }
-        public string Gender { get; set; }
-        //public bool IsPaidLeave { get; set; } = false;
+        public long LastUpdatedUserId { get; set; }
         public long CompanyID { get; set; }
     }
 
@@ -48,5 +46,6 @@
     {
         public long LeaveTypeId { get; set; }
         public string Reasons_For_Delete { get; set; }
+        public long DeletedByUserId { get; internal set; }
     }
 }

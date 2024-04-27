@@ -74,6 +74,8 @@
         public static string Sp_GetLeaveTypeByName { get; set; } = "Sp_GetLeaveTypeByName";
         public static string Sp_CreateLeaveType { get;  set; } = "Sp_CreateLeaveType";
         public static string Sp_GetGradeLeaveById { get; set; } = "Sp_GetGradeLeaveById";
+        public static string Sp_UpdateLeaveTypeById { get; internal set; } = "Sp_UpdateLeaveTypeById";
+        public static string Sp_DeleteLeaveTypeById { get; internal set; } = "Sp_DeleteLeaveTypeById";
 
         //System Default
         public static int DefaultDeptId = 1;
