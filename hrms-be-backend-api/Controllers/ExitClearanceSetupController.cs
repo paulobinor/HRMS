@@ -12,7 +12,7 @@ namespace hrms_be_backend_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ExitClearanceSetupController : ControllerBase
     {
         private readonly ILogger<ExitClearanceSetupController> _logger;
@@ -59,7 +59,7 @@ namespace hrms_be_backend_api.Controllers
 
         [HttpGet]
         [Route("GetExitClearanceSetupByID/{exitClearanceSetupID}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetExitClearanceSetupByID(long exitClearanceSetupID)
         {
 
@@ -78,7 +78,7 @@ namespace hrms_be_backend_api.Controllers
         [HttpGet]
         [Route("GetExitClearanceSetupByCompanyID/{companyId}")]
         [Authorize]
-        public async Task<IActionResult> GetExitClearanceSetupByCompanyID(long companyId, [FromQuery] PaginationFilter filter)
+        public async Task<IActionResult> GetExitClearanceSetupByCompanyID(long companyId)
         {
 
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();

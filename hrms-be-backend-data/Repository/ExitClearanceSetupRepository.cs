@@ -96,9 +96,9 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
                 param.Add("ExitClearanceSetupID", ExitClearanceSetupID);
 
-                return await _dapper.Get<ExitClearanceSetupDTO>("Sp_get_exit_clearance_setup_by_id", param, commandType: CommandType.StoredProcedure);
+                var response =  await _dapper.Get<ExitClearanceSetupDTO>("Sp_get_exit_clearance_setup_by_id", param, commandType: CommandType.StoredProcedure);
 
-
+                return response;
             }
             catch (Exception ex)
             {
@@ -130,9 +130,6 @@ namespace hrms_be_backend_data.Repository
             {
                 var param = new DynamicParameters();
                 param.Add("CompanyID", companyID);
-                //param.Add("@PageNumber", PageNumber);
-                //param.Add("@RowsOfPage", RowsOfPage);
-                //param.Add("@SearchVal", SearchVal.ToLower());
 
                 var response = await _dapper.GetAll<ExitClearanceSetupDTO>("Sp_get_all_exit_clearance_setup", param, commandType: CommandType.StoredProcedure);
 

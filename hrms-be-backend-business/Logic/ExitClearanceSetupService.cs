@@ -162,12 +162,12 @@ namespace hrms_be_backend_business.Logic
 
         public async Task<ExecutedResult<ExitClearanceSetupDTO>> GetExitClearanceSetupByID(long exitClearanceSetupID, string AccessKey, string RemoteIpAddress)
         {
-            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-            if (accessUser.data == null)
-            {
-                return new ExecutedResult<ExitClearanceSetupDTO>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+            //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    return new ExecutedResult<ExitClearanceSetupDTO>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
-            }
+            //}
             try
             {
 

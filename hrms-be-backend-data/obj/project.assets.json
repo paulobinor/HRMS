@@ -1937,24 +1937,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ifeanyi.obinor\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\noble.nwabuike\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ifeanyi.obinor\\Downloads\\hrms-be-backend (2)\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj",
+      "projectUniqueName": "C:\\Users\\noble.nwabuike\\source\\repos\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj",
       "projectName": "hrms-be-backend-data",
-      "projectPath": "C:\\Users\\ifeanyi.obinor\\Downloads\\hrms-be-backend (2)\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj",
-      "packagesPath": "C:\\Users\\ifeanyi.obinor\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ifeanyi.obinor\\Downloads\\hrms-be-backend (2)\\hrms-be-backend\\hrms-be-backend-data\\obj\\",
+      "projectPath": "C:\\Users\\noble.nwabuike\\source\\repos\\hrms-be-backend\\hrms-be-backend-data\\hrms-be-backend-data.csproj",
+      "packagesPath": "C:\\Users\\noble.nwabuike\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\noble.nwabuike\\source\\repos\\hrms-be-backend\\hrms-be-backend-data\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\ifeanyi.obinor\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\noble.nwabuike\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1968,8 +1963,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\ifeanyi.obinor\\Downloads\\hrms-be-backend (2)\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {
-              "projectPath": "C:\\Users\\ifeanyi.obinor\\Downloads\\hrms-be-backend (2)\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj"
+            "C:\\Users\\noble.nwabuike\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj": {
+              "projectPath": "C:\\Users\\noble.nwabuike\\source\\repos\\hrms-be-backend\\hrms-be-backend-common\\hrms-be-backend-common.csproj"
             }
           }
         }
@@ -2045,30 +2040,8 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.200\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'System.Data.SqlClient' 4.8.5 has a known high severity vulnerability, https://github.com/advisories/GHSA-98g6-xh36-x2p7",
-      "libraryId": "System.Data.SqlClient",
-      "targetGraphs": [
-        "net7.0"
-      ]
-    },
-    {
-      "code": "NU1902",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'System.IdentityModel.Tokens.Jwt' 6.32.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-59j7-ghrg-fj52",
-      "libraryId": "System.IdentityModel.Tokens.Jwt",
-      "targetGraphs": [
-        "net7.0"
-      ]
-    }
-  ]
+  }
 }
