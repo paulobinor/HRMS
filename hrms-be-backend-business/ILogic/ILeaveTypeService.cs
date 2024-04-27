@@ -6,8 +6,8 @@ namespace hrms_be_backend_business.ILogic
     public interface ILeaveTypeService
     {
         Task<BaseResponse> CreateLeaveType(CreateLeaveTypeDTO creatDto);
-        Task<BaseResponse> UpdateLeaveType(UpdateLeaveTypeDTO updateDto, string email);
-        Task<BaseResponse> DeleteLeaveType(DeleteLeaveTypeDTO deleteDto, string email);
+        Task<BaseResponse> UpdateLeaveType(UpdateLeaveTypeDTO updateDto);
+        Task<BaseResponse> DeleteLeaveType(DeleteLeaveTypeDTO deleteDto);
         Task<BaseResponse> GetAllActiveLeaveType();
         Task<BaseResponse> GetAllLeaveType();
         Task<BaseResponse> GetLeaveTypeById(long LeaveTypeId);

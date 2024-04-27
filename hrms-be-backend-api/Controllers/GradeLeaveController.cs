@@ -98,8 +98,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 {
                     return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
                 }
-
-                return Ok(await _GradeLeaveService.UpdateGradeLeave(updateDto, new RequesterInfo() { Username = accessUser.data.OfficialMail}));
+                updateDto.UserId = accessUser.data.UserId;
+                return Ok(await _GradeLeaveService.UpdateGradeLeave(updateDto));
             }
             catch (Exception ex)
             {
@@ -127,7 +127,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     Port = Request.HttpContext.Connection.RemotePort.ToString()
                 };
 
-                return Ok(await _GradeLeaveService.DeleteGradeLeave(deleteDto, requester));
+                return Ok(await _GradeLeaveService.DeleteGradeLeave(deleteDto));
             }
             catch (Exception ex)
             {

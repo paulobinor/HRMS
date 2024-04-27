@@ -74,7 +74,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
                 }
                 updateDto.LastUpdatedUserId = accessUser.data.UserId;
-                return Ok(await _LeaveTypeService.UpdateLeaveType(updateDto, accessUser.data.OfficialMail));
+                return Ok(await _LeaveTypeService.UpdateLeaveType(updateDto));
             }
             catch (Exception ex)
             {
@@ -101,7 +101,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
                 }
                 deleteDto.DeletedByUserId = accessUser.data.UserId;
-                return Ok(await _LeaveTypeService.DeleteLeaveType(deleteDto, accessUser.data.OfficialMail));
+                return Ok(await _LeaveTypeService.DeleteLeaveType(deleteDto));
             }
             catch (Exception ex)
             {

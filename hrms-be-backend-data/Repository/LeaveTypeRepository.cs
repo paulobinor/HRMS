@@ -51,7 +51,7 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<dynamic> UpdateLeaveType(UpdateLeaveTypeDTO update, string updatedbyUserEmail)
+        public async Task<LeaveTypeDTO> UpdateLeaveType(UpdateLeaveTypeDTO update)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@CompanyId", update.CompanyID);
                     param.Add("@@LastUpdatedUserId", update.LastUpdatedUserId);
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_UpdateLeaveTypeById, param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapper.QueryFirstAsync<LeaveTypeDTO>(ApplicationConstant.Sp_UpdateLeaveTypeById, param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }
@@ -80,7 +80,7 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<dynamic> DeleteLeaveType(DeleteLeaveTypeDTO delete, string deletedbyUserEmail)
+        public async Task<LeaveTypeDTO> DeleteLeaveType(DeleteLeaveTypeDTO delete)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@DeletedByUserId", delete.DeletedByUserId);
                     param.Add("@Reasons_For_Delete", delete.Reasons_For_Delete);
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_DeleteLeaveTypeById, param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapper.QueryFirstAsync<LeaveTypeDTO>(ApplicationConstant.Sp_DeleteLeaveTypeById, param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }

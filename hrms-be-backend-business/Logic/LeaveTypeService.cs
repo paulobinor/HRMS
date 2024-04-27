@@ -127,7 +127,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> UpdateLeaveType(UpdateLeaveTypeDTO updateDto, string email)
+        public async Task<BaseResponse> UpdateLeaveType(UpdateLeaveTypeDTO updateDto)
         {
             var response = new BaseResponse();
             try
@@ -151,8 +151,8 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-                dynamic resp = await _LeaveTypeRepository.UpdateLeaveType(updateDto, email);
-                if (resp > 0)
+                var resp = await _LeaveTypeRepository.UpdateLeaveType(updateDto);
+                if (resp != null)
                 {
                     //update action performed into audit log here
 
@@ -179,7 +179,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> DeleteLeaveType(DeleteLeaveTypeDTO deleteDto, string email)
+        public async Task<BaseResponse> DeleteLeaveType(DeleteLeaveTypeDTO deleteDto)
         {
             var response = new BaseResponse();
             try
@@ -204,8 +204,8 @@ namespace hrms_be_backend_business.Logic
                 var LeaveType = await _LeaveTypeRepository.GetLeaveTypeById(deleteDto.LeaveTypeId);
                 if (null != LeaveType)
                 {
-                    dynamic resp = await _LeaveTypeRepository.DeleteLeaveType(deleteDto, email);
-                    if (resp > 0)
+                    var resp = await _LeaveTypeRepository.DeleteLeaveType(deleteDto);
+                    if (resp != null)
                     {
                         //update action performed into audit log here
 

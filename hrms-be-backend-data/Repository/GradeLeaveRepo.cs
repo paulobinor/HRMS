@@ -52,23 +52,23 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<dynamic> UpdateGradeLeave(UpdateGradeLeaveDTO update, string updatedbyUserEmail)
+        public async Task<GradeLeaveDTO> UpdateGradeLeave(UpdateGradeLeaveDTO update)
         {
             try
             {
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", GradeLeaveEnum.UPDATE);
-                    param.Add("@GradeLeaveIDUpd", update.GradeLeaveID);
-                    param.Add("@LeaveTypeIdUpd", update.LeaveTypeId);
-                    param.Add("@GradeIDUpd", update.GradeID);
-                    param.Add("@NumbersOfDaysUpd", update.NumbersOfDays);
-                    param.Add("@NumberOfVacationSplitUpd", update.NumberOfVacationSplit);
-                    param.Add("@CompanyIdUpd", update.CompanyID);
-                    param.Add("@Updated_By_User_Email", updatedbyUserEmail.Trim());
+                   // param.Add("@Status", GradeLeaveEnum.UPDATE);
+                    param.Add("@GradeLeaveID", update.GradeLeaveID);
+                    param.Add("@LeaveTypeId", update.LeaveTypeId);
+                    param.Add("@CompanyID", update.CompanyID);
+                    param.Add("@GradeID", update.GradeID);
+                    param.Add("@NumbersOfDays", update.NumbersOfDays);
+                    param.Add("@NumberOfVacationSplit", update.NumberOfVacationSplit);
+                    param.Add("@LastUpdatedByUserId", update.UserId);
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_GradeLeave, param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapper.QueryFirstAsync<GradeLeaveDTO>(ApplicationConstant.Sp_UpdateGradeLeave, param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }
@@ -81,19 +81,19 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<dynamic> DeleteGradeLeave(DeleteGradeLeaveDTO delete, string deletedbyUserEmail)
+        public async Task<GradeLeaveDTO> DeleteGradeLeave(DeleteGradeLeaveDTO delete)
         {
             try
             {
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
-                    param.Add("@Status", GradeLeaveEnum.DELETE);
-                    param.Add("@GradeLeaveIDDelete", Convert.ToInt32(delete.GradeLeaveID));
-                    param.Add("@Deleted_By_User_Email", deletedbyUserEmail.Trim());
-                    param.Add("@Reasons_For_Deleting", delete.Reasons_For_Delete == null ? "" : delete.Reasons_For_Delete.ToString().Trim());
+                   // param.Add("@Status", GradeLeaveEnum.DELETE);
+                    param.Add("@GradeLeaveID", delete.GradeLeaveID);
+                    param.Add("@DeletedByUserId", delete.UserID);
+                    param.Add("@DeletedComment", delete.Reasons_For_Delete);
 
-                    dynamic response = await _dapper.ExecuteAsync(ApplicationConstant.Sp_GradeLeave, param: param, commandType: CommandType.StoredProcedure);
+                    var response = await _dapper.QueryFirstAsync<GradeLeaveDTO>(ApplicationConstant.Sp_DeleteGradeLeave, param: param, commandType: CommandType.StoredProcedure);
 
                     return response;
                 }

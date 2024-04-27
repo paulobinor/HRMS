@@ -101,12 +101,12 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> UpdateGradeLeave(UpdateGradeLeaveDTO updateDto, RequesterInfo requester)
+        public async Task<BaseResponse> UpdateGradeLeave(UpdateGradeLeaveDTO updateDto)
         {
             var response = new BaseResponse();
             try
             {
-                string requesterUserEmail = requester.Username;
+               // string requesterUserEmail = requester.Username;
                 //string requesterUserId = requester.UserId.ToString();
                 //string RoleId = requester.RoleId.ToString();
 
@@ -150,17 +150,17 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-                dynamic resp = await _GradeLeaveRepo.UpdateGradeLeave(updateDto, requesterUserEmail);
-                if (resp > 0)
+                var resp = await _GradeLeaveRepo.UpdateGradeLeave(updateDto);
+                if (resp != null)
                 {
                     //update action performed into audit log here
 
-                    var updatedLeaveType = await _GradeLeaveRepo.GetGradeLeaveById(updateDto.GradeLeaveID);
+                 //   var updatedLeaveType = await _GradeLeaveRepo.GetGradeLeaveById(updateDto.GradeLeaveID);
 
-                    _logger.LogInformation("LeaveType updated successfully.");
+                    _logger.LogInformation("GradeLeave updated successfully.");
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = "Grade Leave updated successfully.";
-                    response.Data = updatedLeaveType;
+                    response.Data = resp;
                     return response;
                 }
                 response.ResponseCode = ResponseCode.Exception.ToString();
@@ -178,37 +178,37 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> DeleteGradeLeave(DeleteGradeLeaveDTO deleteDto, RequesterInfo requester)
+        public async Task<BaseResponse> DeleteGradeLeave(DeleteGradeLeaveDTO deleteDto)
         {
             var response = new BaseResponse();
             try
             {
-                string requesterUserEmail = requester.Username;
-                string requesterUserId = requester.UserId.ToString();
-                string RoleId = requester.RoleId.ToString();
+                //string requesterUserEmail = requester.Username;
+                //string requesterUserId = requester.UserId.ToString();
+                //string RoleId = requester.RoleId.ToString();
 
-                var ipAddress = requester.IpAddress.ToString();
-                var port = requester.Port.ToString();
+                //var ipAddress = requester.IpAddress.ToString();
+                //var port = requester.Port.ToString();
 
-                var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
-                if (null == requesterInfo)
-                {
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Requester information cannot be found.";
-                    return response;
-                }
+                //var requesterInfo = await _accountRepository.FindUser(null,requesterUserEmail,null);
+                //if (null == requesterInfo)
+                //{
+                //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = "Requester information cannot be found.";
+                //    return response;
+                //}
 
-                if (Convert.ToInt32(RoleId) != 2)
-                {
-                    if (Convert.ToInt32(RoleId) != 4)
-                    {
-                        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
-                        return response;
+                //if (Convert.ToInt32(RoleId) != 2)
+                //{
+                //    if (Convert.ToInt32(RoleId) != 4)
+                //    {
+                //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                //        response.ResponseMessage = $"Your role is not authorized to carry out this action.";
+                //        return response;
 
-                    }
+                //    }
 
-                }
+                //}
 
                 //if (deleteDto.GradeLeaveID == 1)
                 //{
@@ -220,17 +220,17 @@ namespace hrms_be_backend_business.Logic
                 var LeaveType = await _GradeLeaveRepo.GetGradeLeaveById(deleteDto.GradeLeaveID);
                 if (null != LeaveType)
                 {
-                    dynamic resp = await _GradeLeaveRepo.DeleteGradeLeave(deleteDto, requesterUserEmail);
-                    if (resp > 0)
+                    var resp = await _GradeLeaveRepo.DeleteGradeLeave(deleteDto);
+                    if (resp != null)
                     {
                         //update action performed into audit log here
 
-                        var DeletedLeaveType = await _GradeLeaveRepo.GetGradeLeaveById(deleteDto.GradeLeaveID);
+                      //  var DeletedLeaveType = await _GradeLeaveRepo.GetGradeLeaveById(deleteDto.GradeLeaveID);
 
-                        _logger.LogInformation($"LeaveType with name: {DeletedLeaveType.GradeLeaveID} Deleted successfully.");
+                        _logger.LogInformation($"LeaveType with name: {resp.GradeLeaveID} Deleted successfully.");
                         response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"LeaveType with name: {DeletedLeaveType.GradeLeaveID} Deleted successfully.";
-                        response.Data = null;
+                        response.ResponseMessage = $"LeaveType with name: {resp.GradeLeaveID} Deleted successfully.";
+                        response.Data = resp;
                         return response;
 
                     }

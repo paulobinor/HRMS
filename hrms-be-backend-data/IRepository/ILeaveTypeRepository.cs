@@ -5,8 +5,8 @@ namespace hrms_be_backend_data.IRepository
     public  interface ILeaveTypeRepository
     {
         Task<CreateLeaveTypeDTO> CreateLeaveType(CreateLeaveTypeDTO create);
-        Task<dynamic> UpdateLeaveType(UpdateLeaveTypeDTO update, string updatedbyUserEmail);
-        Task<dynamic> DeleteLeaveType(DeleteLeaveTypeDTO delete, string deletedbyUserEmail);
+        Task<LeaveTypeDTO> UpdateLeaveType(UpdateLeaveTypeDTO update);
+        Task<LeaveTypeDTO> DeleteLeaveType(DeleteLeaveTypeDTO delete);
         Task<IEnumerable<LeaveTypeDTO>> GetAllActiveLeaveType();
         Task<IEnumerable<LeaveTypeDTO>> GetAllLeaveType();
         Task<LeaveTypeDTO> GetLeaveTypeById(long LeaveTypeId);

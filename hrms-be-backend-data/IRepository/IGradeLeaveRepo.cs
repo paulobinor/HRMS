@@ -5,8 +5,8 @@ namespace hrms_be_backend_data.IRepository
     public  interface IGradeLeaveRepo
     {
         Task<string> CreateGradeLeave(CreateGradeLeaveDTO create);
-        Task<dynamic> UpdateGradeLeave(UpdateGradeLeaveDTO update, string updatedbyUserEmail);
-        Task<dynamic> DeleteGradeLeave(DeleteGradeLeaveDTO delete, string deletedbyUserEmail);
+        Task<GradeLeaveDTO> UpdateGradeLeave(UpdateGradeLeaveDTO update);
+        Task<GradeLeaveDTO> DeleteGradeLeave(DeleteGradeLeaveDTO delete);
         Task<IEnumerable<GradeLeaveDTO>> GetAllActiveGradeLeave();
         Task<IEnumerable<GradeLeaveDTO>> GetAllGradeLeave();
         Task<GradeLeaveDTO> GetGradeLeaveById(long GradeLeaveID);
