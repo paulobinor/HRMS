@@ -148,11 +148,11 @@ namespace hrms_be_backend_business.Logic
 
         public async Task<ExecutedResult<string>> UploadLetter(IFormFile signedResignationLetter, string AccessKey, string RemoteIpAddress)
         {
-            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-            if (accessUser.data == null)
-            {
-                return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
-            }
+            //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+            //}
 
             try
             {
@@ -173,8 +173,8 @@ namespace hrms_be_backend_business.Logic
                     FileUploadRequest request = new FileUploadRequest
                     {
                         AppName = "HRMS",
-                        UserId = accessUser.data.EmployeeId.ToString(),
-                    //    UserId = "101",
+                       // UserId = accessUser.data.EmployeeId.ToString(),
+                       UserId = "101",
                         Image = signedResignationLetter
                     };
                     MultipartFormDataContent formDataContent = new MultipartFormDataContent();
