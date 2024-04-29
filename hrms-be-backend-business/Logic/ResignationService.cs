@@ -39,11 +39,11 @@ namespace hrms_be_backend_business.Logic
        
         public async Task<ExecutedResult<string>> SubmitResignation( ResignationRequestVM payload, string AccessKey, string RemoteIpAddress)
         {
-            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-            if (accessUser.data == null)
-            {
-                return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
-            }
+            //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+            //}
             bool isModelStateValidate = true;
             string validationMessage = "";
 
@@ -87,7 +87,8 @@ namespace hrms_be_backend_business.Logic
                 if (!isModelStateValidate)
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
-                payload.EmployeeId = accessUser.data.EmployeeId;
+                //payload.EmployeeId = accessUser.data.EmployeeId;
+                payload.EmployeeId =112;
 
                 var alreadyResigned = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeId);
                 if (alreadyResigned != null)
@@ -102,7 +103,8 @@ namespace hrms_be_backend_business.Logic
                     CompanyID = payload.CompanyID,
                     //StaffName = payload.StaffName,
                     DateCreated = DateTime.Now,
-                    CreatedByUserId = accessUser.data.UserId,
+                    //CreatedByUserId = accessUser.data.UserId,
+                    CreatedByUserId = 256,
                     ResumptionDate  = payload.ResumptionDate,
                     LastDayOfWork = payload.LastDayOfWork,
                     EmployeeId = payload.EmployeeId,
@@ -112,24 +114,24 @@ namespace hrms_be_backend_business.Logic
                 };
 
 
-                //var resp = await _resignationRepository.CreateResignation(resignation);
-                //int resignationID = resp.ResignationID;
-                //string returnVal = resp.ReturnVal;
-                //if (resignationID < 0)
-                //{
-                //    return new ExecutedResult<string>() { responseMessage = $"{returnVal}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
-
-                //}
-                //var submittedresignation = await _resignationRepository.GetResignationByID(resignationID);
-
                 var resp = await _resignationRepository.CreateResignation(resignation);
-                if (resp < 0)
+                int resignationID = resp.ResignationID;
+                string returnVal = resp.ReturnVal;
+                if (resignationID < 0)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"{resp}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"{returnVal}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
 
                 }
+                var submittedresignation = await _resignationRepository.GetResignationByID(resignationID);
 
-                var submittedresignation = await _resignationRepository.GetResignationByID(resp);
+                //var resp = await _resignationRepository.CreateResignation(resignation);
+                //if (resp < 0)
+                //{
+                //    return new ExecutedResult<string>() { responseMessage = $"{resp}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+
+                //}
+
+                //var submittedresignation = await _resignationRepository.GetResignationByID(resp);
 
                 //Send mail to Hod/UnitHead
                 if (submittedresignation.UnitHeadEmployeeID <= 0)

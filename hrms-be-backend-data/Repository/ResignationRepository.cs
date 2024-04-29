@@ -51,13 +51,13 @@ namespace hrms_be_backend_data.Repository
                 // Retrieve the ResignationID from the output parameter
                 int resignationID = param.Get<int>("@ResignationIDOut");
 
-                // Retrieve the ReturnVal from the output parameter
-                //string returnVal = param.Get<string>("@ReturnVal");
+                //Retrieve the ReturnVal from the output parameter
+                string returnVal = param.Get<string>("@ReturnVal");
 
-                //var result = new { ResignationID = resignationID, ReturnVal = returnVal };
+                var result = new { ResignationID = resignationID, ReturnVal = returnVal };
 
-               // return result;
-                return resignationID;
+                return result;
+               // return resignationID;
             }
             catch (Exception ex)
             {
