@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
+using System.Dynamic;
 using System.Net;
 using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -111,25 +112,19 @@ namespace hrms_be_backend_business.Logic
                     //StaffID = payload.StaffId
                 };
 
-
-                //var resp = await _resignationRepository.CreateResignation(resignation);
-                //int resignationID = resp.ResignationID;
-                //string returnVal = resp.ReturnVal;
-                //if (resignationID < 0)
-                //{
-                //    return new ExecutedResult<string>() { responseMessage = $"{returnVal}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
-
-                //}
-                //var submittedresignation = await _resignationRepository.GetResignationByID(resignationID);
-
-                var resp = await _resignationRepository.CreateResignation(resignation);
-                if (resp < 0)
+                dynamic resp = new ExpandoObject();
+                resp.ResignationID = 0;
+                resp.ReturnVal = string.Empty;
+                var res = await _resignationRepository.CreateResignation(resignation);
+                var resp1 = JsonConvert.DeserializeObject<dynamic>(JsonConvert.SerializeObject(res)); 
+                int resignationID = Convert.ToInt16(resp1.ResignationID);
+                string returnVal = Convert.ToString(resp1.ReturnVal);
+                if (resignationID < 0)
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"{resp}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"{returnVal}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
 
                 }
-
-                var submittedresignation = await _resignationRepository.GetResignationByID(resp);
+                var submittedresignation = await _resignationRepository.GetResignationByID(resignationID);
 
                 //Send mail to Hod/UnitHead
                 if (submittedresignation.UnitHeadEmployeeID <= 0)
