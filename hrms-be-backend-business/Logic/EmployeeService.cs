@@ -172,9 +172,10 @@ namespace hrms_be_backend_business.Logic
                     GradeId = payload.GradeId,
                     IsModifield = false,
                     StaffId = payload.StaffId,
+                    IsMD = payload.IsMD,
                 };
-                var repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
-                if (repoResponse == null)
+                string repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
+                if (!repoResponse.Contains("Success"))
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
@@ -195,6 +196,131 @@ namespace hrms_be_backend_business.Logic
             catch (Exception ex)
             {
                 _logger.LogError($"EmployeeService (CreateEmployeeBasis)=====>{ex}");
+                return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+            }
+        }
+        public async Task<ExecutedResult<string>> UpdateEmployeeBasis(UpdateEmployeeBasisDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+                }
+                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Update_Onboarding_Basis, accessUser.data.UserId);
+                if (!checkPrivilege.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
+
+                }
+                bool isModelStateValidate = true;
+                string validationMessage = "";
+
+                if (string.IsNullOrEmpty(payload.FirstName))
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "First name is required";
+                }
+                if (payload.LastName == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Last name is required";
+                }
+                if (payload.OfficialEmail == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Official email is required";
+                }
+                if (payload.PhoneNumber == null)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Phone number is required";
+                }
+                if (payload.BranchId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Branch is required";
+                }
+                if (payload.EmploymentStatusId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Employment Status is required";
+                }
+                if (payload.JobRoleId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Job Role is required";
+                }
+                if (payload.DepartmentId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Department is required";
+                }
+                if (payload.EmployeeTypeId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Employee Type is required";
+                }
+                if (payload.UnitId < 1)
+                {
+                    isModelStateValidate = false;
+                    validationMessage += "  || Unit is required";
+                }
+
+                if (!isModelStateValidate)
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+
+                }
+                var repoPayload = new EmployeeBasisReq
+                {
+                    CreatedByUserId = accessUser.data.UserId,
+                    DateCreated = DateTime.Now,
+                    FirstName = payload.FirstName,
+                    LastName = payload.LastName,
+                    MiddleName = payload.MiddleName,
+                    OfficialEmail = payload.OfficialEmail,
+                    BranchId = payload.BranchId,
+                    PhoneNumber = payload.PhoneNumber,
+                    DepartmentId = payload.DepartmentId,
+                    DOB = payload.DOB,
+                    EmployeeTypeId = payload.EmployeeTypeId,
+                    EmploymentStatusId = payload.EmploymentStatusId,
+                    JobRoleId = payload.JobRoleId,
+                    PersonalEmail = payload.PersonalEmail,
+                    ResumptionDate = payload.ResumptionDate,
+                    UnitId = payload.UnitId,
+                    GradeId = payload.GradeId,
+                    EmployeeId = payload.EmployeeId,
+                    IsModifield = true,
+                    StaffId = payload.StaffId,
+                    IsMD = payload.IsMD
+                };
+                string repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
+                if (!repoResponse.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
+
+                var auditLog = new AuditLogDto
+                {
+                    userId = accessUser.data.UserId,
+                    actionPerformed = "UpdateEmployeeBasis",
+                    payload = JsonConvert.SerializeObject(payload),
+                    response = null,
+                    actionStatus = $"Successful",
+                    ipAddress = RemoteIpAddress
+                };
+                await _audit.LogActivity(auditLog);
+
+                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeService (UpdateEmployeeBasis)=====>{ex}");
                 return new ExecutedResult<string>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
             }
         }
@@ -1207,130 +1333,7 @@ namespace hrms_be_backend_business.Logic
         }
 
 
-        public async Task<ExecutedResult<EmployeeBasisReq>> UpdateEmployeeBasis(UpdateEmployeeBasisDto payload, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
-        {
 
-            try
-            {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-                if (accessUser.data == null)
-                {
-                    return new ExecutedResult<EmployeeBasisReq>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
-
-                }
-                var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Update_Onboarding_Basis, accessUser.data.UserId);
-                if (!checkPrivilege.Contains("Success"))
-                {
-                    return new ExecutedResult<EmployeeBasisReq>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
-
-                }
-                bool isModelStateValidate = true;
-                string validationMessage = "";
-
-                if (string.IsNullOrEmpty(payload.FirstName))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "First name is required";
-                }
-                if (payload.LastName == null)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Last name is required";
-                }
-                if (payload.OfficialEmail == null)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Official email is required";
-                }
-                if (payload.PhoneNumber == null)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Phone number is required";
-                }
-                if (payload.BranchId < 1)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Branch is required";
-                }
-                if (payload.EmploymentStatusId < 1)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Employment Status is required";
-                }
-                if (payload.JobRoleId < 1)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Job Role is required";
-                }
-                if (payload.DepartmentId < 1)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Department is required";
-                }
-                if (payload.EmployeeTypeId < 1)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Employee Type is required";
-                }
-                if (payload.UnitId < 1)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  || Unit is required";
-                }
-
-                if (!isModelStateValidate)
-                {
-                    return new ExecutedResult<EmployeeBasisReq>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
-
-                }
-                var repoPayload = new EmployeeBasisReq
-                {
-                    CreatedByUserId = accessUser.data.UserId,
-                    DateCreated = DateTime.Now,
-                    FirstName = payload.FirstName,
-                    LastName = payload.LastName,
-                    MiddleName = payload.MiddleName,
-                    OfficialEmail = payload.OfficialEmail,
-                    BranchId = payload.BranchId,
-                    PhoneNumber = payload.PhoneNumber,
-                    DepartmentId = payload.DepartmentId,
-                    DOB = payload.DOB,
-                    EmployeeTypeId = payload.EmployeeTypeId,
-                    EmploymentStatusId = payload.EmploymentStatusId,
-                    JobRoleId = payload.JobRoleId,
-                    PersonalEmail = payload.PersonalEmail,
-                    ResumptionDate = payload.ResumptionDate,
-                    UnitId = payload.UnitId,
-                    GradeId = payload.GradeId,
-                    EmployeeId = payload.EmployeeId,
-                    IsModifield = true,
-                    StaffId = payload.StaffId,
-                };
-                var repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
-                if (repoResponse == null)
-                {
-                    return new ExecutedResult<EmployeeBasisReq>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
-                }
-
-                var auditLog = new AuditLogDto
-                {
-                    userId = accessUser.data.UserId,
-                    actionPerformed = "UpdateEmployeeBasis",
-                    payload = JsonConvert.SerializeObject(payload),
-                    response = null,
-                    actionStatus = $"Successful",
-                    ipAddress = RemoteIpAddress
-                };
-                await _audit.LogActivity(auditLog);
-
-                return new ExecutedResult<EmployeeBasisReq>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = repoResponse };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"EmployeeService (UpdateEmployeeBasis)=====>{ex}");
-                return new ExecutedResult<EmployeeBasisReq>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
-            }
-        }
         public async Task<ExecutedResult<string>> ApproveEmployee(long EmployeeId, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
 

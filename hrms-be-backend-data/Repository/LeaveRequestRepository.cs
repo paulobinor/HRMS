@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using hrms_be_backend_common.DTO;
 using hrms_be_backend_common.Models;
 using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
@@ -87,7 +88,7 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-        public async Task<LeaveApprovalLineItem> UpdateLeaveApprovalLineItem(LeaveApprovalLineItem leaveApprovalLineItem)
+        public async Task<LeaveApprovalLineItemDto> UpdateLeaveApprovalLineItem(LeaveApprovalLineItemDto leaveApprovalLineItem)
         {
             try
             {
@@ -99,7 +100,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@Comments", leaveApprovalLineItem.Comments);
                 param.Add("@EntryDate", leaveApprovalLineItem.EntryDate);
 
-                var res = await _dapperGeneric.Get<LeaveApprovalLineItem>(ApplicationConstant.Sp_UpdateLeaveApprovalLineItem, param, commandType: CommandType.StoredProcedure);
+                var res = await _dapperGeneric.Get<LeaveApprovalLineItemDto>(ApplicationConstant.Sp_UpdateLeaveApprovalLineItem, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
                     return res;
@@ -188,6 +189,83 @@ namespace hrms_be_backend_data.Repository
                 var res = await _dapperGeneric.GetAll<LeaveRequestLineItem>(ApplicationConstant.Sp_GetLeaveRequestLineItems, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
+                    return res;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+        }
+
+        public async Task<List<LeaveRequestLineItemDto>> GetAllLeaveRequestLineItems(long CompanyID)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@CompanyID", CompanyID);
+                //param.Add("@LeavePeriod", LeavePeriod);
+
+                var res = await _dapperGeneric.GetAll<LeaveRequestLineItemDto>(ApplicationConstant.Sp_GetAllLeaveRequestLineItems, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    foreach (var item in res)
+                    {
+                        var leaveAprovalId = (await GetLeaveApprovalInfoByEmployeeId(item.EmployeeId)).LeaveApprovalId;
+                        if (leaveAprovalId > 0)
+                        {
+                            item.leaveApprovalLineItems = await GetLeaveApprovalLineItems(leaveAprovalId);
+                            //var lineitems = await GetLeaveApprovalLineItems(leaveAprovalId);
+                            //if (lineitems.Count > 0)
+                            //{
+                            //    foreach (var itelitem in lineitems)
+                            //    {
+                            //        item.leaveApprovalLineItemList.Add(itelitem);
+                            //    }
+                            //}
+                        }
+                    }
+                    return res;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+        }
+        private async Task<List<LeaveRequestLineItemDto>> GetAllLeaveEmpRequestLineItems(long EmployeeID)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeID", EmployeeID);
+                //param.Add("@LeavePeriod", LeavePeriod);
+
+                var res = await _dapperGeneric.GetAll<LeaveRequestLineItemDto>(ApplicationConstant.Sp_GetAllEmpLeaveRequestLineItems, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    foreach (var item in res)
+                    {
+                        var leaveAprovalId = (await GetLeaveApprovalInfoByEmployeeId(item.EmployeeId)).LeaveApprovalId;
+                        if (leaveAprovalId > 0)
+                        {
+                            item.leaveApprovalLineItems = await GetLeaveApprovalLineItems(leaveAprovalId);
+                            //var lineitems = await GetLeaveApprovalLineItems(leaveAprovalId);
+                            //if (lineitems.Count > 0)
+                            //{
+                            //    foreach (var itelitem in lineitems)
+                            //    {
+                            //        item.leaveApprovalLineItemList.Add(itelitem);
+                            //    }
+                            //}
+                        }
+                    }
                     return res;
                 }
                 return null;
@@ -311,7 +389,7 @@ namespace hrms_be_backend_data.Repository
             }
         }
         
-        public async Task<LeaveApprovalLineItem> GetLeaveApprovalLineItem(long leaveApprovalLineItemId, int approvalStep = 0)
+        public async Task<LeaveApprovalLineItemDto> GetLeaveApprovalLineItem(long leaveApprovalLineItemId, int approvalStep = 0)
         {
             try
             {
@@ -320,7 +398,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@ApprovalStep", approvalStep);
                 //param.Add("@LeavePeriod", LeavePeriod);
 
-                var res = await _dapperGeneric.Get<LeaveApprovalLineItem>(ApplicationConstant.Sp_GetLeaveApprovalLineItem, param, commandType: CommandType.StoredProcedure);
+                var res = await _dapperGeneric.Get<LeaveApprovalLineItemDto>(ApplicationConstant.Sp_GetLeaveApprovalLineItem, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
                     return res;
@@ -334,7 +412,7 @@ namespace hrms_be_backend_data.Repository
                 return default;
             }
         }
-        public async Task<List<LeaveApprovalLineItem>> GetLeaveApprovalLineItems(long leaveApprovalId)
+        public async Task<List<LeaveApprovalLineItemDto>> GetLeaveApprovalLineItems(long leaveApprovalId)
         {
             try
             {
@@ -342,7 +420,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@leaveApprovalId", leaveApprovalId);
                 //param.Add("@LeavePeriod", LeavePeriod);
 
-                var res = await _dapperGeneric.GetAll<LeaveApprovalLineItem>(ApplicationConstant.Sp_GetLeaveApprovalLineItems, param, commandType: CommandType.StoredProcedure);
+                var res = await _dapperGeneric.GetAll<LeaveApprovalLineItemDto>(ApplicationConstant.Sp_GetLeaveApprovalLineItems, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
                     return res;
@@ -366,7 +444,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@LeaveRequestLineItemId", leaveRequestLineItem.LeaveRequestLineItemId);
                 //param.Add("@LeavePeriod", LeavePeriod);
 
-                var res = await _dapperGeneric.GetAll<LeaveApprovalLineItem>(ApplicationConstant.Sp_UpdateLeaveRequestLineItemApproval, param, commandType: CommandType.StoredProcedure);
+                var res = await _dapperGeneric.GetAll<LeaveApprovalLineItemDto>(ApplicationConstant.Sp_UpdateLeaveRequestLineItemApproval, param, commandType: CommandType.StoredProcedure);
 
                 _logger.LogInformation($"Result of Sp_UpdateLeaveRequestLineItemApproval {JsonConvert.SerializeObject(res)}");
                 //if (res != null)
@@ -412,13 +490,13 @@ namespace hrms_be_backend_data.Repository
             {
                 var param = new DynamicParameters();
                 param.Add("@EmployeeId", employeeId);
-                param.Add("@CompanyId", companyId);
+               // param.Add("@CompanyId", companyId);
                 param.Add("@LeaveStatus", LeaveStatus);
 
                 var res = await _dapperGeneric.Get<EmpLeaveRequestInfo>(ApplicationConstant.Sp_GetEmpLeaveInfo, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
-                    res.leaveRequestLineItems = await GetLeaveRequestLineItems(res.LeaveRequestId);
+                    res.leaveRequestLineItems = await GetAllLeaveEmpRequestLineItems(res.EmployeeId);
                     
                     return res;
                 }
@@ -594,7 +672,7 @@ namespace hrms_be_backend_data.Repository
                     {
                         foreach (var item in LeaveDetails)
                         {
-                            item.leaveRequestLineItems = await GetLeaveRequestLineItems(item.LeaveRequestId);
+                            item.leaveRequestLineItems = await GetAllLeaveEmpRequestLineItems(item.LeaveRequestId);
                         }
                       
                     }
@@ -607,6 +685,8 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+
+
         public async Task<IEnumerable<LeaveRequestDTO>> GetLeaveRequestByUserId(long UserId, long CompanyId)
         {
             try

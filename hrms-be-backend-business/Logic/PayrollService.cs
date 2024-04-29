@@ -532,6 +532,40 @@ namespace hrms_be_backend_business.Logic
                 return PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
             }
         }
+        public async Task<PagedExcutedResult<IEnumerable<PayrollRunnedVm>>> GetPayrollRunnedForReport(PaginationFilter filter, DateTime DateFrom, DateTime DateTo, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            long totalRecords = 0;
+            try
+            {
+                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
+
+                }
+                var result = await _payrollRepository.GetPayrollRunnedForReport(accessUser.data.UserId, filter.PageNumber, filter.PageSize, DateFrom, DateTo);
+                if (result == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+                if (result.data == null)
+                {
+                    return PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                }
+
+                totalRecords = result.totalRecords;
+
+                var pagedReponse = PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(result.data, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Ok).ToString(), ResponseCode.Ok.ToString());
+
+                return pagedReponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollService (GetPayrollRunned)=====>{ex}");
+                return PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
+            }
+        }
         public async Task<PagedExcutedResult<IEnumerable<PayrollRunnedDetailsVm>>> GetPayrollRunnedDetails(PaginationFilter filter, long PayrollRunnedId, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
@@ -944,7 +978,7 @@ namespace hrms_be_backend_business.Logic
                     worksheet.Cells[1, 8].Value = "LOCATION";
                     worksheet.Cells[1, 9].Value = "REMARK";
 
-                    int colNumber = 10,earningColumnBegin=10;
+                    int colNumber = 10, earningColumnBegin = 10;
                     var payrollEarnings = await _payrollRepository.GetPayrollEarnings(payollRunned.PayrollId);
                     var payrollEarningForReportVm = new List<PayrollEarningForReportVm>();
                     foreach (var payrollEarning in payrollEarnings)
@@ -995,7 +1029,7 @@ namespace hrms_be_backend_business.Logic
                     worksheet.Cells[1, colNumber].Value = "NET PAY";
                     colNumber++;
                     var payrollRunnedReport = await _payrollRepository.GetPayrollRunnedReport(PayRollRunnedId);
-                    int rowNumber = 1;int sno = 0; 
+                    int rowNumber = 2; int sno = 0;
                     foreach (var payrollRunned in payrollRunnedReport)
                     {
                         sno++;
@@ -1014,33 +1048,33 @@ namespace hrms_be_backend_business.Logic
                             worksheet.Cells[rowNumber, col].Value = $"{payrollEarning.Amount}";
                             col++;
                         }
-                        worksheet.Cells[rowNumber, 9].Value = $"{payrollRunned.GrossPay}";
+                        worksheet.Cells[rowNumber, col].Value = $"{payrollRunned.GrossPay}";
                         col++;
-                        worksheet.Cells[rowNumber, 9].Value = $"{payrollRunned.TAX}";
+                        worksheet.Cells[rowNumber, col].Value = $"{payrollRunned.TAX}";
                         col++;
                         foreach (var payrollDeduction in payrollDeductionForReportVm)
                         {
                             worksheet.Cells[rowNumber, col].Value = $"{payrollDeduction.Amount}";
                             col++;
                         }
-                        worksheet.Cells[rowNumber, 9].Value = $"{payrollRunned.TotalDeduction}";
+                        worksheet.Cells[rowNumber, col].Value = $"{payrollRunned.TotalDeduction}";
                         col++;
-                        worksheet.Cells[rowNumber, 9].Value = $"{payrollRunned.NetPay}";
+                        worksheet.Cells[rowNumber, col].Value = $"{payrollRunned.NetPay}";
                         col++;
                         rowNumber++;
                     }
                     //Header Border
                     for (int k = 1; k <= colNumber; k++)
                     {
-                        worksheet.Cells[2, k].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                        worksheet.Cells[2, k].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                        worksheet.Cells[2, k].Style.Border.Top.Color.SetColor(Color.Black);
-                        worksheet.Cells[2, k].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                        worksheet.Cells[2, k].Style.Border.Bottom.Color.SetColor(Color.Black);
-                        worksheet.Cells[2, k].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                        worksheet.Cells[2, k].Style.Border.Left.Color.SetColor(Color.Black);
-                        worksheet.Cells[2, k].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                        worksheet.Cells[2, k].Style.Border.Right.Color.SetColor(Color.Black);
+                        worksheet.Cells[1, k].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                        worksheet.Cells[1, k].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                        worksheet.Cells[1, k].Style.Border.Top.Color.SetColor(Color.Black);
+                        worksheet.Cells[1, k].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                        worksheet.Cells[1, k].Style.Border.Bottom.Color.SetColor(Color.Black);
+                        worksheet.Cells[1, k].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                        worksheet.Cells[1, k].Style.Border.Left.Color.SetColor(Color.Black);
+                        worksheet.Cells[1, k].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                        worksheet.Cells[1, k].Style.Border.Right.Color.SetColor(Color.Black);
                     }
 
                     //Row Border
@@ -1048,15 +1082,15 @@ namespace hrms_be_backend_business.Logic
                     {
                         for (int k = 1; k <= colNumber; k++)
                         {
-                            worksheet.Cells[i + 2, k].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                            worksheet.Cells[i + 2, k].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                            worksheet.Cells[i + 2, k].Style.Border.Top.Color.SetColor(Color.Black);
-                            worksheet.Cells[i + 2, k].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                            worksheet.Cells[i + 2, k].Style.Border.Bottom.Color.SetColor(Color.Black);
-                            worksheet.Cells[i + 2, k].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                            worksheet.Cells[i + 2, k].Style.Border.Left.Color.SetColor(Color.Black);
-                            worksheet.Cells[i + 2, k].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                            worksheet.Cells[i + 2, k].Style.Border.Right.Color.SetColor(Color.Black);
+                            worksheet.Cells[i + 1, k].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                            worksheet.Cells[i + 1, k].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                            worksheet.Cells[i + 1, k].Style.Border.Top.Color.SetColor(Color.Black);
+                            worksheet.Cells[i + 1, k].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                            worksheet.Cells[i + 1, k].Style.Border.Bottom.Color.SetColor(Color.Black);
+                            worksheet.Cells[i + 1, k].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                            worksheet.Cells[i + 1, k].Style.Border.Left.Color.SetColor(Color.Black);
+                            worksheet.Cells[i + 1, k].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                            worksheet.Cells[i + 1, k].Style.Border.Right.Color.SetColor(Color.Black);
                         }
                     }
                     //Format
@@ -1080,7 +1114,7 @@ namespace hrms_be_backend_business.Logic
             }
             catch (Exception ex)
             {
-                _logger.LogError($"PayrollService (DownloadPayrollRunnedReport)=====>{ex}");               
+                _logger.LogError($"PayrollService (DownloadPayrollRunnedReport)=====>{ex}");
                 return new ExecutedResult<byte[]>()
                 {
                     data = null,

@@ -32,8 +32,6 @@ namespace hrms_be_backend_api.Controllers
         }
 
         [HttpGet("DownloadPayrollRunnedReport")]
-        [Authorize]
-        [HttpGet]
         public async Task<IActionResult> DownloadPayrollRunnedReport(long PayRollRunnedId)
         {
             string RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();

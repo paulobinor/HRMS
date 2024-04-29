@@ -3,10 +3,8 @@ using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System.ComponentModel.Design;
 using System.Data;
-using System.Text.Json.Nodes;
 
 namespace hrms_be_backend_data.Repository
 {
@@ -21,7 +19,7 @@ namespace hrms_be_backend_data.Repository
             _logger = logger;
             _dapper = dapper;
         }
-        public async Task<EmployeeBasisReq> ProcessEmployeeBasis(EmployeeBasisReq payload)
+        public async Task<string> ProcessEmployeeBasis(EmployeeBasisReq payload)
         {
             try
             {
@@ -42,14 +40,13 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@ResumptionDate", payload.ResumptionDate);
                 param.Add("@JobRoleId", payload.JobRoleId);
                 param.Add("@UnitId", payload.UnitId);
+                param.Add("@GradeId", payload.GradeId);
+                param.Add("@IsMD", payload.IsMD);
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
                 param.Add("@DateCreated", payload.DateCreated);
                 param.Add("@IsModifield", payload.IsModifield);
-                param.Add("@GradeId", payload.GradeId);
 
-                var resp = await _dapper.Get<EmployeeBasisReq>("sp_process_employee_basis", param, commandType: CommandType.StoredProcedure);
-                _logger.LogInformation($"Response: {JsonConvert.SerializeObject(resp)}");
-                return resp;
+                return await _dapper.Get<string>("sp_process_employee_basis", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
@@ -327,7 +324,7 @@ namespace hrms_be_backend_data.Repository
             {
                 var param = new DynamicParameters();
                 param.Add("@StaffId", StaffId);
-                param.Add("@CompanyId", CompanyId);               
+                param.Add("@CompanyId", CompanyId);
                 param.Add("@DateCreated", DateTime.Now);
 
                 return await _dapper.Get<string>("sp_check_employee_staff_id", param, commandType: CommandType.StoredProcedure);
@@ -488,7 +485,8 @@ namespace hrms_be_backend_data.Repository
 
                 return returnData;
 
-               
+
+                return await _dapper.Get<EmployeeSindgleVm>("sp_get_employee_by_id", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
@@ -535,7 +533,7 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<EmployeeFullVm> GetEmployeeByEmail(string email , long companyID)
+        public async Task<EmployeeFullVm> GetEmployeeByEmail(string email, long companyID)
         {
             string query = @"select * from Employee where OfficialMail = @Email and IsDeleted = @IsDeleted and IsApproved = @IsApproved and CompanyID = @CompanyID";
             var param = new DynamicParameters();
@@ -546,7 +544,7 @@ namespace hrms_be_backend_data.Repository
             return await _dapper.Get<EmployeeFullVm>(query, param, commandType: CommandType.Text);
 
         }
-        public async Task<List<EmployeeCertificationVm>> GetEmployeeCertification(long EmployeeId,long CompanyId)
+        public async Task<List<EmployeeCertificationVm>> GetEmployeeCertification(long EmployeeId, long CompanyId)
         {
             try
             {

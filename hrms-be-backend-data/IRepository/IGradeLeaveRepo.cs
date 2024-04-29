@@ -11,5 +11,6 @@ namespace hrms_be_backend_data.IRepository
         Task<IEnumerable<GradeLeaveDTO>> GetAllGradeLeave();
         Task<GradeLeaveDTO> GetGradeLeaveById(long GradeLeaveID);
         Task<IEnumerable<GradeLeaveDTO>> GetAllGradeLeaveCompanyId(long CompanyId);
+        Task<IEnumerable<GradeLeaveDTO>> GetEmployeeGradeLeaveTypes(long companyID, long employeeID);
     }
 }

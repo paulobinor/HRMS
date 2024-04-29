@@ -94,6 +94,7 @@ namespace hrms_be_backend_business.Logic
                 var modules = await _accountRepository.GetAppModulesAssigned(Convert.ToInt64(userId));
                 var accessUserVm = new AccessUserVm();
                 var employeeDetailsVm=new EmployeeDetailsVm();
+                string gradeId = string.Empty;
                 if (user.EmployeeId>0)
                 {
                     var employeeDetails = await _employeerepository.GetEmployeeById(user.EmployeeId, user.CompanyId);
@@ -106,6 +107,7 @@ namespace hrms_be_backend_business.Logic
                     employeeDetailsVm.HasCompletedProfBackground = employeeDetails.Employee.HasCompletedProfBackground;
                     employeeDetailsVm.IsFirstEmployee=employeeDetails.Employee.IsFirstEmployee;
 
+                    gradeId = employeeDetails.Employee.GradeID;
                 }
                 accessUserVm.CompanyName = user.CompanyName;
                 accessUserVm.FirstName = user.FirstName;
@@ -115,6 +117,7 @@ namespace hrms_be_backend_business.Logic
                 accessUserVm.OfficialMail = user.OfficialMail;
                 accessUserVm.PhoneNumber = user.PhoneNumber;
                 accessUserVm.UserId = user.UserId;
+                accessUserVm.GradeId = Convert.ToInt32(gradeId);
                 accessUserVm.UserStatusName = user.UserStatusName;
                 accessUserVm.UserStatusCode = user.UserStatusCode;
               

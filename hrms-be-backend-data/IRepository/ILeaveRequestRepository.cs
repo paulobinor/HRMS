@@ -1,4 +1,5 @@
-﻿using hrms_be_backend_common.Models;
+﻿using hrms_be_backend_common.DTO;
+using hrms_be_backend_common.Models;
 using hrms_be_backend_data.RepoPayload;
 
 namespace hrms_be_backend_data.IRepository
@@ -18,19 +19,20 @@ namespace hrms_be_backend_data.IRepository
         Task<LeaveRequestDTO> GetLeaveRequestByYear(string RequestYear, long CompanyId);
         Task<IEnumerable<LeaveRequestDTO>> GetLeaveRequestByCompany(string RequestYear, long companyId);
         Task<IEnumerable<LeaveRequestDTO>> GetLeaveRequestPendingApproval(long UserIdGet);
-        Task<EmpLeaveRequestInfo> GetEmpLeaveInfo(long employeeId, long companyId, string LeaveStatus = "Active");
+        Task<EmpLeaveRequestInfo> GetEmpLeaveInfo(long employeeId = 0, long companyId = 0, string LeaveStatus = "Active");
         Task<EmpLeaveRequestInfo> CreateEmpLeaveInfo(long employeeId);
         Task<LeaveRequestLineItem> GetLeaveRequestLineItem(long leaveRequestLineItemId);
         Task<LeaveApprovalInfo> GetLeaveApprovalInfo(long leaveApprovalId);
         Task<LeaveApprovalInfo> GetLeaveApprovalInfoByRequestLineItemId(long leaveRequestLineitemId);
-        Task<LeaveApprovalLineItem> GetLeaveApprovalLineItem(long leaveApprovalLineItemId, int approvalStep);
-        Task<LeaveApprovalInfo> UpdateLeaveApprovalInfo(LeaveApprovalInfo leaveApproval);
-        Task<LeaveApprovalLineItem> UpdateLeaveApprovalLineItem(LeaveApprovalLineItem leaveApprovalLineItem);
+       // Task<LeaveApprovalLineItem> GetLeaveApprovalLineItem(long leaveApprovalLineItemId, int approvalStep);
+       // Task<LeaveApprovalInfo> UpdateLeaveApprovalInfo(LeaveApprovalInfo leaveApproval);
+      //  Task<LeaveApprovalLineItemDto> UpdateLeaveApprovalLineItem(LeaveApprovalLineItemDto leaveApprovalLineItem);
         Task<List<LeaveRequestLineItem>> GetLeaveRequestLineItems(long leaveRequestId);
+        Task<List<LeaveRequestLineItemDto>> GetAllLeaveRequestLineItems(long CompanyID);
         Task<GradeLeave> GetEmployeeGradeLeave(long employeeId);
-        Task<LeaveApprovalInfo> GetLeaveApprovalInfoByEmployeeId(long EmployeeId);
+       // Task<LeaveApprovalInfo> GetLeaveApprovalInfoByEmployeeId(long EmployeeId);
         Task<EmpLeaveRequestInfo> UpdateLeaveRequestInfoStatus(EmpLeaveRequestInfo empLeaveRequestInfo);
-        Task<List<LeaveApprovalLineItem>> GetLeaveApprovalLineItems(long leaveApprovalId);
+       // Task<List<LeaveApprovalLineItemDto>> GetLeaveApprovalLineItems(long leaveApprovalId);
         Task UpdateLeaveRequestLineItemApproval(LeaveRequestLineItem leaveRequestLineItem);
     }
 }

@@ -80,6 +80,11 @@
         public static string Sp_DeleteGradeLeave { get; set; } = "Sp_DeleteGradeLeave";
         public static string Sp_GetActiveLeaveTypes { get; set; } = "Sp_GetActiveLeaveTypes";
         public static string Sp_GetAllActiveGradeLeave { get; set; } = "Sp_GetAllActiveGradeLeave";
+        public static string Sp_GetAllLeaveRequestLineItems { get; set; } = "Sp_GetAllLeaveRequestLineItems";
+        public static string Sp_GetLeaveApprovalIfoByCompanyID { get; set; } = "Sp_GetLeaveApprovalIfoByCompanyID";
+        public static string Sp_GetPendingLeaveApprovals { get; set; } = "Sp_GetPendingLeaveApprovals";
+        public static string Sp_GetEmployeeGradeLeaveTypes { get; set; } = "Sp_GetEmployeeGradeLeaveTypes";
+        public static string Sp_GetAllEmpLeaveRequestLineItems { get; set; } = "Sp_GetAllEmpLeaveRequestLineItems";
 
         //System Default
         public static int DefaultDeptId = 1;

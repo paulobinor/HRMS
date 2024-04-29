@@ -35,7 +35,8 @@
         public string CompanyName { get; set; }
         public bool IsApproved { get; set; }
         public bool IsDisapproved { get; set; }
-        public bool IsDeactivated { get; set; }      
+        public bool IsDeactivated { get; set; }
+        public int GradeId { get; set; }
     }
     public class EmployeeDetailsVm
     {

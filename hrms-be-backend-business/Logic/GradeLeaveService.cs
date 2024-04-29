@@ -5,6 +5,7 @@ using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.Design;
 
 namespace hrms_be_backend_business.Logic
 {
@@ -425,15 +426,15 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-                if (accessUser.data == null)
-                {
+                //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                //if (accessUser.data == null)
+                //{
 
-                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "User information cannot be found.";
-                    return response;
+                //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                //    response.ResponseMessage = "User information cannot be found.";
+                //    return response;
 
-                }
+                //}
 
 
                 var LeaveType = await _GradeLeaveRepo.GetAllGradeLeaveCompanyId(companyId);
@@ -445,7 +446,8 @@ namespace hrms_be_backend_business.Logic
                     response.Data = null;
                     return response;
                 }
-
+               // int GradeId = Convert.ToInt32(RemoteIpAddress);
+              //  var res = LeaveType.Where(x => x.GradeID == companyId).ToList();
                 //update action performed into audit log here
 
                 response.Data = LeaveType;
@@ -464,6 +466,39 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
+        public async Task<IEnumerable<GradeLeaveDTO>> GetEmployeeGradeLeaveTypes(long companyID, long employeeID)
+        {
+            try
+            {
+               
+                var LeaveTypes = await _GradeLeaveRepo.GetEmployeeGradeLeaveTypes(companyID, employeeID);
 
+                if (LeaveTypes == null)
+                {
+                  //  response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                  //  response.ResponseMessage = "Grade Leave not found.";
+                  //  response.Data = null;
+                   // return response;
+                }
+                // int GradeId = Convert.ToInt32(RemoteIpAddress);
+                //  var res = LeaveType.Where(x => x.GradeID == companyId).ToList();
+                //update action performed into audit log here
+
+               // response.Data = LeaveType;
+               // response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+              //  response.ResponseMessage = "Grade Leave fetched successfully.";
+                return LeaveTypes;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetAllGradeLeaveCompanyId(long companyId) ==> {ex.Message}");
+                throw;
+                //response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+              //  response.ResponseMessage = $"Exception Occured: GetAllGradeLeaveCompanyId(long companyId) ==> {ex.Message}";
+              //  response.Data = null;
+              //  return response;
+            }
+        }
     }
 }

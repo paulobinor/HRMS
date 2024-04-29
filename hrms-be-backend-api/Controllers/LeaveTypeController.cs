@@ -13,6 +13,7 @@ using System.Security.Claims;
 namespace hrms_be_backend_api.LeaveModuleController.Controller
 {
 
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LeaveTypeController : ControllerBase
@@ -30,7 +31,6 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
 
         [HttpPost("CreateLeaveType")]
-        [Authorize]
         public async Task<IActionResult> CreateLeaveType([FromBody] CreateLeaveTypeDTO CreateDto)
         {
             var response = new BaseResponse();
@@ -60,7 +60,6 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         }
 
         [HttpPost("UpdateLeaveType")]
-        [Authorize]
         public async Task<IActionResult> UpdateLeaveType([FromBody] UpdateLeaveTypeDTO updateDto)
         {
             var response = new BaseResponse();
@@ -87,7 +86,6 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         }
 
         [HttpPost("DeleteLeaveType")]
-      //  [Authorize]
         public async Task<IActionResult> DeleteLeaveType([FromBody] DeleteLeaveTypeDTO deleteDto)
         {
             var response = new BaseResponse();
@@ -113,7 +111,6 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             }
         }
 
-        [Authorize]
         [HttpGet("GetAllActiveLeaveType")]
         public async Task<IActionResult> GetAllActiveLeaveType()
         {
@@ -141,7 +138,6 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
         }
 
-        [Authorize]
         [HttpGet("GetAllLeaveType")]
         public async Task<IActionResult> GetAllLeaveType()
         {
@@ -170,7 +166,6 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             }
         }
 
-        [Authorize]
         [HttpGet("GetLeaveTypebyId")]
         public async Task<IActionResult> GetLeaveTypebyId(long LeaveTypeId)
         {
@@ -200,7 +195,6 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
         }
 
-        [Authorize]
         [HttpGet("GetLeaveTypebyCompanyId")]
         public async Task<IActionResult> GetLeaveTypebyCompanyId(long CompanyID, string RequestId)
         {

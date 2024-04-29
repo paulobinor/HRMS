@@ -31,8 +31,21 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
         [Authorize]
         [HttpPost("Create")]
-        public async Task<IActionResult> CreateLeaveRequest([FromBody] LeaveRequestLineItem leaveRequestLineItem)
+        public async Task<IActionResult> CreateLeaveRequest([FromBody] CreateLeaveRequestLineItem createLeaveRequestLine)
         {
+            var leaveRequestLineItem = new LeaveRequestLineItem
+            {
+                CompanyId = createLeaveRequestLine.CompanyId,
+                EmployeeId = createLeaveRequestLine.EmployeeId,
+                endDate = createLeaveRequestLine.endDate,
+                startDate = createLeaveRequestLine.startDate,
+                HandoverNotes = createLeaveRequestLine.HandoverNotes,
+                IsApproved = false,
+                IsRescheduled = false,
+                LeaveLength = createLeaveRequestLine.LeaveLength,
+                ResumptionDate = createLeaveRequestLine.ResumptionDate,
+                RelieverUserId = createLeaveRequestLine.RelieverUserId
+            };
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             _logger.LogInformation($"Received Create leave request. Payload: {JsonConvert.SerializeObject(leaveRequestLineItem)} from remote address: {RemoteIpAddress}");
             var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
@@ -161,7 +174,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
                 }
 
-                return Ok(await _leaveRequestService.GetAllLeaveRquest(CompanyID));
+                return Ok(await _leaveRequestService.GetAllLeaveRequest(CompanyID));
             }
             catch (Exception ex)
             {
@@ -173,6 +186,67 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             }
         }
 
+        [Authorize]
+        [HttpGet("GetEmpLeaveRequests")]
+        public async Task<IActionResult> GetAllLeaveRequestLineItems([FromQuery] string CompanyID)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                _logger.LogInformation($"Received GetAllLeaveRequestLineItems. Payload: {JsonConvert.SerializeObject(new { CompanyID })} from remote address: {RemoteIpAddress}");
+
+                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+
+                }
+
+                return Ok(await _leaveRequestService.GetAllLeaveRquestLineItems(Convert.ToInt64(CompanyID)));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: Controller Method : GetAllLeaveRequestLineItems ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllLeaveRequest ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+        }
+
+
+        //[HttpGet("GetEmpLeaveRequestLineItems")]
+        //[Authorize]
+        //public async Task<IActionResult> GetEmpLeaveRequests([FromQuery] long CompanyId, [FromQuery] long EmployeeId, [FromQuery] string LeaveStatus)
+        //{
+        //    var response = new BaseResponse();
+        //    try
+        //    {
+        //        var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+        //        _logger.LogInformation($"Received GetEmpLeaveInfo request. Payload: {JsonConvert.SerializeObject(new { CompanyId, EmployeeId, LeaveStatus })} from remote address: {RemoteIpAddress}");
+
+        //        var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+        //        var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+        //        if (accessUser.data == null)
+        //        {
+        //            return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+
+        //        }
+        //        var res = await _leaveRequestService.GetEmpLeaveRequests(EmployeeId, CompanyId, LeaveStatus);
+        //        return Ok(new BaseResponse { Data = res, ResponseCode = "00", ResponseMessage = "Success" });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Exception Occured: ControllerMethod : GetLeaveRequestbyId ==> {ex.Message}");
+        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+        //        response.ResponseMessage = $"Exception Occured: ControllerMethod : GetLeaveRequestbyId ==> {ex.Message}";
+        //        response.Data = null;
+        //        return Ok(response);
+        //    }
+
+        //}
         #region Depricated
         //[HttpPost("DisaproveLeaveRequest")]
         //[Authorize]

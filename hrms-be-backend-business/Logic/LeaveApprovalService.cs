@@ -9,353 +9,37 @@ using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Text;
 
 namespace hrms_be_backend_business.Logic
 {
-    public class LeaveRequestService : ILeaveRequestService
+    public class LeaveApprovalService : ILeaveApprovalService
     {
         private readonly IAuditLog _audit;
 
-        private readonly ILogger<LeaveRequestService> _logger;
+        private readonly ILogger<LeaveApprovalService> _logger;
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyrepository;
-        private readonly ILeaveRequestRepository _leaveRequestRepository;
         private readonly ILeaveApprovalRepository _leaveApprovalRepository;
+        private readonly ILeaveRequestRepository _leaveRequestRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IMailService _mailService;
 
-        public LeaveRequestService(IAccountRepository accountRepository, ILogger<LeaveRequestService> logger,
-            ILeaveRequestRepository leaveRequestRepository, IAuditLog audit, ICompanyRepository companyrepository, IMailService mailService, ILeaveApprovalRepository leaveApprovalRepository)
+        public LeaveApprovalService(IAccountRepository accountRepository, ILogger<LeaveApprovalService> logger,
+            ILeaveApprovalRepository leaveApprovalRepository, IAuditLog audit, ICompanyRepository companyrepository, IMailService mailService, ILeaveRequestRepository leaveRequestRepository)
         {
             _audit = audit;
             _mailService = mailService;
             _logger = logger;
             _accountRepository = accountRepository;
-            _leaveRequestRepository = leaveRequestRepository;
-            _companyrepository = companyrepository;
             _leaveApprovalRepository = leaveApprovalRepository;
+            _companyrepository = companyrepository;
+            _leaveRequestRepository = leaveRequestRepository;
         }
 
-        private int CountWeekdays(DateTime startDate, DateTime endDate)
-        {
-            int count = 0;
-            TimeSpan span = endDate - startDate;
-            int days = span.Days + 1; // Including both start and end dates
 
-            for (int i = 0; i < days; i++)
-            {
-                DateTime currentDate = startDate.AddDays(i);
-                if (currentDate.DayOfWeek != DayOfWeek.Saturday && currentDate.DayOfWeek != DayOfWeek.Sunday)
-                {
-                    count++;
-                }
-            }
-
-            return count;
-        }
-        private bool IsValidWeekeday(DateTime dateTime)
-        {
-            if (dateTime.DayOfWeek == DayOfWeek.Sunday || dateTime.DayOfWeek == DayOfWeek.Saturday)
-            {
-                return false;
-            }
-            return true;
-        }
-        public async Task<BaseResponse> CreateLeaveRequestLineItem(LeaveRequestLineItem leaveRequestLineItem)
-        {
-
-            _logger.LogInformation($"About to create leave request for EmployeeId: {leaveRequestLineItem.EmployeeId} and CompanyId: {leaveRequestLineItem.CompanyId}");
-            StringBuilder errorOutput = new StringBuilder();
-            var response = new BaseResponse();
-            GradeLeave gradeLeave = null;
-            int noOfDaysTaken = 0;
-
-            #region Validate Leave Request
-            //check if any pending leave approvals
-            var leaveAproval = await _leaveApprovalRepository.GetLeaveApprovalInfoByEmployeeId(leaveRequestLineItem.EmployeeId);
-            if (leaveAproval != null)
-            {
-                _logger.LogInformation($"There is already a pending leave approval for EmployeeId: {leaveRequestLineItem.EmployeeId} and CompanyId: {leaveRequestLineItem.CompanyId}, payload: {JsonConvert.SerializeObject(leaveAproval)}");
-                response.ResponseCode = "08";
-                response.ResponseMessage = "pending leave detected";
-                response.Data = leaveAproval;
-                return response;
-            }
-
-            if (!IsValidWeekeday(leaveRequestLineItem.startDate) || !IsValidWeekeday(leaveRequestLineItem.endDate))
-            {
-                _logger.LogWarning($"Invalid startdate specified. {leaveRequestLineItem.startDate.DayOfWeek} does not fall within a weekday");
-                response.ResponseCode = "08";
-                response.ResponseMessage = $"Invalid startdate specified. {leaveRequestLineItem.startDate.DayOfWeek} does not fall within a weekday";
-                return response;
-            }
-            if (!IsValidWeekeday(leaveRequestLineItem.endDate))
-            {
-                _logger.LogWarning($"Invalid endDate specified. {leaveRequestLineItem.endDate.DayOfWeek} does not fall within a weekday");
-                response.ResponseCode = "08";
-                response.ResponseMessage = $"Invalid endDate specified. {leaveRequestLineItem.endDate.DayOfWeek} does not fall within a weekday";
-                return response;
-            }
-
-            //startdate must be less than end date
-            if (leaveRequestLineItem.startDate > leaveRequestLineItem.endDate)
-            {
-                _logger.LogError("Invalid date range specified. start date must come before the end date");
-                response.ResponseCode = "08";
-                response.ResponseMessage = "Invalid date range specified. start date must come before the the end date";
-                return response;
-            }
-
-
-            //You cannot select a date in the past
-            if (DateTime.Now.Date > leaveRequestLineItem.startDate)
-            {
-                _logger.LogError("Invalid date range specified. You cannot select a date in the past");
-                response.ResponseCode = "08";
-                response.ResponseMessage = $"Invalid date range specified. You cannot select a date in the past. Selected date {leaveRequestLineItem.startDate}, Current date {DateTime.Now}";
-                return response;
-            }
-            //else
-            //{
-            //    _mailService.SendLeaveApproveMailToApprover(userDetails.Employee.UnitHeadEmployeeId, payload.EmployeeId, payload.StartDate, payload.EndDate);
-            //}
-
-            ////resumption date must be greater or equal to end date
-            //if (leaveRequestLineItem.ResumptionDate < leaveRequestLineItem.endDate)
-            //{
-            //    _logger.LogError("Invalid resumption date specified.");
-            //    response.ResponseCode = "08";
-            //    response.ResponseMessage = "Invalid resumption specified.";
-            //    return response;
-            //}
-
-            //Validate leave length
-            //int totaldays = CountWeekdays(leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
-
-            //if (totaldays != leaveRequestLineItem.LeaveLength)
-            //{
-            //    _logger.LogError($"Invalid leave length specified! The leave length is {leaveRequestLineItem.LeaveLength} but the total weekdays between {leaveRequestLineItem.startDate.ToShortDateString()} and {leaveRequestLineItem.endDate.ToShortDateString()} is {totaldays}");
-            //    response.ResponseCode = "08";
-            //    response.ResponseMessage = $"Invalid leave length specified! The leave length is {leaveRequestLineItem.LeaveLength} but the total weekdays between {leaveRequestLineItem.startDate.ToShortDateString()} and {leaveRequestLineItem.endDate.ToShortDateString()} is {totaldays}";
-            //    return response;
-            //}
-
-            #endregion
-
-
-            EmpLeaveRequestInfo empLeaveRequestInfo = null;
-            bool IsExistingRequest = true;
-            try
-            {
-                empLeaveRequestInfo = await _leaveRequestRepository.GetEmpLeaveInfo(leaveRequestLineItem.EmployeeId, leaveRequestLineItem.CompanyId);
-                if (empLeaveRequestInfo == null)
-                {
-                    empLeaveRequestInfo = await _leaveRequestRepository.CreateEmpLeaveInfo(leaveRequestLineItem.EmployeeId);
-                    if (empLeaveRequestInfo == null)
-                    {
-                        _logger.LogError($"Could not create leave request in database.");
-                        response.ResponseCode = "08";
-                        response.ResponseMessage = $"Could not create leave request. Please try again later of contact support for assistance";
-                        return response;
-                        //throw new Exception("Could not create leave request");
-                    }
-                    IsExistingRequest = false;
-                }
-
-                if (IsExistingRequest)
-                {
-                    var leaveRequestLineItems = await _leaveRequestRepository.GetLeaveRequestLineItems(empLeaveRequestInfo.LeaveRequestId);
-                    if (leaveRequestLineItems != null)
-                    {
-                        if (leaveRequestLineItems.Count > 0)
-                        {
-                            gradeLeave = await _leaveRequestRepository.GetEmployeeGradeLeave(leaveRequestLineItem.EmployeeId);
-
-                            //Check number of days left
-                            //Only sum up the days of the items that were approved
-                            noOfDaysTaken = leaveRequestLineItems.Where(x => x.IsApproved == true).Sum(x => x.LeaveLength);
-
-                            if ((noOfDaysTaken + leaveRequestLineItem.LeaveLength) > gradeLeave.NumbersOfDays)
-                            {
-                                response.ResponseCode = "08";
-                                response.ResponseMessage = "Leave length exceeded";
-                                return response;
-                            }
-
-                            //Check split count
-                            //Only count the items that were approved
-                            //include proposed leave (+1)
-                            var noOfApprovedSplit = leaveRequestLineItems.Where(x => x.IsApproved == true).Count();
-                            if ((noOfApprovedSplit + 1) > gradeLeave.NumberOfVacationSplit)
-                            {
-                                response.ResponseCode = "08";
-                                response.ResponseMessage = "Vacation split count exceeded";
-                                return response;
-                            }
-                        }
-                    }
-                }
-
-                leaveRequestLineItem.LeaveRequestId = empLeaveRequestInfo.LeaveRequestId;
-                var res = await _leaveRequestRepository.CreateLeaveRequestLineItem(leaveRequestLineItem);
-                if (res != null)
-                {
-                    //Update active leave info for employee if maximum days or split count reached.
-
-                    //if ((gradeLeave.NumbersOfDays == (noOfDaysTaken + leaveRequestLineItem.LeaveLength)) ||
-                    //    gradeLeave.NumberOfVacationSplit == (leaveRequestLineItems.Count + 1))
-                    //{
-                    //    empLeaveRequestInfo.LeaveStatus = "Completed";
-                    //    _leaveRequestRepository.UpdateLeaveRequestInfoStatus(empLeaveRequestInfo);
-                    //}
-
-                }
-
-
-                _logger.LogError($"About to GetLeaveApprovalInfoByEmployeeId: {leaveRequestLineItem.EmployeeId}.");
-                var currentLeaveApprovalInfo = await _leaveApprovalRepository.GetLeaveApprovalInfoByEmployeeId(leaveRequestLineItem.EmployeeId);
-                _logger.LogError($"response from  GetLeaveApprovalInfoByEmployeeId: {JsonConvert.SerializeObject(currentLeaveApprovalInfo)}.");
-
-                if (currentLeaveApprovalInfo == null)
-                {
-                    _logger.LogError($"Could not create get leave approval by employeeId: {leaveRequestLineItem.EmployeeId}.");
-                    response.ResponseCode = ((int)ResponseCode.Ok).ToString();
-                    response.ResponseMessage = "an error occured while processing your request. Please contact your administrator for further assistance";
-                    //  response.Data = repoResponse;
-                    return response;
-                }
-
-
-                currentLeaveApprovalInfo.ApprovalStatus = $"Pending on Approval count: {1}";
-
-
-                _logger.LogError($"About to GetLeaveApprovalLineItems using LeaveApprovalId: {currentLeaveApprovalInfo.LeaveApprovalId}.");
-                var nextApprovalLineItem = (await _leaveApprovalRepository.GetLeaveApprovalLineItems(currentLeaveApprovalInfo.LeaveApprovalId)).FirstOrDefault(x => x.ApprovalStep == 1);
-
-                _logger.LogError($"response from  GetLeaveApprovalLineItems: {JsonConvert.SerializeObject(nextApprovalLineItem)}.");
-                if (nextApprovalLineItem == null)
-                {
-                    response.ResponseCode = ((int)ResponseCode.Ok).ToString();
-                    response.ResponseMessage = "an error occured while processing your request. Please contact your administrator for further assistance";
-                    //  response.Data = repoResponse;
-                    return response;
-                }
-
-
-                _logger.LogError($"About to send email to first leave approval.");
-                _mailService.SendLeaveApproveMailToApprover(nextApprovalLineItem.ApprovalEmployeeId, leaveRequestLineItem.EmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
-
-                //Send mail to reliever
-                // _mailService.SendLeaveMailToReliever(leaveRequestLineItem.RelieverUserId, leaveRequestLineItem.EmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
-
-                //Send mail to approval
-                //if (userDetails.Employee.UnitHeadEmployeeId == null)
-                //{
-                //    _mailService.SendLeaveApproveMailToApprover(userDetails.Employee.HodEmployeeId, leaveRequestLineItem.EmployeeId, leaveRequestLineItem.StartDate, payload.EndDate);
-                //}
-                //else
-                //{
-                //    _mailService.SendLeaveApproveMailToApprover(userDetails.Employee.UnitHeadEmployeeId, payload.EmployeeId, payload.StartDate, payload.EndDate);
-                //}
-
-
-                response.Data = res;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "leaveRequest created successfully.";
-                return response;
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Exception occured Contact Admin";
-                response.Data = null;
-
-
-
-                return response;
-            }
-        }
-        public async Task<EmpLeaveRequestInfo> GetEmpLeaveInfo(long employeeId, long companyId, string LeaveStatus)
-        {
-            try
-            {
-                //var param = new DynamicParameters();
-                //param.Add("@EmployeeId", employeeId);
-                //if (!string.IsNullOrEmpty(LeaveStatus))
-                //{
-                //    param.Add("@LeaveStatus", LeaveStatus);
-                //}
-                ////param.Add("@LeavePeriod", LeavePeriod);
-
-                var res = await _leaveRequestRepository.GetEmpLeaveInfo(employeeId, companyId, LeaveStatus);
-                if (res != null)
-                {
-                    return res;
-                }
-                return null;
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
-                return default;
-            }
-        }
-        public async Task<BaseResponse> GetLeaveRequestLineItem(long leaveRequestLineItemId)
-        {
-            try
-            {
-                var leaveRequestLineItem = await _leaveRequestRepository.GetLeaveRequestLineItem(leaveRequestLineItemId);
-                return new BaseResponse { Data = leaveRequestLineItem, ResponseCode = "00", ResponseMessage = "LeaveRequestLineItem fetched successfully" };
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-        public async Task<BaseResponse> RescheduleLeaveRequest(LeaveRequestLineItem leaveRequestLineItem)
-        {
-            var response = new BaseResponse();
-            try
-            {
-
-                var empLeaveRequestInfo = await _leaveRequestRepository.GetEmpLeaveInfo(leaveRequestLineItem.EmployeeId, leaveRequestLineItem.CompanyId);
-                if (empLeaveRequestInfo == null)
-                {
-                    return new BaseResponse { ResponseCode = "404", ResponseMessage = "No record found" };
-                }
-
-                //Check that leave start date is not in the past
-                if (leaveRequestLineItem.startDate.Date < DateTime.Today.Date)
-                {
-                    return new BaseResponse { ResponseCode = "400", ResponseMessage = "Leave start date cannot be in the past" };
-                }
-                var lineItem = await _leaveRequestRepository.RescheduleLeaveRequest(leaveRequestLineItem);
-                response.Data = lineItem;
-                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Reschedule Leave was successful.";
-                return response;
-
-                //response.ResponseCode = ResponseCode.Exception.ToString();
-                //response.ResponseMessage = "An error occurred while updating Reschedule Leave Request.";
-                //response.Data = null;
-                //return response;
-            }
-
-
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: RescheduleLeaveRequest ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: RescheduleLeaveRequest ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
         public async Task<BaseResponse> UpdateLeaveApproveLineItem(LeaveApprovalLineItem leaveApprovalLineItem)
         {
             //check if us
@@ -366,7 +50,7 @@ namespace hrms_be_backend_business.Logic
             LeaveApprovalLineItem nextApprovalLineItem = null;
             try
             {
-                var repoResponse = await  _leaveApprovalRepository.UpdateLeaveApprovalLineItem(leaveApprovalLineItem);
+                var repoResponse = await _leaveApprovalRepository.UpdateLeaveApprovalLineItem(leaveApprovalLineItem);
                 if (repoResponse == null)
                 {
                     response.ResponseCode = ((int)ResponseCode.Ok).ToString();
@@ -375,7 +59,7 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-                var currentLeaveApprovalInfo = await _leaveRequestRepository.GetLeaveApprovalInfo(repoResponse.LeaveApprovalId);
+                var currentLeaveApprovalInfo = await _leaveApprovalRepository.GetLeaveApprovalInfo(repoResponse.LeaveApprovalId);
                 var leaveRequestLineItem = await _leaveRequestRepository.GetLeaveRequestLineItem(currentLeaveApprovalInfo.LeaveRequestLineItemId);
                 if (currentLeaveApprovalInfo == null)
                 {
@@ -396,7 +80,7 @@ namespace hrms_be_backend_business.Logic
 
                         //Update active leave info for employee if maximum days or split count reached.
 
-                        var empLeaveRequestInfo = await _leaveRequestRepository.GetEmpLeaveInfo(leaveRequestLineItem.EmployeeId, leaveRequestLineItem.EmployeeId);
+                        var empLeaveRequestInfo = await _leaveRequestRepository.GetEmpLeaveInfo(employeeId:leaveRequestLineItem.EmployeeId);
                         var gradeLeave = await _leaveRequestRepository.GetEmployeeGradeLeave(leaveRequestLineItem.EmployeeId);
                         var leaveRequestLineItems = await _leaveRequestRepository.GetLeaveRequestLineItems(empLeaveRequestInfo.LeaveRequestId);
                         int noOfDaysTaken = leaveRequestLineItems.Sum(x => x.LeaveLength);
@@ -413,9 +97,9 @@ namespace hrms_be_backend_business.Logic
                     if (currentLeaveApprovalInfo.RequiredApprovalCount > repoResponse.ApprovalStep)
                     {
                         repoResponse.ApprovalStep += 1;
-                        currentLeaveApprovalInfo.ApprovalStatus = $"Pending on Approval count: {repoResponse.ApprovalStep}";
-
-                        nextApprovalLineItem = await _leaveApprovalRepository.GetLeaveApprovalLineItem(repoResponse.LeaveApprovalLineItemId, repoResponse.ApprovalStep);
+                       // currentLeaveApprovalInfo.ApprovalStatus = $"Pending on Approval count: {repoResponse.ApprovalStep}";
+                        currentLeaveApprovalInfo.Comments = $"Pending on Approval step: {repoResponse.ApprovalStep}";
+                        nextApprovalLineItem = await _leaveApprovalRepository.GetLeaveApprovalLineItem(repoResponse.LeaveApprovalId, repoResponse.ApprovalStep);
                         sendMail = true;
                     }
 
@@ -469,11 +153,11 @@ namespace hrms_be_backend_business.Logic
             {
                 if (leaveApprovalId > 0)
                 {
-                    leaveApproval = await _leaveRequestRepository.GetLeaveApprovalInfo(leaveApprovalId);
+                    leaveApproval = await _leaveApprovalRepository.GetLeaveApprovalInfo(leaveApprovalId);
                 }
                 else if (leaveReqestLineItemId > 0)
                 {
-                    leaveApproval = await _leaveRequestRepository.GetLeaveApprovalInfoByRequestLineItemId(leaveReqestLineItemId);
+                    leaveApproval = await _leaveApprovalRepository.GetLeaveApprovalInfoByRequestLineItemId(leaveReqestLineItemId);
                 }
                 if (leaveApproval != null)
                 {
@@ -502,18 +186,7 @@ namespace hrms_be_backend_business.Logic
                 throw;
             }
         }
-        public async Task<LeaveApprovalInfo> GetLeaveApprovalByLineItem(long leaveRequestLineitemId)
-        {
-            try
-            {
-                var leaveApproval = await _leaveRequestRepository.GetLeaveApprovalInfoByRequestLineItemId(leaveRequestLineitemId);
-                return leaveApproval;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+
         public async Task<LeaveApprovalInfo> UpdateLeaveApprovalInfo(LeaveApprovalInfo leaveApproval)
         {
             try
@@ -527,6 +200,8 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
+
+
         public async Task<LeaveApprovalLineItem> GetLeaveApprovalLineItem(long leaveApprovalLineItemId, int approvalStep = 0)
         {
             try
@@ -539,12 +214,24 @@ namespace hrms_be_backend_business.Logic
                 throw;
             }
         }
-        public async Task<LeaveApprovalInfo> GetLeaveApprovalInfoByRequestLineItemId(long leaveRequestLineItemId)
+        public async Task<List<PendingLeaveApprovalItemsDto>> GetPendingLeaveApprovals(long approvalEmployeeID)
         {
             try
             {
-                var LeaveApprovalInfo = await _leaveRequestRepository.GetLeaveApprovalInfoByRequestLineItemId(leaveRequestLineItemId);
-                return LeaveApprovalInfo;
+                var res = await _leaveApprovalRepository.GetPendingLeaveApprovals(approvalEmployeeID);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task<List<LeaveApprovalInfoDto>> GetLeaveApprovalInfoByCompanyID(long CompanyID)
+        {
+            try
+            {
+                var res = await _leaveApprovalRepository.GetLeaveApprovalInfoByCompanyID(CompanyID);
+                return res;
             }
             catch (Exception)
             {
@@ -552,67 +239,18 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> GetAllLeaveRequest(string CompanyID)
+        public async Task<LeaveApprovalInfo> GetLeaveApprovalInfoByRequestLineItemId(long leaveRequestLineItemId)
         {
-            BaseResponse response = new BaseResponse();
             try
             {
-                var leave = await _leaveRequestRepository.GetAllLeaveRequest(CompanyID);
-
-                if (leave.Any())
-                {
-                    response.Data = leave;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "LeaveRequest fetched successfully.";
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No LeaveRequest found.";
-                response.Data = null;
-                return response;
+                var LeaveApprovalInfo = await _leaveApprovalRepository.GetLeaveApprovalInfoByRequestLineItemId(leaveRequestLineItemId);
+                return LeaveApprovalInfo;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.LogError($"Exception Occured: LeaveRequest() ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: LeaveRequest() ==> {ex.Message}";
-                response.Data = null;
-                return response;
+                throw;
             }
         }
-
-        public async Task<BaseResponse> GetAllLeaveRquestLineItems(long CompanyID)
-        {
-            BaseResponse response = new BaseResponse();
-            try
-            {
-                var leave = await _leaveRequestRepository.GetAllLeaveRequestLineItems(CompanyID);
-
-                if (leave.Any())
-                {
-                    response.Data = leave;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "LeaveRequestLineItems fetched successfully.";
-                    return response;
-                }
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No LeaveRequestLineItems found.";
-                response.Data = null;
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Occured: LeaveRequest() ==> {ex.Message}");
-                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = $"Exception Occured: LeaveRequest() ==> {ex.Message}";
-                response.Data = null;
-                return response;
-            }
-        }
-
-
-
-
 
         #region Depricated
         //public async Task<BaseResponse> DisaproveLeaveRequest(LeaveRequestDisapproved payload, RequesterInfo requester)

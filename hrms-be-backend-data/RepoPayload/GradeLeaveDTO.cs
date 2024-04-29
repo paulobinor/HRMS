@@ -5,6 +5,7 @@
         public long GradeLeaveID { get; set; }
         public long LeaveTypeId { get; set; }
         public long GradeID { get; set; }
+        public long GenderID { get; set; }
         public long NumbersOfDays { get; set; }
         public long NumberOfVacationSplit { get; set; }
         public int MaximumNumberOfLeaveDays { get; set; }
@@ -39,6 +40,7 @@
 
         public DateTime Created_Date { get; set; }
         public long CreatedByUserID { get; set; }
+        public int GenderID { get; set; }
 
         //public bool IsUpdated { get; set; }
         //public DateTime? Updated_Date { get; set; }
@@ -60,6 +62,7 @@
         public long CompanyID { get; set; }
         public long UserId { get; set; }
         public int MaximumNumberOfLeaveDays { get; set; }
+        public int GenderID { get; set; }
     }
 
     public class DeleteGradeLeaveDTO

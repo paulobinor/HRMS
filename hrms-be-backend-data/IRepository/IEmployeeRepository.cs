@@ -4,9 +4,9 @@ using System.Data;
 
 namespace hrms_be_backend_data.IRepository
 {
-    public  interface IEmployeeRepository
+    public interface IEmployeeRepository
     {
-        Task<EmployeeBasisReq> ProcessEmployeeBasis(EmployeeBasisReq payload);
+        Task<string> ProcessEmployeeBasis(EmployeeBasisReq payload);
         Task<string> ProcessEmployeePersonalInfo(EmployeePersonalInfoReq payload);
         Task<string> ProcessEmployeeIdentification(EmployeeIdentificationReq payload);
         Task<string> ProcessEmployeeContactDetails(EmployeeContactDetailsReq payload);
@@ -15,7 +15,7 @@ namespace hrms_be_backend_data.IRepository
         Task<string> ProcessEmployeeEduBackground(EmployeeEduBackgroundReq payload);
         Task<string> ProcessEmployeeBankDetails(EmployeeBankDetailsReq payload);
         Task<string> ProcessEmployeeCompensation(EmployeeCompensationReq payload);
-        Task<EmployeeFullVm> GetEmployeeByEmail(string email,long companyID);
+        Task<EmployeeFullVm> GetEmployeeByEmail(string email, long companyID);
 
         Task<string> ApproveEmployee(long EmployeeId, string PasswordHash, long CreatedByUserId);
         Task<string> DisapproveEmployee(long Id, string Comment, long CreatedByUserId);

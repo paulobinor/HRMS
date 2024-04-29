@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hrms_be_backend_common.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,7 +31,7 @@ namespace hrms_be_backend_common.Models
         public byte IsMDApproved { get; set; }
         public byte IsMDDeclined { get; set; }
         public string LeaveStatus { get; set; }
-        public List<LeaveRequestLineItem> leaveRequestLineItems { get; set; } = new List<LeaveRequestLineItem>();
+        public List<LeaveRequestLineItemDto> leaveRequestLineItems { get; set; } = new List<LeaveRequestLineItemDto>();
 
     }
 }

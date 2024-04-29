@@ -225,6 +225,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IGradeLeaveService, GradeLeaveService>();
 builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
 builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
+builder.Services.AddScoped<ILeaveApprovalRepository, LeaveApprovalRepository>();
+builder.Services.AddScoped<ILeaveApprovalService, LeaveApprovalService>();
 
 
 

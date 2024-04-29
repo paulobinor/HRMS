@@ -2,6 +2,7 @@
 using hrms_be_backend_common.Communication;
 using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -9,6 +10,7 @@ namespace hrms_be_backend_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PayrollController : BaseController
     {
         private readonly IPayrollService _payrollService;
@@ -66,7 +68,7 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _payrollService.RunPayroll(Payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
-       
+
 
         [HttpGet("GetPayrolls")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<PayrollAllView>>), 200)]
@@ -79,7 +81,7 @@ namespace hrms_be_backend_api.Controllers
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             var route = Request.Path.Value;
-            return this.CustomResponse(await _payrollService.GetPayrolls(filter,route, accessToken, claim, RemoteIpAddress, RemotePort));
+            return this.CustomResponse(await _payrollService.GetPayrolls(filter, route, accessToken, claim, RemoteIpAddress, RemotePort));
         }
 
         [HttpGet("GetPayrollById")]
@@ -123,6 +125,19 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             var route = Request.Path.Value;
             return this.CustomResponse(await _payrollService.GetPayrollRunned(filter, route, accessToken, claim, RemoteIpAddress, RemotePort));
+        }
+        [HttpGet("GetPayrollRunnedForReport")]
+        [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<PayrollRunnedDetailsVm>>), 200)]
+        public async Task<IActionResult> GetPayrollRunnedForReport([FromQuery] PaginationFilter filter, DateTime DateFrom, DateTime DateTo)
+        {
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            var route = Request.Path.Value;
+            return this.CustomResponse(await _payrollService.GetPayrollRunnedForReport(filter, DateFrom, DateTo, route, accessToken, claim, RemoteIpAddress, RemotePort));
         }
 
         [HttpGet("GetPayrollRunnedDetails")]

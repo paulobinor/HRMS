@@ -32,7 +32,8 @@ namespace hrms_be_backend_data.Repository
                     var param = new DynamicParameters();
                     param.Add("@LeaveTypeId", create.LeaveTypeId);
                     param.Add("@GradeID", create.GradeID);
-                    param.Add("@NumbersOfDays", create.NumbersOfDays);
+                param.Add("@GenderID", create.GenderID);
+                param.Add("@NumbersOfDays", create.NumbersOfDays);
                     param.Add("@NumberOfVacationSplit", create.NumberOfVacationSplit);
                     param.Add("@CompanyID", create.CompanyID);
                     param.Add("@CreatedByUserID", create.CreatedByUserID);
@@ -64,6 +65,7 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@LeaveTypeId", update.LeaveTypeId);
                     param.Add("@CompanyID", update.CompanyID);
                     param.Add("@GradeID", update.GradeID);
+                    param.Add("@GenderID", update.GenderID);
                     param.Add("@NumbersOfDays", update.NumbersOfDays);
                     param.Add("@NumberOfVacationSplit", update.NumberOfVacationSplit);
                     param.Add("@MaximumNumberOfLeaveDays", update.MaximumNumberOfLeaveDays);
@@ -193,5 +195,27 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
+        public async Task<IEnumerable<GradeLeaveDTO>> GetEmployeeGradeLeaveTypes(long companyID, long employeeID)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@CompanyID", companyID);
+                    param.Add("@EmployeeID", employeeID);
+                    var res = await _dapper.QueryAsync<GradeLeaveDTO>(ApplicationConstant.Sp_GetEmployeeGradeLeaveTypes, param, commandType: CommandType.StoredProcedure);
+                   // var LeaveTypeDetails = await _dapper.QueryAsync<GradeLeaveDTO>("Sp_get_all_grade_leave_by_compnay", param: param, commandType: CommandType.StoredProcedure);
+
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: GetAllGradeLeaveCompanyId(long CompanyId) ===>{ex.Message}");
+                throw;
+            }
+        }
     }
 }

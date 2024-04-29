@@ -18,6 +18,7 @@
         public DateTime ResumptionDate { get; set; }
         public long JobRoleId { get; set; }
         public long UnitId { get; set; }
+        public bool IsMD { get; set; }
     }
     public class UpdateEmployeeCompensationDto
     {
@@ -45,6 +46,7 @@
         public long JobRoleId { get; set; }
         public long UnitId { get; set; }
         public long GradeId { get; set; }
+        public bool IsMD { get; set; }
     }
     public class UpdateEmployeePersonalInfoDto
     {

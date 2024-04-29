@@ -1,4 +1,6 @@
-﻿using hrms_be_backend_business.ILogic;
+﻿using ExcelDataReader.Log.Logger;
+using hrms_be_backend_api.Dtos;
+using hrms_be_backend_business.ILogic;
 using hrms_be_backend_business.Logic;
 using hrms_be_backend_common.Communication;
 using hrms_be_backend_common.Models;
@@ -214,7 +216,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
         [Authorize]
         [HttpGet("GetGradeLeavebyId")]
-        public async Task<IActionResult> GetGradeLeavebyId(long LeaveTypeId)
+        public async Task<IActionResult> GetGradeLeavebyId(long GradeLeaveID)
         {
             var response = new BaseResponse();
             try
@@ -233,7 +235,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
                 }
 
-                return Ok(await _GradeLeaveService.GetGradeLeaveById(LeaveTypeId, new RequesterInfo()));
+                return Ok(await _GradeLeaveService.GetGradeLeaveById(GradeLeaveID, new RequesterInfo()));
             }
             catch (Exception ex)
             {
@@ -268,6 +270,62 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 }
 
                 return Ok(await _GradeLeaveService.GetGradeLeavebyCompanyId(CompanyID, accessToken,RemoteIpAddress));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: ControllerMethod : GetGradeLeavebyCompanyId ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetGradeLeavebyCompanyId ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+
+        }
+
+        [Authorize]
+        [HttpGet("GetEmployeeGradeLeaveTypes")]
+        public async Task<IActionResult> GetEmployeeGradeLeaveTypes([FromQuery] long CompanyID, [FromQuery] long EmployeeID)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                _logger.LogInformation($"Received get grade leave by grade id request. Payload: {JsonConvert.SerializeObject(CompanyID)} from remote address: {RemoteIpAddress}");
+                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+
+                if (string.IsNullOrEmpty(accessToken))
+                {
+                    return BadRequest(new { responseMessage = $"Missing authorization header value", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                }
+                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                }
+
+                var res = await _GradeLeaveService.GetEmployeeGradeLeaveTypes(CompanyID, EmployeeID);
+                List<EmployeeGradeLeaveDto> empGradeLeaveList = new List<EmployeeGradeLeaveDto>();
+                foreach (var item in res)
+                {
+                    var empgradeLeave = new EmployeeGradeLeaveDto
+                    {
+                        CompanyID = item.CompanyID,
+                        GradeID = item.GradeID,
+                        GenderID = item.GenderID,
+                        GradeLeaveID = item.GradeLeaveID,
+                        GradeName = item.GradeName,
+                        LeaveTypeId = item.LeaveTypeId,
+                        LeaveTypeName = item.LeaveTypeName,
+                        MaximumNumberOfLeaveDays = item.MaximumNumberOfLeaveDays,
+                        NumberOfVacationSplit = item.NumberOfVacationSplit,
+                        NumbersOfDays = item.NumbersOfDays
+                    };
+                    empGradeLeaveList.Add(empgradeLeave);
+                }
+                response.Data = empGradeLeaveList;
+                response.ResponseCode = "00";
+                response.ResponseMessage = "GetEmployeeGradeLeaveTypes fetched Successfully";
+                return Ok(response);
             }
             catch (Exception ex)
             {

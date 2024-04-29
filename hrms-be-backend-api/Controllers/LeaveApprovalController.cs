@@ -14,14 +14,14 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
     [ApiController]
     public class LeaveApprovalController : ControllerBase
     {
-        private readonly ILogger<LeaveRequestController> _logger;
-        private readonly ILeaveRequestService _leaveRequestService;
+        private readonly ILogger<LeaveApprovalController> _logger;
+        private readonly ILeaveApprovalService _leaveApprovalService;
         private readonly IAuthService _authService;
 
-        public LeaveApprovalController(ILogger<LeaveRequestController> logger, ILeaveRequestService leaveRequestService, IAuthService authService)
+        public LeaveApprovalController(ILogger<LeaveApprovalController> logger, ILeaveApprovalService leaveApprovalService, IAuthService authService)
         {
             _logger = logger;
-            _leaveRequestService = leaveRequestService;
+            _leaveApprovalService = leaveApprovalService;
             _authService = authService;
         }
 
@@ -39,7 +39,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
             }
-            var res = await _leaveRequestService.GetLeaveApprovalInfo(leaveApprovalId, LeaveRequestLineItemId);
+            var res = await _leaveApprovalService.GetLeaveApprovalInfo(leaveApprovalId, LeaveRequestLineItemId);
             return Ok(new BaseResponse { Data = res, ResponseCode = "00", ResponseMessage = "Success" });
         }
 
@@ -58,8 +58,52 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
             }
-            var res = await _leaveRequestService.UpdateLeaveApproveLineItem(leaveApprovalLineItem);
+            var res = await _leaveApprovalService.UpdateLeaveApproveLineItem(leaveApprovalLineItem);
             return Ok(res);
+        }
+
+        [HttpGet("GetAllLeaveApprovalLineItems")]
+        [Authorize]
+        public async Task<IActionResult> GetAllLeaveApprovalLineItems( [FromQuery] long CompanyID)
+        {
+            var response = new BaseResponse();
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            _logger.LogInformation($"Received GetAllLeaveApprovalLineItems request. Payload: {JsonConvert.SerializeObject(new { CompanyID })} from remote address: {RemoteIpAddress}");
+
+            var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+            var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+
+            }
+            var res = await _leaveApprovalService.GetLeaveApprovalInfoByCompanyID(CompanyID);
+            response.Data = res;
+            response.ResponseMessage = "Success";
+            response.ResponseCode = "00";
+            return Ok(response);
+        }
+
+        [HttpGet("GetPendingLeaveApprovals")]
+        [Authorize]
+        public async Task<IActionResult> GetPendingLeaveApprovals([FromQuery] long ApprovalEmployeeID)
+        {
+            var response = new BaseResponse();
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            _logger.LogInformation($"Received GetPendingLeaveApprovals request. Payload: {JsonConvert.SerializeObject(new { ApprovalEmployeeID })} from remote address: {RemoteIpAddress}");
+
+            var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+            var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+
+            }
+            var res = await _leaveApprovalService.GetPendingLeaveApprovals(ApprovalEmployeeID);
+            response.Data = res;
+            response.ResponseMessage = "Success";
+            response.ResponseCode = "00";
+            return Ok(response);
         }
 
     }

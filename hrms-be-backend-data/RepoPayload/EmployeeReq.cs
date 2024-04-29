@@ -12,16 +12,17 @@
         public string OfficialEmail { get; set; }
         public string PhoneNumber { get; set; }
         public long EmploymentStatusId { get; set; }
-        public long BranchId { get; set;}
-        public long EmployeeTypeId { get; set;}
+        public long BranchId { get; set; }
+        public long EmployeeTypeId { get; set; }
         public long DepartmentId { get; set; }
         public DateTime ResumptionDate { get; set; }
         public long JobRoleId { get; set; }
         public long UnitId { get; set; }
+        public long GradeId { get; set; }
+        public bool IsMD { get; set; }
         public long CreatedByUserId { get; set; }
         public DateTime DateCreated { get; set; }
         public bool IsModifield { get; set; }
-        public long GradeId { get; set; }
     }
     public class EmployeePersonalInfoReq
     {
@@ -34,9 +35,9 @@
         public string MaidenName { get; set; }
         public int MaritalStatusId { get; set; }
         public string SpouseName { get; set; }
-        public int NoOfChildren { get; set; }       
+        public int NoOfChildren { get; set; }
         public long CreatedByUserId { get; set; }
-        public DateTime DateCreated { get; set; }       
+        public DateTime DateCreated { get; set; }
     }
     public class EmployeeIdentificationReq
     {
@@ -44,7 +45,7 @@
         public int IdentificationTypeId { get; set; }
         public string IdentificationNumber { get; set; }
         public int CountryIdentificationIssuedId { get; set; }
-        public string IdentificationDocument { get; set; }     
+        public string IdentificationDocument { get; set; }
         public long CreatedByUserId { get; set; }
         public DateTime DateCreated { get; set; }
     }
@@ -118,7 +119,7 @@
         public string AccountNumber { get; set; }
         public string PensionAdministrator { get; set; }
         public string PensionPinNumber { get; set; }
-        public string TaxNumber { get; set; }       
+        public string TaxNumber { get; set; }
         public long CreatedByUserId { get; set; }
         public DateTime DateCreated { get; set; }
     }
@@ -127,7 +128,7 @@
         public long EmployeeId { get; set; }
         public long PayrollId { get; set; }
         public decimal BaseSalary { get; set; }
-        public DateTime SalaryEffectiveFrom { get; set; }       
+        public DateTime SalaryEffectiveFrom { get; set; }
         public long CreatedByUserId { get; set; }
         public DateTime DateCreated { get; set; }
     }

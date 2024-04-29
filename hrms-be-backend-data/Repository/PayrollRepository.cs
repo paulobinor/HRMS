@@ -9,7 +9,7 @@ using System.Data;
 
 namespace hrms_be_backend_data.Repository
 {
-    public class PayrollRepository: IPayrollRepository
+    public class PayrollRepository : IPayrollRepository
     {
         private readonly ILogger<PayrollRepository> _logger;
         private readonly IDapperGenericRepository _dapper;
@@ -55,9 +55,9 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
 
                 param.Add("@PayrollId", payload.PayrollId);
-                param.Add("@Title", payload.Title);               
+                param.Add("@Title", payload.Title);
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
-                param.Add("@DateCreated", payload.DateCreated);             
+                param.Add("@DateCreated", payload.DateCreated);
                 return await _dapper.Get<string>("sp_run_payroll", param, commandType: CommandType.StoredProcedure);
 
             }
@@ -74,7 +74,7 @@ namespace hrms_be_backend_data.Repository
             {
                 var param = new DynamicParameters();
 
-                param.Add("@PayrollRunnedId", PayrollRunnedId);               
+                param.Add("@PayrollRunnedId", PayrollRunnedId);
                 return await _dapper.Get<PayrollRunnedSummaryVm>("sp_get_payroll_runned_summary", param, commandType: CommandType.StoredProcedure);
 
             }
@@ -133,14 +133,40 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
+        public async Task<PayrollRunnedWithTotalVm> GetPayrollRunnedForReport(long AccessByUserId, int PageNumber, int RowsOfPage, DateTime DateFrom, DateTime DateTo)
+        {
+            var returnData = new PayrollRunnedWithTotalVm();
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@AccessByUserId", AccessByUserId);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
+                param.Add("@DateFrom", DateFrom);
+                param.Add("@DateTo", DateTo);
+                var result = await _dapper.GetMultiple("sp_get_payroll_runned_for_report", param, gr => gr.Read<long>(), gr => gr.Read<PayrollRunnedVm>(), commandType: CommandType.StoredProcedure);
+                var totalData = result.Item1.SingleOrDefault<long>();
+                var data = result.Item2.ToList<PayrollRunnedVm>();
+                returnData.totalRecords = totalData;
+                returnData.data = data;
+                return returnData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PayrollRepository -> GetPayrollRunned => {ex}");
+                return returnData;
+            }
+
+        }
         public async Task<PayrollRunnedVm> GetPayrollRunnedById(long PayrollRunnedId)
         {
-           
+
             try
             {
                 var param = new DynamicParameters();
                 param.Add("@PayrollRunnedId", PayrollRunnedId);
-              
+
                 return await _dapper.Get<PayrollRunnedVm>("sp_get_payroll_runned_by_id", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
@@ -187,7 +213,7 @@ namespace hrms_be_backend_data.Repository
                 returnData.totalRecords = totalData;
                 returnData.data = data;
                 return returnData;
-               
+
             }
             catch (Exception ex)
             {
@@ -219,10 +245,10 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
 
                 param.Add("@PayrollId", payload.PayrollId);
-                param.Add("@EarningsItemId", payload.EarningsItemId);              
-                param.Add("@EarningsItemAmount", payload.EarningsItemAmount);               
+                param.Add("@EarningsItemId", payload.EarningsItemId);
+                param.Add("@EarningsItemAmount", payload.EarningsItemAmount);
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
-                param.Add("@DateCreated", payload.DateCreated);              
+                param.Add("@DateCreated", payload.DateCreated);
                 return await _dapper.Get<string>("sp_process_payroll_earnings", param, commandType: CommandType.StoredProcedure);
 
             }
@@ -277,7 +303,7 @@ namespace hrms_be_backend_data.Repository
 
                 param.Add("@PayrollId", payload.PayrollId);
                 param.Add("@DeductionId", payload.DeductionId);
-                param.Add("@IsFixed", payload.IsFixed);                      
+                param.Add("@IsFixed", payload.IsFixed);
                 param.Add("@DeductionFixedAmount", payload.DeductionFixedAmount);
                 param.Add("@IsPercentage", payload.IsPercentage);
                 param.Add("@DeductionPercentageAmount", payload.DeductionPercentageAmount);
@@ -333,7 +359,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                var param = new DynamicParameters();            
+                var param = new DynamicParameters();
                 return await _dapper.GetAll<PayrollCyclesVm>("sp_get_payroll_cycles", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
@@ -343,7 +369,7 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
-        public async Task<List<PayrollDeductionComputationVm>> GetPayrollDeductionComputation(long DeductionId,long PayrollId)
+        public async Task<List<PayrollDeductionComputationVm>> GetPayrollDeductionComputation(long DeductionId, long PayrollId)
         {
             try
             {
@@ -364,7 +390,7 @@ namespace hrms_be_backend_data.Repository
             try
             {
                 var param = new DynamicParameters();
-                param.Add("@PayRollRunnedId", PayRollRunnedId);               
+                param.Add("@PayRollRunnedId", PayRollRunnedId);
                 return await _dapper.GetAll<PayrollRunnedReportVm>("sp_get_payroll_runned_report", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
