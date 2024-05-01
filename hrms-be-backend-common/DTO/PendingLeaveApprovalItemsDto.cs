@@ -17,5 +17,7 @@
         public DateTime ResumptionDate { get; set; }
         public int LeaveLength { get; set; }
         public int ApprovalStep { get; set; }
+        public int CurrentApprovalID { get; set; }
+        
     }
 }

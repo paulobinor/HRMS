@@ -23,6 +23,7 @@ namespace hrms_be_backend_common.DTO
         public string? RescheduleReason { get; set; }
         public bool IsApproved { get; set; }
         public string? FullName { get; set; }
+        public string? LeaveTypeName { get; set; }
         public string? RelieverName { get; set; }
         
         public int RequiredApprovalCount { get; set; }

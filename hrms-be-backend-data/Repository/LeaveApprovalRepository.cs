@@ -272,6 +272,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@Comments", leaveApproval.Comments);
                 param.Add("@CurrentApprovalCount", leaveApproval.CurrentApprovalCount);
                 param.Add("@LeaveApprovalId", leaveApproval.LeaveApprovalId);
+                param.Add("@IsApproved", leaveApproval.IsApproved);
 
                 var res = await _dapperGeneric.Get<LeaveApprovalInfo>(ApplicationConstant.Sp_UpdateLeaveApproval, param, commandType: CommandType.StoredProcedure);
                 if (res != null)

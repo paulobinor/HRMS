@@ -36,6 +36,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             var leaveRequestLineItem = new LeaveRequestLineItem
             {
                 CompanyId = createLeaveRequestLine.CompanyId,
+                LeaveTypeId = createLeaveRequestLine.LeaveTypeId,
                 EmployeeId = createLeaveRequestLine.EmployeeId,
                 endDate = createLeaveRequestLine.endDate,
                 startDate = createLeaveRequestLine.startDate,
@@ -133,8 +134,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             try
             {
                 var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-                _logger.LogInformation($"Received GetEmpLeaveInfo request. Payload: {JsonConvert.SerializeObject(new { CompanyId, EmployeeId, LeaveStatus }) } from remote address: {RemoteIpAddress}");
-              
+                _logger.LogInformation($"Received GetEmpLeaveInfo request. Payload: {JsonConvert.SerializeObject(new { CompanyId, EmployeeId, LeaveStatus })} from remote address: {RemoteIpAddress}");
+
                 var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
                 var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
                 if (accessUser.data == null)

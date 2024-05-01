@@ -419,7 +419,6 @@ namespace hrms_be_backend_business.Logic
                         sendMail = true;
                     }
 
-                    var updateLeaveApproval = await _leaveApprovalRepository.UpdateLeaveApprovalInfo(currentLeaveApprovalInfo);
 
                     if (sendMail)
                     {
@@ -443,6 +442,8 @@ namespace hrms_be_backend_business.Logic
 
                     _mailService.SendLeaveDisapproveConfirmationMail(leaveRequestLineItem.EmployeeId, repoResponse.ApprovalEmployeeId);
                 }
+               // currentLeaveApprovalInfo.
+                var updateLeaveApproval = await _leaveApprovalRepository.UpdateLeaveApprovalInfo(currentLeaveApprovalInfo);
 
                 response.ResponseCode = ((int)ResponseCode.Ok).ToString();
                 response.ResponseMessage = ResponseCode.Ok.ToString();

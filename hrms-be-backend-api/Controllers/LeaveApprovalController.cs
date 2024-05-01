@@ -49,7 +49,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         {
             var response = new BaseResponse();
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            _logger.LogInformation($"Received ApproveLeave request. Payload: {JsonConvert.SerializeObject(leaveApprovalLineItem)} from remote address: {RemoteIpAddress}");
+            _logger.LogInformation($"Received Approve Leave request. Payload: {JsonConvert.SerializeObject(leaveApprovalLineItem)} from remote address: {RemoteIpAddress}");
 
             var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
             var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
