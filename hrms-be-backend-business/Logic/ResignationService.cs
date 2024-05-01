@@ -91,7 +91,7 @@ namespace hrms_be_backend_business.Logic
                 payload.EmployeeId = accessUser.data.EmployeeId;
 
                 var alreadyResigned = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeId);
-                if (alreadyResigned != null)
+                if (alreadyResigned != null && (alreadyResigned.IsUnitHeadDisapproved == false || alreadyResigned.IsHodDisapproved == false || alreadyResigned.IsHrDisapproved == false))
                 {
                     return new ExecutedResult<string>() { responseMessage = $"Resignation form has previously been submitted by this user", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
@@ -174,7 +174,6 @@ namespace hrms_be_backend_business.Logic
                     {
                         AppName = "HRMS",
                         UserId = accessUser.data.EmployeeId.ToString(),
-                    //    UserId = "101",
                         Image = signedResignationLetter
                     };
                     MultipartFormDataContent formDataContent = new MultipartFormDataContent();
