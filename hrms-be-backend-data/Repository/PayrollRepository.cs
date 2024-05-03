@@ -133,13 +133,14 @@ namespace hrms_be_backend_data.Repository
             }
 
         }
-        public async Task<PayrollRunnedWithTotalVm> GetPayrollRunnedForReport(long AccessByUserId, int PageNumber, int RowsOfPage, DateTime DateFrom, DateTime DateTo)
+        public async Task<PayrollRunnedWithTotalVm> GetPayrollRunnedForReport(long AccessByUserId, string SearchVal, int PageNumber, int RowsOfPage, string DateFrom, string DateTo)
         {
             var returnData = new PayrollRunnedWithTotalVm();
             try
             {
                 var param = new DynamicParameters();
                 param.Add("@AccessByUserId", AccessByUserId);
+                param.Add("@SearchVal", SearchVal);
                 param.Add("@PageNumber", PageNumber);
                 param.Add("@RowsOfPage", RowsOfPage);
                 param.Add("@DateFrom", DateFrom);

@@ -128,7 +128,7 @@ namespace hrms_be_backend_api.Controllers
         }
         [HttpGet("GetPayrollRunnedForReport")]
         [ProducesResponseType(typeof(PagedExcutedResult<IEnumerable<PayrollRunnedDetailsVm>>), 200)]
-        public async Task<IActionResult> GetPayrollRunnedForReport([FromQuery] PaginationFilter filter, DateTime DateFrom, DateTime DateTo)
+        public async Task<IActionResult> GetPayrollRunnedForReport([FromQuery] PaginationFilter filter, string? DateFrom, string? DateTo)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();

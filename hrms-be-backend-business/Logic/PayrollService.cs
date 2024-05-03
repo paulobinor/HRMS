@@ -532,7 +532,7 @@ namespace hrms_be_backend_business.Logic
                 return PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.Exception).ToString(), $"Unable to process the transaction, kindly contact us support");
             }
         }
-        public async Task<PagedExcutedResult<IEnumerable<PayrollRunnedVm>>> GetPayrollRunnedForReport(PaginationFilter filter, DateTime DateFrom, DateTime DateTo, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
+        public async Task<PagedExcutedResult<IEnumerable<PayrollRunnedVm>>> GetPayrollRunnedForReport(PaginationFilter filter, string DateFrom, string DateTo, string route, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
             var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
             long totalRecords = 0;
@@ -544,14 +544,14 @@ namespace hrms_be_backend_business.Logic
                     return PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.AuthorizationError).ToString(), ResponseCode.AuthorizationError.ToString());
 
                 }
-                var result = await _payrollRepository.GetPayrollRunnedForReport(accessUser.data.UserId, filter.PageNumber, filter.PageSize, DateFrom, DateTo);
+                var result = await _payrollRepository.GetPayrollRunnedForReport(accessUser.data.UserId, filter.SearchValue, filter.PageNumber, filter.PageSize, DateFrom, DateTo);
                 if (result == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
                 if (result.data == null)
                 {
-                    return PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.AuthorizationError.ToString());
+                    return PaginationHelper.CreatePagedReponse<PayrollRunnedVm>(null, validFilter, totalRecords, _uriService, route, ((int)ResponseCode.NotFound).ToString(), ResponseCode.NotFound.ToString());
                 }
 
                 totalRecords = result.totalRecords;

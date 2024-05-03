@@ -215,6 +215,7 @@ namespace hrms_be_backend_data.Repository
                 return default;
             }
         }
+
         public async Task<List<LeaveApprovalLineItem>> GetLeaveApprovalLineItems(long leaveApprovalId)
         {
             try

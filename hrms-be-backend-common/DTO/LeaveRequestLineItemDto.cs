@@ -21,6 +21,8 @@ namespace hrms_be_backend_common.DTO
         public long LeaveTypeId { get; set; }
         public long CompanyId { get; set; }
         public bool IsApproved { get; set; }
+        public string Comments { get; set; }
+        public string RelieverName { get; set; }
 
         public List<LeaveApprovalLineItemDto> leaveApprovalLineItems { get; set; } // = new List<LeaveApprovalLineItemDto>();
     }

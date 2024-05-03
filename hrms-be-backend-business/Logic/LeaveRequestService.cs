@@ -334,6 +334,23 @@ namespace hrms_be_backend_business.Logic
                 {
                     return new BaseResponse { ResponseCode = "400", ResponseMessage = "Leave start date cannot be in the past" };
                 }
+
+                var leaveApprovalInfo = await GetLeaveApprovalInfo(0, leaveRequestLineItem.LeaveRequestLineItemId.Value);
+                if (leaveApprovalInfo != null)
+                {
+                    var approvals = await GetleaveApprovalLineItems(leaveApprovalInfo.LeaveApprovalId);
+                    if (approvals.Count > 0)
+                    {
+                        var approvalExists = approvals.FirstOrDefault(x => x.IsApproved = true);
+                        if (approvalExists != null)
+                        {
+                            response.ResponseCode = "401";
+                            response.ResponseMessage = "The approval process has already began. Leave cannot be re-adjusted at this time. see output data for details";
+                            response.Data = approvalExists;
+                        }
+                    }
+                    
+                }
                 var lineItem = await _leaveRequestRepository.RescheduleLeaveRequest(leaveRequestLineItem);
                 response.Data = lineItem;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');

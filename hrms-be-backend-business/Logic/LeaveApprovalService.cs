@@ -89,10 +89,11 @@ namespace hrms_be_backend_business.Logic
                     if (currentLeaveApprovalInfo.RequiredApprovalCount == currentLeaveApprovalInfo.CurrentApprovalCount) //all approvals is complete
                     {
 
-                        currentLeaveApprovalInfo.ApprovalStatus = "Completed";
-                        currentLeaveApprovalInfo.Comments = "Completed";
+                        currentLeaveApprovalInfo.ApprovalStatus = 
+                            "Completed";
+
                         currentLeaveApprovalInfo.IsApproved = true;
-                        leaveRequestLineItem.IsApproved = true;//update Leaverequestlineitem
+                     //   leaveRequestLineItem.IsApproved = true;//update Leaverequestlineitem
                         sendMailToReliever = true;
                     }
 
@@ -138,7 +139,9 @@ namespace hrms_be_backend_business.Logic
 
                     _mailService.SendLeaveDisapproveConfirmationMail(leaveRequestLineItem.EmployeeId, repoResponse.ApprovalEmployeeId);
                 }
-
+                #region Depricated
+                //await _leaveRequestRepository.UpdateLeaveRequestLineItemApproval(leaveRequestLineItem);
+                #endregion
 
                 _ = UpdateLeavePlanner(leaveRequestLineItem);
                 _ = _leaveApprovalRepository.UpdateLeaveApprovalInfo(currentLeaveApprovalInfo);
@@ -155,8 +158,6 @@ namespace hrms_be_backend_business.Logic
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = "Exception occured";
                 response.Data = null;
-
-
 
                 return response;
             }
@@ -175,9 +176,7 @@ namespace hrms_be_backend_business.Logic
             var leaveRequestLineItems = await _leaveRequestRepository.GetLeaveRequestLineItems(empLeaveRequestInfo.LeaveRequestId);
 
 
-            #region Depricated
-            await _leaveRequestRepository.UpdateLeaveRequestLineItemApproval(leaveRequestLineItem);
-            #endregion
+           
 
             int noOfDaysTaken = leaveRequestLineItems.Where(x => x.IsApproved == true).Sum(x => x.LeaveLength);
             if (gradeLeave.NumbersOfDays >= noOfDaysTaken || gradeLeave.NumberOfVacationSplit == leaveRequestLineItems.Count())
