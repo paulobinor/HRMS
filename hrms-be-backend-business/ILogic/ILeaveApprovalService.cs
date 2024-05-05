@@ -16,7 +16,7 @@ namespace hrms_be_backend_business.ILogic
         Task<LeaveApprovalInfo> GetLeaveApprovalInfoByRequestLineItemId(long leaveRequestLineItemId);
         Task<List<LeaveApprovalLineItem>>GetleaveApprovalLineItems(long leaveApprovalId);
         Task<List<LeaveApprovalInfoDto>> GetLeaveApprovalInfoByCompanyID(long companyID);
-        Task<List<PendingLeaveApprovalItemsDto>> GetPendingLeaveApprovals(long approvalEmployeeID);
+        Task<List<PendingLeaveApprovalItemsDto>> GetPendingLeaveApprovals(long approvalEmployeeID, string v = null);
 
         #region Depricated
         //Task<BaseResponse> GetLeaveRequsetById(long LeaveRequestID, RequesterInfo requester);

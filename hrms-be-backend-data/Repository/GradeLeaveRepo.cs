@@ -29,16 +29,17 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                    var param = new DynamicParameters();
-                    param.Add("@LeaveTypeId", create.LeaveTypeId);
-                    param.Add("@GradeID", create.GradeID);
+                var param = new DynamicParameters();
+                param.Add("@LeaveTypeId", create.LeaveTypeId);
+                param.Add("@GradeID", create.GradeID);
                 param.Add("@GenderID", create.GenderID);
                 param.Add("@NumbersOfDays", create.NumbersOfDays);
-                    param.Add("@NumberOfVacationSplit", create.NumberOfVacationSplit);
-                    param.Add("@CompanyID", create.CompanyID);
-                    param.Add("@CreatedByUserID", create.CreatedByUserID);
+              //  param.Add("@MaximumNumberOfLeaveDays", create.MaximumNumberOfLeaveDays);
+                param.Add("@NumberOfVacationSplit", create.NumberOfVacationSplit);
+                param.Add("@CompanyID", create.CompanyID);
+                param.Add("@CreatedByUserID", create.CreatedByUserID);
 
-                    dynamic response = await _dapper.Get<string>("Sp_create_grade_leave", param, commandType: CommandType.StoredProcedure);
+                dynamic response = await _dapper.Get<string>("Sp_create_grade_leave", param, commandType: CommandType.StoredProcedure);
 
                     //dynamic response = await _dapper.ExecuteAsync("Sp_create_grade_leave", param: param, commandType: CommandType.StoredProcedure);
 

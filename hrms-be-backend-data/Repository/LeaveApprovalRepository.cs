@@ -38,7 +38,7 @@ namespace hrms_be_backend_data.Repository
             {
                 var param = new DynamicParameters();
                 param.Add("@LeaveApprovalLineItemId", leaveApprovalLineItem.LeaveApprovalLineItemId);
-                //param.Add("@LeaveApprovalId", leaveApprovalLineItem.LeaveApprovalId);
+                param.Add("@ApprovalStatus", leaveApprovalLineItem.ApprovalStatus);
                 param.Add("@IsApproved", leaveApprovalLineItem.IsApproved);
                 param.Add("@ApprovalEmployeeId", leaveApprovalLineItem.ApprovalEmployeeId);
                 param.Add("@Comments", leaveApprovalLineItem.Comments);
@@ -123,6 +123,29 @@ namespace hrms_be_backend_data.Repository
                 return default;
             }
         }
+        public async Task<LeaveApprovalInfo> GetExistingLeaveApproval(long EmployeeId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", EmployeeId);
+              //  param.Add("@CompanyID", CompanyID);
+                //param.Add("@LeavePeriod", LeavePeriod);
+
+                var res = await _dapperGeneric.Get<LeaveApprovalInfo>(ApplicationConstant.Sp_GetExistingLeaveApproval, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    return res;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+        }
         public async Task<LeaveApprovalInfo> GetLeaveApprovalInfoByEmployeeId(long EmployeeId)
         {
             try
@@ -193,13 +216,21 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<List<PendingLeaveApprovalItemsDto>> GetPendingLeaveApprovals(long approvalEmployeeID)
+        public async Task<List<PendingLeaveApprovalItemsDto>> GetPendingLeaveApprovals(long approvalEmployeeID, string v)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("@ApprovalEmployeeID", approvalEmployeeID);
-                //param.Add("@LeavePeriod", LeavePeriod);
+                param.Add("@ApprovalStatus", v);
+                //if (!string.IsNullOrEmpty(v))
+                //{
+                //    param.Add("@ApprovalStatus", "All");
+                //}
+                //else
+                //{
+                //    param.Add("@ApprovalStatus", "Pending");
+                //}
 
                 var res = await _dapperGeneric.GetAll<PendingLeaveApprovalItemsDto>(ApplicationConstant.Sp_GetPendingLeaveApprovals, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
@@ -274,6 +305,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@CurrentApprovalCount", leaveApproval.CurrentApprovalCount);
                 param.Add("@LeaveApprovalId", leaveApproval.LeaveApprovalId);
                 param.Add("@IsApproved", leaveApproval.IsApproved);
+                param.Add("@LastApprovalEmployeeID", leaveApproval.CurrentApprovalID);
 
                 var res = await _dapperGeneric.Get<LeaveApprovalInfo>(ApplicationConstant.Sp_UpdateLeaveApproval, param, commandType: CommandType.StoredProcedure);
                 if (res != null)

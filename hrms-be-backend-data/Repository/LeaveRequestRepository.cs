@@ -41,6 +41,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@LeaveTypeId", leaveRequestLineItem.LeaveTypeId);
                 param.Add("@endDate", leaveRequestLineItem.endDate);
                 param.Add("@HandoverNotes", leaveRequestLineItem.HandoverNotes);
+                param.Add("@UploadFilePath", leaveRequestLineItem.UploadFilePath);
                 param.Add("@LeaveLength", leaveRequestLineItem.LeaveLength);
                 param.Add("@LeaveRequestId", leaveRequestLineItem.LeaveRequestId);
                 param.Add("@RelieverUserId", leaveRequestLineItem.RelieverUserId);
@@ -67,9 +68,11 @@ namespace hrms_be_backend_data.Repository
                     var param = new DynamicParameters();
                     //  param.Add("@Status", LeaveRequestEnum.UPDATE);
                     param.Add("@LeaveRequestLineItemId", leaveRequestLineItem.LeaveRequestLineItemId);
+                    param.Add("@LeaveTypeID", leaveRequestLineItem.LeaveTypeId);
                     param.Add("@startDate", leaveRequestLineItem.startDate);
                     param.Add("@endDate", leaveRequestLineItem.endDate);
                     param.Add("@HandoverNotes", leaveRequestLineItem.HandoverNotes);
+                    param.Add("@UploadFilePath", leaveRequestLineItem.UploadFilePath);
                     param.Add("@RescheduleReason", leaveRequestLineItem.RescheduleReason);
                     param.Add("@ResumptionDate", leaveRequestLineItem.ResumptionDate);
                     param.Add("@RelieverUserId", leaveRequestLineItem.RelieverUserId);
@@ -238,6 +241,42 @@ namespace hrms_be_backend_data.Repository
                 _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
                 return default;
             }
+        }
+        public async Task<List<LeaveRequestLineItemDto>> GetEmployeeLeaveRequests(long CompanyID, long EmployeeID)
+        {
+            var param = new DynamicParameters();
+            param.Add("@EmployeeID", EmployeeID);
+            param.Add("@CompanyID", CompanyID);
+            try
+            {
+                var res = await _dapperGeneric.GetAll<LeaveRequestLineItemDto>(ApplicationConstant.Sp_GetEmployeeLeaveRequests, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    foreach (var item in res)
+                    {
+                        var leaveAprovalId = (await GetLeaveApprovalInfoByEmployeeId(item.EmployeeId)).LeaveApprovalId;
+                        if (leaveAprovalId > 0)
+                        {
+                            item.leaveApprovalLineItems = await GetLeaveApprovalLineItems(leaveAprovalId);
+                            //var lineitems = await GetLeaveApprovalLineItems(leaveAprovalId);
+                            //if (lineitems.Count > 0)
+                            //{
+                            //    foreach (var itelitem in lineitems)
+                            //    {
+                            //        item.leaveApprovalLineItemList.Add(itelitem);
+                            //    }
+                            //}
+                        }
+                    }
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+            return null;
         }
         private async Task<List<LeaveRequestLineItemDto>> GetAllLeaveEmpRequestLineItems(long EmployeeID)
         {
@@ -496,7 +535,7 @@ namespace hrms_be_backend_data.Repository
                 var res = await _dapperGeneric.Get<EmpLeaveRequestInfo>(ApplicationConstant.Sp_GetEmpLeaveInfo, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
-                    res.leaveRequestLineItems = await GetAllLeaveEmpRequestLineItems(res.EmployeeId);
+                    res.leaveRequestLineItems = await GetAllLeaveEmpRequestLineItems(employeeId);
                     
                     return res;
                 }
@@ -509,7 +548,6 @@ namespace hrms_be_backend_data.Repository
                 return default;
             }
         }
-
         public async Task<string> ApproveLeaveRequest(long LeaveRequestID, long ApprovedByUserId)
         {
             try
@@ -598,6 +636,8 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
+   
+        
         public async Task<dynamic> DeleteLeaveRequest(LeaveRequestDelete delete, string deletedbyUserEmail)
         {
             try
@@ -622,7 +662,6 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-
         public async Task<dynamic> RescheduleLeaveRequest(RescheduleLeaveRequest update, string requesterUserEmail)
         {
             try
@@ -685,7 +724,6 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-
 
         public async Task<IEnumerable<LeaveRequestDTO>> GetLeaveRequestByUserId(long UserId, long CompanyId)
         {

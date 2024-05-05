@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System.Security.Claims;
+using static iText.Signatures.LtvVerification;
 using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace hrms_be_backend_api.LeaveModuleController.Controller
@@ -45,7 +46,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 IsRescheduled = false,
                 LeaveLength = createLeaveRequestLine.LeaveLength,
                 ResumptionDate = createLeaveRequestLine.ResumptionDate,
-                RelieverUserId = createLeaveRequestLine.RelieverUserId
+                RelieverUserId = createLeaveRequestLine.RelieverUserId,
+                UploadFilePath = createLeaveRequestLine.UploadFilePath
             };
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             _logger.LogInformation($"Received Create leave request. Payload: {JsonConvert.SerializeObject(leaveRequestLineItem)} from remote address: {RemoteIpAddress}");
@@ -217,6 +219,45 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             }
         }
 
+        [Authorize]
+        [HttpGet("GetEmployeeLeaveRequests")]
+        public async Task<IActionResult> GetEmployeeLeaveRequests([FromQuery] long CompanyID, long EmployeeId)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                _logger.LogInformation($"Received GetEmployeeLeaveRequests. Payload: {JsonConvert.SerializeObject(new { CompanyID, EmployeeId })} from remote address: {RemoteIpAddress}");
+
+                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                if (accessUser.data == null)
+                {
+                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+
+                }
+                var leave = await _leaveRequestService.GetEmployeeLeaveRequests(CompanyID, EmployeeId);
+                if (leave.Any())
+                {
+                    response.Data = leave;
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Leave requests fetched successfully.";
+                    return Ok(response);
+                }
+                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "No Leave request found.";
+                response.Data = null;
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: Controller Method : GetAllLeaveRequestLineItems ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllLeaveRequest ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+        }
 
         //[HttpGet("GetEmpLeaveRequestLineItems")]
         //[Authorize]

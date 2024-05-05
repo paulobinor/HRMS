@@ -269,7 +269,9 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
                 }
 
-                return Ok(await _GradeLeaveService.GetGradeLeavebyCompanyId(CompanyID, accessToken,RemoteIpAddress));
+                var res = await _GradeLeaveService.GetGradeLeavebyCompanyId(CompanyID);
+                //  response.ResponseMessage = res.ResponseMessage;
+                return Ok(res);
             }
             catch (Exception ex)
             {

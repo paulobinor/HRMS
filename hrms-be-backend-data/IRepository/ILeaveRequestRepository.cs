@@ -34,6 +34,7 @@ namespace hrms_be_backend_data.IRepository
         Task<EmpLeaveRequestInfo> UpdateLeaveRequestInfoStatus(EmpLeaveRequestInfo empLeaveRequestInfo);
        // Task<List<LeaveApprovalLineItemDto>> GetLeaveApprovalLineItems(long leaveApprovalId);
         Task UpdateLeaveRequestLineItemApproval(LeaveRequestLineItem leaveRequestLineItem);
+        Task<List<LeaveRequestLineItemDto>> GetEmployeeLeaveRequests(long companyID, long employeeID);
     }
 }
 

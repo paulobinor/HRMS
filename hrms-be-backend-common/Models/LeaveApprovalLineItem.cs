@@ -17,5 +17,6 @@ namespace hrms_be_backend_common.Models
         public string ApprovalPosition { get; set; }
         public DateTime EntryDate { get; set; }
         public int ApprovalStep { get; set; }
+        public string ApprovalStatus { get; set; }
     }
 }

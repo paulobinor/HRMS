@@ -1,4 +1,5 @@
-﻿using hrms_be_backend_common.Models;
+﻿using hrms_be_backend_common.DTO;
+using hrms_be_backend_common.Models;
 using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
@@ -21,6 +22,7 @@ namespace hrms_be_backend_business.ILogic
        // Task<List<LeaveApprovalLineItem>>GetleaveApprovalLineItems(long leaveApprovalId);
         Task<BaseResponse> GetAllLeaveRequest(string CompanyID);
         Task<BaseResponse> GetAllLeaveRquestLineItems(long CompanyID);
+        Task<List<LeaveRequestLineItemDto>> GetEmployeeLeaveRequests(long CompanyID, long EmployeeId);
         //Task<List<LeaveApprovalLineItem>> GetAllLeaveApprovalLineItems(string companyID);
 
         #region Depricated

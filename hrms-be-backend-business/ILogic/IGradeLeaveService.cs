@@ -11,7 +11,7 @@ namespace hrms_be_backend_business.ILogic
         Task<BaseResponse> GetAllActiveGradeLeave(RequesterInfo requester);
         Task<BaseResponse> GetAllGradeLeave( string AccessKey, string RemoteIpAddress);
         Task<BaseResponse> GetGradeLeaveById(long GradeLeaveID, RequesterInfo requester);
-        Task<BaseResponse> GetGradeLeavebyCompanyId(long companyId , string AccessKey, string RemoteIpAddress);
+        Task<BaseResponse> GetGradeLeavebyCompanyId(long companyId);
         Task<IEnumerable<GradeLeaveDTO>> GetEmployeeGradeLeaveTypes(long companyID, long employeeID);
     }
 }

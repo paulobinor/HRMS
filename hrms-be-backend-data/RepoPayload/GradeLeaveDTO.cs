@@ -33,7 +33,7 @@
         public long LeaveTypeId { get; set; }
         public long GradeID { get; set; }
         public long NumbersOfDays { get; set; }
-        public long NumberOfVacationSplit { get; set; }
+        public long? NumberOfVacationSplit { get; set; } = 0;
         public string GradeName { get; set; }
         public string LeaveTypeName { get; set; }
         public long CompanyID { get; set; }
@@ -41,6 +41,7 @@
         public DateTime Created_Date { get; set; }
         public long CreatedByUserID { get; set; }
         public int GenderID { get; set; }
+        public int MaximumNumberOfLeaveDays { get; set; }
 
         //public bool IsUpdated { get; set; }
         //public DateTime? Updated_Date { get; set; }

@@ -49,8 +49,22 @@ namespace hrms_be_backend_business.Logic
             bool sendMailToReliever = false;
             var response = new BaseResponse();
             LeaveApprovalLineItem nextApprovalLineItem = null;
+            
             try
             {
+                var Emilokan = (await _leaveApprovalRepository.GetPendingLeaveApprovals(leaveApprovalLineItem.ApprovalEmployeeId, "")).FirstOrDefault(x => x.LeaveApprovalLineItemId == leaveApprovalLineItem.LeaveApprovalLineItemId);
+                if (Emilokan != null)
+                {
+                    if (Emilokan.LastApprovalEmployeeID != leaveApprovalLineItem.ApprovalEmployeeId) 
+                    {
+                        //Not your turn to approve
+                        response.ResponseCode = "401";
+                        response.ResponseMessage = "You cannot peform this action at this time";
+                        response.Data = null;
+                        return response;
+                    }
+                }
+
                 var repoResponse = await _leaveApprovalRepository.UpdateLeaveApprovalLineItem(leaveApprovalLineItem);
                 if (repoResponse == null)
                 {
@@ -84,7 +98,7 @@ namespace hrms_be_backend_business.Logic
                     return response;
                 }
 
-                if (repoResponse.IsApproved)
+                if (repoResponse.IsApproved || repoResponse.ApprovalStatus == "Approved")
                 {
                     if (currentLeaveApprovalInfo.RequiredApprovalCount == currentLeaveApprovalInfo.CurrentApprovalCount) //all approvals is complete
                     {
@@ -102,10 +116,10 @@ namespace hrms_be_backend_business.Logic
                         currentLeaveApprovalInfo.CurrentApprovalCount += 1;
 
                         // currentLeaveApprovalInfo.ApprovalStatus = $"Pending on Approval count: {repoResponse.ApprovalStep}";
-                        //nextApprovalLineItem = await _leaveApprovalRepository.GetLeaveApprovalLineItem(repoResponse.LeaveApprovalId, currentLeaveApprovalInfo.CurrentApprovalCount);
-                        //currentLeaveApprovalInfo.CurrentApprovalID = (int)nextApprovalLineItem.ApprovalEmployeeId;
+                        nextApprovalLineItem = await _leaveApprovalRepository.GetLeaveApprovalLineItem(repoResponse.LeaveApprovalId, currentLeaveApprovalInfo.CurrentApprovalCount);
+                        currentLeaveApprovalInfo.CurrentApprovalID = (int)nextApprovalLineItem.ApprovalEmployeeId;
 
-                        //   currentLeaveApprovalInfo.Comments = $"Pending on Approval Position: {nextApprovalLineItem.ApprovalPosition}";
+                           currentLeaveApprovalInfo.Comments = $"Pending on Approval Position: {nextApprovalLineItem.ApprovalPosition}";
                         //   sendMail = true;
                     }
 
@@ -120,8 +134,9 @@ namespace hrms_be_backend_business.Logic
                         //Send mail to reliever
                         _mailService.SendLeaveMailToReliever(leaveRequestLineItem.RelieverUserId, leaveRequestLineItem.EmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
                     }
+                    response.ResponseMessage = "Approved Successfully";
                 }
-                else if (!repoResponse.IsApproved) // Leave approval is denied
+                else if (!repoResponse.IsApproved || repoResponse.ApprovalStatus == "Disapproved") // Leave approval is denied
                 {
                     currentLeaveApprovalInfo.ApprovalStatus = "Completed";
                     // currentLeaveApprovalInfo.ApprovalStatus = $"Denied on Approval count: {repoResponse.ApprovalStep}";
@@ -138,6 +153,7 @@ namespace hrms_be_backend_business.Logic
                     // leaveRequestLineItem = await _leaveRequestRepository.GetLeaveRequestLineItem(currentLeaveApprovalInfo.LeaveRequestLineItemId);
 
                     _mailService.SendLeaveDisapproveConfirmationMail(leaveRequestLineItem.EmployeeId, repoResponse.ApprovalEmployeeId);
+                    response.ResponseMessage = "Disapproved Successfully";
                 }
                 #region Depricated
                 //await _leaveRequestRepository.UpdateLeaveRequestLineItemApproval(leaveRequestLineItem);
@@ -147,7 +163,7 @@ namespace hrms_be_backend_business.Logic
                 _ = _leaveApprovalRepository.UpdateLeaveApprovalInfo(currentLeaveApprovalInfo);
 
                 response.ResponseCode = ((int)ResponseCode.Ok).ToString();
-                response.ResponseMessage = ResponseCode.Ok.ToString();
+               // response.ResponseMessage = ResponseCode.Ok.ToString();
                 response.Data = repoResponse;
                 return response;
 
@@ -179,7 +195,9 @@ namespace hrms_be_backend_business.Logic
            
 
             int noOfDaysTaken = leaveRequestLineItems.Where(x => x.IsApproved == true).Sum(x => x.LeaveLength);
-            if (gradeLeave.NumbersOfDays >= noOfDaysTaken || gradeLeave.NumberOfVacationSplit == leaveRequestLineItems.Count())
+            //if (gradeLeave.NumbersOfDays >= noOfDaysTaken || gradeLeave.NumberOfVacationSplit == leaveRequestLineItems.Count())
+                
+            if (gradeLeave.NumbersOfDays >= noOfDaysTaken)
             {
                 empLeaveRequestInfo.LeaveStatus = "Completed";
                 _leaveRequestRepository.UpdateLeaveRequestInfoStatus(empLeaveRequestInfo);
@@ -254,11 +272,11 @@ namespace hrms_be_backend_business.Logic
                 throw;
             }
         }
-        public async Task<List<PendingLeaveApprovalItemsDto>> GetPendingLeaveApprovals(long approvalEmployeeID)
+        public async Task<List<PendingLeaveApprovalItemsDto>> GetPendingLeaveApprovals(long approvalEmployeeID, string v = null)
         {
             try
             {
-                var res = await _leaveApprovalRepository.GetPendingLeaveApprovals(approvalEmployeeID);
+                var res = await _leaveApprovalRepository.GetPendingLeaveApprovals(approvalEmployeeID, v);
                 return res;
             }
             catch (Exception)

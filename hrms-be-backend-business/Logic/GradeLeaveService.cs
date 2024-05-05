@@ -420,7 +420,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> GetGradeLeavebyCompanyId(long companyId, string AccessKey, string RemoteIpAddress)
+        public async Task<BaseResponse> GetGradeLeavebyCompanyId(long companyId)
         {
             BaseResponse response = new BaseResponse();
 

@@ -74,9 +74,10 @@ namespace hrms_be_backend_business.Logic
 
             #region Validate Leave Request
             //check if any pending leave approvals
-            var leaveAproval = await _leaveApprovalRepository.GetLeaveApprovalInfoByEmployeeId(leaveRequestLineItem.EmployeeId);
+            var leaveAproval = await _leaveApprovalRepository.GetExistingLeaveApproval(leaveRequestLineItem.EmployeeId);
             if (leaveAproval != null)
             {
+
                 _logger.LogInformation($"There is already a pending leave approval for EmployeeId: {leaveRequestLineItem.EmployeeId} and CompanyId: {leaveRequestLineItem.CompanyId}, payload: {JsonConvert.SerializeObject(leaveAproval)}");
                 response.ResponseCode = "08";
                 response.ResponseMessage = "pending leave detected";
@@ -95,7 +96,7 @@ namespace hrms_be_backend_business.Logic
             {
                 _logger.LogWarning($"Invalid endDate specified. {leaveRequestLineItem.endDate.DayOfWeek} does not fall within a weekday");
                 response.ResponseCode = "08";
-                response.ResponseMessage = $"Invalid endDate specified. {leaveRequestLineItem.endDate.DayOfWeek} does not fall within a weekday";
+                response.ResponseMessage = $"Invalid end date specified. {leaveRequestLineItem.endDate.DayOfWeek} does not fall within a weekday";
                 return response;
             }
 
@@ -115,6 +116,15 @@ namespace hrms_be_backend_business.Logic
                 _logger.LogError("Invalid date range specified. You cannot select a date in the past");
                 response.ResponseCode = "08";
                 response.ResponseMessage = $"Invalid date range specified. You cannot select a date in the past. Selected date {leaveRequestLineItem.startDate}, Current date {DateTime.Now}";
+                return response;
+            }
+
+            //You cannot relieve yourself a date in the past
+            if (leaveRequestLineItem.EmployeeId == leaveRequestLineItem.RelieverUserId)
+            {
+                _logger.LogError("Invalid date reliever specified specified. You cannot relieve yourself");
+                response.ResponseCode = "08";
+                response.ResponseMessage = $"Invalid date reliever specified. You cannot relieve yourself";
                 return response;
             }
             //else
@@ -187,13 +197,13 @@ namespace hrms_be_backend_business.Logic
                             //Check split count
                             //Only count the items that were approved
                             //include proposed leave (+1)
-                            var noOfApprovedSplit = leaveRequestLineItems.Where(x => x.IsApproved == true).Count();
-                            if ((noOfApprovedSplit + 1) > gradeLeave.NumberOfVacationSplit)
-                            {
-                                response.ResponseCode = "08";
-                                response.ResponseMessage = "Vacation split count exceeded";
-                                return response;
-                            }
+                            //var noOfApprovedSplit = leaveRequestLineItems.Where(x => x.IsApproved == true).Count();
+                            //if ((noOfApprovedSplit + 1) > gradeLeave.NumberOfVacationSplit)
+                            //{
+                            //    response.ResponseCode = "08";
+                            //    response.ResponseMessage = "Vacation split count exceeded";
+                            //    return response;
+                            //}
                         }
                     }
                 }
@@ -341,11 +351,11 @@ namespace hrms_be_backend_business.Logic
                     var approvals = await GetleaveApprovalLineItems(leaveApprovalInfo.LeaveApprovalId);
                     if (approvals.Count > 0)
                     {
-                        var approvalExists = approvals.FirstOrDefault(x => x.IsApproved = true);
+                        var approvalExists = approvals.FirstOrDefault(x => x.IsApproved = true || x.ApprovalStatus == "Approved");
                         if (approvalExists != null)
                         {
                             response.ResponseCode = "401";
-                            response.ResponseMessage = "The approval process has already began. Leave cannot be re-adjusted at this time. see output data for details";
+                            response.ResponseMessage = "The approval process has already began. Leave request cannot be re-adjusted at this time. see output data for details";
                             response.Data = approvalExists;
                         }
                     }
@@ -599,6 +609,20 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
+        public async Task<List<LeaveRequestLineItemDto>> GetEmployeeLeaveRequests(long CompanyID, long EmployeeID)
+        {
+            try
+            {
+                var leave = await _leaveRequestRepository.GetEmployeeLeaveRequests(CompanyID, EmployeeID);
+
+                return leave;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetEmployeeLeaveRequests() ==> {ex.Message}");
+                return null;
+            }
+        }
         public async Task<BaseResponse> GetAllLeaveRquestLineItems(long CompanyID)
         {
             BaseResponse response = new BaseResponse();
