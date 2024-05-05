@@ -384,7 +384,7 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 //disapprove resignation clearance
-                var disapprovedResignationResp = await _resignationClearanceRepository.DisapprovePendingResignationClearance(request.employeeID, request.ResignationClearanceID, request.reason);
+                var disapprovedResignationResp = await _resignationClearanceRepository.DisapprovePendingResignationClearance(accessUser.data.EmployeeId, request.ResignationClearanceID, request.reason);
 
                 //Get the final approval department from exit clearance table
                 //var finalApprovalDepartment = await _exitClearanceSetupRepository.GetDepartmentThatIsFinalApprroval(resignation.CompanyID);
