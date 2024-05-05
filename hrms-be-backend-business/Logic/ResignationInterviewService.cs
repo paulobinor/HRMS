@@ -126,7 +126,7 @@ namespace hrms_be_backend_business.Logic
                 var sectionTwoDataTable = DatatableUtilities.ConvertSectionListToDataTable(payload.SectionTwo);
 
 
-                payload.EmployeeId = accessUser.data.EmployeeId;
+                //payload.EmployeeId = accessUser.data.EmployeeId;
 
                 var resignation = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeId);
 
