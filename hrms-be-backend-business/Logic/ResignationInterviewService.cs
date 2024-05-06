@@ -119,7 +119,7 @@ namespace hrms_be_backend_business.Logic
                     if (payload.SectionTwo[x].Value < 1)
                         return new ExecutedResult<string>() { responseMessage = "Please kindly check all radio button on section two", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
 
-                    payload.SectionTwo[x].Scale = Enum.GetName(typeof(ExitInterviewScaleSectionTwo), (ExitInterviewScaleSectionOne)payload.SectionTwo[x].Value);
+                    payload.SectionTwo[x].Scale = Enum.GetName(typeof(ExitInterviewScaleSectionTwo), (ExitInterviewScaleSectionTwo)payload.SectionTwo[x].Value);
                 }
 
                 var sectionOneDataTable = DatatableUtilities.ConvertSectionListToDataTable(payload.SectionOne);

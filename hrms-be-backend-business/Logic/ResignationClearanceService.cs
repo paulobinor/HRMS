@@ -392,7 +392,7 @@ namespace hrms_be_backend_business.Logic
 
                 if (!disapprovedResignationResp.Contains("Success"))
                 {
-                    return new ExecutedResult<string>() { responseMessage = $"{resignation}", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+                    return new ExecutedResult<string>() { responseMessage = $"{disapprovedResignationResp}", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
 
                 }
 

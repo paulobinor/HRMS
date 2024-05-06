@@ -37,5 +37,6 @@ namespace Com.XpressPayments.Common.ViewModels
         public int Value { get; set; }
         //[JsonIgnore]
         public string Scale { get; set; }
+        public string InterviewDetailName { get; set; }
     }
 }
