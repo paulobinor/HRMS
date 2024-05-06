@@ -32,10 +32,10 @@ namespace hrms_be_backend_api.Controllers
         [HttpPost]
         [Route("file")]
         [Authorize]
-        public async Task<IActionResult> UploadFile(IFormFile formFile, long EmployeeID)
+        public async Task<IActionResult> UploadFile(IFormFile formFile)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            _logger.LogInformation($"Received GetPendingLeaveApprovals request. Payload: {JsonConvert.SerializeObject(new { EmployeeID })} from remote address: {RemoteIpAddress}");
+            _logger.LogInformation($"Received GetPendingLeaveApprovals request. Payload: {JsonConvert.SerializeObject(new { formFile.FileName })} from remote address: {RemoteIpAddress}");
 
             var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
             var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
@@ -45,7 +45,7 @@ namespace hrms_be_backend_api.Controllers
 
             }
 
-            return Ok(await _uploadFileService.UploadFile(formFile, EmployeeID));
+            return Ok(await _uploadFileService.UploadFile(formFile, accessUser.data.OfficialMail));
         }
     }
 }

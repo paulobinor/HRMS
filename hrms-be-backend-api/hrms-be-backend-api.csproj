@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <Folder Include="UploadedDocument\" />
+    <Folder Include="Uploads\LeaveRequests\" />
   </ItemGroup>
 
 </Project>

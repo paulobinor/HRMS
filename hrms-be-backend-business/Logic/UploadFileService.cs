@@ -6,8 +6,10 @@ using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
@@ -22,16 +24,77 @@ namespace hrms_be_backend_business.Logic
     {
         private readonly IConfiguration _config;
         private readonly ILogger<UploadFileService> _logger;
-        private readonly IUploadFileService _uploadFileService;
+        //  private readonly IUploadFileService _uploadFileService;
+        private readonly IHostEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _webHostingEnvironment;
+        private readonly IEmployeeService _employeeService;
 
-        public UploadFileService(IConfiguration config, ILogger<UploadFileService> logger, IUploadFileService uploadFileService)
+        public UploadFileService(IConfiguration config, ILogger<UploadFileService> logger, IHostEnvironment hostingEnvironment, IEmployeeService employeeService, IWebHostEnvironment webHostingEnvironment)
         {
             _config = config;
             _logger = logger;
-            _uploadFileService = uploadFileService;
+            _hostingEnvironment = hostingEnvironment;
+            _employeeService = employeeService;
+            _webHostingEnvironment = webHostingEnvironment;
+            //  _uploadFileService = uploadFileService;
         }
 
-        public async Task<ExecutedResult<string>> UploadFile(IFormFile formFile, long EmployeeID)
+        public async Task<ExecutedResult<string>> UploadFile(IFormFile file, string FullName)
+        {
+            try
+            {
+                string folderPath = _config["FileUploadConfig:UploadFolderPath"];
+
+                if (file == null || file.Length == 0)
+                {
+                    throw new ArgumentException("File is not selected or is empty.");
+                }
+
+                // Get the uploads folder path
+                string uploadsFolder = Path.Combine(_hostingEnvironment.ContentRootPath, folderPath);
+
+                // Check if the folder exists, create it if not
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+
+                string uniqueFileName = FullName + Path.GetExtension(file.FileName);
+
+
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+
+                string urlPath = string.Empty;
+                if (_webHostingEnvironment.IsDevelopment())
+                {
+                    _logger.LogInformation("This is a development environment as such we will return the content absolute root path");
+                    urlPath = Path.Combine(_webHostingEnvironment.ContentRootPath, folderPath, uniqueFileName);
+
+                }
+                else
+                {
+                    _logger.LogInformation("This is a production environment as such we will return the web root path");
+                    urlPath = Path.Combine(_webHostingEnvironment.WebRootPath, folderPath, uniqueFileName);
+                }
+
+
+                return new ExecutedResult<string>() { responseMessage = "File uploaded Successfully", responseCode = 00.ToString(), data = urlPath };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error Submitting resignation", ex);
+                return new ExecutedResult<string>() { responseMessage = "An error occurred", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+            }
+        }
+
+        public async Task<ExecutedResult<string>> UploadFile1(IFormFile formFile, string FullName)
         {
             try
             {
@@ -43,19 +106,18 @@ namespace hrms_be_backend_business.Logic
                     errorMessages += "|Resignation letter is required";
 
 
-                string url = uploadBaseURL + @"\LeaveRequests";
-
-                if (!Directory.Exists(url))
-                    Directory.CreateDirectory(url);
+                // uploadPath = uploadPath + @"\LeaveRequests";
+                if (!Directory.Exists(uploadPath))
+                    Directory.CreateDirectory(uploadPath);
 
                 if (string.IsNullOrEmpty(errorMessages))
                 {
-    
+
                     using HttpClient httpClient = new HttpClient();
                     FileUploadRequest request = new FileUploadRequest
                     {
                         AppName = "HRMS",
-                        UserId = EmployeeID.ToString(),
+                        UserId = FullName,
                         Image = formFile
                     };
                     MultipartFormDataContent formDataContent = new MultipartFormDataContent
@@ -65,6 +127,7 @@ namespace hrms_be_backend_business.Logic
                         { new StringContent(request.UserId), "UserId" }
                     };
 
+                    string url = uploadBaseURL + "UploadFile";
                     HttpResponseMessage response = await httpClient.PostAsync(url, formDataContent);
                     if (response.StatusCode != HttpStatusCode.OK)
                     {

@@ -9,7 +9,7 @@ namespace hrms_be_backend_business.ILogic
 {
     public interface IUploadFileService
     {
-        Task<ExecutedResult<string>> UploadFile(IFormFile formFile, long EmployeeID);
+        Task<ExecutedResult<string>> UploadFile(IFormFile formFile, string FullName);
     }
    
 }

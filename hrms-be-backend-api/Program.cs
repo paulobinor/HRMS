@@ -240,6 +240,10 @@ builder.Services.AddScoped<IExitClearanceSetupService, ExitClearanceSetupService
 //Mail Service
 builder.Services.AddScoped<IMailService, MailService>();
 
+//File Upload
+builder.Services.AddScoped<IUploadFileService, UploadFileService>();
+//builder.Services.AddSingleton<IWebHostEnvironment>();
+
 
 var app = builder.Build();
 app.Use(async (context, next) =>
