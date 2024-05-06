@@ -61,7 +61,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpGet]
         [Route("GetResignationInterviewDetails/{InterviewID}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetResignationInterviewDetails(long InterviewID)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -111,7 +111,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpGet]
         [Route("GetInterviewScaleDetails")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetInterviewScaleDetails()
         {
 

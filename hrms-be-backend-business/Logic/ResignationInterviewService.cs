@@ -119,7 +119,7 @@ namespace hrms_be_backend_business.Logic
                     if (payload.SectionTwo[x].Value < 1)
                         return new ExecutedResult<string>() { responseMessage = "Please kindly check all radio button on section two", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
 
-                    payload.SectionTwo[x].Scale = Enum.GetName(typeof(ExitInterviewScaleSectionTwo), (ExitInterviewScaleSectionOne)payload.SectionTwo[x].Value);
+                    payload.SectionTwo[x].Scale = Enum.GetName(typeof(ExitInterviewScaleSectionTwo), (ExitInterviewScaleSectionTwo)payload.SectionTwo[x].Value);
                 }
 
                 var sectionOneDataTable = DatatableUtilities.ConvertSectionListToDataTable(payload.SectionOne);
@@ -242,14 +242,14 @@ namespace hrms_be_backend_business.Logic
         {
             BaseResponse response = new BaseResponse();
 
-            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-            if (accessUser.data == null)
-            {
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Unathorized User";
-                response.Data = null;
-                return response;
-            }
+            //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+            //    response.ResponseMessage = "Unathorized User";
+            //    response.Data = null;
+            //    return response;
+            //}
 
             try
             {
@@ -290,14 +290,14 @@ namespace hrms_be_backend_business.Logic
         public async Task<BaseResponse> GetInterviewScaleDetails(string AccessKey, string RemoteIpAddress)
         {
             BaseResponse response = new BaseResponse();
-            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-            if (accessUser.data == null)
-            {
-                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "Unathorized User";
-                response.Data = null;
-                return response;
-            }
+            //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+            //    response.ResponseMessage = "Unathorized User";
+            //    response.Data = null;
+            //    return response;
+            //}
             try
             {
 

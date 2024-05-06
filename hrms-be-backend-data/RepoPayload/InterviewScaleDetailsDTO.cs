@@ -8,7 +8,7 @@ namespace hrms_be_backend_data.RepoPayload
 {
     public class InterviewScaleDetailsDTO
     {
-        public int InterviewScaleDetailsID { get; set; }
+        public int InterviewRateScaleDetailsID { get; set; }
         public string Name { get; set; }
         public int Section { get; set; }
         public int MaximumValue { get; set; }
