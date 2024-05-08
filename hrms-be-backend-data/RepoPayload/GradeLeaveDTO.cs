@@ -40,7 +40,7 @@
 
         public DateTime Created_Date { get; set; }
         public long CreatedByUserID { get; set; }
-        public int GenderID { get; set; }
+        public long GenderID { get; set; }
         public int MaximumNumberOfLeaveDays { get; set; }
 
         //public bool IsUpdated { get; set; }

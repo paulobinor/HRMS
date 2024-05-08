@@ -31,6 +31,7 @@
         //public bool IsPaidLeave { get; set; } 
         public long CompanyID { get; set; }
         public string UserId { get; set; }
+        public long GenderID { get; internal set; }
     }
 
     public class UpdateLeaveTypeDTO
@@ -40,6 +41,7 @@
         public string LeaveTypeName { get; set; }
         public long LastUpdatedUserId { get; set; }
         public long CompanyID { get; set; }
+        public long GenderID { get; internal set; }
     }
 
     public class DeleteLeaveTypeDTO

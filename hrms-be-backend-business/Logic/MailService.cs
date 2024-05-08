@@ -45,10 +45,10 @@ namespace hrms_be_backend_business.AppCode
                     mail.Attachments.Add(attachment);
                 }
                 mail.IsBodyHtml = true;
-                NetworkCredential Credentials = new NetworkCredential(_smtpParameters.EmailAddress, _smtpParameters.Password);
+             //   NetworkCredential Credentials = new NetworkCredential(_smtpParameters.EmailAddress, _smtpParameters.Password);
                 using (var smtpClient = new SmtpClient(_smtpParameters.Host, Convert.ToInt32(_smtpParameters.Port)))
                 {
-                    smtpClient.Credentials = Credentials;
+                    smtpClient.Credentials = new NetworkCredential(_smtpParameters.EmailAddress, _smtpParameters.Password); ;
                     smtpClient.EnableSsl = _smtpParameters.SSL;
                     await smtpClient.SendMailAsync(mail);
 

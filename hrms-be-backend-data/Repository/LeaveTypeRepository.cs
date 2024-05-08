@@ -34,6 +34,7 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
                 param.Add("@LeaveTypeName", create.LeaveTypeName.Trim());
                 param.Add("@CompanyID", create.CompanyID);
+                param.Add("@GenderID", create.GenderID);
                 param.Add("@CreatedByUserId", create.UserId);
 
                 var res = await _dapperGeneric.Get<CreateLeaveTypeDTO>(ApplicationConstant.Sp_CreateLeaveType, param, commandType: CommandType.StoredProcedure);
@@ -62,7 +63,7 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@LeaveTypeId", update.LeaveTypeId);
                     param.Add("@LeaveTypeName", update.LeaveTypeName);
                   //  param.Add("@MaximumLeaveDurationDaysUpd", update.MaximumLeaveDurationDays);
-                  //  param.Add("@GenderUpd", update.Gender.Trim());
+                    param.Add("@GenderID", update.GenderID);
                     //param.Add("@IsPaidLeaveUpd", update.IsPaidLeave);
                     param.Add("@CompanyId", update.CompanyID);
                     param.Add("@LastUpdatedUserId", update.LastUpdatedUserId);
