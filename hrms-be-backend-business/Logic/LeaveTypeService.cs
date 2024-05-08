@@ -213,7 +213,7 @@ namespace hrms_be_backend_business.Logic
 
                         _logger.LogInformation($"LeaveType with name: {DeletedLeaveType.LeaveTypeName} Deleted successfully.");
                         response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"LeaveType with name: {DeletedLeaveType.LeaveTypeName} Deleted successfully.";
+                        response.ResponseMessage = $"LeaveType deleted successfully.";
                         response.Data = null;
                         return response;
 

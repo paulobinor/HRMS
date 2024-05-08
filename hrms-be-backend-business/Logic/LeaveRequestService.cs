@@ -1,4 +1,5 @@
-﻿using hrms_be_backend_business.AppCode;
+﻿using GTB.Common;
+using hrms_be_backend_business.AppCode;
 using hrms_be_backend_business.ILogic;
 using hrms_be_backend_common.DTO;
 using hrms_be_backend_common.Models;
@@ -24,10 +25,11 @@ namespace hrms_be_backend_business.Logic
         private readonly ILeaveRequestRepository _leaveRequestRepository;
         private readonly ILeaveApprovalRepository _leaveApprovalRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IGradeLeaveRepo  _leaveTypeRepository;
         private readonly IMailService _mailService;
 
         public LeaveRequestService(IAccountRepository accountRepository, ILogger<LeaveRequestService> logger,
-            ILeaveRequestRepository leaveRequestRepository, IAuditLog audit, ICompanyRepository companyrepository, IMailService mailService, ILeaveApprovalRepository leaveApprovalRepository)
+            ILeaveRequestRepository leaveRequestRepository, IAuditLog audit, ICompanyRepository companyrepository, IMailService mailService, ILeaveApprovalRepository leaveApprovalRepository, IGradeLeaveRepo leaveTypeRepository)
         {
             _audit = audit;
             _mailService = mailService;
@@ -36,6 +38,7 @@ namespace hrms_be_backend_business.Logic
             _leaveRequestRepository = leaveRequestRepository;
             _companyrepository = companyrepository;
             _leaveApprovalRepository = leaveApprovalRepository;
+            _leaveTypeRepository = leaveTypeRepository;
         }
 
         private int CountWeekdays(DateTime startDate, DateTime endDate)
@@ -85,13 +88,16 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
 
-            if (!IsValidWeekeday(leaveRequestLineItem.startDate) || !IsValidWeekeday(leaveRequestLineItem.endDate))
+            //Start date must fall within a weekday
+            if (!IsValidWeekeday(leaveRequestLineItem.startDate))
             {
                 _logger.LogWarning($"Invalid startdate specified. {leaveRequestLineItem.startDate.DayOfWeek} does not fall within a weekday");
                 response.ResponseCode = "08";
                 response.ResponseMessage = $"Invalid startdate specified. {leaveRequestLineItem.startDate.DayOfWeek} does not fall within a weekday";
                 return response;
             }
+
+            //Start date must fall within a weekday
             if (!IsValidWeekeday(leaveRequestLineItem.endDate))
             {
                 _logger.LogWarning($"Invalid endDate specified. {leaveRequestLineItem.endDate.DayOfWeek} does not fall within a weekday");
@@ -119,13 +125,43 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
 
-            //You cannot relieve yourself a date in the past
+            //You cannot relieve yourself
             if (leaveRequestLineItem.EmployeeId == leaveRequestLineItem.RelieverUserId)
             {
-                _logger.LogError("Invalid date reliever specified specified. You cannot relieve yourself");
+                _logger.LogError("Invalid reliever specified specified. You cannot relieve yourself");
                 response.ResponseCode = "08";
-                response.ResponseMessage = $"Invalid date reliever specified. You cannot relieve yourself";
+                response.ResponseMessage = $"Invalid reliever specified. You cannot relieve yourself";
                 return response;
+            }
+
+            //Validate Gender
+            if (ConfigSettings.leaveRequestConfig.ValidateGender)
+            {
+                var empGender = await _employeeRepository.GetEmployeeById(leaveRequestLineItem.EmployeeId, leaveRequestLineItem.CompanyId);
+                if (empGender == null)
+                {
+                    _logger.LogError("We could not get the employee information while trying to validate gender");
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = $"We could not get the employee information while trying to validate gender for the leavetype selected";
+                    return response;
+                }
+                var LeaveTypeGender = (await _leaveTypeRepository.GetEmployeeGradeLeaveTypes(leaveRequestLineItem.CompanyId, leaveRequestLineItem.EmployeeId)).FirstOrDefault(x => x.LeaveTypeId == leaveRequestLineItem.LeaveTypeId && x.GradeID == Convert.ToInt32(empGender.Employee.GradeID));
+
+                if (LeaveTypeGender == null)
+                {
+                    _logger.LogError("We could not get the GradeLeave gender information");
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = $"We could not get the GradeLeave gender information while trying to validate gender for the leavetype selected";
+                    return response;
+                }
+
+                if (empGender.Employee.SexId != LeaveTypeGender.GenderID)
+                {
+                    _logger.LogError($"You cannot apply for this leave type. Invalid gender. Employee GenderID:{empGender.Employee.SexId}, GradeLeave GenderID:{LeaveTypeGender.GenderID}");
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = $"You cannot apply for this leave type. Invalid gender";
+                    return response;
+                }
             }
             //else
             //{
@@ -154,7 +190,6 @@ namespace hrms_be_backend_business.Logic
 
             #endregion
 
-
             EmpLeaveRequestInfo empLeaveRequestInfo = null;
             bool IsExistingRequest = true;
             try
@@ -181,17 +216,46 @@ namespace hrms_be_backend_business.Logic
                     {
                         if (leaveRequestLineItems.Count > 0)
                         {
-                            gradeLeave = await _leaveRequestRepository.GetEmployeeGradeLeave(leaveRequestLineItem.EmployeeId);
-
+                            gradeLeave = await _leaveRequestRepository.GetEmployeeGradeLeave(leaveRequestLineItem.EmployeeId, leaveRequestLineItem.LeaveTypeId);
+                            _logger.LogInformation($"GradeLeave info for  {leaveRequestLineItem.EmployeeId} is {JsonConvert.SerializeObject(gradeLeave)}");
+                            
                             //Check number of days left
                             //Only sum up the days of the items that were approved
                             noOfDaysTaken = leaveRequestLineItems.Where(x => x.IsApproved == true).Sum(x => x.LeaveLength);
+                            _logger.LogInformation($"no. of approved days taken for {leaveRequestLineItem.EmployeeId} is {noOfDaysTaken}");
+                            _logger.LogInformation($"Calculate permissible days for EmployeeId - {leaveRequestLineItem.EmployeeId}: {gradeLeave.NumbersOfDays} - ({noOfDaysTaken} + {leaveRequestLineItem.LeaveLength}) = {gradeLeave.NumbersOfDays - (noOfDaysTaken + leaveRequestLineItem.LeaveLength)}");
+                           
+                            var diff = gradeLeave.NumbersOfDays - (noOfDaysTaken + leaveRequestLineItem.LeaveLength);
+                            if (diff > 0)
+                            {
+                                _logger.LogInformation($"no. of permissable days for - {leaveRequestLineItem.EmployeeId} is {diff}");
+                            }
+                            else
+                            {
+                                _logger.LogError($"Leave length will be exceeded by {diff} days");
+                            }
+
 
                             if ((noOfDaysTaken + leaveRequestLineItem.LeaveLength) > gradeLeave.NumbersOfDays)
                             {
                                 response.ResponseCode = "08";
-                                response.ResponseMessage = "Leave length exceeded";
+                                response.ResponseMessage = $"Leave length exceeded. No. of days allocated: {gradeLeave.NumbersOfDays}. No. of approved days already taken: {noOfDaysTaken}, No. of days requested: {leaveRequestLineItem.LeaveLength}";
                                 return response;
+                            }
+
+
+
+                            //Check for previous leave date encroachment
+                            //Get last leave taken
+                            var maxItemId = leaveRequestLineItems.Max(x => x.LeaveRequestLineItemId);
+                            var lastLeaveTaken = leaveRequestLineItems.FirstOrDefault(x => x.LeaveRequestLineItemId == maxItemId);
+                            if (lastLeaveTaken != null)
+                            {
+                                 _logger.LogError($"Details of last leave taken: {JsonConvert.SerializeObject(lastLeaveTaken)}");
+                                if (lastLeaveTaken.endDate > leaveRequestLineItem.startDate)
+                                {
+                                    _logger.LogError($"Invalid start date. The start date selected conflicts with a previous leave period already taken");
+                                }
                             }
 
                             //Check split count
@@ -424,7 +488,7 @@ namespace hrms_be_backend_business.Logic
                         //Update active leave info for employee if maximum days or split count reached.
 
                         var empLeaveRequestInfo = await _leaveRequestRepository.GetEmpLeaveInfo(leaveRequestLineItem.EmployeeId, leaveRequestLineItem.EmployeeId);
-                        var gradeLeave = await _leaveRequestRepository.GetEmployeeGradeLeave(leaveRequestLineItem.EmployeeId);
+                        var gradeLeave = await _leaveRequestRepository.GetEmployeeGradeLeave(leaveRequestLineItem.EmployeeId, leaveRequestLineItem.LeaveTypeId);
                         var leaveRequestLineItems = await _leaveRequestRepository.GetLeaveRequestLineItems(empLeaveRequestInfo.LeaveRequestId);
                         int noOfDaysTaken = leaveRequestLineItems.Sum(x => x.LeaveLength);
                         if (gradeLeave.NumbersOfDays == noOfDaysTaken || gradeLeave.NumberOfVacationSplit == leaveRequestLineItems.Count())

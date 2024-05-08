@@ -168,7 +168,6 @@ namespace hrms_be_backend_business.Logic
 
                 if (string.IsNullOrEmpty(errorMessages))
                 {
-    
                     using HttpClient httpClient = new HttpClient();
                     FileUploadRequest request = new FileUploadRequest
                     {

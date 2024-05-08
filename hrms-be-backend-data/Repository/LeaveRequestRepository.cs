@@ -316,12 +316,13 @@ namespace hrms_be_backend_data.Repository
                 return default;
             }
         }
-        public async Task<GradeLeave> GetEmployeeGradeLeave(long employeeId)
+        public async Task<GradeLeave> GetEmployeeGradeLeave(long employeeId, long leaveTypeId)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("@employeeId", employeeId);
+                param.Add("@LeaveTypeId", leaveTypeId);
                 //param.Add("@LeavePeriod", LeavePeriod);
 
                 var res = await _dapperGeneric.Get<GradeLeave>(ApplicationConstant.Sp_GetEmployeeGradeLeave, param, commandType: CommandType.StoredProcedure);

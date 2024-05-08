@@ -37,6 +37,7 @@
         public bool IsDisapproved { get; set; }
         public bool IsDeactivated { get; set; }
         public int GradeId { get; set; }
+        public int GenderId { get; set; }
     }
     public class EmployeeDetailsVm
     {

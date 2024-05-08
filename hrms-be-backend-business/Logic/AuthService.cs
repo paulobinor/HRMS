@@ -108,6 +108,7 @@ namespace hrms_be_backend_business.Logic
                     employeeDetailsVm.IsFirstEmployee=employeeDetails.Employee.IsFirstEmployee;
 
                     gradeId = employeeDetails.Employee.GradeID;
+                    accessUserVm.GenderId = employeeDetails.Employee.SexId;
                 }
                 accessUserVm.CompanyName = user.CompanyName;
                 accessUserVm.FirstName = user.FirstName;

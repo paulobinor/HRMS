@@ -469,7 +469,15 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
                 param.Add("@EmployeeId", EmployeeId);
                 param.Add("@CompanyId", CompanyId);
-                var result = await _dapper.GetMultiple("sp_get_employee_by_id", param, gr => gr.Read<EmployeeFullVm>(), gr => gr.Read<EmployeeCertificationVm>(), gr => gr.Read<EmployeeEduBackgroundVm>(), gr => gr.Read<EmployeeIdentificationVm>(), gr => gr.Read<EmployeeProfBackgroundVm>(), gr => gr.Read<EmployeeRefereeVm>(), commandType: CommandType.StoredProcedure);
+                var result = await _dapper.GetMultiple("sp_get_employee_by_id", param, gr => gr.Read<EmployeeFullVm>(), 
+                    gr => gr.Read<EmployeeCertificationVm>(), 
+                    gr => gr.Read<EmployeeEduBackgroundVm>(),
+                    gr => gr.Read<EmployeeIdentificationVm>(), 
+                    gr => gr.Read<EmployeeProfBackgroundVm>(), 
+                    gr => gr.Read<EmployeeRefereeVm>(), 
+                    commandType: CommandType.StoredProcedure
+                    );
+
                 var employeeFullVm = result.Item1.SingleOrDefault<EmployeeFullVm>();
                 var employeeCertificationVm = result.Item2.ToList<EmployeeCertificationVm>();
                 var employeeEduBackgroundVm = result.Item3.ToList<EmployeeEduBackgroundVm>();

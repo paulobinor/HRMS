@@ -33,3 +33,21 @@ C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-business
 C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-business\obj\Release\net7.0\hrms-be-backend-business.pdb
 C:\XpressPaymentBox\HRMS-UserManagement\hrms-be-backend\hrms-be-backend-business\obj\Release\net7.0\ref\hrms-be-backend-business.dll
 C:\Users\peter.omolayo\source\repos\hrms-be-backend\hrms-be-backend-business\obj\Release\net7.0\hrms-be-backend-business.sourcelink.json
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\bin\Release\net7.0\hrms-be-backend-business.deps.json
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\bin\Release\net7.0\hrms-be-backend-business.dll
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\bin\Release\net7.0\hrms-be-backend-business.pdb
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\bin\Release\net7.0\hrms-be-backend-common.dll
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\bin\Release\net7.0\hrms-be-backend-data.dll
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\bin\Release\net7.0\hrms-be-backend-common.pdb
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\bin\Release\net7.0\hrms-be-backend-data.pdb
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\obj\Release\net7.0\hrms-be-backend-business.csproj.AssemblyReference.cache
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\obj\Release\net7.0\hrms-be-backend-business.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\obj\Release\net7.0\hrms-be-backend-business.AssemblyInfoInputs.cache
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\obj\Release\net7.0\hrms-be-backend-business.AssemblyInfo.cs
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\obj\Release\net7.0\hrms-be-backend-business.csproj.CoreCompileInputs.cache
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\obj\Release\net7.0\hrms-be-backend-business.sourcelink.json
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\obj\Release\net7.0\hrms-be-backend-business.csproj.CopyComplete
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\obj\Release\net7.0\hrms-be-backend-business.dll
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\obj\Release\net7.0\refint\hrms-be-backend-business.dll
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\obj\Release\net7.0\hrms-be-backend-business.pdb
+C:\Users\ifeanyi.obinor\Downloads\hrms-be-backend (2)\hrms-be-backend\hrms-be-backend-business\obj\Release\net7.0\ref\hrms-be-backend-business.dll

@@ -21,7 +21,9 @@
         public string RelieverName { get; set; }
         public string HandoverNotes { get; set; }
         public int LastApprovalEmployeeID { get; set; }
+        public string UploadFilePath { get; set; }
         
+
 
     }
 }

@@ -25,7 +25,8 @@ namespace hrms_be_backend_common.DTO
         public bool IsApproved { get; set; }
         public string Comments { get; set; }
         public string RelieverName { get; set; }
-
+        public string UploadFilePath { get; set; }
+        
         public List<LeaveApprovalLineItemDto> leaveApprovalLineItems { get; set; } // = new List<LeaveApprovalLineItemDto>();
     }
 

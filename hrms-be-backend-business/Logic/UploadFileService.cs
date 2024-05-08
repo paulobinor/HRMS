@@ -39,11 +39,13 @@ namespace hrms_be_backend_business.Logic
             //  _uploadFileService = uploadFileService;
         }
 
-        public async Task<ExecutedResult<string>> UploadFile(IFormFile file, string FullName)
+        public async Task<ExecutedResult<string>> UploadFile1(IFormFile file, string FullName)
         {
             try
             {
                 string folderPath = _config["FileUploadConfig:UploadFolderPath"];
+
+                _logger.LogInformation($"UploadFolderPath: {folderPath}");
 
                 if (file == null || file.Length == 0)
                 {
@@ -52,6 +54,7 @@ namespace hrms_be_backend_business.Logic
 
                 // Get the uploads folder path
                 string uploadsFolder = Path.Combine(_hostingEnvironment.ContentRootPath, folderPath);
+                _logger.LogInformation($"uploadsFolder: {uploadsFolder}");
 
                 // Check if the folder exists, create it if not
                 if (!Directory.Exists(uploadsFolder))
@@ -62,9 +65,11 @@ namespace hrms_be_backend_business.Logic
 
                 string uniqueFileName = FullName + Path.GetExtension(file.FileName);
 
+                _logger.LogInformation($"uniqueFileName: {uniqueFileName}");
 
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
+                _logger.LogInformation($"filePath: {filePath}");
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
@@ -80,21 +85,22 @@ namespace hrms_be_backend_business.Logic
                 }
                 else
                 {
-                    _logger.LogInformation("This is a production environment as such we will return the web root path");
+                    _logger.LogInformation($"This is a production environment as such we will return the web root path: {_webHostingEnvironment.WebRootPath}");
                     urlPath = Path.Combine(_webHostingEnvironment.WebRootPath, folderPath, uniqueFileName);
                 }
+                _logger.LogInformation($"urlPath: {urlPath}");
 
 
                 return new ExecutedResult<string>() { responseMessage = "File uploaded Successfully", responseCode = 00.ToString(), data = urlPath };
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error Submitting resignation", ex);
+                _logger.LogError("Error uploading File", ex);
                 return new ExecutedResult<string>() { responseMessage = "An error occurred", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
             }
         }
 
-        public async Task<ExecutedResult<string>> UploadFile1(IFormFile formFile, string FullName)
+        public async Task<ExecutedResult<string>> UploadFile(IFormFile formFile, string FullName)
         {
             try
             {
@@ -103,7 +109,7 @@ namespace hrms_be_backend_business.Logic
                 var errorMessages = string.Empty;
 
                 if (formFile == null || formFile.Length == 0)
-                    errorMessages += "|Resignation letter is required";
+                    errorMessages += "|file is required";
 
 
                 // uploadPath = uploadPath + @"\LeaveRequests";

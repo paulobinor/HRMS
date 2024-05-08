@@ -1114,7 +1114,7 @@ namespace hrms_be_backend_business.Logic
             }
             catch (Exception ex)
             {
-                _logger.LogError($"PayrollService (DownloadPayrollRunnedReport)=====>{ex}");
+                _logger.LogError($"PayrollService (DownloadPayrollRunnedReport)=====>{ex.Message} StackTrace: {ex.StackTrace}");
                 return new ExecutedResult<byte[]>()
                 {
                     data = null,
