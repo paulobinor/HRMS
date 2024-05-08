@@ -90,12 +90,16 @@ namespace hrms_be_backend_business.Logic
 
                 payload.EmployeeId = accessUser.data.EmployeeId;
 
-                var alreadyResigned = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeId);
-                if (alreadyResigned != null && (alreadyResigned.IsUnitHeadDisapproved == false || alreadyResigned.IsHodDisapproved == false || alreadyResigned.IsHrDisapproved == false))
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"Resignation form has previously been submitted by this user", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+                //var alreadyResigned = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeId);
+                //if (alreadyResigned != null )
+                //{
+                //    if (alreadyResigned.IsUnitHeadDisapproved == false && alreadyResigned.IsHodDisapproved == false && alreadyResigned.IsHrDisapproved == false)
+                //    {
+                //        return new ExecutedResult<string>() { responseMessage = $"Resignation form has previously been submitted by this user", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+                //    }
+                    
 
-                }
+                //}
 
                 var resignation = new ResignationDTO
                 {
@@ -281,12 +285,12 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<ExecutedResult<ResignationDTO>> GetResignationByEmployeeID(long EmployeeId, string AccessKey, string RemoteIpAddress)
+        public async Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetResignationByEmployeeID(long EmployeeId, string AccessKey, string RemoteIpAddress)
         {
             var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
             if (accessUser.data == null)
             {
-                return new ExecutedResult<ResignationDTO>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+                return new ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
             }
             try
@@ -296,21 +300,21 @@ namespace hrms_be_backend_business.Logic
 
                 if (resignation == null)
                 {
-                    return new ExecutedResult<ResignationDTO>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+                    return new ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
 
                 }
 
                 //update action performed into audit log here
 
                 _logger.LogInformation("Resignation fetched successfully.");
-                return new ExecutedResult<ResignationDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = (00).ToString(), data = resignation };
+                return new ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = (00).ToString(), data = resignation };
 
 
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Exception Occured: GetResignationByUserID(long UserID) ==> {ex.Message}");
-                return new ExecutedResult<ResignationDTO>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+                return new ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
 
             }
         }
@@ -564,7 +568,7 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                _mailService.SendResignationDisapproveConfirmationMail(resignation.EmployeeId, accessUser.data.EmployeeId);
+                _mailService.SendResignationDisapproveConfirmationMail(resignation.EmployeeId, request.EmployeeID);
 
                 return new ExecutedResult<string>() { responseMessage = "Resignation disapproved successfully.", responseCode = (00).ToString(), data = null };
 
