@@ -111,14 +111,14 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<IEnumerable<ResignationDTO>> GetResignationByEmployeeID(long employeeID)
+        public async Task<ResignationDTO> GetResignationByEmployeeID(long employeeID)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("employeeID", employeeID);
 
-                var response = await _dapper.GetAll<ResignationDTO>("Sp_get_resignation_by_user", param, commandType: CommandType.StoredProcedure);
+                var response = await _dapper.Get<ResignationDTO>("Sp_get_resignation_by_user", param, commandType: CommandType.StoredProcedure);
 
                 return response;
             }

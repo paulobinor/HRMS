@@ -12,7 +12,7 @@ namespace hrms_be_backend_business.ILogic
         Task<ExecutedResult<string>> UploadLetter(IFormFile signedResignationLetter, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<string>> UpdateResignation(UpdateResignationDTO updateDTO, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<ResignationDTO>> GetResignationByID(long ID, string AccessKey, string RemoteIpAddress);
-        Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetResignationByEmployeeID(long UserID, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<ResignationDTO>> GetResignationByEmployeeID(long UserID, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetResignationByCompanyID(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress);
 
         //Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetAllResignations(string AccessKey, string RemoteIpAddress);

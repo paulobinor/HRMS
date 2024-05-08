@@ -40,11 +40,11 @@ namespace hrms_be_backend_business.Logic
        
         public async Task<ExecutedResult<string>> SubmitResignation( ResignationRequestVM payload, string AccessKey, string RemoteIpAddress)
         {
-            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-            if (accessUser.data == null)
-            {
-                return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
-            }
+            //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+            //}
             bool isModelStateValidate = true;
             string validationMessage = "";
 
@@ -88,7 +88,7 @@ namespace hrms_be_backend_business.Logic
                 if (!isModelStateValidate)
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
-                payload.EmployeeId = accessUser.data.EmployeeId;
+                payload.EmployeeId = 112/*accessUser.data.EmployeeId*/;
 
                 //var alreadyResigned = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeId);
                 //if (alreadyResigned != null )
@@ -107,7 +107,7 @@ namespace hrms_be_backend_business.Logic
                     CompanyID = payload.CompanyID,
                     //StaffName = payload.StaffName,
                     DateCreated = DateTime.Now,
-                    CreatedByUserId = accessUser.data.UserId,
+                    CreatedByUserId = 256/*accessUser.data.UserId*/,
                     ResumptionDate  = payload.ResumptionDate,
                     LastDayOfWork = payload.LastDayOfWork,
                     EmployeeId = payload.EmployeeId,
@@ -285,12 +285,12 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetResignationByEmployeeID(long EmployeeId, string AccessKey, string RemoteIpAddress)
+        public async Task<ExecutedResult<ResignationDTO>> GetResignationByEmployeeID(long EmployeeId, string AccessKey, string RemoteIpAddress)
         {
             var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
             if (accessUser.data == null)
             {
-                return new ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+                return new ExecutedResult<ResignationDTO>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
             }
             try
@@ -300,21 +300,21 @@ namespace hrms_be_backend_business.Logic
 
                 if (resignation == null)
                 {
-                    return new ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+                    return new ExecutedResult<ResignationDTO>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
 
                 }
 
                 //update action performed into audit log here
 
                 _logger.LogInformation("Resignation fetched successfully.");
-                return new ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = (00).ToString(), data = resignation };
+                return new ExecutedResult<ResignationDTO>() { responseMessage = ResponseCode.Ok.ToString(), responseCode = (00).ToString(), data = resignation };
 
 
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Exception Occured: GetResignationByUserID(long UserID) ==> {ex.Message}");
-                return new ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+                return new ExecutedResult<ResignationDTO>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
 
             }
         }
