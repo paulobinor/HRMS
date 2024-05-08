@@ -40,11 +40,11 @@ namespace hrms_be_backend_business.Logic
        
         public async Task<ExecutedResult<string>> SubmitResignation( ResignationRequestVM payload, string AccessKey, string RemoteIpAddress)
         {
-            //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-            //if (accessUser.data == null)
-            //{
-            //    return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
-            //}
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+            }
             bool isModelStateValidate = true;
             string validationMessage = "";
 
@@ -88,7 +88,7 @@ namespace hrms_be_backend_business.Logic
                 if (!isModelStateValidate)
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
-                payload.EmployeeId = 112/*accessUser.data.EmployeeId*/;
+                payload.EmployeeId = accessUser.data.EmployeeId;
 
                 //var alreadyResigned = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeId);
                 //if (alreadyResigned != null )
@@ -107,7 +107,7 @@ namespace hrms_be_backend_business.Logic
                     CompanyID = payload.CompanyID,
                     //StaffName = payload.StaffName,
                     DateCreated = DateTime.Now,
-                    CreatedByUserId = 256/*accessUser.data.UserId*/,
+                    CreatedByUserId = accessUser.data.UserId,
                     ResumptionDate  = payload.ResumptionDate,
                     LastDayOfWork = payload.LastDayOfWork,
                     EmployeeId = payload.EmployeeId,
