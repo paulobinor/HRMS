@@ -44,12 +44,7 @@ namespace hrms_be_backend_business.Logic
             {
                 return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
             }
-            var alreadyInterviewed = await _resignationInterviewRepository.GetResignationInterviewByEmployeeID(payload.EmployeeId);
-            if (alreadyInterviewed != null)
-            {
-                return new ExecutedResult<string>() { responseMessage = $"Resignation interview has previously been submitted by this user", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
-            }
             string traceID = Guid.NewGuid().ToString();
             try
             {
@@ -126,9 +121,14 @@ namespace hrms_be_backend_business.Logic
                 var sectionTwoDataTable = DatatableUtilities.ConvertSectionListToDataTable(payload.SectionTwo);
 
 
-                //payload.EmployeeId = accessUser.data.EmployeeId;
+                
 
-                var resignation = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeId);
+                var resignation = await _resignationRepository.GetResignationByID(payload.ResignationId);
+                if (resignation.IsHrApproved == false )
+                {
+                    return new ExecutedResult<string>() { responseMessage = "Invalid resignation form", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+
+                }
 
                 var resignationInterview = new ResignationInterviewDTO
                 {
