@@ -90,12 +90,16 @@ namespace hrms_be_backend_business.Logic
 
                 payload.EmployeeId = accessUser.data.EmployeeId;
 
-                var alreadyResigned = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeId);
-                if (alreadyResigned != null && (alreadyResigned.IsUnitHeadDisapproved == false || alreadyResigned.IsHodDisapproved == false || alreadyResigned.IsHrDisapproved == false))
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"Resignation form has previously been submitted by this user", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+                //var alreadyResigned = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeId);
+                //if (alreadyResigned != null )
+                //{
+                //    if (alreadyResigned.IsUnitHeadDisapproved == false && alreadyResigned.IsHodDisapproved == false && alreadyResigned.IsHrDisapproved == false)
+                //    {
+                //        return new ExecutedResult<string>() { responseMessage = $"Resignation form has previously been submitted by this user", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+                //    }
+                    
 
-                }
+                //}
 
                 var resignation = new ResignationDTO
                 {
@@ -564,7 +568,7 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                _mailService.SendResignationDisapproveConfirmationMail(resignation.EmployeeId, accessUser.data.EmployeeId);
+                _mailService.SendResignationDisapproveConfirmationMail(resignation.EmployeeId, request.EmployeeID);
 
                 return new ExecutedResult<string>() { responseMessage = "Resignation disapproved successfully.", responseCode = (00).ToString(), data = null };
 
