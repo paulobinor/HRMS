@@ -73,13 +73,13 @@ namespace hrms_be_backend_business.Logic
 
                 payload.EmployeeID = accessUser.data.EmployeeId;
 
-                var alreadyCleared = await _resignationClearanceRepository.GetResignationClearanceByEmployeeID(payload.EmployeeID);
-                if (alreadyCleared != null)
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"Resignation clearance has previously been submitted by this user", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+                //var alreadyCleared = await _resignationClearanceRepository.GetResignationClearanceByEmployeeID(payload.EmployeeID);
+                //if (alreadyCleared != null)
+                //{
+                //    return new ExecutedResult<string>() { responseMessage = $"Resignation clearance has previously been submitted by this user", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
-                }
-                var resignation = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeID);
+                //}
+                var resignation = await _resignationRepository.GetResignationByID(payload.ResignationID);
 
                 var resignationClearance = new ResignationClearanceDTO
                 {

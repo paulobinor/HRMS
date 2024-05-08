@@ -9,6 +9,7 @@ namespace Com.XpressPayments.Common.ViewModels
     public class ResignationClearanceVM
     {
         public long EmployeeID { get; set; }
+        public long ResignationID { get; set; }
         public long CompanyID { get; set; }
         public string ItemsReturnedToDepartment { get; set; }
         public string ItemsReturnedToAdmin { get; set; }

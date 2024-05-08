@@ -13,7 +13,7 @@ namespace Com.XpressPayments.Common.ViewModels
 
         public long EmployeeId { get; set; }
         public long CompanyId { get; set; }
-        //public int ResignationId { get; set; }
+        public long ResignationId { get; set; }
         //public DateTime ResumptionDate { get; set; }
         //public string ReasonForResignation { get; set; }
         //public DateTime ExitDate { get; set; }
