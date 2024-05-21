@@ -20,9 +20,13 @@
         public string Signature { get; set; }
         public long CreatedByUserID { get; set; }
         public DateTime DateCreated { get; set; }
+        public long HodEmployeeID { get; set; }
+        public bool IsHodApproved { get; set; }
+        public bool IsHodDisapproved { get; set; }
         public bool IsApproved { get; set; }
         public bool IsDisapproved { get; set; }
         public DateTime DateApproved { get; set; }
+        public DateTime HodDateApproved { get; set; }
         public DateTime DateDisapproved { get; set; }
         public long DisapproveByUserID { get; set; }
         public string ReasonForDisapproval { get; set; }
