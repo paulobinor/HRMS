@@ -11,7 +11,7 @@
         public string Grade { get; set; }
         public string Department { get; set; }
         public long CompanyID { get; set; }
-        public string ReasonForExit { get; set; }
+        //public string ReasonForExit { get; set; }
         public string ItemsReturnedToDepartment { get; set; }
         public string ItemsReturnedToAdmin { get; set; }
         public string ItemsReturnedToHr { get; set; }

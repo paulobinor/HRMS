@@ -73,11 +73,11 @@ namespace hrms_be_backend_business.Logic
                     isModelStateValidate = false;
                     validationMessage += "  Invalid resumption date";
                 } 
-                if (string.IsNullOrWhiteSpace(payload.ReasonForResignation))
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  Resignation reason is required";
-                }
+                //if (string.IsNullOrWhiteSpace(payload.ReasonForResignation))
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  Resignation reason is required";
+                //}
 
                 if (string.IsNullOrEmpty(payload.fileName))
                 {
@@ -90,17 +90,6 @@ namespace hrms_be_backend_business.Logic
 
                 payload.EmployeeId =  accessUser.data.EmployeeId;
 
-                //var alreadyResigned = await _resignationRepository.GetResignationByEmployeeID(payload.EmployeeId);
-                //if (alreadyResigned != null )
-                //{
-                //    if (alreadyResigned.IsUnitHeadDisapproved == false && alreadyResigned.IsHodDisapproved == false && alreadyResigned.IsHrDisapproved == false)
-                //    {
-                //        return new ExecutedResult<string>() { responseMessage = $"Resignation form has previously been submitted by this user", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
-                //    }
-                    
-
-                //}
-
                 var resignation = new ResignationDTO
                 {
                     ExitDate = payload.Date,
@@ -111,7 +100,8 @@ namespace hrms_be_backend_business.Logic
                     ResumptionDate  = payload.ResumptionDate,
                     LastDayOfWork = payload.LastDayOfWork,
                     EmployeeId = payload.EmployeeId,
-                    ReasonForResignation = payload.ReasonForResignation,
+                    //ReasonForResignation = payload.ReasonForResignation,
+                    OtherReasonForResignation=payload.OtherReasonForResignation,
                     SignedResignationLetter = payload.fileName,
                     //StaffID = payload.StaffId
                 };
@@ -126,6 +116,16 @@ namespace hrms_be_backend_business.Logic
                 if (resignationID < 0)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{returnVal}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+
+                }
+                //var reasons = payload.ReasonForResignation;
+
+                // Save resignation details and reasons
+                var reasons = await _resignationRepository.CreateReasonsForResignation(resignationID,payload.ReasonForResignation,payload.CompanyID);
+
+                if (!reasons.Contains("Success"))
+                {
+                    return new ExecutedResult<string>() { responseMessage = $"{reasons}", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
 
                 }
                 var submittedresignation = await _resignationRepository.GetResignationByID(resignationID);
@@ -583,5 +583,37 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
+
+        public async Task<ExecutedResult<IEnumerable<ReasonsForResignationDTO>>> GetReasonsForResignationByID(long ResignationID, string AccessKey, string RemoteIpAddress)
+        {
+            //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    return new ExecutedResult<IEnumerable<ReasonsForResignationDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+
+            //}
+            try
+            {
+
+                var ReasonsForResignation = await _resignationRepository.GetReasonsForResignationByID(ResignationID);
+
+                if (ReasonsForResignation == null)
+                {
+                    return new ExecutedResult<IEnumerable<ReasonsForResignationDTO>>() { responseMessage = ResponseCode.NotFound.ToString(), responseCode = ((int)ResponseCode.NotFound).ToString(), data = null };
+
+                }
+
+                _logger.LogInformation("Resignation fetched successfully.");
+                return new ExecutedResult<IEnumerable<ReasonsForResignationDTO>>() { responseMessage = "Reasons for Resignation fetched Successfully", responseCode = (00).ToString(), data = ReasonsForResignation };
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetPendingResignationByUserID(long userID) ==> {ex.Message}");
+                return new ExecutedResult<IEnumerable<ReasonsForResignationDTO>>() { responseMessage = "Unable to process the operation, kindly contact the support", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
+
+            }
+        }
     }
 }

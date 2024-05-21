@@ -16,7 +16,8 @@ namespace Com.XpressPayments.Common.ViewModels
         public string Department { get; set; }
         public string Grade { get; set; }
         public DateTime ExitDate { get; set; }
-        public string ReasonForResignation { get; set; }
+       // public string[] ReasonForResignation { get; set; }
+        public string OtherReasonForResignation { get; set; }
         public DateTime LastDayOfWork { get; set; }
         public string SignedResignationLetter { get; set; }
         public long CompanyID { get; set; }

@@ -86,7 +86,7 @@ namespace hrms_be_backend_business.Logic
                     EmployeeID = payload.EmployeeID,
                     CompanyID = payload.CompanyID,
                     Signature = payload.Signature,
-                    ReasonForExit = resignation.ReasonForResignation,
+                    //ReasonForExit = resignation.ReasonForResignation,
                     ResignationID = resignation.ResignationID,
                     ItemsReturnedToDepartment = payload.ItemsReturnedToDepartment,
                     ItemsReturnedToAdmin = payload.ItemsReturnedToAdmin,
