@@ -26,6 +26,7 @@ namespace hrms_be_backend_business.Logic
         private readonly ILeaveRequestRepository _leaveRequestRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IMailService _mailService;
+        private bool sendApprovalMailToInitiator;
 
         public LeaveApprovalService(IAccountRepository accountRepository, ILogger<LeaveApprovalService> logger,
             ILeaveApprovalRepository leaveApprovalRepository, IAuditLog audit, ICompanyRepository companyrepository, IMailService mailService, ILeaveRequestRepository leaveRequestRepository)
@@ -45,7 +46,7 @@ namespace hrms_be_backend_business.Logic
             //check if us
             StringBuilder errorOutput = new StringBuilder();
             var updateLeaveRequestLineItem = new LeaveRequestLineItem();
-            bool sendMail = false;
+            bool sendMailToApprover = false;
             bool sendMailToReliever = false;
             var response = new BaseResponse();
             LeaveApprovalLineItem nextApprovalLineItem = null;
@@ -114,6 +115,7 @@ namespace hrms_be_backend_business.Logic
                         currentLeaveApprovalInfo.IsApproved = true;
                      //   leaveRequestLineItem.IsApproved = true;//update Leaverequestlineitem
                         sendMailToReliever = true;
+                        sendApprovalMailToInitiator = true;
                     }
 
                     if (currentLeaveApprovalInfo.RequiredApprovalCount > currentLeaveApprovalInfo.CurrentApprovalCount)
@@ -125,13 +127,35 @@ namespace hrms_be_backend_business.Logic
                         currentLeaveApprovalInfo.CurrentApprovalID = (int)nextApprovalLineItem.ApprovalEmployeeId;
 
                            currentLeaveApprovalInfo.Comments = $"Pending on {nextApprovalLineItem.ApprovalPosition}";
-                           sendMail = true;
+                           sendMailToApprover = true;
                     }
 
-                    if (sendMail)
+                    if (sendMailToApprover)
                     {
                         //Send mail to next approver
                         _mailService.SendLeaveApproveMailToApprover(nextApprovalLineItem.ApprovalEmployeeId, leaveRequestLineItem.EmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
+                        _mailService.SendLeaveApproveConfirmationMail(leaveRequestLineItem.EmployeeId, leaveApprovalLineItem.ApprovalEmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
+
+                       
+                        //Notify Leave request Initiator of approval progress
+                        var userDetails = await _accountRepository.GetUserByEmployeeId(leaveRequestLineItem.EmployeeId);
+                        var app = await _accountRepository.GetUserByEmployeeId(leaveApprovalLineItem.ApprovalEmployeeId);
+                        StringBuilder mailBody = new StringBuilder();
+                        mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
+                        mailBody.Append($"Kindly note that the next approval is currently pending on  {app.FirstName} {app.LastName} {leaveApprovalLineItem.ApprovalPosition},  <br/> <br/>");
+                        mailBody.Append($"<b>Start Date : <b/> {leaveRequestLineItem.startDate}  <br/> ");
+                        mailBody.Append($"<b>End Date : <b/> {leaveRequestLineItem.endDate}   <br/> ");
+
+                        var mailPayload = new MailRequest
+                        {
+                            Body = mailBody.ToString(),
+                            Subject = "Leave Request",
+                            ToEmail = userDetails.OfficialMail,
+                        };
+
+                        _logger.LogError($"Email payload to send: {mailPayload}.");
+                        _mailService.SendEmailAsync(mailPayload, null);
+
                     }
 
                     if (sendMailToReliever)
@@ -139,6 +163,28 @@ namespace hrms_be_backend_business.Logic
                         //Send mail to reliever
                         _mailService.SendLeaveMailToReliever(leaveRequestLineItem.RelieverUserId, leaveRequestLineItem.EmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
                     }
+
+                    if (sendApprovalMailToInitiator)
+                    {
+                        var userDetails = await _accountRepository.GetUserByEmployeeId(leaveRequestLineItem.EmployeeId);
+                        //  var app = await _accountRepository.GetUserByEmployeeId(leaveApprovalLineItem.ApprovalEmployeeId);
+                        StringBuilder mailBody = new StringBuilder();
+                        mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} <br/> <br/>");
+                        mailBody.Append($"Kindly note that your request for leave has successfully passed the final stage for approval. Enjoy your leave<br/> <br/>");
+                        mailBody.Append($"<b>Start Date : <b/> {leaveRequestLineItem.startDate}  <br/> ");
+                        mailBody.Append($"<b>End Date : <b/> {leaveRequestLineItem.endDate}   <br/> ");
+
+                        var mailPayload = new MailRequest
+                        {
+                            Body = mailBody.ToString(),
+                            Subject = "Leave Request",
+                            ToEmail = userDetails.OfficialMail,
+                        };
+
+                        _logger.LogError($"Email payload to send: {mailPayload}.");
+                        _mailService.SendEmailAsync(mailPayload);
+                    }
+
                     response.ResponseMessage = "Approved Successfully";
                 }
                 else if (!repoResponse.IsApproved || repoResponse.ApprovalStatus == "Disapproved") // Leave approval is denied
@@ -183,7 +229,27 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }
+        private async Task Process_Email(LeaveRequestLineItem leaveRequestLineItem, LeaveApprovalLineItem leaveApprovalLineItem)
+        {
+            var userDetails = await _accountRepository.GetUserByEmployeeId(leaveRequestLineItem.EmployeeId);
+          //  var app = await _accountRepository.GetUserByEmployeeId(leaveApprovalLineItem.ApprovalEmployeeId);
+            StringBuilder mailBody = new StringBuilder();
+            mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} <br/> <br/>");
+            mailBody.Append($"Kindly note that your request for leave has successfully passed the final stage for approval. Enjoy your leave<br/> <br/>");
+            mailBody.Append($"<b>Start Date : <b/> {leaveRequestLineItem.startDate}  <br/> ");
+            mailBody.Append($"<b>End Date : <b/> {leaveRequestLineItem.endDate}   <br/> ");
 
+            var mailPayload = new MailRequest
+            {
+                Body = mailBody.ToString(),
+                Subject = "Leave Request",
+                ToEmail = userDetails.OfficialMail,
+            };
+
+            _logger.LogError($"Email payload to send: {mailPayload}.");
+            _mailService.SendEmailAsync(mailPayload, null);
+
+        }
         private async Task ProcessLeaveApproval(long leaveApprovalId, bool isApproved)
         {
            

@@ -17,6 +17,6 @@ namespace hrms_be_backend_business.ILogic
         Task SendResignationClearanceApproveMailToApprover(long ApproverEmployeeId, long ResigationByEmployeeId);
         Task SendResignationClearanceApproveConfirmationMail(long RequesterEmployeeId, long ApprovedByEmployeeId);
         Task SendResignationClearanceDisapproveConfirmationMail(long RequesterEmployeeId, long DiapprovedByEmployeeId, string reason);
-
+        Task SendEmailAsync(MailRequest mailPayload);
     }
 }

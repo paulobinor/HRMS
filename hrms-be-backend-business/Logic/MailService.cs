@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using Newtonsoft.Json;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
@@ -29,28 +30,39 @@ namespace hrms_be_backend_business.AppCode
             _hostEnvironment = hostEnvironment;
 
         }
-        public async Task SendEmailAsync(MailRequest mailRequest, string attarchDocument)
+
+        public async Task SendEmailAsync(MailRequest mailRequest)
         {
+            _logger.LogInformation($"Received request to send mail: {JsonConvert.SerializeObject(mailRequest)}");
             try
             {
                 MailMessage mail = new MailMessage();
-                mail.From = new MailAddress(_smtpParameters.EmailAddress, _smtpParameters.DisplayName);
+                mail.From = new MailAddress(_smtpParameters.EmailAddress, mailRequest.DisplayName);
                 mail.To.Add(mailRequest.ToEmail);
                 mail.Subject = mailRequest.Subject;
                 mail.Body = mailRequest.Body;
-                Attachment attachment;
-                if (attarchDocument != null)
-                {
-                    attachment = new Attachment(attarchDocument);
-                    mail.Attachments.Add(attachment);
-                }
                 mail.IsBodyHtml = true;
-             //   NetworkCredential Credentials = new NetworkCredential(_smtpParameters.EmailAddress, _smtpParameters.Password);
+                mail.HeadersEncoding = Encoding.UTF8;
+
+
+                //  Attachment attachment;
+                if (mailRequest.Attachments.Count > 0)
+                {
+                    foreach (var item in mailRequest.Attachments)
+                    {
+                        mail.Attachments.Add(new Attachment(item.Value, item.Key));
+                    }
+
+                }
+
+                _logger.LogInformation($"About to send email using config: {JsonConvert.SerializeObject(_smtpParameters)}");
                 using (var smtpClient = new SmtpClient(_smtpParameters.Host, Convert.ToInt32(_smtpParameters.Port)))
                 {
-                    smtpClient.Credentials = new NetworkCredential(_smtpParameters.EmailAddress, _smtpParameters.Password); ;
+                    smtpClient.Credentials = new NetworkCredential(_smtpParameters.EmailAddress, _smtpParameters.Password);
                     smtpClient.EnableSsl = _smtpParameters.SSL;
-                    await smtpClient.SendMailAsync(mail);
+                    smtpClient.SendCompleted += SmtpClient_SendCompleted;
+                    // await smtpClient.SendMailAsync(mail);
+                    smtpClient.SendAsync(mail, mailRequest);
 
                 }
             }
@@ -59,6 +71,70 @@ namespace hrms_be_backend_business.AppCode
                 _logger.LogError(ex.ToString(), new { Controller = "MailService", Method = "SendEmailAsync" });
             }
         }
+        public async Task SendEmailAsync(MailRequest mailRequest, string attachDocument)
+        {
+            _logger.LogInformation($"Received request to send mail: {JsonConvert.SerializeObject(mailRequest)}");
+            try
+            {
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress(_smtpParameters.EmailAddress, mailRequest.DisplayName);
+                mail.To.Add(mailRequest.ToEmail);
+                mail.Subject = mailRequest.Subject;
+                mail.Body = mailRequest.Body;
+                mail.IsBodyHtml = true;
+                mail.HeadersEncoding = Encoding.UTF8;
+                
+    
+              //  Attachment attachment;
+                if (attachDocument != null)
+                {
+                   var attachment = new Attachment(attachDocument);
+                    mail.Attachments.Add(attachment);
+                }
+                mail.IsBodyHtml = true;
+                //   NetworkCredential Credentials = new NetworkCredential(_smtpParameters.EmailAddress, _smtpParameters.Password);
+                _logger.LogInformation($"About to send email using config: {JsonConvert.SerializeObject(_smtpParameters)}");
+                using (var smtpClient = new SmtpClient(_smtpParameters.Host, Convert.ToInt32(_smtpParameters.Port)))
+                {
+                    smtpClient.Credentials = new NetworkCredential(_smtpParameters.EmailAddress, _smtpParameters.Password); ;
+                    smtpClient.EnableSsl = _smtpParameters.SSL;
+                    smtpClient.SendCompleted += SmtpClient_SendCompleted;
+                   // await smtpClient.SendMailAsync(mail);
+                    smtpClient.SendAsync(mail, mailRequest);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString(), new { Controller = "MailService", Method = "SendEmailAsync" });
+            }
+        }
+
+        private void SmtpClient_SendCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        {
+            try
+            {
+                var mailRequest = (MailRequest)e.UserState;
+                if (mailRequest != null)
+                {
+                    _logger.LogInformation($"Mail successfully sent to {mailRequest.ToEmail}");
+                }
+                else
+                {
+                    _logger.LogInformation("Mail successfully sent");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($" {ex.Message}");
+            }
+            if (e.Error != null)
+            {
+                _logger.LogError($"We had a problem sending the mail. see details: {e.Error.Message}");
+            }
+            
+        }
+
         public async Task SendLeaveMailToReliever(long RelieverUserId, long leaveRequetedByUserId, DateTime startDate, DateTime endDate)
         {
             try
@@ -124,7 +200,7 @@ namespace hrms_be_backend_business.AppCode
                 mailBody.Append($"You leave has been approved by {ApprovedByUserDetails.FirstName} {ApprovedByUserDetails.LastName} {ApprovedByUserDetails.MiddleName} <br/> <br/>");
 
                 mailBody.Append($"<b> Your leave start from : <b/> {startDate} <br/> ");
-                mailBody.Append($"<b>and end on : <b/> {endDate} <br/> ");
+                mailBody.Append($"<b>and ends on : <b/> {endDate} <br/> ");
 
                 var mailPayload = new MailRequest
                 {
@@ -149,7 +225,7 @@ namespace hrms_be_backend_business.AppCode
 
                 StringBuilder mailBody = new StringBuilder();
                 mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
-                mailBody.Append($"You leave has been disapproved by {disapprovedByUserDetails.FirstName} {disapprovedByUserDetails.LastName} {disapprovedByUserDetails.MiddleName} <br/> <br/>");
+                mailBody.Append($"You leave has been disapproved by {disapprovedByUserDetails.FirstName}  <br/> <br/>");
 
 
 
@@ -170,43 +246,55 @@ namespace hrms_be_backend_business.AppCode
 
         public async Task SendEmailApproveUser(string recipientEmail, string recipientName, string defaultPass, string subject, string token)
         {
-            string emailAddress = _smtpParameters.EmailAddress;
-            string smtpAdress = _smtpParameters.Host;
-            int smtpPort = _smtpParameters.Port;
-            string password = _smtpParameters.Password;
-
-            string message = string.Empty;
-            MimeMessage mailBody = new MimeMessage();
-
-            MailboxAddress from = new MailboxAddress("Xpress HRMS", emailAddress);
-            mailBody.From.Add(from);
-
-            MailboxAddress to = new MailboxAddress(_smtpParameters.DisplayName, recipientEmail);
-            //MailboxAddress to = new MailboxAddress("User", sampleEmail);
-            mailBody.To.Add(to);
-
-            mailBody.Subject = subject;
-            message = ComposeApprovedUserMail(recipientName, token);
-            BodyBuilder bodyBuilder = new BodyBuilder();
-            _logger.LogInformation($"{subject} for {recipientEmail} with Message==> {message}");
-
-            bodyBuilder.HtmlBody = message;
-            mailBody.Body = bodyBuilder.ToMessageBody();
-
-            try
+            _logger.LogInformation($"Received request to send email. Email details {JsonConvert.SerializeObject(new { recipientEmail, recipientName, defaultPass, subject, token })}");
+            MailRequest mailRequest = new MailRequest
             {
-                MailKit.Net.Smtp.SmtpClient client = new MailKit.Net.Smtp.SmtpClient();
-                client.Connect(smtpAdress, smtpPort);
-                client.Authenticate(emailAddress, password);
-                await client.SendAsync(mailBody);
-                client.Disconnect(true);
-                client.Dispose();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"MethodName: SendEmailApproveUser ===>{ex.Message}");
-                throw;
-            }
+                Body = ComposeApprovedUserMail(recipientName, token),
+                Subject = subject,
+                ToEmail = recipientEmail,
+                EmailTitle = "Welcome to Xpress HRMS",
+                DisplayName = "Xpress HRMS"
+            };
+
+            _logger.LogError($"Email payload to send: {JsonConvert.SerializeObject(new {mailRequest.ToEmail, mailRequest.Subject, mailRequest.DisplayName})}.");
+            SendEmailAsync(mailRequest, null);
+
+            ////string emailAddress = _smtpParameters.EmailAddress;
+            ////string smtpAdress = _smtpParameters.Host;
+            ////int smtpPort = _smtpParameters.Port;
+            ////string password = _smtpParameters.Password;
+
+            //string message = string.Empty;
+            //MimeMessage mailBody = new MimeMessage();
+
+            //MailboxAddress from = new MailboxAddress("Xpress HRMS", _smtpParameters.EmailAddress);
+            //mailBody.From.Add(from);
+
+            //MailboxAddress to = new MailboxAddress(_smtpParameters.DisplayName, recipientEmail);
+            ////MailboxAddress to = new MailboxAddress("User", sampleEmail);
+            //mailBody.To.Add(to);
+
+            //mailBody.Subject = subject;
+            //message = ComposeApprovedUserMail(recipientName, token);
+            //BodyBuilder bodyBuilder = new BodyBuilder();
+
+            //bodyBuilder.HtmlBody = message;
+            //mailBody.Body = bodyBuilder.ToMessageBody();
+
+            //try
+            //{
+            //    MailKit.Net.Smtp.SmtpClient client = new MailKit.Net.Smtp.SmtpClient();
+            //    client.Connect(smtpAdress, smtpPort);
+            //    client.Authenticate(emailAddress, password);
+            //    await client.SendAsync(mailBody);
+            //    client.Disconnect(true);
+            //    client.Dispose();
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError($"MethodName: SendEmailApproveUser ===>{ex.Message}");
+            //    throw;
+            //}
         }
         public void SendEmail(string recipientEmail, string firtname, string defaultPass, string subject, string wwwRootPath, string ip, string port, string appKey = null, string channel = null)
         {
@@ -498,8 +586,6 @@ namespace hrms_be_backend_business.AppCode
             }
             return body;
         }
-
-
         public string ComposeEmailForSurveyParticipation(string firstname, string survProcessName, string email, string wwwRootPath, string ip, string port, string appKey = null, string channel = null)
         {
 
@@ -645,7 +731,6 @@ namespace hrms_be_backend_business.AppCode
                 throw;
             }
         }
-
         public async Task SendResignationClearanceApproveMailToApprover(long ApproverEmployeeId, long ResigationByEmployeeId)
         {
             try

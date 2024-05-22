@@ -161,10 +161,12 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _EmployeeService.UpdateEmployeeBasis(payload, accessToken, claim, RemoteIpAddress, RemotePort));
         }
+
         [HttpPost("ApproveEmployee")]
         [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
         public async Task<IActionResult> ApproveEmployee(long EmployeeId)
         {
+            _logger.LogInformation($"Received request to approve EmployeeId: {EmployeeId}");
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
             var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -173,6 +175,7 @@ namespace hrms_be_backend_api.Controllers
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
             return this.CustomResponse(await _EmployeeService.ApproveEmployee(EmployeeId, accessToken, claim, RemoteIpAddress, RemotePort));
         }
+
         [HttpPost("DisapproveEmployee")]
         [ProducesResponseType(typeof(ExecutedResult<string>), 200)]
         public async Task<IActionResult> DisapproveEmployee(long EmployeeId, string Comment)

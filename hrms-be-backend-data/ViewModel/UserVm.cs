@@ -48,6 +48,7 @@
         public bool HasCompletedEduBackGround { get; set; }
         public bool HasCompletedPersonalInfo { get; set; }
         public bool HasCompletedProfBackground { get; set; }
+        public int GenderID { get; set; }
     }
     public class UserModulesVm
     {

@@ -1342,12 +1342,14 @@ namespace hrms_be_backend_business.Logic
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
                 if (accessUser.data == null)
                 {
+                    _logger.LogError("Unathorized User");
                     return new ExecutedResult<string>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
                 }
                 var checkPrivilege = await _privilegeRepository.CheckUserAppPrivilege(UserModulePrivilegeConstant.Approve_Onboarding, accessUser.data.UserId);
                 if (!checkPrivilege.Contains("Success"))
                 {
+                    _logger.LogError(checkPrivilege);
                     return new ExecutedResult<string>() { responseMessage = $"{checkPrivilege}", responseCode = ((int)ResponseCode.NoPrivilege).ToString(), data = null };
 
                 }
@@ -1356,14 +1358,16 @@ namespace hrms_be_backend_business.Logic
                 string repoResponse = await _EmployeeRepository.ApproveEmployee(EmployeeId, password, accessUser.data.UserId);
                 if (!repoResponse.Contains("Success"))
                 {
+                    _logger.LogError($"We did not get a successful response from Approve employee - {repoResponse}");
                     return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
                 }
 
                 var UserId = repoResponse.Replace("Success", "");
                 var userDetails = await _accountRepository.GetUserById(Convert.ToInt64(UserId));
                 string token = $"{RandomGenerator.GetNumber(20)}{userDetails.UserId}";
-
+                _logger.LogInformation($"About to send email to approved user with details: {JsonConvert.SerializeObject(userDetails)} ");
                 _mailService.SendEmailApproveUser(userDetails.OfficialMail, $"{userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName}", password, "Xpress HRMS User Creation", token);
+               
                 var auditLog = new AuditLogDto
                 {
                     userId = accessUser.data.UserId,

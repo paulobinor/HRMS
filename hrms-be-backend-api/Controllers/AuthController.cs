@@ -32,7 +32,8 @@ namespace hrms_be_backend_api.Controllers
         {           
             var IpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var Port = Request.HttpContext.Connection.RemotePort.ToString();
-            return this.CustomResponse(await _authService.Login(login, IpAddress, Port));           
+            var res = this.CustomResponse(await _authService.Login(login, IpAddress, Port));
+            return res;           
         }
 
         [AllowAnonymous]

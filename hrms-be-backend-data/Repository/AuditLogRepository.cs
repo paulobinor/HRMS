@@ -14,6 +14,7 @@ namespace Com.XpressPayments.Data.Repositories.UserAccount.Repository
     {
         private string _connectionString;
         private readonly ILogger<AuditLogRepository> _logger;
+        private readonly IConfiguration _configuration;
 
         public AuditLogRepository(IConfiguration configuration, ILogger<AuditLogRepository> logger)
         {

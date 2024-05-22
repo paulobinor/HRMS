@@ -3,6 +3,7 @@ using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System.ComponentModel.Design;
 using System.Data;
 
@@ -262,6 +263,7 @@ namespace hrms_be_backend_data.Repository
 
         public async Task<string> ApproveEmployee(long EmployeeId, string PasswordHash, long CreatedByUserId)
         {
+            _logger.LogInformation($"Received request to approve employee: {JsonConvert.SerializeObject(new { EmployeeId, PasswordHash, CreatedByUserId })} ");
             try
             {
                 string pwd = BCrypt.Net.BCrypt.HashPassword(PasswordHash, BCrypt.Net.BCrypt.GenerateSalt());
@@ -271,12 +273,14 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@CreatedByUserId", CreatedByUserId);
                 param.Add("@DateCreated", DateTime.Now);
 
-                return await _dapper.Get<string>("sp_approve_employee", param, commandType: CommandType.StoredProcedure);
+                var res = await _dapper.Get<string>("sp_approve_employee", param, commandType: CommandType.StoredProcedure);
+                _logger.LogInformation($"Approve Employee sp_approve_employee response: {res}");
+                return res;
             }
             catch (Exception ex)
             {
                 var err = ex.Message;
-                _logger.LogError($"EmployeeRepository => ApproveEmployee ===> {ex.Message}");
+                _logger.LogError($"EmployeeRepository => ApproveEmployee ===> {ex.Message}, stacktrace: {ex.StackTrace}");
                 throw;
             }
         }
