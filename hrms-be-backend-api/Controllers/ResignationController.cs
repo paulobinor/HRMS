@@ -241,7 +241,23 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         }
 
- 
+        [HttpGet]
+        [Route("GetReasonsForResignationByID/{ResignationID}")]
+        [Authorize]
+        public async Task<IActionResult> GetReasonsForResignationByID(long ResignationID)
+        {
+
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var accessToken = Request.Headers["Authorization"];
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+
+            return Ok(await _resignationService.GetReasonsForResignationByID(ResignationID, accessToken, RemoteIpAddress));
+
+
+        }
     }
 }
 

@@ -14,7 +14,9 @@ namespace Com.XpressPayments.Common.ViewModels
         //public string StaffName { get; set; }
         public DateTime Date { get; set; }
         public DateTime ResumptionDate { get; set; }
-        public string ReasonForResignation { get; set; }
+        public string[] ReasonForResignation { get; set; }
+        public string OtherReasonForResignation { get; set; }
+
         public DateTime LastDayOfWork { get; set; }
        // public IFormFile SignedResignationLetter { get; set; }
         public string fileName { get; set; }    

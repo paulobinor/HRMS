@@ -8,6 +8,8 @@ namespace hrms_be_backend_data.IRepository
     {
         Task<dynamic> CreateResignation(ResignationDTO request);
         Task<dynamic> UpdateResignation(UpdateResignationDTO resignation);
+        Task<dynamic> CreateReasonsForResignation(int resignationID,string[] reasons,long CompanyID);
+        Task<IEnumerable<ReasonsForResignationDTO>> GetReasonsForResignationByID(long ID);
         Task<ResignationDTO> GetResignationByID(long ID);
         Task<ResignationDTO> GetResignationByEmployeeID(long EmployeeID);
         Task<IEnumerable<ResignationDTO>> GetResignationByCompanyID(long companyID, int PageNumber, int RowsOfPage, string SearchVal);

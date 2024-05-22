@@ -19,6 +19,7 @@ namespace hrms_be_backend_business.ILogic
         //Task<ExecutedResult<string>> DeleteResignation(DeleteResignationDTO request, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetPendingResignationByEmployeeID(long employeeID, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetPendingResignationByCompanyID(long companyID, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<IEnumerable<ReasonsForResignationDTO>>> GetReasonsForResignationByID(long ResignationID, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<string>> ApprovePendingResignation(ApprovePendingResignationDTO request, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<string>> DisapprovePendingResignation(DisapprovePendingResignation request, string AccessKey, string RemoteIpAddress);
         

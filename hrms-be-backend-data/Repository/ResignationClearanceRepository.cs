@@ -37,7 +37,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("LoansOutstanding", resignation.LoansOutstanding);
                 param.Add("Signature", resignation.Signature);
                 param.Add("ExitDate", resignation.ExitDate);
-                param.Add("ReasonForExit", resignation.ReasonForExit);
+                //param.Add("ReasonForExit", resignation.ReasonForExit);
                 param.Add("CreatedByUserID", resignation.CreatedByUserID);
                 param.Add("DateCreated", resignation.DateCreated);
                 param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
