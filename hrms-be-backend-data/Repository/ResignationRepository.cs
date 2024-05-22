@@ -32,14 +32,15 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
                 param.Add("EmployeeID", resignation.EmployeeId);
                 //param.Add("StaffID", resignation.StaffID);
-                // param.Add("StaffName", resignation.StaffName);
+                //param.Add("StaffName", resignation.StaffName);
                 param.Add("SignedResignationLetter", resignation.SignedResignationLetter);
                 param.Add("CompanyID", resignation.CompanyID);
                 param.Add("ResumptionDate", resignation.ResumptionDate);
                 param.Add("ExitDate", resignation.ExitDate);
                 param.Add("LastDayOfWork", resignation.LastDayOfWork);
                 param.Add("CreatedByUserId", resignation.CreatedByUserId);
-                param.Add("ReasonForResignation", resignation.ReasonForResignation);
+                param.Add("OtherReasonForResignation", resignation.OtherReasonForResignation);
+                //param.Add("ReasonForResignation", resignation.ReasonForResignation);
                 param.Add("DateCreated", resignation.DateCreated);
 
                 // Add output parameters to capture both ResignationID and ReturnVal
@@ -88,9 +89,56 @@ namespace hrms_be_backend_data.Repository
                 _logger.LogError($"MethodName: UpdateResignation(ResignationDTO resignation) ===>{ex.Message}");
                 throw;
             }
+        } 
+        public async Task<dynamic> CreateReasonsForResignation(int resignationID,string[] reasons, long CompanyID)
+        {
+            try
+            {
+                // Join the reasons array into a single comma-separated string
+                string reasonsString = string.Join(",", reasons);
+
+                var param = new DynamicParameters();
+                param.Add("Reasons", reasonsString);
+                param.Add("resignationID", resignationID);
+                param.Add("CompanyID", CompanyID);
+                param.Add("ReturnVal", dbType: DbType.String, direction: ParameterDirection.Output, size: 500);
+
+
+                dynamic response =  await _dapper.Get<string>("Sp_create_reasons_for_resignation", param, commandType: CommandType.StoredProcedure);
+                // Retrieve the output parameter value
+                string returnValue = param.Get<string>("ReturnVal");
+
+                return returnValue;
+
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: CreateReasonsForResignation(int resignationID,string[] reasons) ===>{ex.Message}");
+                throw;
+            }
         }
 
 
+        public async Task<IEnumerable<ReasonsForResignationDTO>> GetReasonsForResignationByID(long ID)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("ResignationId", ID);
+
+                var resignationDetails = await _dapper.GetAll<ReasonsForResignationDTO>("Sp_get_reasons_for_resignation_by_id", param, commandType: CommandType.StoredProcedure);
+
+                return resignationDetails;
+                
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error Getting Resignation by ID - {ID}", ex);
+                throw;
+            }
+        }
         public async Task<ResignationDTO> GetResignationByID(long ID)
         {
             try

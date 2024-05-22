@@ -650,6 +650,42 @@ namespace hrms_be_backend_business.AppCode
             return body;
         }
 
+        public async Task SendResignationMailFromHrToStaff(long ResigationByEmployeeId, DateTime exitDate)
+        {
+            try
+            {
+                var resignationBy = await _accountRepository.GetUserByEmployeeId(ResigationByEmployeeId);
+                StringBuilder mailBody = new StringBuilder();
+                mailBody.Append($"Dear {resignationBy.FirstName} {resignationBy.LastName}<br/> <br/>");
+                mailBody.Append($"We refer to your letter indicating your intention to resign from the services of the Company with effect from {exitDate}.<br/> <br/>");
+                mailBody.Append($"We appreciate your contribution during your stay with us.<br/> <br/>");
+                mailBody.Append($"Please be informed that you will be required to do a proper handover of your duties as well as submit the following items/documents to the respective departments upon your exit:<br/> <br/>");
+                mailBody.Append($"-     Completed Exit Interview and Exit Clearance Forms [see attached]<br/> <br/>");
+                mailBody.Append($"-     ID Card - HCM<br/> <br/>");
+                mailBody.Append($"-     Lapel Pin – HCM<br/> <br/>");
+                mailBody.Append($"-     HMO ID Card – HCM<br/> <br/>");
+                mailBody.Append($"-     Laptop – Admin<br/> <br/>");
+                mailBody.Append($"-     Handover Note – Your Head/GH and HCM<br/> <br/>");
+                mailBody.Append($"-     Any other items given to you while in service<br/> <br/>");
+                mailBody.Append($"We will also review our records to ascertain that there are no pending issues concerning your desk while in the service of the Company.<br/> <br/>");
+                mailBody.Append($"Your net financial position as well as a formal letter acknowledging your resignation will be communicated to you in due course.<br/> <br/>");
+                mailBody.Append($"We wish you the best in your endeavors and look forward to a cordial relationship in the future.<br/> <br/>");
+
+                var mailPayload = new MailRequest
+                {
+                    Body = mailBody.ToString(),
+                    Subject = "Acknowledgment of Your Resignation Request",
+                    ToEmail = resignationBy.OfficialMail,
+                };
+                SendEmailAsync(mailPayload, null);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: SendResignationApproveMailToApprover ===>{ex.Message}");
+                throw;
+            }
+        } 
         public async Task SendResignationApproveMailToApprover(long ApproverEmployeeId, long ResigationByEmployeeId, DateTime exitDate)
         {
             try

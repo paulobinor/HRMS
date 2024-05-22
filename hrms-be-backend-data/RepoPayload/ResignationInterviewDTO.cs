@@ -21,7 +21,8 @@ namespace hrms_be_backend_data.RepoPayload
         public DateTime DateCreated { get; set; }
         public long CreatedByUserId { get; set; }
         public DateTime ResumptionDate { get; set; }
-        public string ReasonForResignation { get; set; }
+
+        //public string ReasonForResignation { get; set; }
         public DateTime ExitDate { get; set; }
         public string OtherRemarks { get; set; }
         public string Signature  { get; set; }

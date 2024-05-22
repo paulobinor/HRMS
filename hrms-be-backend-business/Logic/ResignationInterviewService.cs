@@ -139,7 +139,7 @@ namespace hrms_be_backend_business.Logic
                     ExitDate = resignation.ExitDate,
                     EmployeeId = payload.EmployeeId,
                     ResignationId = resignation.ResignationID,
-                    ReasonForResignation = resignation.ReasonForResignation,
+                    //ReasonForResignation = resignation.ReasonForResignation,
                     OtherRemarks = payload.OtherRemarks,
                     ResumptionDate = resignation.ResumptionDate,
                     Signature = payload.Signature,
