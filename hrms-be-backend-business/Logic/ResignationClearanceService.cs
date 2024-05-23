@@ -311,28 +311,28 @@ namespace hrms_be_backend_business.Logic
 
                     }
 
-                //send approval confirmation mail
-                _mailService.SendResignationClearanceApproveConfirmationMail(resignation.EmployeeID, accessUser.data.EmployeeId);
+                    //send approval confirmation mail
+                    _mailService.SendResignationClearanceApproveConfirmationMail(resignation.EmployeeID, accessUser.data.EmployeeId);
 
 
-                //Send mail to departments setup to approve resignation clearance
-                var DepartmentsThatAreNotFinalApprover = await _exitClearanceSetupRepository.GetDepartmentsThatAreNotFinalApproval(resignation.CompanyID);
-                if (DepartmentsThatAreNotFinalApprover.Count() == 0)
-                {
-                    var FinalApprovalDepartment = await _exitClearanceSetupRepository.GetDepartmentThatIsFinalApprroval(resignation.CompanyID);
-                    _mailService.SendResignationClearanceApproveMailToApprover(FinalApprovalDepartment.HodEmployeeID, resignation.EmployeeID);
-                }
-                else
-                {
-                    foreach (var item in DepartmentsThatAreNotFinalApprover)
+                    //Send mail to departments setup to approve resignation clearance
+                    var DepartmentsThatAreNotFinalApprover = await _exitClearanceSetupRepository.GetDepartmentsThatAreNotFinalApproval(resignation.CompanyID);
+                    if (DepartmentsThatAreNotFinalApprover.Count() == 0)
                     {
-                        _mailService.SendResignationClearanceApproveMailToApprover(item.HodEmployeeID, resignation.EmployeeID);
-
+                        var FinalApprovalDepartment = await _exitClearanceSetupRepository.GetDepartmentThatIsFinalApprroval(resignation.CompanyID);
+                        _mailService.SendResignationClearanceApproveMailToApprover(FinalApprovalDepartment.HodEmployeeID, resignation.EmployeeID);
                     }
-                }
+                    else
+                    {
+                        foreach (var item in DepartmentsThatAreNotFinalApprover)
+                        {
+                            _mailService.SendResignationClearanceApproveMailToApprover(item.HodEmployeeID, resignation.EmployeeID);
 
-                    return new ExecutedResult<string>() { responseMessage = "Resignation clearance approved successfully.", responseCode = (00).ToString(), data = null };
-            }
+                        }
+                    }
+
+                        return new ExecutedResult<string>() { responseMessage = "Resignation clearance approved successfully.", responseCode = (00).ToString(), data = null };
+                }
                 else
                 {
                     if (!resignation.IsHodApproved == false)
