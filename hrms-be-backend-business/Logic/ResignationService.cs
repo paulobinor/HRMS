@@ -117,8 +117,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{returnVal}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
 
-                }
-                //var reasons = payload.ReasonForResignation;
+                };
 
                 // Save resignation details and reasons
                 var reasons = await _resignationRepository.CreateReasonsForResignation(resignationID,payload.ReasonForResignation,payload.CompanyID);

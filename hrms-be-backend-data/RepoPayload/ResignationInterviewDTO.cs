@@ -33,6 +33,7 @@ namespace hrms_be_backend_data.RepoPayload
         public string DoYouFeelYouWerePlacedInAPositionCompatibleWithYourSkillSet { get; set; }
         public string IfYouAreTakingAnotherJob_WhatKindOfJobWillYouBeTaking { get; set; }
         public string CouldOurCompanyHaveMadeAnyImprovementsThatMightHaveMadeYouStay { get; set; }
+        public string PendingOn { get; set; }
 
     }
 }
