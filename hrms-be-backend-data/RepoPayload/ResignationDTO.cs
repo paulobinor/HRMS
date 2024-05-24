@@ -44,7 +44,7 @@ namespace Com.XpressPayments.Common.ViewModels
         public bool IsHrDisapproved { get; set; }
         public string HrDisapprovedComment { get; set; }
         public DateTime HrDateDisapproved { get; set; }
-
+        public string Status { get; set; }
 
     }
    
