@@ -77,7 +77,9 @@ namespace hrms_be_backend_business.Logic
             int noOfDaysTaken = 0;
             List<LeaveRequestLineItem> responseItems = new List<LeaveRequestLineItem>();
             
-            foreach (var leaveRequestLineItem in RequestLineItems) {
+            foreach (var leaveRequestLineItem in RequestLineItems)
+            {
+                _logger.LogInformation($"About to create leave request for EmployeeId: {leaveRequestLineItem.EmployeeId} and CompanyId: {leaveRequestLineItem.CompanyId}");
 
                 #region Validate Leave Request
                 //check if any pending leave approvals
@@ -215,14 +217,6 @@ namespace hrms_be_backend_business.Logic
                 //}
 
                 #endregion
-
-            }
-
-            foreach (var leaveRequestLineItem in RequestLineItems)
-            {
-                _logger.LogInformation($"About to create leave request for EmployeeId: {leaveRequestLineItem.EmployeeId} and CompanyId: {leaveRequestLineItem.CompanyId}");
-
-                
 
                 EmpLeaveRequestInfo empLeaveRequestInfo = null;
                 bool IsExistingRequest = true;

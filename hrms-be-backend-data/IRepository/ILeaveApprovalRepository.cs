@@ -1,6 +1,7 @@
 ﻿using hrms_be_backend_common.DTO;
 using hrms_be_backend_common.Models;
 using hrms_be_backend_data.RepoPayload;
+using System.Threading.Tasks;
 
 namespace hrms_be_backend_data.IRepository
 {
@@ -8,6 +9,7 @@ namespace hrms_be_backend_data.IRepository
     {
 
         Task<LeaveApprovalInfo> GetLeaveApprovalInfo(long leaveApprovalId);
+        Task<LeaveApprovalInfo> GetAnnualLeaveApprovalInfo(long leaveApprovalId);
         Task<List<LeaveApprovalInfoDto>> GetLeaveApprovalInfoByCompanyID(long CompanyID);
         Task<LeaveApprovalInfo> GetLeaveApprovalInfoByRequestLineItemId(long leaveRequestLineitemId);
         Task<LeaveApprovalLineItem> GetLeaveApprovalLineItem(long LeaveApprovalId, int approvalStep);
@@ -18,6 +20,7 @@ namespace hrms_be_backend_data.IRepository
         Task<LeaveApprovalInfo> GetExistingLeaveApproval(long EmployeeId);
         Task<List<LeaveApprovalLineItem>> GetLeaveApprovalLineItems(long leaveApprovalId);
         Task<List<PendingLeaveApprovalItemsDto>> GetPendingLeaveApprovals(long approvalEmployeeID, string v);
+        Task<List<PendingLeaveApprovalItemsDto>> GetPendingAnnualLeaveApprovals(long approvalEmployeeID, string v);
     }
 }
 

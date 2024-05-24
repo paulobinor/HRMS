@@ -14,6 +14,7 @@ using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System.Drawing;
 using System.Security.Claims;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace hrms_be_backend_business.Logic
 {
@@ -463,13 +464,131 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
                 }
+
+                var earnings = await _payrollRepository.GetPayrollEarnings(payload.PayrollId);
+                decimal totalEarningsAmount = 0, taxIncome = 0;
+                if (earnings.Count > 0)
+                {
+                    foreach (var item in earnings)
+                    {
+                        totalEarningsAmount += item.EarningItemAmount;
+                    }
+                }
+
+                var deductions = await _payrollRepository.GetPayrollDeductions(payload.PayrollId);
+                decimal deductionTotalAmount = 0;
+                if (deductions.Count > 0)
+                {
+                    var payrollDeduction = new List<PayrollDeduction>();
+                    foreach (var item in deductions)
+                    {
+                        decimal deductionAmount = 0;
+                        if (item.IsFixed)
+                        {
+                            deductionTotalAmount += item.DeductionFixedAmount;
+                            deductionAmount = item.DeductionFixedAmount;
+                        }
+                        if (item.IsPercentage)
+                        {
+                            var deduction = await _payrollRepository.GetPayrollDeductionComputation(item.DeductionId, payload.PayrollId);
+                            if (deduction != null)
+                            {
+                                foreach (var deductionItem in deduction)
+                                {
+                                    decimal deductionItemAmount = deductionItem.EarningItemAmount;
+                                    if (deductionItemAmount > 0)
+                                    {
+                                        if (item.DeductionPercentageAmount > 0)
+                                        {
+                                            decimal percentage = decimal.Divide(item.DeductionPercentageAmount, 100);
+                                            decimal amt = decimal.Multiply(percentage, deductionItemAmount);
+                                            deductionTotalAmount += amt;
+                                            deductionAmount = amt;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+                decimal restatedAmount = totalEarningsAmount - deductionTotalAmount;
+
+                //----CRA Calculation
+                #region CRA Calculation
+                var cra = await _earningsRepository.GetEarningsCRA(accessUser.data.CompanyId);
+                decimal craAmount = 0;
+                if (cra != null)
+                {
+                    if (cra.CreatedByUserId > 0)
+                    {
+                        decimal percentage = decimal.Divide(Convert.ToDecimal(cra.EarningsCRAPercentage), 100);
+                        craAmount = decimal.Multiply(percentage, restatedAmount);
+                        decimal earningsCRAHigherOfPercentage = decimal.Divide(Convert.ToDecimal(cra.EarningsCRAHigherOfPercentage), 100);
+                        decimal earningsCRAHigherOfPercentageAmount = decimal.Multiply(earningsCRAHigherOfPercentage, restatedAmount);
+                        decimal amountToAdd = 0;
+                        if (earningsCRAHigherOfPercentageAmount > cra.EarningsCRAHigherOfValue)
+                        {
+                            amountToAdd = earningsCRAHigherOfPercentageAmount;
+                        }
+                        else
+                        {
+                            amountToAdd = cra.EarningsCRAHigherOfValue;
+                        }
+                        craAmount += amountToAdd;
+                    }
+                }
+                #endregion
+
+                #region Tax Calculation              
+                taxIncome = totalEarningsAmount - deductionTotalAmount - craAmount;
+
+                var taxPayable = await _taxRepository.GetTaxPayable(accessUser.data.CompanyId);
+                decimal taxPayableAmount = 0, taxIncomeRemained = taxIncome;
+                if (taxPayable.Count > 0)
+                {
+                    taxPayable.OrderBy(p => p.StepNumber);
+                    foreach (var item in taxPayable)
+                    {
+                        if (taxIncomeRemained > 0)
+                        {
+                            decimal percentage = decimal.Divide(item.PayablePercentage, 100);
+                            if (item.IsLast)
+                            {
+                                decimal amt = decimal.Multiply(taxIncomeRemained, percentage);
+                                taxIncomeRemained -= item.PayableAmount;
+                                taxPayableAmount += amt;
+                            }
+                            else
+                            {
+                                decimal amt = decimal.Multiply(item.PayableAmount, percentage);
+                                taxIncomeRemained -= item.PayableAmount;
+                                taxPayableAmount += amt;
+                            }
+
+
+                        }
+                    }
+                }
+
+                #endregion
+                var netincome = restatedAmount - taxIncome;
                 var repoPayload = new RunPayrollReq
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
                     Title = payload.Title,
+                    NetCRAAmount = decimal.Divide(craAmount, 12),
+                    NetRestatedAmount = decimal.Divide(restatedAmount, 12),
+                    NetTAXAmount = decimal.Divide(taxPayableAmount, 12),
+                    LoanRepayment = 0,
+                    NetDeduction = decimal.Divide(deductionTotalAmount, 12),
+                    NetPay = decimal.Divide(netincome, 12),
+                    TotalEarning = netincome,
                     PayrollId = payload.PayrollId,
                 };
+
+
                 string repoResponse = await _payrollRepository.RunPayroll(repoPayload);
                 if (!repoResponse.Contains("Success"))
                 {
@@ -1114,7 +1233,7 @@ namespace hrms_be_backend_business.Logic
             }
             catch (Exception ex)
             {
-                _logger.LogError($"PayrollService (DownloadPayrollRunnedReport)=====>{ex.Message} StackTrace: {ex.StackTrace}");
+                _logger.LogError($"PayrollService (DownloadPayrollRunnedReport)=====>{ex}");
                 return new ExecutedResult<byte[]>()
                 {
                     data = null,

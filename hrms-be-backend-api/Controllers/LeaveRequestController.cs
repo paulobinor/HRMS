@@ -31,6 +31,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             _authService = authService;
         }
 
+      
         [Authorize]
         [HttpPost("Create")]
         public async Task<IActionResult> CreateLeaveRequest([FromBody] CreateLeaveRequestLineItem createLeaveRequestLine)
@@ -109,6 +110,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             return Ok(res);
         }
 
+     
         [HttpPost("Reschedule")]
         [Authorize]
         public async Task<IActionResult> RescheduleLeaveRequest([FromBody] LeaveRequestLineItem leaveRequestLineItem)

@@ -56,6 +56,13 @@ namespace hrms_be_backend_data.Repository
 
                 param.Add("@PayrollId", payload.PayrollId);
                 param.Add("@Title", payload.Title);
+                param.Add("@NetPay", payload.NetPay);
+                param.Add("@NetDeduction", payload.NetDeduction);
+                param.Add("@NetRestatedAmount", payload.NetRestatedAmount);
+                param.Add("@NetCRAAmount", payload.NetCRAAmount);
+                param.Add("@NetTAXAmount", payload.NetTAXAmount);
+                param.Add("@TotalEarning", payload.TotalEarning);
+                param.Add("@LoanRepayment", payload.LoanRepayment);
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
                 param.Add("@DateCreated", payload.DateCreated);
                 return await _dapper.Get<string>("sp_run_payroll", param, commandType: CommandType.StoredProcedure);

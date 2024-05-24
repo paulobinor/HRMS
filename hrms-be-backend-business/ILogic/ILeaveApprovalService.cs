@@ -10,6 +10,8 @@ namespace hrms_be_backend_business.ILogic
     public interface ILeaveApprovalService
     {
         Task<BaseResponse> UpdateLeaveApproveLineItem(LeaveApprovalLineItem leaveApprovalLineItem);
+
+        Task<LeaveApprovalInfo> GetAnnualLeaveApprovalInfo(long leaveApprovalId, long leaveReqestLineItemId);
         Task<LeaveApprovalInfo> GetLeaveApprovalInfo(long leaveApprovalId, long leaveReqestLineItemId);
         Task<LeaveApprovalInfo> UpdateLeaveApprovalInfo(LeaveApprovalInfo leaveApproval);
         Task<LeaveApprovalLineItem> GetLeaveApprovalLineItem(long leaveApprovalLineItemId, int approvalStep = 0);
@@ -17,6 +19,8 @@ namespace hrms_be_backend_business.ILogic
         Task<List<LeaveApprovalLineItem>>GetleaveApprovalLineItems(long leaveApprovalId);
         Task<List<LeaveApprovalInfoDto>> GetLeaveApprovalInfoByCompanyID(long companyID);
         Task<List<PendingLeaveApprovalItemsDto>> GetPendingLeaveApprovals(long approvalEmployeeID, string v = null);
+        Task<List<PendingLeaveApprovalItemsDto>> GetPendingAnnualLeaveApprovals(long approvalEmployeeID, string v = null);
+        Task<BaseResponse> UpdateLeaveApproveLineItems(List<LeaveApprovalLineItem> leaveApprovalLineItems, string approvalStatus);
 
         #region Depricated
         //Task<BaseResponse> GetLeaveRequsetById(long LeaveRequestID, RequesterInfo requester);
