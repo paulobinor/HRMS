@@ -88,6 +88,9 @@
         public static string Sp_GetEmployeeLeaveRequests { get; set; } = "GetEmployeeLeaveRequests";
         public static string Sp_GetExistingLeaveApproval { get; set; } = "Sp_GetExistingLeaveApproval";
         public static string Sp_GetAnnualLeaveApproval { get; set; } = "Sp_GetAnnualLeaveApproval";
+        public static string Sp_GetPendingAnnualLeaveApprovals { get; set; } = "Sp_GetPendingAnnualLeaveApprovals";
+        public static string Sp_GetAllAnnualLeaveRequestLineItems { get; set; } = "Sp_GetAllAnnualLeaveRequestLineItems";
+        public static string Sp_GetLeaveApprovals { get; internal set; } = "Sp_GetLeaveApprovals";
 
         //System Default
         public static int DefaultDeptId = 1;

@@ -173,6 +173,8 @@ namespace hrms_be_backend_business.Logic
                     IsModifield = false,
                     StaffId = payload.StaffId,
                     IsMD = payload.IsMD,
+                    SupervisorId = payload.SupervisorId,
+                    GroupHeadId = payload.GroupHeadId,
                 };
                 string repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
                 if (!repoResponse.Contains("Success"))

@@ -113,6 +113,7 @@ namespace hrms_be_backend_data.Repository
                 var res = await _dapperGeneric.Get<LeaveApprovalInfo>(ApplicationConstant.Sp_GetAnnualLeaveApproval, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
+                    res.LeaveApprovalLineItems = await GetLeaveApprovalLineItems(res.LeaveApprovalId);
                     return res;
                 }
                 return null;
@@ -270,6 +271,36 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
+        public async Task<List<LeaveApproval>> GetLeaveApprovals(long approvalEmployeeId, long employeeID)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@ApprovalEmployeeID", approvalEmployeeId);
+                param.Add("@EmployeeID", employeeID);
+                //if (!string.IsNullOrEmpty(v))
+                //{
+                //    param.Add("@ApprovalStatus", "All");
+                //}
+                //else
+                //{
+                //    param.Add("@ApprovalStatus", "Pending");
+                //}
+
+                var res = await _dapperGeneric.GetAll<LeaveApproval>(ApplicationConstant.Sp_GetLeaveApprovals, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    return res;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: GetPendingAnnualLeaveApprovals ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+        }
         public async Task<List<PendingLeaveApprovalItemsDto>> GetPendingAnnualLeaveApprovals(long approvalEmployeeID, string v)
         {
             try
@@ -286,7 +317,7 @@ namespace hrms_be_backend_data.Repository
                 //    param.Add("@ApprovalStatus", "Pending");
                 //}
 
-                var res = await _dapperGeneric.GetAll<PendingLeaveApprovalItemsDto>(ApplicationConstant.Sp_GetPendingLeaveApprovals, param, commandType: CommandType.StoredProcedure);
+                var res = await _dapperGeneric.GetAll<PendingLeaveApprovalItemsDto>(ApplicationConstant.Sp_GetPendingAnnualLeaveApprovals, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
                     return res;

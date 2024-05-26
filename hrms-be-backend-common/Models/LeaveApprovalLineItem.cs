@@ -11,6 +11,22 @@ namespace hrms_be_backend_common.Models
 
         public long LeaveApprovalLineItemId { get; set; }
         public long LeaveApprovalId { get; set; }
+        public long EmployeeID { get; set; }
+        public bool IsApproved { get; set; }
+        public long ApprovalEmployeeId { get; set; }
+        public string Comments { get; set; }
+        public string ApprovalPosition { get; set; }
+        public DateTime EntryDate { get; set; }
+        public int ApprovalStep { get; set; }
+        public string ApprovalStatus { get; set; }
+    }
+
+    public class LeaveApproval
+    {
+
+        public long LeaveApprovalLineItemId { get; set; }
+        public long LeaveApprovalId { get; set; }
+        public long EmployeeID { get; set; }
         public bool IsApproved { get; set; }
         public long ApprovalEmployeeId { get; set; }
         public string Comments { get; set; }

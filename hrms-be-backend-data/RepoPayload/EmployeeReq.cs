@@ -23,6 +23,8 @@
         public long CreatedByUserId { get; set; }
         public DateTime DateCreated { get; set; }
         public bool IsModifield { get; set; }
+        public long SupervisorId { get; set; }
+        public long GroupHeadId { get; set; }
     }
     public class EmployeePersonalInfoReq
     {

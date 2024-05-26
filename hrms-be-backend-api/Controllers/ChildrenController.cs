@@ -2,7 +2,7 @@
 
 namespace hrms_be_backend_api.Controllers
 {
-    public class ChildrenController : Controller
+    public class ChildrenController : ControllerBase
     {
         public IActionResult Index()
         {

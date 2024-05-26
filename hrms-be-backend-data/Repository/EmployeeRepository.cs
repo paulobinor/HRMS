@@ -46,6 +46,8 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
                 param.Add("@DateCreated", payload.DateCreated);
                 param.Add("@IsModifield", payload.IsModifield);
+                param.Add("@SupervisorId", payload.SupervisorId);
+                param.Add("@GroupHeadId", payload.GroupHeadId);
 
                 return await _dapper.Get<string>("sp_process_employee_basis", param, commandType: CommandType.StoredProcedure);
             }

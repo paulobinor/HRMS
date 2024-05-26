@@ -62,24 +62,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             return Ok(res);
         }
 
-        [HttpPost("ApproveAnnualLeave")]
-        //  [Authorize]
-        public async Task<IActionResult> ApproveAnnualLeave(List<LeaveApprovalLineItem> leaveApprovalLineItems, string approvalStatus)
-        {
-            var response = new BaseResponse();
-            //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            //_logger.LogInformation($"Received Approve Leave request. Payload: {JsonConvert.SerializeObject(leaveApprovalLineItem)} from remote address: {RemoteIpAddress}");
-
-            //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
-            //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-            //if (accessUser.data == null)
-            //{
-            //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-
-            //}
-            var res = await _leaveApprovalService.UpdateLeaveApproveLineItems(leaveApprovalLineItems, approvalStatus);
-            return Ok(res);
-        }
+      
 
         [HttpGet("GetAllLeaveApprovalLineItems")]
         [Authorize]
@@ -126,20 +109,20 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         }
 
         [HttpGet("GetLeaveApprovals")]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> GetLeaveApprovals([FromQuery] long ApprovalEmployeeID)
         {
             var response = new BaseResponse();
-            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            _logger.LogInformation($"Received GetPendingLeaveApprovals request. Payload: {JsonConvert.SerializeObject(new { ApprovalEmployeeID })} from remote address: {RemoteIpAddress}");
+            //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            //_logger.LogInformation($"Received GetPendingLeaveApprovals request. Payload: {JsonConvert.SerializeObject(new { ApprovalEmployeeID })} from remote address: {RemoteIpAddress}");
 
-            var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
-            var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-            if (accessUser.data == null)
-            {
-                return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+            //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+            //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
-            }
+            //}
             var res = await _leaveApprovalService.GetPendingLeaveApprovals(ApprovalEmployeeID);
             response.Data = res;
             response.ResponseMessage = "Success";
@@ -147,27 +130,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             return Ok(response);
         }
 
-        [HttpGet("GetAnnualLeaveApprovals")]
-        [Authorize]
-        public async Task<IActionResult> GetAnnualLeaveApprovals([FromQuery] long ApprovalEmployeeID)
-        {
-            var response = new BaseResponse();
-            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            _logger.LogInformation($"Received GetAnnualLeaveApprovals request. Payload: {JsonConvert.SerializeObject(new { ApprovalEmployeeID })} from remote address: {RemoteIpAddress}");
-
-            var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
-            var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-            if (accessUser.data == null)
-            {
-                return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-
-            }
-            var res = await _leaveApprovalService.GetPendingLeaveApprovals(ApprovalEmployeeID);
-            response.Data = res;
-            response.ResponseMessage = "Success";
-            response.ResponseCode = "00";
-            return Ok(response);
-        }
+       
 
     }
 

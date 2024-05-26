@@ -23,6 +23,10 @@
 	  <None Remove="bin\**" />
 	  <None Remove="obj\**" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Compile Remove="Controllers\ChildrenController.cs" />
+	  <Compile Remove="Controllers\ProviderController.cs" />
+	</ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.10" />

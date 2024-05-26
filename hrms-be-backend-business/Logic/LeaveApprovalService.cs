@@ -230,34 +230,58 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<BaseResponse> UpdateLeaveApproveLineItems(List<LeaveApprovalLineItem> leaveApprovalLineItems, string approvalStatus)
+        public async Task<BaseResponse> UpdateAnnualLeaveApproval(LeaveApprovalLineItem leaveApprovalLineItem)
+        {
+            var leaveApprovals = await _leaveApprovalRepository.GetLeaveApprovals(leaveApprovalLineItem.ApprovalEmployeeId, leaveApprovalLineItem.EmployeeID);
+            var leaveapprovalLineItems = new List<LeaveApprovalLineItem>();
+            foreach (var item in leaveApprovals)
+            {
+                var info = await _leaveApprovalRepository.GetAnnualLeaveApprovalInfo(item.LeaveApprovalId);
+                foreach (var LeaveApprovalLineItem1 in info.LeaveApprovalLineItems)
+                {
+                    if (LeaveApprovalLineItem1.ApprovalEmployeeId == leaveApprovalLineItem.ApprovalEmployeeId)
+                    {
+                        leaveapprovalLineItems.Add(LeaveApprovalLineItem1);
+                    }
+                }
+            }
+            var res = await UpdateLeaveApproveLineItems(leaveapprovalLineItems, leaveApprovalLineItem.ApprovalStatus, leaveApprovalLineItem.Comments);
+            return res;
+        }
+        public async Task<BaseResponse> UpdateLeaveApproveLineItems(List<LeaveApprovalLineItem> leaveApprovalLineItems, string approvalStatus, string comments = "N/A")
         {
             //check if us
-            StringBuilder errorOutput = new StringBuilder();
+          //  StringBuilder errorOutput = new StringBuilder();
             var updateLeaveRequestLineItem = new LeaveRequestLineItem();
             bool sendMailToApprover = false;
             bool sendMailToReliever = false;
             var response = new BaseResponse();
             LeaveApprovalLineItem nextApprovalLineItem = null;
 
+            var approvalItems = new List<LeaveApprovalLineItem>();
+            //  var leaveApprovalItems = _leaveApprovalRepository.GetPendingLeaveApprovals(noOfDaysTaken);
+
             foreach (var leaveApprovalLineItem in leaveApprovalLineItems)
             {
                 try
                 {
+                    // CHeck if it is the Approver's turn to approve
                     var Emilokan = (await _leaveApprovalRepository.GetPendingLeaveApprovals(leaveApprovalLineItem.ApprovalEmployeeId, "")).FirstOrDefault(x => x.LeaveApprovalLineItemId == leaveApprovalLineItem.LeaveApprovalLineItemId);
                     if (Emilokan != null)
                     {
                         if (Emilokan.LastApprovalEmployeeID != leaveApprovalLineItem.ApprovalEmployeeId)
                         {
-                            //Not your turn to approve
+                            //Not your turn to approve at this time
                             response.ResponseCode = "401";
                             response.ResponseMessage = "You cannot peform this action at this time";
                             response.Data = null;
                             return response;
                         }
                     }
-
+                    leaveApprovalLineItem.ApprovalStatus = approvalStatus;
+                    leaveApprovalLineItem.Comments = comments;
                     var repoResponse = await _leaveApprovalRepository.UpdateLeaveApprovalLineItem(leaveApprovalLineItem);
+                    approvalItems.Add(repoResponse);
                     if (repoResponse == null)
                     {
                         response.ResponseCode = ((int)ResponseCode.Ok).ToString();
@@ -265,8 +289,15 @@ namespace hrms_be_backend_business.Logic
                         response.Data = repoResponse;
                         return response;
                     }
-
-                    _ = ProcessLeaveApproval(repoResponse.LeaveApprovalId, repoResponse.IsApproved);
+                    //if (approvalStatus == "Approved")
+                    //{
+                    //    leaveApprovalLineItem.IsApproved = true;
+                    //}
+                    //else
+                    //{
+                    //    leaveApprovalLineItem.IsApproved = false;
+                    //}
+                    //_ = ProcessLeaveApproval(repoResponse.LeaveApprovalId, repoResponse.IsApproved);
                     //Get the eapproval information of the current leave request
                     var currentLeaveApprovalInfo = await _leaveApprovalRepository.GetLeaveApprovalInfo(leaveApprovalLineItem.LeaveApprovalId);
 
@@ -278,6 +309,7 @@ namespace hrms_be_backend_business.Logic
                         //  response.Data = repoResponse;
                         return response;
                     }
+                   
                     //Get the current request being approved/denied
                     var leaveRequestLineItem = await _leaveRequestRepository.GetLeaveRequestLineItem(currentLeaveApprovalInfo.LeaveRequestLineItemId);
 
@@ -346,7 +378,7 @@ namespace hrms_be_backend_business.Logic
 
                             _logger.LogError($"Email payload to send: {mailPayload}.");
                             _mailService.SendEmailAsync(mailPayload, null);
-
+                            sendMailToApprover = false;
                         }
 
                         if (sendMailToReliever)
@@ -374,6 +406,7 @@ namespace hrms_be_backend_business.Logic
 
                             _logger.LogError($"Email payload to send: {mailPayload}.");
                             _mailService.SendEmailAsync(mailPayload);
+                            sendApprovalMailToInitiator = false;
                         }
 
                         response.ResponseMessage = "Approved Successfully";
@@ -387,13 +420,6 @@ namespace hrms_be_backend_business.Logic
                             currentLeaveApprovalInfo.Comments += "," + repoResponse.Comments;
 
                         }
-                        //else
-                        //{
-                        //    currentLeaveApprovalInfo.Comments = "Completed";
-                        //}
-
-                        // leaveRequestLineItem = await _leaveRequestRepository.GetLeaveRequestLineItem(currentLeaveApprovalInfo.LeaveRequestLineItemId);
-
                         _mailService.SendLeaveDisapproveConfirmationMail(leaveRequestLineItem.EmployeeId, repoResponse.ApprovalEmployeeId);
                         response.ResponseMessage = "Disapproved Successfully";
                     }
@@ -406,8 +432,8 @@ namespace hrms_be_backend_business.Logic
 
                     response.ResponseCode = ((int)ResponseCode.Ok).ToString();
                     // response.ResponseMessage = ResponseCode.Ok.ToString();
-                    response.Data = repoResponse;
-                    return response;
+                    response.Data = approvalItems;
+                   // return response;
 
                 }
                 catch (Exception ex)
@@ -574,6 +600,7 @@ namespace hrms_be_backend_business.Logic
             try
             {
                 var res = await _leaveApprovalRepository.GetPendingAnnualLeaveApprovals(approvalEmployeeID, v);
+               
                 return res;
             }
             catch (Exception)
@@ -619,6 +646,8 @@ namespace hrms_be_backend_business.Logic
                 throw;
             }
         }
+
+      
 
         #region Depricated
         //public async Task<BaseResponse> DisaproveLeaveRequest(LeaveRequestDisapproved payload, RequesterInfo requester)

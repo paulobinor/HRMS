@@ -68,49 +68,6 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             return Ok(res);
         }
 
-        [Authorize]
-        [HttpPost("CreateMultiple")]
-        public async Task<ActionResult<List<LeaveRequestLineItem>>> CreateLeaveRequest([FromBody] List<CreateLeaveRequestLineItem> leaveRequests)
-        {
-            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            _logger.LogInformation($"Received Create leave request. Payload: {JsonConvert.SerializeObject(leaveRequests)} from remote address: {RemoteIpAddress}");
-            var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
-
-            if (string.IsNullOrEmpty(accessToken))
-            {
-                return BadRequest(new { responseMessage = $"Missing authorization header value", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-            }
-            var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-            if (accessUser.data == null)
-            {
-                return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-            }
-            List<LeaveRequestLineItem> requestLineItems = new List<LeaveRequestLineItem>();
-            LeaveRequestLineItem requestLineItem = null;
-            foreach (var create in leaveRequests)
-            {
-                requestLineItem = new LeaveRequestLineItem
-                {
-                    CompanyId = create.CompanyId,
-                    LeaveTypeId = create.LeaveTypeId,
-                    EmployeeId = create.EmployeeId,
-                    endDate = create.endDate,
-                    startDate = create.startDate,
-                    HandoverNotes = create.HandoverNotes,
-                    IsApproved = false,
-                    IsRescheduled = false,
-                    LeaveLength = create.LeaveLength,
-                    ResumptionDate = create.ResumptionDate,
-                    RelieverUserId = create.RelieverUserId,
-                    UploadFilePath = create.UploadFilePath
-                };
-                requestLineItems.Add(requestLineItem);
-            }
-            var res = await _leaveRequestService.CreateLeaveRequestLineItem(requestLineItems);
-            return Ok(res);
-        }
-
-     
         [HttpPost("Reschedule")]
         [Authorize]
         public async Task<IActionResult> RescheduleLeaveRequest([FromBody] LeaveRequestLineItem leaveRequestLineItem)
@@ -141,7 +98,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             }
         }
 
-
+       
         [HttpGet("{Id}")]
         [Authorize]
         public async Task<IActionResult> GetLeaveRequestLineItem(long Id)
@@ -159,8 +116,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                     return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
                 }
-
-                return Ok(await _leaveRequestService.GetLeaveRequestLineItem(Id));
+                var res = await _leaveRequestService.GetLeaveRequestLineItem(Id);
+                return Ok(res);
             }
             catch (Exception ex)
             {
@@ -264,6 +221,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             }
         }
 
+      
         [Authorize]
         [HttpGet("GetEmployeeLeaveRequests")]
         public async Task<IActionResult> GetEmployeeLeaveRequests([FromQuery] long CompanyID, long EmployeeId)

@@ -19,6 +19,8 @@
         public long JobRoleId { get; set; }
         public long UnitId { get; set; }
         public bool IsMD { get; set; }
+        public long SupervisorId { get; set; }
+        public long GroupHeadId { get; set; }
     }
     public class UpdateEmployeeCompensationDto
     {

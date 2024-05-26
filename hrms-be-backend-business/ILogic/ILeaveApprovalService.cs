@@ -20,7 +20,8 @@ namespace hrms_be_backend_business.ILogic
         Task<List<LeaveApprovalInfoDto>> GetLeaveApprovalInfoByCompanyID(long companyID);
         Task<List<PendingLeaveApprovalItemsDto>> GetPendingLeaveApprovals(long approvalEmployeeID, string v = null);
         Task<List<PendingLeaveApprovalItemsDto>> GetPendingAnnualLeaveApprovals(long approvalEmployeeID, string v = null);
-        Task<BaseResponse> UpdateLeaveApproveLineItems(List<LeaveApprovalLineItem> leaveApprovalLineItems, string approvalStatus);
+        Task<BaseResponse> UpdateLeaveApproveLineItems(List<LeaveApprovalLineItem> leaveApprovalLineItems, string approvalStatus,  string comments = "N/A");
+        Task<BaseResponse> UpdateAnnualLeaveApproval(LeaveApprovalLineItem leaveApprovalLineItem);
 
         #region Depricated
         //Task<BaseResponse> GetLeaveRequsetById(long LeaveRequestID, RequesterInfo requester);

@@ -572,19 +572,20 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 #endregion
-                var netincome = restatedAmount - taxIncome;
+                decimal NetDeduction = deductionTotalAmount + taxPayableAmount;
+                decimal netincome = totalEarningsAmount - NetDeduction;
                 var repoPayload = new RunPayrollReq
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
                     Title = payload.Title,
-                    NetCRAAmount = decimal.Divide(craAmount, 12),
-                    NetRestatedAmount = decimal.Divide(restatedAmount, 12),
-                    NetTAXAmount = decimal.Divide(taxPayableAmount, 12),
+                    NetCRAAmount = craAmount,
+                    NetRestatedAmount = restatedAmount,
+                    NetTAXAmount = taxPayableAmount,
                     LoanRepayment = 0,
-                    NetDeduction = decimal.Divide(deductionTotalAmount, 12),
+                    NetDeduction = deductionTotalAmount,
                     NetPay = decimal.Divide(netincome, 12),
-                    TotalEarning = netincome,
+                    TotalEarning = totalEarningsAmount,
                     PayrollId = payload.PayrollId,
                 };
 
