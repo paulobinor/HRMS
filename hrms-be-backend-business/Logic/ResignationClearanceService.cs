@@ -73,12 +73,7 @@ namespace hrms_be_backend_business.Logic
 
                 payload.EmployeeID = accessUser.data.EmployeeId;
 
-                //var alreadyCleared = await _resignationClearanceRepository.GetResignationClearanceByEmployeeID(payload.EmployeeID);
-                //if (alreadyCleared != null)
-                //{
-                //    return new ExecutedResult<string>() { responseMessage = $"Resignation clearance has previously been submitted by this user", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
-
-                //}
+              
                 var resignation = await _resignationRepository.GetResignationByID(payload.ResignationID);
 
                 var resignationClearance = new ResignationClearanceDTO
@@ -302,9 +297,10 @@ namespace hrms_be_backend_business.Logic
                 }
 
 
-                if (accessUser.data.EmployeeId == resignation.HodEmployeeID)
+                if (accessUser.data.EmployeeId == resignation.HodEmployeeID && resignation.IsHodApproved == false)
                 {
-                   var approveResignatonClearanceByHod =  await _resignationClearanceRepository.ApprovePendingResignationClearance(request.employeeID, request.ResignationClearanceID);
+
+                    var approveResignatonClearanceByHod =  await _resignationClearanceRepository.ApprovePendingResignationClearance(request.employeeID, request.ResignationClearanceID);
                     if (!approveResignatonClearanceByHod.Contains("Success"))
                     {
                         return new ExecutedResult<string>() { responseMessage = $"{approveResignatonClearanceByHod}", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
@@ -312,6 +308,7 @@ namespace hrms_be_backend_business.Logic
                     }
 
                     //send approval confirmation mail
+
                     _mailService.SendResignationClearanceApproveConfirmationMail(resignation.EmployeeID, accessUser.data.EmployeeId);
 
 
@@ -341,7 +338,7 @@ namespace hrms_be_backend_business.Logic
                         var ClearanceSetup = await _exitClearanceSetupRepository.GetExitClearanceSetupByHodEmployeeID(accessUser.data.EmployeeId);
 
                         //Save approval in resignation clearance approvals table
-                        var saveApproval = await _resignationClearanceApprovalsRepository.CreateResignationClearanceApprovals(resignation.CompanyID, resignation.ResignationClearanceID, ClearanceSetup.ExitClearanceSetupID, accessUser.data.UserId);
+                        var saveApproval = await _resignationClearanceApprovalsRepository.CreateResignationClearanceApprovals(resignation.CompanyID, resignation.ResignationClearanceID, ClearanceSetup.ExitClearanceSetupID, accessUser.data.UserId,ClearanceSetup.DepartmentName);
                         if (!saveApproval.Contains("Success"))
                         {
                             return new ExecutedResult<string>() { responseMessage = $"{saveApproval}", responseCode = ((int)ResponseCode.Exception).ToString(), data = null };
@@ -416,8 +413,9 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
+                var ClearanceSetup = await _exitClearanceSetupRepository.GetExitClearanceSetupByHodEmployeeID(accessUser.data.EmployeeId);
                 //disapprove resignation clearance
-                var disapprovedResignationResp = await _resignationClearanceRepository.DisapprovePendingResignationClearance(accessUser.data.EmployeeId, request.ResignationClearanceID, request.reason);
+                var disapprovedResignationResp = await _resignationClearanceRepository.DisapprovePendingResignationClearance(accessUser.data.EmployeeId, request.ResignationClearanceID,ClearanceSetup.DepartmentName ,request.reason);
 
                 //Get the final approval department from exit clearance table
                 //var finalApprovalDepartment = await _exitClearanceSetupRepository.GetDepartmentThatIsFinalApprroval(resignation.CompanyID);
