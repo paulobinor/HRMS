@@ -30,7 +30,7 @@
         public DateTime DateDisapproved { get; set; }
         public long DisapproveByUserID { get; set; }
         public string ReasonForDisapproval { get; set; }
-        public string PendingOn { get; set; }
+        public string Status { get; set; }
 
 
     }
