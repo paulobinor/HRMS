@@ -140,7 +140,12 @@
         public string EmployeeTypeName { get; set; }
         public string DOB { get; set; }
         public long BranchID { get; set; }
+        public string BranchName { get; set; }
+        public long SupervisorId { get; set; }
+        public long GroupHeadId { get; set; }
         public string EmploymentStatusID { get; set; }
+        public string groupHeadName { get; set; }
+        public string supervisorName { get; set; }
         public string EmploymentStatusName { get; set; }
         public string JobDescriptionID { get; set; }
         public string JobDescriptionName { get; set; }

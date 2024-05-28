@@ -111,6 +111,7 @@ namespace hrms_be_backend_data.Repository
                 //param.Add("@LeavePeriod", LeavePeriod);
 
                 var res = await _dapperGeneric.Get<LeaveApprovalInfo>(ApplicationConstant.Sp_GetAnnualLeaveApproval, param, commandType: CommandType.StoredProcedure);
+                
                 if (res != null)
                 {
                     res.LeaveApprovalLineItems = await GetLeaveApprovalLineItems(res.LeaveApprovalId);

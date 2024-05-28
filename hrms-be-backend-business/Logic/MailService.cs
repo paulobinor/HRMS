@@ -1,4 +1,5 @@
-﻿using hrms_be_backend_business.ILogic;
+﻿using AutoMapper.Internal;
+using hrms_be_backend_business.ILogic;
 using hrms_be_backend_common.Configuration;
 using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.IRepository;
@@ -59,7 +60,8 @@ namespace hrms_be_backend_business.AppCode
                 using (var smtpClient = new SmtpClient(_smtpParameters.Host, Convert.ToInt32(_smtpParameters.Port)))
                 {
                     smtpClient.Credentials = new NetworkCredential(_smtpParameters.EmailAddress, _smtpParameters.Password);
-                    smtpClient.EnableSsl = _smtpParameters.SSL;
+                    smtpClient.EnableSsl = true; // _smtpParameters.SSL;
+                    smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                     smtpClient.SendCompleted += SmtpClient_SendCompleted;
                     // await smtpClient.SendMailAsync(mail);
                     smtpClient.SendAsync(mail, mailRequest);
@@ -77,7 +79,7 @@ namespace hrms_be_backend_business.AppCode
             try
             {
                 MailMessage mail = new MailMessage();
-                mail.From = new MailAddress(_smtpParameters.EmailAddress, mailRequest.DisplayName);
+                mail.From = new MailAddress(_smtpParameters.EmailAddress, mailRequest.DisplayName, Encoding.Default);
                 mail.To.Add(mailRequest.ToEmail);
                 mail.Subject = mailRequest.Subject;
                 mail.Body = mailRequest.Body;
@@ -94,10 +96,12 @@ namespace hrms_be_backend_business.AppCode
                 mail.IsBodyHtml = true;
                 //   NetworkCredential Credentials = new NetworkCredential(_smtpParameters.EmailAddress, _smtpParameters.Password);
                 _logger.LogInformation($"About to send email using config: {JsonConvert.SerializeObject(_smtpParameters)}");
-                using (var smtpClient = new SmtpClient(_smtpParameters.Host, Convert.ToInt32(_smtpParameters.Port)))
+              //  using ()
                 {
-                    smtpClient.Credentials = new NetworkCredential(_smtpParameters.EmailAddress, _smtpParameters.Password); ;
-                    smtpClient.EnableSsl = _smtpParameters.SSL;
+                    var smtpClient = new SmtpClient(_smtpParameters.Host, _smtpParameters.Port);
+                    smtpClient.Credentials = new NetworkCredential(_smtpParameters.EmailAddress, _smtpParameters.Password);
+                    smtpClient.EnableSsl = true; // _smtpParameters.SSL;
+                    smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                     smtpClient.SendCompleted += SmtpClient_SendCompleted;
                    // await smtpClient.SendMailAsync(mail);
                     smtpClient.SendAsync(mail, mailRequest);
@@ -115,14 +119,22 @@ namespace hrms_be_backend_business.AppCode
             try
             {
                 var mailRequest = (MailRequest)e.UserState;
-                if (mailRequest != null)
+                if (e.Error != null)
                 {
-                    _logger.LogInformation($"Mail successfully sent to {mailRequest.ToEmail}");
+                    _logger.LogError($"Mail could not be sent. Data: {JsonConvert.SerializeObject(e.Error.Data)}, Error message:{e.Error.Message}");
                 }
                 else
                 {
-                    _logger.LogInformation("Mail successfully sent");
+                    if (mailRequest != null)
+                    {
+                        _logger.LogInformation($"Mail successfully sent to {mailRequest.ToEmail}");
+                    }
+                    else
+                    {
+                        _logger.LogInformation("Mail successfully sent");
+                    }
                 }
+               
             }
             catch (Exception ex)
             {
@@ -152,6 +164,8 @@ namespace hrms_be_backend_business.AppCode
                     Body = mailBody.ToString(),
                     Subject = "Leave Request",
                     ToEmail = userDetails.OfficialMail,
+                    DisplayName = "HRMS",
+                    EmailTitle = "Leave Request"
                 };
                 SendEmailAsync(mailPayload, null);
 
@@ -176,11 +190,14 @@ namespace hrms_be_backend_business.AppCode
                 var mailPayload = new MailRequest
                 {
                     Body = mailBody.ToString(),
-                    Subject = "Leave Request",
+                    Subject = "Leave Approval",
                     ToEmail = userDetails.OfficialMail,
+                    DisplayName = "HRMS Leave Approval",
+                    EmailTitle = "Leave Approval"
+
                 };
 
-                _logger.LogError($"Email payload to send: {mailPayload}.");
+                _logger.LogInformation($"Email payload to send: {JsonConvert.SerializeObject(mailPayload)}.");
                 SendEmailAsync(mailPayload, null);
 
             }
@@ -207,6 +224,8 @@ namespace hrms_be_backend_business.AppCode
                     Body = mailBody.ToString(),
                     Subject = "Leave Request",
                     ToEmail = userDetails.OfficialMail,
+                    DisplayName = "HRMS",
+                    EmailTitle = "Leave Request"
                 };
                 SendEmailAsync(mailPayload, null);
 
@@ -233,6 +252,8 @@ namespace hrms_be_backend_business.AppCode
                 {
                     Body = mailBody.ToString(),
                     Subject = "Leave Request",
+                    DisplayName = "HRMS",
+                    EmailTitle = "Leave Request",
                     ToEmail = userDetails.OfficialMail,
                 };
                 SendEmailAsync(mailPayload, null);
@@ -253,7 +274,7 @@ namespace hrms_be_backend_business.AppCode
                 Subject = subject,
                 ToEmail = recipientEmail,
                 EmailTitle = "Welcome to Xpress HRMS",
-                DisplayName = "Xpress HRMS"
+                DisplayName = "XpressHRMS"
             };
 
             _logger.LogError($"Email payload to send: {JsonConvert.SerializeObject(new {mailRequest.ToEmail, mailRequest.Subject, mailRequest.DisplayName})}.");
@@ -373,28 +394,38 @@ namespace hrms_be_backend_business.AppCode
         public string ComposeApprovedUserMail(string recipientName, string token)
         {
 
-            string message = string.Empty;
-            string body = string.Empty;
-            string templatePath = string.Empty;
-
-            string qryStr = string.Empty;
-            string clientUrl = _frontendConfig.FrontendUrl;
-            //string clientUrl = ip;
-            //string clientUrl = $"http://{ip}:{port}/";
-            templatePath = $"{_hostEnvironment.ContentRootPath}/EmailHandler/SignUp.html";
-            qryStr = $"?k={token}";
-            message = $"Dear {recipientName}," +
-                      $"<p>You have been created on Xpress HRMS. Please click on the link below to activate your account</p>";
-
-            using (StreamReader reader = new StreamReader(Path.Combine(templatePath)))
+            try
             {
-                body = reader.ReadToEnd();
+                string message = string.Empty;
+                string body = string.Empty;
+                string templatePath = string.Empty;
+
+                string qryStr = string.Empty;
+                string clientUrl = _frontendConfig.FrontendUrl;
+                //string clientUrl = ip;
+                //string clientUrl = $"http://{ip}:{port}/";
+                templatePath = $"{_hostEnvironment.ContentRootPath}/EmailHandler/SignUp.html";
+                _logger.LogInformation($" Email template path: {templatePath}.");
+                qryStr = $"?k={token}";
+                message = $"Dear {recipientName}," +
+                          $"<p>You have been created on Xpress HRMS. Please click on the link below to activate your account</p>";
+
+                using (StreamReader reader = new StreamReader(Path.Combine(templatePath)))
+                {
+                    body = reader.ReadToEnd();
+                }
+
+                body = body.Replace("{link}", $"{clientUrl}{qryStr}");
+                body = body.Replace("{MailContent}", message);
+
+                _logger.LogInformation($" Email body: {body}.");
+                return body;
             }
-
-            body = body.Replace("{link}", $"{clientUrl}{qryStr}");
-            body = body.Replace("{MailContent}", message);
-
-            return body;
+            catch (Exception ex)
+            {
+                _logger.LogError($"error composing email: {ex.Message}  {ex.StackTrace}.");
+                throw;
+            }
         }
         public string ComposeSignUpMail(string firstname, string defaultPass, string email, string wwwRootPath, string ip, string port, string appKey = null, string channel = null)
         {

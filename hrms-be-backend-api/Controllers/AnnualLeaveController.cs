@@ -70,22 +70,22 @@ namespace hrms_be_backend_api.Controller
         }
 
         [HttpPost("RescheduleAnnual")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> RescheduleAnnualLeaveRequest([FromBody] List<LeaveRequestLineItem> leaveRequestLineItems)
         {
             var response = new BaseResponse();
             try
             {
-                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-                _logger.LogInformation($"Received RescheduleLeave request. Payload: {JsonConvert.SerializeObject(leaveRequestLineItems)} from remote address: {RemoteIpAddress}");
+                //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                //_logger.LogInformation($"Received RescheduleLeave request. Payload: {JsonConvert.SerializeObject(leaveRequestLineItems)} from remote address: {RemoteIpAddress}");
 
-                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+                //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
 
-                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-                if (accessUser.data == null)
-                {
-                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-                }
+                //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                //if (accessUser.data == null)
+                //{
+                //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                //}
                 var res = await _leaveRequestService.RescheduleAnnualLeaveRequest(leaveRequestLineItems);
                 return Ok(res);
             }
@@ -167,7 +167,7 @@ namespace hrms_be_backend_api.Controller
         //  [Authorize]
         public async Task<IActionResult> ApproveAnnualLeave(LeaveApprovalLineItem leaveApprovalLineItem)
         {
-            _logger.LogInformation($"recieved request to update leaveapproval by approval Id: {leaveApprovalLineItem.ApprovalEmployeeId} payload is: {JsonConvert.SerializeObject(leaveApprovalLineItem)}");
+            _logger.LogInformation($"recieved request to update leaveapproval by approval Id: {leaveApprovalLineItem.ApprovalEmployeeId}ty76  payload is: {JsonConvert.SerializeObject(leaveApprovalLineItem)}");
             var response = new BaseResponse();
             //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             //_logger.LogInformation($"Received Approve Leave request. Payload: {JsonConvert.SerializeObject(leaveApprovalLineItem)} from remote address: {RemoteIpAddress}");
@@ -179,16 +179,16 @@ namespace hrms_be_backend_api.Controller
             //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
             //}
-            var leaveapprovals = await _leaveApprovalService.GetleaveApprovalLineItems(leaveApprovalLineItem.LeaveApprovalId);
-            foreach (var item in leaveapprovals)
-            {
-                item.ApprovalStatus = leaveApprovalLineItem.ApprovalStatus;
-                item.EntryDate = leaveApprovalLineItem.EntryDate;
-                item.Comments = leaveApprovalLineItem.Comments;
-               // item.IsApproved = leaveApprovalLineItem.IsApproved;
-                item.EntryDate = leaveApprovalLineItem.EntryDate;
-                item.ApprovalStep = leaveApprovalLineItem.ApprovalStep;
-            }
+            //var leaveapprovals = await _leaveApprovalService.GetleaveApprovalLineItems(leaveApprovalLineItem.LeaveApprovalId);
+            //foreach (var item in leaveapprovals)
+            //{
+            //    item.ApprovalStatus = leaveApprovalLineItem.ApprovalStatus;
+            //    item.EntryDate = leaveApprovalLineItem.EntryDate;
+            //    item.Comments = leaveApprovalLineItem.Comments;
+            //   // item.IsApproved = leaveApprovalLineItem.IsApproved;
+            //    item.EntryDate = leaveApprovalLineItem.EntryDate;
+            //    item.ApprovalStep = leaveApprovalLineItem.ApprovalStep;
+            //}
             var res = await _leaveApprovalService.UpdateAnnualLeaveApproval(leaveApprovalLineItem);
             return Ok(res);
         }
@@ -220,6 +220,7 @@ namespace hrms_be_backend_api.Controller
                     TotalNoOfDays = res.Sum(x => x.LeaveLength),
                     LeaveCount = res.Count,
                     Status = mySingleRes.ApprovalStatus,
+                    EmployeeID = mySingleRes.EmployeeID,
                     leaveRequestLineItems = res
                 };
                 response.Data = res1;

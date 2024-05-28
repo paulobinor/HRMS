@@ -1,4 +1,5 @@
-﻿using hrms_be_backend_business.AppCode;
+﻿using GTB.Common;
+using hrms_be_backend_business.AppCode;
 using hrms_be_backend_business.ILogic;
 using hrms_be_backend_common.DTO;
 using hrms_be_backend_common.Models;
@@ -239,9 +240,14 @@ namespace hrms_be_backend_business.Logic
                 var info = await _leaveApprovalRepository.GetAnnualLeaveApprovalInfo(item.LeaveApprovalId);
                 foreach (var LeaveApprovalLineItem1 in info.LeaveApprovalLineItems)
                 {
-                    if (LeaveApprovalLineItem1.ApprovalEmployeeId == leaveApprovalLineItem.ApprovalEmployeeId)
+                    if (LeaveApprovalLineItem1.ApprovalEmployeeId == leaveApprovalLineItem.ApprovalEmployeeId && LeaveApprovalLineItem1.ApprovalStep == leaveApprovalLineItem.ApprovalStep)
                     {
                         leaveapprovalLineItems.Add(LeaveApprovalLineItem1);
+                        if (ConfigSettings.leaveRequestConfig.EnableSingleApproval)
+                        {
+
+                            break;
+                        }
                     }
                 }
             }
@@ -357,6 +363,7 @@ namespace hrms_be_backend_business.Logic
                         {
                             //Send mail to next approver
                             _mailService.SendLeaveApproveMailToApprover(nextApprovalLineItem.ApprovalEmployeeId, leaveRequestLineItem.EmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
+
                             _mailService.SendLeaveApproveConfirmationMail(leaveRequestLineItem.EmployeeId, leaveApprovalLineItem.ApprovalEmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
 
 
@@ -374,6 +381,8 @@ namespace hrms_be_backend_business.Logic
                                 Body = mailBody.ToString(),
                                 Subject = "Leave Request",
                                 ToEmail = userDetails.OfficialMail,
+                                DisplayName = "HRMS",
+                                EmailTitle = "Leave Request"
                             };
 
                             _logger.LogError($"Email payload to send: {mailPayload}.");
@@ -402,6 +411,8 @@ namespace hrms_be_backend_business.Logic
                                 Body = mailBody.ToString(),
                                 Subject = "Leave Request",
                                 ToEmail = userDetails.OfficialMail,
+                                DisplayName = "HRMS",
+                                EmailTitle = "Leave Approval"
                             };
 
                             _logger.LogError($"Email payload to send: {mailPayload}.");

@@ -400,16 +400,20 @@ namespace hrms_be_backend_business.Logic
 
             #region Validate Leave Request
             //check if any pending leave approvals
+
+            _logger.LogInformation($"Check if any pending leave approvals");
             var leaveAproval = await _leaveApprovalRepository.GetExistingLeaveApproval(leaveRequestLineItem.EmployeeId);
             if (leaveAproval != null)
             {
 
-                _logger.LogInformation($"There is already a pending leave approval for EmployeeId: {leaveRequestLineItem.EmployeeId} and CompanyId: {leaveRequestLineItem.CompanyId}, payload: {JsonConvert.SerializeObject(leaveAproval)}");
+                _logger.LogError($"A pending pending leave for approval already exists for EmployeeId: {leaveRequestLineItem.EmployeeId} and CompanyId: {leaveRequestLineItem.CompanyId}, payload: {JsonConvert.SerializeObject(leaveAproval)}");
                 response.ResponseCode = "08";
                 response.ResponseMessage = "pending leave detected";
                 response.Data = leaveAproval;
                 return response;
             }
+
+            _logger.LogInformation($"No pending leave approvals.");
 
             //Start date must fall within a weekday
             if (!IsValidWeekeday(leaveRequestLineItem.startDate))
@@ -449,7 +453,6 @@ namespace hrms_be_backend_business.Logic
             }
 
             //You cannot relieve yourself
-
             if (leaveRequestLineItem.EmployeeId == leaveRequestLineItem.RelieverUserId)
             {
                 _logger.LogError("Invalid reliever specified specified. You cannot relieve yourself");
@@ -625,6 +628,8 @@ namespace hrms_be_backend_business.Logic
 
                 leaveRequestLineItem.LeaveRequestId = empLeaveRequestInfo.LeaveRequestId;
                 var res = await _leaveRequestRepository.CreateLeaveRequestLineItem(leaveRequestLineItem);
+
+                _logger.LogInformation($"Create leave Request result is: {JsonConvert.SerializeObject(res)}");
                 if (res != null)
                 {
                     //Update active leave info for employee if maximum days or split count reached.
@@ -639,9 +644,9 @@ namespace hrms_be_backend_business.Logic
                 }
 
 
-                _logger.LogError($"About to GetLeaveApprovalInfoByEmployeeId: {leaveRequestLineItem.EmployeeId}.");
+                _logger.LogInformation($"About to Get LeaveApproval Info for EmployeeId: {leaveRequestLineItem.EmployeeId}.");
                 var currentLeaveApprovalInfo = await _leaveApprovalRepository.GetLeaveApprovalInfoByEmployeeId(leaveRequestLineItem.EmployeeId);
-                _logger.LogError($"response from  GetLeaveApprovalInfoByEmployeeId: {JsonConvert.SerializeObject(currentLeaveApprovalInfo)}.");
+                _logger.LogInformation($"response from  GetLeaveApprovalInfoByEmployeeId method: {JsonConvert.SerializeObject(currentLeaveApprovalInfo)}.");
 
                 if (currentLeaveApprovalInfo == null)
                 {
@@ -656,15 +661,15 @@ namespace hrms_be_backend_business.Logic
                 currentLeaveApprovalInfo.ApprovalStatus = $"Pending on Approval count: {1}";
 
 
-                _logger.LogInformation($"About to GetLeaveApprovalLineItems using LeaveApprovalId: {currentLeaveApprovalInfo.LeaveApprovalId}.");
+                _logger.LogInformation($"About to get next approval for current leave request using and Approval step 1. LeaveApprovalId: {currentLeaveApprovalInfo.LeaveApprovalId}.");
                 var nextApprovalLineItem = (await _leaveApprovalRepository.GetLeaveApprovalLineItems(currentLeaveApprovalInfo.LeaveApprovalId)).FirstOrDefault(x => x.ApprovalStep == 1);
 
                 _logger.LogInformation($"response from  GetLeaveApprovalLineItems: {JsonConvert.SerializeObject(nextApprovalLineItem)}.");
                 if (nextApprovalLineItem == null)
                 {
-                    _logger.LogError($"an error occured while processing your request. Please contact your administrator for further assistance");
+                    _logger.LogError($"an error occured while processing your leave request for approval. Please contact your administrator for further assistance");
                     response.ResponseCode = ((int)ResponseCode.NotFound).ToString();
-                    response.ResponseMessage = "an error occured while processing your request. Please contact your administrator for further assistance";
+                    response.ResponseMessage = "an error occured while processing your leave request for approval. Please contact your administrator for further assistance";
                     //  response.Data = repoResponse;
                     return response;
                 }
@@ -709,25 +714,63 @@ namespace hrms_be_backend_business.Logic
 
         private async Task Process_Email(LeaveRequestLineItem leaveRequestLineItem, LeaveApprovalLineItem leaveApprovalLineItem)
         {
-            var userDetails = await _accountRepository.GetUserByEmployeeId(leaveRequestLineItem.EmployeeId);
-            var app = await _accountRepository.GetUserByEmployeeId(leaveApprovalLineItem.ApprovalEmployeeId);
-            StringBuilder mailBody = new StringBuilder();
-            mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
-            mailBody.Append($"Kindly note that your request for leave was successfully created and sent for approval. The approval is currently pending on  {app.FirstName} {app.LastName} {leaveApprovalLineItem.ApprovalPosition},  <br/> <br/>");
-            mailBody.Append($"<b>Start Date : <b/> {leaveRequestLineItem.startDate}  <br/> ");
-            mailBody.Append($"<b>End Date : <b/> {leaveRequestLineItem.endDate}   <br/> ");
+            StringBuilder mailBody = null;
+            MailRequest mailPayload = null;
+            bool sendmail = true;
+            //Fetch recepient details
+            var requester = await _accountRepository.GetUserByEmployeeId(leaveRequestLineItem.EmployeeId);
+            var approver = await _accountRepository.GetUserByEmployeeId(leaveApprovalLineItem.ApprovalEmployeeId);
 
-            var mailPayload = new MailRequest
+            if (requester == null || approver == null)
             {
-                Body = mailBody.ToString(),
-                Subject = "Leave Request",
-                ToEmail = userDetails.OfficialMail,
-            };
+                _logger.LogError($"Email parameters are needed: requester payload:{JsonConvert.SerializeObject(requester)}. Approver payload:{JsonConvert.SerializeObject(approver)}");
+                sendmail = false;
+            }
 
-            _logger.LogError($"Email payload to send: {mailPayload}.");
-            _mailService.SendEmailAsync(mailPayload, null);
+            if (sendmail)
+            {
+                //Send mail to requester
+                mailBody = new StringBuilder();
+                mailBody.Append($"Dear <b>{requester.FirstName} {requester.LastName} {requester.MiddleName}</b> <br/> <br/>");
+                mailBody.Append($"Kindly note that your request for leave was successfully created and sent for approval. The approval is currently pending on {approver.FirstName} {approver.LastName} <br/> <br/>");
+                mailBody.Append($"<b>Start Date : <b/> {leaveRequestLineItem.startDate.ToString("dd/MM/yyyy")}  <br/> ");
+                mailBody.Append($"<b>End Date : <b/> {leaveRequestLineItem.endDate.ToString("dd/MM/yyyy")}   <br/> ");
 
-            _mailService.SendLeaveApproveMailToApprover(leaveApprovalLineItem.ApprovalEmployeeId, leaveRequestLineItem.EmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
+                mailPayload = new MailRequest
+                {
+                    Body = mailBody.ToString(),
+                    Subject = "Leave Request",
+                    ToEmail = requester.OfficialMail,
+                    DisplayName = "HRMS",
+                    EmailTitle = "Leave Request"
+                };
+
+                _logger.LogInformation($"Email payload to send: {JsonConvert.SerializeObject(mailPayload)}.");
+                _mailService.SendEmailAsync(mailPayload, null);
+
+
+                //Send mail to Approver
+                mailBody = new StringBuilder();
+                mailBody.Append($"Dear {approver.FirstName} {approver.LastName} {approver.MiddleName} <br/> <br/>");
+                mailBody.Append($"Kindly login to approve a leave request by {requester.FirstName} {requester.MiddleName}  {requester.LastName}<br/> <br/>");
+                mailBody.Append($"<b>Start Date : <b/> {leaveRequestLineItem.startDate}  <br/> ");
+                mailBody.Append($"<b>End Date : <b/> {leaveRequestLineItem.endDate}   <br/> ");
+
+                mailPayload = new MailRequest
+                {
+                    Body = mailBody.ToString(),
+                    Subject = "Leave Request",
+                    ToEmail = approver.OfficialMail,
+                    DisplayName = "HRMS Leave Request",
+                    EmailTitle = "Leave Request"
+
+                };
+
+                _logger.LogError($"Email payload to send: {JsonConvert.SerializeObject(mailPayload)}.");
+                _mailService.SendEmailAsync(mailPayload, null);
+            }
+           
+            //  _mailService.SendLeaveApproveMailToApprover(leaveApprovalLineItem.ApprovalEmployeeId, leaveRequestLineItem.EmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
 
         }
 
@@ -848,6 +891,9 @@ namespace hrms_be_backend_business.Logic
                             Body = mailBody.ToString(),
                             Subject = "Reschedule Leave Request",
                             ToEmail = userDetails.OfficialMail,
+                             DisplayName = "HRMS Leave Reschedule",
+                              EmailTitle = "Leave Reschedule"
+                              
                         };
 
                         _logger.LogError($"Email payload to send: {mailPayload}.");

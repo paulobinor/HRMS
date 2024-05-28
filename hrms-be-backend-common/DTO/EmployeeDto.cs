@@ -49,6 +49,8 @@
         public long UnitId { get; set; }
         public long GradeId { get; set; }
         public bool IsMD { get; set; }
+        public int GroupHeadId { get; set; }
+        public int SupervisorId { get; set; }
     }
     public class UpdateEmployeePersonalInfoDto
     {

@@ -177,10 +177,10 @@ namespace hrms_be_backend_business.Logic
                     GroupHeadId = payload.GroupHeadId,
                 };
                 string repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
-                if (!repoResponse.Contains("Success"))
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
-                }
+                //if (!repoResponse.Contains("Success"))
+                //{
+                //    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                //}
 
                 var auditLog = new AuditLogDto
                 {
@@ -271,6 +271,16 @@ namespace hrms_be_backend_business.Logic
                     isModelStateValidate = false;
                     validationMessage += "  || Unit is required";
                 }
+                //if (payload.SupervisorId < 1)
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || Unit is required";
+                //}
+                //if (payload.GroupHeadId < 1)
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  || Unit is required";
+                //}
 
                 if (!isModelStateValidate)
                 {
@@ -299,13 +309,15 @@ namespace hrms_be_backend_business.Logic
                     EmployeeId = payload.EmployeeId,
                     IsModifield = true,
                     StaffId = payload.StaffId,
+                    SupervisorId = payload.SupervisorId,
+                    GroupHeadId = payload.GroupHeadId,
                     IsMD = payload.IsMD
                 };
                 string repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
-                if (!repoResponse.Contains("Success"))
-                {
-                    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
-                }
+                //if (!repoResponse.Contains("Success"))
+                //{
+                //    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                //}
 
                 var auditLog = new AuditLogDto
                 {
@@ -965,7 +977,6 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-
         public async Task<BaseResponse> CreateEmployeeBulkUpload(IFormFile payload, RequesterInfo requester)
         {
             //check if us
@@ -1333,8 +1344,6 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }
-
-
 
         public async Task<ExecutedResult<string>> ApproveEmployee(long EmployeeId, string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {

@@ -10,6 +10,7 @@ namespace hrms_be_backend_data.RepoPayload
         public int CurrentApprovalCount { get; set; }
         public int CurrentApprovalID { get; set; }
         public string? Comments { get; set; }
+        public string? LeaveTypeName { get; set; }
         public DateTime EntryDate { get; set; }
         public DateTime CompletedDate { get; set; }
         public string ApprovalStatus { get; set; }

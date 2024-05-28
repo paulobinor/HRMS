@@ -211,7 +211,7 @@ namespace hrms_be_backend_business.Logic
 
                         var DeletedLeaveType = await _LeaveTypeRepository.GetLeaveTypeById(deleteDto.LeaveTypeId);
 
-                        _logger.LogInformation($"LeaveType with name: {DeletedLeaveType.LeaveTypeName} Deleted successfully.");
+                        _logger.LogInformation($"LeaveType deleted successfully.");
                         response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.ResponseMessage = $"LeaveType deleted successfully.";
                         response.Data = null;

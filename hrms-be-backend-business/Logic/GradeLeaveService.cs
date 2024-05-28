@@ -228,9 +228,9 @@ namespace hrms_be_backend_business.Logic
 
                       //  var DeletedLeaveType = await _GradeLeaveRepo.GetGradeLeaveById(deleteDto.GradeLeaveID);
 
-                        _logger.LogInformation($"LeaveType with ID: {resp.GradeLeaveID} Deleted successfully.");
+                        _logger.LogInformation($"GradeLeave deleted successfully.");
                         response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                        response.ResponseMessage = $"LeaveType with ID: {resp.GradeLeaveID} Deleted successfully.";
+                        response.ResponseMessage = $"Grade Leave deleted successfully.";
                         response.Data = resp;
                         return response;
 

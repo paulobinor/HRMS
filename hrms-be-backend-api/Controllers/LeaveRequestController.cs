@@ -32,7 +32,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         }
 
       
-        [Authorize]
+      //  [Authorize]
         [HttpPost("Create")]
         public async Task<IActionResult> CreateLeaveRequest([FromBody] CreateLeaveRequestLineItem createLeaveRequestLine)
         {
@@ -51,19 +51,19 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 RelieverUserId = createLeaveRequestLine.RelieverUserId,
                 UploadFilePath = createLeaveRequestLine.UploadFilePath
             };
-            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            _logger.LogInformation($"Received Create leave request. Payload: {JsonConvert.SerializeObject(leaveRequestLineItem)} from remote address: {RemoteIpAddress}");
-            var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+            //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            //_logger.LogInformation($"Received Create leave request. Payload: {JsonConvert.SerializeObject(leaveRequestLineItem)} from remote address: {RemoteIpAddress}");
+            //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
 
-            if (string.IsNullOrEmpty(accessToken))
-            {
-                return BadRequest(new { responseMessage = $"Missing authorization header value", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-            }
-            var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-            if (accessUser.data == null)
-            {
-                return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-            }
+            //if (string.IsNullOrEmpty(accessToken))
+            //{
+            //    return BadRequest(new { responseMessage = $"Missing authorization header value", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+            //}
+            //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+            //}
             var res = await _leaveRequestService.CreateLeaveRequestLineItem(leaveRequestLineItem);
             return Ok(res);
         }
