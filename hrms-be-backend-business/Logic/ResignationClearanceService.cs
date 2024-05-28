@@ -413,9 +413,8 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                var ClearanceSetup = await _exitClearanceSetupRepository.GetExitClearanceSetupByHodEmployeeID(accessUser.data.EmployeeId);
                 //disapprove resignation clearance
-                var disapprovedResignationResp = await _resignationClearanceRepository.DisapprovePendingResignationClearance(accessUser.data.EmployeeId, request.ResignationClearanceID,ClearanceSetup.DepartmentName ,request.reason);
+                var disapprovedResignationResp = await _resignationClearanceRepository.DisapprovePendingResignationClearance(accessUser.data.EmployeeId, request.ResignationClearanceID,request.reason);
 
                 //Get the final approval department from exit clearance table
                 //var finalApprovalDepartment = await _exitClearanceSetupRepository.GetDepartmentThatIsFinalApprroval(resignation.CompanyID);
@@ -427,7 +426,7 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                _mailService.SendResignationClearanceDisapproveConfirmationMail(resignation.EmployeeID, accessUser.data.EmployeeId, request.reason);
+                _mailService.SendResignationClearanceDisapproveConfirmationMail(resignation.EmployeeID,accessUser.data.EmployeeId, request.reason);
 
 
                 return new ExecutedResult<string>() { responseMessage = "Resignation clearance disapproved successfully.", responseCode = (00).ToString(), data = null };
