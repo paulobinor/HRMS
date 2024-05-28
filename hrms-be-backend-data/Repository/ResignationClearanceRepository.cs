@@ -180,14 +180,13 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<dynamic> DisapprovePendingResignationClearance(long userID, long resignationClearanceId, string departmentName, string reason)
+        public async Task<dynamic> DisapprovePendingResignationClearance(long userID, long resignationClearanceId, string reason)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("UserID", userID);
                 param.Add("resignationClearanceId", resignationClearanceId);
-                param.Add("DepartmentName", departmentName);
                 param.Add("DateDisapproved", DateTime.Now);
                 param.Add("DisapprovedReason", reason);
                 param.Add("Resp", dbType: DbType.Int32, direction: ParameterDirection.Output);
