@@ -27,12 +27,13 @@ namespace hrms_be_backend_data.Repository
         }
 
 
-        public async Task<dynamic> CreateResignationClearanceApprovals(long CompanyId, long resignationClearanceID, long exitClearanceSetupID,long UserID)
+        public async Task<dynamic> CreateResignationClearanceApprovals(long CompanyId, long resignationClearanceID, long exitClearanceSetupID,long UserID, string departmentName)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("CompanyID", CompanyId);
+                param.Add("DepartmentName", departmentName);
                 param.Add("ResignationClearanceID", resignationClearanceID);
                 param.Add("ExitClearanceSetupID", exitClearanceSetupID);
                 param.Add("IsApproved", true);

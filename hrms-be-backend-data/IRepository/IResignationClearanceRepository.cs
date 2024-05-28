@@ -13,6 +13,6 @@ namespace hrms_be_backend_data.IRepository
         Task<IEnumerable<ResignationClearanceDTO>> GetPendingResignationClearanceByEmployeeID(long employeeID);
         Task<IEnumerable<ResignationClearanceDTO>> GetPendingResignationClearanceByCompnayID(long companyID);
         Task<dynamic> ApprovePendingResignationClearance(long userID, long ID);
-        Task<dynamic> DisapprovePendingResignationClearance(long userID, long ID, string reason);
+        Task<dynamic> DisapprovePendingResignationClearance(long userID, long ID,string departmentName, string reason);
     }
 }
