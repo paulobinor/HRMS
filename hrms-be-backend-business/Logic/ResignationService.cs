@@ -129,6 +129,8 @@ namespace hrms_be_backend_business.Logic
                 }
                 var submittedresignation = await _resignationRepository.GetResignationByID(resignationID);
 
+                _mailService.SendResignationMailFromHrToStaff(submittedresignation.EmployeeId, submittedresignation.ExitDate);
+
                 //Send mail to Hod/UnitHead
                 if (submittedresignation.UnitHeadEmployeeID <= 0)
                 {
@@ -472,7 +474,7 @@ namespace hrms_be_backend_business.Logic
             try
             {
 
-                var PendingResignation = await _resignationRepository.GetPendingResignationByCompanyID(companyID);
+                var PendingResignation = await _resignationRepository.GetPendingResignationByCompanyID(companyID,accessUser.data.EmployeeId);
 
                 if (PendingResignation == null)
                 {

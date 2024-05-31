@@ -137,12 +137,13 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-        public async Task<IEnumerable<ResignationClearanceDTO>> GetPendingResignationClearanceByCompnayID(long companyID)
+        public async Task<IEnumerable<ResignationClearanceDTO>> GetPendingResignationClearanceByCompnayID(long companyID, long employeeID)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("CompanyID", companyID);
+                param.Add("EmployeeID", employeeID);
 
                 var response = await _dapper.GetAll<ResignationClearanceDTO>("Sp_GetPendingResignationClearanceByCompanyID", param, commandType: CommandType.StoredProcedure);
 
