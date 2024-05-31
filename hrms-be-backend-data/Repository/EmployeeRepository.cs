@@ -50,6 +50,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@GroupHeadId", payload.GroupHeadId);
 
                 var res = await _dapper.Get<string>("sp_process_employee_basis", param, commandType: CommandType.StoredProcedure);
+                _logger.LogInformation($" response from create employee: {res}");
                 return res;
             }
             catch (Exception ex)

@@ -101,7 +101,12 @@
         public bool HasCompletedPersonalInfo { get; set; }
         public bool HasCompletedProfBackground { get; set; }
         public bool HasCompletedReferenceDetails { get; set; }
-       
+        public bool StateName { get; set; }
+        public bool LGA_Name { get; set; }
+        public bool GradeCode { get; set; }
+        public bool GenderID { get; set; }
+        public bool GenderName { get; set; }
+
     }
 
     public class EmployeeSindgleVm

@@ -114,7 +114,7 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@ResumptionDate", leaveRequestLineItem.ResumptionDate);
                     param.Add("@RelieverUserId", leaveRequestLineItem.RelieverUserId);
                     param.Add("@LeaveLength", leaveRequestLineItem.LeaveLength);
-                    param.Add("@IsRescheduled", leaveRequestLineItem.IsRescheduled);
+                    param.Add("@IsRescheduled", true);
 
                     var res = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_RescheduleLeaveRequestLineItem, param, commandType: CommandType.StoredProcedure);
 

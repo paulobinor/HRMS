@@ -260,7 +260,24 @@ namespace hrms_be_backend_data.Repository
                 var res = await _dapperGeneric.GetAll<PendingLeaveApprovalItemsDto>(ApplicationConstant.Sp_GetPendingLeaveApprovals, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
-                    return res;
+                    bool ispresent = false;
+                    List<PendingLeaveApprovalItemsDto> res1 = new List<PendingLeaveApprovalItemsDto>();
+                    foreach (var item in res)
+                    {
+                        if (item.ApprovalEmployeeId == approvalEmployeeID)
+                        {
+                            if (!ispresent)
+                            {
+                                res1.Add(item);
+                                ispresent = true;
+                            }
+                        }
+                        else
+                        {
+                            res1.Add(item);
+                        }
+                    }
+                    return res1;
                 }
                 return null;
 

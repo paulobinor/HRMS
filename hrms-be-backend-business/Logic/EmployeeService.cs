@@ -177,14 +177,17 @@ namespace hrms_be_backend_business.Logic
                     GroupHeadId = payload.GroupHeadId,
                 };
                 string repoResponse = await _EmployeeRepository.ProcessEmployeeBasis(repoPayload);
-                //if (!repoResponse.Contains("Success"))
-                //{
-                //    return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
-                //}
+
+                _logger.LogInformation($" response from create employee: {repoResponse}");
+             //   if (!repoResponse.Contains("Success"))
+                {
+                    //_logger.LogInformation($" response from create employee: {repoResponse}");
+                    //return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                }
 
                 var auditLog = new AuditLogDto
                 {
-                    userId = accessUser.data.UserId,
+                    userId =  accessUser.data.UserId,
                     actionPerformed = "CreateEmployeeBasis",
                     payload = JsonConvert.SerializeObject(payload),
                     response = null,
@@ -193,7 +196,7 @@ namespace hrms_be_backend_business.Logic
                 };
                 await _audit.LogActivity(auditLog);
 
-                return new ExecutedResult<string>() { responseMessage = "Created Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
@@ -330,7 +333,7 @@ namespace hrms_be_backend_business.Logic
                 };
                 await _audit.LogActivity(auditLog);
 
-                return new ExecutedResult<string>() { responseMessage = "Updated Successfully", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
+                return new ExecutedResult<string>() { responseMessage = $"{repoResponse}", responseCode = ((int)ResponseCode.Ok).ToString(), data = null };
             }
             catch (Exception ex)
             {
