@@ -691,7 +691,7 @@ namespace hrms_be_backend_business.AppCode
                 mailBody.Append($"We refer to your letter indicating your intention to resign from the services of the Company with effect from {exitDate}.<br/> <br/>");
                 mailBody.Append($"We appreciate your contribution during your stay with us.<br/> <br/>");
                 mailBody.Append($"Please be informed that you will be required to do a proper handover of your duties as well as submit the following items/documents to the respective departments upon your exit:<br/> <br/>");
-                mailBody.Append($"-     Completed Exit Interview and Exit Clearance Forms [see attached]<br/> <br/>");
+                mailBody.Append($"-     Completed Exit Interview and Exit Clearance Forms<br/> <br/>");
                 mailBody.Append($"-     ID Card - HCM<br/> <br/>");
                 mailBody.Append($"-     Lapel Pin – HCM<br/> <br/>");
                 mailBody.Append($"-     HMO ID Card – HCM<br/> <br/>");
