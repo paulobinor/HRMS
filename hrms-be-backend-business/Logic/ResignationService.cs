@@ -465,16 +465,16 @@ namespace hrms_be_backend_business.Logic
 
         public async Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetPendingResignationByCompanyID(long companyID, string AccessKey, string RemoteIpAddress)
         {
-            //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-            //if (accessUser.data == null)
-            //{
-            //    return new ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
-            //}
+            }
             try
             {
 
-                var PendingResignation = await _resignationRepository.GetPendingResignationByCompanyID(companyID,109/*accessUser.data.EmployeeId*/);
+                var PendingResignation = await _resignationRepository.GetPendingResignationByCompanyID(companyID,accessUser.data.EmployeeId);
 
                 if (PendingResignation == null)
                 {
