@@ -258,7 +258,7 @@ namespace hrms_be_backend_business.Logic
             try
             {
 
-                var PendingResignation = await _resignationClearanceRepository.GetPendingResignationClearanceByCompnayID(CompanyID);
+                var PendingResignation = await _resignationClearanceRepository.GetPendingResignationClearanceByCompnayID(CompanyID, accessUser.data.EmployeeId);
 
                 if (PendingResignation == null)
                 {

@@ -17,7 +17,7 @@ namespace hrms_be_backend_data.IRepository
 
         //Task<dynamic> DeleteResignation(long ID, string deletedBy, string deleteReason);
         Task<IEnumerable<ResignationDTO>> GetPendingResignationByEmployeeID(long employeeID);
-        Task<IEnumerable<ResignationDTO>> GetPendingResignationByCompanyID(long companyID);
+        Task<IEnumerable<ResignationDTO>> GetPendingResignationByCompanyID(long companyID,long employeeID);
         Task<string> ApprovePendingResignation(long EmployeeID, long ResignationId);
         Task<string> DisapprovePendingResignation(long EmployeeID, long ResignationId, string reason);
         
