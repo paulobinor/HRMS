@@ -150,7 +150,12 @@ namespace hrms_be_backend_api.Controller
 
                 }
                 var res = await _leaveRequestService.GetEmpAnnualLeaveInfo(EmployeeId, CompanyId, LeaveStatus);
-                return Ok(new BaseResponse { Data = res, ResponseCode = "00", ResponseMessage = "Success" });
+                if (res.leaveRequestLineItems.Count > 0)
+                {
+                    return Ok(new BaseResponse { Data = res, ResponseCode = "00", ResponseMessage = "Success" });
+
+                }
+                return Ok(new BaseResponse { Data = null, ResponseCode = "00", ResponseMessage = "Success" });
             }
             catch (Exception ex)
             {

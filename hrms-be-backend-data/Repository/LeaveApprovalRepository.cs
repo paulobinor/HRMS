@@ -260,11 +260,12 @@ namespace hrms_be_backend_data.Repository
                 var res = await _dapperGeneric.GetAll<PendingLeaveApprovalItemsDto>(ApplicationConstant.Sp_GetPendingLeaveApprovals, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
+                    res = res.OrderBy(x=>x.ApprovalStep).ToList();
                     bool ispresent = false;
                     List<PendingLeaveApprovalItemsDto> res1 = new List<PendingLeaveApprovalItemsDto>();
                     foreach (var item in res)
                     {
-                        if (item.ApprovalEmployeeId == approvalEmployeeID)
+                        if (item.ApprovalEmployeeId == approvalEmployeeID && !item.ApprovalStatus.Contains("Approved", StringComparison.OrdinalIgnoreCase))
                         {
                             if (!ispresent)
                             {
@@ -338,7 +339,25 @@ namespace hrms_be_backend_data.Repository
                 var res = await _dapperGeneric.GetAll<PendingLeaveApprovalItemsDto>(ApplicationConstant.Sp_GetPendingAnnualLeaveApprovals, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
-                    return res;
+                    res = res.OrderBy(x => x.ApprovalStep).ToList();
+                    bool ispresent = false;
+                    List<PendingLeaveApprovalItemsDto> res1 = new List<PendingLeaveApprovalItemsDto>();
+                    foreach (var item in res)
+                    {
+                        if (item.ApprovalEmployeeId == approvalEmployeeID && !item.ApprovalStatus.Contains("Approved", StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (!ispresent)
+                            {
+                                res1.Add(item);
+                                ispresent = true;
+                            }
+                        }
+                        else
+                        {
+                            res1.Add(item);
+                        }
+                    }
+                    return res1;
                 }
                 return null;
 
