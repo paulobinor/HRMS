@@ -8,7 +8,7 @@ namespace hrms_be_backend_data.IRepository
         Task<dynamic> CreateResignationClearance(ResignationClearanceDTO resignation);
         Task<ResignationClearanceDTO> GetResignationClearanceByID(long ID);
         Task<ResignationClearanceDTO> GetResignationClearanceByEmployeeID(long UserID);
-        Task<IEnumerable<ResignationClearanceDTO>> GetAllResignationClearanceByCompany(long companyID, int PageNumber, int RowsOfPage, string SearchVal);
+        Task<IEnumerable<ResignationClearanceDTO>> GetAllResignationClearanceByCompany(long companyID, int PageNumber, int RowsOfPage, string SearchVal, long employeeID);
 
         Task<IEnumerable<ResignationClearanceDTO>> GetPendingResignationClearanceByEmployeeID(long employeeID);
         Task<IEnumerable<ResignationClearanceDTO>> GetPendingResignationClearanceByCompnayID(long companyID,long employeeID);
