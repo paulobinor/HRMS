@@ -1,5 +1,6 @@
 ﻿using hrms_be_backend_business.ILogic;
 using hrms_be_backend_business.Logic;
+using hrms_be_backend_common.DTO;
 using hrms_be_backend_common.Models;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.ViewModel;
@@ -172,7 +173,7 @@ namespace hrms_be_backend_api.Controller
           [Authorize]
         public async Task<IActionResult> ApproveAnnualLeave(LeaveApprovalLineItem leaveApprovalLineItem)
         {
-            _logger.LogInformation($"recieved request to update leaveapproval by approval Id: {leaveApprovalLineItem.ApprovalEmployeeId}ty76  payload is: {JsonConvert.SerializeObject(leaveApprovalLineItem)}");
+            _logger.LogInformation($"recieved request to update leaveapproval by approval Id: {leaveApprovalLineItem.ApprovalEmployeeId}  payload is: {JsonConvert.SerializeObject(leaveApprovalLineItem)}");
             var response = new BaseResponse();
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             _logger.LogInformation($"Received Approve Leave request. Payload: {JsonConvert.SerializeObject(leaveApprovalLineItem)} from remote address: {RemoteIpAddress}");
@@ -199,43 +200,23 @@ namespace hrms_be_backend_api.Controller
         }
 
         [HttpGet("GetAnnualLeaveApprovals")]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> GetAnnualLeaveApprovals([FromQuery] long ApprovalEmployeeID)
         {
             var response = new BaseResponse();
-            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            _logger.LogInformation($"Received GetAnnualLeaveApprovals request. Payload: {JsonConvert.SerializeObject(new { ApprovalEmployeeID })} from remote address: {RemoteIpAddress}");
+            //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            //_logger.LogInformation($"Received GetAnnualLeaveApprovals request. Payload: {JsonConvert.SerializeObject(new { ApprovalEmployeeID })} from remote address: {RemoteIpAddress}");
 
-            var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
-            var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-            if (accessUser.data == null)
-            {
-                return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+            //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+            //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
-            }
+            //}
             var res = await _leaveApprovalService.GetPendingAnnualLeaveApprovals(ApprovalEmployeeID);
-            if (res.Count > 0)
-            {
-                var mySingleRes = res.FirstOrDefault();
-                var res1 = new
-                {
-                    FullName = mySingleRes.FullName,
-                    LeaveTypeName = mySingleRes.LeaveTypeName,
-                    Year = mySingleRes.StartDate.Year.ToString(),
-                    TotalNoOfDays = res.Sum(x => x.LeaveLength),
-                    LeaveCount = res.Count,
-                    Status = mySingleRes.ApprovalStatus,
-                    EmployeeID = mySingleRes.EmployeeID,
-                    leaveRequestLineItems = res
-                };
-                response.Data = res1;
-            }
-            else
-            {
-                response.Data = res;
-            }
-            
-            
+           
+            response.Data = res;
             response.ResponseMessage = "Success";
             response.ResponseCode = "00";
             return Ok(response);

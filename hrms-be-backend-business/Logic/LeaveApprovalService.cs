@@ -606,7 +606,7 @@ namespace hrms_be_backend_business.Logic
         }
 
 
-        public async Task<List<PendingLeaveApprovalItemsDto>> GetPendingAnnualLeaveApprovals(long approvalEmployeeID, string v = null)
+        public async Task<List<PendingAnnualLeaveApprovalItemDto>> GetPendingAnnualLeaveApprovals(long approvalEmployeeID, string v = null)
         {
             try
             {

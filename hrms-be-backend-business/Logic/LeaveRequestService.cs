@@ -816,20 +816,20 @@ namespace hrms_be_backend_business.Logic
 
 
                             //Check for previous leave date encroachment
-                            var maxItemId = leaveRequestLineItems.Max(x => x.LeaveRequestLineItemId);
-                            var lastLeaveTaken = leaveRequestLineItems.FirstOrDefault(x => x.LeaveRequestLineItemId == maxItemId);
-                            if (lastLeaveTaken != null)
-                            {
-                                 _logger.LogInformation($"Details of last leave taken: {JsonConvert.SerializeObject(lastLeaveTaken)}");
-                                if (lastLeaveTaken.endDate.Date > leaveRequestLineItem.startDate.Date)
-                                {
-                                    _logger.LogError($"Invalid start date. The start date selected conflicts with a previous leave period already taken");
-                                    response.ResponseCode = ((int)ResponseCode.Ok).ToString();
-                                    response.ResponseMessage = "Invalid start date. The start date selected conflicts with a previous leave period already taken";
-                                    //  response.Data = repoResponse;
-                                    return response;
-                                }
-                            }
+                            //var maxItemId = leaveRequestLineItems.Max(x => x.LeaveRequestLineItemId);
+                            //var lastLeaveTaken = leaveRequestLineItems.FirstOrDefault(x => x.LeaveRequestLineItemId == maxItemId);
+                            //if (lastLeaveTaken != null)
+                            //{
+                            //     _logger.LogInformation($"Details of last leave taken: {JsonConvert.SerializeObject(lastLeaveTaken)}");
+                            //    if (lastLeaveTaken.endDate.Date > leaveRequestLineItem.startDate.Date)
+                            //    {
+                            //        _logger.LogError($"Invalid start date. The start date selected conflicts with a previous leave period already taken");
+                            //        response.ResponseCode = ((int)ResponseCode.Ok).ToString();
+                            //        response.ResponseMessage = "Invalid start date. The start date selected conflicts with a previous leave period already taken";
+                            //        //  response.Data = repoResponse;
+                            //        return response;
+                            //    }
+                            //}
 
                             //Check split count
                             //Only count the items that were approved
@@ -916,7 +916,7 @@ namespace hrms_be_backend_business.Logic
 
                 response.Data = res;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "leaveRequest created successfully.";
+                response.ResponseMessage = "leave request created successfully.";
                 return response;
 
             }
@@ -1419,11 +1419,11 @@ namespace hrms_be_backend_business.Logic
                 {
                     response.Data = leave;
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "LeaveRequestLineItems fetched successfully.";
+                    response.ResponseMessage = "Leave request fetched successfully.";
                     return response;
                 }
                 response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
-                response.ResponseMessage = "No LeaveRequestLineItems found.";
+                response.ResponseMessage = "No Leave request found.";
                 response.Data = null;
                 return response;
             }

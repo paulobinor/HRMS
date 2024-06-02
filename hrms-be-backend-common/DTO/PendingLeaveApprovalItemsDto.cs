@@ -24,6 +24,4 @@
         public int LastApprovalEmployeeID { get; set; }
         public string UploadFilePath { get; set; }
     }
-
-
 }

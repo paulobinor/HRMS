@@ -20,7 +20,7 @@ namespace hrms_be_backend_data.IRepository
         Task<LeaveApprovalInfo> GetExistingLeaveApproval(long EmployeeId);
         Task<List<LeaveApprovalLineItem>> GetLeaveApprovalLineItems(long leaveApprovalId);
         Task<List<PendingLeaveApprovalItemsDto>> GetPendingLeaveApprovals(long approvalEmployeeID, string v);
-        Task<List<PendingLeaveApprovalItemsDto>> GetPendingAnnualLeaveApprovals(long approvalEmployeeID, string v);
+        Task<List<PendingAnnualLeaveApprovalItemDto>> GetPendingAnnualLeaveApprovals(long approvalEmployeeID, string v);
         Task<List<LeaveApproval>> GetLeaveApprovals(long approvalEmployeeId, long employeeID);
     }
 }

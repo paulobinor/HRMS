@@ -60,6 +60,17 @@
         public string Signature { get; set; }
         public string BirthCertificate { get; set; }
         public int CurrentAddressStateId { get; set; }
+        public string currentStateName { get; set; }
+        public string localGovermentName { get; set; }
+        public string CurrentAddressStateName { get; set; }
+        public string currentAddressLGAName { get; set; }
+        public string maillingAddressStateName { get; set; }
+        public string mailingAddressLGAName { get; set; }
+        public string spouseAddressStateName { get; set; }
+        public string spouseAddressLGAName { get; set; }
+        public string maritalStatusName { get; set; }
+        public string profileImage { get; set; }
+        public string birthplace { get; set; }
         public int CurrentAddressLGAId { get; set; }
         public string CurrentAddressCity { get; set; }
         public string CurrentAddressOne { get; set; }
@@ -105,7 +116,7 @@
         public bool LGA_Name { get; set; }
         public bool GradeCode { get; set; }
         public bool GenderID { get; set; }
-        public bool GenderName { get; set; }
+        public string GenderName { get; set; }
 
     }
 

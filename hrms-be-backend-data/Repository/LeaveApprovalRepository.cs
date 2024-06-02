@@ -265,7 +265,7 @@ namespace hrms_be_backend_data.Repository
                     List<PendingLeaveApprovalItemsDto> res1 = new List<PendingLeaveApprovalItemsDto>();
                     foreach (var item in res)
                     {
-                        if (item.ApprovalEmployeeId == approvalEmployeeID && !item.ApprovalStatus.Contains("Approved", StringComparison.OrdinalIgnoreCase))
+                        if (item.EmployeeID == approvalEmployeeID && !item.ApprovalStatus.Contains("Approved", StringComparison.OrdinalIgnoreCase))
                         {
                             if (!ispresent)
                             {
@@ -320,7 +320,7 @@ namespace hrms_be_backend_data.Repository
                 return default;
             }
         }
-        public async Task<List<PendingLeaveApprovalItemsDto>> GetPendingAnnualLeaveApprovals(long approvalEmployeeID, string v)
+        public async Task<List<PendingAnnualLeaveApprovalItemDto>> GetPendingAnnualLeaveApprovals(long approvalEmployeeID, string v)
         {
             try
             {
@@ -341,23 +341,52 @@ namespace hrms_be_backend_data.Repository
                 {
                     res = res.OrderBy(x => x.ApprovalStep).ToList();
                     bool ispresent = false;
+                    bool ispresent1 = false;
                     List<PendingLeaveApprovalItemsDto> res1 = new List<PendingLeaveApprovalItemsDto>();
+                    List<PendingAnnualLeaveApprovalItemDto> pendingRes = new List<PendingAnnualLeaveApprovalItemDto>();
                     foreach (var item in res)
                     {
-                        if (item.ApprovalEmployeeId == approvalEmployeeID && !item.ApprovalStatus.Contains("Approved", StringComparison.OrdinalIgnoreCase))
-                        {
-                            if (!ispresent)
-                            {
-                                res1.Add(item);
-                                ispresent = true;
-                            }
-                        }
-                        else
+                        var count = res1.FirstOrDefault(x=>x.EmployeeID == item.EmployeeID);
+                        if (count == null)
                         {
                             res1.Add(item);
                         }
+                         
+                        //if (item.EmployeeID == approvalEmployeeID && !item.ApprovalStatus.Contains("Approved", StringComparison.OrdinalIgnoreCase))
+                        //{
+                        //    if (!ispresent)
+                        //    {
+                        //        res1.Add(item);
+                        //        ispresent = true;
+                        //    }
+                        //}
+                        //else if(item.EmployeeID != approvalEmployeeID && !item.ApprovalStatus.Contains("Approved", StringComparison.OrdinalIgnoreCase))
+                        //{
+                        //    if (!ispresent1)
+                        //    {
+                        //        res1.Add(item);
+                        //        ispresent1 = true;
+                        //    }
+                        //}
+
                     }
-                    return res1;
+
+                    PendingAnnualLeaveApprovalItemDto pendingAnnualLeaveApprovalItemDto = null;
+                    foreach (var item in res1)
+                    {
+                        pendingAnnualLeaveApprovalItemDto = new()
+                        {
+                            FullName = item.FullName,
+                            EmployeeID = item.EmployeeID,
+                            LeaveCount = res.FindAll(x => x.EmployeeID == item.EmployeeID).Count(),
+                            LeaveTypeName = item.LeaveTypeName,
+                            leaveRequestLineItems = await GetLeaveApprovalLineItems(item.LeaveApprovalId),
+                            Status = item.Comments,
+                            TotalNoOfDays = res.FindAll(x => x.EmployeeID == item.EmployeeID).Sum(x => x.LeaveLength)
+                        };
+                        pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                    }
+                    return pendingRes;
                 }
                 return null;
 
