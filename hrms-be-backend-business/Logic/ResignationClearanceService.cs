@@ -191,7 +191,7 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<IEnumerable<ResignationClearanceDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
                 }
 
-                var resignation = await _resignationClearanceRepository.GetAllResignationClearanceByCompany(companyID, filter.PageNumber, filter.PageSize, filter.SearchValue);
+                var resignation = await _resignationClearanceRepository.GetAllResignationClearanceByCompany(companyID, filter.PageNumber, filter.PageSize, filter.SearchValue,accessUser.data.EmployeeId);
 
                 if (resignation == null)
                 {
