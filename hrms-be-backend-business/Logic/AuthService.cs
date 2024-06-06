@@ -5,7 +5,9 @@ using hrms_be_backend_business.ILogic;
 using hrms_be_backend_common.Communication;
 using hrms_be_backend_common.Configuration;
 using hrms_be_backend_common.DTO;
+using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
+using hrms_be_backend_data.Helpers;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
@@ -60,9 +62,8 @@ namespace hrms_be_backend_business.Logic
             {
 
                 var email = Encoding.UTF8.GetString(Convert.FromBase64String(login.OfficialMail));
-                var password = Encoding.UTF8.GetString(Convert.FromBase64String(login.Password));
-                            
-
+                login.Password = Encoding.UTF8.GetString(Convert.FromBase64String(login.Password));
+             
                 var repoResponse = await _accountRepository.AuthenticateUser(email, _passwordConfig.MaxNumberOfFailedAttemptsToLogin, DateTime.Now);
                 if (!repoResponse.Contains("Success"))
                 {
@@ -71,7 +72,7 @@ namespace hrms_be_backend_business.Logic
                 var userId = repoResponse.Replace("Success", "");
                 var user = await _accountRepository.FindUser(Convert.ToInt64(userId), null, null);
 
-                var isPasswordMatch = Utils.DoesPasswordMatch(user.PasswordHash, Encoding.UTF8.GetString(Convert.FromBase64String(login.Password)));
+                var isPasswordMatch = PasswordManagerHelper.DoesPasswordMatch(user.PasswordHash, login.Password);
                 if (!isPasswordMatch)
                 {
                     var attemptCount = user.LoginFailedAttemptsCount + 1;
@@ -118,7 +119,10 @@ namespace hrms_be_backend_business.Logic
                 accessUserVm.OfficialMail = user.OfficialMail;
                 accessUserVm.PhoneNumber = user.PhoneNumber;
                 accessUserVm.UserId = user.UserId;
-                accessUserVm.GradeId = Convert.ToInt32(gradeId);
+                if (user.UserStatusCode != UserStatusConstant.Back_Office_User)
+                {
+                    accessUserVm.GradeId = Convert.ToInt32(gradeId);
+                }               
                 accessUserVm.UserStatusName = user.UserStatusName;
                 accessUserVm.UserStatusCode = user.UserStatusCode;
               
@@ -383,7 +387,7 @@ namespace hrms_be_backend_business.Logic
                 var newPassword = Encoding.UTF8.GetString(Convert.FromBase64String(payload.NewPassword));
                 string oldPassword = Encoding.UTF8.GetString(Convert.FromBase64String(payload.OldPassword));
 
-                var isPasswordMatch = Utils.DoesPasswordMatch(accessUser.data
+                var isPasswordMatch = PasswordManagerHelper.DoesPasswordMatch(accessUser.data
                     .PasswordHash, Encoding.UTF8.GetString(Convert.FromBase64String(payload.OldPassword)));
                 if (!isPasswordMatch)
                 {

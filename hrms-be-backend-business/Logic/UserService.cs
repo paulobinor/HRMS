@@ -6,6 +6,7 @@ using hrms_be_backend_common.Configuration;
 using hrms_be_backend_common.DTO;
 using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.Enums;
+using hrms_be_backend_data.Helpers;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.Repository;
@@ -97,7 +98,7 @@ namespace hrms_be_backend_business.Logic
                     LastName = payload.LastName,
                     MiddleName = payload.MiddleName,
                     OfficialMail = payload.OfficialMail,
-                    PasswordHash = password,
+                    PasswordHash = PasswordManagerHelper.HashPassword(password),
                     PhoneNumber=payload.PhoneNumber,
                     UserStatusCode=UserStatusConstant.Back_Office_User,
                     IsModifield = false,
@@ -182,7 +183,7 @@ namespace hrms_be_backend_business.Logic
                     LastName = payload.LastName,
                     MiddleName = payload.MiddleName,
                     OfficialMail = payload.OfficialMail,
-                    PasswordHash = password,
+                    PasswordHash = PasswordManagerHelper.HashPassword(password),
                     PhoneNumber = payload.PhoneNumber,
                     UserStatusCode = UserStatusConstant.Back_Office_User,
                     UserId=payload.UserId,

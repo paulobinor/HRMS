@@ -1,13 +1,9 @@
 ﻿using Dapper;
-using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 using System.Data;
-using System.Data.SqlClient;
 
 namespace hrms_be_backend_data.Repository
 {
@@ -26,7 +22,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
-                string pwd = BCrypt.Net.BCrypt.HashPassword(payload.PasswordHash, BCrypt.Net.BCrypt.GenerateSalt());
+                string pwd = payload.PasswordHash;
                 var param = new DynamicParameters();
                 param.Add("@UserId", payload.UserId);
                 param.Add("@FirstName", payload.FirstName);
