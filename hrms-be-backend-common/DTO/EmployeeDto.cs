@@ -55,14 +55,16 @@
     public class UpdateEmployeePersonalInfoDto
     {
         public long EmployeeId { get; set; }
-        public string BirthPlace { get; set; }
+        public long GenderId { get; set; }
         public int NationalityId { get; set; }
         public int StateOfOriginId { get; set; }
+        public int MaritalStatusId { get; set; }
         public int LGAOfOriginId { get; set; }
+        public string BirthPlace { get; set; }
         public string TownOfOrigin { get; set; }
         public string MaidenName { get; set; }
-        public int MaritalStatusId { get; set; }
         public string SpouseName { get; set; }
+        public string ProfileImage { get; set; }
         public int NoOfChildren { get; set; }
         public List<UpdateEmployeeIdentificationDto> Identifications { get; set; }
     }

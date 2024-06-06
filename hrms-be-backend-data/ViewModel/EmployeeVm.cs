@@ -69,8 +69,8 @@
         public string spouseAddressStateName { get; set; }
         public string spouseAddressLGAName { get; set; }
         public string maritalStatusName { get; set; }
-        public string profileImage { get; set; }
-        public string birthplace { get; set; }
+     //   public string profileImage { get; set; }
+       // public string birthplace { get; set; }
         public int CurrentAddressLGAId { get; set; }
         public string CurrentAddressCity { get; set; }
         public string CurrentAddressOne { get; set; }
@@ -112,10 +112,10 @@
         public bool HasCompletedPersonalInfo { get; set; }
         public bool HasCompletedProfBackground { get; set; }
         public bool HasCompletedReferenceDetails { get; set; }
-        public bool StateName { get; set; }
-        public bool LGA_Name { get; set; }
-        public bool GradeCode { get; set; }
-        public bool GenderID { get; set; }
+        public string StateName { get; set; }
+        public string LGA_Name { get; set; }
+        public string GradeCode { get; set; }
+        public long GenderID { get; set; }
         public string GenderName { get; set; }
 
     }

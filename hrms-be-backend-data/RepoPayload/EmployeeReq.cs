@@ -40,6 +40,8 @@
         public int NoOfChildren { get; set; }
         public long CreatedByUserId { get; set; }
         public DateTime DateCreated { get; set; }
+        public string ProfileImage { get; set; }
+        public long GenderId { get; set; }
     }
     public class EmployeeIdentificationReq
     {

@@ -77,6 +77,8 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@NoOfChildren", payload.NoOfChildren);
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
                 param.Add("@DateCreated", payload.DateCreated);
+                param.Add("@GenderId", payload.GenderId);
+                param.Add("@ProfileImage", payload.ProfileImage);
 
                 return await _dapper.Get<string>("sp_process_employee_personal_info", param, commandType: CommandType.StoredProcedure);
             }

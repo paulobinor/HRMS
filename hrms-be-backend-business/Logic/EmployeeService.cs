@@ -468,7 +468,6 @@ namespace hrms_be_backend_business.Logic
                     validationMessage += "  || Marital Status is required";
                 }
 
-
                 if (!isModelStateValidate)
                 {
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
@@ -479,15 +478,18 @@ namespace hrms_be_backend_business.Logic
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
                     LGAOfOriginId = payload.LGAOfOriginId,
+                    StateOfOriginId = payload.StateOfOriginId,
+                    MaritalStatusId = payload.MaritalStatusId,
+                    NationalityId = payload.NationalityId,
+                    GenderId = payload.GenderId,
                     BirthPlace = payload.BirthPlace,
                     EmployeeId = payload.EmployeeId,
                     MaidenName = payload.MaidenName,
-                    MaritalStatusId = payload.MaritalStatusId,
-                    NationalityId = payload.NationalityId,
                     NoOfChildren = payload.NoOfChildren,
                     SpouseName = payload.SpouseName,
-                    StateOfOriginId = payload.StateOfOriginId,
-                    TownOfOrigin = payload.TownOfOrigin
+                    TownOfOrigin = payload.TownOfOrigin,
+                    ProfileImage = payload.ProfileImage
+                    
                 };
                 string repoResponse = await _EmployeeRepository.ProcessEmployeePersonalInfo(repoPayload);
                 if (!repoResponse.Contains("Success"))

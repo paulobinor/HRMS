@@ -11,6 +11,6 @@ namespace hrms_be_backend_common.DTO
         public int LeaveCount { get; set; }
         public string Status { get; set; }
         public long EmployeeID { get; set; }
-        public List<LeaveApprovalLineItem> leaveRequestLineItems { get; set; } = new List<LeaveApprovalLineItem>();
+        public List<PendingLeaveApprovalItemsDto>? leaveRequestLineItems { get; set; }
     }
 }
