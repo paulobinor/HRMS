@@ -53,13 +53,13 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<string>() { responseMessage = "department setup already exist", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
             }
-            var finalApprover = await _exitClearanceSetupRepository.GetDepartmentThatIsFinalApprroval(request.CompanyID);
+            //var finalApprover = await _exitClearanceSetupRepository.GetDepartmentThatIsFinalApprroval(request.CompanyID);
 
-            if (finalApprover != null)
-            {
-                return new ExecutedResult<string>() { responseMessage = "final approval already exist", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
+            //if (finalApprover != null)
+            //{
+            //    return new ExecutedResult<string>() { responseMessage = "final approval already exist", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
-            }
+            //}
             try
             {
 
