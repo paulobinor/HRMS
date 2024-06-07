@@ -48,10 +48,10 @@ namespace hrms_be_backend_api.Controllers
                 Port = Request.HttpContext.Connection.RemotePort.ToString()
             };
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claim = identity.Claims;
+           // IEnumerable<Claim> claim = identity.Claims;
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
-            return this.CustomResponse(await _departmentService.CreateDepartmentBulkUpload(payload, accessToken, claim , requester));
+            return this.CustomResponse(await _departmentService.CreateDepartmentBulkUpload(payload, accessToken, identity.Claims, requester));
         }
 
         [HttpPost("UpdateDepartment")]

@@ -163,7 +163,7 @@ namespace hrms_be_backend_business.Logic
         }
         public async Task<ExecutedResult<IEnumerable<IdenticationTypeVm>>> GetIdenticationTypes(string AccessKey, IEnumerable<Claim> claim, string RemoteIpAddress, string RemotePort)
         {
-
+            _logger.LogError($"Received request to get identification types");
             try
             {
                 var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);

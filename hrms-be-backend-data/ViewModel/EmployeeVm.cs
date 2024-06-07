@@ -23,6 +23,7 @@
         public string UnitHeadName { get; set; }
         public string GradeID { get; set; }
         public string GradeName { get; set; }
+        public string Nationality { get; set; }
         public string EmployeeTypeID { get; set; }
         public string EmployeeTypeName { get; set; }
         public string DOB { get; set; }
