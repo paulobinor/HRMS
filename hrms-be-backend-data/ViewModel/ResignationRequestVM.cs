@@ -13,7 +13,7 @@ namespace Com.XpressPayments.Common.ViewModels
         //public string StaffId { get; set; }
         //public string StaffName { get; set; }
         public DateTime Date { get; set; }
-        public DateTime ResumptionDate { get; set; }
+        //public DateTime ResumptionDate { get; set; }
         public string[] ReasonForResignation { get; set; }
         public string OtherReasonForResignation { get; set; }
 

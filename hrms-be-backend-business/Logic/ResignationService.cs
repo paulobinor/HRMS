@@ -68,11 +68,11 @@ namespace hrms_be_backend_business.Logic
                     isModelStateValidate = false;
                     validationMessage += "  Invalid last day of work";
                 }
-                if (payload.ResumptionDate > DateTime.Now)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  Invalid resumption date";
-                } 
+                //if (payload.ResumptionDate > DateTime.Now)
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  Invalid resumption date";
+                //} 
                 //if (string.IsNullOrWhiteSpace(payload.ReasonForResignation))
                 //{
                 //    isModelStateValidate = false;
@@ -94,16 +94,16 @@ namespace hrms_be_backend_business.Logic
                 {
                     ExitDate = payload.Date,
                     CompanyID = payload.CompanyID,
-                    //StaffName = payload.StaffName,
                     DateCreated = DateTime.Now,
                     CreatedByUserId = accessUser.data.UserId,
-                    ResumptionDate  = payload.ResumptionDate,
                     LastDayOfWork = payload.LastDayOfWork,
                     EmployeeId = payload.EmployeeId,
-                    //ReasonForResignation = payload.ReasonForResignation,
                     OtherReasonForResignation=payload.OtherReasonForResignation,
                     SignedResignationLetter = payload.fileName,
-                    //StaffID = payload.StaffId
+                    //StaffID = payload.StaffId,
+                    //ResumptionDate  = payload.ResumptionDate,
+                    //ReasonForResignation = payload.ReasonForResignation,
+                    //StaffName = payload.StaffName,
                 };
 
                 dynamic resp = new ExpandoObject();
