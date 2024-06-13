@@ -136,7 +136,7 @@ namespace hrms_be_backend_business.Logic
                     Date = payload.Date,
                     DateCreated = DateTime.Now,
                     CreatedByUserId = accessUser.data.UserId,
-                    ExitDate = resignation.ExitDate,
+                    ExitDate = resignation.LastDayOfWork,
                     EmployeeId = payload.EmployeeId,
                     ResignationId = resignation.ResignationID,
                     //ReasonForResignation = resignation.ReasonForResignation,

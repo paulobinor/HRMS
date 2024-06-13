@@ -88,7 +88,7 @@ namespace hrms_be_backend_business.Logic
                     CreatedByUserID = accessUser.data.UserId,
                     LoansOutstanding = payload.LoansOutstanding,
                     ItemsReturnedToHr = payload.ItemsReturnedToHr,
-                    ExitDate = resignation.ExitDate,
+                    ExitDate = resignation.LastDayOfWork,
                     DateCreated = payload.DateCreated,
 
                 };

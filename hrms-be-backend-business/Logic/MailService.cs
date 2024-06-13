@@ -561,14 +561,14 @@ namespace hrms_be_backend_business.AppCode
             return body;
         }
 
-        public async Task SendResignationMailFromHrToStaff(long ResigationByEmployeeId, DateTime exitDate)
+        public async Task SendResignationMailFromHrToStaff(long ResigationByEmployeeId, DateTime lastDatOfWork)
         {
             try
             {
                 var resignationBy = await _accountRepository.GetUserByEmployeeId(ResigationByEmployeeId);
                 StringBuilder mailBody = new StringBuilder();
                 mailBody.Append($"Dear {resignationBy.FirstName} {resignationBy.LastName}<br/> <br/>");
-                mailBody.Append($"We refer to your letter indicating your intention to resign from the services of the Company with effect from {exitDate}.<br/> <br/>");
+                mailBody.Append($"We refer to your letter indicating your intention to resign from the services of the Company with effect from {lastDatOfWork}.<br/> <br/>");
                 mailBody.Append($"We appreciate your contribution during your stay with us.<br/> <br/>");
                 mailBody.Append($"Please be informed that you will be required to do a proper handover of your duties as well as submit the following items/documents to the respective departments upon your exit:<br/> <br/>");
                 mailBody.Append($"-     Completed Exit Interview and Exit Clearance Forms<br/> <br/>");
@@ -597,7 +597,7 @@ namespace hrms_be_backend_business.AppCode
                 throw;
             }
         } 
-        public async Task SendResignationApproveMailToApprover(long ApproverEmployeeId, long ResigationByEmployeeId, DateTime exitDate)
+        public async Task SendResignationApproveMailToApprover(long ApproverEmployeeId, long ResigationByEmployeeId, DateTime lastDatOfWork)
         {
             try
             {
@@ -606,7 +606,7 @@ namespace hrms_be_backend_business.AppCode
                 StringBuilder mailBody = new StringBuilder();
                 mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
                 mailBody.Append($"Kindly login to approve a resignation request by {resignationBy.FirstName} {resignationBy.LastName} {resignationBy.MiddleName} <br/> <br/>");
-                mailBody.Append($"<b>Exit Date : <b/> {exitDate}  <br/> ");
+                mailBody.Append($"<b>Exit Date : <b/> {lastDatOfWork}  <br/> ");
 
                 var mailPayload = new MailRequest
                 {
@@ -624,7 +624,7 @@ namespace hrms_be_backend_business.AppCode
             }
         }
 
-        public async Task SendResignationApproveConfirmationMail(long RequesterEmployeeId, long ApprovedByEmployeeId, DateTime exitDate)
+        public async Task SendResignationApproveConfirmationMail(long RequesterEmployeeId, long ApprovedByEmployeeId, DateTime lastDatOfWork)
         {
             try
             {
@@ -634,7 +634,7 @@ namespace hrms_be_backend_business.AppCode
                 mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
                 mailBody.Append($"Your resignation has been approved by {ApprovedByUserDetails.FirstName} {ApprovedByUserDetails.LastName} {ApprovedByUserDetails.MiddleName} <br/> <br/>");
 
-                mailBody.Append($"<b> Your exit date is on: <b/> {exitDate} <br/> ");
+                mailBody.Append($"<b> Your exit date is on: <b/> {lastDatOfWork} <br/> ");
 
                 var mailPayload = new MailRequest
                 {
