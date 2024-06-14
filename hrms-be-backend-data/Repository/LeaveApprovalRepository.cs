@@ -306,7 +306,7 @@ namespace hrms_be_backend_data.Repository
                 //    param.Add("@ApprovalStatus", "Pending");
                 //}
 
-                var res = await _dapperGeneric.GetAll<LeaveApproval>(ApplicationConstant.Sp_GetLeaveApprovals, param, commandType: CommandType.StoredProcedure);
+                var res = await _dapperGeneric.GetAll<LeaveApproval>(ApplicationConstant.Sp_GetAnnualLeaveApprovals, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
                     return res;
@@ -531,7 +531,10 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@IsApproved", leaveApproval.IsApproved);
                 param.Add("@LastApprovalEmployeeID", leaveApproval.CurrentApprovalID);
 
+
                 var res = await _dapperGeneric.Get<LeaveApprovalInfo>(ApplicationConstant.Sp_UpdateLeaveApproval, param, commandType: CommandType.StoredProcedure);
+                _logger.LogInformation($"Response from Sp_UpdateLeaveApproval: {JsonConvert.SerializeObject(res)}");
+
                 if (res != null)
                 {
                     return res;

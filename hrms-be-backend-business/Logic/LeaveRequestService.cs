@@ -10,6 +10,7 @@ using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Pqc.Crypto.Lms;
 using System.ComponentModel.Design;
 using System.Data;
 using System.Text;
@@ -26,11 +27,12 @@ namespace hrms_be_backend_business.Logic
         private readonly ILeaveRequestRepository _leaveRequestRepository;
         private readonly ILeaveApprovalRepository _leaveApprovalRepository;
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly IGradeLeaveRepo  _leaveTypeRepository;
+        private readonly IGradeLeaveRepo _gradeLeaveRepo;
+        private readonly ILeaveTypeRepository _leaveTypeService;
         private readonly IMailService _mailService;
 
         public LeaveRequestService(IAccountRepository accountRepository, ILogger<LeaveRequestService> logger,
-            ILeaveRequestRepository leaveRequestRepository, IAuditLog audit, ICompanyRepository companyrepository, IMailService mailService, ILeaveApprovalRepository leaveApprovalRepository, IGradeLeaveRepo leaveTypeRepository)
+            ILeaveRequestRepository leaveRequestRepository, IAuditLog audit, ICompanyRepository companyrepository, IMailService mailService, ILeaveApprovalRepository leaveApprovalRepository, IGradeLeaveRepo leaveTypeRepository, ILeaveTypeRepository leaveTypeService)
         {
             _audit = audit;
             _mailService = mailService;
@@ -39,7 +41,8 @@ namespace hrms_be_backend_business.Logic
             _leaveRequestRepository = leaveRequestRepository;
             _companyrepository = companyrepository;
             _leaveApprovalRepository = leaveApprovalRepository;
-            _leaveTypeRepository = leaveTypeRepository;
+            _gradeLeaveRepo = leaveTypeRepository;
+            _leaveTypeService = leaveTypeService;
         }
 
         private int CountWeekdays(DateTime startDate, DateTime endDate)
@@ -175,7 +178,7 @@ namespace hrms_be_backend_business.Logic
                         response.ResponseMessage = $"We could not get the employee information while trying to validate gender for the leavetype selected";
                         return response;
                     }
-                    var LeaveTypeGender = (await _leaveTypeRepository.GetEmployeeGradeLeaveTypes(leaveRequestLineItem.CompanyId, leaveRequestLineItem.EmployeeId)).FirstOrDefault(x => x.LeaveTypeId == leaveRequestLineItem.LeaveTypeId && x.GradeID == Convert.ToInt32(empGender.Employee.GradeID));
+                    var LeaveTypeGender = (await _gradeLeaveRepo.GetEmployeeGradeLeaveTypes(leaveRequestLineItem.CompanyId, leaveRequestLineItem.EmployeeId)).FirstOrDefault(x => x.LeaveTypeId == leaveRequestLineItem.LeaveTypeId && x.GradeID == Convert.ToInt32(empGender.Employee.GradeID));
 
                     if (LeaveTypeGender == null)
                     {
@@ -226,7 +229,10 @@ namespace hrms_be_backend_business.Logic
             if (anualLeave != null)
             {
 
-                var item = anualLeave.leaveRequestLineItems.FirstOrDefault(x => x.startDate.Year == anualLeave.LeavePeriod && !x.ApprovalStatus.Contains("Disapproved"));
+              //  var item = anualLeave.leaveRequestLineItems.FirstOrDefault(x => x.startDate.Year == anualLeave.LeavePeriod && !x.ApprovalStatus.Contains("Disapproved"));
+              var leaveTypeId = RequestLineItems.First().LeaveTypeId;
+                anualLeave.leaveRequestLineItems = anualLeave.leaveRequestLineItems.FindAll(x=> x.LeaveTypeId == leaveTypeId);
+                var item = anualLeave.leaveRequestLineItems.FirstOrDefault(x => x.startDate.Year == anualLeave.LeavePeriod && !x.ApprovalStatus.Contains("Disapproved", StringComparison.OrdinalIgnoreCase));
                 if (item != null)
                 {
                     //Multiple requests not allowed while one pending
@@ -240,9 +246,9 @@ namespace hrms_be_backend_business.Logic
                     }
 
                     //Only one approved request shall stand
-                    if (item.Comments.Contains("Approved", StringComparison.OrdinalIgnoreCase))
+                    if (item.IsApproved) // == .Comments.Contains("Approved", StringComparison.OrdinalIgnoreCase))
                     {
-                        _logger.LogWarning($"Invalid request. Annual Leave already exists:{JsonConvert.SerializeObject(item)}");
+                        _logger.LogWarning($"Invalid request. An approved Annual Leave already exists:{JsonConvert.SerializeObject(item)}");
                         response.ResponseCode = "400";
                         response.ResponseMessage = $"Invalid request. You have already applied for this leave type.";
                         return response;
@@ -388,7 +394,7 @@ namespace hrms_be_backend_business.Logic
                     {
                         _logger.LogWarning($"Invalid request. Annual Leave already disapproved:{JsonConvert.SerializeObject(item)}");
                         response.ResponseCode = "400";
-                        response.ResponseMessage = $"You cannot changed a disapproved leave type.";
+                        response.ResponseMessage = $"You cannot change a disapproved leave type.";
                         return response;
                     }
 
@@ -500,7 +506,7 @@ namespace hrms_be_backend_business.Logic
                         response.ResponseMessage = $"We could not get the employee information while trying to validate gender for the leavetype selected";
                         return response;
                     }
-                    var LeaveTypeGender = (await _leaveTypeRepository.GetEmployeeGradeLeaveTypes(leaveRequestLineItem.CompanyId, leaveRequestLineItem.EmployeeId)).FirstOrDefault(x => x.LeaveTypeId == leaveRequestLineItem.LeaveTypeId && x.GradeID == Convert.ToInt32(empGender.Employee.GradeID));
+                    var LeaveTypeGender = (await _gradeLeaveRepo.GetEmployeeGradeLeaveTypes(leaveRequestLineItem.CompanyId, leaveRequestLineItem.EmployeeId)).FirstOrDefault(x => x.LeaveTypeId == leaveRequestLineItem.LeaveTypeId && x.GradeID == Convert.ToInt32(empGender.Employee.GradeID));
 
                     if (LeaveTypeGender == null)
                     {
@@ -547,11 +553,12 @@ namespace hrms_be_backend_business.Logic
             #endregion
             try
             {
+                bool IsSuccessful = false;
                 foreach (var leaveRequestLineItem in RequestLineItems)
                 {
                    
                     var leaveApprovalInfo = await GetLeaveApprovalInfo(0, leaveRequestLineItem.LeaveRequestLineItemId.Value);
-                    if (leaveApprovalInfo != null)
+                    if (leaveApprovalInfo != null )
                     {
                         var approvals = await GetleaveApprovalLineItems(leaveApprovalInfo.LeaveApprovalId);
                         if (approvals.Count > 0)
@@ -596,7 +603,14 @@ namespace hrms_be_backend_business.Logic
                         response.Data = rescheduleItems;
                         response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                         response.ResponseMessage = "Reschedule Leave was successful.";
+                        IsSuccessful = true;
                     }
+                }
+
+                if (IsSuccessful)
+                {
+                    //Create Approval process
+
                 }
             }
             catch (Exception ex)
@@ -714,7 +728,7 @@ namespace hrms_be_backend_business.Logic
                     response.ResponseMessage = $"We could not get the employee information while trying to validate gender for the leavetype selected";
                     return response;
                 }
-                var LeaveTypeGender = (await _leaveTypeRepository.GetEmployeeGradeLeaveTypes(leaveRequestLineItem.CompanyId, leaveRequestLineItem.EmployeeId)).FirstOrDefault(x => x.LeaveTypeId == leaveRequestLineItem.LeaveTypeId && x.GradeID == Convert.ToInt32(empGender.Employee.GradeID));
+                var LeaveTypeGender = (await _gradeLeaveRepo.GetEmployeeGradeLeaveTypes(leaveRequestLineItem.CompanyId, leaveRequestLineItem.EmployeeId)).FirstOrDefault(x => x.LeaveTypeId == leaveRequestLineItem.LeaveTypeId && x.GradeID == Convert.ToInt32(empGender.Employee.GradeID));
 
                 if (LeaveTypeGender == null)
                 {
@@ -850,7 +864,7 @@ namespace hrms_be_backend_business.Logic
                 leaveRequestLineItem.LeaveRequestId = empLeaveRequestInfo.LeaveRequestId;
                 var res = await _leaveRequestRepository.CreateLeaveRequestLineItem(leaveRequestLineItem);
 
-                _logger.LogInformation($"Create leave Request result is: {JsonConvert.SerializeObject(res)}");
+                _logger.LogInformation($"Response from CreateLeaveRequest: {JsonConvert.SerializeObject(res)}");
                 if (res != null)
                 {
                     //Update active leave info for employee if maximum days or split count reached.
@@ -935,8 +949,8 @@ namespace hrms_be_backend_business.Logic
 
         private async Task Process_Email(LeaveRequestLineItem leaveRequestLineItem, LeaveApprovalLineItem leaveApprovalLineItem)
         {
-            StringBuilder mailBody = null;
-            MailRequest mailPayload = null;
+           // StringBuilder mailBody = null;
+           // MailRequest mailPayload = null;
             bool sendmail = true;
             //Fetch recepient details
             var requester = await _accountRepository.GetUserByEmployeeId(leaveRequestLineItem.EmployeeId);
@@ -950,14 +964,16 @@ namespace hrms_be_backend_business.Logic
 
             if (sendmail)
             {
+                var leaveType = await _leaveTypeService.GetLeaveTypeById(leaveRequestLineItem.LeaveTypeId);
+                leaveType.LeaveTypeName = leaveType.LeaveTypeName.Replace("leave", "", StringComparison.OrdinalIgnoreCase);
                 //Send mail to requester
-                mailBody = new StringBuilder();
+                var mailBody = new StringBuilder();
                 mailBody.Append($"Dear <b>{requester.FirstName} {requester.LastName} {requester.MiddleName}</b> <br/> <br/>");
-                mailBody.Append($"Kindly note that your request for leave was successfully created and sent for approval. The approval is currently pending on {approver.FirstName} {approver.LastName} <br/> <br/>");
+                mailBody.Append($"Kindly note that your request for {leaveType.LeaveTypeName} leave was successfully created and sent for approval. The approval is currently pending on {approver.FirstName} {approver.LastName} <br/> <br/>");
                 mailBody.Append($"<b>Start Date : <b/> {leaveRequestLineItem.startDate.ToString("dd/MM/yyyy")}  <br/> ");
                 mailBody.Append($"<b>End Date : <b/> {leaveRequestLineItem.endDate.ToString("dd/MM/yyyy")}   <br/> ");
 
-                mailPayload = new MailRequest
+                var mailPayload1 = new MailRequest
                 {
                     Body = mailBody.ToString(),
                     Subject = "Leave Request",
@@ -966,18 +982,18 @@ namespace hrms_be_backend_business.Logic
                     EmailTitle = "Leave Request"
                 };
 
-                _logger.LogInformation($"Email payload to send: {JsonConvert.SerializeObject(mailPayload)}.");
-                _mailService.SendEmailAsync(mailPayload, null);
+                _logger.LogInformation($"Email payload to send: {JsonConvert.SerializeObject(mailPayload1)}.");
+                _mailService.SendEmailAsync(mailPayload1, null);
 
 
                 //Send mail to Approver
-                mailBody = new StringBuilder();
-                mailBody.Append($"Dear {approver.FirstName} {approver.LastName} {approver.MiddleName} <br/> <br/>");
-                mailBody.Append($"Kindly login to approve a leave request by {requester.FirstName} {requester.MiddleName}  {requester.LastName}<br/> <br/>");
-                mailBody.Append($"<b>Start Date : <b/> {leaveRequestLineItem.startDate}  <br/> ");
-                mailBody.Append($"<b>End Date : <b/> {leaveRequestLineItem.endDate}   <br/> ");
+                var mailBody1 = new StringBuilder();
+                mailBody1.Append($"Dear {approver.FirstName} {approver.LastName} {approver.MiddleName} <br/> <br/>");
+                mailBody1.Append($"Kindly login to approve a leave request by {requester.FirstName} {requester.MiddleName}  {requester.LastName}<br/> <br/>");
+                mailBody1.Append($"<b>Start Date : <b/> {leaveRequestLineItem.startDate}  <br/> ");
+                mailBody1.Append($"<b>End Date : <b/> {leaveRequestLineItem.endDate}   <br/> ");
 
-                mailPayload = new MailRequest
+                var mailPayload2 = new MailRequest
                 {
                     Body = mailBody.ToString(),
                     Subject = "Leave Request",
@@ -987,8 +1003,8 @@ namespace hrms_be_backend_business.Logic
 
                 };
 
-                _logger.LogError($"Email payload to send: {JsonConvert.SerializeObject(mailPayload)}.");
-                _mailService.SendEmailAsync(mailPayload, null);
+                _logger.LogError($"Email payload to send: {JsonConvert.SerializeObject(mailPayload2)}.");
+                _mailService.SendEmailAsync(mailPayload2, null);
             }
            
             //  _mailService.SendLeaveApproveMailToApprover(leaveApprovalLineItem.ApprovalEmployeeId, leaveRequestLineItem.EmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
@@ -1080,7 +1096,7 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 var leaveApprovalInfo = await GetLeaveApprovalInfo(0, leaveRequestLineItem.LeaveRequestLineItemId.Value);
-                if (leaveApprovalInfo != null)
+                if (leaveApprovalInfo != null && leaveApprovalInfo.ApprovalStatus != "Completed")
                 {
                     var approvals = await GetleaveApprovalLineItems(leaveApprovalInfo.LeaveApprovalId);
                     if (approvals.Count > 0)
@@ -1096,30 +1112,37 @@ namespace hrms_be_backend_business.Logic
                     
                 }
                 var lineItem = await _leaveRequestRepository.RescheduleLeaveRequest(leaveRequestLineItem);
-                if (lineItem != null)
+                Task t = new Task(() =>
+
                 {
-                    var userDetails = await _accountRepository.GetUserByEmployeeId(leaveRequestLineItem.EmployeeId);
-                    //  var app = await _accountRepository.GetUserByEmployeeId(leaveApprovalLineItem.ApprovalEmployeeId);
-                    StringBuilder mailBody = new StringBuilder();
-                    mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} <br/> <br/>");
-                    mailBody.Append($"Kindly note that you have successfully rescheduled your leave request. See details below<br/> <br/>");
-                    mailBody.Append($"<b>Start Date : <b/> {leaveRequestLineItem.startDate}  <br/> ");
-                    mailBody.Append($"<b>End Date : <b/> {leaveRequestLineItem.endDate}   <br/> ");
-
-                    var mailPayload = new MailRequest
+                    if (lineItem != null)
                     {
-                        Body = mailBody.ToString(),
-                        Subject = "Reschedule Leave Request",
-                        ToEmail = userDetails.OfficialMail,
-                    };
+                        var userDetails = _accountRepository.GetUserByEmployeeId(leaveRequestLineItem.EmployeeId).Result;
+                        //  var app = await _accountRepository.GetUserByEmployeeId(leaveApprovalLineItem.ApprovalEmployeeId);
+                        StringBuilder mailBody = new StringBuilder();
+                        mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} <br/> <br/>");
+                        mailBody.Append($"Kindly note that you have successfully rescheduled your leave request. See details below<br/> <br/>");
+                        mailBody.Append($"<b>Start Date : <b/> {leaveRequestLineItem.startDate}  <br/> ");
+                        mailBody.Append($"<b>End Date : <b/> {leaveRequestLineItem.endDate}   <br/> ");
 
-                    _logger.LogError($"Email payload to send: {mailPayload}.");
-                    _mailService.SendEmailAsync(mailPayload, null);
+                        var mailPayload = new MailRequest
+                        {
+                            Body = mailBody.ToString(),
+                            Subject = "Reschedule Leave Request",
+                            ToEmail = userDetails.OfficialMail,
+                        };
 
-                    response.Data = lineItem;
-                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
-                    response.ResponseMessage = "Reschedule Leave was successful.";
-                }
+                        _logger.LogError($"Email payload to send: {mailPayload}.");
+                        _mailService.SendEmailAsync(mailPayload, null);
+
+                        response.Data = lineItem;
+                        response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                        response.ResponseMessage = "Reschedule Leave was successful.";
+                    }
+                });
+
+                t.Start();
+                
                 return response;
 
 

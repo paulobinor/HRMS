@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.ComponentModel.Design;
 using System.Data;
+using System.Diagnostics.Metrics;
 using System.Text;
 
 namespace hrms_be_backend_business.Logic
@@ -233,31 +234,72 @@ namespace hrms_be_backend_business.Logic
 
         public async Task<BaseResponse> UpdateAnnualLeaveApproval(LeaveApprovalLineItem leaveApprovalLineItem)
         {
-            var leaveApprovals = await _leaveApprovalRepository.GetLeaveApprovals(leaveApprovalLineItem.ApprovalEmployeeId, leaveApprovalLineItem.EmployeeID);
-            var leaveapprovalLineItems = new List<LeaveApprovalLineItem>();
-            foreach (var item in leaveApprovals)
+         
+            try
             {
-                var info = await _leaveApprovalRepository.GetAnnualLeaveApprovalInfo(item.LeaveApprovalId);
-                foreach (var LeaveApprovalLineItem1 in info.LeaveApprovalLineItems)
+                _logger.LogInformation($"About to get leave approval details for update");
+                var leaveApprovals = await _leaveApprovalRepository.GetLeaveApprovals(leaveApprovalLineItem.ApprovalEmployeeId, leaveApprovalLineItem.EmployeeID);
+
+                _logger.LogInformation($"Response from GetLeaveApprovals method:{JsonConvert.SerializeObject(leaveApprovals)}");
+                if (leaveApprovals == null || leaveApprovals.Count <= 0)
                 {
-                    if (LeaveApprovalLineItem1.ApprovalEmployeeId == leaveApprovalLineItem.ApprovalEmployeeId && LeaveApprovalLineItem1.ApprovalStep == leaveApprovalLineItem.ApprovalStep)
+                    _logger.LogError($"We could not get any records for the the given leave ApprovalEmployeeId:{leaveApprovalLineItem.ApprovalEmployeeId}");
+                    return new BaseResponse { Data = null, ResponseCode = "25", ResponseMessage = $"We could not get any records for the the given leave ApprovalEmployeeId:{leaveApprovalLineItem.ApprovalEmployeeId}" };
+                }
+
+                var leaveapprovalLineItems = new List<LeaveApprovalLineItem>();
+                _logger.LogInformation($"Leave approval update will treat {leaveApprovals.Count} records");
+                int count = 0;
+                foreach (var item in leaveApprovals)
+                {
+                    count++;
+                    _logger.LogInformation($"Now treating {count} of {leaveApprovals.Count}  leave Approval with LeaveApprovalLineItemId:{item.LeaveApprovalLineItemId}");
+
+                    
+                    _logger.LogInformation($"About to fetch Annual Leave info for LeaveApprovalId: {item.LeaveApprovalId}");
+                    var info = await _leaveApprovalRepository.GetAnnualLeaveApprovalInfo(item.LeaveApprovalId);
+                    _logger.LogInformation($"Response from GetAnnualLeaveApprovalInfo: {JsonConvert.SerializeObject(info)}");
+                    if (info == null)
                     {
-                        leaveapprovalLineItems.Add(LeaveApprovalLineItem1);
-                        if (ConfigSettings.leaveRequestConfig.EnableSingleApproval)
+
+                        _logger.LogError($"We could not get any records for the the given leave LeaveApprovalId:{item.LeaveApprovalId}");
+                       
+                        return new BaseResponse { Data = null, ResponseCode = "25", ResponseMessage = "No Annual Leave Record found" };
+                    }
+
+                    int count1 = 0;
+                    foreach (var LeaveApprovalLineItem1 in info.LeaveApprovalLineItems)
+                    {
+                        _logger.LogInformation($"Now treating {count1} of {info.LeaveApprovalLineItems} leave Approval item LeaveApprovalLineItemId:{LeaveApprovalLineItem1.LeaveApprovalLineItemId}");
+
+                        if (LeaveApprovalLineItem1.ApprovalEmployeeId == leaveApprovalLineItem.ApprovalEmployeeId && LeaveApprovalLineItem1.ApprovalStep == leaveApprovalLineItem.ApprovalStep)
                         {
 
-                            break;
+                            leaveapprovalLineItems.Add(LeaveApprovalLineItem1);
+                            if (ConfigSettings.leaveRequestConfig.EnableSingleApproval)
+                            {
+
+                                break;
+                            }
                         }
                     }
                 }
+                _logger.LogInformation($"Items to update: {JsonConvert.SerializeObject(leaveapprovalLineItems)}");
+                var res = await UpdateLeaveApproveLineItems(leaveapprovalLineItems, leaveApprovalLineItem.ApprovalStatus, leaveApprovalLineItem.Comments);
+                return res;
             }
-            var res = await UpdateLeaveApproveLineItems(leaveapprovalLineItems, leaveApprovalLineItem.ApprovalStatus, leaveApprovalLineItem.Comments);
-            return res;
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occured: {ex.Message}, Stack trace: {ex.StackTrace}");
+
+                throw;
+            }
         }
         public async Task<BaseResponse> UpdateLeaveApproveLineItems(List<LeaveApprovalLineItem> leaveApprovalLineItems, string approvalStatus, string comments = "N/A")
         {
-            //check if us
-          //  StringBuilder errorOutput = new StringBuilder();
+            //check if us
+            //  StringBuilder errorOutput = new StringBuilder();
+
             var updateLeaveRequestLineItem = new LeaveRequestLineItem();
             bool sendMailToApprover = false;
             bool sendMailToReliever = false;
@@ -267,17 +309,25 @@ namespace hrms_be_backend_business.Logic
             var approvalItems = new List<LeaveApprovalLineItem>();
             //  var leaveApprovalItems = _leaveApprovalRepository.GetPendingLeaveApprovals(noOfDaysTaken);
 
+            _logger.LogInformation($"About to update approval Items to approval status: {approvalStatus}");
+            _logger.LogInformation($"No of items to set status to{approvalStatus} are {leaveApprovalLineItems.Count}");
+            int approvalCount = 1;
             foreach (var leaveApprovalLineItem in leaveApprovalLineItems)
             {
+                _logger.LogInformation($"Now treating {approvalCount} of {leaveApprovalLineItems.Count}  leave Approval with LeaveApprovalLineItemId:{leaveApprovalLineItem.LeaveApprovalLineItemId}");
                 try
                 {
-                    // CHeck if it is the Approver's turn to approve
+
+                    // Check if it is the Approver's turn to approve
+                    _logger.LogInformation($"About to Check if it is the Approver's turn to approve: LeaveApprovalLineItemId:{leaveApprovalLineItem.LeaveApprovalLineItemId}");
                     var Emilokan = (await _leaveApprovalRepository.GetPendingLeaveApprovals(leaveApprovalLineItem.ApprovalEmployeeId, "")).FirstOrDefault(x => x.LeaveApprovalLineItemId == leaveApprovalLineItem.LeaveApprovalLineItemId);
                     if (Emilokan != null)
                     {
                         if (Emilokan.LastApprovalEmployeeID != leaveApprovalLineItem.ApprovalEmployeeId)
                         {
                             //Not your turn to approve at this time
+
+                            _logger.LogError($"It is not the approver's turn to approve at this time");
                             response.ResponseCode = "401";
                             response.ResponseMessage = "You cannot peform this action at this time";
                             response.Data = null;
@@ -286,8 +336,12 @@ namespace hrms_be_backend_business.Logic
                     }
                     leaveApprovalLineItem.ApprovalStatus = approvalStatus;
                     leaveApprovalLineItem.Comments = comments;
+                    _logger.LogInformation($"About to update approval Item with payload:  to approval status: {JsonConvert.SerializeObject(leaveApprovalLineItem)}");
+
                     var repoResponse = await _leaveApprovalRepository.UpdateLeaveApprovalLineItem(leaveApprovalLineItem);
                     approvalItems.Add(repoResponse);
+
+                    _logger.LogInformation($"Response from UpdateLeaveApprovalLineItem: {JsonConvert.SerializeObject(repoResponse)}");
                     if (repoResponse == null)
                     {
                         response.ResponseCode = ((int)ResponseCode.Ok).ToString();
@@ -296,28 +350,27 @@ namespace hrms_be_backend_business.Logic
                         return response;
                     }
                     //if (approvalStatus == "Approved")
-                    //{
-                    //    leaveApprovalLineItem.IsApproved = true;
-                    //}
-                    //else
-                    //{
-                    //    leaveApprovalLineItem.IsApproved = false;
-                    //}
-                    //_ = ProcessLeaveApproval(repoResponse.LeaveApprovalId, repoResponse.IsApproved);
-                    //Get the eapproval information of the current leave request
+
+                    _logger.LogInformation($"About to fetch leave approval info for {leaveApprovalLineItem.LeaveApprovalId}");
                     var currentLeaveApprovalInfo = await _leaveApprovalRepository.GetLeaveApprovalInfo(leaveApprovalLineItem.LeaveApprovalId);
 
+                    _logger.LogInformation($"Response from GetLeaveApprovalInfo: {JsonConvert.SerializeObject(currentLeaveApprovalInfo)}");
 
                     if (currentLeaveApprovalInfo == null)
                     {
+                        _logger.LogError($"We could not fetch the current leave approval info at this time");
                         response.ResponseCode = ((int)ResponseCode.Ok).ToString();
-                        response.ResponseMessage = "an error occured while processing your request. Please contact your administrator for further assistance";
+                        response.ResponseMessage = "An error occured while processing your request. Please contact your administrator for further assistance";
                         //  response.Data = repoResponse;
                         return response;
                     }
-                   
+
+                    _logger.LogInformation($"Get the current request being approved/denied");
                     //Get the current request being approved/denied
                     var leaveRequestLineItem = await _leaveRequestRepository.GetLeaveRequestLineItem(currentLeaveApprovalInfo.LeaveRequestLineItemId);
+
+
+                    _logger.LogInformation($"Response from GetLeaveRequestLineItem: {JsonConvert.SerializeObject(leaveRequestLineItem)}");
 
                     if (leaveRequestLineItem == null)
                     {
@@ -332,7 +385,7 @@ namespace hrms_be_backend_business.Logic
                     {
                         if (currentLeaveApprovalInfo.RequiredApprovalCount == currentLeaveApprovalInfo.CurrentApprovalCount) //all approvals is complete
                         {
-
+                            _logger.LogInformation($"Approval has been completed for the leave");
                             currentLeaveApprovalInfo.ApprovalStatus = "Completed";
 
                             currentLeaveApprovalInfo.Comments = "Approved";
@@ -352,7 +405,22 @@ namespace hrms_be_backend_business.Logic
                             currentLeaveApprovalInfo.CurrentApprovalCount += 1;
 
                             // currentLeaveApprovalInfo.ApprovalStatus = $"Pending on Approval count: {repoResponse.ApprovalStep}";
+
+                            _logger.LogInformation($"About to fetch next approval for LeaveApprovalId: {repoResponse.LeaveApprovalId}");
+
                             nextApprovalLineItem = await _leaveApprovalRepository.GetLeaveApprovalLineItem(repoResponse.LeaveApprovalId, currentLeaveApprovalInfo.CurrentApprovalCount);
+
+                            _logger.LogInformation($"Response from GetLeaveRequestLineItem: {JsonConvert.SerializeObject(leaveRequestLineItem)}");
+
+                            if (nextApprovalLineItem == null)
+                            {
+                                response.ResponseCode = ((int)ResponseCode.NotFound).ToString();
+                                _logger.LogError($"Failed to get current Next Approval item while trying to procces the request for: {JsonConvert.SerializeObject(leaveApprovalLineItem)}");
+                                response.ResponseMessage = "an error occured while processing current Approval. We could not get the next approver from the db. Please contact your administrator for further assistance";
+                               
+                                return response;
+                            }
+
                             currentLeaveApprovalInfo.CurrentApprovalID = (int)nextApprovalLineItem.ApprovalEmployeeId;
 
                             currentLeaveApprovalInfo.Comments = $"Pending on {nextApprovalLineItem.ApprovalPosition}";
@@ -361,8 +429,12 @@ namespace hrms_be_backend_business.Logic
 
                         if (sendMailToApprover)
                         {
+                            _logger.LogInformation($"About to send mail to next approver with payload: {JsonConvert.SerializeObject(new { nextApprovalLineItem.ApprovalEmployeeId, leaveRequestLineItem.EmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate})}");
+
                             //Send mail to next approver
                             _mailService.SendLeaveApproveMailToApprover(nextApprovalLineItem.ApprovalEmployeeId, leaveRequestLineItem.EmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
+
+                            _logger.LogInformation($"About to send confirmation mail to requester with payload: {JsonConvert.SerializeObject(new { leaveRequestLineItem.EmployeeId, leaveApprovalLineItem.ApprovalEmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate })}");
 
                             _mailService.SendLeaveApproveConfirmationMail(leaveRequestLineItem.EmployeeId, leaveApprovalLineItem.ApprovalEmployeeId, leaveRequestLineItem.startDate, leaveRequestLineItem.endDate);
 
@@ -424,6 +496,7 @@ namespace hrms_be_backend_business.Logic
                     }
                     else if (!repoResponse.IsApproved || repoResponse.ApprovalStatus == "Disapproved") // Leave approval is denied
                     {
+                        _logger.LogInformation($"Approval has been completed for the leave");
                         currentLeaveApprovalInfo.ApprovalStatus = "Completed";
                         currentLeaveApprovalInfo.Comments = $"Disapproved by {repoResponse.ApprovalPosition}";
                         if (!string.IsNullOrEmpty(repoResponse.Comments))
@@ -431,14 +504,16 @@ namespace hrms_be_backend_business.Logic
                             currentLeaveApprovalInfo.Comments += "," + repoResponse.Comments;
 
                         }
+
+                        _logger.LogInformation($"About to send disapproval mail to requester with payload: {JsonConvert.SerializeObject(new { leaveRequestLineItem.EmployeeId, repoResponse.ApprovalEmployeeId })}");
+
                         _mailService.SendLeaveDisapproveConfirmationMail(leaveRequestLineItem.EmployeeId, repoResponse.ApprovalEmployeeId);
                         response.ResponseMessage = "Disapproved Successfully";
                     }
-                    #region Depricated
-                    //await _leaveRequestRepository.UpdateLeaveRequestLineItemApproval(leaveRequestLineItem);
-                    #endregion
 
-                    _ = UpdateLeavePlanner(leaveRequestLineItem);
+
+                    //  _ = UpdateLeavePlanner(leaveRequestLineItem);
+                    _logger.LogInformation($"About to update  UpdateLeaveApprovalInfo. Payload: {JsonConvert.SerializeObject(currentLeaveApprovalInfo)}");
                     _ = _leaveApprovalRepository.UpdateLeaveApprovalInfo(currentLeaveApprovalInfo);
 
                     response.ResponseCode = ((int)ResponseCode.Ok).ToString();
@@ -456,6 +531,7 @@ namespace hrms_be_backend_business.Logic
 
                     return response;
                 }
+                approvalCount++;
             }
             return response;
 

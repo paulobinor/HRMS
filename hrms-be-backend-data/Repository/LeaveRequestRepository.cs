@@ -389,7 +389,6 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-
         public async Task<EmpLeaveRequestInfo> GetAnnualLeaveInfo(long employeeId = 0, long companyId = 0, string LeaveStatus = "Active")
         {
             try
@@ -403,7 +402,7 @@ namespace hrms_be_backend_data.Repository
                 if (res != null)
                 {
                     res.leaveRequestLineItems = await GetAnnualLeaveRequestLineItems(employeeId);
-
+                    res.NoOfDaysTaken = res.leaveRequestLineItems.Sum(x=>x.LeaveLength);
                     return res;
                 }
                 return null;
@@ -549,6 +548,7 @@ namespace hrms_be_backend_data.Repository
                 var res = await _dapperGeneric.Get<LeaveApprovalInfo>(ApplicationConstant.Sp_GetLeaveApprovalByRequestItem, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
+                   // res.LeaveApprovalLineItems = await GetLeaveApprovalLineItems(res.LeaveApprovalId);
                     return res;
                 }
                 return null;

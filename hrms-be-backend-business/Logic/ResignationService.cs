@@ -208,7 +208,7 @@ namespace hrms_be_backend_business.Logic
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error Submitting resignation", ex);
+                _logger.LogError($"Error Submitting resignation: {ex.Message}, Stack trace: {ex.StackTrace}");
                 return new ExecutedResult<string>() { responseMessage = "An error occurred", responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
             }
         }

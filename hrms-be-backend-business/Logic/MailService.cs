@@ -214,7 +214,7 @@ namespace hrms_be_backend_business.AppCode
                 var ApprovedByUserDetails = await _accountRepository.GetUserByEmployeeId(ApprovedByEmployeeId);
                 StringBuilder mailBody = new StringBuilder();
                 mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
-                mailBody.Append($"You leave has been approved by {ApprovedByUserDetails.FirstName} {ApprovedByUserDetails.LastName} {ApprovedByUserDetails.MiddleName} <br/> <br/>");
+                mailBody.Append($"Your leave has been approved by {ApprovedByUserDetails.FirstName} {ApprovedByUserDetails.LastName} {ApprovedByUserDetails.MiddleName} <br/> <br/>");
 
                 mailBody.Append($"<b> Your leave start from : <b/> {startDate} <br/> ");
                 mailBody.Append($"<b>and ends on : <b/> {endDate} <br/> ");

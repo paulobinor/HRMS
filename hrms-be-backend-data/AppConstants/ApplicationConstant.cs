@@ -91,6 +91,7 @@
         public static string Sp_GetPendingAnnualLeaveApprovals { get; set; } = "Sp_GetPendingAnnualLeaveApprovals";
         public static string Sp_GetAllAnnualLeaveRequestLineItems { get; set; } = "Sp_GetAllAnnualLeaveRequestLineItems";
         public static string Sp_GetLeaveApprovals { get; internal set; } = "Sp_GetLeaveApprovals";
+        public static string Sp_GetAnnualLeaveApprovals { get; internal set; } = "Sp_GetAnnualLeaveApprovals";
 
         //System Default
         public static int DefaultDeptId = 1;

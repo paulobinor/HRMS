@@ -100,6 +100,24 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
+        private async Task<string> SaveFileAsync(IFormFile formFile)
+        {
+            var _folderPath = _config["FileUploadConfig:UploadFolderPath"];
+            if (formFile == null || formFile.Length == 0)
+                throw new ArgumentException("Invalid file.");
+
+            var fileName = Path.GetFileName(formFile.FileName);
+            var filePath = Path.Combine(_folderPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await formFile.CopyToAsync(stream);
+            }
+
+            // Return the URL path of the saved file (assuming your application is hosted on a web server)
+            return $"/{_folderPath}/{fileName}".Replace("\\", "/");
+        }
+
         public async Task<ExecutedResult<string>> UploadFile(IFormFile formFile, string FullName)
         {
             try
@@ -116,38 +134,42 @@ namespace hrms_be_backend_business.Logic
                 if (!Directory.Exists(uploadPath))
                     Directory.CreateDirectory(uploadPath);
 
+
+
                 if (string.IsNullOrEmpty(errorMessages))
                 {
+                    var url = await SaveFileAsync(formFile);
 
-                    using HttpClient httpClient = new HttpClient();
-                    FileUploadRequest request = new FileUploadRequest
-                    {
-                        AppName = "HRMS",
-                        UserId = FullName,
-                        Image = formFile
-                    };
-                    MultipartFormDataContent formDataContent = new MultipartFormDataContent
-                    {
-                        { new StreamContent(request.Image.OpenReadStream()), "Image", request.Image.FileName },
-                        { new StringContent(request.AppName), "AppName" },
-                        { new StringContent(request.UserId), "UserId" }
-                    };
+                    //  using HttpClient httpClient = new HttpClient();
+                    //  FileUploadRequest request = new FileUploadRequest
+                    //  {
+                    //      AppName = "HRMS",
+                    //      UserId = FullName,
+                    //      Image = formFile
+                    //  };
+                    //  MultipartFormDataContent formDataContent = new MultipartFormDataContent
+                    //  {
+                    //      { new StreamContent(request.Image.OpenReadStream()), "Image", request.Image.FileName },
+                    //      { new StringContent(request.AppName), "AppName" },
+                    //      { new StringContent(request.UserId), "UserId" }
+                    //  };
 
-                    string url = uploadBaseURL + "UploadFile";
-                    HttpResponseMessage response = await httpClient.PostAsync(url, formDataContent);
-                    if (response.StatusCode != HttpStatusCode.OK)
-                    {
-                        await response.Content.ReadAsStringAsync();
-                        return new ExecutedResult<string>() { responseMessage = errorMessages, responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
-                    }
-                    var uploadResponse = JsonConvert.DeserializeObject<FileResponse>(await response.Content.ReadAsStringAsync());
-                    if (uploadResponse.ResponseCode != "00")
-                    {
-                        _logger.LogInformation("file upload failed");
-                        return new ExecutedResult<string>() { responseMessage = errorMessages, responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                    //// string url = uploadBaseURL + "UploadFile";
+                    //  HttpResponseMessage response = await httpClient.PostAsync(url, formDataContent);
+                    //  if (response.StatusCode != HttpStatusCode.OK)
+                    //  {
+                    //      await response.Content.ReadAsStringAsync();
+                    //      return new ExecutedResult<string>() { responseMessage = errorMessages, responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                    //  }
+                    //  var uploadResponse = JsonConvert.DeserializeObject<FileResponse>(await response.Content.ReadAsStringAsync());
+                    //  if (uploadResponse.ResponseCode != "00")
+                    //  {
+                    //      _logger.LogInformation("file upload failed");
+                    //      return new ExecutedResult<string>() { responseMessage = errorMessages, responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
 
-                    }
-                    return new ExecutedResult<string>() { responseMessage = "File uploaded Successfully", responseCode = 00.ToString(), data = uploadResponse.UploadUrl };
+                    //  }
+                    //return new ExecutedResult<string>() { responseMessage = "File uploaded Successfully", responseCode = 00.ToString(), data = uploadResponse.UploadUrl };
+                    return new ExecutedResult<string>() { responseMessage = "File uploaded Successfully", responseCode = 00.ToString(), data = url };
                 }
                 else
                 {

@@ -23,7 +23,7 @@ namespace hrms_be_backend_common.Models
         public int TotalDays { get; set; }
         public int NoOfDays { get; set; }
         public int RemainingDays { get { return NoOfDays; } }
-        public int NoOfDaysTaken { get { return (TotalDays - RemainingDays); } }
+        public int NoOfDaysTaken { get; set; }
         public int LeavePeriod { get; set; }
       //  public long RelieverUserID { get; set; }
         public long CreatedByUserId { get; set; }

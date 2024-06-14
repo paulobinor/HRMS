@@ -72,13 +72,13 @@ namespace hrms_be_backend_api.Controller
 
         [HttpPost("RescheduleAnnual")]
         [Authorize]
-        public async Task<IActionResult> RescheduleAnnualLeaveRequest([FromBody] List<LeaveRequestLineItem> leaveRequestLineItems)
+        public async Task<IActionResult> Reschedule([FromBody] List<LeaveRequestLineItem> leaveRequestLineItems)
         {
             var response = new BaseResponse();
             try
             {
                 var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-                _logger.LogInformation($"Received RescheduleLeave request. Payload: {JsonConvert.SerializeObject(leaveRequestLineItems)} from remote address: {RemoteIpAddress}");
+                _logger.LogInformation($"Received request to reschedule annual leave. Payload: {JsonConvert.SerializeObject(leaveRequestLineItems)} from remote address: {RemoteIpAddress}");
 
                 var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
 
@@ -170,21 +170,21 @@ namespace hrms_be_backend_api.Controller
 
 
         [HttpPost("UpdateAnnualLeave")]
-          [Authorize]
+        //[Authorize]
         public async Task<IActionResult> ApproveAnnualLeave(LeaveApprovalLineItem leaveApprovalLineItem)
         {
             _logger.LogInformation($"recieved request to update leaveapproval by approval Id: {leaveApprovalLineItem.ApprovalEmployeeId}  payload is: {JsonConvert.SerializeObject(leaveApprovalLineItem)}");
             var response = new BaseResponse();
-            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            _logger.LogInformation($"Received Approve Leave request. Payload: {JsonConvert.SerializeObject(leaveApprovalLineItem)} from remote address: {RemoteIpAddress}");
+            //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            //_logger.LogInformation($"Received Approve Leave request. Payload: {JsonConvert.SerializeObject(leaveApprovalLineItem)} from remote address: {RemoteIpAddress}");
 
-            var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
-            var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-            if (accessUser.data == null)
-            {
-                return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+            //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+            //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
-            }
+            //}
             //var leaveapprovals = await _leaveApprovalService.GetleaveApprovalLineItems(leaveApprovalLineItem.LeaveApprovalId);
             //foreach (var item in leaveapprovals)
             //{

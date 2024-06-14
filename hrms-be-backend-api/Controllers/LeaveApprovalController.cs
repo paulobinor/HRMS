@@ -44,20 +44,20 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         }
 
         [HttpPost("Approve")]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> ApproveLeaveRequestLineItem(LeaveApprovalLineItem leaveApprovalLineItem)
         {
             var response = new BaseResponse();
-            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            _logger.LogInformation($"Received Approve Leave request. Payload: {JsonConvert.SerializeObject(leaveApprovalLineItem)} from remote address: {RemoteIpAddress}");
+            //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            //_logger.LogInformation($"Received Approve Leave request. Payload: {JsonConvert.SerializeObject(leaveApprovalLineItem)} from remote address: {RemoteIpAddress}");
 
-            var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
-            var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-            if (accessUser.data == null)
-            {
-                return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+            //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+            //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
-            }
+            //}
             var res = await _leaveApprovalService.UpdateLeaveApproveLineItem(leaveApprovalLineItem);
             return Ok(res);
         }

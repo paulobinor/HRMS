@@ -10,7 +10,7 @@ namespace hrms_be_backend_data.Helpers
 {
     public class PasswordManagerHelper
     {     
-        public static bool DoesPasswordMatch(string hashedPwdFromDatabase, string userEnteredPassword)
+        public static bool IsMatch(string hashedPwdFromDatabase, string userEnteredPassword)
         {
             return BCrypt.Net.BCrypt.Verify(userEnteredPassword, hashedPwdFromDatabase);
         }

@@ -65,28 +65,31 @@ namespace hrms_be_backend_business.Logic
                 login.Password = Encoding.UTF8.GetString(Convert.FromBase64String(login.Password));
              
                 var repoResponse = await _accountRepository.AuthenticateUser(email, _passwordConfig.MaxNumberOfFailedAttemptsToLogin, DateTime.Now);
+
+                _logger.LogInformation($"Response from AuthenticateUser: {repoResponse}");
+
                 if (!repoResponse.Contains("Success"))
                 {
                     return new ExecutedResult<LoginResponse>() { responseMessage = repoResponse, responseCode = ResponseCode.AuthorizationError.ToString("D").PadLeft(2, '0'), data = null };
                 }
+
                 var userId = repoResponse.Replace("Success", "");
+
                 var user = await _accountRepository.FindUser(Convert.ToInt64(userId), null, null);
 
-                var isPasswordMatch = PasswordManagerHelper.DoesPasswordMatch(user.PasswordHash, login.Password);
-                if (!isPasswordMatch)
+               // var isPasswordMatch = PasswordManagerHelper.IsMatch(user.PasswordHash, login.Password);
+                if (!PasswordManagerHelper.IsMatch(user.PasswordHash, login.Password))
                 {
                     var attemptCount = user.LoginFailedAttemptsCount + 1;
                     await _accountRepository.UpdateLastLoginAttempt(attemptCount, user.OfficialMail);
 
                     if (attemptCount >= _passwordConfig.MaxNumberOfFailedAttemptsToLogin)
                     {
-                        return new ExecutedResult<LoginResponse>() { responseMessage = $"You have exceeded number of attempts. your account has been locked. Please contact admin.", responseCode = ResponseCode.NotAuthenticated.ToString("D").PadLeft(2, '0'), data = null };
+                        return new ExecutedResult<LoginResponse>() { responseMessage = $"Number of failed login attempts exceeded!. Account locked. Please contact admin for further assistance.", responseCode = ResponseCode.NotAuthenticated.ToString("D").PadLeft(2, '0'), data = null };
                     }
                     return new ExecutedResult<LoginResponse>()
                     {
-                        responseMessage = $"Invalid Password! You have made {attemptCount} unsuccessful attempt(s). " +
-                                               $"The maximum retry attempts allowed is {_passwordConfig.MaxNumberOfFailedAttemptsToLogin}. " +
-                                               $"If {_passwordConfig.MaxNumberOfFailedAttemptsToLogin} is exceeded, then you will be locked out of the system",
+                        responseMessage = $"Invalid Password! You have made {attemptCount} unsuccessful attempt(s). The maximum retry attempts is {_passwordConfig.MaxNumberOfFailedAttemptsToLogin}",
                         responseCode = ResponseCode.NotAuthenticated.ToString("D").PadLeft(2, '0'),
                         data = null
                     };
@@ -128,8 +131,6 @@ namespace hrms_be_backend_business.Logic
               
                 accessUserVm.CompanyId = user.CompanyId;
               
-
-
                 var authResponse = await _jwtManager.GenerateJsonWebToken(accessUserVm);
 
                 await _accountRepository.UpdateLoginActivity(user.UserId, ipAddress, authResponse.JwtToken,DateTime.Now);
@@ -140,7 +141,6 @@ namespace hrms_be_backend_business.Logic
                     RefreshToken = authResponse.RefreshToken,
                     EmployeeDetails= employeeDetailsVm,
                     Modules=modules
-
                 };
 
                 var auditLog = new AuditLogDto
@@ -159,7 +159,7 @@ namespace hrms_be_backend_business.Logic
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception || UsersServices (Login)=====>{ex}");
+                _logger.LogError($"Exception || UsersServices (Login)=====>{ex.Message}, StackTrace: {ex.StackTrace}");
                 return new ExecutedResult<LoginResponse>() { responseMessage = $"Unable to process the operation, kindly contact the support", responseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0'), data = null };
             }
         }
@@ -387,7 +387,7 @@ namespace hrms_be_backend_business.Logic
                 var newPassword = Encoding.UTF8.GetString(Convert.FromBase64String(payload.NewPassword));
                 string oldPassword = Encoding.UTF8.GetString(Convert.FromBase64String(payload.OldPassword));
 
-                var isPasswordMatch = PasswordManagerHelper.DoesPasswordMatch(accessUser.data
+                var isPasswordMatch = PasswordManagerHelper.IsMatch(accessUser.data
                     .PasswordHash, Encoding.UTF8.GetString(Convert.FromBase64String(payload.OldPassword)));
                 if (!isPasswordMatch)
                 {
