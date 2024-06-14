@@ -35,8 +35,8 @@ namespace hrms_be_backend_data.Repository
                 //param.Add("StaffName", resignation.StaffName);
                 param.Add("SignedResignationLetter", resignation.SignedResignationLetter);
                 param.Add("CompanyID", resignation.CompanyID);
-                param.Add("ResumptionDate", resignation.ResumptionDate);
-                param.Add("ExitDate", resignation.ExitDate);
+                //param.Add("ResumptionDate", resignation.ResumptionDate);
+                //param.Add("ExitDate", resignation.ExitDate);
                 param.Add("LastDayOfWork", resignation.LastDayOfWork);
                 param.Add("CreatedByUserId", resignation.CreatedByUserId);
                 param.Add("OtherReasonForResignation", resignation.OtherReasonForResignation);

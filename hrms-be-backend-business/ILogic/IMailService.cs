@@ -13,9 +13,9 @@ namespace hrms_be_backend_business.ILogic
         Task SendLeaveDisapproveConfirmationMail(long RequesterEmployeeId, long DiapprovedByEmployeeId);
 
 
-        Task SendResignationMailFromHrToStaff(long ResigationByEmployeeId, DateTime exitDate);
-        Task SendResignationApproveMailToApprover(long ApproverEmployeeId, long ResigationByEmployeeId, DateTime exitDate);
-        Task SendResignationApproveConfirmationMail(long RequesterEmployeeId, long ApprovedByEmployeeId, DateTime exitDate);
+        Task SendResignationMailFromHrToStaff(long ResigationByEmployeeId, DateTime lastDatOfWork);
+        Task SendResignationApproveMailToApprover(long ApproverEmployeeId, long ResigationByEmployeeId, DateTime lastDatOfWork);
+        Task SendResignationApproveConfirmationMail(long RequesterEmployeeId, long ApprovedByEmployeeId, DateTime lastDatOfWork);
         Task SendResignationDisapproveConfirmationMail(long RequesterEmployeeId, long DiapprovedByEmployeeId);     
         Task SendResignationClearanceApproveMailToApprover(long ApproverEmployeeId, long ResigationByEmployeeId);
         Task SendResignationClearanceApproveConfirmationMail(long RequesterEmployeeId, long ApprovedByEmployeeId);

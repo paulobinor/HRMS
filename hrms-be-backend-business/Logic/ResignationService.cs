@@ -68,11 +68,11 @@ namespace hrms_be_backend_business.Logic
                     isModelStateValidate = false;
                     validationMessage += "  Invalid last day of work";
                 }
-                if (payload.ResumptionDate > DateTime.Now)
-                {
-                    isModelStateValidate = false;
-                    validationMessage += "  Invalid resumption date";
-                } 
+                //if (payload.ResumptionDate > DateTime.Now)
+                //{
+                //    isModelStateValidate = false;
+                //    validationMessage += "  Invalid resumption date";
+                //} 
                 //if (string.IsNullOrWhiteSpace(payload.ReasonForResignation))
                 //{
                 //    isModelStateValidate = false;
@@ -92,18 +92,18 @@ namespace hrms_be_backend_business.Logic
 
                 var resignation = new ResignationDTO
                 {
-                    ExitDate = payload.Date,
+                    //ExitDate = payload.Date,
                     CompanyID = payload.CompanyID,
-                    //StaffName = payload.StaffName,
                     DateCreated = DateTime.Now,
                     CreatedByUserId = accessUser.data.UserId,
-                    ResumptionDate  = payload.ResumptionDate,
                     LastDayOfWork = payload.LastDayOfWork,
                     EmployeeId = payload.EmployeeId,
-                    //ReasonForResignation = payload.ReasonForResignation,
                     OtherReasonForResignation=payload.OtherReasonForResignation,
                     SignedResignationLetter = payload.fileName,
-                    //StaffID = payload.StaffId
+                    //StaffID = payload.StaffId,
+                    //ResumptionDate  = payload.ResumptionDate,
+                    //ReasonForResignation = payload.ReasonForResignation,
+                    //StaffName = payload.StaffName,
                 };
 
                 dynamic resp = new ExpandoObject();
@@ -129,16 +129,16 @@ namespace hrms_be_backend_business.Logic
                 }
                 var submittedresignation = await _resignationRepository.GetResignationByID(resignationID);
 
-                _mailService.SendResignationMailFromHrToStaff(submittedresignation.EmployeeId, submittedresignation.ExitDate);
+                _mailService.SendResignationMailFromHrToStaff(submittedresignation.EmployeeId, submittedresignation.LastDayOfWork);
 
                 //Send mail to Hod/UnitHead
                 if (submittedresignation.UnitHeadEmployeeID <= 0)
                 {
-                    _mailService.SendResignationApproveMailToApprover(submittedresignation.HodEmployeeID, submittedresignation.EmployeeId, submittedresignation.ExitDate);
+                    _mailService.SendResignationApproveMailToApprover(submittedresignation.HodEmployeeID, submittedresignation.EmployeeId, submittedresignation.LastDayOfWork);
                 }
                 else
                 {
-                    _mailService.SendResignationApproveMailToApprover(submittedresignation.UnitHeadEmployeeID, submittedresignation.EmployeeId, submittedresignation.ExitDate);
+                    _mailService.SendResignationApproveMailToApprover(submittedresignation.UnitHeadEmployeeID, submittedresignation.EmployeeId, submittedresignation.LastDayOfWork);
 
                 }
 
@@ -515,12 +515,12 @@ namespace hrms_be_backend_business.Logic
 
                 if (accessUser.data.EmployeeId == resignation.HodEmployeeID)
                 {
-                    _mailService.SendResignationApproveMailToApprover(resignation.HrEmployeeID, resignation.EmployeeId, resignation.ExitDate);
+                    _mailService.SendResignationApproveMailToApprover(resignation.HrEmployeeID, resignation.EmployeeId, resignation.LastDayOfWork);
 
                 }
                 else
                 {
-                    _mailService.SendResignationApproveMailToApprover(resignation.HodEmployeeID, resignation.EmployeeId, resignation.ExitDate);
+                    _mailService.SendResignationApproveMailToApprover(resignation.HodEmployeeID, resignation.EmployeeId, resignation.LastDayOfWork);
 
                 }
 
@@ -530,7 +530,7 @@ namespace hrms_be_backend_business.Logic
 
                 }
 
-                _mailService.SendResignationApproveConfirmationMail(resignation.EmployeeId, accessUser.data.EmployeeId, resignation.ExitDate);
+                _mailService.SendResignationApproveConfirmationMail(resignation.EmployeeId, accessUser.data.EmployeeId, resignation.LastDayOfWork);
 
                 return new ExecutedResult<string>() { responseMessage = "Resignation approved successfully.", responseCode = (00).ToString(), data = null };
 
