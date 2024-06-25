@@ -62,9 +62,12 @@
         public int LGAOfOriginId { get; set; }
         public string BirthPlace { get; set; }
         public string TownOfOrigin { get; set; }
+        public string? NIN { get; set; }
+       // public string PreviousEmployerAddress { get; set; }        
         public string MaidenName { get; set; }
         public string SpouseName { get; set; }
         public string ProfileImage { get; set; }
+        public bool HasChildren { get; set; }
         public int NoOfChildren { get; set; }
         public List<UpdateEmployeeIdentificationDto> Identifications { get; set; }
     }
@@ -108,6 +111,8 @@
     public class EmployeeProfBackgroundDetailsDto
     {
         public string CompanyName { get; set; }
+        public string CompanyAddress { get; set; }
+        
         public string PositionHead { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
@@ -120,11 +125,11 @@
     }
     public class EmployeeEduBackgroundDto
     {
-        public string InstitutionName { get; set; }
-        public string CertificateName { get; set; }
-        public string CertificateDoc { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public string? InstitutionName { get; set; }
+        public string? CertificateName { get; set; }
+        public string? CertificateDoc { get; set; }
+        public DateTime StartDate { get; set; } = Convert.ToDateTime("01/01/0001");
+        public DateTime EndDate { get; set; } = Convert.ToDateTime("01/01/0001");
     }
     public class UpdateEmployeeReferenceDto
     {
@@ -145,6 +150,7 @@
         public long EmployeeId { get; set; }
         public string BankName { get; set; }
         public string BVN { get; set; }
+        public string NIN { get; set; }
         public string AccountName { get; set; }
         public string AccountNumber { get; set; }
         public string PensionAdministrator { get; set; }

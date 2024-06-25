@@ -42,6 +42,9 @@
         public DateTime DateCreated { get; set; }
         public string ProfileImage { get; set; }
         public long GenderId { get; set; }
+        public string NIN { get; set; }
+      //  public string PreviousEmployerAddress { get; set; }
+        public bool HasChildren { get; set; }
     }
     public class EmployeeIdentificationReq
     {
@@ -90,6 +93,7 @@
         public string ContactEmail { get; set; }
         public long CreatedByUserId { get; set; }
         public DateTime DateCreated { get; set; }
+        public string CompanyAddress { get; set; }
     }
     public class EmployeeReferenceReq
     {
@@ -126,6 +130,7 @@
         public string TaxNumber { get; set; }
         public long CreatedByUserId { get; set; }
         public DateTime DateCreated { get; set; }
+        public string NIN { get; set; }
     }
     public class EmployeeCompensationReq
     {

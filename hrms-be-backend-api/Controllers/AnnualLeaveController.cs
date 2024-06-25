@@ -28,23 +28,23 @@ namespace hrms_be_backend_api.Controller
             _leaveRequestService = leaveRequestService;
         }
 
-        [Authorize]
+      //  [Authorize]
         [HttpPost("CreateMultiple")]
         public async Task<ActionResult<List<LeaveRequestLineItem>>> CreateLeaveRequest([FromBody] List<CreateLeaveRequestLineItem> leaveRequests)
         {
-            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            _logger.LogInformation($"Received Create leave request. Payload: {JsonConvert.SerializeObject(leaveRequests)} from remote address: {RemoteIpAddress}");
-            var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+            //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            //_logger.LogInformation($"Received Create leave request. Payload: {JsonConvert.SerializeObject(leaveRequests)} from remote address: {RemoteIpAddress}");
+            //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
 
-            if (string.IsNullOrEmpty(accessToken))
-            {
-                return BadRequest(new { responseMessage = $"Missing authorization header value", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-            }
-            var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-            if (accessUser.data == null)
-            {
-                return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-            }
+            //if (string.IsNullOrEmpty(accessToken))
+            //{
+            //    return BadRequest(new { responseMessage = $"Missing authorization header value", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+            //}
+            //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+            //}
             List<LeaveRequestLineItem> requestLineItems = new List<LeaveRequestLineItem>();
             LeaveRequestLineItem requestLineItem = null;
             foreach (var create in leaveRequests)
@@ -71,22 +71,22 @@ namespace hrms_be_backend_api.Controller
         }
 
         [HttpPost("RescheduleAnnual")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> Reschedule([FromBody] List<LeaveRequestLineItem> leaveRequestLineItems)
         {
             var response = new BaseResponse();
             try
             {
-                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-                _logger.LogInformation($"Received request to reschedule annual leave. Payload: {JsonConvert.SerializeObject(leaveRequestLineItems)} from remote address: {RemoteIpAddress}");
+                //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                //_logger.LogInformation($"Received request to reschedule annual leave. Payload: {JsonConvert.SerializeObject(leaveRequestLineItems)} from remote address: {RemoteIpAddress}");
 
-                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+                //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
 
-                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-                if (accessUser.data == null)
-                {
-                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-                }
+                //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                //if (accessUser.data == null)
+                //{
+                //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                //}
                 var res = await _leaveRequestService.RescheduleAnnualLeaveRequest(leaveRequestLineItems);
                 return Ok(res);
             }
@@ -133,34 +133,37 @@ namespace hrms_be_backend_api.Controller
             }
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("GetEmpAnnualLeaveInfo")]
-        public async Task<IActionResult> GetAnnualLeaveInfo([FromQuery] long CompanyId, [FromQuery] long EmployeeId, [FromQuery] string LeaveStatus = "Active")
+        public async Task<IActionResult> GetAnnualLeaveInfo([FromQuery] long CompanyId, [FromQuery] long EmployeeId)
         {
             var response = new BaseResponse();
             try
             {
-                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-                _logger.LogInformation($"Received GetEmpLeaveInfo request. Payload: {JsonConvert.SerializeObject(new { CompanyId, EmployeeId, LeaveStatus })} from remote address: {RemoteIpAddress}");
+                //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                //_logger.LogInformation($"Received GetEmpLeaveInfo request. Payload: {JsonConvert.SerializeObject(new { CompanyId, EmployeeId })} from remote address: {RemoteIpAddress}");
 
-                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
-                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-                if (accessUser.data == null)
+                //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+                //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                //if (accessUser.data == null)
+                //{
+                //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+
+                //}
+                var res = await _leaveRequestService.GetEmpAnnualLeaveInfoList(EmployeeId, CompanyId);
+                if (res != null && res.Count > 0)
                 {
-                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                    response.Data = res;
+                  //  return Ok(new BaseResponse { Data = res, ResponseCode = "00", ResponseMessage = "Success" });
 
                 }
-                var res = await _leaveRequestService.GetEmpAnnualLeaveInfo(EmployeeId, CompanyId, LeaveStatus);
-                if (res.leaveRequestLineItems.Count > 0)
-                {
-                    return Ok(new BaseResponse { Data = res, ResponseCode = "00", ResponseMessage = "Success" });
-
-                }
-                return Ok(new BaseResponse { Data = null, ResponseCode = "00", ResponseMessage = "Success" });
+                response.ResponseCode = "00";
+                response.ResponseMessage = "Success";
+                return Ok(response);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception Occured: ControllerMethod : GetLeaveRequestbyId ==> {ex.Message}");
+                _logger.LogError($"Exception Occured: ControllerMethod : GetAnnualLeaveInfo ==> {ex.Message}");
                 response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = $"Exception Occured: ControllerMethod : GetLeaveRequestbyId ==> {ex.Message}";
                 response.Data = null;

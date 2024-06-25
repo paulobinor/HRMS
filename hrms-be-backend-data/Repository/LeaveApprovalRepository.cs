@@ -260,25 +260,75 @@ namespace hrms_be_backend_data.Repository
                 var res = await _dapperGeneric.GetAll<PendingLeaveApprovalItemsDto>(ApplicationConstant.Sp_GetPendingLeaveApprovals, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
-                    res = res.OrderBy(x=>x.ApprovalStep).ToList();
                     bool ispresent = false;
+                    bool ispresent1 = false;
                     List<PendingLeaveApprovalItemsDto> res1 = new List<PendingLeaveApprovalItemsDto>();
+                    List<PendingAnnualLeaveApprovalItemDto> pendingRes = new List<PendingAnnualLeaveApprovalItemDto>();
+
+
                     foreach (var item in res)
                     {
-                        if (item.EmployeeID == approvalEmployeeID && !item.ApprovalStatus.Contains("Approved", StringComparison.OrdinalIgnoreCase))
-                        {
-                            if (!ispresent)
-                            {
-                                res1.Add(item);
-                                ispresent = true;
-                            }
-                        }
-                        else
+                        var approvalLineItems = await GetLeaveApprovalLineItems(item.LeaveApprovalId);
+                        approvalLineItems = approvalLineItems.OrderBy(x => x.ApprovalStep).ToList();
+                        var approvalLineItem = approvalLineItems.FirstOrDefault(x => x.ApprovalEmployeeId == approvalEmployeeID && x.ApprovalPosition == item.Comments.Split(" ").Last().Trim());
+                        item.ApprovalStep = approvalLineItem.ApprovalStep;
+                        item.ApprovalPosition = approvalLineItem.ApprovalPosition;
+                        item.ApprovalStatus = approvalLineItem.ApprovalStatus;
+                        item.LeaveApprovalLineItemId = approvalLineItem.LeaveApprovalLineItemId;
+                        item.ApprovalEmployeeId = approvalLineItem.ApprovalEmployeeId;
+                    }
+                    res = res.OrderBy(x => x.ApprovalStep).ToList();
+                    foreach (var item in res)
+                    {
+
+                        var pendingLeaveItem = res1.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
+                        if (pendingLeaveItem == null)
                         {
                             res1.Add(item);
                         }
                     }
+
+                    //PendingAnnualLeaveApprovalItemDto pendingAnnualLeaveApprovalItemDto = null;
+                    //foreach (var item in res1)
+                    //{
+                    //    pendingAnnualLeaveApprovalItemDto = new()
+                    //    {
+                    //        FullName = item.FullName,
+                    //        //ApprovalEmployeeID = approvalEmployeeID,
+                    //        Year = item.StartDate.Year.ToString(),
+                    //        EmployeeID = item.EmployeeID,
+                    //        LeaveCount = res.FindAll(x => x.EmployeeID == item.EmployeeID).Count(),
+                    //        LeaveTypeName = item.LeaveTypeName,
+                    //        leaveRequestLineItems = res.FindAll(x => x.EmployeeID == item.EmployeeID),
+                    //        Status = item.Comments,
+                    //        TotalNoOfDays = res.FindAll(x => x.EmployeeID == item.EmployeeID).Sum(x => x.LeaveLength)
+                    //    };
+
+
+                    //    pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                    //}
                     return res1;
+
+
+                    //res = res.OrderBy(x=>x.ApprovalStep).ToList();
+                    //bool ispresent = false;
+                    //List<PendingLeaveApprovalItemsDto> res1 = new List<PendingLeaveApprovalItemsDto>();
+                    //foreach (var item in res)
+                    //{
+                    //    if (item.EmployeeID == approvalEmployeeID && !item.ApprovalStatus.Contains("Approved", StringComparison.OrdinalIgnoreCase))
+                    //    {
+                    //        if (!ispresent)
+                    //        {
+                    //            res1.Add(item);
+                    //            ispresent = true;
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        res1.Add(item);
+                    //    }
+                    //}
+                    //return res1;
                 }
                 return null;
 
@@ -344,54 +394,6 @@ namespace hrms_be_backend_data.Repository
                     List<PendingLeaveApprovalItemsDto> res1 = new List<PendingLeaveApprovalItemsDto>();
                     List<PendingAnnualLeaveApprovalItemDto> pendingRes = new List<PendingAnnualLeaveApprovalItemDto>();
 
-                    //foreach (var item in res)
-                    //{
-                    //    if (item.IsApproved)
-                    //    {
-
-                    //    }
-                    //    var count = res1.FirstOrDefault(x => x.LeaveApprovalId == item.LeaveApprovalId);
-                    //    if (count == null)
-                    //    {
-                    //        if (item)
-                    //        {
-
-                    //        }
-                    //        res1.Add(item);
-                    //    }
-                    //    else
-                    //    {
-                    //        if (item.IsApproved)
-                    //        {
-
-                    //        }
-                    //        if (ispresent == false)
-                    //        {
-                    //            res1.Add(item);
-                    //            ispresent = true;
-                    //        }
-                    //    }
-
-                    //    //if (item.EmployeeID == approvalEmployeeID && !item.ApprovalStatus.Contains("Approved", StringComparison.OrdinalIgnoreCase))
-                    //    //{
-                    //    //    if (!ispresent)
-                    //    //    {
-                    //    //        res1.Add(item);
-                    //    //        ispresent = true;
-                    //    //    }
-                    //    //}
-                    //    //else if (item.EmployeeID != approvalEmployeeID && !item.ApprovalStatus.Contains("Approved", StringComparison.OrdinalIgnoreCase))
-                    //    //{
-                    //    //    if (!ispresent1)
-                    //    //    {
-                    //    //        res1.Add(item);
-                    //    //        ispresent1 = true;
-                    //    //    }
-                    //    //}
-                    //}
-
-                    //   return res1;
-
 
                     foreach (var item in res)
                     {
@@ -408,8 +410,8 @@ namespace hrms_be_backend_data.Repository
                     foreach (var item in res)
                     {
                         
-                        var count = res1.FirstOrDefault(x=>x.EmployeeID == item.EmployeeID);
-                        if (count == null)
+                        var pendingLeaveItem = res1.FirstOrDefault(x=>x.EmployeeID == item.EmployeeID);
+                        if (pendingLeaveItem == null)
                         {
                             res1.Add(item);
                         }

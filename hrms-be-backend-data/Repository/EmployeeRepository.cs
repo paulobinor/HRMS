@@ -62,6 +62,7 @@ namespace hrms_be_backend_data.Repository
         }
         public async Task<string> ProcessEmployeePersonalInfo(EmployeePersonalInfoReq payload)
         {
+            _logger.LogInformation($"Payload to send to DB: {JsonConvert.SerializeObject(payload)}");
             try
             {
                 var param = new DynamicParameters();
@@ -76,15 +77,22 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@SpouseName", payload.SpouseName);
                 param.Add("@NoOfChildren", payload.NoOfChildren);
                 param.Add("@CreatedByUserId", payload.CreatedByUserId);
-                param.Add("@DateCreated", payload.DateCreated);
+                //param.Add("@DateCreated", payload.DateCreated);
                 param.Add("@GenderId", payload.GenderId);
                 param.Add("@ProfileImage", payload.ProfileImage);
+               // param.Add("@PreviousEmployerAddress", payload.PreviousEmployerAddress);
+                param.Add("@HasChildren", payload.HasChildren);
+                param.Add("@NIN", payload.NIN);
 
-                return await _dapper.Get<string>("sp_process_employee_personal_info", param, commandType: CommandType.StoredProcedure);
+                var res = await _dapper.Get<string>("sp_process_employee_personal_info", param, commandType: CommandType.StoredProcedure);
+
+                _logger.LogInformation($"response from DB: {res}");
+
+                return res;
             }
             catch (Exception ex)
             {
-                var err = ex.Message;
+               // var err = ex.Message;
                 _logger.LogError($"EmployeeRepository => ProcessEmployeePersonalInfo ===> {ex.Message}");
                 throw;
             }
@@ -157,6 +165,7 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
                 param.Add("@EmployeeId", payload.EmployeeId);
                 param.Add("@CompanyName", payload.CompanyName);
+                param.Add("@CompanyAddress", payload.CompanyAddress);
                 param.Add("@PositionHead", payload.PositionHead);
                 param.Add("@StartDate", payload.StartDate);
                 param.Add("@EndDate", payload.EndDate);
@@ -228,6 +237,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@EmployeeId", payload.EmployeeId);
                 param.Add("@BankName", payload.BankName);
                 param.Add("@BVN", payload.BVN);
+                param.Add("@NIN", payload.NIN);
                 param.Add("@AccountName", payload.AccountName);
                 param.Add("@AccountNumber", payload.AccountNumber);
                 param.Add("@PensionAdministrator", payload.PensionAdministrator);
@@ -488,7 +498,7 @@ namespace hrms_be_backend_data.Repository
                     commandType: CommandType.StoredProcedure
                     );
 
-                var employeeFullVm = result.Item1.SingleOrDefault<EmployeeFullVm>();
+                var employeeFullVm = result.Item1.SingleOrDefault();
                 var employeeCertificationVm = result.Item2.ToList<EmployeeCertificationVm>();
                 var employeeEduBackgroundVm = result.Item3.ToList<EmployeeEduBackgroundVm>();
                 var employeeIdentificationVm = result.Item4.ToList<EmployeeIdentificationVm>();
@@ -504,7 +514,7 @@ namespace hrms_be_backend_data.Repository
                 return returnData;
 
 
-                return await _dapper.Get<EmployeeSindgleVm>("sp_get_employee_by_id", param, commandType: CommandType.StoredProcedure);
+                //return await _dapper.Get<EmployeeSindgleVm>("sp_get_employee_by_id", param, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {

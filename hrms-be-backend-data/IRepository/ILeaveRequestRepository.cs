@@ -40,10 +40,13 @@ namespace hrms_be_backend_data.IRepository
         Task<List<LeaveRequestLineItemDto>> GetEmployeeLeaveRequests(long companyID, long employeeID);
 
         //Annual Leave
-      //  Task<EmpLeaveRequestInfo> CreateAnnualLeaveInfo(long employeeId, string CompanyID);
-        Task<EmpLeaveRequestInfo> GetAnnualLeaveInfo(long employeeId = 0, long companyId = 0, string LeaveStatus = "Active");
+        //  Task<EmpLeaveRequestInfo> CreateAnnualLeaveInfo(long employeeId, string CompanyID);
+        Task<List<AnnualLeave>> GetAnnualLeaveInfo(int employeeId, int companyId);
+        Task<AnnualLeave> GetAnnualLeaveInfo(int AnnualLeaveId);
+        Task<AnnualLeave> CreateAnnualLeaveRequest(AnnualLeave annualLeave);
+        Task<AnnualLeave> UpdateAnnualLeave(AnnualLeave anualLeave);
 
-      //  Task<EmpLeaveRequestInfo> UpdateAnnualLeaveInfo(long employeeId, string CompanyID);
+        //  Task<EmpLeaveRequestInfo> UpdateAnnualLeaveInfo(long employeeId, string CompanyID);
 
     }
 }

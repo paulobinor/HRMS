@@ -17,6 +17,7 @@
         public long CompanyId { get; set; }
         public bool IsApproved { get; set; }
         public string? UploadFilePath { get; set; } = string.Empty;
+        public int AnnualLeaveId { get; set; }
     }
 
     public class CreateLeaveRequestLineItem

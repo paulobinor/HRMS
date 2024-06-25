@@ -138,38 +138,38 @@ namespace hrms_be_backend_business.Logic
 
                 if (string.IsNullOrEmpty(errorMessages))
                 {
-                    var url = await SaveFileAsync(formFile);
+                    // var url = await SaveFileAsync(formFile);
 
-                    //  using HttpClient httpClient = new HttpClient();
-                    //  FileUploadRequest request = new FileUploadRequest
-                    //  {
-                    //      AppName = "HRMS",
-                    //      UserId = FullName,
-                    //      Image = formFile
-                    //  };
-                    //  MultipartFormDataContent formDataContent = new MultipartFormDataContent
-                    //  {
-                    //      { new StreamContent(request.Image.OpenReadStream()), "Image", request.Image.FileName },
-                    //      { new StringContent(request.AppName), "AppName" },
-                    //      { new StringContent(request.UserId), "UserId" }
-                    //  };
+                    using HttpClient httpClient = new HttpClient();
+                    FileUploadRequest request = new FileUploadRequest
+                    {
+                        AppName = "HRMS",
+                        UserId = FullName,
+                        Image = formFile
+                    };
+                    MultipartFormDataContent formDataContent = new MultipartFormDataContent
+                      {
+                          { new StreamContent(request.Image.OpenReadStream()), "Image", request.Image.FileName },
+                          { new StringContent(request.AppName), "AppName" },
+                          { new StringContent(request.UserId), "UserId" }
+                      };
 
-                    //// string url = uploadBaseURL + "UploadFile";
-                    //  HttpResponseMessage response = await httpClient.PostAsync(url, formDataContent);
-                    //  if (response.StatusCode != HttpStatusCode.OK)
-                    //  {
-                    //      await response.Content.ReadAsStringAsync();
-                    //      return new ExecutedResult<string>() { responseMessage = errorMessages, responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
-                    //  }
-                    //  var uploadResponse = JsonConvert.DeserializeObject<FileResponse>(await response.Content.ReadAsStringAsync());
-                    //  if (uploadResponse.ResponseCode != "00")
-                    //  {
-                    //      _logger.LogInformation("file upload failed");
-                    //      return new ExecutedResult<string>() { responseMessage = errorMessages, responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                     string url = uploadBaseURL + "UploadFile";
+                    HttpResponseMessage response = await httpClient.PostAsync(url, formDataContent);
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        await response.Content.ReadAsStringAsync();
+                        return new ExecutedResult<string>() { responseMessage = errorMessages, responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
+                    }
+                    var uploadResponse = JsonConvert.DeserializeObject<FileResponse>(await response.Content.ReadAsStringAsync());
+                    if (uploadResponse.ResponseCode != "00")
+                    {
+                        _logger.LogInformation("file upload failed");
+                        return new ExecutedResult<string>() { responseMessage = errorMessages, responseCode = ((int)ResponseCode.ProcessingError).ToString(), data = null };
 
-                    //  }
-                    //return new ExecutedResult<string>() { responseMessage = "File uploaded Successfully", responseCode = 00.ToString(), data = uploadResponse.UploadUrl };
-                    return new ExecutedResult<string>() { responseMessage = "File uploaded Successfully", responseCode = 00.ToString(), data = url };
+                    }
+                    return new ExecutedResult<string>() { responseMessage = "File uploaded Successfully", responseCode = 00.ToString(), data = uploadResponse.UploadUrl };
+                  //  return new ExecutedResult<string>() { responseMessage = "File uploaded Successfully", responseCode = 00.ToString(), data = url };
                 }
                 else
                 {

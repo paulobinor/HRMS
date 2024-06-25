@@ -45,5 +45,6 @@ namespace hrms_be_backend_data.IRepository
                                       Func<GridReader, IEnumerable<T5>> func5,
                                         Func<GridReader, IEnumerable<T6>> func6,
                                      CommandType commandType = CommandType.StoredProcedure);
+
     }
 }

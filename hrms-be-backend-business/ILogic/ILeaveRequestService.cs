@@ -18,11 +18,9 @@ namespace hrms_be_backend_business.ILogic
         Task<BaseResponse> GetEmployCumulativeForLeaveType(LeaveRequestLineItem leaveRequestLineItem);
         //  Task<LeaveApprovalInfo> GetLeaveApprovalInfo(long leaveApprovalId, long leaveReqestLineItemId);
         Task<EmpLeaveRequestInfo> GetEmpLeaveInfo(long employeeId, long companyId, string LeaveStatus = "Active");
-        Task<EmpLeaveRequestInfo> GetEmpAnnualLeaveInfo(long employeeId, long companyId, string LeaveStatus = "Active");
-        // Task<LeaveApprovalInfo> UpdateLeaveApprovalInfo(LeaveApprovalInfo leaveApproval);
-        //  Task<LeaveApprovalLineItem> GetLeaveApprovalLineItem(long leaveApprovalLineItemId, int approvalStep = 0);
-        //  Task<LeaveApprovalInfo> GetLeaveApprovalInfoByRequestLineItemId(long leaveRequestLineItemId);
-        // Task<List<LeaveApprovalLineItem>>GetleaveApprovalLineItems(long leaveApprovalId);
+        Task<List<AnnualLeave>> GetEmpAnnualLeaveInfoList(long employeeId, long companyId);
+        Task<AnnualLeave> GetEmpAnnualLeaveInfo(int AnnualLeaveId);
+
         Task<BaseResponse> GetAllLeaveRequest(string CompanyID);
         Task<BaseResponse> GetAllLeaveRquestLineItems(long CompanyID);
         Task<List<LeaveRequestLineItemDto>> GetEmployeeLeaveRequests(long CompanyID, long EmployeeId);

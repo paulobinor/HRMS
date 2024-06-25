@@ -473,7 +473,7 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<string>() { responseMessage = $"{validationMessage}", responseCode = ((int)ResponseCode.ValidationError).ToString(), data = null };
 
                 }
-                var repoPayload = new EmployeePersonalInfoReq
+                var repoPayload = new EmployeePersonalInfoReq //Should implement automapper
                 {
                     CreatedByUserId = accessUser.data.UserId,
                     DateCreated = DateTime.Now,
@@ -485,9 +485,12 @@ namespace hrms_be_backend_business.Logic
                     BirthPlace = payload.BirthPlace,
                     EmployeeId = payload.EmployeeId,
                     MaidenName = payload.MaidenName,
+                    HasChildren = payload.HasChildren,
+                   // PreviousEmployerAddress = payload.PreviousEmployerAddress,
                     NoOfChildren = payload.NoOfChildren,
                     SpouseName = payload.SpouseName,
                     TownOfOrigin = payload.TownOfOrigin,
+                    NIN = payload.NIN,
                     ProfileImage = payload.ProfileImage
                     
                 };
@@ -706,6 +709,7 @@ namespace hrms_be_backend_business.Logic
                             CreatedByUserId = accessUser.data.UserId,
                             DateCreated = DateTime.Now,
                             CompanyName = dat.CompanyName,
+                            CompanyAddress = dat.CompanyAddress,
                             PositionHead = dat.PositionHead,
                             ContactEmail = dat.ContactEmail,
                             EmployeeId = payload.EmployeeId,
@@ -928,6 +932,7 @@ namespace hrms_be_backend_business.Logic
                     PensionAdministrator = payload.PensionAdministrator,
                     BankName = payload.BankName,
                     BVN = payload.BVN,
+                    NIN = payload.NIN,
                     PensionPinNumber = payload.PensionPinNumber,
                     TaxNumber = payload.TaxNumber,
                 };

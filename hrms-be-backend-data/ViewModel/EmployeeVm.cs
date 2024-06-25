@@ -41,6 +41,7 @@
         public int SexId { get; set; }
         public int MaritalStatusId { get; set; }
         public string SpouseName { get; set; }
+        public bool HasChildren { get; set; }
         public string NoOfChildren { get; set; }
         public string SpouseContactAddress { get; set; }
         public string SpouseMobile { get; set; }
@@ -279,6 +280,7 @@
     {
         public long EmployeeProfesionalBackgroudId { get; set; }
         public string CompanyName { get; set; }
+        public string CompanyAddress { get; set; }
         public string PositionHead { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
