@@ -45,4 +45,19 @@
     <Folder Include="Uploads\LeaveRequests\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="EmailHandler\ResetPassword.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="EmailHandler\SendOtp.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="EmailHandler\SignUp.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="EmailHandler\SignUpWithToken.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
