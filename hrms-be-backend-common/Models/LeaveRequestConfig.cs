@@ -10,5 +10,6 @@ namespace hrms_be_backend_common.Models
     {
         public bool ValidateGender { get; set; }
         public bool EnableSingleApproval { get; set; }
+        public bool UseApprovalTable { get; set; } = false;
     }
 }

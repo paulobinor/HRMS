@@ -119,7 +119,8 @@
         public string GradeCode { get; set; }
         public long GenderID { get; set; }
         public string GenderName { get; set; }
-
+        public long SupervisorID { get; set; }
+        public long GroupHeadID { get; set; }
     }
 
     public class EmployeeSindgleVm

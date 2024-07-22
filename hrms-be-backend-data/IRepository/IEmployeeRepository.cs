@@ -35,5 +35,6 @@ namespace hrms_be_backend_data.IRepository
         Task<List<EmployeeProfBackgroundVm>> GetEmployeeProfBackground(long EmployeeId, long CompanyId);
         Task<List<EmployeeRefereeVm>> GetEmployeeReferee(long EmployeeId, long CompanyId);
         Task<int> AddEmployeeBulk(DataTable dataTable, RequesterInfo requester, long currentStaffCount, int listCount, long companyID);
+        Task<long> GetHR_ID(long companyId, long EmployeeID);
     }
 }

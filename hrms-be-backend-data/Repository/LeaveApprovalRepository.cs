@@ -340,6 +340,121 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
+        public async Task<Approvals> CreateLeaveApproval(Approvals approvals)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@ApprovalEmployeeID", approvals.ApprovalEmployeeID);
+               // param.Add("@ApprovalStatus", approvals.ApprovalStatus);
+                param.Add("@RequiredApprovalCount", approvals.RequiredApprovalCount);
+              //  param.Add("@CurrentApprovalCount", approvals.CurrentApprovalCount);
+                param.Add("@Comment", approvals.Comment);
+              //  param.Add("@EntryDate", approvals.EntryDate);
+              //  param.Add("@DateCompleted", approvals.DateCompleted);
+                param.Add("@ApprovalDescription", approvals.ApprovalDescription);
+                param.Add("@CompanyID", approvals.CompanyID);
+              //  param.Add("@IsApproved", approvals.IsApproved);
+                //if (!string.IsNullOrEmpty(v))
+                //{
+                //    param.Add("@ApprovalStatus", "All");
+                //}
+                //else
+                //{
+                //    param.Add("@ApprovalStatus", "Pending");
+                //}
+
+                var res = await _dapperGeneric.Insert<Approvals>(ApplicationConstant.Sp_CreateApprovals, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    if (approvals.ApprovalsLineItems.Count > 0)
+                    {
+                        foreach (var item in approvals.ApprovalsLineItems)
+                        {
+                            var items = new DynamicParameters();
+                            items.Add("@ApprovalID", res.ApprovalID);
+                            items.Add("@ApprovalPosition", item.ApprovalPosition);
+                            items.Add("@ApprovalEmployeeID", item.ApprovalEmployeeID);
+                           // items.Add("@ApprovalStatus", item.ApprovalStatus);
+                            items.Add("@Comments", item.Comments);
+                            items.Add("@ApprovalStep", item.ApprovalStep);
+                            //items.Add("@IsApproved", item.IsApproved);
+
+                            var res1 = await _dapperGeneric.Insert<ApprovalsLineItem>(ApplicationConstant.Sp_CreateApprovalsLineItem, items, commandType: CommandType.StoredProcedure);
+                            if (res1 != null)
+                            {
+                                res.ApprovalsLineItems.Add(res1);
+                            }
+                        }
+                    }
+                    return res;
+                }
+              
+                return default;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateLeaveApproval ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+        }
+
+        public async Task<LeaveApproval> CreateAnnualLeaveApproval(LeaveApproval leaveApproval)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@LeaveRequestLineItemId", leaveApproval.LeaveRequestLineItemId);
+                param.Add("@RequiredApprovalCount", leaveApproval.RequiredApprovalCount);
+                param.Add("@EmployeeID", leaveApproval.EmployeeID);
+                param.Add("@LastApprovalEmployeeID", leaveApproval.LastApprovalEmployeeID);
+                param.Add("@Comments", leaveApproval.Comments);
+                //  param.Add("@IsApproved", approvals.IsApproved);
+                //if (!string.IsNullOrEmpty(v))
+                //{
+                //    param.Add("@ApprovalStatus", "All");
+                //}
+                //else
+                //{
+                //    param.Add("@ApprovalStatus", "Pending");
+                //}
+
+                var res = await _dapperGeneric.Insert<LeaveApproval>(ApplicationConstant.Sp_CreatLeaveApproval, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    if (leaveApproval.leaveApprovalLineItems.Count > 0)
+                    {
+                        foreach (var item in leaveApproval.leaveApprovalLineItems)
+                        {
+                            var items = new DynamicParameters();
+                            items.Add("@LeaveApprovalId", res.LeaveApprovalId);
+                            items.Add("@ApprovalPosition", item.ApprovalPosition);
+                            items.Add("@ApprovalEmployeeID", item.ApprovalEmployeeId);
+                            // items.Add("@ApprovalStatus", item.ApprovalStatus);
+                            items.Add("@Comments", item.Comments);
+                            items.Add("@ApprovalStep", item.ApprovalStep);
+                            //items.Add("@IsApproved", item.IsApproved);
+
+                            var res1 = await _dapperGeneric.Insert<LeaveApprovalLineItem>(ApplicationConstant.Sp_CreateLeaveApprovalLineItem, items, commandType: CommandType.StoredProcedure);
+                            if (res1 != null)
+                            {
+                                res.leaveApprovalLineItems.Add(res1);
+                            }
+                        }
+                    }
+                    return res;
+                }
+
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateLeaveApproval ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+        }
         public async Task<List<LeaveApproval>> GetLeaveApprovals(long approvalEmployeeId, long employeeID)
         {
             try
@@ -366,7 +481,7 @@ namespace hrms_be_backend_data.Repository
             }
             catch (Exception ex)
             {
-                _logger.LogError($"MethodName: GetPendingAnnualLeaveApprovals ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                _logger.LogError($"MethodName: GetAnnualLeaveApprovals ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
                 return default;
             }
         }
@@ -391,7 +506,7 @@ namespace hrms_be_backend_data.Repository
                 {
                     bool ispresent = false;
                     bool ispresent1 = false;
-                    List<PendingLeaveApprovalItemsDto> res1 = new List<PendingLeaveApprovalItemsDto>();
+                  //  List<PendingLeaveApprovalItemsDto> res1 = new List<PendingLeaveApprovalItemsDto>();
                     List<PendingAnnualLeaveApprovalItemDto> pendingRes = new List<PendingAnnualLeaveApprovalItemDto>();
 
 
@@ -399,7 +514,8 @@ namespace hrms_be_backend_data.Repository
                     {
                         var approvalLineItems = await GetLeaveApprovalLineItems(item.LeaveApprovalId);
                         approvalLineItems = approvalLineItems.OrderBy(x => x.ApprovalStep).ToList();
-                        var approvalLineItem = approvalLineItems.FirstOrDefault(x => x.ApprovalEmployeeId == approvalEmployeeID && x.ApprovalPosition == item.Comments.Split(" ").Last().Trim());
+                        var approvalLineItem = approvalLineItems.FirstOrDefault(x => x.ApprovalEmployeeId == approvalEmployeeID);
+
                         item.ApprovalStep = approvalLineItem.ApprovalStep;
                         item.ApprovalPosition = approvalLineItem.ApprovalPosition;
                         item.ApprovalStatus = approvalLineItem.ApprovalStatus;
@@ -407,19 +523,19 @@ namespace hrms_be_backend_data.Repository
                         item.ApprovalEmployeeId = approvalLineItem.ApprovalEmployeeId;
                     }
                     res = res.OrderBy(x => x.ApprovalStep).ToList();
-                    foreach (var item in res)
-                    {
+                    //foreach (var item in res)
+                    //{
                         
-                        var pendingLeaveItem = res1.FirstOrDefault(x=>x.EmployeeID == item.EmployeeID);
-                        if (pendingLeaveItem == null)
-                        {
-                            res1.Add(item);
-                        }
+                    //    var pendingLeaveItem = res1.FirstOrDefault(x=>x.EmployeeID == item.EmployeeID);
+                    //    if (pendingLeaveItem == null)
+                    //    {
+                    //        res1.Add(item);
+                    //    }
                          
-                    }
+                    //}
 
                     PendingAnnualLeaveApprovalItemDto pendingAnnualLeaveApprovalItemDto = null;
-                    foreach (var item in res1)
+                    foreach (var item in res)
                     {
                         pendingAnnualLeaveApprovalItemDto = new()
                         {

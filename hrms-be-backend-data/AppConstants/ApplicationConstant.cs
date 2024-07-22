@@ -97,6 +97,9 @@
         public const string Sp_GetEmpAnnualLeaveRequestLineItems  = "Sp_GetEmpAnnualLeaveRequestLineItems";
         public const string Sp_GetEmpAnnualLeave  = "Sp_GetEmpAnnualLeave";
         public const string Sp_UpdateEmpAnnualLeave = "Sp_UpdateEmpAnnualLeave";
+        public const string Sp_CreateApprovals = "Sp_CreateAproval";
+        public const string Sp_CreateApprovalsLineItem = "Sp_CreateAprovalLineItem";
+        public const string sp_get_hr_Id = "sp_get_hr_Id";
 
         //System Default
         public const int DefaultDeptId = 1;
@@ -115,6 +118,10 @@
         public const string Sp_TrainingSchedule = "Sp_TrainingSchedule";
         public const string Sp_TrainingInduction = "Sp_TrainingInduction";
         public const string Sp_TrainingFeedbackForm = "Sp_TrainingFeedbackForm";
-
+        public const string Sp_CheckEmpAnnualLeave = "Sp_CheckEmpAnnualLeave";
+        public const string Sp_UpdateLeaveRequestApprovalID = "Sp_UpdateLeaveRequestApprovalID";
+        public const string Sp_CreatLeaveApproval = "Sp_CreatLeaveApproval";
+        public const string Sp_CreateLeaveApprovalLineItem = "Sp_CreateLeaveApprovalLineItem";
+        public const string Sp_CreateEmpLeaveRequestLineItem1 = "Sp_CreateEmpLeaveRequestLineItem1";
     }
 }

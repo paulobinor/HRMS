@@ -101,7 +101,7 @@ namespace hrms_be_backend_api.Controller
         }
 
 
-        [Authorize]
+      //  [Authorize]
         [HttpGet("GetAnnualLeaveRequests")]
         public async Task<IActionResult> GetAnnualLeaveRequestLineItems([FromQuery] string CompanyID)
         {
@@ -111,13 +111,14 @@ namespace hrms_be_backend_api.Controller
                 var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
                 _logger.LogInformation($"Received GetAllLeaveRequestLineItems. Payload: {JsonConvert.SerializeObject(new { CompanyID })} from remote address: {RemoteIpAddress}");
 
-                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
-                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-                if (accessUser.data == null)
-                {
-                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+             //   var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+             //   var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                //if (accessUser.data == null)
+                //{
+                //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
-                }
+                //}
+
                 var res = await _leaveRequestService.GetEmpAnnualLeaveRquestLineItems(Convert.ToInt64(CompanyID));
 
 
@@ -174,7 +175,7 @@ namespace hrms_be_backend_api.Controller
 
         [HttpPost("UpdateAnnualLeave")]
         //[Authorize]
-        public async Task<IActionResult> ApproveAnnualLeave(LeaveApprovalLineItem leaveApprovalLineItem)
+        public async Task<IActionResult> UpdateAnnualLeave(LeaveApprovalLineItem leaveApprovalLineItem)
         {
             _logger.LogInformation($"recieved request to update leaveapproval by approval Id: {leaveApprovalLineItem.ApprovalEmployeeId}  payload is: {JsonConvert.SerializeObject(leaveApprovalLineItem)}");
             var response = new BaseResponse();

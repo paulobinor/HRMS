@@ -18,6 +18,7 @@
         public bool IsApproved { get; set; }
         public string? UploadFilePath { get; set; } = string.Empty;
         public int AnnualLeaveId { get; set; }
+        public int ApproalID { get; set; }
     }
 
     public class CreateLeaveRequestLineItem

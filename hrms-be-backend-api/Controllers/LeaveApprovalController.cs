@@ -91,8 +91,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         public async Task<IActionResult> GetPendingLeaveApprovals([FromQuery] long ApprovalEmployeeID)
         {
             var response = new BaseResponse();
-            //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            //_logger.LogInformation($"Received GetPendingLeaveApprovals request. Payload: {JsonConvert.SerializeObject(new { ApprovalEmployeeID })} from remote address: {RemoteIpAddress}");
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            _logger.LogInformation($"Received GetPendingLeaveApprovals request. Payload: {JsonConvert.SerializeObject(new { ApprovalEmployeeID })} from remote address: {RemoteIpAddress}");
 
             //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
             //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);

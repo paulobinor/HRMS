@@ -20,7 +20,8 @@ namespace hrms_be_backend_business.ILogic
         Task<EmpLeaveRequestInfo> GetEmpLeaveInfo(long employeeId, long companyId, string LeaveStatus = "Active");
         Task<List<AnnualLeave>> GetEmpAnnualLeaveInfoList(long employeeId, long companyId);
         Task<AnnualLeave> GetEmpAnnualLeaveInfo(int AnnualLeaveId);
-
+        Task<AnnualLeave> CheckAnnualLeaveInfo(LeaveRequestLineItem leaveRequestLineItem);
+        
         Task<BaseResponse> GetAllLeaveRequest(string CompanyID);
         Task<BaseResponse> GetAllLeaveRquestLineItems(long CompanyID);
         Task<List<LeaveRequestLineItemDto>> GetEmployeeLeaveRequests(long CompanyID, long EmployeeId);

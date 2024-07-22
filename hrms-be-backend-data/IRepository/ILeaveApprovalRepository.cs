@@ -1,6 +1,7 @@
 ﻿using hrms_be_backend_common.DTO;
 using hrms_be_backend_common.Models;
 using hrms_be_backend_data.RepoPayload;
+using hrms_be_backend_data.ViewModel;
 using System.Threading.Tasks;
 
 namespace hrms_be_backend_data.IRepository
@@ -22,6 +23,8 @@ namespace hrms_be_backend_data.IRepository
         Task<List<PendingLeaveApprovalItemsDto>> GetPendingLeaveApprovals(long approvalEmployeeID, string v);
         Task<List<PendingAnnualLeaveApprovalItemDto>> GetPendingAnnualLeaveApprovals(long approvalEmployeeID, string v);
         Task<List<LeaveApproval>> GetLeaveApprovals(long approvalEmployeeId, long employeeID);
+        Task<Approvals> CreateLeaveApproval(Approvals approvals);
+        Task<LeaveApproval> CreateAnnualLeaveApproval(LeaveApproval leaveApproval);
     }
 }
 

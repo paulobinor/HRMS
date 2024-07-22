@@ -28,6 +28,7 @@ namespace hrms_be_backend_common.DTO
         public string UploadFilePath { get; set; }
         
         public List<LeaveApprovalLineItemDto> leaveApprovalLineItems { get; set; } // = new List<LeaveApprovalLineItemDto>();
+        public int AnnualLeaveId { get; set; }
     }
 
 

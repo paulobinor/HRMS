@@ -44,7 +44,24 @@ namespace hrms_be_backend_business.Logic
             _leaveTypeService = leaveTypeService;
         }
 
+        public async Task<Approvals> CreateApproval(Approvals approvals)
+        {
+            var response = new Approvals();
 
+            try
+            {
+                response = await _leaveApprovalRepository.CreateLeaveApproval(approvals);               
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured ==> {ex.Message}");
+              //  response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+              //  response.ResponseMessage = "Exception occured";
+               // response.Data = null;
+
+            }
+            return response;
+        }
         public async Task<BaseResponse> UpdateLeaveApproveLineItem(LeaveApprovalLineItem leaveApprovalLineItem)
         {
             //check if us
@@ -239,53 +256,64 @@ namespace hrms_be_backend_business.Logic
          
             try
             {
-                _logger.LogInformation($"About to get leave approval details for update");
-                var leaveApprovals = await _leaveApprovalRepository.GetLeaveApprovals(leaveApprovalLineItem.ApprovalEmployeeId, leaveApprovalLineItem.EmployeeID);
+                //if (ConfigSettings.leaveRequestConfig.UseApprovalTable)
+                //{
+                //    _logger.LogInformation($"About to get leave approval details for update");
+                //    var approval = await _leaveApprovalRepository.GetLeaveApproval(leaveApprovalLineItem.ApprovalEmployeeId, leaveApprovalLineItem.EmployeeID);
+                //}
+                //else
+                //{
 
-                _logger.LogInformation($"Response from GetLeaveApprovals method:{JsonConvert.SerializeObject(leaveApprovals)}");
-                if (leaveApprovals == null || leaveApprovals.Count <= 0)
+                //}
+                _logger.LogInformation($"About to get leave approval details for update");
+
+                var info = await _leaveApprovalRepository.GetAnnualLeaveApprovalInfo(leaveApprovalLineItem.LeaveApprovalId);
+               // var leaveApprovals = await _leaveApprovalRepository.GetLeaveApprovals(leaveApprovalLineItem.ApprovalEmployeeId, leaveApprovalLineItem.EmployeeID);
+
+                _logger.LogInformation($"Response from GetLeaveApproval method:{JsonConvert.SerializeObject(info)}");
+                if (info == null)
                 {
                     _logger.LogError($"We could not get any records for the the given leave ApprovalEmployeeId:{leaveApprovalLineItem.ApprovalEmployeeId}");
                     return new BaseResponse { Data = null, ResponseCode = "25", ResponseMessage = $"We could not get any records for the the given leave ApprovalEmployeeId:{leaveApprovalLineItem.ApprovalEmployeeId}" };
                 }
 
                 var leaveapprovalLineItems = new List<LeaveApprovalLineItem>();
-                _logger.LogInformation($"Leave approval update will treat {leaveApprovals.Count} records");
-                int count = 0;
-                foreach (var item in leaveApprovals)
+                _logger.LogInformation($"Response from GetAnnualLeaveApprovalInfo: {JsonConvert.SerializeObject(info)}");
+                if (info == null)
                 {
-                    count++;
-                    _logger.LogInformation($"Now treating {count} of {leaveApprovals.Count}  leave Approval with LeaveApprovalLineItemId:{item.LeaveApprovalLineItemId}");
 
-                    
-                    _logger.LogInformation($"About to fetch Annual Leave info for LeaveApprovalId: {item.LeaveApprovalId}");
-                    var info = await _leaveApprovalRepository.GetAnnualLeaveApprovalInfo(item.LeaveApprovalId);
-                    _logger.LogInformation($"Response from GetAnnualLeaveApprovalInfo: {JsonConvert.SerializeObject(info)}");
-                    if (info == null)
+                    _logger.LogError($"We could not get any records for the the given leave LeaveApprovalId:{info.LeaveApprovalId}");
+
+                    return new BaseResponse { Data = null, ResponseCode = "25", ResponseMessage = "No Annual Leave Record found" };
+                }
+
+                int count1 = 0;
+                foreach (var LeaveApprovalLineItem1 in info.LeaveApprovalLineItems)
+                {
+                    _logger.LogInformation($"Now treating {count1} of {info.LeaveApprovalLineItems} leave Approval item LeaveApprovalLineItemId:{LeaveApprovalLineItem1.LeaveApprovalLineItemId}");
+
+                    if (LeaveApprovalLineItem1.ApprovalEmployeeId == leaveApprovalLineItem.ApprovalEmployeeId && LeaveApprovalLineItem1.ApprovalStep == leaveApprovalLineItem.ApprovalStep)
                     {
 
-                        _logger.LogError($"We could not get any records for the the given leave LeaveApprovalId:{item.LeaveApprovalId}");
-                       
-                        return new BaseResponse { Data = null, ResponseCode = "25", ResponseMessage = "No Annual Leave Record found" };
-                    }
-
-                    int count1 = 0;
-                    foreach (var LeaveApprovalLineItem1 in info.LeaveApprovalLineItems)
-                    {
-                        _logger.LogInformation($"Now treating {count1} of {info.LeaveApprovalLineItems} leave Approval item LeaveApprovalLineItemId:{LeaveApprovalLineItem1.LeaveApprovalLineItemId}");
-
-                        if (LeaveApprovalLineItem1.ApprovalEmployeeId == leaveApprovalLineItem.ApprovalEmployeeId && LeaveApprovalLineItem1.ApprovalStep == leaveApprovalLineItem.ApprovalStep)
+                        leaveapprovalLineItems.Add(LeaveApprovalLineItem1);
+                        if (ConfigSettings.leaveRequestConfig.EnableSingleApproval)
                         {
-
-                            leaveapprovalLineItems.Add(LeaveApprovalLineItem1);
-                            if (ConfigSettings.leaveRequestConfig.EnableSingleApproval)
-                            {
-
-                                break;
-                            }
+                            break;
                         }
                     }
                 }
+                // _logger.LogInformation($"Leave approval update will treat {leaveApproval.Count} records");
+                //  int count = 0;
+                //foreach (var item in leaveApprovals)
+                //{
+                //    count++;
+                //    _logger.LogInformation($"Now treating {count} of {leaveApprovals.Count}  leave Approval with LeaveApprovalLineItemId:{item.LeaveApprovalLineItemId}");
+
+
+                //    _logger.LogInformation($"About to fetch Annual Leave info for LeaveApprovalId: {item.LeaveApprovalId}");
+                //    var info = await _leaveApprovalRepository.GetAnnualLeaveApprovalInfo(item.LeaveApprovalId);
+
+                //}
                 _logger.LogInformation($"Items to update: {JsonConvert.SerializeObject(leaveapprovalLineItems)}");
                 var res = await UpdateLeaveApproveLineItems(leaveapprovalLineItems, leaveApprovalLineItem.ApprovalStatus, leaveApprovalLineItem.Comments);
                 return res;
