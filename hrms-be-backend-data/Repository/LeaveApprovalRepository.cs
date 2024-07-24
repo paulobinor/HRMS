@@ -42,7 +42,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@IsApproved", leaveApprovalLineItem.IsApproved);
                 param.Add("@ApprovalEmployeeId", leaveApprovalLineItem.ApprovalEmployeeId);
                 param.Add("@Comments", leaveApprovalLineItem.Comments);
-                param.Add("@EntryDate", leaveApprovalLineItem.EntryDate);
+               // param.Add("@EntryDate", leaveApprovalLineItem.EntryDate);
 
                 var res = await _dapperGeneric.Get<LeaveApprovalLineItem>(ApplicationConstant.Sp_UpdateLeaveApprovalLineItem, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
@@ -340,21 +340,76 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<Approvals> CreateLeaveApproval(Approvals approvals)
+        public async Task<LeaveApproval> CreateLeaveApproval(LeaveApproval leaveApproval)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@LeaveRequestLineItemId", leaveApproval.LeaveRequestLineItemId);
+                param.Add("@RequiredApprovalCount", leaveApproval.RequiredApprovalCount);
+                param.Add("@EmployeeID", leaveApproval.EmployeeID);
+                param.Add("@LastApprovalEmployeeID", leaveApproval.LastApprovalEmployeeID);
+                param.Add("@Comments", leaveApproval.Comments);
+                //  param.Add("@IsApproved", approvals.IsApproved);
+                //if (!string.IsNullOrEmpty(v))
+                //{
+                //    param.Add("@ApprovalStatus", "All");
+                //}
+                //else
+                //{
+                //    param.Add("@ApprovalStatus", "Pending");
+                //}
+
+                var res = await _dapperGeneric.Insert<LeaveApproval>(ApplicationConstant.Sp_CreatLeaveApproval, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    if (leaveApproval.leaveApprovalLineItems.Count > 0)
+                    {
+                        foreach (var item in leaveApproval.leaveApprovalLineItems)
+                        {
+                            var items = new DynamicParameters();
+                            items.Add("@LeaveApprovalId", res.LeaveApprovalId);
+                            items.Add("@ApprovalPosition", item.ApprovalPosition);
+                            items.Add("@ApprovalEmployeeID", item.ApprovalEmployeeId);
+                            // items.Add("@ApprovalStatus", item.ApprovalStatus);
+                            items.Add("@Comments", item.Comments);
+                            items.Add("@ApprovalStep", item.ApprovalStep);
+                            //items.Add("@IsApproved", item.IsApproved);
+
+                            var res1 = await _dapperGeneric.Insert<LeaveApprovalLineItem>(ApplicationConstant.Sp_CreateLeaveApprovalLineItem, items, commandType: CommandType.StoredProcedure);
+                            if (res1 != null)
+                            {
+                                res.leaveApprovalLineItems.Add(res1);
+                            }
+                        }
+                    }
+                    return res;
+                }
+
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateLeaveApproval ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+        }
+        public async Task<Approvals> CreateApproval(Approvals approvals)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("@ApprovalEmployeeID", approvals.ApprovalEmployeeID);
-               // param.Add("@ApprovalStatus", approvals.ApprovalStatus);
+                // param.Add("@ApprovalStatus", approvals.ApprovalStatus);
                 param.Add("@RequiredApprovalCount", approvals.RequiredApprovalCount);
-              //  param.Add("@CurrentApprovalCount", approvals.CurrentApprovalCount);
+                //  param.Add("@CurrentApprovalCount", approvals.CurrentApprovalCount);
                 param.Add("@Comment", approvals.Comment);
-              //  param.Add("@EntryDate", approvals.EntryDate);
-              //  param.Add("@DateCompleted", approvals.DateCompleted);
+                //  param.Add("@EntryDate", approvals.EntryDate);
+                //  param.Add("@DateCompleted", approvals.DateCompleted);
                 param.Add("@ApprovalDescription", approvals.ApprovalDescription);
                 param.Add("@CompanyID", approvals.CompanyID);
-              //  param.Add("@IsApproved", approvals.IsApproved);
+                //  param.Add("@IsApproved", approvals.IsApproved);
                 //if (!string.IsNullOrEmpty(v))
                 //{
                 //    param.Add("@ApprovalStatus", "All");
@@ -375,7 +430,7 @@ namespace hrms_be_backend_data.Repository
                             items.Add("@ApprovalID", res.ApprovalID);
                             items.Add("@ApprovalPosition", item.ApprovalPosition);
                             items.Add("@ApprovalEmployeeID", item.ApprovalEmployeeID);
-                           // items.Add("@ApprovalStatus", item.ApprovalStatus);
+                            // items.Add("@ApprovalStatus", item.ApprovalStatus);
                             items.Add("@Comments", item.Comments);
                             items.Add("@ApprovalStep", item.ApprovalStep);
                             //items.Add("@IsApproved", item.IsApproved);
@@ -389,7 +444,7 @@ namespace hrms_be_backend_data.Repository
                     }
                     return res;
                 }
-              
+
                 return default;
 
             }
@@ -487,8 +542,43 @@ namespace hrms_be_backend_data.Repository
         }
         public async Task<List<PendingAnnualLeaveApprovalItemDto>> GetPendingAnnualLeaveApprovals(long approvalEmployeeID, string v)
         {
+            List<PendingAnnualLeaveApprovalItemDto> pendingRes = new List<PendingAnnualLeaveApprovalItemDto>();
+
+            PendingAnnualLeaveApprovalItemDto pendingAnnualLeaveApprovalItemDto = null;
             try
             {
+                var leaveApprovalLineItems = await GetAllApprovalLineItems(approvalEmployeeID);
+
+                foreach (var item in leaveApprovalLineItems)
+                {
+                    
+                    var res1 = await GetAnnualLeaveInfo(item.LeaveApprovalId);
+                    foreach (var item1 in res1.leaveRequestLineItems)
+                    {
+                        item1.LeaveApprovalLineItemId = item.LeaveApprovalLineItemId;
+                        item1.LeaveApprovalId = item.LeaveApprovalId;
+                        item1.ApprovalStatus = item.ApprovalStatus;
+                        item1.CompanyId = res1.CompanyID;
+                        item1.Comments = item.Comments;
+                    }
+                    pendingAnnualLeaveApprovalItemDto = new()
+                    {
+                        FullName = res1.leaveRequestLineItems.FirstOrDefault().FullName,
+                        RelieverName = res1.leaveRequestLineItems.FirstOrDefault().RelieverName,
+                        ApprovalStatus = item.ApprovalStatus,
+                        //ApprovalEmployeeID = approvalEmployeeID,
+                        Year = res1.leaveRequestLineItems.FirstOrDefault().startDate.Year.ToString(),
+                        EmployeeID = item.EmployeeID,
+                        LeaveCount = res1.leaveRequestLineItems.Count, // res.FindAll(x => x.EmployeeID == item.EmployeeID).Count(),
+                        LeaveTypeName = res1.leaveRequestLineItems.FirstOrDefault().LeaveTypeName,
+                        leaveRequestLineItems = res1.leaveRequestLineItems, // res.FindAll(x => x.EmployeeID == item.EmployeeID),
+                        Status = item.Comments,
+                        TotalNoOfDays = res1.leaveRequestLineItems.Sum(x => x.LeaveLength)  // res.FindAll(x => x.EmployeeID == item.EmployeeID).Sum(x => x.LeaveLength)
+                    };
+                    pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                }
+
+                return pendingRes;
                 var param = new DynamicParameters();
                 param.Add("@ApprovalEmployeeID", approvalEmployeeID);
                 param.Add("@ApprovalStatus", v);
@@ -507,53 +597,124 @@ namespace hrms_be_backend_data.Repository
                     bool ispresent = false;
                     bool ispresent1 = false;
                   //  List<PendingLeaveApprovalItemsDto> res1 = new List<PendingLeaveApprovalItemsDto>();
-                    List<PendingAnnualLeaveApprovalItemDto> pendingRes = new List<PendingAnnualLeaveApprovalItemDto>();
+                //    List<PendingAnnualLeaveApprovalItemDto> pendingRes = new List<PendingAnnualLeaveApprovalItemDto>();
 
 
-                    foreach (var item in res)
-                    {
-                        var approvalLineItems = await GetLeaveApprovalLineItems(item.LeaveApprovalId);
-                        approvalLineItems = approvalLineItems.OrderBy(x => x.ApprovalStep).ToList();
-                        var approvalLineItem = approvalLineItems.FirstOrDefault(x => x.ApprovalEmployeeId == approvalEmployeeID);
 
-                        item.ApprovalStep = approvalLineItem.ApprovalStep;
-                        item.ApprovalPosition = approvalLineItem.ApprovalPosition;
-                        item.ApprovalStatus = approvalLineItem.ApprovalStatus;
-                        item.LeaveApprovalLineItemId = approvalLineItem.LeaveApprovalLineItemId;
-                        item.ApprovalEmployeeId = approvalLineItem.ApprovalEmployeeId;
-                    }
-                    res = res.OrderBy(x => x.ApprovalStep).ToList();
+                  //  PendingAnnualLeaveApprovalItemDto pendingAnnualLeaveApprovalItemDto = null;
                     //foreach (var item in res)
                     //{
-                        
+                    //    var leaverequests = await GetLeaveRequestLineItems(item.AnnualLeaveID);
+                    //    foreach (var item1 in leaverequests)
+                    //    {
+
+                    //        var leaveApprovalItem = (await GetLeaveApprovalLineItems(item.LeaveApprovalId)).FirstOrDefault(x => x.ApprovalEmployeeId == item.LastApprovalEmployeeID && x.ApprovalStatus == "Pending");
+                    //        item1.leaveApprovalLineItemId = leaveApprovalItem.LeaveApprovalLineItemId;
+                    //        item1.leaveApprovalId = leaveApprovalItem.LeaveApprovalId;
+                    //        var leaveApproval = await GetLeaveApprovalInfo(item.LeaveApprovalId);
+                    //        item1.Comments = leaveApproval.Comments;
+                    //        item1.ApprovalStatus = leaveApproval.ApprovalStatus;
+                    //        item1.LeaveTypeName = item.LeaveTypeName;
+                    //        item1.RelieverName = item.RelieverName;
+                    //    }
+                    //    pendingAnnualLeaveApprovalItemDto = new()
+                    //    {
+                    //        FullName = item.FullName,
+                    //        RelieverName = item.RelieverName,
+                    //        ApprovalStatus = item.ApprovalStatus,
+                    //        //ApprovalEmployeeID = approvalEmployeeID,
+                    //        Year = item.StartDate.Year.ToString(),
+                    //        EmployeeID = item.EmployeeID,
+                    //        LeaveCount = item.LeaveCount, // res.FindAll(x => x.EmployeeID == item.EmployeeID).Count(),
+                    //        LeaveTypeName = item.LeaveTypeName,
+                    //        leaveRequestLineItems = leaverequests, // res.FindAll(x => x.EmployeeID == item.EmployeeID),
+                    //        Status = item.Comments,
+                    //        TotalNoOfDays = item.TotalNoOfDays  // res.FindAll(x => x.EmployeeID == item.EmployeeID).Sum(x => x.LeaveLength)
+                    //    };
+
+
+                    //    pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                    //}
+                   
+
+                   // var approvalLineItems = await GetLeaveApprovalLineItems(res.LeaveApprovalId);
+                   // approvalLineItems = approvalLineItems;
+                  //  approvalLineItems = approvalLineItems.FindAll(x => x.ApprovalEmployeeId == approvalEmployeeID).OrderBy(x => x.ApprovalStep).ToList();
+
+                    //List<PendingLeaveApprovalItemsDto> pendingLeaveApprovalItems = new List<PendingLeaveApprovalItemsDto>();
+                    //foreach (var item in approvalLineItems)
+                    //{
+                    //    res.ApprovalStep = item.ApprovalStep;
+                    //    res.ApprovalStatus = item.ApprovalStatus;
+                    //    res.ApprovalPosition = item.ApprovalPosition;
+                    //    res.LeaveApprovalId = item.LeaveApprovalId;
+                    //    res.ApprovalEmployeeId = item.ApprovalEmployeeId;
+                    //    res.Comments = item.Comments;
+                    //    res.IsApproved = item.IsApproved;
+                    //    res.LeaveApprovalLineItemId = item.LeaveApprovalLineItemId;
+                    //    pendingLeaveApprovalItems.Add(res);
+                    //}
+                    //foreach (var item in leaverequests)
+                    //{
+                    //    res.StartDate = item.startDate;
+                    //    res.EndDate = item.endDate;
+                    //    res.LeaveLength = item.LeaveLength;
+                    //    item.leaveApprovalLineItemId = res.LeaveApprovalLineItemId;
+                    //    item.leaveApprovalId = res.LeaveApprovalId;
+                    //}
+
+                    //pendingAnnualLeaveApprovalItemDto = new()
+                    //{
+                    //    FullName = res.FullName,
+                    //    //ApprovalEmployeeID = approvalEmployeeID,
+                    //    Year = res.StartDate.Year.ToString(),
+                    //    EmployeeID = res.EmployeeID,
+                    //    LeaveCount = res.LeaveCount, //.FindAll(x => x.EmployeeID == item.EmployeeID).Count(),
+                    //    LeaveTypeName = res.LeaveTypeName,
+                    //    leaveRequestLineItems = leaverequests, // res.FindAll(x => x.EmployeeID == item.EmployeeID),
+                    //    Status = item.Comments,
+                    //    TotalNoOfDays = res.FindAll(x => x.EmployeeID == item.EmployeeID).Sum(x => x.LeaveLength)
+                    //};
+                    //item.ApprovalStep = approvalLineItem.ApprovalStep;
+                    //item.ApprovalPosition = approvalLineItem.ApprovalPosition;
+                    //item.ApprovalStatus = approvalLineItem.ApprovalStatus;
+                    //item.LeaveApprovalLineItemId = approvalLineItem.LeaveApprovalLineItemId;
+                    //item.ApprovalEmployeeId = approvalLineItem.ApprovalEmployeeId;
+
+                    //foreach (var item in res)
+                    //{
+
+                    //}
+                    //res = res.OrderBy(x => x.ApprovalStep).ToList();
+                    //foreach (var item in res)
+                    //{
+
                     //    var pendingLeaveItem = res1.FirstOrDefault(x=>x.EmployeeID == item.EmployeeID);
                     //    if (pendingLeaveItem == null)
                     //    {
                     //        res1.Add(item);
                     //    }
-                         
+
                     //}
 
-                    PendingAnnualLeaveApprovalItemDto pendingAnnualLeaveApprovalItemDto = null;
-                    foreach (var item in res)
-                    {
-                        pendingAnnualLeaveApprovalItemDto = new()
-                        {
-                            FullName = item.FullName,
-                            //ApprovalEmployeeID = approvalEmployeeID,
-                            Year = item.StartDate.Year.ToString(),
-                            EmployeeID = item.EmployeeID,
-                            LeaveCount = res.FindAll(x => x.EmployeeID == item.EmployeeID).Count(),
-                            LeaveTypeName = item.LeaveTypeName,
-                            leaveRequestLineItems = res.FindAll(x=>x.EmployeeID == item.EmployeeID),
-                            Status = item.Comments,
-                            TotalNoOfDays = res.FindAll(x => x.EmployeeID == item.EmployeeID).Sum(x => x.LeaveLength)
-                        };
+                    //foreach (var item in res)
+                    //{
+                    //    pendingAnnualLeaveApprovalItemDto = new()
+                    //    {
+                    //        FullName = item.FullName,
+                    //        //ApprovalEmployeeID = approvalEmployeeID,
+                    //        Year = item.StartDate.Year.ToString(),
+                    //        EmployeeID = item.EmployeeID,
+                    //        LeaveCount = res.FindAll(x => x.EmployeeID == item.EmployeeID).Count(),
+                    //        LeaveTypeName = item.LeaveTypeName,
+                    //        leaveRequestLineItems = res.FindAll(x=>x.EmployeeID == item.EmployeeID),
+                    //        Status = item.Comments,
+                    //        TotalNoOfDays = res.FindAll(x => x.EmployeeID == item.EmployeeID).Sum(x => x.LeaveLength)
+                    //    };
 
 
-                        pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
-                    }
-                    return pendingRes;
+                    //    pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                    //}
                 }
                 return null;
 
@@ -561,6 +722,91 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: GetPendingAnnualLeaveApprovals ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+        }
+
+        private async Task<AnnualLeave> GetAnnualLeaveInfo(long leaveApprovalId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@ApprovalID", leaveApprovalId);
+
+                var res = await _dapperGeneric.Get<AnnualLeave>(ApplicationConstant.Sp_GetAnnualLeaveInfo, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    res.leaveRequestLineItems = await GetAnnualLeaveRequestLineItem(res.AnnualLeaveId);
+
+                    return res;
+                }
+                return res;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+
+        private async Task<List<LeaveRequestLineItemDto>> GetAnnualLeaveRequestLineItem(int AnnualLeaveId)
+        {
+            var param = new DynamicParameters();
+            param.Add("@AnnualLeaveId", AnnualLeaveId);
+
+            var res = await _dapperGeneric.GetAll<LeaveRequestLineItemDto>(ApplicationConstant.Sp_GetAnnualLeaveRequestLineItems, param, commandType: CommandType.StoredProcedure);
+            if (res != null && res.Count > 0)
+            {
+                return res;
+            }
+            return null;
+        }
+
+        private async Task<List<LeaveApprovalLineItem>> GetAllApprovalLineItems(long approvalEmployeeID)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@ApprovalEmployeeID", approvalEmployeeID);
+                //param.Add("@LeavePeriod", LeavePeriod);
+
+                var res = await _dapperGeneric.GetAll<LeaveApprovalLineItem>(ApplicationConstant.Sp_GetAllLeaveApprovalLineItems, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    return res;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+        }
+
+        private async Task<List<LeaveRequestLineItem>> GetLeaveRequestLineItems(long AnnualLeaveID)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@AnnualLeaveID", AnnualLeaveID);
+                //param.Add("@LeavePeriod", LeavePeriod);
+
+                var res = await _dapperGeneric.GetAll<LeaveRequestLineItem>(ApplicationConstant.Sp_GetAnnualLeaveRequestLineItems, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    //res = res.FindAll(x => x.LeaveTypeName == LeaveTypeName);
+
+                    return res;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: GetAllLeaveEmpRequestLineItems ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
                 return default;
             }
         }

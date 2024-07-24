@@ -123,5 +123,9 @@
         public const string Sp_CreatLeaveApproval = "Sp_CreatLeaveApproval";
         public const string Sp_CreateLeaveApprovalLineItem = "Sp_CreateLeaveApprovalLineItem";
         public const string Sp_CreateEmpLeaveRequestLineItem1 = "Sp_CreateEmpLeaveRequestLineItem1";
+        public const string Sp_GetAnnualLeaveRequestLineItems = "Sp_GetAnnualLeaveRequestLineItems";
+        public const string Sp_GetAllLeaveApprovalLineItems = "Sp_GetAllLeaveApprovalLineItems";
+        public const string Sp_GetAllAnnualLeaveApprovals = "Sp_GetAllAnnualLeaveApprovals";
+        public const string Sp_GetAnnualLeaveInfo = "Sp_GetAnnualLeaveInfo";
     }
 }

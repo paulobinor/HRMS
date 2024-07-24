@@ -17,6 +17,7 @@ namespace hrms_be_backend_common.Models
         public int SplitCount { get; set; }
         public string ApprovalStatus { get; set; }
         public string Comments { get; set; }
-        public List<LeaveRequestLineItemDto> leaveRequestLineItems { get; set; } = new List<LeaveRequestLineItemDto>(); 
+        public List<LeaveRequestLineItemDto> leaveRequestLineItems { get; set; } = new List<LeaveRequestLineItemDto>();
+        public long ApprovalID { get; set; }
     }
 }

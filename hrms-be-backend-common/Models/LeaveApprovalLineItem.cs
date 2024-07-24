@@ -19,6 +19,7 @@ namespace hrms_be_backend_common.Models
         public DateTime EntryDate { get; set; }
         public int ApprovalStep { get; set; }
         public string ApprovalStatus { get; set; }
+        public DateTime DateCompleted { get; set; }
     }
 
     public class LeaveApproval

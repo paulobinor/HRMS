@@ -6,6 +6,7 @@ namespace hrms_be_backend_common.DTO
 
         public long? LeaveRequestLineItemId { get; set; }
         public long LeaveRequestId { get; set; }
+        public long LeaveApprovalLineItemId { get; set; }
         public long LeaveApprovalId { get; set; }
         public long RelieverUserId { get; set; }
         public int LeaveLength { get; set; }

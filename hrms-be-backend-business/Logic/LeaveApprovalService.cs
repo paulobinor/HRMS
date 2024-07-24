@@ -50,7 +50,7 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-                response = await _leaveApprovalRepository.CreateLeaveApproval(approvals);               
+                response = await _leaveApprovalRepository.CreateApproval(approvals);               
             }
             catch (Exception ex)
             {
@@ -71,20 +71,24 @@ namespace hrms_be_backend_business.Logic
             bool sendMailToReliever = false;
             var response = new BaseResponse();
             LeaveApprovalLineItem nextApprovalLineItem = null;
-            
+            bool isEmilokan = false;
             try
             {
-                var Emilokan = (await _leaveApprovalRepository.GetPendingLeaveApprovals(leaveApprovalLineItem.ApprovalEmployeeId, "")).FirstOrDefault(x => x.LeaveApprovalLineItemId == leaveApprovalLineItem.LeaveApprovalLineItemId);
-                if (Emilokan != null)
+                
+                //var Emilokan = (await _leaveApprovalRepository.GetPendingLeaveApprovals(leaveApprovalLineItem.ApprovalEmployeeId, "")).FirstOrDefault(x => x.LeaveApprovalLineItemId == leaveApprovalLineItem.LeaveApprovalLineItemId);
+                var leaveApproval = await GetLeaveApprovalInfo(leaveApprovalLineItem.LeaveApprovalId, 0);
+                var leaveApprovalLineItem1 = leaveApproval.LeaveApprovalLineItems.FirstOrDefault(x=>x.LeaveApprovalLineItemId == leaveApprovalLineItem.LeaveApprovalLineItemId);
+                if (leaveApproval.LastApprovalEmployeeID == leaveApprovalLineItem.ApprovalEmployeeId && leaveApproval.Comments.Equals(leaveApprovalLineItem1.Comments, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (Emilokan.LastApprovalEmployeeID != leaveApprovalLineItem.ApprovalEmployeeId) 
-                    {
-                        //Not your turn to approve
-                        response.ResponseCode = "401";
-                        response.ResponseMessage = "You cannot peform this action at this time";
-                        response.Data = null;
-                        return response;
-                    }
+                    isEmilokan=true;
+                }
+                if (!isEmilokan)
+                {
+                    //Not your turn to approve
+                    response.ResponseCode = "401";
+                    response.ResponseMessage = "You cannot peform this action at this time";
+                    response.Data = null;
+                    return response;
                 }
 
                 var repoResponse = await _leaveApprovalRepository.UpdateLeaveApprovalLineItem(leaveApprovalLineItem);
@@ -162,6 +166,10 @@ namespace hrms_be_backend_business.Logic
                         var userDetails = await _accountRepository.GetUserByEmployeeId(leaveRequestLineItem.EmployeeId);
                         var app = await _accountRepository.GetUserByEmployeeId(leaveApprovalLineItem.ApprovalEmployeeId);
                         StringBuilder mailBody = new StringBuilder();
+
+                        var leaveType = await _leaveTypeService.GetLeaveTypeById(leaveRequestLineItem.LeaveTypeId);
+                        leaveType.LeaveTypeName = leaveType.LeaveTypeName.Replace("leave", "", StringComparison.OrdinalIgnoreCase);
+
                         mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} {userDetails.MiddleName} <br/> <br/>");
                         mailBody.Append($"Kindly note that the next approval is currently pending on  {app.FirstName} {app.LastName} {leaveApprovalLineItem.ApprovalPosition},  <br/> <br/>");
                         mailBody.Append($"<b>Start Date : <b/> {leaveRequestLineItem.startDate}  <br/> ");
@@ -170,7 +178,7 @@ namespace hrms_be_backend_business.Logic
                         var mailPayload = new MailRequest
                         {
                             Body = mailBody.ToString(),
-                            Subject = "Leave Request",
+                            Subject = $"{leaveType.LeaveTypeName} leave Approval",
                             ToEmail = userDetails.OfficialMail,
                         };
 
@@ -190,15 +198,18 @@ namespace hrms_be_backend_business.Logic
                         var userDetails = await _accountRepository.GetUserByEmployeeId(leaveRequestLineItem.EmployeeId);
                         //  var app = await _accountRepository.GetUserByEmployeeId(leaveApprovalLineItem.ApprovalEmployeeId);
                         StringBuilder mailBody = new StringBuilder();
+                        var leaveType = await _leaveTypeService.GetLeaveTypeById(leaveRequestLineItem.LeaveTypeId);
+                        leaveType.LeaveTypeName = leaveType.LeaveTypeName.Replace("leave", "", StringComparison.OrdinalIgnoreCase);
+
                         mailBody.Append($"Dear {userDetails.FirstName} {userDetails.LastName} <br/> <br/>");
-                        mailBody.Append($"Kindly note that your request for leave has successfully passed the final stage for approval. Enjoy your leave<br/> <br/>");
+                        mailBody.Append($"Kindly note that your request for {leaveType.LeaveTypeName} leave has successfully passed the final stage for approval. Enjoy your leave<br/> <br/>");
                         mailBody.Append($"<b>Start Date : <b/> {leaveRequestLineItem.startDate}  <br/> ");
                         mailBody.Append($"<b>End Date : <b/> {leaveRequestLineItem.endDate}   <br/> ");
 
                         var mailPayload = new MailRequest
                         {
                             Body = mailBody.ToString(),
-                            Subject = "Leave Request",
+                            Subject = $"{leaveType.LeaveTypeName} Leave Request",
                             ToEmail = userDetails.OfficialMail,
                         };
 
@@ -206,7 +217,7 @@ namespace hrms_be_backend_business.Logic
                         _mailService.SendEmailAsync(mailPayload);
                     }
 
-                    response.ResponseMessage = "Approved Successfully";
+                    response.ResponseMessage = $"Approved Successfully";
                 }
                 else if (!repoResponse.IsApproved || repoResponse.ApprovalStatus == "Disapproved") // Leave approval is denied
                 {
@@ -288,20 +299,35 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 int count1 = 0;
-                foreach (var LeaveApprovalLineItem1 in info.LeaveApprovalLineItems)
+                var updateLineItem = info.LeaveApprovalLineItems.FirstOrDefault(x=>x.LeaveApprovalLineItemId == leaveApprovalLineItem.LeaveApprovalLineItemId);
+                _logger.LogInformation($"Item to update: {JsonConvert.SerializeObject(updateLineItem)}");
+                updateLineItem.ApprovalStatus = leaveApprovalLineItem.ApprovalStatus;
+                updateLineItem.IsApproved = leaveApprovalLineItem.IsApproved;
+                updateLineItem.DateCompleted = DateTime.Now; // leaveApprovalLineItem.EntryDate;
+                updateLineItem.Comments = leaveApprovalLineItem.Comments;
+                if (updateLineItem != null)
                 {
-                    _logger.LogInformation($"Now treating {count1} of {info.LeaveApprovalLineItems} leave Approval item LeaveApprovalLineItemId:{LeaveApprovalLineItem1.LeaveApprovalLineItemId}");
-
-                    if (LeaveApprovalLineItem1.ApprovalEmployeeId == leaveApprovalLineItem.ApprovalEmployeeId && LeaveApprovalLineItem1.ApprovalStep == leaveApprovalLineItem.ApprovalStep)
-                    {
-
-                        leaveapprovalLineItems.Add(LeaveApprovalLineItem1);
-                        if (ConfigSettings.leaveRequestConfig.EnableSingleApproval)
-                        {
-                            break;
-                        }
-                    }
+                    var res = await UpdateLeaveApproveLineItem(updateLineItem);
+                    return res;
                 }
+
+                return null;
+                
+                // UpdateLeaveApproveLineItems(leaveapprovalLineItems, leaveApprovalLineItem.ApprovalStatus, leaveApprovalLineItem.Comments);
+                //foreach (var LeaveApprovalLineItem1 in info.LeaveApprovalLineItems)
+                //{
+                //    _logger.LogInformation($"Now treating {count1} of {info.LeaveApprovalLineItems} leave Approval item LeaveApprovalLineItemId:{LeaveApprovalLineItem1.LeaveApprovalLineItemId}");
+
+                //    if (LeaveApprovalLineItem1.ApprovalEmployeeId == leaveApprovalLineItem.ApprovalEmployeeId && LeaveApprovalLineItem1.ApprovalStep == leaveApprovalLineItem.ApprovalStep)
+                //    {
+
+                //        leaveapprovalLineItems.Add(LeaveApprovalLineItem1);
+                //        if (ConfigSettings.leaveRequestConfig.EnableSingleApproval)
+                //        {
+                //            break;
+                //        }
+                //    }
+                //}
                 // _logger.LogInformation($"Leave approval update will treat {leaveApproval.Count} records");
                 //  int count = 0;
                 //foreach (var item in leaveApprovals)
@@ -314,9 +340,7 @@ namespace hrms_be_backend_business.Logic
                 //    var info = await _leaveApprovalRepository.GetAnnualLeaveApprovalInfo(item.LeaveApprovalId);
 
                 //}
-                _logger.LogInformation($"Items to update: {JsonConvert.SerializeObject(leaveapprovalLineItems)}");
-                var res = await UpdateLeaveApproveLineItems(leaveapprovalLineItems, leaveApprovalLineItem.ApprovalStatus, leaveApprovalLineItem.Comments);
-                return res;
+
             }
             catch (Exception ex)
             {
@@ -339,7 +363,7 @@ namespace hrms_be_backend_business.Logic
 
                 var leaveApproval = await _leaveApprovalRepository.GetLeaveApprovalInfo(LeaveApprovalId);
                 var leaveRequestLineItem = await _leaveRequestRepository.GetLeaveRequestLineItem(leaveApproval.LeaveRequestLineItemId);
-                var res = await _leaveRequestRepository.GetAnnualLeaveInfo(leaveRequestLineItem.AnnualLeaveId);
+                var res = await _leaveRequestRepository.GetAnnualLeaveInfo(leaveRequestLineItem.AnnualLeaveId.Value);
                 if (res != null)
                 {
                     return res;
@@ -377,22 +401,22 @@ namespace hrms_be_backend_business.Logic
                 try
                 {
 
-                    // Check if it is the Approver's turn to approve
-                    _logger.LogInformation($"About to Check if it is the Approver's turn to approve: LeaveApprovalLineItemId:{leaveApprovalLineItem.LeaveApprovalLineItemId}");
-                    var Emilokan = (await _leaveApprovalRepository.GetPendingLeaveApprovals(leaveApprovalLineItem.ApprovalEmployeeId, "")).FirstOrDefault(x => x.LeaveApprovalLineItemId == leaveApprovalLineItem.LeaveApprovalLineItemId);
-                    if (Emilokan != null)
-                    {
-                        if (Emilokan.LastApprovalEmployeeID != leaveApprovalLineItem.ApprovalEmployeeId)
-                        {
-                            //Not your turn to approve at this time
+                    //// Check if it is the Approver's turn to approve
+                    //_logger.LogInformation($"About to Check if it is the Approver's turn to approve: LeaveApprovalLineItemId:{leaveApprovalLineItem.LeaveApprovalLineItemId}");
+                    //var Emilokan = (await _leaveApprovalRepository.GetPendingLeaveApprovals(leaveApprovalLineItem.ApprovalEmployeeId, "")).FirstOrDefault(x => x.LeaveApprovalLineItemId == leaveApprovalLineItem.LeaveApprovalLineItemId);
+                    //if (Emilokan != null)
+                    //{
+                    //    if (Emilokan.LastApprovalEmployeeID != leaveApprovalLineItem.ApprovalEmployeeId)
+                    //    {
+                    //        //Not your turn to approve at this time
 
-                            _logger.LogError($"It is not the approver's turn to approve at this time");
-                            response.ResponseCode = "401";
-                            response.ResponseMessage = "You cannot peform this action at this time";
-                            response.Data = null;
-                            return response;
-                        }
-                    }
+                    //        _logger.LogError($"It is not the approver's turn to approve at this time");
+                    //        response.ResponseCode = "401";
+                    //        response.ResponseMessage = "You cannot peform this action at this time";
+                    //        response.Data = null;
+                    //        return response;
+                    //    }
+                    //}
                     leaveApprovalLineItem.ApprovalStatus = approvalStatus;
                     leaveApprovalLineItem.Comments = comments;
                     _logger.LogInformation($"About to update approval Item with payload:  to approval status: {JsonConvert.SerializeObject(leaveApprovalLineItem)}");

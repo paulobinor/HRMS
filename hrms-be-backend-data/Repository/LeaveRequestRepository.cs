@@ -37,6 +37,7 @@ namespace hrms_be_backend_data.Repository
         {
             try
             {
+                var sp = string.Empty;
                 var param = new DynamicParameters();
                 param.Add("@EmployeeId", leaveRequestLineItem.EmployeeId);
                 param.Add("@LeaveTypeId", leaveRequestLineItem.LeaveTypeId);
@@ -48,10 +49,18 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@RelieverUserId", leaveRequestLineItem.RelieverUserId);
                 param.Add("@AnnualLeaveId", leaveRequestLineItem.AnnualLeaveId);
                 param.Add("@startDate", leaveRequestLineItem.startDate);
-              //  param.Add("@IsRescheduled", "0");
                 param.Add("@ResumptionDate", leaveRequestLineItem.ResumptionDate);
 
-                var res = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_CreateEmpLeaveRequestLineItem1, param, commandType: CommandType.StoredProcedure);
+                if (leaveRequestLineItem.AnnualLeaveId > 0)
+                {
+                    sp = ApplicationConstant.Sp_CreateEmpLeaveRequestLineItem1;
+                }
+                else
+                {
+                    sp = ApplicationConstant.Sp_CreateEmpLeaveRequestLineItem;
+                      param.Add("@IsRescheduled", "0");
+                }
+                var res = await _dapperGeneric.Get<LeaveRequestLineItem>(sp, param, commandType: CommandType.StoredProcedure);
                 return res;
             }
             catch (Exception ex)
@@ -425,6 +434,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@TotalNoOfDays", annualLeave.TotalNoOfDays);
                 param.Add("@ApprovalStatus", annualLeave.ApprovalStatus);
                 param.Add("@AnnualLeaveId", annualLeave.AnnualLeaveId);
+                param.Add("@ApprovalID", annualLeave.ApprovalID);
 
                 var res = await _dapperGeneric.Get<AnnualLeave>(ApplicationConstant.Sp_UpdateEmpAnnualLeave, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
@@ -461,6 +471,7 @@ namespace hrms_be_backend_data.Repository
                 var res = await _dapperGeneric.Get<AnnualLeave>(ApplicationConstant.Sp_CreateEmpAnnualLeave, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
+
                     foreach (var leaveRequestLineItem in requestLineItems)
                     {
                         leaveRequestLineItem.LeaveRequestId = annualLeave.LeaveRequestId;
