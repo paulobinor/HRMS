@@ -899,7 +899,7 @@ namespace hrms_be_backend_business.Logic
                     RequiredApprovalCount = 3,
                     EmployeeID = leaveRequestItem.EmployeeId,
                     LastApprovalEmployeeID = SupervisorID,
-                    Comments = "Pending on Supervisor",
+                    Comments = "Pending on SUPERVISOR",
                     //  ApprovalEmployeeId = (int)SupervisorID,
                     //  ApprovalStatus = "Pending",
                     //  EntryDate = DateTime.Now,
