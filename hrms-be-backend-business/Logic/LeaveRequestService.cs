@@ -683,7 +683,8 @@ namespace hrms_be_backend_business.Logic
                 LeaveApproval leaveApproval = null;
                 if (CreateApproval)
                 {
-                    leaveApproval = await CreateLeaveApproval(leaveRequestLineItem);
+                    res.CompanyId = leaveRequestLineItem.CompanyId;
+                    leaveApproval = await CreateLeaveApproval(res);
                     if (leaveApproval != null && leaveApproval.leaveApprovalLineItems.Count > 0)
                     {
                         leaveRequestLineItem.leaveApprovalId = leaveApproval.LeaveApprovalId;
@@ -884,53 +885,61 @@ namespace hrms_be_backend_business.Logic
 
         private async Task<LeaveApproval> CreateLeaveApproval(LeaveRequestLineItem leaveRequestItem)
         {
-            var employeeInfo = await _employeeRepository.GetEmployeeById(leaveRequestItem.EmployeeId, leaveRequestItem.CompanyId);
-
-            long SupervisorID = employeeInfo.Employee.SupervisorID;
-            long GroupHeadID = employeeInfo.Employee.GroupHeadID;
-            long HR_ID = await _employeeRepository.GetHR_ID(leaveRequestItem.CompanyId, leaveRequestItem.EmployeeId);
-
-            LeaveApproval leaveApproval = new()
+            try
             {
-                LeaveRequestLineItemId = leaveRequestItem.LeaveRequestLineItemId.Value,
-                RequiredApprovalCount = 3,
-                EmployeeID = leaveRequestItem.EmployeeId,
-                LastApprovalEmployeeID = SupervisorID,
-                Comments = "Pending on Supervisor",
-                //  ApprovalEmployeeId = (int)SupervisorID,
-                //  ApprovalStatus = "Pending",
-                //  EntryDate = DateTime.Now,
-                //  ApprovalPosition = "Supervisor"
-            };
+                var employeeInfo = await _employeeRepository.GetEmployeeById(leaveRequestItem.EmployeeId, leaveRequestItem.CompanyId);
 
-            LeaveApprovalLineItem approvalsLineItem = null;
+                long SupervisorID = employeeInfo.Employee.SupervisorID;
+                long GroupHeadID = employeeInfo.Employee.GroupHeadID;
+                long HR_ID = await _employeeRepository.GetHR_ID(leaveRequestItem.CompanyId, leaveRequestItem.EmployeeId);
+
+                LeaveApproval leaveApproval = new()
+                {
+                    LeaveRequestLineItemId = leaveRequestItem.LeaveRequestLineItemId.Value,
+                    RequiredApprovalCount = 3,
+                    EmployeeID = leaveRequestItem.EmployeeId,
+                    LastApprovalEmployeeID = SupervisorID,
+                    Comments = "Pending on Supervisor",
+                    //  ApprovalEmployeeId = (int)SupervisorID,
+                    //  ApprovalStatus = "Pending",
+                    //  EntryDate = DateTime.Now,
+                    //  ApprovalPosition = "Supervisor"
+                };
+
+                LeaveApprovalLineItem approvalsLineItem = null;
 
 
-            approvalsLineItem = new LeaveApprovalLineItem();
-            approvalsLineItem.ApprovalEmployeeId = SupervisorID;
-            approvalsLineItem.ApprovalPosition = "SUPERVISOR";
-            approvalsLineItem.Comments = "Pending on SUPERVISOR";
-            approvalsLineItem.ApprovalStep = 1;
-            leaveApproval.leaveApprovalLineItems.Add(approvalsLineItem);
+                approvalsLineItem = new LeaveApprovalLineItem();
+                approvalsLineItem.ApprovalEmployeeId = SupervisorID;
+                approvalsLineItem.ApprovalPosition = "SUPERVISOR";
+                approvalsLineItem.Comments = "Pending on SUPERVISOR";
+                approvalsLineItem.ApprovalStep = 1;
+                leaveApproval.leaveApprovalLineItems.Add(approvalsLineItem);
 
-            approvalsLineItem = new LeaveApprovalLineItem();
-            approvalsLineItem.ApprovalEmployeeId = GroupHeadID;
-            approvalsLineItem.ApprovalPosition = "GROUP HEAD";
-            approvalsLineItem.Comments = "Pending on GROUP HEAD";
-            approvalsLineItem.ApprovalStep = 2;
-            leaveApproval.leaveApprovalLineItems.Add(approvalsLineItem);
+                approvalsLineItem = new LeaveApprovalLineItem();
+                approvalsLineItem.ApprovalEmployeeId = GroupHeadID;
+                approvalsLineItem.ApprovalPosition = "GROUP HEAD";
+                approvalsLineItem.Comments = "Pending on GROUP HEAD";
+                approvalsLineItem.ApprovalStep = 2;
+                leaveApproval.leaveApprovalLineItems.Add(approvalsLineItem);
 
-            approvalsLineItem = new LeaveApprovalLineItem();
-            approvalsLineItem.ApprovalEmployeeId = HR_ID;
-            approvalsLineItem.ApprovalPosition = "HR";
-            approvalsLineItem.Comments = "Pending on HR";
-            approvalsLineItem.ApprovalStep = 3;
-            leaveApproval.leaveApprovalLineItems.Add(approvalsLineItem);
+                approvalsLineItem = new LeaveApprovalLineItem();
+                approvalsLineItem.ApprovalEmployeeId = HR_ID;
+                approvalsLineItem.ApprovalPosition = "HR";
+                approvalsLineItem.Comments = "Pending on HR";
+                approvalsLineItem.ApprovalStep = 3;
+                leaveApproval.leaveApprovalLineItems.Add(approvalsLineItem);
 
-            var res = await _leaveApprovalRepository.CreateLeaveApproval(leaveApproval);
-            if (res != null)
+                var res = await _leaveApprovalRepository.CreateLeaveApproval(leaveApproval);
+                if (res != null)
+                {
+                    return res;
+                }
+            }
+            catch (Exception ex)
             {
-                return res;
+
+                throw;
             }
             return null;
         }

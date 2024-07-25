@@ -77,6 +77,15 @@ namespace hrms_be_backend_business.Logic
                 
                 //var Emilokan = (await _leaveApprovalRepository.GetPendingLeaveApprovals(leaveApprovalLineItem.ApprovalEmployeeId, "")).FirstOrDefault(x => x.LeaveApprovalLineItemId == leaveApprovalLineItem.LeaveApprovalLineItemId);
                 var leaveApproval = await GetLeaveApprovalInfo(leaveApprovalLineItem.LeaveApprovalId, 0);
+                if (leaveApproval == null)
+                {
+                    _logger.LogInformation($"No information was return for the LeaveApprovalID:{leaveApprovalLineItem.LeaveApprovalId}");
+                    response.ResponseCode = ((int)ResponseCode.Ok).ToString();
+                    response.ResponseMessage = "an error occured while processing your request. Please contact your administrator for further assistance";
+                   // response.Data = repoResponse;
+                    return response;
+                }
+
                 var leaveApprovalLineItem1 = leaveApproval.LeaveApprovalLineItems.FirstOrDefault(x=>x.LeaveApprovalLineItemId == leaveApprovalLineItem.LeaveApprovalLineItemId);
                 if (leaveApproval.LastApprovalEmployeeID == leaveApprovalLineItem.ApprovalEmployeeId && leaveApproval.Comments.Equals(leaveApprovalLineItem1.Comments, StringComparison.OrdinalIgnoreCase))
                 {

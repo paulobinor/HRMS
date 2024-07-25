@@ -51,16 +51,16 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@startDate", leaveRequestLineItem.startDate);
                 param.Add("@ResumptionDate", leaveRequestLineItem.ResumptionDate);
 
-                if (leaveRequestLineItem.AnnualLeaveId > 0)
-                {
-                    sp = ApplicationConstant.Sp_CreateEmpLeaveRequestLineItem1;
-                }
-                else
-                {
-                    sp = ApplicationConstant.Sp_CreateEmpLeaveRequestLineItem;
-                      param.Add("@IsRescheduled", "0");
-                }
-                var res = await _dapperGeneric.Get<LeaveRequestLineItem>(sp, param, commandType: CommandType.StoredProcedure);
+                //if (leaveRequestLineItem.AnnualLeaveId > 0)
+                //{
+                //    sp = ApplicationConstant.Sp_CreateEmpLeaveRequestLineItem1;
+                //}
+                //else
+                //{
+                //    sp = ApplicationConstant.Sp_CreateEmpLeaveRequestLineItem;
+                //      param.Add("@IsRescheduled", "0");
+                //}
+                var res = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_CreateEmpLeaveRequestLineItem1, param, commandType: CommandType.StoredProcedure);
                 return res;
             }
             catch (Exception ex)

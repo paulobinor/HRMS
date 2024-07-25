@@ -219,7 +219,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             }
         }
 
-        [Authorize]
+     //   [Authorize]
         [HttpGet("GetEmployeeLeaveRequests")]
         public async Task<IActionResult> GetEmployeeLeaveRequests([FromQuery] long CompanyID, long EmployeeId)
         {
@@ -229,13 +229,13 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
                 _logger.LogInformation($"Received GetEmployeeLeaveRequests. Payload: {JsonConvert.SerializeObject(new { CompanyID, EmployeeId })} from remote address: {RemoteIpAddress}");
 
-                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
-                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-                if (accessUser.data == null)
-                {
-                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+             //   var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+                //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                //if (accessUser.data == null)
+                //{
+                //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
-                }
+                //}
                 var leave = await _leaveRequestService.GetEmployeeLeaveRequests(CompanyID, EmployeeId);
                 if (leave.Any())
                 {

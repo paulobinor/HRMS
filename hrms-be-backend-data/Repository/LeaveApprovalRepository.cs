@@ -553,29 +553,32 @@ namespace hrms_be_backend_data.Repository
                 {
                     
                     var res1 = await GetAnnualLeaveInfo(item.LeaveApprovalId);
-                    foreach (var item1 in res1.leaveRequestLineItems)
+                    if (res1 != null)
                     {
-                        item1.LeaveApprovalLineItemId = item.LeaveApprovalLineItemId;
-                        item1.LeaveApprovalId = item.LeaveApprovalId;
-                        item1.ApprovalStatus = item.ApprovalStatus;
-                        item1.CompanyId = res1.CompanyID;
-                        item1.Comments = item.Comments;
+                        foreach (var item1 in res1.leaveRequestLineItems)
+                        {
+                            item1.LeaveApprovalLineItemId = item.LeaveApprovalLineItemId;
+                            item1.LeaveApprovalId = item.LeaveApprovalId;
+                            item1.ApprovalStatus = item.ApprovalStatus;
+                            item1.CompanyId = res1.CompanyID;
+                            item1.Comments = item.Comments;
+                        }
+                        pendingAnnualLeaveApprovalItemDto = new()
+                        {
+                            FullName = res1.leaveRequestLineItems.FirstOrDefault().FullName,
+                            RelieverName = res1.leaveRequestLineItems.FirstOrDefault().RelieverName,
+                            ApprovalStatus = item.ApprovalStatus,
+                            //ApprovalEmployeeID = approvalEmployeeID,
+                            Year = res1.leaveRequestLineItems.FirstOrDefault().startDate.Year.ToString(),
+                            EmployeeID = item.EmployeeID,
+                            LeaveCount = res1.leaveRequestLineItems.Count, // res.FindAll(x => x.EmployeeID == item.EmployeeID).Count(),
+                            LeaveTypeName = res1.leaveRequestLineItems.FirstOrDefault().LeaveTypeName,
+                            leaveRequestLineItems = res1.leaveRequestLineItems, // res.FindAll(x => x.EmployeeID == item.EmployeeID),
+                            Status = item.Comments,
+                            TotalNoOfDays = res1.leaveRequestLineItems.Sum(x => x.LeaveLength)  // res.FindAll(x => x.EmployeeID == item.EmployeeID).Sum(x => x.LeaveLength)
+                        };
+                        pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
                     }
-                    pendingAnnualLeaveApprovalItemDto = new()
-                    {
-                        FullName = res1.leaveRequestLineItems.FirstOrDefault().FullName,
-                        RelieverName = res1.leaveRequestLineItems.FirstOrDefault().RelieverName,
-                        ApprovalStatus = item.ApprovalStatus,
-                        //ApprovalEmployeeID = approvalEmployeeID,
-                        Year = res1.leaveRequestLineItems.FirstOrDefault().startDate.Year.ToString(),
-                        EmployeeID = item.EmployeeID,
-                        LeaveCount = res1.leaveRequestLineItems.Count, // res.FindAll(x => x.EmployeeID == item.EmployeeID).Count(),
-                        LeaveTypeName = res1.leaveRequestLineItems.FirstOrDefault().LeaveTypeName,
-                        leaveRequestLineItems = res1.leaveRequestLineItems, // res.FindAll(x => x.EmployeeID == item.EmployeeID),
-                        Status = item.Comments,
-                        TotalNoOfDays = res1.leaveRequestLineItems.Sum(x => x.LeaveLength)  // res.FindAll(x => x.EmployeeID == item.EmployeeID).Sum(x => x.LeaveLength)
-                    };
-                    pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
                 }
 
                 return pendingRes;
