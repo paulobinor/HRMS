@@ -159,7 +159,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
         }
 
-        [Authorize]
+       // [Authorize]
         [HttpGet("GetAllLeaveRequest")]
         public async Task<IActionResult> GetAllLeaveRequest([FromQuery] string CompanyID)
         {
@@ -169,13 +169,13 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
                 _logger.LogInformation($"Received GetAllLeaveRequest. Payload: {JsonConvert.SerializeObject(new { CompanyID })} from remote address: {RemoteIpAddress}");
 
-                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
-                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-                if (accessUser.data == null)
-                {
-                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+                //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                //if (accessUser.data == null)
+                //{
+                //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
-                }
+                //}
 
                 return Ok(await _leaveRequestService.GetAllLeaveRequest(CompanyID));
             }
@@ -189,7 +189,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             }
         }
 
-        [Authorize]
+     //   [Authorize]
         [HttpGet("GetEmpLeaveRequests")]
         public async Task<IActionResult> GetAllLeaveRequestLineItems([FromQuery] string CompanyID)
         {
@@ -199,13 +199,13 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
                 _logger.LogInformation($"Received GetAllLeaveRequestLineItems. Payload: {JsonConvert.SerializeObject(new { CompanyID })} from remote address: {RemoteIpAddress}");
 
-                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
-                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-                if (accessUser.data == null)
-                {
-                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+                //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                //if (accessUser.data == null)
+                //{
+                //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
-                }
+                //}
 
                 return Ok(await _leaveRequestService.GetAllLeaveRquestLineItems(Convert.ToInt64(CompanyID)));
             }

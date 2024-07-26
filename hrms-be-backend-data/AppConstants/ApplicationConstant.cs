@@ -127,6 +127,6 @@
         public const string Sp_GetAllLeaveApprovalLineItems = "Sp_GetAllLeaveApprovalLineItems";
         public const string Sp_GetAllAnnualLeaveApprovals = "Sp_GetAllAnnualLeaveApprovals";
         public const string Sp_GetAnnualLeaveInfo = "Sp_GetAnnualLeaveInfo";
-        internal static string Sp_GetLeaveApprovalItem = "Sp_GetLeaveApprovalItem";
+        public const string Sp_GetLeaveApprovalItem = "Sp_GetLeaveApprovalItem";
     }
 }

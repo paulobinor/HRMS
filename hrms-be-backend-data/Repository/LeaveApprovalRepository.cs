@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using GTB.Common;
 using hrms_be_backend_common.DTO;
 using hrms_be_backend_common.Models;
 using hrms_be_backend_data.AppConstants;
@@ -260,6 +261,7 @@ namespace hrms_be_backend_data.Repository
                 List<PendingAnnualLeaveApprovalItemDto> pendingRes = new List<PendingAnnualLeaveApprovalItemDto>();
                 PendingLeaveApprovalItemsDto pendingLeaveApproval = null;
                 var leaveApprovalLineItems = await GetAllApprovalLineItems(approvalEmployeeID);
+                bool isValidItem = false;
                 foreach (var item in leaveApprovalLineItems)
                 {
                     var leaveapproval = await GetLeaveApprovalInfo(item.LeaveApprovalId);
@@ -283,10 +285,41 @@ namespace hrms_be_backend_data.Repository
                             leaveApprovalItem.ApprovalStatus = item.ApprovalStatus;
                             if (item.ApprovalStatus == "Pending")
                             {
-                                leaveApprovalItem.Comments = item.Comments;
+                                if (leaveApprovalItem.LastApprovalEmployeeID == item.ApprovalEmployeeId)
+                                {
+                                    if (leaveapproval.CurrentApprovalCount == item.ApprovalStep)
+                                    {
+                                        leaveApprovalItem.Comments = item.Comments;
+                                        isValidItem = true;
+                                    }
+                                    else
+                                    {
+                                       // isValidItem = false;
+                                        leaveApprovalItem.Comments = item.Comments; 
+                                    }
+                                }
+                                else
+                                {
+                                    leaveApprovalItem.Comments = leaveapproval.Comments;
+                                }
                             }
-                           
-                            leaveApprovalItems.Add(leaveApprovalItem);
+                            else
+                            {
+                                leaveApprovalItem.Comments = leaveapproval.Comments;
+                                isValidItem = true;
+                            }
+                            if (ConfigSettings.leaveRequestConfig.EnableSingleApproval) // only one item of approval employeeid will show up in the list where the approver has more than one approval position.
+                            {
+                                if (isValidItem)
+                                {
+                                    leaveApprovalItems.Add(leaveApprovalItem);
+                                    isValidItem = false;
+                                }
+                            }
+                            else
+                            {
+                                leaveApprovalItems.Add(leaveApprovalItem);
+                            }
                         }
                       
                     }
@@ -389,7 +422,24 @@ namespace hrms_be_backend_data.Repository
                             Status = comments, // item.Comments,
                             TotalNoOfDays = res1.leaveRequestLineItems.Sum(x => x.LeaveLength)  // res.FindAll(x => x.EmployeeID == item.EmployeeID).Sum(x => x.LeaveLength)
                         };
-                        pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                        if (ConfigSettings.leaveRequestConfig.EnableSingleApproval)
+                        {
+                            if (item.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+                            {
+                                if (leaveapproval.LastApprovalEmployeeID == item.ApprovalEmployeeId && leaveapproval.CurrentApprovalCount == item.ApprovalStep)
+                                {
+                                    pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                                }
+                            }
+                            else
+                            {
+                                pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                            }
+                        }
+                        else
+                        {
+                            pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                        }
                     }
                 }
 
