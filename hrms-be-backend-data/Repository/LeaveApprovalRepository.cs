@@ -283,6 +283,7 @@ namespace hrms_be_backend_data.Repository
                             leaveApprovalItem.IsApproved = item.IsApproved;
                             leaveApprovalItem.ApprovalStep = item.ApprovalStep;
                             leaveApprovalItem.ApprovalStatus = item.ApprovalStatus;
+                            leaveApprovalItem.LeaveApprovalId = item.LeaveApprovalId;
                             if (item.ApprovalStatus == "Pending")
                             {
                                 if (leaveApprovalItem.LastApprovalEmployeeID == item.ApprovalEmployeeId)
@@ -300,7 +301,8 @@ namespace hrms_be_backend_data.Repository
                                 }
                                 else
                                 {
-                                    leaveApprovalItem.Comments = leaveapproval.Comments;
+                                    leaveApprovalItem.Comments = item.Comments;
+                                    isValidItem = true;
                                 }
                             }
                             else
