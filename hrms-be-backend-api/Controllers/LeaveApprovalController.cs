@@ -130,8 +130,6 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             return Ok(response);
         }
 
-       
-
     }
 
 }

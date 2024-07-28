@@ -249,17 +249,11 @@ namespace hrms_be_backend_data.Repository
                 var param = new DynamicParameters();
                 param.Add("@ApprovalEmployeeID", approvalEmployeeID);
                 param.Add("@ApprovalStatus", v);
-                //if (!string.IsNullOrEmpty(v))
-                //{
-                //    param.Add("@ApprovalStatus", "All");
-                //}
-                //else
-                //{
-                //    param.Add("@ApprovalStatus", "Pending");
-                //}
+              
                 List<PendingLeaveApprovalItemsDto> leaveApprovalItems = new List<PendingLeaveApprovalItemsDto>();
                 List<PendingAnnualLeaveApprovalItemDto> pendingRes = new List<PendingAnnualLeaveApprovalItemDto>();
                 PendingLeaveApprovalItemsDto pendingLeaveApproval = null;
+            
                 var leaveApprovalLineItems = await GetAllApprovalLineItems(approvalEmployeeID);
                 bool isValidItem = false;
                 foreach (var item in leaveApprovalLineItems)
@@ -268,59 +262,63 @@ namespace hrms_be_backend_data.Repository
                     var leaverequestLineitem =  GetLeaveRequestLineItem(leaveapproval.LeaveRequestLineItemId).Result;
                     if (leaverequestLineitem.AnnualLeaveId > 0)
                     {
-                        //skip
+                        //skip because we are not looking for annual leave requests
                     }
                     else
                     {
                         var param1 = new DynamicParameters();
                         param1.Add("@LeaveApprovalId", item.LeaveApprovalId);
-                        var leaveApprovalItem = await _dapperGeneric.Get<PendingLeaveApprovalItemsDto>(ApplicationConstant.Sp_GetLeaveApprovalItem, param1, commandType: CommandType.StoredProcedure);
 
-                        if (leaveApprovalItem != null)
+                        var leaveApprovalRequestItem = await _dapperGeneric.Get<PendingLeaveApprovalItemsDto>(ApplicationConstant.Sp_GetLeaveApprovalItem, param1, commandType: CommandType.StoredProcedure);
+
+                        if (leaveApprovalRequestItem != null)
                         {
-                            leaveApprovalItem.LeaveApprovalLineItemId = item.LeaveApprovalLineItemId;
-                            leaveApprovalItem.ApprovalEmployeeId = item.ApprovalEmployeeId;
-                            leaveApprovalItem.IsApproved = item.IsApproved;
-                            leaveApprovalItem.ApprovalStep = item.ApprovalStep;
-                            leaveApprovalItem.ApprovalStatus = item.ApprovalStatus;
-                            leaveApprovalItem.LeaveApprovalId = item.LeaveApprovalId;
+                            leaveApprovalRequestItem.LeaveApprovalLineItemId = item.LeaveApprovalLineItemId;
+                            leaveApprovalRequestItem.ApprovalEmployeeId = item.ApprovalEmployeeId;
+                            leaveApprovalRequestItem.IsApproved = item.IsApproved;
+                            leaveApprovalRequestItem.ApprovalStep = item.ApprovalStep;
+                            leaveApprovalRequestItem.ApprovalStatus = item.ApprovalStatus;
+                            leaveApprovalRequestItem.LeaveApprovalId = item.LeaveApprovalId;
                             if (item.ApprovalStatus == "Pending")
                             {
-                                if (leaveApprovalItem.LastApprovalEmployeeID == item.ApprovalEmployeeId)
+                                leaveApprovalRequestItem.Comments = item.Comments;
+                                if (leaveApprovalRequestItem.LastApprovalEmployeeID == item.ApprovalEmployeeId)
                                 {
                                     if (leaveapproval.CurrentApprovalCount == item.ApprovalStep)
                                     {
-                                        leaveApprovalItem.Comments = item.Comments;
                                         isValidItem = true;
+                                      //  leaveApprovalRequestItem.Comments = item.Comments;
                                     }
-                                    else
-                                    {
-                                       // isValidItem = false;
-                                        leaveApprovalItem.Comments = item.Comments; 
-                                    }
+                                    //else
+                                    //{
+                                    //   // isValidItem = false;
+                                    //    leaveApprovalRequestItem.Comments = item.Comments;
+
+                                    //}
                                 }
-                                else
-                                {
-                                    leaveApprovalItem.Comments = item.Comments;
-                                    isValidItem = true;
-                                }
+                                //else
+                                //{
+                                //    leaveApprovalRequestItem.Comments = item.Comments;
+                                //    isValidItem = true;
+                                //}
                             }
                             else
                             {
-                                leaveApprovalItem.Comments = leaveapproval.Comments;
+                              //  leaveApprovalRequestItem.Comments = leaveapproval.Comments;
                                 isValidItem = true;
                             }
+
                             if (ConfigSettings.leaveRequestConfig.EnableSingleApproval) // only one item of approval employeeid will show up in the list where the approver has more than one approval position.
                             {
                                 if (isValidItem)
                                 {
-                                    leaveApprovalItems.Add(leaveApprovalItem);
+                                    leaveApprovalItems.Add(leaveApprovalRequestItem);
                                     isValidItem = false;
                                 }
                             }
                             else
                             {
-                                leaveApprovalItems.Add(leaveApprovalItem);
+                                leaveApprovalItems.Add(leaveApprovalRequestItem);
                             }
                         }
                       
