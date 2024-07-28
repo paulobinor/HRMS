@@ -232,10 +232,10 @@ namespace hrms_be_backend_business.Logic
                 {
                     currentLeaveApprovalInfo.ApprovalStatus = "Completed";
                     currentLeaveApprovalInfo.Comments = $"Disapproved by {repoResponse.ApprovalPosition}";
+                    currentLeaveApprovalInfo.CurrentApprovalID = (int)leaveApprovalLineItem.ApprovalEmployeeId;
                     if (!string.IsNullOrEmpty(repoResponse.Comments))
                     {
                         currentLeaveApprovalInfo.Comments += ","+repoResponse.Comments;
-
                     }
                     //else
                     //{
