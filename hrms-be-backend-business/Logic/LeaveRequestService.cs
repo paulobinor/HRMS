@@ -171,7 +171,9 @@ namespace hrms_be_backend_business.Logic
             {
 
                 //Multiple requests not allowed while one pending
-                if (existingAnnualLeave.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+                var leaveApproval = await _leaveApprovalRepository.GetLeaveApprovalInfo(existingAnnualLeave.ApprovalID);
+
+                if (leaveApproval.ApprovalStatus.Contains("Pending", StringComparison.OrdinalIgnoreCase))
                 {
                     _logger.LogWarning($"Invalid request. Pending annual leave for approval exists:{JsonConvert.SerializeObject(existingAnnualLeave)}");
                     response.ResponseCode = "08";
@@ -181,7 +183,7 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 //Only one approved request shall stand
-                if (existingAnnualLeave.ApprovalStatus.Equals("Approved", StringComparison.OrdinalIgnoreCase)) // == .Comments.Contains("Approved", StringComparison.OrdinalIgnoreCase))
+                if (leaveApproval.ApprovalStatus.Contains("Approved", StringComparison.OrdinalIgnoreCase)) // == .Comments.Contains("Approved", StringComparison.OrdinalIgnoreCase))
                 {
                     _logger.LogWarning($"Invalid request. An approved Annual Leave already exists:{JsonConvert.SerializeObject(existingAnnualLeave)}");
                     response.ResponseCode = "400";

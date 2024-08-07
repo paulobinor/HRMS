@@ -16,5 +16,8 @@ namespace hrms_be_backend_common.DTO
         public string ApprovalStatus { get; set; }
         public string RelieverName { get; set; }
         public List<LeaveRequestLineItemDto>? leaveRequestLineItems { get; set; }
+        public long leaveApprovalId { get; set; }
+        public long LastApprovalEmployeeId { get; set; }
+        public string ApprovalPosition { get; set; }
     }
 }

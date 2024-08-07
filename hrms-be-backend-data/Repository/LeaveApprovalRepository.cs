@@ -141,7 +141,6 @@ namespace hrms_be_backend_data.Repository
                     return res;
                 }
                 return null;
-
             }
             catch (Exception ex)
             {
@@ -277,80 +276,64 @@ namespace hrms_be_backend_data.Repository
                             leaveApprovalRequestItem.ApprovalEmployeeId = item.ApprovalEmployeeId;
                             leaveApprovalRequestItem.IsApproved = item.IsApproved;
                             leaveApprovalRequestItem.ApprovalStep = item.ApprovalStep;
-                            leaveApprovalRequestItem.ApprovalStatus = item.ApprovalStatus;
+                           // leaveApprovalRequestItem.ApprovalStatus = item.ApprovalStatus;
                             leaveApprovalRequestItem.LeaveApprovalId = item.LeaveApprovalId;
-                            if (leaveapproval.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
-                            {
-                                if (leaveApprovalRequestItem.LastApprovalEmployeeID == item.ApprovalEmployeeId)
-                                {
-                                    if (leaveapproval.CurrentApprovalCount == item.ApprovalStep)
-                                    {
-
-                                        leaveApprovalRequestItem.Comments = item.Comments;
-                                        isValidItem = true;
-                                    }
-                                    else if(leaveapproval.CurrentApprovalCount != item.ApprovalStep)
-                                    {
-
-                                        if (item.ApprovalStatus.Equals("Approved", StringComparison.OrdinalIgnoreCase))
-                                        {
-                                            leaveApprovalRequestItem.Comments = item.ApprovalStatus + "," + item.Comments;
-                                            isValidItem = true;
-                                        }
-                                    }
-                                }
-                            }
-                            //else if (leaveApprovalRequestItem.ApprovalStatus.Equals("Approved", StringComparison.OrdinalIgnoreCase))
+                            leaveApprovalRequestItem.ApprovalPosition = item.ApprovalPosition;
+                            //if (leaveapproval.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
                             //{
-                            //    if (leaveApprovalRequestItem.LastApprovalEmployeeID == item.ApprovalEmployeeId)
+                            //    if (leaveapproval.LastApprovalEmployeeID == item.ApprovalEmployeeId &&
+                            //        leaveapproval.CurrentApprovalCount == item.ApprovalStep)
                             //    {
-                            //        if (leaveapproval.CurrentApprovalCount == item.ApprovalStep)
-                            //        {
-                            //            leaveApprovalRequestItem.Comments = item.ApprovalStatus + "," + item.Comments;
-                            //            isValidItem = true;
-                            //        }
+                            //        isValidItem = true;
+                                    
+                            //    }
+                            //    //else if (item.ApprovalStep > leaveapproval.CurrentApprovalCount)
+                            //    //{
+                            //    //    isValidItem = true;
+                            //    //}
+                            //    leaveApprovalRequestItem.Comments = leaveapproval.Comments;
+                            //}
+                            //else if (leaveapproval.ApprovalStatus.Equals("Completed", StringComparison.OrdinalIgnoreCase))
+                            //{
+                            //    if (leaveApprovalRequestItem.LastApprovalEmployeeID == item.ApprovalEmployeeId &&
+                            //        leaveapproval.CurrentApprovalCount == item.ApprovalStep)
+                            //    {
+                            //        isValidItem = true;
+
+                            //    }
+                              
+                            //    leaveApprovalRequestItem.Comments = leaveapproval.Comments;
+                            //    var approvalItemId = leaveApprovalItems.FirstOrDefault(x=>x.ApprovalEmployeeId ==  item.ApprovalEmployeeId && x.LeaveApprovalId == item.LeaveApprovalId);
+                            //    if (approvalItemId != null)
+                            //    {
+                            //        //skip
+                            //        isValidItem = false;
+
+                            //    }
+                            //    else
+                            //    {
+                            //        isValidItem = true;
                             //    }
                             //}
+                            //else
+                            //{
+                            //    leaveApprovalRequestItem.Comments = item.ApprovalStatus + "," + item.Comments;
+                            //    isValidItem = true;
+                            //}
 
-                            else if (leaveapproval.ApprovalStatus.Equals("Completed", StringComparison.OrdinalIgnoreCase))
-                            {
-                                isValidItem = true;
-                                //if (leaveApprovalRequestItem.LastApprovalEmployeeID == item.ApprovalEmployeeId)
-                                //{
-                                //    if (leaveapproval.CurrentApprovalCount == item.ApprovalStep)
-                                //    {
-                                //        leaveApprovalRequestItem.Comments = item.ApprovalStatus + "," + item.Comments;
-                                //        isValidItem = true;
-                                //    }
-                                //    else if (leaveapproval.CurrentApprovalCount != item.ApprovalStep)
-                                //    {
+                            //if (ConfigSettings.leaveRequestConfig.EnableSingleApproval) // only one item of approval employeeid will show up in the list where the approver has more than one approval position.
+                            //{
+                            //    if (isValidItem)
+                            //    {
+                            //        leaveApprovalItems.Add(leaveApprovalRequestItem);
+                            //        isValidItem = false;
+                            //    }
+                            //}
+                            //else
+                            //{
+                            //}
 
-                                //        if (item.ApprovalStatus.Equals("Approved", StringComparison.OrdinalIgnoreCase))
-                                //        {
-                                //            leaveApprovalRequestItem.Comments = item.ApprovalStatus + "," + item.Comments;
-                                //            isValidItem = true;
-                                //        }
-                                //    }
-                                //}
-                            }
-                            else
-                            {
-                                leaveApprovalRequestItem.Comments = item.ApprovalStatus + "," + item.Comments;
-                                isValidItem = true;
-                            }
-
-                            if (ConfigSettings.leaveRequestConfig.EnableSingleApproval) // only one item of approval employeeid will show up in the list where the approver has more than one approval position.
-                            {
-                                if (isValidItem)
-                                {
-                                    leaveApprovalItems.Add(leaveApprovalRequestItem);
-                                    isValidItem = false;
-                                }
-                            }
-                            else
-                            {
-                                leaveApprovalItems.Add(leaveApprovalRequestItem);
-                            }
+                            leaveApprovalItems.Add(leaveApprovalRequestItem);
                         }
                       
                     }
@@ -425,20 +408,23 @@ namespace hrms_be_backend_data.Repository
                     var res1 = await GetAnnualLeaveInfo(item.LeaveApprovalId);
                     if (res1 != null)
                     {
+                        string comments = string.Empty;
+                        var leaveapproval = await GetLeaveApprovalInfo(item.LeaveApprovalId); 
+                        
+                        if (leaveapproval != null)
+                        {
+                            comments = leaveapproval.Comments;
+                        }
+
                         foreach (var item1 in res1.leaveRequestLineItems)
                         {
                             item1.LeaveApprovalLineItemId = item.LeaveApprovalLineItemId;
                             item1.LeaveApprovalId = item.LeaveApprovalId;
                             item1.ApprovalStatus = item.ApprovalStatus;
                             item1.CompanyId = res1.CompanyID;
-                            item1.Comments = item.Comments;
+                            item1.Comments = comments; // + "," + item.Comments;
                         }
-                        string comments = string.Empty;
-                        var leaveapproval = await GetLeaveApprovalInfo(item.LeaveApprovalId);
-                        if (leaveapproval != null)
-                        {
-                            comments = leaveapproval.Comments;
-                        }
+                       
                         pendingAnnualLeaveApprovalItemDto = new()
                         {
                             FullName = res1.leaveRequestLineItems.FirstOrDefault().FullName,
@@ -451,29 +437,50 @@ namespace hrms_be_backend_data.Repository
                             LeaveTypeName = res1.leaveRequestLineItems.FirstOrDefault().LeaveTypeName,
                             leaveRequestLineItems = res1.leaveRequestLineItems, // res.FindAll(x => x.EmployeeID == item.EmployeeID),
                             Status = comments, // item.Comments,
+                            leaveApprovalId = leaveapproval.LeaveApprovalId,
+                            ApprovalPosition = item.ApprovalPosition,
+                            LastApprovalEmployeeId = leaveapproval.LastApprovalEmployeeID,
                             TotalNoOfDays = res1.leaveRequestLineItems.Sum(x => x.LeaveLength)  // res.FindAll(x => x.EmployeeID == item.EmployeeID).Sum(x => x.LeaveLength)
                         };
 
 
+                        pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                        //if (ConfigSettings.leaveRequestConfig.EnableSingleApproval)
+                        //{
+                        //    if (leaveapproval.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+                        //    {
+                        //        if (leaveapproval.LastApprovalEmployeeID == item.ApprovalEmployeeId && leaveapproval.CurrentApprovalCount == item.ApprovalStep)
+                        //        {
+                        //            pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                        //        }
+                        //        else if(item.ApprovalStatus.Equals("Approved", StringComparison.OrdinalIgnoreCase))
+                        //        {
+                        //            pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                        //        }
+                        //    }
+                        //    else if (leaveapproval.ApprovalStatus.Equals("Completed", StringComparison.OrdinalIgnoreCase))
+                        //    {
+                        //        if (leaveapproval.LastApprovalEmployeeID == item.ApprovalEmployeeId &&
+                        //            leaveapproval.CurrentApprovalCount == item.ApprovalStep)
+                        //        {
+                        //            pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
 
-                        if (ConfigSettings.leaveRequestConfig.EnableSingleApproval)
-                        {
-                            if (item.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
-                            {
-                                if (leaveapproval.LastApprovalEmployeeID == item.ApprovalEmployeeId && leaveapproval.CurrentApprovalCount == item.ApprovalStep)
-                                {
-                                    pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
-                                }
-                            }
-                            else
-                            {
-                                pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
-                            }
-                        }
-                        else
-                        {
-                            pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
-                        }
+                        //        }
+
+                        //        leaveapproval.Comments = leaveapproval.Comments;
+                        //        var approvalItemId = pendingRes.FirstOrDefault(x=>x.LastApprovalEmployeeId ==  item.ApprovalEmployeeId && x.leaveApprovalId == item.LeaveApprovalId);
+                        //        if (approvalItemId != null)
+                        //        {
+                        //            //skip
+                        //           // isValidItem = false;
+
+                        //        }
+                        //        else
+                        //        {
+                        //        }
+
+                        //    }
+                        //}
                     }
                 }
 

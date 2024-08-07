@@ -247,6 +247,7 @@ namespace hrms_be_backend_business.Logic
                     _mailService.SendLeaveDisapproveConfirmationMail(leaveRequestLineItem.EmployeeId, repoResponse.ApprovalEmployeeId);
                     response.ResponseMessage = "Disapproved Successfully";
                 }
+               // currentLeaveApprovalInfo.CurrentApprovalID = (int)leaveApprovalLineItem.ApprovalEmployeeId;
                 #region Depricated
                 //await _leaveRequestRepository.UpdateLeaveRequestLineItemApproval(leaveRequestLineItem);
                 #endregion
