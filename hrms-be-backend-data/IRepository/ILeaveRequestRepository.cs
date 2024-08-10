@@ -9,6 +9,7 @@ namespace hrms_be_backend_data.IRepository
         Task<string> CreateLeaveRequest(LeaveRequestCreate Leave);
         Task<LeaveRequestLineItem> CreateLeaveRequestLineItem(LeaveRequestLineItem leaveRequestLineItem);
         Task<LeaveRequestLineItem> RescheduleLeaveRequest(LeaveRequestLineItem leaveRequestLineItem);
+        Task<LeaveRequestLineItem> RescheduleLeaveRequest(List<LeaveRequestLineItem> leaveRequestLineItems, int AnnualLeaveID, int LeaveRequestId);
         Task<dynamic> RescheduleLeaveRequest(RescheduleLeaveRequest update, string requesterUserEmail);
         Task<string> ApproveLeaveRequest(long LeaveRequestID, long ApprovedByUserId);
         Task<string> DisaproveLeaveRequest(long LeaveRequestID, long DisapprovedByUserId, string DisapprovedComment);
@@ -47,6 +48,7 @@ namespace hrms_be_backend_data.IRepository
         Task<AnnualLeave> CreateAnnualLeaveRequest(AnnualLeave annualLeave, List<LeaveRequestLineItem> requestLineItems);
         Task<AnnualLeave> UpdateAnnualLeave(AnnualLeave anualLeave);
         Task<LeaveApprovalLineItem> UpdateLeaveRequestApprovalID(LeaveRequestLineItem leaveRequestLineItem);
+        Task<AnnualLeave> GetAnnualLeaveInfo(int employeeId, int companyId, int leavePeriod);
 
         //  Task<EmpLeaveRequestInfo> UpdateAnnualLeaveInfo(long employeeId, string CompanyID);
 

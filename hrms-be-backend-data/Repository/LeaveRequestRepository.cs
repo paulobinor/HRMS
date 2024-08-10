@@ -105,6 +105,56 @@ namespace hrms_be_backend_data.Repository
             }
             return responseItems;
         }
+
+        public async Task<LeaveRequestLineItem> RescheduleLeaveRequest(List<LeaveRequestLineItem> leaveRequestLineItems, int AnnualLeaveID, int LeaveRequestId)
+        {
+            try
+            {
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    //  param.Add("@Status", LeaveRequestEnum.UPDATE);
+                    param.Add("@AnnualLeaveID", AnnualLeaveID);
+
+                    var res = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_DeleteLeaveRequestItems, param, commandType: CommandType.StoredProcedure);
+
+                }
+
+                foreach (var item in leaveRequestLineItems)
+                {
+                    item.LeaveRequestId = LeaveRequestId;
+                    item.AnnualLeaveId = AnnualLeaveID;
+                    item.IsRescheduled = true;
+                    item.LeaveRequestId = LeaveRequestId;
+                }
+                using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                {
+                    var param = new DynamicParameters();
+                    //  param.Add("@Status", LeaveRequestEnum.UPDATE);
+                    param.Add("@LeaveRequestLineItemId", leaveRequestLineItem.LeaveRequestLineItemId);
+                    param.Add("@LeaveTypeID", leaveRequestLineItem.LeaveTypeId);
+                    param.Add("@startDate", leaveRequestLineItem.startDate);
+                    param.Add("@endDate", leaveRequestLineItem.endDate);
+                    param.Add("@HandoverNotes", leaveRequestLineItem.HandoverNotes);
+                    param.Add("@UploadFilePath", leaveRequestLineItem.UploadFilePath);
+                    param.Add("@RescheduleReason", leaveRequestLineItem.RescheduleReason);
+                    param.Add("@ResumptionDate", leaveRequestLineItem.ResumptionDate);
+                    param.Add("@RelieverUserId", leaveRequestLineItem.RelieverUserId);
+                    param.Add("@LeaveLength", leaveRequestLineItem.LeaveLength);
+                    param.Add("@IsRescheduled", true);
+
+                    var res = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_RescheduleLeaveRequestLineItem, param, commandType: CommandType.StoredProcedure);
+
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                _logger.LogError($"MethodName: RescheduleLeaveRequest(RescheduleLeaveRequest update) ===>{ex.Message}");
+                throw;
+            }
+        }
         public async Task<LeaveRequestLineItem> RescheduleLeaveRequest(LeaveRequestLineItem leaveRequestLineItem)
         {
             try
@@ -565,6 +615,37 @@ namespace hrms_be_backend_data.Repository
             catch (Exception ex)
             {
                 _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+        }
+
+        public async Task<AnnualLeave> GetAnnualLeaveInfo(int employeeId, int companyId, int LeavePeriod)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@EmployeeId", employeeId);
+                param.Add("@CompanyId", companyId);
+                param.Add("@LeavePeriod", LeavePeriod);
+
+                var res = await _dapperGeneric.GetAll<AnnualLeave>(ApplicationConstant.Sp_GetEmpAnnualLeaveInfo1, param, commandType: CommandType.StoredProcedure);
+                if (res != null && res.Count > 0)
+                {
+                    foreach (var item in res)
+                    {
+                        item.leaveRequestLineItems = await GetAnnualLeaveRequestLineItems(item.AnnualLeaveId);
+                        //res.NoOfDaysTaken = res.leaveRequestLineItems.Sum(x=>x.LeaveLength);
+                        // res.Comments = res.leaveRequestLineItems.FirstOrDefault().Comments;
+                    }
+
+                    return res;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: GetAnnualLeaveInfo ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
                 return default;
             }
         }
