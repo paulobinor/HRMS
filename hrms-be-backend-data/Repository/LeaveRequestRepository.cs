@@ -92,7 +92,7 @@ namespace hrms_be_backend_data.Repository
                         param.Add("@LeaveLength", leaveRequestLineItem.LeaveLength);
                         param.Add("@IsRescheduled", leaveRequestLineItem.IsRescheduled);
 
-                        var res = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_RescheduleLeaveRequestLineItem, param, commandType: CommandType.StoredProcedure);
+                        var res = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_RescheduleAnnualLeaveRequestLineItem, param, commandType: CommandType.StoredProcedure);
                         responseItems.Add(res);
                     }
                 }
@@ -106,7 +106,7 @@ namespace hrms_be_backend_data.Repository
             return responseItems;
         }
 
-        public async Task<string> RescheduleLeaveRequest(List<LeaveRequestLineItem> leaveRequestLineItems, AnnualLeave annualLeave)
+        public async Task<string> RescheduleAnnualLeaveRequest(List<LeaveRequestLineItem> leaveRequestLineItems, AnnualLeave annualLeave)
         {
             string res = string.Empty;
             try
@@ -117,8 +117,7 @@ namespace hrms_be_backend_data.Repository
                     //  param.Add("@Status", LeaveRequestEnum.UPDATE);
                     param.Add("@AnnualLeaveID", annualLeave.AnnualLeaveId);
 
-                    var res1 = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_DeleteLeaveRequestItems, param, commandType: CommandType.StoredProcedure);
-
+                    var res1 = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_DeleteAnnualLeaveRequestItems, param, commandType: CommandType.StoredProcedure);
                 }
 
                 foreach (var leaveRequestLineItem in leaveRequestLineItems)
@@ -145,7 +144,7 @@ namespace hrms_be_backend_data.Repository
                         param.Add("@IsRescheduled", leaveRequestLineItem.IsRescheduled);
                         param.Add("@AnnualLeaveID", annualLeave.AnnualLeaveId);
 
-                        res = await _dapperGeneric.Get<string>(ApplicationConstant.Sp_RescheduleLeaveRequestLineItem, param, commandType: CommandType.StoredProcedure);
+                        res = await _dapperGeneric.Get<string>(ApplicationConstant.Sp_RescheduleAnnualLeaveRequestLineItem, param, commandType: CommandType.StoredProcedure);
                         if (!int.TryParse(res, out _))
                         {
                             _logger.LogError($"MethodName: RescheduleLeaveRequest(RescheduleLeaveRequest update) ===>{res}");
@@ -169,7 +168,6 @@ namespace hrms_be_backend_data.Repository
                         return null;
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -528,8 +526,70 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
+        public async Task<AnnualLeave> CreateAnnualLeaveRequest1(AnnualLeave annualLeave, List<LeaveRequestLineItem> requestLineItems)
+        {
+            var lineitem = requestLineItems.FirstOrDefault();
+
+            var param = new DynamicParameters();
+            param.Add("@CompanyID", lineitem.CompanyId);
+            param.Add("@EmployeeId", lineitem.EmployeeId);
+            param.Add("@NoOfDaysTaken", requestLineItems.Sum(x => x.LeaveLength));
+
+            try
+            {
+                var res = await _dapperGeneric.Get<AnnualLeave>(ApplicationConstant.Sp_CreateEmpAnnualLeave1, param, commandType: CommandType.StoredProcedure);
+                _logger.LogInformation($"Response from Sp_CreateEmpAnnualLeave1:{JsonConvert.SerializeObject(res)}");
+                if (res != null)
+                {
+
+                    foreach (var leaveRequestLineItem in requestLineItems)
+                    {
+                        leaveRequestLineItem.LeaveRequestId = annualLeave.LeaveRequestId;
+                        leaveRequestLineItem.AnnualLeaveId = res.AnnualLeaveId;
+
+                        _logger.LogInformation($"About to post leave request item to db. Paylaod:  {JsonConvert.SerializeObject(leaveRequestLineItem)}");
+
+                        var lineItem = await CreateLeaveRequestLineItem(leaveRequestLineItem);
+
+                        _logger.LogInformation($"Response after posting leave request to db:  {JsonConvert.SerializeObject(lineItem)}");
+
+                        if (lineItem != null)
+                        {
+                            LeaveRequestLineItemDto leaveRequestLineItemDto = new LeaveRequestLineItemDto()
+                            {
+                                LeaveRequestLineItemId = lineItem.LeaveRequestLineItemId,
+                                LeaveLength = lineItem.LeaveLength,
+                                LeaveTypeId = lineItem.LeaveTypeId,
+                                LeaveRequestId = lineItem.LeaveRequestId,
+                                RelieverUserId = leaveRequestLineItem.RelieverUserId,
+                                ResumptionDate = lineItem.ResumptionDate,
+                                CompanyId = leaveRequestLineItem.CompanyId,
+                                EmployeeId = lineItem.EmployeeId,
+                                HandoverNotes = lineItem.HandoverNotes,
+                                startDate = lineItem.startDate,
+                                endDate = lineItem.endDate,
+                                UploadFilePath = lineItem.UploadFilePath,
+                                AnnualLeaveId = res.AnnualLeaveId
+                            };
+                            res.leaveRequestLineItems.Add(leaveRequestLineItemDto);
+                        }
+                    }
+                    return res;
+                }
+
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return null;
+            }
+        }
         public async Task<AnnualLeave> CreateAnnualLeaveRequest(AnnualLeave annualLeave, List<LeaveRequestLineItem> requestLineItems)
         {
+            var lineitem  = requestLineItems.FirstOrDefault();
+            
             var param = new DynamicParameters();
             param.Add("@LeaveRequestId", annualLeave.LeaveRequestId);
             param.Add("@CompanyID", annualLeave.CompanyID);

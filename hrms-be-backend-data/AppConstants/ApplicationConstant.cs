@@ -53,7 +53,6 @@
 
         public const string Sp_CreateEmpLeaveRequestLineItem = "Sp_CreateEmpLeaveRequestLineItem";
         public const string Sp_CreateEmpLeaveInfo = "Sp_CreateEmpLeaveInfo";
-        public const string Sp_RescheduleLeaveRequestLineItem = "Sp_RescheduleLeaveRequestLineItem";
         public const string Sp_GetEmpLeaveInfoHistory = "Sp_GetEmpLeaveInfoHistory";
         public const string Sp_GetEmpLeaveInfo = "Sp_GetEmpLeaveInfo";
         public const string Sp_GetLeaveApproval = "Sp_GetLeaveApproval";
@@ -129,7 +128,10 @@
         public const string Sp_GetAnnualLeaveInfo = "Sp_GetAnnualLeaveInfo";
         public const string Sp_GetLeaveApprovalItem = "Sp_GetLeaveApprovalItem";
         public const string Sp_GetEmpAnnualLeaveInfo1 = "Sp_GetEmpAnnualLeaveInfo1";
-        public const string Sp_DeleteLeaveRequestItems = "Sp_DeleteLeaveRequestItems";
+        public const string Sp_DeleteAnnualLeaveRequestItems = "Sp_DeleteAnnualLeaveRequestItems";
         public const string Sp_UpdateAnnualLeaveApproval = "Sp_UpdateAnnualLeaveApproval";
+        public const string Sp_RescheduleLeaveRequestLineItem = "Sp_RescheduleLeaveRequestLineItem";
+        public const string Sp_CreateEmpAnnualLeave1 = "Sp_CreateEmpAnnualLeave1";
+        public const string Sp_RescheduleAnnualLeaveRequestLineItem = "Sp_RescheduleAnnualLeaveRequestLineItem";
     }
 }

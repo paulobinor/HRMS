@@ -103,7 +103,7 @@ namespace hrms_be_backend_api.Controller
 
       //  [Authorize]
         [HttpGet("GetAnnualLeaveRequests")]
-        public async Task<IActionResult> GetAnnualLeaveRequestLineItems([FromQuery] string CompanyID)
+        public async Task<IActionResult> GetAnnualLeaveRequestLineItems([FromQuery] string CompanyID, int pageNumber, int pageSize)
         {
             var response = new BaseResponse();
             try
@@ -120,8 +120,24 @@ namespace hrms_be_backend_api.Controller
                 //}
 
                 var res = await _leaveRequestService.GetEmpAnnualLeaveRquestLineItems(Convert.ToInt64(CompanyID));
+                var requests = (List<LeaveRequestLineItemDto>)res.Data;
+                var totalItems = requests.Count;
+                var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
+                var items = requests
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
 
+                var pagedRes = new
+                {
+                    TotalItems = totalItems,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalPages = totalPages,
+                    Items = items
+                };
+                res.Data = pagedRes;
                 return Ok(res);
             }
             catch (Exception ex)
