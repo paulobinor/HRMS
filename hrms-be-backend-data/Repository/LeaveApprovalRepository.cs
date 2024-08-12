@@ -138,6 +138,7 @@ namespace hrms_be_backend_data.Repository
                 var res = await _dapperGeneric.Get<LeaveApprovalInfo>(ApplicationConstant.Sp_GetLeaveApproval, param, commandType: CommandType.StoredProcedure);
                 if (res != null)
                 {
+                    res.LeaveApprovalLineItems = await GetLeaveApprovalLineItems(leaveApprovalId);
                     return res;
                 }
                 return null;

@@ -106,47 +106,70 @@ namespace hrms_be_backend_data.Repository
             return responseItems;
         }
 
-        public async Task<LeaveRequestLineItem> RescheduleLeaveRequest(List<LeaveRequestLineItem> leaveRequestLineItems, int AnnualLeaveID, int LeaveRequestId)
+        public async Task<string> RescheduleLeaveRequest(List<LeaveRequestLineItem> leaveRequestLineItems, AnnualLeave annualLeave)
         {
+            string res = string.Empty;
             try
             {
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
                     //  param.Add("@Status", LeaveRequestEnum.UPDATE);
-                    param.Add("@AnnualLeaveID", AnnualLeaveID);
+                    param.Add("@AnnualLeaveID", annualLeave.AnnualLeaveId);
 
-                    var res = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_DeleteLeaveRequestItems, param, commandType: CommandType.StoredProcedure);
+                    var res1 = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_DeleteLeaveRequestItems, param, commandType: CommandType.StoredProcedure);
 
                 }
 
-                foreach (var item in leaveRequestLineItems)
+                foreach (var leaveRequestLineItem in leaveRequestLineItems)
                 {
-                    item.LeaveRequestId = LeaveRequestId;
-                    item.AnnualLeaveId = AnnualLeaveID;
-                    item.IsRescheduled = true;
-                    item.LeaveRequestId = LeaveRequestId;
+                    leaveRequestLineItem.LeaveRequestId = annualLeave.LeaveRequestId;
+                    leaveRequestLineItem.AnnualLeaveId = annualLeave.AnnualLeaveId;
+                    leaveRequestLineItem.IsRescheduled = true;
+
+                    using (SqlConnection _dapper = new SqlConnection(_connectionString))
+                    {
+                        var param = new DynamicParameters();
+                        //  param.Add("@Status", LeaveRequestEnum.UPDATE);
+                        param.Add("@EmployeeId", annualLeave.EmployeeId);
+                        param.Add("@LeaveTypeID", leaveRequestLineItem.LeaveTypeId);
+                        param.Add("@LeaveRequestId", leaveRequestLineItem.LeaveRequestId);
+                        param.Add("@startDate", leaveRequestLineItem.startDate);
+                        param.Add("@endDate", leaveRequestLineItem.endDate);
+                        param.Add("@HandoverNotes", leaveRequestLineItem.HandoverNotes);
+                        param.Add("@UploadFilePath", leaveRequestLineItem.UploadFilePath);
+                        param.Add("@RescheduleReason", leaveRequestLineItem.RescheduleReason);
+                        param.Add("@ResumptionDate", leaveRequestLineItem.ResumptionDate);
+                        param.Add("@RelieverUserId", leaveRequestLineItem.RelieverUserId);
+                        param.Add("@LeaveLength", leaveRequestLineItem.LeaveLength);
+                        param.Add("@IsRescheduled", leaveRequestLineItem.IsRescheduled);
+                        param.Add("@AnnualLeaveID", annualLeave.AnnualLeaveId);
+
+                        res = await _dapperGeneric.Get<string>(ApplicationConstant.Sp_RescheduleLeaveRequestLineItem, param, commandType: CommandType.StoredProcedure);
+                        if (!int.TryParse(res, out _))
+                        {
+                            _logger.LogError($"MethodName: RescheduleLeaveRequest(RescheduleLeaveRequest update) ===>{res}");
+                            return null;
+                        }
+                    }
                 }
+
                 using (SqlConnection _dapper = new SqlConnection(_connectionString))
                 {
                     var param = new DynamicParameters();
                     //  param.Add("@Status", LeaveRequestEnum.UPDATE);
-                    param.Add("@LeaveRequestLineItemId", leaveRequestLineItem.LeaveRequestLineItemId);
-                    param.Add("@LeaveTypeID", leaveRequestLineItem.LeaveTypeId);
-                    param.Add("@startDate", leaveRequestLineItem.startDate);
-                    param.Add("@endDate", leaveRequestLineItem.endDate);
-                    param.Add("@HandoverNotes", leaveRequestLineItem.HandoverNotes);
-                    param.Add("@UploadFilePath", leaveRequestLineItem.UploadFilePath);
-                    param.Add("@RescheduleReason", leaveRequestLineItem.RescheduleReason);
-                    param.Add("@ResumptionDate", leaveRequestLineItem.ResumptionDate);
-                    param.Add("@RelieverUserId", leaveRequestLineItem.RelieverUserId);
-                    param.Add("@LeaveLength", leaveRequestLineItem.LeaveLength);
-                    param.Add("@IsRescheduled", true);
+                    param.Add("@leaveApprovalId", annualLeave.ApprovalID);
+                    param.Add("@EmployeeId", annualLeave.EmployeeId);
+                    param.Add("@AnnualLeaveID", annualLeave.AnnualLeaveId);
 
-                    var res = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_RescheduleLeaveRequestLineItem, param, commandType: CommandType.StoredProcedure);
-
-                    return res;
+                    res = await _dapperGeneric.Get<string>(ApplicationConstant.Sp_UpdateAnnualLeaveApproval, param, commandType: CommandType.StoredProcedure);
+                    if (!int.TryParse(res, out _))
+                    {
+                        _logger.LogError($"MethodName: RescheduleLeaveRequest(RescheduleLeaveRequest update) ===>{res}");
+                        return null;
+                    }
                 }
+
             }
             catch (Exception ex)
             {
@@ -154,6 +177,7 @@ namespace hrms_be_backend_data.Repository
                 _logger.LogError($"MethodName: RescheduleLeaveRequest(RescheduleLeaveRequest update) ===>{ex.Message}");
                 throw;
             }
+            return res;
         }
         public async Task<LeaveRequestLineItem> RescheduleLeaveRequest(LeaveRequestLineItem leaveRequestLineItem)
         {
@@ -200,6 +224,7 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@EntryDate", leaveApprovalLineItem.EntryDate);
 
                 var res = await _dapperGeneric.Get<LeaveApprovalLineItemDto>(ApplicationConstant.Sp_UpdateLeaveApprovalLineItem, param, commandType: CommandType.StoredProcedure);
+               
                 if (res != null)
                 {
                     return res;
@@ -628,15 +653,10 @@ namespace hrms_be_backend_data.Repository
                 param.Add("@CompanyId", companyId);
                 param.Add("@LeavePeriod", LeavePeriod);
 
-                var res = await _dapperGeneric.GetAll<AnnualLeave>(ApplicationConstant.Sp_GetEmpAnnualLeaveInfo1, param, commandType: CommandType.StoredProcedure);
-                if (res != null && res.Count > 0)
+                var res = await _dapperGeneric.Get<AnnualLeave>(ApplicationConstant.Sp_GetEmpAnnualLeaveInfo1, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
                 {
-                    foreach (var item in res)
-                    {
-                        item.leaveRequestLineItems = await GetAnnualLeaveRequestLineItems(item.AnnualLeaveId);
-                        //res.NoOfDaysTaken = res.leaveRequestLineItems.Sum(x=>x.LeaveLength);
-                        // res.Comments = res.leaveRequestLineItems.FirstOrDefault().Comments;
-                    }
+                    res.leaveRequestLineItems = await GetAnnualLeaveRequestLineItems(res.AnnualLeaveId);
 
                     return res;
                 }

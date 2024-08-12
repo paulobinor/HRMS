@@ -9,7 +9,7 @@ namespace hrms_be_backend_data.IRepository
         Task<string> CreateLeaveRequest(LeaveRequestCreate Leave);
         Task<LeaveRequestLineItem> CreateLeaveRequestLineItem(LeaveRequestLineItem leaveRequestLineItem);
         Task<LeaveRequestLineItem> RescheduleLeaveRequest(LeaveRequestLineItem leaveRequestLineItem);
-        Task<LeaveRequestLineItem> RescheduleLeaveRequest(List<LeaveRequestLineItem> leaveRequestLineItems, int AnnualLeaveID, int LeaveRequestId);
+        Task<string> RescheduleLeaveRequest(List<LeaveRequestLineItem> leaveRequestLineItems, AnnualLeave annualLeave);
         Task<dynamic> RescheduleLeaveRequest(RescheduleLeaveRequest update, string requesterUserEmail);
         Task<string> ApproveLeaveRequest(long LeaveRequestID, long ApprovedByUserId);
         Task<string> DisaproveLeaveRequest(long LeaveRequestID, long DisapprovedByUserId, string DisapprovedComment);
