@@ -1,6 +1,7 @@
 ﻿using hrms_be_backend_business.ILogic;
 using hrms_be_backend_business.Logic;
 using hrms_be_backend_common.Communication;
+using hrms_be_backend_common.DTO;
 using hrms_be_backend_common.Models;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.RepoPayload;
@@ -68,22 +69,22 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         }
 
         [HttpPost("Reschedule")]
-        [Authorize]
+     //   [Authorize]
         public async Task<IActionResult> RescheduleLeaveRequest([FromBody] LeaveRequestLineItem leaveRequestLineItem)
         {
             var response = new BaseResponse();
             try
             {
-                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-                _logger.LogInformation($"Received RescheduleLeave request. Payload: {JsonConvert.SerializeObject(leaveRequestLineItem)} from remote address: {RemoteIpAddress}");
+                //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                //_logger.LogInformation($"Received RescheduleLeave request. Payload: {JsonConvert.SerializeObject(leaveRequestLineItem)} from remote address: {RemoteIpAddress}");
 
-                var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+                //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
 
-                var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-                if (accessUser.data == null)
-                {
-                    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-                }
+                //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                //if (accessUser.data == null)
+                //{
+                //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                //}
                 var res = await _leaveRequestService.RescheduleLeaveRequest(leaveRequestLineItem);
                 return Ok(res);
             }
@@ -189,6 +190,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             }
         }
 
+
      //   [Authorize]
         [HttpGet("GetEmpLeaveRequests")]
         public async Task<IActionResult> GetAllLeaveRequestLineItems([FromQuery] string CompanyID)
@@ -219,7 +221,67 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             }
         }
 
-     //   [Authorize]
+        //   [Authorize]
+        [HttpGet("GetPagedEmpLeaveRequests")]
+        public async Task<IActionResult> GetAllPagedLeaveRequestLineItems([FromQuery] string CompanyID, int pageNumber = 1, int pageSize = 10)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                _logger.LogInformation($"Received GetAllLeaveRequestLineItems. Payload: {JsonConvert.SerializeObject(new { CompanyID })} from remote address: {RemoteIpAddress}");
+
+                //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+                //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                //if (accessUser.data == null)
+                //{
+                //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+
+                //}
+
+                var res = await _leaveRequestService.GetAllLeaveRquestLineItems(Convert.ToInt64(CompanyID));
+                var requests = (List<LeaveRequestLineItemDto>)res.Data;
+
+                int totalItems = 0; int totalPages = 0;
+                List<LeaveRequestLineItemDto> items = null;
+                if (requests != null && requests.Count > 0)
+                {
+                    totalItems = requests.Count;
+                    totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+                    items = requests
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToList();
+                }
+                else
+                {
+                    totalItems = 0;
+                    totalPages = 1;
+                }
+
+                var pagedRes = new
+                {
+                    TotalItems = totalItems,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalPages = totalPages,
+                    Items = items
+                };
+                res.Data = pagedRes;
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: Controller Method : GetAllLeaveRequestLineItems ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllLeaveRequest ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+        }
+
+        //   [Authorize]
         [HttpGet("GetEmployeeLeaveRequests")]
         public async Task<IActionResult> GetEmployeeLeaveRequests([FromQuery] long CompanyID, long EmployeeId)
         {

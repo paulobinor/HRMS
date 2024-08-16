@@ -58,14 +58,14 @@ namespace hrms_be_backend_data.Repository
                 //else
                 //{
                 //    sp = ApplicationConstant.Sp_CreateEmpLeaveRequestLineItem;
-                //      param.Add("@IsRescheduled", "0");
+                //    param.Add("@IsRescheduled", "0");
                 //}
                 var res = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_CreateEmpLeaveRequestLineItem1, param, commandType: CommandType.StoredProcedure);
                 return res;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex}");
+                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex} Stacktrace: {ex.StackTrace}");
                 throw;
             }
         }
@@ -235,13 +235,13 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-        public async Task<EmpLeaveRequestInfo> CreateEmpLeaveInfo(long employeeId)
+        public async Task<EmpLeaveRequestInfo> CreateEmpLeaveInfo(long employeeId, long companyId)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("@EmployeeId", employeeId);
-               // param.Add("@CompanyId", CompanyId);
+                param.Add("@CompanyId", companyId);
                 // param.Add("@LeaveStatus", LeaveStatus);
 
                 var res = await _dapperGeneric.Get<EmpLeaveRequestInfo>(ApplicationConstant.Sp_CreateEmpLeaveInfo, param, commandType: CommandType.StoredProcedure);
@@ -517,7 +517,6 @@ namespace hrms_be_backend_data.Repository
                     return res;
                 }
                 return null;
-
             }
             catch (Exception ex)
             {
@@ -526,13 +525,14 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<AnnualLeave> CreateAnnualLeaveRequest1(AnnualLeave annualLeave, List<LeaveRequestLineItem> requestLineItems)
+        public async Task<AnnualLeave> CreateAnnualLeaveRequest(List<LeaveRequestLineItem> requestLineItems)
         {
             var lineitem = requestLineItems.FirstOrDefault();
 
             var param = new DynamicParameters();
             param.Add("@CompanyID", lineitem.CompanyId);
             param.Add("@EmployeeId", lineitem.EmployeeId);
+            param.Add("@LeavePeriod", lineitem.startDate.Year);
             param.Add("@NoOfDaysTaken", requestLineItems.Sum(x => x.LeaveLength));
 
             try
@@ -541,10 +541,9 @@ namespace hrms_be_backend_data.Repository
                 _logger.LogInformation($"Response from Sp_CreateEmpAnnualLeave1:{JsonConvert.SerializeObject(res)}");
                 if (res != null)
                 {
-
                     foreach (var leaveRequestLineItem in requestLineItems)
                     {
-                        leaveRequestLineItem.LeaveRequestId = annualLeave.LeaveRequestId;
+                        leaveRequestLineItem.LeaveRequestId = res.LeaveRequestId;
                         leaveRequestLineItem.AnnualLeaveId = res.AnnualLeaveId;
 
                         _logger.LogInformation($"About to post leave request item to db. Paylaod:  {JsonConvert.SerializeObject(leaveRequestLineItem)}");
@@ -576,9 +575,7 @@ namespace hrms_be_backend_data.Repository
                     }
                     return res;
                 }
-
                 return null;
-
             }
             catch (Exception ex)
             {
@@ -704,6 +701,31 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
+        public async Task<LeaveRequestLineItem> GetLeaveRequest(long LeaveRequestId, long LeaveTypeId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@LeaveTypeId", LeaveTypeId);
+                param.Add("@LeaveRequestId", LeaveRequestId);
+
+                var res = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_CheckForExistingEmpLeaveRequest, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                   // res.leaveRequestLineItems = await GetAnnualLeaveRequestLineItems(res.AnnualLeaveId);
+                    //res.NoOfDaysTaken = res.leaveRequestLineItems.Sum(x=>x.LeaveLength);
+                   // res.Comments = res.leaveRequestLineItems.FirstOrDefault().Comments;
+                    return res;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+        }
         public async Task<AnnualLeave> GetAnnualLeaveInfo(int employeeId, int companyId, int LeavePeriod)
         {
             try
@@ -999,14 +1021,14 @@ namespace hrms_be_backend_data.Repository
                 return default;
             }
         }
-        public async Task<EmpLeaveRequestInfo> GetEmpLeaveInfo(long employeeId, long companyId, string LeaveStatus)
+        public async Task<EmpLeaveRequestInfo> GetEmpLeaveInfo(long employeeId, long companyId, string year)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("@EmployeeId", employeeId);
-               // param.Add("@CompanyId", companyId);
-                param.Add("@LeaveStatus", LeaveStatus);
+                param.Add("@CompanyId", companyId);
+                param.Add("@Year", year);
 
                 var res = await _dapperGeneric.Get<EmpLeaveRequestInfo>(ApplicationConstant.Sp_GetEmpLeaveInfo, param, commandType: CommandType.StoredProcedure);
                 if (res != null)

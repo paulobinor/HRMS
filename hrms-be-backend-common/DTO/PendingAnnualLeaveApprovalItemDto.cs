@@ -19,5 +19,6 @@ namespace hrms_be_backend_common.DTO
         public long leaveApprovalId { get; set; }
         public long LastApprovalEmployeeId { get; set; }
         public string ApprovalPosition { get; set; }
+        public DateTime RequestDate { get; set; }
     }
 }

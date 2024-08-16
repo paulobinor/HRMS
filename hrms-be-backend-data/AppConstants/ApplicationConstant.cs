@@ -133,5 +133,7 @@
         public const string Sp_RescheduleLeaveRequestLineItem = "Sp_RescheduleLeaveRequestLineItem";
         public const string Sp_CreateEmpAnnualLeave1 = "Sp_CreateEmpAnnualLeave1";
         public const string Sp_RescheduleAnnualLeaveRequestLineItem = "Sp_RescheduleAnnualLeaveRequestLineItem";
+        public const string Sp_CheckForExistingEmpLeaveRequest = "Sp_CheckForExistingEmpLeaveRequest";
+        public const string Sp_UpdateLeaveApprovalRequestLineItemID = "Sp_UpdateLeaveApprovalRequestLineItemID";
     }
 }

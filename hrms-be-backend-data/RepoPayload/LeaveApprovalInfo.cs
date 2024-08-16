@@ -18,6 +18,7 @@ namespace hrms_be_backend_data.RepoPayload
         public bool IsApproved { get; set; } = false;
         public List<LeaveApprovalLineItem>? LeaveApprovalLineItems { get; set; }
         public List<LeaveRequestLineItem>? LeaveRequestLineItems { get; set; }
+        public long ApprovalKey { get; set; }
     }
 
 }

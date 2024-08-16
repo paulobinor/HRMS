@@ -7,6 +7,7 @@ using hrms_be_backend_data.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace hrms_be_backend_api.Controller
@@ -103,7 +104,7 @@ namespace hrms_be_backend_api.Controller
 
       //  [Authorize]
         [HttpGet("GetAnnualLeaveRequests")]
-        public async Task<IActionResult> GetAnnualLeaveRequestLineItems([FromQuery] string CompanyID, int pageNumber, int pageSize)
+        public async Task<IActionResult> GetAnnualLeaveRequests([FromQuery] string CompanyID)
         {
             var response = new BaseResponse();
             try
@@ -120,14 +121,74 @@ namespace hrms_be_backend_api.Controller
                 //}
 
                 var res = await _leaveRequestService.GetEmpAnnualLeaveRquestLineItems(Convert.ToInt64(CompanyID));
-                var requests = (List<LeaveRequestLineItemDto>)res.Data;
-                var totalItems = requests.Count;
-                var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+                //var requests = (List<LeaveRequestLineItemDto>)res.Data;
+                //var totalItems = requests.Count;
+                //var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
-                var items = requests
-                    .Skip((pageNumber - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToList();
+                //var items = requests
+                //    .Skip((pageNumber - 1) * pageSize)
+                //    .Take(pageSize)
+                //    .ToList();
+
+                //var pagedRes = new
+                //{
+                //    TotalItems = totalItems,
+                //    PageNumber = pageNumber,
+                //    PageSize = pageSize,
+                //    TotalPages = totalPages,
+                //    Items = items
+                //};
+                //res.Data = pagedRes;
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: Controller Method : GetAllLeaveRequestLineItems ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllLeaveRequest ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+        }
+
+        //  [Authorize]
+        [HttpGet("GetPagedAnnualLeaveRequests")]
+        public async Task<IActionResult> GetPagedAnnualLeaveRequests([FromQuery] string CompanyID, int pageNumber = 1, int pageSize = 10)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                _logger.LogInformation($"Received GetAllLeaveRequestLineItems. Payload: {JsonConvert.SerializeObject(new { CompanyID })} from remote address: {RemoteIpAddress}");
+
+                //   var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+                //   var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                //if (accessUser.data == null)
+                //{
+                //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+
+                //}
+
+                var res = await _leaveRequestService.GetEmpAnnualLeaveRquestLineItems(Convert.ToInt64(CompanyID));
+                var requests = (List<LeaveRequestLineItemDto>)res.Data;
+
+                int totalItems = 0; int totalPages = 0;
+                List<LeaveRequestLineItemDto> items = null;
+                if (requests != null && requests.Count > 0)
+                {
+                    totalItems = requests.Count;
+                    totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+                    items = requests
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToList();
+                }
+                else
+                {
+                    totalItems = 0;
+                    totalPages = 1;
+                }
 
                 var pagedRes = new
                 {
