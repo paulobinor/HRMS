@@ -410,7 +410,6 @@ namespace hrms_be_backend_data.Repository
                             TotalNoOfDays = res1.leaveRequestLineItems.Sum(x => x.LeaveLength)  // res.FindAll(x => x.EmployeeID == item.EmployeeID).Sum(x => x.LeaveLength)
                         };
 
-
                         pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
                       
                     }

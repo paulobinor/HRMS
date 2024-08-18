@@ -78,16 +78,6 @@ namespace hrms_be_backend_api.Controller
             var response = new BaseResponse();
             try
             {
-                //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-                //_logger.LogInformation($"Received request to reschedule annual leave. Payload: {JsonConvert.SerializeObject(leaveRequestLineItems)} from remote address: {RemoteIpAddress}");
-
-                //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
-
-                //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-                //if (accessUser.data == null)
-                //{
-                //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-                //}
                 var res = await _leaveRequestService.RescheduleAnnualLeaveRequest(leaveRequestLineItems);
                 return Ok(res);
             }
