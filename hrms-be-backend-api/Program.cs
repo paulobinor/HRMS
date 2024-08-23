@@ -1,6 +1,7 @@
 using AutoMapper;
 using Com.XpressPayments.Data.Repositories.UserAccount.Repository;
 using hrms_be_backend_business.AppCode;
+using hrms_be_backend_business.Helpers;
 using hrms_be_backend_business.ILogic;
 using hrms_be_backend_business.Logic;
 using hrms_be_backend_common.Configuration;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Reflection;
@@ -243,7 +245,9 @@ builder.Services.AddScoped<IMailService, MailService>();
 //File Upload
 builder.Services.AddScoped<IUploadFileService, UploadFileService>();
 //builder.Services.AddSingleton<IWebHostEnvironment>();
+builder.Services.AddSingleton<IServiceProvider, ServiceProvider>();
 
+builder.Services.AddSingleton<Utilities>();
 
 var app = builder.Build();
 app.Use(async (context, next) =>

@@ -34,6 +34,8 @@ namespace hrms_be_backend_data.IRepository
         Task<List<LeaveRequestLineItem>> GetLeaveRequestLineItems(long leaveRequestId);
         Task<List<LeaveRequestLineItemDto>> GetAllLeaveRequestLineItems(long CompanyID);
         Task<List<LeaveRequestLineItemDto>> GetAllAnnualLeaveRequestLineItems(long CompanyID);
+        Task<List<LeaveRequestLineItemDto>> GetAllAnnualLeaveRequestLineItems(int AnnualLeaveId, string CompanyId = null);
+        Task<List<AnnualLeaveDto>> GetAllAnnualLeaveRequests(long CompanyID, string leavePeriod);
         Task<GradeLeave> GetEmployeeGradeLeave(long employeeId, long leaveTypeId);
        // Task<LeaveApprovalInfo> GetLeaveApprovalInfoByEmployeeId(long EmployeeId);
         Task<EmpLeaveRequestInfo> UpdateLeaveRequestInfoStatus(EmpLeaveRequestInfo empLeaveRequestInfo);

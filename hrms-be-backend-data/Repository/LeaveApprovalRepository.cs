@@ -127,6 +127,32 @@ namespace hrms_be_backend_data.Repository
                 return default;
             }
         }
+        public async Task<bool> GetLeaveApprovalInfoByApprovalKey(long approvalKey)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@ApprovalKey", approvalKey);
+                //param.Add("@LeavePeriod", LeavePeriod);
+
+                var res = await _dapperGeneric.Get<LeaveApprovalInfo>(ApplicationConstant.Sp_GetLeaveApprovalByApprovalKey, param, commandType: CommandType.StoredProcedure);
+                if (res != null)
+                {
+                    if (res.ApprovalKey == approvalKey)
+                    {
+                        return true;
+                    }
+                   // res.LeaveApprovalLineItems = await GetLeaveApprovalLineItems(res.LeaveApprovalId);
+                   // return res;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                return default;
+            }
+        }
         public async Task<LeaveApprovalInfo> GetLeaveApprovalInfo(long leaveApprovalId)
         {
             try
@@ -244,6 +270,7 @@ namespace hrms_be_backend_data.Repository
 
         public async Task<List<PendingLeaveApprovalItemsDto>> GetPendingLeaveApprovals(long approvalEmployeeID, string v)
         {
+            int lastLeaveApprovalId = 0;
             try
             {
                 var param = new DynamicParameters();
@@ -260,7 +287,7 @@ namespace hrms_be_backend_data.Repository
                 {
                     var leaveapproval = await GetLeaveApprovalInfo(item.LeaveApprovalId);
                     var leaverequestLineitem =  GetLeaveRequestLineItem(leaveapproval.LeaveRequestLineItemId).Result;
-                    if (leaverequestLineitem.AnnualLeaveId > 0)
+                    if (leaverequestLineitem == null || leaverequestLineitem.AnnualLeaveId > 0)
                     {
                         //skip because we are not looking for annual leave requests
                     }
@@ -277,16 +304,29 @@ namespace hrms_be_backend_data.Repository
                             leaveApprovalRequestItem.ApprovalEmployeeId = item.ApprovalEmployeeId;
                             leaveApprovalRequestItem.IsApproved = item.IsApproved;
                             leaveApprovalRequestItem.ApprovalStep = item.ApprovalStep;
-                           // leaveApprovalRequestItem.ApprovalStatus = item.ApprovalStatus;
+                            // leaveApprovalRequestItem.ApprovalStatus = item.ApprovalStatus;
                             leaveApprovalRequestItem.LeaveApprovalId = item.LeaveApprovalId;
                             leaveApprovalRequestItem.ApprovalPosition = item.ApprovalPosition;
+
+                            if (leaveapproval.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+                            {
+                                if (leaveapproval.ApprovalKey == item.LeaveApprovalLineItemId)
+                                {
+                                    isValidItem = true;
+                                }
+                            }
+                            else
+                            {
+                                isValidItem = true;
+                            }
+
                             //if (leaveapproval.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
                             //{
                             //    if (leaveapproval.LastApprovalEmployeeID == item.ApprovalEmployeeId &&
                             //        leaveapproval.CurrentApprovalCount == item.ApprovalStep)
                             //    {
                             //        isValidItem = true;
-                                    
+
                             //    }
                             //    //else if (item.ApprovalStep > leaveapproval.CurrentApprovalCount)
                             //    //{
@@ -302,7 +342,7 @@ namespace hrms_be_backend_data.Repository
                             //        isValidItem = true;
 
                             //    }
-                              
+
                             //    leaveApprovalRequestItem.Comments = leaveapproval.Comments;
                             //    var approvalItemId = leaveApprovalItems.FirstOrDefault(x=>x.ApprovalEmployeeId ==  item.ApprovalEmployeeId && x.LeaveApprovalId == item.LeaveApprovalId);
                             //    if (approvalItemId != null)
@@ -334,9 +374,13 @@ namespace hrms_be_backend_data.Repository
                             //{
                             //}
 
-                            leaveApprovalItems.Add(leaveApprovalRequestItem);
+                            if (isValidItem)
+                            {
+                                leaveApprovalItems.Add(leaveApprovalRequestItem);
+                                isValidItem = false;
+                            }
                         }
-                      
+
                     }
                 }
                 leaveApprovalItems = leaveApprovalItems.OrderByDescending(x => x.StartDate).ToList(); 
@@ -349,10 +393,10 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        private async Task<LeaveRequestLineItem> GetLeaveRequestLineItem(long LeaveRequestLineItem)
+        private async Task<LeaveRequestLineItem> GetLeaveRequestLineItem(long LeaveRequestLineItemId)
         {
             var param = new DynamicParameters();
-            param.Add("@@LeaveRequestLineItemId", LeaveRequestLineItem);
+            param.Add("@LeaveRequestLineItemId", LeaveRequestLineItemId);
 
             var res = await _dapperGeneric.Get<LeaveRequestLineItem>(ApplicationConstant.Sp_GetLeaveRequestLineItem, param, commandType: CommandType.StoredProcedure);
 
@@ -370,7 +414,6 @@ namespace hrms_be_backend_data.Repository
 
                 foreach (var item in leaveApprovalLineItems)
                 {
-                    
                     var res1 = await GetAnnualLeaveInfo(item.LeaveApprovalId);
                     if (res1 != null)
                     {
@@ -390,13 +433,13 @@ namespace hrms_be_backend_data.Repository
                             item1.CompanyId = res1.CompanyID;
                             item1.Comments = comments; // + "," + item.Comments;
                         }
-                       
+
                         pendingAnnualLeaveApprovalItemDto = new()
                         {
                             FullName = res1.leaveRequestLineItems.FirstOrDefault().FullName,
                             RelieverName = res1.leaveRequestLineItems.FirstOrDefault().RelieverName,
                             ApprovalStatus = item.ApprovalStatus,
-                            //ApprovalEmployeeID = approvalEmployeeID,
+                            IsApproved = leaveapproval.IsApproved,
                             Year = res1.leaveRequestLineItems.FirstOrDefault().startDate.Year.ToString(),
                             RequestDate = res1.DateCreated, //.leaveRequestLineItems.FirstOrDefault().
                             EmployeeID = item.EmployeeID,
@@ -405,20 +448,26 @@ namespace hrms_be_backend_data.Repository
                             leaveRequestLineItems = res1.leaveRequestLineItems, // res.FindAll(x => x.EmployeeID == item.EmployeeID),
                             Status = comments, // item.Comments,
                             leaveApprovalId = leaveapproval.LeaveApprovalId,
+                            LeaveApprovalLineItemId = leaveapproval.LeaveApprovalLineItems.FirstOrDefault(x => x.ApprovalEmployeeId == approvalEmployeeID).LeaveApprovalLineItemId,
                             ApprovalPosition = item.ApprovalPosition,
                             LastApprovalEmployeeId = leaveapproval.LastApprovalEmployeeID,
-                            TotalNoOfDays = res1.leaveRequestLineItems.Sum(x => x.LeaveLength)  // res.FindAll(x => x.EmployeeID == item.EmployeeID).Sum(x => x.LeaveLength)
+                            TotalNoOfDays = res1.leaveRequestLineItems.Sum(x => x.LeaveLength)  
                         };
-
-                        pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
-                      
+                        if (leaveapproval.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (leaveapproval.ApprovalKey == item.LeaveApprovalLineItemId)
+                            {
+                                pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                            }
+                        }
+                        else
+                        {
+                            pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                        }
                     }
                 }
                 pendingRes = pendingRes.OrderByDescending(x => x.RequestDate).ToList();
                 return pendingRes;
-              
-                return null;
-
             }
             catch (Exception ex)
             {

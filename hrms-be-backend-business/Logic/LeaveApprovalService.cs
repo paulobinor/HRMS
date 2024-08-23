@@ -74,22 +74,31 @@ namespace hrms_be_backend_business.Logic
             bool isEmilokan = false;
             try
             {
-                var leaveApproval = await GetLeaveApprovalInfo(leaveApprovalLineItem.LeaveApprovalId, 0);
-                if (leaveApproval == null)
+
+                var leaveApproval = await GetLeaveApprovalInfo(leaveApprovalLineItem.LeaveApprovalId, 0); 
+                if (leaveApproval == null )
                 {
                     _logger.LogInformation($"No information was returned for the LeaveApprovalID:{leaveApprovalLineItem.LeaveApprovalId}");
                     response.ResponseCode = ((int)ResponseCode.Ok).ToString();
                     response.ResponseMessage = $"No information was returned for the LeaveApprovalID:{leaveApprovalLineItem.LeaveApprovalId}";
-                   return response;
+                    return response;
                 }
 
-                var leaveApprovalLineItem1 = leaveApproval.LeaveApprovalLineItems.FirstOrDefault(x=>x.LeaveApprovalLineItemId == leaveApprovalLineItem.LeaveApprovalLineItemId);
-                if (leaveApproval.LastApprovalEmployeeID == leaveApprovalLineItem.ApprovalEmployeeId && leaveApproval.Comments.Equals(leaveApprovalLineItem1.Comments, StringComparison.OrdinalIgnoreCase))
+                if (leaveApproval.ApprovalKey == leaveApprovalLineItem.LeaveApprovalLineItemId)
                 {
-                    isEmilokan=true;
+                    isEmilokan = true;
                 }
+
+                //var leaveApprovalLineItem1 = leaveApproval.LeaveApprovalLineItems.FirstOrDefault(x=>x.LeaveApprovalLineItemId == leaveApprovalLineItem.LeaveApprovalLineItemId);
+                //if (leaveApproval.LastApprovalEmployeeID == leaveApprovalLineItem.ApprovalEmployeeId && leaveApproval.Comments.Equals(leaveApprovalLineItem1.Comments, StringComparison.OrdinalIgnoreCase))
+                //{
+                //    isEmilokan=true;
+                //}
+
                 if (!isEmilokan)
                 {
+                    _logger.LogInformation($"Approval mismatch. ApprovalKey provided: {leaveApprovalLineItem.LeaveApprovalLineItemId}, ApprovalKey returned: {leaveApproval.ApprovalKey}");
+
                     //Not your turn to approve
                     response.ResponseCode = "401";
                     response.ResponseMessage = "You cannot peform this action at this time";
@@ -114,7 +123,7 @@ namespace hrms_be_backend_business.Logic
                     response.ResponseMessage = "an error occured while processing your request. Please contact your administrator for further assistance";
                     return response;
                 }
-            
+
                 var leaveRequestLineItem = await _leaveRequestRepository.GetLeaveRequestLineItem(currentLeaveApprovalInfo.LeaveRequestLineItemId);
               
                 if (leaveRequestLineItem == null)
@@ -291,7 +300,6 @@ namespace hrms_be_backend_business.Logic
             try
             {
 
-                //var Emilokan = (await _leaveApprovalRepository.GetPendingLeaveApprovals(leaveApprovalLineItem.ApprovalEmployeeId, "")).FirstOrDefault(x => x.LeaveApprovalLineItemId == leaveApprovalLineItem.LeaveApprovalLineItemId);
                 var leaveApproval = await GetLeaveApprovalInfo(leaveApprovalLineItem.LeaveApprovalId, 0);
                 if (leaveApproval == null)
                 {
@@ -301,12 +309,19 @@ namespace hrms_be_backend_business.Logic
                     // response.Data = repoResponse;
                     return response;
                 }
-
-                var leaveApprovalLineItem1 = leaveApproval.LeaveApprovalLineItems.FirstOrDefault(x => x.LeaveApprovalLineItemId == leaveApprovalLineItem.LeaveApprovalLineItemId);
-                if (leaveApproval.LastApprovalEmployeeID == leaveApprovalLineItem.ApprovalEmployeeId && leaveApproval.Comments.Equals(leaveApprovalLineItem1.Comments, StringComparison.OrdinalIgnoreCase))
+                if (leaveApproval.ApprovalKey == leaveApprovalLineItem.LeaveApprovalLineItemId)
                 {
                     isEmilokan = true;
+
                 }
+               
+                //var leaveApprovalLineItem1 = leaveApproval.LeaveApprovalLineItems.FirstOrDefault(x => x.LeaveApprovalLineItemId == leaveApprovalLineItem.LeaveApprovalLineItemId);
+               
+                //if (leaveApproval.LastApprovalEmployeeID == leaveApprovalLineItem.ApprovalEmployeeId && leaveApproval.Comments.Equals(leaveApprovalLineItem1.Comments, StringComparison.OrdinalIgnoreCase))
+                //{
+                //    isEmilokan = true;
+                //}
+
                 if (!isEmilokan)
                 {
                     //Not your turn to approve
@@ -841,6 +856,20 @@ namespace hrms_be_backend_business.Logic
             catch (Exception)
             {
 
+                throw;
+            }
+        }
+
+        public async Task<bool> GetLeaveApprovalInfoByApprovalKey(long ApprovalKey)
+        {
+            try
+            {
+                var leaveApproval = await _leaveApprovalRepository.GetLeaveApprovalInfoByApprovalKey(ApprovalKey);
+
+                return leaveApproval;
+            }
+            catch (Exception)
+            {
                 throw;
             }
         }

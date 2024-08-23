@@ -135,5 +135,8 @@
         public const string Sp_RescheduleAnnualLeaveRequestLineItem = "Sp_RescheduleAnnualLeaveRequestLineItem";
         public const string Sp_CheckForExistingEmpLeaveRequest = "Sp_CheckForExistingEmpLeaveRequest";
         public const string Sp_UpdateLeaveApprovalRequestLineItemID = "Sp_UpdateLeaveApprovalRequestLineItemID";
+        public const string Sp_GetAllAnnualLeaveRequests = "Sp_GetAllAnnualLeaveRequests";
+        public const string Sp_GetAnnualLeaveRequestLineItemsByAnnualLeaveId = "Sp_GetAnnualLeaveRequestLineItemsByAnnualLeaveId";
+        internal static string Sp_GetLeaveApprovalByApprovalKey = "Sp_GetLeaveApprovalByApprovalKey";
     }
 }

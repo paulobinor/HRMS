@@ -182,7 +182,7 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 //Only one approved request shall stand
-                if (leaveApproval.ApprovalStatus.Contains("Approved", StringComparison.OrdinalIgnoreCase)) // == .Comments.Contains("Approved", StringComparison.OrdinalIgnoreCase))
+                if (leaveApproval.Comments.Contains("Approved", StringComparison.OrdinalIgnoreCase)) // == .Comments.Contains("Approved", StringComparison.OrdinalIgnoreCase))
                 {
                     _logger.LogWarning($"Invalid request. An approved Annual Leave already exists:{JsonConvert.SerializeObject(existingAnnualLeave)}");
                     response.ResponseCode = "400";
@@ -426,14 +426,26 @@ namespace hrms_be_backend_business.Logic
             //Check if already applied for this leavetype before
             var leaveApplicationExists = await _leaveRequestRepository.GetLeaveRequest(empLeaveRequestInfo.LeaveRequestId, leaveRequestLineItem.LeaveTypeId);
 
-          //  var existingLeaveAproval = await _leaveApprovalRepository.GetExistingLeaveApproval(leaveRequestLineItem.EmployeeId);
+          //  var existingLeaveApproval = await _leaveApprovalRepository.GetExistingLeaveApproval(leaveRequestLineItem.EmployeeId);
             if (leaveApplicationExists != null)
             {
-                _logger.LogError($"A pending approval for this leavetype already exists for EmployeeId: {leaveRequestLineItem.EmployeeId} and CompanyId: {leaveRequestLineItem.CompanyId}, payload: {JsonConvert.SerializeObject(leaveApplicationExists)}");
-                response.ResponseCode = "08";
-                response.ResponseMessage = "pending leave detected";
-                response.Data = leaveApplicationExists;
-                return response;
+                if (leaveApplicationExists.Comments.Contains("Pending"))
+                {
+                    _logger.LogError($"A pending approval for this leavetype already exists for EmployeeId: {leaveRequestLineItem.EmployeeId} and CompanyId: {leaveRequestLineItem.CompanyId}, payload: {JsonConvert.SerializeObject(leaveApplicationExists)}");
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "leave detected";
+                    response.Data = leaveApplicationExists;
+                    return response;
+                }
+                else
+                {
+                    _logger.LogError($"Invalid request. Leave already applied for:{JsonConvert.SerializeObject(leaveApplicationExists)}");
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = "You have already appliead for this leavetype";
+                    response.Data = leaveApplicationExists;
+                    return response;
+                }
+
             }
 
             _logger.LogInformation($"Check if any pending leave approvals for this leavetype");
@@ -1347,7 +1359,7 @@ namespace hrms_be_backend_business.Logic
 
                         //Check number of days left
                         //Only sum up the days of the items that were approved
-                        var noOfDaysTaken = leaveRequestLineItems.Where(x => x.IsApproved == true && x.LeaveTypeId == leaveRequestLineItem.LeaveTypeId).Sum(x => x.LeaveLength);
+                        var noOfDaysTaken = leaveRequestLineItems.Where(x => x.IsApproved == true && x.LeaveTypeId == leaveRequestLineItem.LeaveTypeId && x.LeaveRequestLineItemId != leaveRequestLineItem.LeaveRequestLineItemId).Sum(x => x.LeaveLength);
                         _logger.LogInformation($"no. of approved days taken for {leaveRequestLineItem.EmployeeId} is {noOfDaysTaken}");
                         _logger.LogInformation($"Calculate permissible days for EmployeeId - {leaveRequestLineItem.EmployeeId}: {gradeLeave.NumbersOfDays} - ({noOfDaysTaken} + {leaveRequestLineItem.LeaveLength}) = {gradeLeave.NumbersOfDays - (noOfDaysTaken + leaveRequestLineItem.LeaveLength)}");
 
@@ -1716,7 +1728,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<EmpLeaveRequestInfo> GetEmpLeaveInfo(long employeeId, long companyId, string LeaveStatus)
+        public async Task<EmpLeaveRequestInfo> GetEmpLeaveInfo(long employeeId, long companyId, string year)
         {
             try
             {
@@ -1728,7 +1740,7 @@ namespace hrms_be_backend_business.Logic
                 //}
                 ////param.Add("@LeavePeriod", LeavePeriod);
 
-                var res = await _leaveRequestRepository.GetEmpLeaveInfo(employeeId, companyId, LeaveStatus);
+                var res = await _leaveRequestRepository.GetEmpLeaveInfo(employeeId, companyId, year);
                 if (res != null)
                 {
                     return res;
@@ -2002,7 +2014,35 @@ namespace hrms_be_backend_business.Logic
 
                 if (leave.Any())
                 {
-                    response.Data = leave.OrderByDescending(x=>x.endDate).ToList();
+                    response.Data = leave.OrderByDescending(x => x.endDate).ToList();
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Annual leave items fetched successfully.";
+                    return response;
+                }
+                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "No items returned.";
+                response.Data = null;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetAllAnnualLeaveRequestLineItems() ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: GetAllAnnualLeaveRequestLineItems() ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+        }
+        public async Task<BaseResponse> GetAnnualLeaveRequests(long CompanyID, string LeavePeriod)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                var leave = await _leaveRequestRepository.GetAllAnnualLeaveRequests(CompanyID, LeavePeriod);
+
+                if (leave.Any())
+                {
+                    response.Data = leave.OrderByDescending(x=>x.DateCreated).ToList();
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = "Annual leave items fetched successfully.";
                     return response;

@@ -27,7 +27,8 @@ namespace hrms_be_backend_data.IRepository
         Task<LeaveApproval> CreateLeaveApproval(LeaveApproval approvals);
         Task<LeaveApproval> CreateAnnualLeaveApproval(LeaveApproval leaveApproval);
         Task<AnnualLeave> GetAnnualLeaveInfo(long leaveApprovalId);
-      //  Task<AnnualLeave> UpdateAnnualLeave(AnnualLeave annualLeave);
+        Task<bool> GetLeaveApprovalInfoByApprovalKey(long approvalKey);
+        //  Task<AnnualLeave> UpdateAnnualLeave(AnnualLeave annualLeave);
     }
 }
 
