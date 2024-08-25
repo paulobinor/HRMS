@@ -38,8 +38,8 @@ namespace hrms_be_backend_api.Controller
         [HttpPost("CreateMultiple")]
         public async Task<ActionResult<List<LeaveRequestLineItem>>> CreateLeaveRequest([FromBody] List<CreateLeaveRequestLineItem> leaveRequests)
         {
-            //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            //_logger.LogInformation($"Received Create leave request. Payload: {JsonConvert.SerializeObject(leaveRequests)} from remote address: {RemoteIpAddress}");
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            _logger.LogInformation($"Received Create leave request. Payload: {JsonConvert.SerializeObject(leaveRequests)} from remote address: {RemoteIpAddress}");
             //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
 
             //if (string.IsNullOrEmpty(accessToken))
