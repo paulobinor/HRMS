@@ -234,7 +234,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [HttpGet("GetAllPagedLeaveRequest")]
-        public async Task<IActionResult> GetAllPagedLeaveRequest([FromQuery] string CompanyID, DateTime? startDate, DateTime? endDate, int pageNumber = 1, int pageSize = 10)
+        public async Task<IActionResult> GetAllPagedLeaveRequest([FromQuery] string CompanyID, DateTime? startDate, DateTime? endDate, string ApprovalPosition = "HR", ApprovalStatus approvalStatus  = ApprovalStatus.Completed, int pageNumber = 1, int pageSize = 10)
         {
             var response = new BaseResponse();
             try
@@ -269,8 +269,6 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 var res = await _leaveRequestService.GetAllLeaveRequest(CompanyID);
                 var requests = (List<EmpLeaveRequestInfo>)res.Data;
 
-               // requests = requests.FindAll(x => x.DateCreated >= startDate && x.DateCreated <= endDate);
-
                 foreach (var request in requests)
                 {
                     request.leaveRequestLineItems  = request.leaveRequestLineItems.FindAll(x => x.startDate >= startDate && x.endDate <= endDate).ToList();
@@ -282,34 +280,34 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                         finalRes.Add(request); //.leaveRequestLineItems
                     }
                 }
-               
-                //var pagedRes = hrms_be_backend_business.Helpers.Utilities.GetPagedList(finalRes, pageNumber, pageSize);
+               finalRes = finalRes.FindAll(x => x.ApprovalStatus == approvalStatus.ToString() && x.ApprovalPosition == ApprovalPosition).ToList();
+               var pagedRes = hrms_be_backend_business.Helpers.Utilities.GetPagedList(finalRes, pageNumber, pageSize);
 
-                int totalItems = 0; int totalPages = 0;
-                List<EmpLeaveRequestInfo> items = null;
-                if (finalRes != null && finalRes.Count > 0)
-                {
-                    totalItems = finalRes.Count;
-                    totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-                    items = finalRes
-                        .Skip((pageNumber - 1) * pageSize)
-                        .Take(pageSize)
-                        .ToList();
-                }
-                else
-                {
-                    totalItems = 0;
-                    totalPages = 1;
-                }
+                //int totalItems = 0; int totalPages = 0;
+                //List<EmpLeaveRequestInfo> items = null;
+                //if (finalRes != null && finalRes.Count > 0)
+                //{
+                //    totalItems = finalRes.Count;
+                //    totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+                //    items = finalRes
+                //        .Skip((pageNumber - 1) * pageSize)
+                //        .Take(pageSize)
+                //        .ToList();
+                //}
+                //else
+                //{
+                //    totalItems = 0;
+                //    totalPages = 1;
+                //}
 
-                var pagedRes = new
-                {
-                    TotalItems = totalItems,
-                    PageNumber = pageNumber,
-                    PageSize = pageSize,
-                    TotalPages = totalPages,
-                    Items = items
-                };
+                //var pagedRes = new
+                //{
+                //    TotalItems = totalItems,
+                //    PageNumber = pageNumber,
+                //    PageSize = pageSize,
+                //    TotalPages = totalPages,
+                //    Items = items
+                //};
                 res.Data = pagedRes;
                 return Ok(res);
             }
@@ -373,127 +371,75 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             }
         }
 
-        
+        /// <summary>
+        /// Gets  to get a paged list of leave info for a single Employee within a given Company
+        /// </summary>
+        /// <param name="CompanyId">Request Parameters</param>
+        /// <param name="EmployeeId">Request Parameters</param>
+        /// <returns>BaseResponse</returns>
+        [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+        [HttpGet("GetEmployeePagedLeaveRequests")]
+        public async Task<IActionResult> GetEmployeePagedLeaveRequests([FromQuery] long CompanyID, long EmployeeId, DateTime? startDate, DateTime? endDate, int pageNumber = 1, int pageSize = 10)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+                _logger.LogInformation($"Received GetEmployeeLeaveRequests. Payload: {JsonConvert.SerializeObject(new { CompanyID, EmployeeId })} from remote address: {RemoteIpAddress}");
 
-        #region Depricated
-        ///// <summary>
-        ///// Endpoint to get a list of pending/past leave request for a given company within a given period
-        ///// </summary>
-        ///// <param name="CompanyID">Request Parameters</param>
-        ///// <returns>BaseResponse</returns>
-        //[ProducesResponseType(typeof(BaseResponse), StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        //[HttpGet("GetEmpLeaveRequests")]
-        //public async Task<IActionResult> GetAllLeaveRequestLineItems([FromQuery] string CompanyID)
-        //{
-        //    var response = new BaseResponse();
-        //    try
-        //    {
-        //        var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-        //        _logger.LogInformation($"Received GetAllLeaveRequestLineItems. Payload: {JsonConvert.SerializeObject(new { CompanyID })} from remote address: {RemoteIpAddress}");
+                //   var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+                //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+                //if (accessUser.data == null)
+                //{
+                //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
-        //        //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
-        //        //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-        //        //if (accessUser.data == null)
-        //        //{
-        //        //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+                //}
 
-        //        //}
+                if (startDate == null)
+                {
+                    startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                }
+                else
+                {
+                    startDate = startDate.Value.AddDays(-1);
+                }
+                if (endDate == null)
+                {
+                    endDate = new DateTime(DateTime.Now.Year, 12, 31);
+                }
+                else
+                {
+                    endDate = endDate.Value.AddDays(1);
+                }
+                var requests = await _leaveRequestService.GetEmployeeLeaveRequests(CompanyID, EmployeeId);
+                if (!requests.Any())
+                {
+                    response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "No Leave request found.";
+                    response.Data = null;
+                    return Ok(response);
+                }
 
-        //        return Ok(await _leaveRequestService.GetAllLeaveRquestLineItems(Convert.ToInt64(CompanyID)));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Exception Occured: Controller Method : GetAllLeaveRequestLineItems ==> {ex.Message}");
-        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-        //        response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllLeaveRequest ==> {ex.Message}";
-        //        response.Data = null;
-        //        return Ok(response);
-        //    }
-        //}
+                var pagedRes = hrms_be_backend_business.Helpers.Utilities.GetPagedList(requests, pageNumber, pageSize);
 
-        ///// <summary>
-        ///// Endpoint to get a paged list of pending/past leave request for a given company within a given period
-        ///// </summary>
-        ///// <param name="CompanyID">Request Parameters</param>
-        ///// <param name="startdate">Request Parameters</param>
-        ///// <param name="endDate">Request Parameters</param>
-        ///// <param name="pageNumber">Request Parameters</param>
-        ///// <param name="pageSize">Request Parameters</param>
-        ///// <returns>BaseResponse</returns>
-        //[ProducesResponseType(typeof(BaseResponse), StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        //[HttpGet("GetPagedEmpLeaveRequests")]
-        //public async Task<IActionResult> GetAllPagedLeaveRequestLineItems([FromQuery] string CompanyID, DateTime? startDate, DateTime? endDate, int pageNumber = 1, int pageSize = 10)
-        //{
-        //    var response = new BaseResponse();
-        //    try
-        //    {
-        //        var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-        //        _logger.LogInformation($"Received GetAllLeaveRequestLineItems. Payload: {JsonConvert.SerializeObject(new { CompanyID })} from remote address: {RemoteIpAddress}");
+               
+                response.Data = pagedRes;
+                response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "Leave requests fetched successfully.";
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: Controller Method : GetAllLeaveRequestLineItems ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllLeaveRequest ==> {ex.Message}";
+                response.Data = null;
+                return Ok(response);
+            }
+        }
 
-        //        //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
-        //        //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
-        //        //if (accessUser.data == null)
-        //        //{
-        //        //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
-
-        //        //}
-        //        if (startDate == null)
-        //        {
-        //            startDate = new DateTime(DateTime.Now.Year, 1, 1);
-        //        }
-        //        if (endDate == null)
-        //        {
-        //            endDate = new DateTime(DateTime.Now.Year, 12, 31);
-        //        }
-
-        //        var res = await _leaveRequestService.GetAllLeaveRquestLineItems(Convert.ToInt64(CompanyID));
-        //        var requests = (List<LeaveRequestLineItemDto>)res.Data;
-
-        //        requests = requests.FindAll(x => x.startDate >= startDate && x.endDate <= endDate);
-        //        int totalItems = 0; int totalPages = 0;
-        //        List<LeaveRequestLineItemDto> items = null;
-        //        if (requests != null && requests.Count > 0)
-        //        {
-        //            totalItems = requests.Count;
-        //            totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-
-        //            items = requests
-        //                .Skip((pageNumber - 1) * pageSize)
-        //                .Take(pageSize)
-        //                .ToList();
-        //        }
-        //        else
-        //        {
-        //            totalItems = 0;
-        //            totalPages = 1;
-        //        }
-
-        //        var pagedRes = new
-        //        {
-        //            TotalItems = totalItems,
-        //            PageNumber = pageNumber,
-        //            PageSize = pageSize,
-        //            TotalPages = totalPages,
-        //            Items = items
-        //        };
-        //        res.Data = pagedRes;
-        //        return Ok(res);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Exception Occured: Controller Method : GetAllLeaveRequestLineItems ==> {ex.Message}");
-        //        response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-        //        response.ResponseMessage = $"Exception Occured: ControllerMethod : GetAllLeaveRequest ==> {ex.Message}";
-        //        response.Data = null;
-        //        return Ok(response);
-        //    }
-        //} 
-        #endregion
     }
 }
