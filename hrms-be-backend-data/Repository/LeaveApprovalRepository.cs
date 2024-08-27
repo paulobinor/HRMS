@@ -308,7 +308,7 @@ namespace hrms_be_backend_data.Repository
                             leaveApprovalRequestItem.LeaveApprovalId = item.LeaveApprovalId;
                             leaveApprovalRequestItem.ApprovalPosition = item.ApprovalPosition;
 
-                            if (leaveapproval.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+                            if (item.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
                             {
                                 if (leaveapproval.ApprovalKey == item.LeaveApprovalLineItemId)
                                 {
@@ -320,59 +320,7 @@ namespace hrms_be_backend_data.Repository
                                 isValidItem = true;
                             }
 
-                            //if (leaveapproval.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
-                            //{
-                            //    if (leaveapproval.LastApprovalEmployeeID == item.ApprovalEmployeeId &&
-                            //        leaveapproval.CurrentApprovalCount == item.ApprovalStep)
-                            //    {
-                            //        isValidItem = true;
-
-                            //    }
-                            //    //else if (item.ApprovalStep > leaveapproval.CurrentApprovalCount)
-                            //    //{
-                            //    //    isValidItem = true;
-                            //    //}
-                            //    leaveApprovalRequestItem.Comments = leaveapproval.Comments;
-                            //}
-                            //else if (leaveapproval.ApprovalStatus.Equals("Completed", StringComparison.OrdinalIgnoreCase))
-                            //{
-                            //    if (leaveApprovalRequestItem.LastApprovalEmployeeID == item.ApprovalEmployeeId &&
-                            //        leaveapproval.CurrentApprovalCount == item.ApprovalStep)
-                            //    {
-                            //        isValidItem = true;
-
-                            //    }
-
-                            //    leaveApprovalRequestItem.Comments = leaveapproval.Comments;
-                            //    var approvalItemId = leaveApprovalItems.FirstOrDefault(x=>x.ApprovalEmployeeId ==  item.ApprovalEmployeeId && x.LeaveApprovalId == item.LeaveApprovalId);
-                            //    if (approvalItemId != null)
-                            //    {
-                            //        //skip
-                            //        isValidItem = false;
-
-                            //    }
-                            //    else
-                            //    {
-                            //        isValidItem = true;
-                            //    }
-                            //}
-                            //else
-                            //{
-                            //    leaveApprovalRequestItem.Comments = item.ApprovalStatus + "," + item.Comments;
-                            //    isValidItem = true;
-                            //}
-
-                            //if (ConfigSettings.leaveRequestConfig.EnableSingleApproval) // only one item of approval employeeid will show up in the list where the approver has more than one approval position.
-                            //{
-                            //    if (isValidItem)
-                            //    {
-                            //        leaveApprovalItems.Add(leaveApprovalRequestItem);
-                            //        isValidItem = false;
-                            //    }
-                            //}
-                            //else
-                            //{
-                            //}
+                        
 
                             if (isValidItem)
                             {
@@ -453,7 +401,7 @@ namespace hrms_be_backend_data.Repository
                             LastApprovalEmployeeId = leaveapproval.LastApprovalEmployeeID,
                             TotalNoOfDays = res1.leaveRequestLineItems.Sum(x => x.LeaveLength)  
                         };
-                        if (leaveapproval.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+                        if (item.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
                         {
                             if (leaveapproval.ApprovalKey == item.LeaveApprovalLineItemId)
                             {

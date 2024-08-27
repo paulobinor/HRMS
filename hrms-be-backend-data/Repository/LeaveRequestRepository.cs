@@ -1300,7 +1300,9 @@ namespace hrms_be_backend_data.Repository
         }
         public async Task<IEnumerable<EmpLeaveRequestInfo>> GetAllLeaveRequest(string CompanyId)
         {
-           // var respItems = new List<EmpLeaveRequestInfo>();
+            var respItems = new List<EmpLeaveRequestInfo>();
+            EmpLeaveRequestInfo empLeaveRequestInfo = null;
+
             try
             {
                 using (SqlConnection conn = new SqlConnection(_connectionString))
@@ -1314,7 +1316,16 @@ namespace hrms_be_backend_data.Repository
                         foreach (var item in LeaveDetails)
                         {
                             item.leaveRequestLineItems = await GetAllLeaveEmpRequestLineItems(item.EmployeeId);
+                            var leaveapproval = await GetLeaveApprovalInfoByRequestLineItemId(item.leaveRequestLineItems.FirstOrDefault().LeaveApprovalLineItemId);
+                            if (leaveapproval != null)
+                            {
+                                item.ApprovalPosition = leaveapproval.ApprovalStatus;
+                                item.ApprovalPosition = leaveapproval.Comments.Split(",").First().Split(" ").Last();
+                            }
+                           // empLeaveRequestInfo = new EmpLeaveRequestInfo();
+                          //  empLeaveRequestInfo.ApprovalPosition = item.ApprovalPosition;
                         }
+                        
                     }
                     return LeaveDetails;
                 }
