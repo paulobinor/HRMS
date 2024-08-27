@@ -234,7 +234,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [HttpGet("GetAllPagedLeaveRequest")]
-        public async Task<IActionResult> GetAllPagedLeaveRequest([FromQuery] string CompanyID, DateTime? startDate, DateTime? endDate, string ApprovalPosition = "HR", ApprovalStatus approvalStatus  = ApprovalStatus.Completed, int pageNumber = 1, int pageSize = 10)
+        public async Task<IActionResult> GetAllPagedLeaveRequest([FromQuery] string CompanyID, DateTime? startDate, DateTime? endDate, string ApprovalPosition = null, string approvalStatus  = "Pending", int pageNumber = 1, int pageSize = 10)
         {
             var response = new BaseResponse();
             try
@@ -268,7 +268,10 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 List<EmpLeaveRequestInfo> finalRes = new List<EmpLeaveRequestInfo>();
                 var res = await _leaveRequestService.GetAllLeaveRequest(CompanyID);
                 var requests = (List<EmpLeaveRequestInfo>)res.Data;
-
+                if (requests == null)
+                {
+                    return Ok(res);
+                }
                 foreach (var request in requests)
                 {
                     request.leaveRequestLineItems  = request.leaveRequestLineItems.FindAll(x => x.startDate >= startDate && x.endDate <= endDate).ToList();
@@ -280,34 +283,25 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                         finalRes.Add(request); //.leaveRequestLineItems
                     }
                 }
-               finalRes = finalRes.FindAll(x => x.ApprovalStatus == approvalStatus.ToString() && x.ApprovalPosition == ApprovalPosition).ToList();
-               var pagedRes = hrms_be_backend_business.Helpers.Utilities.GetPagedList(finalRes, pageNumber, pageSize);
 
-                //int totalItems = 0; int totalPages = 0;
-                //List<EmpLeaveRequestInfo> items = null;
-                //if (finalRes != null && finalRes.Count > 0)
-                //{
-                //    totalItems = finalRes.Count;
-                //    totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-                //    items = finalRes
-                //        .Skip((pageNumber - 1) * pageSize)
-                //        .Take(pageSize)
-                //        .ToList();
-                //}
-                //else
-                //{
-                //    totalItems = 0;
-                //    totalPages = 1;
-                //}
+                PagedListModel<EmpLeaveRequestInfo> pagedRes = null;
+                if (!string.IsNullOrEmpty(approvalStatus))
+                {
+                    if (!approvalStatus.Equals("All", StringComparison.OrdinalIgnoreCase))
+                    {
+                        finalRes = finalRes.FindAll(x => x.ApprovalStatus == approvalStatus);
+                    }
+                }
+                if (!string.IsNullOrEmpty(ApprovalPosition))
+                {
+                    if (!ApprovalPosition.Equals("All", StringComparison.OrdinalIgnoreCase))
+                    {
+                        finalRes = finalRes.FindAll(x => x.ApprovalPosition == ApprovalPosition);
+                    }
+                }
 
-                //var pagedRes = new
-                //{
-                //    TotalItems = totalItems,
-                //    PageNumber = pageNumber,
-                //    PageSize = pageSize,
-                //    TotalPages = totalPages,
-                //    Items = items
-                //};
+                pagedRes = hrms_be_backend_business.Helpers.Utilities.GetPagedList(finalRes, pageNumber, pageSize);
+
                 res.Data = pagedRes;
                 return Ok(res);
             }

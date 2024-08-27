@@ -181,7 +181,7 @@ namespace hrms_be_backend_api.Controller
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [HttpGet("GetPagedAnnualLeaveRequests")]
-        public async Task<IActionResult> GetPagedAnnualLeaveRequests([FromQuery] string CompanyID, DateTime? startdate, DateTime? endDate, int pageNumber = 1, int pageSize = 10, string year = null)
+        public async Task<IActionResult> GetPagedAnnualLeaveRequests([FromQuery] string CompanyID, DateTime? startdate, DateTime? endDate, string ApprovalPosition = "All", string approvalStatus = "All", int pageNumber = 1, int pageSize = 10, string year = null)
         {
             var response = new BaseResponse();
             try
@@ -220,6 +220,11 @@ namespace hrms_be_backend_api.Controller
 
                 List<AnnualLeaveDto> finalRes = new List<AnnualLeaveDto>();
                 var requests = (List<AnnualLeaveDto>)res.Data;
+                if (requests == null)
+                {
+                    return Ok(res);
+                }
+
                 foreach (var request in requests)
                 {
                     request.leaveRequestLineItems = request.leaveRequestLineItems.FindAll(x => x.startDate >= startdate && x.endDate <= endDate).ToList();
@@ -231,33 +236,49 @@ namespace hrms_be_backend_api.Controller
                         finalRes.Add(request); //.leaveRequestLineItems
                     }
                 }
+                PagedListModel<AnnualLeaveDto> pagedRes = null;
+                if (!string.IsNullOrEmpty(approvalStatus))
+                {
+                    if (!approvalStatus.Equals("All", StringComparison.OrdinalIgnoreCase))
+                    {
+                        finalRes = finalRes.FindAll(x => x.ApprovalStatus == approvalStatus);
+                    }
+                }
+                if (!string.IsNullOrEmpty(ApprovalPosition))
+                {
+                    if (!ApprovalPosition.Equals("All", StringComparison.OrdinalIgnoreCase))
+                    {
+                        finalRes = finalRes.FindAll(x => x.ApprovalPosition == ApprovalPosition);
+                    }
+                }
+                pagedRes = hrms_be_backend_business.Helpers.Utilities.GetPagedList(finalRes, pageNumber, pageSize);
                 //  requests = requests.FindAll(x => x.DateCreated >= startdate && x.DateCreated <= endDate);
-                int totalItems = 0; int totalPages = 0;
-                List<AnnualLeaveDto> items = null;
-                if (finalRes != null && finalRes.Count > 0)
-                {
-                    totalItems = finalRes.Count;
-                    totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+                //int totalItems = 0; int totalPages = 0;
+                //List<AnnualLeaveDto> items = null;
+                //if (finalRes != null && finalRes.Count > 0)
+                //{
+                //    totalItems = finalRes.Count;
+                //    totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
-                    items = finalRes
-                        .Skip((pageNumber - 1) * pageSize)
-                        .Take(pageSize)
-                        .ToList();
-                }
-                else
-                {
-                    totalItems = 0;
-                    totalPages = 1;
-                }
+                //    items = finalRes
+                //        .Skip((pageNumber - 1) * pageSize)
+                //        .Take(pageSize)
+                //        .ToList();
+                //}
+                //else
+                //{
+                //    totalItems = 0;
+                //    totalPages = 1;
+                //}
 
-                var pagedRes = new
-                {
-                    TotalItems = totalItems,
-                    PageNumber = pageNumber,
-                    PageSize = pageSize,
-                    TotalPages = totalPages,
-                    Items = items
-                };
+                //var pagedRes = new
+                //{
+                //    TotalItems = totalItems,
+                //    PageNumber = pageNumber,
+                //    PageSize = pageSize,
+                //    TotalPages = totalPages,
+                //    Items = items
+                //};
                 res.Data = pagedRes;
                 return Ok(res);
             }

@@ -381,7 +381,12 @@ namespace hrms_be_backend_data.Repository
                         item.IsApproved = leaveAprovalInfo.IsApproved;
                         item.Comments = leaveAprovalInfo.Comments;
 
-                        item.leaveApprovalLineItems = await GetLeaveApprovalLineItems(leaveAprovalInfo.LeaveApprovalId); 
+                        item.leaveApprovalLineItems = await GetLeaveApprovalLineItems(leaveAprovalInfo.LeaveApprovalId);
+                        var approvalineItem = item.leaveApprovalLineItems.FirstOrDefault(x => x.LeaveApprovalLineItemId == leaveAprovalInfo.ApprovalKey);
+                        if (approvalineItem != null)
+                        {
+                            item.ApprovalPosition = approvalineItem.ApprovalPosition; // (await GetLeaveApprovalLineItems(leaveAprovalInfo.LeaveApprovalId)).FirstOrDefault(x => x.LeaveApprovalLineItemId == leaveAprovalInfo.ApprovalKey).ApprovalPosition;
+                        }
 
                         item.leaveRequestLineItems = await AnnualLeaveRequestLineItems(item.AnnualLeaveId);
                         item.SplitCount = item.leaveRequestLineItems.Count;
@@ -550,7 +555,7 @@ namespace hrms_be_backend_data.Repository
                 var res = await _dapperGeneric.GetAll<LeaveRequestLineItemDto>(ApplicationConstant.Sp_GetAllEmpLeaveRequestLineItems, param, commandType: CommandType.StoredProcedure);
                     if (res != null)
                 {
-                    res = res.FindAll(x => !x.LeaveTypeName.Contains("Annual", StringComparison.OrdinalIgnoreCase));
+                  //  res = res.FindAll(x => !x.LeaveTypeName.Contains("Annual", StringComparison.OrdinalIgnoreCase));
                     foreach (var item in res)
                     {
                         var leaveAprovalId = (await GetLeaveApprovalInfoByEmployeeId(item.EmployeeId)).LeaveApprovalId;
@@ -570,7 +575,6 @@ namespace hrms_be_backend_data.Repository
                 return default;
             }
         }
-
 
         public async Task<LeaveApprovalLineItem> UpdateLeaveRequestApprovalID(LeaveRequestLineItem leaveRequestLineItem)
         {
@@ -852,8 +856,6 @@ namespace hrms_be_backend_data.Repository
             }
         }
        
-
-
         public async Task<List<AnnualLeave>> GetAnnualLeaveInfo(int employeeId, int companyId)
         {
             try
@@ -1316,18 +1318,38 @@ namespace hrms_be_backend_data.Repository
                         foreach (var item in LeaveDetails)
                         {
                             item.leaveRequestLineItems = await GetAllLeaveEmpRequestLineItems(item.EmployeeId);
-                            var leaveapproval = await GetLeaveApprovalInfoByRequestLineItemId(item.leaveRequestLineItems.FirstOrDefault().LeaveApprovalLineItemId);
-                            if (leaveapproval != null)
+                            if (item.leaveRequestLineItems != null && item.leaveRequestLineItems.Count > 0)
                             {
-                                item.ApprovalPosition = leaveapproval.ApprovalStatus;
-                                item.ApprovalPosition = leaveapproval.Comments.Split(",").First().Split(" ").Last();
+                                foreach (var lineItem in item.leaveRequestLineItems)
+                                {
+                                    empLeaveRequestInfo = new EmpLeaveRequestInfo();
+                                    var leaveapproval = await GetLeaveApprovalInfoByRequestLineItemId(lineItem.LeaveRequestLineItemId.Value);
+                                    if (leaveapproval != null)
+                                    {
+                                        empLeaveRequestInfo.ApprovalStatus = leaveapproval.ApprovalStatus;
+                                        var approvalLineItem = (await GetLeaveApprovalLineItems(leaveapproval.LeaveApprovalId)).FirstOrDefault(x => x.LeaveApprovalLineItemId == leaveapproval.ApprovalKey);
+                                        if (approvalLineItem != null)
+                                        {
+                                            empLeaveRequestInfo.ApprovalPosition = approvalLineItem.ApprovalPosition;
+                                        }
+                                        else
+                                        {
+                                            empLeaveRequestInfo.ApprovalPosition = "N/A";
+                                        }
+                                    }
+                                    empLeaveRequestInfo.CompanyID = item.CompanyID;
+                                    empLeaveRequestInfo.EmployeeId = item.EmployeeId;
+                                    empLeaveRequestInfo.NoOfDaysTaken = item.NoOfDaysTaken;
+                                    empLeaveRequestInfo.leaveRequestLineItems.Add(lineItem);
+                                    empLeaveRequestInfo.LeavePeriod = item.LeavePeriod;
+                                    empLeaveRequestInfo.LeaveRequestId = item.LeaveRequestId;
+                                    empLeaveRequestInfo.DateCreated = item.DateCreated;
+                                    respItems.Add(empLeaveRequestInfo);
+                                }
                             }
-                           // empLeaveRequestInfo = new EmpLeaveRequestInfo();
-                          //  empLeaveRequestInfo.ApprovalPosition = item.ApprovalPosition;
                         }
-                        
                     }
-                    return LeaveDetails;
+                    return respItems;
                 }
             }
             catch (Exception ex)
