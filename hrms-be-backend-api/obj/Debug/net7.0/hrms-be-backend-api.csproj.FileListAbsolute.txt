@@ -259,10 +259,11 @@ C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\obj\Deb
 C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\staticwebassets.build.json
 C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\staticwebassets.development.json
 C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\scopedcss\bundle\hrms-be-backend-api.styles.css
-C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\hrms-be-backend-api.csproj.CopyComplete
 C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\hrms-be-backend-api.dll
 C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\refint\hrms-be-backend-api.dll
 C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\hrms-be-backend-api.xml
 C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\hrms-be-backend-api.pdb
 C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\hrms-be-backend-api.genruntimeconfig.cache
 C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\ref\hrms-be-backend-api.dll
+C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\hrms-be-backend-api.sourcelink.json
+C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-api\obj\Debug\net7.0\hrms-be-.28DC68A0.Up2Date

@@ -320,7 +320,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetResignationByCompanyID(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress)
+        public async Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetResignationByCompanyID(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress, DateTime? startDate, DateTime? endDate)
         {
             var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
             if (accessUser.data == null)
@@ -333,7 +333,7 @@ namespace hrms_be_backend_business.Logic
             try
             {              
 
-                var resignation = await _resignationRepository.GetResignationByCompanyID(companyID, filter.PageNumber, filter.PageSize, filter.SearchValue);
+                var resignation = await _resignationRepository.GetResignationByCompanyID(companyID, filter.PageNumber, filter.PageSize, filter.SearchValue,startDate,endDate);
 
                 if (resignation == null)
                 {
@@ -463,7 +463,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetPendingResignationByCompanyID(long companyID, string AccessKey, string RemoteIpAddress)
+        public async Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetPendingResignationByCompanyID(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress, DateTime? startDate, DateTime? endDate)
         {
             var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
             if (accessUser.data == null)
@@ -471,10 +471,11 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<IEnumerable<ResignationDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
             }
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
             try
             {
 
-                var PendingResignation = await _resignationRepository.GetPendingResignationByCompanyID(companyID,accessUser.data.EmployeeId);
+                var PendingResignation = await _resignationRepository.GetPendingResignationByCompanyID( companyID, accessUser.data.EmployeeId, filter.PageNumber, filter.PageSize, filter.SearchValue, startDate, endDate);
 
                 if (PendingResignation == null)
                 {

@@ -45,8 +45,9 @@ C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\ob
 C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\obj\Debug\net7.0\hrms-be-backend-business.AssemblyInfoInputs.cache
 C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\obj\Debug\net7.0\hrms-be-backend-business.AssemblyInfo.cs
 C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\obj\Debug\net7.0\hrms-be-backend-business.csproj.CoreCompileInputs.cache
-C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\obj\Debug\net7.0\hrms-be-backend-business.csproj.CopyComplete
 C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\obj\Debug\net7.0\hrms-be-backend-business.dll
 C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\obj\Debug\net7.0\refint\hrms-be-backend-business.dll
 C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\obj\Debug\net7.0\hrms-be-backend-business.pdb
 C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\obj\Debug\net7.0\ref\hrms-be-backend-business.dll
+C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\obj\Debug\net7.0\hrms-be-backend-business.sourcelink.json
+C:\Users\noble.nwabuike\source\repos\hrms-be-backend\hrms-be-backend-business\obj\Debug\net7.0\hrms-be-.8FB3A7AC.Up2Date
