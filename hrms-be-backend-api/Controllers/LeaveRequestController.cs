@@ -1,21 +1,10 @@
 ﻿using hrms_be_backend_business.ILogic;
-using hrms_be_backend_business.Logic;
-using hrms_be_backend_common.Communication;
-using hrms_be_backend_common.DTO;
 using hrms_be_backend_common.Models;
 using hrms_be_backend_data.Enums;
-using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
-using iText.Kernel.Geom;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System.Collections.Generic;
-using System.Security.Claims;
-using static iText.Signatures.LtvVerification;
-using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace hrms_be_backend_api.LeaveModuleController.Controller
 {
@@ -116,7 +105,6 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
 
         [HttpGet("{Id}")]
-        [Authorize]
         public async Task<IActionResult> GetLeaveRequestLineItem(long Id)
         {
             var response = new BaseResponse();
@@ -234,7 +222,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [HttpGet("GetAllPagedLeaveRequest")]
-        public async Task<IActionResult> GetAllPagedLeaveRequest([FromQuery] string CompanyID, DateTime? startDate, DateTime? endDate, string ApprovalPosition = null, string approvalStatus  = "Pending", int pageNumber = 1, int pageSize = 10)
+        public async Task<IActionResult> GetAllPagedLeaveRequest([FromQuery] string CompanyID, DateTime? startDate, DateTime? endDate, string ApprovalPosition = "All", string approvalStatus  = "All", int pageNumber = 1, int pageSize = 10)
         {
             var response = new BaseResponse();
             try
@@ -366,7 +354,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         }
 
         /// <summary>
-        /// Gets  to get a paged list of leave info for a single Employee within a given Company
+        /// Endpoint to a paged list of leave info for a single Employee within a given Company
         /// </summary>
         /// <param name="CompanyId">Request Parameters</param>
         /// <param name="EmployeeId">Request Parameters</param>
