@@ -289,14 +289,14 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 {
                     if (!approvalStatus.Equals("All", StringComparison.OrdinalIgnoreCase))
                     {
-                        finalRes = finalRes.FindAll(x => x.ApprovalStatus == approvalStatus);
+                        finalRes = finalRes.FindAll(x => x.ApprovalStatus.Equals(approvalStatus, StringComparison.OrdinalIgnoreCase));
                     }
                 }
                 if (!string.IsNullOrEmpty(ApprovalPosition))
                 {
                     if (!ApprovalPosition.Equals("All", StringComparison.OrdinalIgnoreCase))
                     {
-                        finalRes = finalRes.FindAll(x => x.ApprovalPosition == ApprovalPosition);
+                        finalRes = finalRes.FindAll(x => x.ApprovalPosition.Equals(ApprovalPosition, StringComparison.OrdinalIgnoreCase));
                     }
                 }
 

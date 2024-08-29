@@ -616,34 +616,6 @@ namespace hrms_be_backend_business.Logic
                                 return response;
                             }
 
-                            //Check for previous leave date encroachment
-                            //var maxItemId = leaveRequestLineItems.Max(x => x.LeaveRequestLineItemId);
-                            //var lastLeaveTaken = leaveRequestLineItems.FirstOrDefault(x => x.LeaveRequestLineItemId == maxItemId);
-                            //if (lastLeaveTaken != null)
-                            //{
-                            //     _logger.LogInformation($"Details of last leave taken: {JsonConvert.SerializeObject(lastLeaveTaken)}");
-                            //    if (lastLeaveTaken.endDate.Date > leaveRequestLineItem.startDate.Date)
-                            //    {
-                            //        _logger.LogError($"Invalid start date. The start date selected conflicts with a previous leave period already taken");
-                            //        response.ResponseCode = ((int)ResponseCode.Ok).ToString();
-                            //        response.ResponseMessage = "Invalid start date. The start date selected conflicts with a previous leave period already taken";
-                            //        //  response.Data = repoResponse;
-                            //        return response;
-                            //    }
-                            //}
-
-                            //Check split count
-                            //Only count the items that were approved
-                            //include proposed leave (+1)
-                            //var noOfApprovedSplit = leaveRequestLineItems.Where(x => x.IsApproved == true).Count();
-                            //if ((noOfApprovedSplit + 1) > gradeLeave.NumberOfVacationSplit)
-                            //{
-                            //    response.ResponseCode = "08";
-                            //    response.ResponseMessage = "Vacation split count exceeded";
-                            //    return response;
-                            //}
-
-
                         }
                     }
                 }
@@ -673,12 +645,7 @@ namespace hrms_be_backend_business.Logic
                     if (leaveApproval != null && leaveApproval.leaveApprovalLineItems.Count > 0)
                     {
                         leaveRequestLineItem.leaveApprovalId = leaveApproval.LeaveApprovalId;
-                    //    _ = _leaveRequestRepository.UpdateLeaveRequestApprovalID(leaveRequestLineItem);
-                        //foreach (var item in RequestLineItems)
-                        //{
-                        //    item.AnnualLeaveId = (int)leaveApproval.LeaveApprovalId;
-                        //}
-
+                 
                         _logger.LogInformation($"About to get next leave approver using LeaveApprovalId: {leaveApproval.LeaveApprovalId}.");
 
                         nextApprovalLineItem = leaveApproval.leaveApprovalLineItems.FirstOrDefault(x => x.ApprovalStep == 1);

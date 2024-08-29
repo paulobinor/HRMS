@@ -962,12 +962,22 @@ namespace hrms_be_backend_business.Logic
                             }
                             else
                             {
-                                decimal amt = decimal.Multiply(item.PayableAmount, percentage);
-                                taxIncomeRemained -= item.PayableAmount;
-                                taxPayableAmount += amt;
+                                decimal amt = 0;
+                                if (item.PayableAmount > taxIncomeRemained)
+                                {
+                                    decimal amtToDeduct = taxIncomeRemained;
+                                    amt = decimal.Multiply(amtToDeduct, percentage);
+                                    taxIncomeRemained -= amtToDeduct;
+                                    taxPayableAmount += amt;
+                                }
+                                else
+                                {
+                                    amt = decimal.Multiply(item.PayableAmount, percentage);
+                                    taxIncomeRemained -= item.PayableAmount;
+                                    taxPayableAmount += amt;
+                                }
+
                             }
-
-
                         }
                     }
                 }

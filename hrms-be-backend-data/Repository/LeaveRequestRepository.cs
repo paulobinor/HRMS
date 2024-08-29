@@ -377,7 +377,7 @@ namespace hrms_be_backend_data.Repository
                     foreach (var item in res)
                     {
                         var leaveAprovalInfo = await GetLeaveApprovalInfo(item.ApprovalID);
-                        item.ApprovalStatus = leaveAprovalInfo.ApprovalStatus;
+                        item.ApprovalStatus = leaveAprovalInfo.Comments.Split(",").First().Split(" ").First(); //.ApprovalStatus;
                         item.IsApproved = leaveAprovalInfo.IsApproved;
                         item.Comments = leaveAprovalInfo.Comments;
 
@@ -1326,7 +1326,7 @@ namespace hrms_be_backend_data.Repository
                                     var leaveapproval = await GetLeaveApprovalInfoByRequestLineItemId(lineItem.LeaveRequestLineItemId.Value);
                                     if (leaveapproval != null)
                                     {
-                                        empLeaveRequestInfo.ApprovalStatus = leaveapproval.ApprovalStatus;
+                                        empLeaveRequestInfo.ApprovalStatus = leaveapproval.Comments.Split(",").First().Split(" ").First(); //.ApprovalStatus;
                                         var approvalLineItem = (await GetLeaveApprovalLineItems(leaveapproval.LeaveApprovalId)).FirstOrDefault(x => x.LeaveApprovalLineItemId == leaveapproval.ApprovalKey);
                                         if (approvalLineItem != null)
                                         {
