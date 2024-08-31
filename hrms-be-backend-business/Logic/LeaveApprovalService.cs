@@ -478,6 +478,9 @@ namespace hrms_be_backend_business.Logic
                     {
                         currentLeaveApprovalInfo.Comments += "," + repoResponse.Comments;
                     }
+                    annualLeave.ApprovalStatus = currentLeaveApprovalInfo.ApprovalStatus;
+                    annualLeave.Comments = currentLeaveApprovalInfo.Comments;
+
                     //else
                     //{
                     //    currentLeaveApprovalInfo.Comments = "Completed";
