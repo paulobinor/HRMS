@@ -234,7 +234,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [HttpGet("GetAllPagedLeaveRequest")]
-        public async Task<IActionResult> GetAllPagedLeaveRequest([FromQuery] string CompanyID, DateTime? startDate, DateTime? endDate, string ApprovalPosition = null, string approvalStatus  = "Pending", int pageNumber = 1, int pageSize = 10)
+        public async Task<IActionResult> GetAllPagedLeaveRequest([FromQuery] string CompanyID, DateTime? startDate, DateTime? endDate, string ApprovalPosition = null, string approvalStatus  = "All", int pageNumber = 1, int pageSize = 10)
         {
             var response = new BaseResponse();
             try

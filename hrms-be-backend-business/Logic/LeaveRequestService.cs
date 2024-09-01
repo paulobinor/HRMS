@@ -61,7 +61,6 @@ namespace hrms_be_backend_business.Logic
                     count++;
                 }
             }
-
             return count;
         }
         private bool IsValidWeekeday(DateTime dateTime)
@@ -83,7 +82,7 @@ namespace hrms_be_backend_business.Logic
             int noOfDaysTaken = 0;
             List<LeaveRequestLineItem> responseItems = new List<LeaveRequestLineItem>();
             var leaveRequestItem = RequestLineItems.FirstOrDefault();
-
+            string approvalStatus = string.Empty;
             #region Validate annual Leave Request
            
             var existingAnnualLeave = await CheckAnnualLeaveInfo(leaveRequestItem);
@@ -92,8 +91,8 @@ namespace hrms_be_backend_business.Logic
 
                 //Multiple requests not allowed
                 var leaveApproval = await _leaveApprovalRepository.GetLeaveApprovalInfo(existingAnnualLeave.ApprovalID);
-
-                if (leaveApproval.ApprovalStatus.Contains("Pending", StringComparison.OrdinalIgnoreCase))
+                approvalStatus = leaveApproval.Comments.Split(",").First().Split(" ").First();
+                if (approvalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
                 {
                     _logger.LogWarning($"Invalid request. Pending annual leave for approval exists:{JsonConvert.SerializeObject(existingAnnualLeave)}");
                     response.ResponseCode = "08";
@@ -103,16 +102,24 @@ namespace hrms_be_backend_business.Logic
                 }
 
                 //Only one approved request shall stand
-                if (leaveApproval.Comments.Contains("Approved", StringComparison.OrdinalIgnoreCase)) // == .Comments.Contains("Approved", StringComparison.OrdinalIgnoreCase))
-                {
-                    _logger.LogWarning($"Invalid request. An approved Annual Leave already exists:{JsonConvert.SerializeObject(existingAnnualLeave)}");
-                    response.ResponseCode = "400";
-                    response.ResponseMessage = $"Invalid request. You have already applied for this leave type.";
-                    return response;
-                }
+               
             }
             foreach (var leaveRequestLineItem in RequestLineItems)
             {
+                if (approvalStatus.Equals("Approved", StringComparison.OrdinalIgnoreCase)) // == .Comments.Contains("Approved", StringComparison.OrdinalIgnoreCase))
+                {
+                    foreach (var existingItem in existingAnnualLeave.leaveRequestLineItems)
+                    {
+                        if (DateTime.Now.Date > existingItem.startDate || DateTime.Now.Date > existingItem.endDate)
+                        {
+                            _logger.LogWarning($"Invalid request. Part of this leave has already been taken:{JsonConvert.SerializeObject(existingAnnualLeave)}");
+                            response.ResponseCode = "400";
+                            response.ResponseMessage = $"Invalid request. You have already taken part of this leave.";
+                            return response;
+                        }
+                    }
+                   
+                }
                 //Start date must fall within a weekday
                 if (!IsValidWeekeday(leaveRequestLineItem.startDate))
                 {
@@ -290,11 +297,11 @@ namespace hrms_be_backend_business.Logic
 
             //Check if already applied for this leavetype before
             var leaveApplicationExists = await _leaveRequestRepository.GetLeaveRequest(empLeaveRequestInfo.LeaveRequestId, leaveRequestLineItem.LeaveTypeId);
-
+            var approvalStatus = leaveApplicationExists.Comments.Split(",").First().Split(" ").First();
           //  var existingLeaveApproval = await _leaveApprovalRepository.GetExistingLeaveApproval(leaveRequestLineItem.EmployeeId);
             if (leaveApplicationExists != null)
             {
-                if (leaveApplicationExists.Comments.Contains("Pending"))
+                if (approvalStatus.Equals("Pending"))
                 {
                     _logger.LogError($"A pending approval for this leavetype already exists for EmployeeId: {leaveRequestLineItem.EmployeeId} and CompanyId: {leaveRequestLineItem.CompanyId}, payload: {JsonConvert.SerializeObject(leaveApplicationExists)}");
                     response.ResponseCode = "08";
@@ -302,7 +309,7 @@ namespace hrms_be_backend_business.Logic
                     response.Data = leaveApplicationExists;
                     return response;
                 }
-                else if(leaveApplicationExists.Comments.Contains("Approved"))
+                else if(approvalStatus.Equals("Approved"))
                 {
                     _logger.LogError($"Invalid request. Leave already applied for:{JsonConvert.SerializeObject(leaveApplicationExists)}");
                     response.ResponseCode = "08";
@@ -310,14 +317,9 @@ namespace hrms_be_backend_business.Logic
                     response.Data = leaveApplicationExists;
                     return response;
                 }
-
             }
 
-            _logger.LogInformation($"Check if any pending leave approvals for this leavetype");
-
-
-            _logger.LogInformation($"No pending leave approvals.");
-
+           
             //Start date must fall within a weekday
             if (!IsValidWeekeday(leaveRequestLineItem.startDate))
             {
@@ -344,7 +346,6 @@ namespace hrms_be_backend_business.Logic
                 response.ResponseMessage = "Invalid date range specified. start date must come before the the end date";
                 return response;
             }
-
 
             //You cannot select a date in the past
             if (DateTime.Now.Date > leaveRequestLineItem.startDate)
@@ -1179,49 +1180,17 @@ namespace hrms_be_backend_business.Logic
 
                 #region Validate Leave Request
 
-                var leaveRequestLineItems = await _leaveRequestRepository.GetLeaveRequestLineItems(empLeaveRequestInfo.LeaveRequestId);
-              
-                if (leaveRequestLineItems != null && leaveRequestLineItems.Count > 0)
+                var gradeLeave = await _leaveRequestRepository.GetEmployeeGradeLeave(leaveRequestLineItem.EmployeeId, leaveRequestLineItem.LeaveTypeId);
+                _logger.LogInformation($"GradeLeave info for  {leaveRequestLineItem.EmployeeId} is {JsonConvert.SerializeObject(gradeLeave)}");
+
+                if (leaveRequestLineItem.LeaveLength > gradeLeave.NumbersOfDays)
                 {
-                    if (leaveRequestLineItems.Count > 0)
-                    {
-                        var gradeLeave = await _leaveRequestRepository.GetEmployeeGradeLeave(leaveRequestLineItem.EmployeeId, leaveRequestLineItem.LeaveTypeId);
-                        _logger.LogInformation($"GradeLeave info for  {leaveRequestLineItem.EmployeeId} is {JsonConvert.SerializeObject(gradeLeave)}");
-
-                        //Check number of days left
-                        //Only sum up the days of the items that were approved
-                        var noOfDaysTaken = leaveRequestLineItems.Where(x => x.IsApproved == true && x.LeaveTypeId == leaveRequestLineItem.LeaveTypeId && x.LeaveRequestLineItemId != leaveRequestLineItem.LeaveRequestLineItemId).Sum(x => x.LeaveLength);
-                        _logger.LogInformation($"no. of approved days taken for {leaveRequestLineItem.EmployeeId} is {noOfDaysTaken}");
-                        _logger.LogInformation($"Calculate permissible days for EmployeeId - {leaveRequestLineItem.EmployeeId}: {gradeLeave.NumbersOfDays} - ({noOfDaysTaken} + {leaveRequestLineItem.LeaveLength}) = {gradeLeave.NumbersOfDays - (noOfDaysTaken + leaveRequestLineItem.LeaveLength)}");
-
-                        var diff = gradeLeave.NumbersOfDays - (noOfDaysTaken + leaveRequestLineItem.LeaveLength);
-                        if (diff > 0)
-                        {
-                            _logger.LogInformation($"no. of permissable days for - {leaveRequestLineItem.EmployeeId} is {diff}");
-                        }
-                        else
-                        {
-                            _logger.LogError($"Leave length will be exceeded by {diff} days");
-                        }
-
-
-                        if ((noOfDaysTaken + leaveRequestLineItem.LeaveLength) > gradeLeave.NumbersOfDays)
-                        {
-                            _logger.LogError($"Leave length exceeded. No. of days allocated: {gradeLeave.NumbersOfDays}. No. of approved days already taken: {noOfDaysTaken}, No. of days requested: {leaveRequestLineItem.LeaveLength}");
-                            response.ResponseCode = "08";
-                            response.ResponseMessage = $"Leave length exceeded. No. of days allocated: {gradeLeave.NumbersOfDays}. No. of approved days already taken: {noOfDaysTaken}, No. of days requested: {leaveRequestLineItem.LeaveLength}";
-                            return response;
-                        }
-                    }
-                }
-                else
-                {
-                    _logger.LogError($" We could not retrieve infomation about your requested leave. Please contact support for further assistance");
+                    _logger.LogError($"Leave length exceeded. No. of days allocated to this leave type: {gradeLeave.NumbersOfDays}, No. of days requested: {leaveRequestLineItem.LeaveLength}");
                     response.ResponseCode = "08";
-                    response.ResponseMessage = $" We could not retrieve infomation about your requested leave. Please contact support for further assistance";
+                    response.ResponseMessage = $"Leave length exceeded. No. of days allocated to this leave type:{gradeLeave.NumbersOfDays}, No. of days requested: {leaveRequestLineItem.LeaveLength}";
                     return response;
                 }
-            
+
 
                 //Check approval status
                 var leaveApprovalInfo = await GetLeaveApprovalInfo(0, leaveRequestLineItem.LeaveRequestLineItemId.Value);
