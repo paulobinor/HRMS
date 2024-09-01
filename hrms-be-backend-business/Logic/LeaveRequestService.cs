@@ -84,7 +84,8 @@ namespace hrms_be_backend_business.Logic
             var leaveRequestItem = RequestLineItems.FirstOrDefault();
             string approvalStatus = string.Empty;
             #region Validate annual Leave Request
-           
+
+            
             var existingAnnualLeave = await CheckAnnualLeaveInfo(leaveRequestItem);
             if (existingAnnualLeave != null)
             {
@@ -217,6 +218,20 @@ namespace hrms_be_backend_business.Logic
             #endregion
 
             EmpLeaveRequestInfo empLeaveRequestInfo = null;
+            empLeaveRequestInfo = await _leaveRequestRepository.GetEmpLeaveInfo(leaveRequestItem.EmployeeId, leaveRequestItem.CompanyId, leaveRequestItem.startDate.Year.ToString());
+            if (empLeaveRequestInfo == null)
+            {
+                empLeaveRequestInfo = await _leaveRequestRepository.CreateEmpLeaveInfo(leaveRequestItem.EmployeeId, leaveRequestItem.CompanyId);
+                if (empLeaveRequestInfo == null)
+                {
+                    _logger.LogError($"Could not create leave request in database.");
+                    response.ResponseCode = "08";
+                    response.ResponseMessage = $"Could not create leave request. Please try again later or contact support for assistance";
+                    return response;
+                    //throw new Exception("Could not create leave request");
+                }
+                //  IsExistingRequest = false;
+            }
             bool IsExistingRequest = true;
 
            
@@ -297,10 +312,10 @@ namespace hrms_be_backend_business.Logic
 
             //Check if already applied for this leavetype before
             var leaveApplicationExists = await _leaveRequestRepository.GetLeaveRequest(empLeaveRequestInfo.LeaveRequestId, leaveRequestLineItem.LeaveTypeId);
-            var approvalStatus = leaveApplicationExists.Comments.Split(",").First().Split(" ").First();
           //  var existingLeaveApproval = await _leaveApprovalRepository.GetExistingLeaveApproval(leaveRequestLineItem.EmployeeId);
             if (leaveApplicationExists != null)
             {
+                var approvalStatus = leaveApplicationExists.Comments.Split(",").First().Split(" ").First();
                 if (approvalStatus.Equals("Pending"))
                 {
                     _logger.LogError($"A pending approval for this leavetype already exists for EmployeeId: {leaveRequestLineItem.EmployeeId} and CompanyId: {leaveRequestLineItem.CompanyId}, payload: {JsonConvert.SerializeObject(leaveApplicationExists)}");
