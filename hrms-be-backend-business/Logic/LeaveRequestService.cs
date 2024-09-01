@@ -966,7 +966,10 @@ namespace hrms_be_backend_business.Logic
             int noOfDaysTaken = 0;
 
             var singleRequestLineItem = RequestLineItems.FirstOrDefault(x => x.LeaveRequestLineItemId != null);
-            var emplAnnualLeaveInfo = await _leaveRequestRepository.GetAnnualLeaveInfo((int)singleRequestLineItem.EmployeeId, (int)singleRequestLineItem.CompanyId, DateTime.Now.Year);
+            var resp = await GetLeaveRequestLineItem(singleRequestLineItem.LeaveRequestLineItemId.Value);
+            var requestlineItem = (LeaveRequestLineItem)resp.Data;
+            var emplAnnualLeaveInfo = await _leaveRequestRepository.GetAnnualLeaveInfo(requestlineItem.AnnualLeaveId.Value);
+          //  var emplAnnualLeaveInfo = await _leaveRequestRepository.GetAnnualLeaveInfo((int)singleRequestLineItem.EmployeeId, (int)singleRequestLineItem.CompanyId, DateTime.Now.Year);
             if (emplAnnualLeaveInfo == null)
             {
                 _logger.LogWarning($"We could not get information on annual leave from db");
