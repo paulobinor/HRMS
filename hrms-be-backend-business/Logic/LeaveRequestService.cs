@@ -302,7 +302,7 @@ namespace hrms_be_backend_business.Logic
                     response.Data = leaveApplicationExists;
                     return response;
                 }
-                else
+                else if(leaveApplicationExists.Comments.Contains("Approved"))
                 {
                     _logger.LogError($"Invalid request. Leave already applied for:{JsonConvert.SerializeObject(leaveApplicationExists)}");
                     response.ResponseCode = "08";
@@ -446,8 +446,6 @@ namespace hrms_be_backend_business.Logic
             try
             {
                
-
-               // if (IsExistingRequest)
                 {
                     var leaveRequestLineItems = await _leaveRequestRepository.GetLeaveRequestLineItems(empLeaveRequestInfo.LeaveRequestId);
                     if (leaveRequestLineItems != null)
