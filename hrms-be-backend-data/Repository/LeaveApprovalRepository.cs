@@ -363,63 +363,67 @@ namespace hrms_be_backend_data.Repository
                     _logger.LogError($"MethodName: GetPendingAnnualLeaveApprovals ===> Could not get leaveApprovalLineItems info");
                     return default;
                 }
-                var leaveapproval = await GetLeaveApprovalInfo(leaveApprovalLineItems.FirstOrDefault().LeaveApprovalId);
-                if (leaveapproval == null)
-                {
-                    _logger.LogError($"MethodName: GetPendingAnnualLeaveApprovals ===> Could not get leaveapproval info");
-                    return default;
-                }
-
-                var res1 = await GetAnnualLeaveInfo(leaveApprovalLineItems.FirstOrDefault().LeaveApprovalId);
-                if (res1 == null)
-                {
-                    _logger.LogError($"MethodName: GetPendingAnnualLeaveApprovals ===> Could not get annual leave info");
-                    return default;
-                }
-
-                string comments = leaveapproval.Comments; 
+               
 
                 foreach (var item in leaveApprovalLineItems)
                 {
-                    foreach (var item1 in res1.leaveRequestLineItems)
-                    {
-                        item1.LeaveApprovalLineItemId = item.LeaveApprovalLineItemId;
-                        item1.LeaveApprovalId = item.LeaveApprovalId;
-                        item1.ApprovalStatus = item.ApprovalStatus;
-                        item1.CompanyId = res1.CompanyID;
-                        item1.Comments = comments; // + "," + item.Comments;
-                    }
-                    var reqLineItem = res1.leaveRequestLineItems.FirstOrDefault();
-                    pendingAnnualLeaveApprovalItemDto = new()
-                    {
-                        FullName = reqLineItem.FullName,
-                        RelieverName = reqLineItem.RelieverName,
-                        ApprovalStatus = item.ApprovalStatus,
-                        IsApproved = leaveapproval.IsApproved,
-                        Year = reqLineItem.startDate.Year.ToString(),
-                        RequestDate = res1.DateCreated, //.leaveRequestLineItems.FirstOrDefault().
-                        EmployeeID = item.EmployeeID,
-                        LeaveCount = res1.leaveRequestLineItems.Count, // res.FindAll(x => x.EmployeeID == item.EmployeeID).Count(),
-                        LeaveTypeName = reqLineItem.LeaveTypeName,
-                        leaveRequestLineItems = res1.leaveRequestLineItems, // res.FindAll(x => x.EmployeeID == item.EmployeeID),
-                        Status = comments, // item.Comments,
-                        leaveApprovalId = leaveapproval.LeaveApprovalId,
-                        LeaveApprovalLineItemId = leaveapproval.LeaveApprovalLineItems.FirstOrDefault(x => x.ApprovalEmployeeId == approvalEmployeeID).LeaveApprovalLineItemId,
-                        ApprovalPosition = item.ApprovalPosition,
-                        LastApprovalEmployeeId = leaveapproval.LastApprovalEmployeeID,
-                        TotalNoOfDays = res1.leaveRequestLineItems.Sum(x => x.LeaveLength)
-                    };
+                    var leaveapproval = await GetLeaveApprovalInfo(item.LeaveApprovalId);
 
-                    if (item.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+                    if (leaveapproval == null)
                     {
-                        if (leaveapproval.ApprovalKey == item.LeaveApprovalLineItemId)
-                        {
-                            pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
-                        }
+                        _logger.LogError($"MethodName: GetPendingAnnualLeaveApprovals ===> Could not get leaveapproval info");
+                        return default;
+                    }
+                    string comments = leaveapproval.Comments;
+                    var annualLeaveInfo = await GetAnnualLeaveInfo(leaveapproval.LeaveApprovalId);
+                    if (annualLeaveInfo == null)
+                    {
+                        //we are looking for only annual leave
+                      //  _logger.LogError($"MethodName: GetPendingAnnualLeaveApprovals ===> Could not get annual leave info");
+                      //  return default;
                     }
                     else
                     {
-                        pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                        foreach (var AnnualLieaveRequestLineItem in annualLeaveInfo.leaveRequestLineItems)
+                        {
+                            AnnualLieaveRequestLineItem.LeaveApprovalLineItemId = item.LeaveApprovalLineItemId;
+                            AnnualLieaveRequestLineItem.LeaveApprovalId = item.LeaveApprovalId;
+                            AnnualLieaveRequestLineItem.ApprovalStatus = item.ApprovalStatus;
+                            AnnualLieaveRequestLineItem.CompanyId = annualLeaveInfo.CompanyID;
+                            AnnualLieaveRequestLineItem.Comments = comments; // + "," + item.Comments;
+                        }
+                        var reqLineItem = annualLeaveInfo.leaveRequestLineItems.FirstOrDefault();
+                        pendingAnnualLeaveApprovalItemDto = new()
+                        {
+                            FullName = reqLineItem.FullName,
+                            RelieverName = reqLineItem.RelieverName,
+                            ApprovalStatus = item.ApprovalStatus,
+                            IsApproved = leaveapproval.IsApproved,
+                            Year = reqLineItem.startDate.Year.ToString(),
+                            RequestDate = annualLeaveInfo.DateCreated, //.leaveRequestLineItems.FirstOrDefault().
+                            EmployeeID = item.EmployeeID,
+                            LeaveCount = annualLeaveInfo.leaveRequestLineItems.Count, // res.FindAll(x => x.EmployeeID == item.EmployeeID).Count(),
+                            LeaveTypeName = reqLineItem.LeaveTypeName,
+                            leaveRequestLineItems = annualLeaveInfo.leaveRequestLineItems, // res.FindAll(x => x.EmployeeID == item.EmployeeID),
+                            Status = comments, // item.Comments,
+                            leaveApprovalId = leaveapproval.LeaveApprovalId,
+                            LeaveApprovalLineItemId = leaveapproval.LeaveApprovalLineItems.FirstOrDefault(x => x.ApprovalEmployeeId == approvalEmployeeID).LeaveApprovalLineItemId,
+                            ApprovalPosition = item.ApprovalPosition,
+                            LastApprovalEmployeeId = leaveapproval.LastApprovalEmployeeID,
+                            TotalNoOfDays = annualLeaveInfo.leaveRequestLineItems.Sum(x => x.LeaveLength)
+                        };
+
+                        if (item.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (leaveapproval.ApprovalKey == item.LeaveApprovalLineItemId)
+                            {
+                                pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                            }
+                        }
+                        else
+                        {
+                            pendingRes.Add(pendingAnnualLeaveApprovalItemDto);
+                        }
                     }
                 }
                 pendingRes = pendingRes.OrderByDescending(x => x.RequestDate).ToList();
