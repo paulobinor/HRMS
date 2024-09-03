@@ -115,7 +115,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpGet]
         [Route("GetResignationByCompanyID/{companyId}")]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> GetResignationByCompanyID(long companyId, [FromQuery] PaginationFilter filter, DateTime? startDate, DateTime? endDate)
         {
            
@@ -124,7 +124,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claim = identity.Claims;
             var accessToken = Request.Headers["Authorization"];
-            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+           // accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
             return Ok(await _resignationService.GetResignationByCompanyID(filter, companyId, accessToken, RemoteIpAddress,startDate,endDate));
           

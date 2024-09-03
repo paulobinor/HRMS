@@ -205,17 +205,15 @@ namespace hrms_be_backend_business.Logic
 
        public async Task<ExecutedResult<IEnumerable<ResignationInterviewDTO>>> GetAllResignationInterviewsByCompany(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress, DateTime? startDate, DateTime? endDate)
         {
-            //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-            //if (accessUser.data == null)
-            //{
-            //    return new ExecutedResult<IEnumerable<ResignationInterviewDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
-            //}
+            var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+            if (accessUser.data == null)
+            {
+                return new ExecutedResult<IEnumerable<ResignationInterviewDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+            }
             var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
 
             try
             {
-
-
                 var resignation = await _resignationInterviewRepository.GetAllResignationInterviewsByCompany(companyID, filter.PageNumber, filter.PageSize, filter.SearchValue,startDate,endDate);
 
                 if (resignation == null)

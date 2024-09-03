@@ -91,7 +91,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-            return Ok(await _resignationClearanceService.GetAllResignationClearanceByCompany(filter, companyId, accessToken, RemoteIpAddress,endDate,startDate));
+            return Ok(await _resignationClearanceService.GetAllResignationClearanceByCompany(filter, companyId, accessToken, RemoteIpAddress, startDate, endDate));
 
 
         }

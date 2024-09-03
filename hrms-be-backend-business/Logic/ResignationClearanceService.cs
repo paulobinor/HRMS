@@ -185,11 +185,11 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-                var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
-                if (accessUser.data == null)
-                {
-                    return new ExecutedResult<IEnumerable<ResignationClearanceDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
-                }
+                //var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
+                //if (accessUser.data == null)
+                //{
+                //    return new ExecutedResult<IEnumerable<ResignationClearanceDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
+                //}
 
                 var resignation = await _resignationClearanceRepository.GetAllResignationClearanceByCompany(companyID, filter.PageNumber, filter.PageSize, filter.SearchValue,accessUser.data.EmployeeId,startDate,endDate);
 
