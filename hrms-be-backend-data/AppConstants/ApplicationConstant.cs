@@ -53,7 +53,6 @@
 
         public const string Sp_CreateEmpLeaveRequestLineItem = "Sp_CreateEmpLeaveRequestLineItem";
         public const string Sp_CreateEmpLeaveInfo = "Sp_CreateEmpLeaveInfo";
-        public const string Sp_RescheduleLeaveRequestLineItem = "Sp_RescheduleLeaveRequestLineItem";
         public const string Sp_GetEmpLeaveInfoHistory = "Sp_GetEmpLeaveInfoHistory";
         public const string Sp_GetEmpLeaveInfo = "Sp_GetEmpLeaveInfo";
         public const string Sp_GetLeaveApproval = "Sp_GetLeaveApproval";
@@ -97,6 +96,9 @@
         public const string Sp_GetEmpAnnualLeaveRequestLineItems  = "Sp_GetEmpAnnualLeaveRequestLineItems";
         public const string Sp_GetEmpAnnualLeave  = "Sp_GetEmpAnnualLeave";
         public const string Sp_UpdateEmpAnnualLeave = "Sp_UpdateEmpAnnualLeave";
+        public const string Sp_CreateApprovals = "Sp_CreateAproval";
+        public const string Sp_CreateApprovalsLineItem = "Sp_CreateAprovalLineItem";
+        public const string sp_get_hr_Id = "sp_get_hr_Id";
 
         //System Default
         public const int DefaultDeptId = 1;
@@ -115,6 +117,26 @@
         public const string Sp_TrainingSchedule = "Sp_TrainingSchedule";
         public const string Sp_TrainingInduction = "Sp_TrainingInduction";
         public const string Sp_TrainingFeedbackForm = "Sp_TrainingFeedbackForm";
-
+        public const string Sp_CheckEmpAnnualLeave = "Sp_CheckEmpAnnualLeave";
+        public const string Sp_UpdateLeaveRequestApprovalID = "Sp_UpdateLeaveRequestApprovalID";
+        public const string Sp_CreatLeaveApproval = "Sp_CreatLeaveApproval";
+        public const string Sp_CreateLeaveApprovalLineItem = "Sp_CreateLeaveApprovalLineItem";
+        public const string Sp_CreateEmpLeaveRequestLineItem1 = "Sp_CreateEmpLeaveRequestLineItem1";
+        public const string Sp_GetAnnualLeaveRequestLineItems = "Sp_GetAnnualLeaveRequestLineItems";
+        public const string Sp_GetAllLeaveApprovalLineItems = "Sp_GetAllLeaveApprovalLineItems";
+        public const string Sp_GetAllAnnualLeaveApprovals = "Sp_GetAllAnnualLeaveApprovals";
+        public const string Sp_GetAnnualLeaveInfo = "Sp_GetAnnualLeaveInfo";
+        public const string Sp_GetLeaveApprovalItem = "Sp_GetLeaveApprovalItem";
+        public const string Sp_GetEmpAnnualLeaveInfo1 = "Sp_GetEmpAnnualLeaveInfo1";
+        public const string Sp_DeleteAnnualLeaveRequestItems = "Sp_DeleteAnnualLeaveRequestItems";
+        public const string Sp_UpdateAnnualLeaveApproval = "Sp_UpdateAnnualLeaveApproval";
+        public const string Sp_RescheduleLeaveRequestLineItem = "Sp_RescheduleLeaveRequestLineItem";
+        public const string Sp_CreateEmpAnnualLeave1 = "Sp_CreateEmpAnnualLeave1";
+        public const string Sp_RescheduleAnnualLeaveRequestLineItem = "Sp_RescheduleAnnualLeaveRequestLineItem";
+        public const string Sp_CheckForExistingEmpLeaveRequest = "Sp_CheckForExistingEmpLeaveRequest";
+        public const string Sp_UpdateLeaveApprovalRequestLineItemID = "Sp_UpdateLeaveApprovalRequestLineItemID";
+        public const string Sp_GetAllAnnualLeaveRequests = "Sp_GetAllAnnualLeaveRequests";
+        public const string Sp_GetAnnualLeaveRequestLineItemsByAnnualLeaveId = "Sp_GetAnnualLeaveRequestLineItemsByAnnualLeaveId";
+        internal static string Sp_GetLeaveApprovalByApprovalKey = "Sp_GetLeaveApprovalByApprovalKey";
     }
 }

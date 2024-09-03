@@ -1,8 +1,10 @@
 ﻿using hrms_be_backend_business.ILogic;
 using hrms_be_backend_business.Logic;
+using hrms_be_backend_common.DTO;
 using hrms_be_backend_common.Models;
 using hrms_be_backend_data.Enums;
 using hrms_be_backend_data.ViewModel;
+using iText.Kernel.Geom;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -91,8 +93,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         public async Task<IActionResult> GetPendingLeaveApprovals([FromQuery] long ApprovalEmployeeID)
         {
             var response = new BaseResponse();
-            //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
-            //_logger.LogInformation($"Received GetPendingLeaveApprovals request. Payload: {JsonConvert.SerializeObject(new { ApprovalEmployeeID })} from remote address: {RemoteIpAddress}");
+            var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            _logger.LogInformation($"Received GetPendingLeaveApprovals request. Payload: {JsonConvert.SerializeObject(new { ApprovalEmployeeID })} from remote address: {RemoteIpAddress}");
 
             //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
             //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
@@ -130,7 +132,57 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             return Ok(response);
         }
 
-       
+        [HttpGet("GetPagedLeaveApprovals")]
+        // [Authorize]
+        public async Task<IActionResult> GetPagedLeaveApprovals([FromQuery] long ApprovalEmployeeID, int pageNumber = 1, int pageSize = 10)
+        {
+            var response = new BaseResponse();
+            //var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            //_logger.LogInformation($"Received GetPendingLeaveApprovals request. Payload: {JsonConvert.SerializeObject(new { ApprovalEmployeeID })} from remote address: {RemoteIpAddress}");
+
+            //var accessToken = Request.Headers["Authorization"].ToString().Split(" ").Last();
+            //var accessUser = await _authService.CheckUserAccess(accessToken, RemoteIpAddress);
+            //if (accessUser.data == null)
+            //{
+            //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
+
+            //}
+            var res = await _leaveApprovalService.GetPendingLeaveApprovals(ApprovalEmployeeID);
+           // var requests = (List<LeaveRequestLineItemDto>)res.Data;
+
+            int totalItems = 0; int totalPages = 0;
+            List<PendingLeaveApprovalItemsDto> items = null;
+            if (res != null && res.Count > 0)
+            {
+                totalItems = res.Count;
+                totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+                items = res
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+            }
+            else
+            {
+                totalItems = 0;
+                totalPages = 1;
+            }
+
+            var pagedRes = new
+            {
+                TotalItems = totalItems,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalPages = totalPages,
+                Items = items
+            };
+            //res = pagedRes;
+            response.Data = pagedRes;
+            response.ResponseMessage = "Success";
+            response.ResponseCode = "00";
+            return Ok(response);
+
+        }
 
     }
 

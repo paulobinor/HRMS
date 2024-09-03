@@ -23,5 +23,8 @@
         public string HandoverNotes { get; set; }
         public int LastApprovalEmployeeID { get; set; }
         public string UploadFilePath { get; set; }
+        public long AnnualLeaveID { get; set; }
+        public int TotalNoOfDays { get; set; }
+        public int LeaveCount { get; set; }
     }
 }

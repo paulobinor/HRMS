@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using hrms_be_backend_data.AppConstants;
 using hrms_be_backend_data.IRepository;
 using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
@@ -645,6 +646,22 @@ namespace hrms_be_backend_data.Repository
             {
                 _logger.LogError($"EmployeeRepository => GetEmployeeReferee || {ex}");
                 return null;
+            }
+        }
+
+        public async Task<long> GetHR_ID(long CompanyId, long EmployeeID)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add("@CompanyId", CompanyId);
+                param.Add("@EmployeeID", EmployeeID);
+                return await _dapper.Get<long>(ApplicationConstant.sp_get_hr_Id, param, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EmployeeRepository => GetEmployeeReferee || {ex}");
+                return default;
             }
         }
     }

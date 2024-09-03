@@ -9,6 +9,7 @@ namespace hrms_be_backend_common.Models
     public class LeaveRequestConfig
     {
         public bool ValidateGender { get; set; }
-        public bool EnableSingleApproval { get; set; }
+        public bool EnableSingleApproval { get; set; } = true;
+        public bool UseApprovalTable { get; set; } = false;
     }
 }

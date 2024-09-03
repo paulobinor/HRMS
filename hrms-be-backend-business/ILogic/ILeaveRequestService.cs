@@ -17,11 +17,15 @@ namespace hrms_be_backend_business.ILogic
         Task<BaseResponse> GetLeaveRequestLineItem(long leaveRequestLineItemId);
         Task<BaseResponse> GetEmployCumulativeForLeaveType(LeaveRequestLineItem leaveRequestLineItem);
         //  Task<LeaveApprovalInfo> GetLeaveApprovalInfo(long leaveApprovalId, long leaveReqestLineItemId);
-        Task<EmpLeaveRequestInfo> GetEmpLeaveInfo(long employeeId, long companyId, string LeaveStatus = "Active");
+        Task<EmpLeaveRequestInfo> GetEmpLeaveInfo(long employeeId, long companyId, string year);
         Task<List<AnnualLeave>> GetEmpAnnualLeaveInfoList(long employeeId, long companyId);
         Task<AnnualLeave> GetEmpAnnualLeaveInfo(int AnnualLeaveId);
-
+        Task<AnnualLeave> GetEmpAnnualLeaveInfo(int EmployeeId, int CompanyId, int LeavePeriod);
+        Task<AnnualLeave> CheckAnnualLeaveInfo(LeaveRequestLineItem leaveRequestLineItem);
+        
         Task<BaseResponse> GetAllLeaveRequest(string CompanyID);
+
+        Task<BaseResponse> GetAnnualLeaveRequests(long CompanyID, string LeavePeriod);
         Task<BaseResponse> GetAllLeaveRquestLineItems(long CompanyID);
         Task<List<LeaveRequestLineItemDto>> GetEmployeeLeaveRequests(long CompanyID, long EmployeeId);
         Task<BaseResponse> RescheduleAnnualLeaveRequest(List<LeaveRequestLineItem> leaveRequestLineItems);

@@ -3,6 +3,7 @@
     public class LeaveRequestLineItem
     {
         public long? LeaveRequestLineItemId { get; set; }
+        public long? leaveApprovalLineItemId { get; set; }
         public long LeaveRequestId { get; set; }
         public long RelieverUserId { get; set; }
         public int LeaveLength { get; set; }
@@ -15,9 +16,15 @@
         public long EmployeeId { get; set; }
         public long LeaveTypeId { get; set; }
         public long CompanyId { get; set; }
-        public bool IsApproved { get; set; }
+        public bool IsApproved { get; set; } = false;
         public string? UploadFilePath { get; set; } = string.Empty;
-        public int AnnualLeaveId { get; set; }
+        public int? AnnualLeaveId { get; set; }
+        public int? ApproalID { get; set; }
+        public long? leaveApprovalId { get; set; }
+        public string? Comments { get; set; }
+        public string? ApprovalStatus { get; set; }
+        public string? RelieverName { get; set; }
+        public string? LeaveTypeName { get; set; }
     }
 
     public class CreateLeaveRequestLineItem

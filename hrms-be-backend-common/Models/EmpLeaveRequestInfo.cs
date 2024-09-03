@@ -31,7 +31,8 @@ namespace hrms_be_backend_common.Models
     //    public byte IsMDApproved { get; set; }
     //    public byte IsMDDeclined { get; set; }
         public string LeaveStatus { get; set; }
-        public List<LeaveRequestLineItemDto> leaveRequestLineItems { get; set; } = new List<LeaveRequestLineItemDto>();
         public string ApprovalStatus { get; set; }
+        public string ApprovalPosition { get; set; }
+        public List<LeaveRequestLineItemDto> leaveRequestLineItems { get; set; } = new List<LeaveRequestLineItemDto>();
     }
 }
