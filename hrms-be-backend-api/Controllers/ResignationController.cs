@@ -25,7 +25,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
         }
         [HttpPost]
         [Route("SubmitResignation")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> SubmitResignation(ResignationRequestVM request)
         {
           
@@ -42,7 +42,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpPost]
         [Route("UpdateResignation")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> UpdateResignation([FromBody] UpdateResignationDTO updateDTO)
         {
 
@@ -60,7 +60,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpPost]
         [Route("UploadResignationLetter")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> UploadFile_(IFormFile letter)
         {
            
@@ -78,7 +78,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpGet]
         [Route("GetResignationByID/{resignationID}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetResignationByID(long resignationID)
         {
             
@@ -97,7 +97,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpGet]
         [Route("GetResignationByEmployeeID/{EmployeeID}")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> GetResignationByEmployeeID(long EmployeeID)
         {
            
@@ -115,7 +115,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpGet]
         [Route("GetResignationByCompanyID/{companyId}")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> GetResignationByCompanyID(long companyId, [FromQuery] PaginationFilter filter, DateTime? startDate, DateTime? endDate)
         {
            
@@ -124,7 +124,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claim = identity.Claims;
             var accessToken = Request.Headers["Authorization"];
-           // accessToken = accessToken.ToString().Replace("bearer", "").Trim();
+            accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
             return Ok(await _resignationService.GetResignationByCompanyID(filter, companyId, accessToken, RemoteIpAddress,startDate,endDate));
           
