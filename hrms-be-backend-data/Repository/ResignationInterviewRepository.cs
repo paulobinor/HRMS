@@ -100,7 +100,7 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<IEnumerable<ResignationInterviewDTO>> GetAllResignationInterviewsByCompany(long companyID, int PageNumber, int RowsOfPage, string SearchVal)
+        public async Task<IEnumerable<ResignationInterviewDTO>> GetAllResignationInterviewsByCompany(long companyID, int PageNumber, int RowsOfPage, string SearchVal, DateTime? startDate, DateTime? endDate)
         {
             try
             {
@@ -110,7 +110,10 @@ namespace hrms_be_backend_data.Repository
                     param.Add("CompanyID", companyID);
                     param.Add("@PageNumber", PageNumber);
                     param.Add("@RowsOfPage", RowsOfPage);
+                    param.Add("@StartDate", startDate);
+                    param.Add("@EndDate", endDate);
                     param.Add("@SearchVal", SearchVal.ToLower());
+
 
                     var response = await _dapper.GetAll<ResignationInterviewDTO>("Sp_get_all_resignation_interview", param, commandType: CommandType.StoredProcedure);
 
