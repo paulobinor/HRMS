@@ -55,8 +55,8 @@ namespace hrms_be_backend_business.Logic
             catch (Exception ex)
             {
                 _logger.LogError($"Exception Occured ==> {ex.Message}");
-              //  response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
-              //  response.ResponseMessage = "Exception occured";
+               // response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+               // response.ResponseMessage = "Exception occured";
                // response.Data = null;
 
             }
@@ -64,7 +64,7 @@ namespace hrms_be_backend_business.Logic
         }
         public async Task<BaseResponse> UpdateLeaveApproveLineItem(LeaveApprovalLineItem leaveApprovalLineItem)
         {
-            //check if us
+            
             StringBuilder errorOutput = new StringBuilder();
             var updateLeaveRequestLineItem = new LeaveRequestLineItem();
             bool sendMailToApprover = false;
@@ -99,7 +99,7 @@ namespace hrms_be_backend_business.Logic
                 {
                     _logger.LogInformation($"Approval mismatch. ApprovalKey provided: {leaveApprovalLineItem.LeaveApprovalLineItemId}, ApprovalKey returned: {leaveApproval.ApprovalKey}");
 
-                    //Not your turn to approve
+                    //Not your turn to approve at the moment
                     response.ResponseCode = "401";
                     response.ResponseMessage = "You cannot peform this action at this time";
                     response.Data = null;
