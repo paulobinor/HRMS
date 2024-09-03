@@ -177,7 +177,7 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<IEnumerable<ResignationDTO>> GetResignationByCompanyID(long companyID, int PageNumber, int RowsOfPage, string SearchVal)
+        public async Task<IEnumerable<ResignationDTO>> GetResignationByCompanyID(long companyID, int PageNumber, int RowsOfPage, string SearchVal, DateTime? startDate, DateTime? endDate)
         {
             try
             {
@@ -185,6 +185,8 @@ namespace hrms_be_backend_data.Repository
                 param.Add("CompanyId", companyID);
                 param.Add("PageNumber", PageNumber);
                 param.Add("RowsOfPage", RowsOfPage);
+                param.Add("@StartDate", startDate);
+                param.Add("@EndDate", endDate);
                 param.Add("SearchVal", SearchVal.ToLower());
 
                 var response = await _dapper.GetAll<ResignationDTO>("Sp_get_resignation_by_company", param, commandType: CommandType.StoredProcedure);
@@ -264,13 +266,18 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<IEnumerable<ResignationDTO>> GetPendingResignationByCompanyID(long companyID, long employeeID)
+        public async Task<IEnumerable<ResignationDTO>> GetPendingResignationByCompanyID(long companyID, long employeeID, int PageNumber, int RowsOfPage, string SearchVal, DateTime? startDate, DateTime? endDate)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("CompanyID", companyID);
                 param.Add("EmployeeID", employeeID);
+                param.Add("PageNumber", PageNumber);
+                param.Add("RowsOfPage", RowsOfPage);
+                param.Add("@StartDate", startDate);
+                param.Add("@EndDate", endDate);
+                param.Add("SearchVal", SearchVal.ToLower());
 
                 var response = await _dapper.GetAll<ResignationDTO>("Sp_GetPendingResignationByCompanyID", param, commandType: CommandType.StoredProcedure);
 

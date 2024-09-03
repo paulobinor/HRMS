@@ -179,7 +179,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<ExecutedResult<IEnumerable<ResignationClearanceDTO>>> GetAllResignationClearanceByCompany(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress)
+        public async Task<ExecutedResult<IEnumerable<ResignationClearanceDTO>>> GetAllResignationClearanceByCompany(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress, DateTime? startDate, DateTime? endDate)
         {
             var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
 
@@ -191,7 +191,7 @@ namespace hrms_be_backend_business.Logic
                     return new ExecutedResult<IEnumerable<ResignationClearanceDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
                 }
 
-                var resignation = await _resignationClearanceRepository.GetAllResignationClearanceByCompany(companyID, filter.PageNumber, filter.PageSize, filter.SearchValue,accessUser.data.EmployeeId);
+                var resignation = await _resignationClearanceRepository.GetAllResignationClearanceByCompany(companyID, filter.PageNumber, filter.PageSize, filter.SearchValue,accessUser.data.EmployeeId,startDate,endDate);
 
                 if (resignation == null)
                 {
@@ -247,7 +247,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-        public async Task<ExecutedResult<IEnumerable<ResignationClearanceDTO>>> GetPendingResignationClearanceByCompanyID(long CompanyID, string AccessKey, string RemoteIpAddress)
+        public async Task<ExecutedResult<IEnumerable<ResignationClearanceDTO>>> GetPendingResignationClearanceByCompanyID(long companyID, string AccessKey, string RemoteIpAddress, PaginationFilter filter, DateTime? startDate, DateTime? endDate)
         {
             var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
             if (accessUser.data == null)
@@ -255,10 +255,11 @@ namespace hrms_be_backend_business.Logic
                 return new ExecutedResult<IEnumerable<ResignationClearanceDTO>>() { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString(), data = null };
 
             }
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
             try
             {
 
-                var PendingResignation = await _resignationClearanceRepository.GetPendingResignationClearanceByCompnayID(CompanyID, accessUser.data.EmployeeId);
+                var PendingResignation = await _resignationClearanceRepository.GetPendingResignationClearanceByCompnayID(companyID, accessUser.data.EmployeeId, filter.PageNumber, filter.PageSize, filter.SearchValue, startDate,endDate);
 
                 if (PendingResignation == null)
                 {

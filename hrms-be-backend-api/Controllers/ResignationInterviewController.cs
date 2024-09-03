@@ -77,8 +77,8 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpGet]
         [Route("GetAllResignationInterviewsByCompany/{CompanyID}")]
-        [Authorize]
-        public async Task<IActionResult> GetAllResignationInterviewsByCompany(long CompanyID, [FromQuery] PaginationFilter filter)
+        //[Authorize]
+        public async Task<IActionResult> GetAllResignationInterviewsByCompany(long CompanyID, [FromQuery] PaginationFilter filter, DateTime? startDate, DateTime? endDate)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -87,7 +87,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-            return Ok(await _resignationInterviewService.GetAllResignationInterviewsByCompany(filter,CompanyID, accessToken, RemoteIpAddress));
+            return Ok(await _resignationInterviewService.GetAllResignationInterviewsByCompany(filter,CompanyID, accessToken, RemoteIpAddress,startDate,endDate));
             
         }
 

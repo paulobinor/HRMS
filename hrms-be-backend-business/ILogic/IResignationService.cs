@@ -13,15 +13,16 @@ namespace hrms_be_backend_business.ILogic
         Task<ExecutedResult<string>> UpdateResignation(UpdateResignationDTO updateDTO, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<ResignationDTO>> GetResignationByID(long ID, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<ResignationDTO>> GetResignationByEmployeeID(long UserID, string AccessKey, string RemoteIpAddress);
-        Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetResignationByCompanyID(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetResignationByCompanyID(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress, DateTime? startDate, DateTime? endDate);
 
-        //Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetAllResignations(string AccessKey, string RemoteIpAddress);
-        //Task<ExecutedResult<string>> DeleteResignation(DeleteResignationDTO request, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetPendingResignationByEmployeeID(long employeeID, string AccessKey, string RemoteIpAddress);
-        Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetPendingResignationByCompanyID(long companyID, string AccessKey, string RemoteIpAddress);
+        Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetPendingResignationByCompanyID(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress, DateTime? startDate, DateTime? endDate);
         Task<ExecutedResult<IEnumerable<ReasonsForResignationDTO>>> GetReasonsForResignationByID(long ResignationID, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<string>> ApprovePendingResignation(ApprovePendingResignationDTO request, string AccessKey, string RemoteIpAddress);
         Task<ExecutedResult<string>> DisapprovePendingResignation(DisapprovePendingResignation request, string AccessKey, string RemoteIpAddress);
-        
+
+        //Task<ExecutedResult<IEnumerable<ResignationDTO>>> GetAllResignations(string AccessKey, string RemoteIpAddress);
+        //Task<ExecutedResult<string>> DeleteResignation(DeleteResignationDTO request, string AccessKey, string RemoteIpAddress);
+
     }
 }

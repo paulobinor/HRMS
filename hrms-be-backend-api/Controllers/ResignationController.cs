@@ -116,7 +116,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
         [HttpGet]
         [Route("GetResignationByCompanyID/{companyId}")]
         [Authorize]
-        public async Task<IActionResult> GetResignationByCompanyID(long companyId, [FromQuery] PaginationFilter filter)
+        public async Task<IActionResult> GetResignationByCompanyID(long companyId, [FromQuery] PaginationFilter filter, DateTime? startDate, DateTime? endDate)
         {
            
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -126,7 +126,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-            return Ok(await _resignationService.GetResignationByCompanyID(filter, companyId, accessToken, RemoteIpAddress));
+            return Ok(await _resignationService.GetResignationByCompanyID(filter, companyId, accessToken, RemoteIpAddress,startDate,endDate));
           
 
         }
@@ -189,7 +189,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
         [HttpGet]
         [Route("GetPendingResignationByCompanyID/{companyID}")]
         [Authorize]
-        public async Task<IActionResult> GetPendingResignationByCompanyID(long companyID)
+        public async Task<IActionResult> GetPendingResignationByCompanyID(long companyID, [FromQuery] PaginationFilter filter, DateTime? startDate, DateTime? endDate)
         {
 
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -199,7 +199,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-            return Ok(await _resignationService.GetPendingResignationByCompanyID(companyID, accessToken, RemoteIpAddress));
+            return Ok(await _resignationService.GetPendingResignationByCompanyID(filter,companyID, accessToken, RemoteIpAddress,startDate,endDate));
 
 
         }
