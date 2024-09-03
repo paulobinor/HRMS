@@ -115,7 +115,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
 
         [HttpGet]
         [Route("GetResignationByCompanyID/{companyId}")]
-      //  [Authorize]
+        [Authorize]
         public async Task<IActionResult> GetResignationByCompanyID(long companyId, [FromQuery] PaginationFilter filter, DateTime? startDate, DateTime? endDate)
         {
            
