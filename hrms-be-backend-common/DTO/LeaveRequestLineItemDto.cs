@@ -11,6 +11,7 @@ namespace hrms_be_backend_common.DTO
         public long RelieverUserId { get; set; }
         public int LeaveLength { get; set; }
         public DateTime startDate { get; set; }
+        public DateTime DateCreated { get; set; }
         public DateTime endDate { get; set; }
         public DateTime? ResumptionDate { get; set; }
         public string RescheduleReason { get; set; } = string.Empty;

@@ -279,6 +279,7 @@ namespace hrms_be_backend_api.Controller
                 //    TotalPages = totalPages,
                 //    Items = items
                 //};
+                pagedRes.Items = pagedRes.Items.OrderByDescending(x=>x.DateCreated).ToList();
                 res.Data = pagedRes;
                 return Ok(res);
             }
@@ -400,7 +401,7 @@ namespace hrms_be_backend_api.Controller
             //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
             //}
-            var res = await _leaveApprovalService.GetPendingAnnualLeaveApprovals(ApprovalEmployeeID);
+            var res = await _leaveApprovalService.GetAnnualLeaveApprovals(ApprovalEmployeeID);
            
             response.Data = res;
             response.ResponseMessage = "Success";

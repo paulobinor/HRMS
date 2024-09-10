@@ -14,6 +14,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
+    //  [Authorize]
     public class LeaveApprovalController : ControllerBase
     {
         private readonly ILogger<LeaveApprovalController> _logger;
@@ -27,7 +28,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
             _authService = authService;
         }
 
-        [Authorize]
+       // [Authorize]
         [HttpGet("Info")]
         public async Task<IActionResult> GetLeaveApprovalInfo([FromQuery] long LeaveRequestLineItemId, [FromQuery] long leaveApprovalId)
         {
@@ -46,7 +47,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
         }
 
         [HttpPost("Approve")]
-      //  [Authorize]
+      
         public async Task<IActionResult> ApproveLeaveRequestLineItem(LeaveApprovalLineItem leaveApprovalLineItem)
         {
             var response = new BaseResponse();
@@ -82,7 +83,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
             }
             var res = await _leaveApprovalService.GetLeaveApprovalInfoByCompanyID(CompanyID);
-            response.Data = res;
+            response.Data = res.OrderByDescending(x=>x.DateCreated).ToList();
             response.ResponseMessage = "Success";
             response.ResponseCode = "00";
             return Ok(response);
@@ -104,7 +105,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
             //}
             var res = await _leaveApprovalService.GetPendingLeaveApprovals(ApprovalEmployeeID, "Pending");
-            response.Data = res;
+            response.Data = res.OrderByDescending(x => x.DateCreated).ToList();
             response.ResponseMessage = "Success";
             response.ResponseCode = "00";
             return Ok(response);
@@ -126,7 +127,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
             //}
             var res = await _leaveApprovalService.GetPendingLeaveApprovals(ApprovalEmployeeID);
-            response.Data = res;
+            response.Data = res.OrderByDescending(x => x.DateCreated).ToList();
             response.ResponseMessage = "Success";
             response.ResponseCode = "00";
             return Ok(response);
@@ -159,7 +160,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
                 items = res
                     .Skip((pageNumber - 1) * pageSize)
-                    .Take(pageSize)
+                    .Take(pageSize).OrderByDescending(x=>x.DateCreated)
                     .ToList();
             }
             else
@@ -176,7 +177,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 TotalPages = totalPages,
                 Items = items
             };
-            //res = pagedRes;
+            
             response.Data = pagedRes;
             response.ResponseMessage = "Success";
             response.ResponseCode = "00";

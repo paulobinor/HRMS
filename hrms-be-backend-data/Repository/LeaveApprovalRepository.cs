@@ -307,7 +307,7 @@ namespace hrms_be_backend_data.Repository
                             // leaveApprovalRequestItem.ApprovalStatus = item.ApprovalStatus;
                             leaveApprovalRequestItem.LeaveApprovalId = item.LeaveApprovalId;
                             leaveApprovalRequestItem.ApprovalPosition = item.ApprovalPosition;
-
+                            leaveApprovalRequestItem.DateCreated = item.EntryDate;
                             if (item.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
                             {
                                 if (leaveapproval.ApprovalKey == item.LeaveApprovalLineItemId)
@@ -350,7 +350,7 @@ namespace hrms_be_backend_data.Repository
             return res;
         }
 
-        public async Task<List<PendingAnnualLeaveApprovalItemDto>> GetPendingAnnualLeaveApprovals(long approvalEmployeeID, string v)
+        public async Task<List<PendingAnnualLeaveApprovalItemDto>> GetAnnualLeaveApprovals(long approvalEmployeeID)
         {
             List<PendingAnnualLeaveApprovalItemDto> pendingRes = new List<PendingAnnualLeaveApprovalItemDto>();
 
@@ -410,7 +410,8 @@ namespace hrms_be_backend_data.Repository
                             LeaveApprovalLineItemId = leaveapproval.LeaveApprovalLineItems.FirstOrDefault(x => x.ApprovalEmployeeId == approvalEmployeeID).LeaveApprovalLineItemId,
                             ApprovalPosition = item.ApprovalPosition,
                             LastApprovalEmployeeId = leaveapproval.LastApprovalEmployeeID,
-                            TotalNoOfDays = annualLeaveInfo.leaveRequestLineItems.Sum(x => x.LeaveLength)
+                            TotalNoOfDays = annualLeaveInfo.leaveRequestLineItems.Sum(x => x.LeaveLength),
+                            DateCreated = leaveapproval.EntryDate
                         };
 
                         if (item.ApprovalStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
@@ -710,7 +711,7 @@ namespace hrms_be_backend_data.Repository
             }
             catch (Exception ex)
             {
-                _logger.LogError($"MethodName: CreateLeaveRequest ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
+                _logger.LogError($"MethodName: GetAllApprovalLineItems ===>{ex.Message}, StackTrace: {ex.StackTrace}, Source: {ex.Source}");
                 return default;
             }
         }

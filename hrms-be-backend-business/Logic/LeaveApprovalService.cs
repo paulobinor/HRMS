@@ -944,12 +944,12 @@ namespace hrms_be_backend_business.Logic
         }
 
 
-        public async Task<List<PendingAnnualLeaveApprovalItemDto>> GetPendingAnnualLeaveApprovals(long approvalEmployeeID, string v = null)
+        public async Task<List<PendingAnnualLeaveApprovalItemDto>> GetAnnualLeaveApprovals(long approvalEmployeeID)
         {
             try
             {
-                var res = await _leaveApprovalRepository.GetPendingAnnualLeaveApprovals(approvalEmployeeID, v);
-               
+                var res = await _leaveApprovalRepository.GetAnnualLeaveApprovals(approvalEmployeeID);
+                res = res.OrderByDescending(x=>x.DateCreated).ToList();
                 return res;
             }
             catch (Exception)
