@@ -203,7 +203,7 @@ namespace hrms_be_backend_business.Logic
             }
         }
 
-       public async Task<ExecutedResult<IEnumerable<ResignationInterviewDTO>>> GetAllResignationInterviewsByCompany(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress)
+       public async Task<ExecutedResult<IEnumerable<ResignationInterviewDTO>>> GetAllResignationInterviewsByCompany(PaginationFilter filter, long companyID, string AccessKey, string RemoteIpAddress, DateTime? startDate, DateTime? endDate)
         {
             var accessUser = await _authService.CheckUserAccess(AccessKey, RemoteIpAddress);
             if (accessUser.data == null)
@@ -214,9 +214,7 @@ namespace hrms_be_backend_business.Logic
 
             try
             {
-
-
-                var resignation = await _resignationInterviewRepository.GetAllResignationInterviewsByCompany(companyID, filter.PageNumber, filter.PageSize, filter.SearchValue);
+                var resignation = await _resignationInterviewRepository.GetAllResignationInterviewsByCompany(companyID, filter.PageNumber, filter.PageSize, filter.SearchValue,startDate,endDate);
 
                 if (resignation == null)
                 {

@@ -81,7 +81,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
         [HttpGet]
         [Route("GetResignationClearanceByCompanyID/{companyId}")]
         [Authorize]
-        public async Task<IActionResult> GetResignationClearanceByCompanyID(long companyId, [FromQuery] PaginationFilter filter)
+        public async Task<IActionResult> GetResignationClearanceByCompanyID(long companyId, [FromQuery] PaginationFilter filter, DateTime? startDate, DateTime? endDate)
         {
 
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -91,7 +91,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-            return Ok(await _resignationClearanceService.GetAllResignationClearanceByCompany(filter, companyId, accessToken, RemoteIpAddress));
+            return Ok(await _resignationClearanceService.GetAllResignationClearanceByCompany(filter, companyId, accessToken, RemoteIpAddress, startDate, endDate));
 
 
         }
@@ -116,7 +116,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
         [HttpGet]
         [Route("GetPendingResignationClearanceByCompanyID/{CompanyID}")]
         [Authorize]
-        public async Task<IActionResult> GetPendingResignationClearanceByCompanyID(long CompanyID)
+        public async Task<IActionResult> GetPendingResignationClearanceByCompanyID(long CompanyID, [FromQuery] PaginationFilter filter, DateTime? startDate, DateTime? endDate)
         {
             var RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             var RemotePort = Request.HttpContext.Connection.RemotePort.ToString();
@@ -125,7 +125,7 @@ namespace hrms_be_backend_api.ExitModuleController.Controller
             var accessToken = Request.Headers["Authorization"];
             accessToken = accessToken.ToString().Replace("bearer", "").Trim();
 
-            return Ok(await _resignationClearanceService.GetPendingResignationClearanceByCompanyID(CompanyID, accessToken, RemoteIpAddress));
+            return Ok(await _resignationClearanceService.GetPendingResignationClearanceByCompanyID(CompanyID, accessToken,RemoteIpAddress,filter,startDate,endDate));
 
         }
 

@@ -16,6 +16,8 @@ namespace hrms_be_backend_business.Helpers
         {
             _serviceProvider = serviceProvider;
         }
+
+
         public static int CountWeekdays(DateTime startDate, DateTime endDate)
         {
             int count = 0;
@@ -48,7 +50,7 @@ namespace hrms_be_backend_business.Helpers
             {
                 return new PagedListModel<T>();
             }
-            
+           
             var pagedRes = new PagedListModel<T>
             {
                 TotalItems = t.Count,

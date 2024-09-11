@@ -96,7 +96,7 @@ namespace hrms_be_backend_data.Repository
             }
         }
 
-        public async Task<IEnumerable<ResignationClearanceDTO>> GetAllResignationClearanceByCompany(long companyID, int PageNumber, int RowsOfPage, string SearchVal, long employeeID)
+        public async Task<IEnumerable<ResignationClearanceDTO>> GetAllResignationClearanceByCompany(long companyID, int PageNumber, int RowsOfPage, string SearchVal, long employeeID, DateTime? startDate, DateTime? endDate)
         {
             try
             {
@@ -107,6 +107,8 @@ namespace hrms_be_backend_data.Repository
                     param.Add("@PageNumber", PageNumber);
                     param.Add("@RowsOfPage", RowsOfPage);
                     param.Add("EmployeeID", employeeID);
+                    param.Add("@StartDate", startDate);
+                    param.Add("@EndDate", endDate);
                     param.Add("@SearchVal", SearchVal.ToLower());
                     var response = await _dapper.GetAll<ResignationClearanceDTO>("Sp_get_all_resignation_clearance_by_company", param, commandType: CommandType.StoredProcedure);
 
@@ -138,13 +140,18 @@ namespace hrms_be_backend_data.Repository
                 throw;
             }
         }
-        public async Task<IEnumerable<ResignationClearanceDTO>> GetPendingResignationClearanceByCompnayID(long companyID, long employeeID)
+        public async Task<IEnumerable<ResignationClearanceDTO>> GetPendingResignationClearanceByCompnayID(long companyID, long employeeID, int PageNumber, int RowsOfPage, string SearchVal, DateTime? startDate, DateTime? endDate)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add("CompanyID", companyID);
+                param.Add("@PageNumber", PageNumber);
+                param.Add("@RowsOfPage", RowsOfPage);
                 param.Add("EmployeeID", employeeID);
+                param.Add("@StartDate", startDate);
+                param.Add("@EndDate", endDate);
+                param.Add("@SearchVal", SearchVal.ToLower());
 
                 var response = await _dapper.GetAll<ResignationClearanceDTO>("Sp_GetPendingResignationClearanceByCompanyID", param, commandType: CommandType.StoredProcedure);
 

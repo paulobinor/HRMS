@@ -15,7 +15,7 @@ namespace hrms_be_backend_data.IRepository
         Task<ResignationInterviewDTO> GetResignationInterviewById(long ResignationInterviewId);
         Task<ResignationInterviewDTO> GetResignationInterviewByEmployeeID(long EmployeeId);
         Task<List<InterviewScaleValue>> GetResignationInterviewDetails(long InterviewID);
-        Task<IEnumerable<ResignationInterviewDTO>> GetAllResignationInterviewsByCompany(long companyID, int PageNumber, int RowsOfPage, string SearchVal);
+        Task<IEnumerable<ResignationInterviewDTO>> GetAllResignationInterviewsByCompany(long companyID, int PageNumber, int RowsOfPage, string SearchVal, DateTime? startDate, DateTime? endDate);
 
 
         Task<IEnumerable<InterviewScaleDetailsDTO>> GetInterviewScaleDetails();

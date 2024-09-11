@@ -15,7 +15,8 @@
         public DateTime EntryDate { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-      //  public DateTime ResumptionDate { get; set; }
+        public DateTime DateCreated { get; set; }
+        //  public DateTime ResumptionDate { get; set; }
         public int LeaveLength { get; set; }
         public int ApprovalStep { get; set; }
         public string ApprovalStatus { get; set; }

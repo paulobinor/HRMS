@@ -15,12 +15,13 @@ namespace hrms_be_backend_common.DTO
         public int LeaveLength { get; set; }
         public string ApprovalStatus { get; set; }
         public string RelieverName { get; set; }
-        public List<LeaveRequestLineItemDto>? leaveRequestLineItems { get; set; }
         public long leaveApprovalId { get; set; }
         public long LastApprovalEmployeeId { get; set; }
         public string ApprovalPosition { get; set; }
         public DateTime RequestDate { get; set; }
         public long LeaveApprovalLineItemId { get; set; }
         public bool IsApproved { get; set; }
+        public DateTime DateCreated { get; set; }
+        public List<LeaveRequestLineItemDto>? leaveRequestLineItems { get; set; }
     }
 }

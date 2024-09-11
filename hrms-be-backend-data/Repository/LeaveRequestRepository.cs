@@ -558,7 +558,8 @@ namespace hrms_be_backend_data.Repository
                   //  res = res.FindAll(x => !x.LeaveTypeName.Contains("Annual", StringComparison.OrdinalIgnoreCase));
                     foreach (var item in res)
                     {
-                        var leaveAprovalId = (await GetLeaveApprovalInfoByEmployeeId(item.EmployeeId)).LeaveApprovalId;
+                        var leaveAprovalId = (await GetLeaveApprovalInfoByRequestLineItemId(item.LeaveRequestLineItemId.Value)).LeaveApprovalId;
+                       // var leaveAprovalId = (await GetLeaveApprovalInfoByEmployeeId(item.EmployeeId)).LeaveApprovalId;
                         if (leaveAprovalId > 0)
                         {
                             item.leaveApprovalLineItems = await GetLeaveApprovalLineItems(leaveAprovalId);
