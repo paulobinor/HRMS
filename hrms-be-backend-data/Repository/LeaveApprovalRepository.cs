@@ -330,7 +330,10 @@ namespace hrms_be_backend_data.Repository
 
                     }
                 }
-                leaveApprovalItems = leaveApprovalItems.OrderByDescending(x => x.StartDate).ToList(); 
+                if (leaveApprovalItems.Any())
+                {
+                    leaveApprovalItems = leaveApprovalItems.OrderByDescending(x => x.DateCreated).ToList();
+                }
                 return leaveApprovalItems;
             }
             catch (Exception ex)

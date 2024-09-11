@@ -949,7 +949,10 @@ namespace hrms_be_backend_business.Logic
             try
             {
                 var res = await _leaveApprovalRepository.GetAnnualLeaveApprovals(approvalEmployeeID);
-                res = res.OrderByDescending(x=>x.DateCreated).ToList();
+                if (res.Any())
+                {
+                    res = res.OrderByDescending(x => x.DateCreated).ToList();
+                }
                 return res;
             }
             catch (Exception)
