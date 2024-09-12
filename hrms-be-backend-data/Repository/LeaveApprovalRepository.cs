@@ -430,7 +430,7 @@ namespace hrms_be_backend_data.Repository
                         }
                     }
                 }
-                pendingRes = pendingRes.OrderByDescending(x => x.RequestDate).ToList();
+              //  pendingRes = pendingRes.OrderByDescending(x => x.RequestDate).ToList();
                 return pendingRes;
             }
             catch (Exception ex)

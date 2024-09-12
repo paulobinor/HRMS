@@ -10,6 +10,7 @@ using hrms_be_backend_data.RepoPayload;
 using hrms_be_backend_data.ViewModel;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Org.BouncyCastle.Pqc.Crypto.Lms;
 using System.ComponentModel.Design;
 using System.Data;
@@ -980,8 +981,8 @@ namespace hrms_be_backend_business.Logic
             //var rescheduleItems = new List<LeaveRequestLineItem>();
             int noOfDaysTaken = 0;
 
-            var singleRequestLineItem = RequestLineItems.FirstOrDefault(x => x.LeaveRequestLineItemId != null);
-            var resp = await GetLeaveRequestLineItem(singleRequestLineItem.LeaveRequestLineItemId.Value);
+            var LeaveRequestLineItemId =  RequestLineItems.FirstOrDefault(x => x.LeaveRequestLineItemId != null).LeaveRequestLineItemId;
+            var resp = await GetLeaveRequestLineItem(LeaveRequestLineItemId.Value);
             var requestlineItem = (LeaveRequestLineItem)resp.Data;
             var emplAnnualLeaveInfo = await _leaveRequestRepository.GetAnnualLeaveInfo(requestlineItem.AnnualLeaveId.Value);
           //  var emplAnnualLeaveInfo = await _leaveRequestRepository.GetAnnualLeaveInfo((int)singleRequestLineItem.EmployeeId, (int)singleRequestLineItem.CompanyId, DateTime.Now.Year);
@@ -1825,6 +1826,78 @@ namespace hrms_be_backend_business.Logic
                 throw;
             }
         }
+        public async Task<BaseResponse> GetAllLeaveRequest(string CompanyID, DateTime? startDate, DateTime? endDate, string ApprovalPosition = "All", string approvalStatus = "All", int pageNumber = 1, int pageSize = 10)
+        {
+            List<EmpLeaveRequestInfo> finalRes = new List<EmpLeaveRequestInfo>();
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                var leaveRequests = (await _leaveRequestRepository.GetAllLeaveRequest(CompanyID)).ToList();
+
+                if (leaveRequests.Any())
+                {
+                    if (startDate == null)
+                    {
+                        startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                    }
+                    else
+                    {
+                        startDate = startDate.Value.AddDays(-1);
+                    }
+                    if (endDate == null)
+                    {
+                        endDate = new DateTime(DateTime.Now.Year, 12, 31);
+                    }
+                    else
+                    {
+                        endDate = endDate.Value.AddDays(1);
+                    }
+                    foreach (var request in leaveRequests)
+                    {
+                        var Lineitems = request.leaveRequestLineItems.FindAll(x => x.startDate >= startDate && x.endDate <= endDate).ToList();
+                        if (Lineitems.Any())
+                        {
+                            finalRes.Add(request); //.leaveRequestLineItems
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(approvalStatus) && finalRes.Any())
+                    {
+                        if (!approvalStatus.Equals("All", StringComparison.OrdinalIgnoreCase))
+                        {
+                            finalRes = finalRes.FindAll(x => x.ApprovalStatus.Equals(approvalStatus, StringComparison.OrdinalIgnoreCase));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(ApprovalPosition) && finalRes.Any())
+                    {
+                        if (!ApprovalPosition.Equals("All", StringComparison.OrdinalIgnoreCase))
+                        {
+                            finalRes = finalRes.FindAll(x => x.ApprovalPosition.Equals(ApprovalPosition, StringComparison.OrdinalIgnoreCase));
+                        }
+                    }
+                    if (finalRes.Count > 0)
+                    {
+                        finalRes = finalRes.OrderByDescending(x => x.DateCreated).ToList();
+                    }
+                    response.Data = finalRes;
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "LeaveRequest fetched successfully.";
+                    return response;
+                }
+                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "No LeaveRequest found.";
+                response.Data = null;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: LeaveRequest() ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: LeaveRequest() ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+        }
         public async Task<BaseResponse> GetAllLeaveRequest(string CompanyID)
         {
             BaseResponse response = new BaseResponse();
@@ -1834,7 +1907,7 @@ namespace hrms_be_backend_business.Logic
 
                 if (leave.Any())
                 {
-                    response.Data = leave.OrderByDescending(x=>x.DateCreated).ToList();
+                    response.Data = leave.OrderByDescending(x => x.DateCreated).ToList();
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = "LeaveRequest fetched successfully.";
                     return response;
@@ -1860,6 +1933,41 @@ namespace hrms_be_backend_business.Logic
                 var leave = await _leaveRequestRepository.GetEmployeeLeaveRequests(CompanyID, EmployeeID);
                 leave = leave.OrderByDescending(x => x.startDate).ToList();
                 return leave;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetEmployeeLeaveRequests() ==> {ex.Message}");
+                return null;
+            }
+        }
+        public async Task<List<LeaveRequestLineItemDto>> GetEmployeeLeaveRequests(long CompanyID, long EmployeeID, DateTime? startDate, DateTime? endDate, int pageNumber = 1, int pageSize = 10)
+        {
+            try
+            {
+               
+                var leaveRequests = await _leaveRequestRepository.GetEmployeeLeaveRequests(CompanyID, EmployeeID);
+                if (leaveRequests.Any())
+                {
+                    if (startDate == null)
+                    {
+                        startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                    }
+                    else
+                    {
+                        startDate = startDate.Value.AddDays(-1);
+                    }
+                    if (endDate == null)
+                    {
+                        endDate = new DateTime(DateTime.Now.Year, 12, 31);
+                    }
+                    else
+                    {
+                        endDate = endDate.Value.AddDays(1);
+                    }
+
+                    leaveRequests = leaveRequests.FindAll(x => x.startDate >= startDate && x.endDate <= endDate).OrderByDescending(x=>x.DateCreated).ToList();
+                }
+                return leaveRequests;
             }
             catch (Exception ex)
             {
@@ -1895,16 +2003,77 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }
-        public async Task<BaseResponse> GetAnnualLeaveRequests(long CompanyID, string LeavePeriod)
+        public async Task<BaseResponse> GetAnnualLeaveRequests(long CompanyID, DateTime? startdate, DateTime? endDate, string ApprovalPosition = "All", string approvalStatus = "All", int pageNumber = 1, int pageSize = 10, string year = null)
         {
             BaseResponse response = new BaseResponse();
+
+            if (string.IsNullOrEmpty(year))
+            {
+                year = DateTime.Now.ToString("yyyy");
+            }
             try
             {
-                var leave = await _leaveRequestRepository.GetAllAnnualLeaveRequests(CompanyID, LeavePeriod);
+                var leaveRequests = await _leaveRequestRepository.GetAllAnnualLeaveRequests(CompanyID, year);
 
-                if (leave.Any())
+                if (leaveRequests.Any())
                 {
-                    response.Data = leave.OrderByDescending(x=>x.DateCreated).ToList();
+                    List<AnnualLeaveDto> finalRes = new List<AnnualLeaveDto>();
+
+                    if (startdate == null)
+                    {
+                        startdate = new DateTime(DateTime.Now.Year, 1, 1);
+                    }
+                    else
+                    {
+                        startdate = startdate.Value.AddDays(-1);
+                    }
+                  
+                    if (endDate == null)
+                    {
+                        endDate = new DateTime(DateTime.Now.Year, 12, 31);
+                    }
+                    else
+                    {
+                        endDate = endDate.Value.AddDays(1);
+                    }
+                  
+
+                    foreach (var request in leaveRequests)
+                    {
+                      var lineItems = request.leaveRequestLineItems.FindAll(x => x.startDate >= startdate && x.endDate <= endDate).ToList();
+                      
+                        if (lineItems.Any())
+                        {
+                            finalRes.Add(request); //.leaveRequestLineItems
+                        }
+                    }
+                   
+                    //foreach (var request in leaveRequests) //only add items with request greater than 0
+                    //{
+                        
+                    //}
+                 
+                    if (!string.IsNullOrEmpty(approvalStatus) && finalRes.Count > 0)
+                    {
+                        if (!approvalStatus.Equals("All", StringComparison.OrdinalIgnoreCase))
+                        {
+                            finalRes = finalRes.FindAll(x => x.ApprovalStatus.Equals(approvalStatus, StringComparison.OrdinalIgnoreCase));
+                        }
+                    }
+                 
+                    if (!string.IsNullOrEmpty(ApprovalPosition) && finalRes.Count > 0)
+                    {
+                        if (!ApprovalPosition.Equals("All", StringComparison.OrdinalIgnoreCase))
+                        {
+                            finalRes = finalRes.FindAll(x => x.ApprovalPosition.Equals(ApprovalPosition, StringComparison.OrdinalIgnoreCase));
+                        }
+                    }
+                    if (finalRes.Count > 0)
+                    {
+                        finalRes = finalRes.OrderByDescending(x => x.DateCreated).ToList();
+                    }
+                    response.Data = finalRes;
+
                     response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                     response.ResponseMessage = "Annual leave items fetched successfully.";
                     return response;
@@ -1923,6 +2092,41 @@ namespace hrms_be_backend_business.Logic
                 return response;
             }
         }
+
+        public async Task<BaseResponse> GetAnnualLeaveRequests(long CompanyID, string year = null)
+        {
+            BaseResponse response = new BaseResponse();
+           
+            if (string.IsNullOrEmpty(year))
+            {
+                year = DateTime.Now.ToString("yyyy");
+            }
+            try
+            {
+                var leave = await _leaveRequestRepository.GetAllAnnualLeaveRequests(CompanyID, year);
+
+                if (leave.Any())
+                {
+                    response.Data = leave.OrderByDescending(x => x.DateCreated).ToList();
+                    response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
+                    response.ResponseMessage = "Annual leave items fetched successfully.";
+                    return response;
+                }
+                response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = "No items returned.";
+                response.Data = null;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception Occured: GetAllAnnualLeaveRequestLineItems() ==> {ex.Message}");
+                response.ResponseCode = ResponseCode.Exception.ToString("D").PadLeft(2, '0');
+                response.ResponseMessage = $"Exception Occured: GetAllAnnualLeaveRequestLineItems() ==> {ex.Message}";
+                response.Data = null;
+                return response;
+            }
+        }
+
         public async Task<BaseResponse> GetAllLeaveRquestLineItems(long CompanyID)
         {
             BaseResponse response = new BaseResponse();

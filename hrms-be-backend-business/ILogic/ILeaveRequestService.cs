@@ -22,12 +22,16 @@ namespace hrms_be_backend_business.ILogic
         Task<AnnualLeave> GetEmpAnnualLeaveInfo(int AnnualLeaveId);
         Task<AnnualLeave> GetEmpAnnualLeaveInfo(int EmployeeId, int CompanyId, int LeavePeriod);
         Task<AnnualLeave> CheckAnnualLeaveInfo(LeaveRequestLineItem leaveRequestLineItem);
-        
+
+        Task<BaseResponse> GetAllLeaveRequest(string CompanyID, DateTime? startDate, DateTime? endDate, string ApprovalPosition = "All", string approvalStatus = "All", int pageNumber = 1, int pageSize = 10);
         Task<BaseResponse> GetAllLeaveRequest(string CompanyID);
 
-        Task<BaseResponse> GetAnnualLeaveRequests(long CompanyID, string LeavePeriod);
+        Task<BaseResponse> GetAnnualLeaveRequests(long CompanyID, DateTime? startdate, DateTime? endDate, string ApprovalPosition = "All", string approvalStatus = "All", int pageNumber = 1, int pageSize = 10, string year = null);
+
+        Task<BaseResponse> GetAnnualLeaveRequests(long CompanyID, string year = null);
         Task<BaseResponse> GetAllLeaveRquestLineItems(long CompanyID);
         Task<List<LeaveRequestLineItemDto>> GetEmployeeLeaveRequests(long CompanyID, long EmployeeId);
+        Task<List<LeaveRequestLineItemDto>> GetEmployeeLeaveRequests(long CompanyID, long EmployeeId, DateTime? startDate, DateTime? endDate, int pageNumber = 1, int pageSize = 10);
         Task<BaseResponse> RescheduleAnnualLeaveRequest(List<LeaveRequestLineItem> leaveRequestLineItems);
         Task<BaseResponse> GetEmpAnnualLeaveRquestLineItems(long v);
         //Task<List<LeaveApprovalLineItem>> GetAllLeaveApprovalLineItems(string companyID);

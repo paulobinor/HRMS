@@ -83,7 +83,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
             }
             var res = await _leaveApprovalService.GetLeaveApprovalInfoByCompanyID(CompanyID);
-            response.Data = res.OrderByDescending(x=>x.DateCreated).ToList();
+            response.Data = res;
             response.ResponseMessage = "Success";
             response.ResponseCode = "00";
             return Ok(response);
@@ -127,7 +127,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
             //}
             var res = await _leaveApprovalService.GetPendingLeaveApprovals(ApprovalEmployeeID);
-            response.Data = res.OrderByDescending(x => x.DateCreated).ToList();
+            response.Data = res; //.OrderByDescending(x => x.DateCreated).ToList();
             response.ResponseMessage = "Success";
             response.ResponseCode = "00";
             return Ok(response);

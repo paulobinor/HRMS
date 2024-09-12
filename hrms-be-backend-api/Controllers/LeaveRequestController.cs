@@ -256,57 +256,16 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
                 //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
                 //}
-                if (startDate == null)
-                {
-                    startDate = new DateTime(DateTime.Now.Year, 1, 1);
-                }
-                else
-                {
-                    startDate = startDate.Value.AddDays(-1);
-                }
-                if (endDate == null)
-                {
-                    endDate = new DateTime(DateTime.Now.Year, 12, 31);
-                }
-                else
-                {
-                    endDate = endDate.Value.AddDays(1);
-                }
-                List<EmpLeaveRequestInfo> finalRes = new List<EmpLeaveRequestInfo>();
-                var res = await _leaveRequestService.GetAllLeaveRequest(CompanyID);
+              
+                var res = await _leaveRequestService.GetAllLeaveRequest(CompanyID, startDate, endDate, ApprovalPosition, approvalStatus, pageNumber, pageSize);
                 var requests = (List<EmpLeaveRequestInfo>)res.Data;
                 if (requests == null)
                 {
                     return Ok(res);
                 }
 
-                foreach (var request in requests)
-                {
-                    var Lineitems  = request.leaveRequestLineItems.FindAll(x => x.startDate >= startDate && x.endDate <= endDate).ToList();
-                    if (Lineitems.Count > 0)
-                    {
-                        finalRes.Add(request); //.leaveRequestLineItems
-                    }
-                }
-              
-                PagedListModel<EmpLeaveRequestInfo> pagedRes = null;
-                if (!string.IsNullOrEmpty(approvalStatus))
-                {
-                    if (!approvalStatus.Equals("All", StringComparison.OrdinalIgnoreCase))
-                    {
-                        finalRes = finalRes.FindAll(x => x.ApprovalStatus.Equals(approvalStatus, StringComparison.OrdinalIgnoreCase));
-                    }
-                }
-                if (!string.IsNullOrEmpty(ApprovalPosition))
-                {
-                    if (!ApprovalPosition.Equals("All", StringComparison.OrdinalIgnoreCase))
-                    {
-                        finalRes = finalRes.FindAll(x => x.ApprovalPosition.Equals(ApprovalPosition, StringComparison.OrdinalIgnoreCase));
-                    }
-                }
-
-                pagedRes = hrms_be_backend_business.Helpers.Utilities.GetPagedList(finalRes, pageNumber, pageSize);
-                pagedRes.Items = pagedRes.Items.OrderByDescending(x => x.DateCreated).ToList();
+                var pagedRes = hrms_be_backend_business.Helpers.Utilities.GetPagedList(requests, pageNumber, pageSize);
+              //  pagedRes.Items = pagedRes.Items.OrderByDescending(x => x.DateCreated).ToList();
                 res.Data = pagedRes;
                 return Ok(res);
             }
@@ -397,23 +356,8 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
                 //}
 
-                if (startDate == null)
-                {
-                    startDate = new DateTime(DateTime.Now.Year, 1, 1);
-                }
-                else
-                {
-                    startDate = startDate.Value.AddDays(-1);
-                }
-                if (endDate == null)
-                {
-                    endDate = new DateTime(DateTime.Now.Year, 12, 31);
-                }
-                else
-                {
-                    endDate = endDate.Value.AddDays(1);
-                }
-                var requests = await _leaveRequestService.GetEmployeeLeaveRequests(CompanyID, EmployeeId);
+              
+                var requests = await _leaveRequestService.GetEmployeeLeaveRequests(CompanyID, EmployeeId, startDate, endDate, pageNumber, pageSize);
                 if (!requests.Any())
                 {
                     response.ResponseCode = ResponseCode.NotFound.ToString("D").PadLeft(2, '0');
@@ -424,7 +368,7 @@ namespace hrms_be_backend_api.LeaveModuleController.Controller
 
                 var pagedRes = hrms_be_backend_business.Helpers.Utilities.GetPagedList(requests, pageNumber, pageSize);
 
-                pagedRes.Items = pagedRes.Items.OrderByDescending(x => x.DateCreated).ToList();
+               // pagedRes.Items = pagedRes.Items.OrderByDescending(x => x.DateCreated).ToList();
                 response.Data = pagedRes;
                 response.ResponseCode = ResponseCode.Ok.ToString("D").PadLeft(2, '0');
                 response.ResponseMessage = "Leave requests fetched successfully.";

@@ -196,90 +196,19 @@ namespace hrms_be_backend_api.Controller
                 //    return Unauthorized(new { responseMessage = $"Unathorized User", responseCode = ((int)ResponseCode.NotAuthenticated).ToString() });
 
                 //}
-                if (startdate == null)
-                {
-                    startdate = new DateTime(DateTime.Now.Year, 1, 1);
-                }
-                else
-                {
-                    startdate = startdate.Value.AddDays(-1);
-                }
-                if (endDate == null)
-                {
-                    endDate = new DateTime(DateTime.Now.Year, 12, 31);
-                }
-                else
-                {
-                    endDate = endDate.Value.AddDays(1);
-                }
-                if (string.IsNullOrEmpty(year))
-                {
-                    year = DateTime.Now.ToString("yyyy");
-                }
-                var res = await _leaveRequestService.GetAnnualLeaveRequests(Convert.ToInt64(CompanyID), year);
+             
+                var res = await _leaveRequestService.GetAnnualLeaveRequests(Convert.ToInt64(CompanyID), startdate, endDate, ApprovalPosition, approvalStatus, pageNumber, pageSize, year);
 
-                List<AnnualLeaveDto> finalRes = new List<AnnualLeaveDto>();
                 var requests = (List<AnnualLeaveDto>)res.Data;
                 if (requests == null)
                 {
                     return Ok(res);
                 }
 
-                foreach (var request in requests)
-                {
-                    request.leaveRequestLineItems = request.leaveRequestLineItems.FindAll(x => x.startDate >= startdate && x.endDate <= endDate).ToList();
-                }
-                foreach (var request in requests)
-                {
-                    if (request.leaveRequestLineItems.Count > 0)
-                    {
-                        finalRes.Add(request); //.leaveRequestLineItems
-                    }
-                }
-                PagedListModel<AnnualLeaveDto> pagedRes = null;
-                if (!string.IsNullOrEmpty(approvalStatus))
-                {
-                    if (!approvalStatus.Equals("All", StringComparison.OrdinalIgnoreCase))
-                    {
-                        finalRes = finalRes.FindAll(x => x.ApprovalStatus.Equals(approvalStatus, StringComparison.OrdinalIgnoreCase));
-                    }
-                }
-                if (!string.IsNullOrEmpty(ApprovalPosition))
-                {
-                    if (!ApprovalPosition.Equals("All", StringComparison.OrdinalIgnoreCase))
-                    {
-                        finalRes = finalRes.FindAll(x => x.ApprovalPosition.Equals(ApprovalPosition, StringComparison.OrdinalIgnoreCase));
-                    }
-                }
-                pagedRes = hrms_be_backend_business.Helpers.Utilities.GetPagedList(finalRes, pageNumber, pageSize);
-                //  requests = requests.FindAll(x => x.DateCreated >= startdate && x.DateCreated <= endDate);
-                //int totalItems = 0; int totalPages = 0;
-                //List<AnnualLeaveDto> items = null;
-                //if (finalRes != null && finalRes.Count > 0)
-                //{
-                //    totalItems = finalRes.Count;
-                //    totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-
-                //    items = finalRes
-                //        .Skip((pageNumber - 1) * pageSize)
-                //        .Take(pageSize)
-                //        .ToList();
-                //}
-                //else
-                //{
-                //    totalItems = 0;
-                //    totalPages = 1;
-                //}
-
-                //var pagedRes = new
-                //{
-                //    TotalItems = totalItems,
-                //    PageNumber = pageNumber,
-                //    PageSize = pageSize,
-                //    TotalPages = totalPages,
-                //    Items = items
-                //};
-                pagedRes.Items = pagedRes.Items.OrderByDescending(x=>x.DateCreated).ToList();
+                
+               var pagedRes = hrms_be_backend_business.Helpers.Utilities.GetPagedList(requests, pageNumber, pageSize);
+              
+             //   pagedRes.Items = pagedRes.Items.OrderByDescending(x=>x.DateCreated).ToList();
                 res.Data = pagedRes;
                 return Ok(res);
             }

@@ -392,7 +392,7 @@ namespace hrms_be_backend_data.Repository
                         item.SplitCount = item.leaveRequestLineItems.Count;
                     }
                    
-                    res = res.OrderByDescending(x => x.DateCreated).ToList();
+                    //res = res.OrderByDescending(x => x.DateCreated).ToList();
                     return res;
                 }
                 return null;
@@ -433,7 +433,7 @@ namespace hrms_be_backend_data.Repository
                             //}
                         }
                     }
-                    res = res.OrderByDescending(x => x.startDate).ToList();
+                  //  res = res.OrderByDescending(x => x.startDate).ToList();
                     return res;
                 }
                 return null;
